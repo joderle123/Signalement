@@ -1,7 +1,11 @@
 /* ============================================
    Word Document Generator (.docx)
-   Signalement Generator - CDSE Annexe Junglinster
-   Uses docx library for professional Word export
+   Signalement MiTe - CDSE Annexe Junglinster
+   Generates official letter matching the CDSE template exactly:
+   - Calibri 12pt, A4, 2.54cm margins
+   - CDSE logo in header
+   - Footer with address/phone/email
+   - Formal letter structure
    ============================================ */
 
 class WordGenerator {
@@ -11,20 +15,14 @@ class WordGenerator {
 
     async loadLibrary() {
         if (this.libraryLoaded) return;
-        // Load docx library dynamically
         await this.loadScript('https://unpkg.com/docx@8.5.0/build/index.umd.js');
-        // Load FileSaver for download
         await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js');
         this.libraryLoaded = true;
     }
 
     loadScript(src) {
         return new Promise((resolve, reject) => {
-            // Check if already loaded
-            if (document.querySelector(`script[src="${src}"]`)) {
-                resolve();
-                return;
-            }
+            if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
             const script = document.createElement('script');
             script.src = src;
             script.onload = resolve;
@@ -33,506 +31,312 @@ class WordGenerator {
         });
     }
 
+    async loadLogoAsBase64() {
+        try {
+            const response = await fetch('assets/cdse-logo.jpeg');
+            const blob = await response.blob();
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.readAsDataURL(blob);
+            });
+        } catch (e) {
+            console.warn('Could not load logo:', e);
+            return null;
+        }
+    }
+
     async generate(data) {
         await this.loadLibrary();
 
-        const lang = data.language || 'fr';
         const t = (key) => i18n.t(key);
 
         const {
             Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
-            WidthType, AlignmentType, HeadingLevel, BorderStyle, ShadingType,
-            PageBreak, TabStopPosition, TabStopType, Header, Footer,
-            ImageRun, UnderlineType, TableLayoutType
+            WidthType, AlignmentType, BorderStyle, ShadingType,
+            Header, Footer, ImageRun, TabStopPosition, TabStopType,
+            NumberFormat, LevelFormat, convertInchesToTwip
         } = docx;
 
-        // Color constants
-        const PRIMARY = '1a56db';
-        const PRIMARY_LIGHT = 'e8eefb';
-        const GRAY = '6b7280';
-        const BLACK = '111827';
-        const WHITE = 'ffffff';
-        const RED = 'dc2626';
-
-        // Helper: create a styled heading
-        const sectionHeading = (number, text) => {
-            return new Paragraph({
-                spacing: { before: 300, after: 150 },
-                border: {
-                    bottom: { color: PRIMARY, space: 4, style: BorderStyle.SINGLE, size: 6 },
-                },
-                children: [
-                    new TextRun({
-                        text: `${number}. `,
-                        bold: true,
-                        color: PRIMARY,
-                        size: 26,
-                        font: 'Calibri',
-                    }),
-                    new TextRun({
-                        text: text,
-                        bold: true,
-                        color: PRIMARY,
-                        size: 26,
-                        font: 'Calibri',
-                    }),
-                ],
-            });
-        };
-
-        // Helper: field line
-        const fieldLine = (label, value) => {
-            return new Paragraph({
-                spacing: { after: 60 },
-                children: [
-                    new TextRun({
-                        text: `${label} : `,
-                        bold: true,
-                        size: 21,
-                        font: 'Calibri',
-                        color: BLACK,
-                    }),
-                    new TextRun({
-                        text: value || '—',
-                        size: 21,
-                        font: 'Calibri',
-                        color: BLACK,
-                    }),
-                ],
-            });
-        };
-
-        // Helper: empty line
-        const emptyLine = () => new Paragraph({ spacing: { after: 80 }, children: [] });
-
-        // Helper: checkbox text
-        const checkItem = (text, checked) => {
-            return new Paragraph({
-                spacing: { after: 40 },
-                children: [
-                    new TextRun({
-                        text: checked ? '☑ ' : '☐ ',
-                        size: 22,
-                        font: 'Calibri',
-                    }),
-                    new TextRun({
-                        text: text,
-                        size: 21,
-                        font: 'Calibri',
-                        color: BLACK,
-                    }),
-                ],
-            });
-        };
-
-        // Helper: sub-heading for categories
-        const categoryHeading = (text) => {
-            return new Paragraph({
-                spacing: { before: 160, after: 80 },
-                shading: { type: ShadingType.SOLID, color: PRIMARY_LIGHT },
-                children: [
-                    new TextRun({
-                        text: text,
-                        bold: true,
-                        size: 21,
-                        font: 'Calibri',
-                        color: PRIMARY,
-                    }),
-                ],
-            });
-        };
-
-        // Helper: rating value to display text
-        const ratingDisplay = (val) => {
-            if (!val || val === 'na') return 'N/A';
-            const labels = {
-                '1': t('rating_1'),
-                '2': t('rating_2'),
-                '3': t('rating_3'),
-                '4': t('rating_4'),
-                '5': t('rating_5'),
-            };
-            return labels[val] || val;
-        };
-
-        // Helper: rating value to visual indicator
-        const ratingVisual = (val) => {
-            if (!val || val === 'na') return '—';
-            const dots = { '1': '●○○○○', '2': '●●○○○', '3': '●●●○○', '4': '●●●●○', '5': '●●●●●' };
-            return dots[val] || '—';
-        };
-
-        // Build rating table
-        const buildRatingTableDoc = (ratings, categories) => {
-            const rows = [];
-
-            // Header row
-            const headerCells = [
-                new TableCell({
-                    width: { size: 4000, type: WidthType.DXA },
-                    shading: { type: ShadingType.SOLID, color: PRIMARY },
-                    children: [new Paragraph({
-                        children: [new TextRun({ text: '', bold: true, size: 18, color: WHITE, font: 'Calibri' })]
-                    })],
-                }),
-                ...[t('rating_na'), t('rating_1'), t('rating_2'), t('rating_3'), t('rating_4'), t('rating_5')].map(h =>
-                    new TableCell({
-                        width: { size: 1100, type: WidthType.DXA },
-                        shading: { type: ShadingType.SOLID, color: PRIMARY },
-                        children: [new Paragraph({
-                            alignment: AlignmentType.CENTER,
-                            children: [new TextRun({ text: h, bold: true, size: 14, color: WHITE, font: 'Calibri' })]
-                        })],
-                    })
-                ),
-            ];
-            rows.push(new TableRow({ children: headerCells }));
-
-            // Data rows from categories
-            categories.forEach(cat => {
-                // Category row
-                const catCells = [
-                    new TableCell({
-                        columnSpan: 7,
-                        shading: { type: ShadingType.SOLID, color: PRIMARY_LIGHT },
-                        children: [new Paragraph({
-                            children: [new TextRun({ text: cat.category, bold: true, size: 18, color: PRIMARY, font: 'Calibri' })]
-                        })],
-                    }),
-                ];
-                rows.push(new TableRow({ children: catCells }));
-
-                cat.items.forEach(item => {
-                    const ratingVal = ratings[item] || null;
-                    const values = ['na', '1', '2', '3', '4', '5'];
-                    const itemCells = [
-                        new TableCell({
-                            width: { size: 4000, type: WidthType.DXA },
-                            children: [new Paragraph({
-                                children: [new TextRun({ text: item, size: 18, font: 'Calibri', color: BLACK })]
-                            })],
-                        }),
-                        ...values.map(v =>
-                            new TableCell({
-                                width: { size: 1100, type: WidthType.DXA },
-                                children: [new Paragraph({
-                                    alignment: AlignmentType.CENTER,
-                                    children: [new TextRun({
-                                        text: ratingVal === v ? '●' : '○',
-                                        size: 20,
-                                        font: 'Calibri',
-                                        color: ratingVal === v ? PRIMARY : 'cccccc',
-                                    })]
-                                })],
-                            })
-                        ),
-                    ];
-                    rows.push(new TableRow({ children: itemCells }));
-                });
-            });
-
-            return new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                rows: rows,
-                layout: TableLayoutType.FIXED,
-            });
-        };
-
-        // Get questionnaire data for current language
-        const qData = questionnaireData;
+        // Load logo
+        const logoBase64 = await this.loadLogoAsBase64();
 
         // Format date
-        const formatDate = (dateStr) => {
-            if (!dateStr) return '—';
+        const formatDate = (dateStr, place) => {
+            if (!dateStr) return '';
             try {
                 const d = new Date(dateStr);
-                return d.toLocaleDateString(lang === 'fr' ? 'fr-LU' : 'de-LU');
+                const lang = data.language || 'fr';
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const dateFormatted = d.toLocaleDateString(lang === 'fr' ? 'fr-LU' : 'de-LU', options);
+                return place ? `${place}, le ${dateFormatted}` : dateFormatted;
             } catch { return dateStr; }
         };
 
-        // Level display
-        const levelText = (val) => {
-            const key = `level_${val}`;
-            return val ? t(key) : '—';
+        // Standard paragraph style: Calibri 12pt, justified
+        const bodyPara = (text, options = {}) => {
+            return new Paragraph({
+                alignment: options.align || AlignmentType.JUSTIFIED,
+                spacing: { after: options.after !== undefined ? options.after : 200, line: options.line || 276 },
+                indent: options.indent,
+                children: [
+                    new TextRun({
+                        text: text,
+                        size: 24, // 12pt in half-points
+                        font: 'Calibri',
+                        bold: options.bold || false,
+                        italics: options.italic || false,
+                        color: options.color || '000000',
+                    }),
+                ],
+            });
         };
 
-        // Collect all motifs for the questionnaire
-        const allMotifs = qData.motifs[lang];
-        const checkedMotifs = data.motifs || [];
+        // Multi-run paragraph (for mixed formatting in one paragraph)
+        const multiRunPara = (runs, options = {}) => {
+            return new Paragraph({
+                alignment: options.align || AlignmentType.JUSTIFIED,
+                spacing: { after: options.after !== undefined ? options.after : 200, line: options.line || 276 },
+                children: runs.map(r => new TextRun({
+                    text: r.text,
+                    size: r.size || 24,
+                    font: r.font || 'Calibri',
+                    bold: r.bold || false,
+                    italics: r.italic || false,
+                    color: r.color || '000000',
+                })),
+            });
+        };
 
-        const allMeasures = qData.measures[lang];
-        const checkedMeasures = data.measures || [];
+        // Empty paragraph
+        const emptyPara = (after = 200) => new Paragraph({
+            spacing: { after },
+            children: [],
+        });
 
-        // ========================
-        // BUILD DOCUMENT
-        // ========================
+        // Bullet list item (dash style like the original)
+        const bulletItem = (text) => {
+            return new Paragraph({
+                alignment: AlignmentType.JUSTIFIED,
+                spacing: { after: 60, line: 276 },
+                indent: { left: 720, hanging: 360 },
+                children: [
+                    new TextRun({
+                        text: '–  ',
+                        size: 24,
+                        font: 'Calibri',
+                    }),
+                    new TextRun({
+                        text: text.endsWith(';') || text.endsWith('.') ? text : text + ' ;',
+                        size: 24,
+                        font: 'Calibri',
+                    }),
+                ],
+            });
+        };
+
+        // Build the recipient address lines
+        const recipientLines = (data.recipientAddress || '').split('\n').filter(l => l.trim());
+        const recipientParagraphs = [
+            bodyPara(data.recipientInstitution || '', { align: AlignmentType.LEFT, after: 0 }),
+            ...recipientLines.map((line, i) =>
+                bodyPara(line.trim(), {
+                    align: AlignmentType.LEFT,
+                    after: i === recipientLines.length - 1 ? 200 : 0
+                })
+            ),
+        ];
+
+        // Build facts list
+        const factsParagraphs = (data.facts || []).map((fact, idx) => {
+            // Last item ends with period, others with semicolon
+            let text = fact;
+            if (idx === (data.facts || []).length - 1) {
+                if (!text.endsWith('.')) text = text.replace(/\s*;\s*$/, '') + '.';
+            } else {
+                if (!text.endsWith(';') && !text.endsWith('.')) text += ' ;';
+            }
+            return bulletItem(text);
+        });
+
+        // Subject line
+        const subjectText = data.studentMatricule
+            ? `${t('doc_subject_prefix')} ${data.studentName || 'xxx'} (matricule : ${data.studentMatricule})`
+            : `${t('doc_subject_prefix')} ${data.studentName || 'xxx'}`;
+
+        // Build header children
+        const headerChildren = [];
+        if (logoBase64) {
+            headerChildren.push(
+                new Paragraph({
+                    children: [
+                        new ImageRun({
+                            data: Uint8Array.from(atob(logoBase64), c => c.charCodeAt(0)),
+                            transformation: { width: 170, height: 85 },
+                            type: 'jpg',
+                        }),
+                    ],
+                })
+            );
+        }
+
+        // Build document
         const doc = new Document({
             styles: {
                 default: {
                     document: {
-                        run: { font: 'Calibri', size: 22 },
+                        run: { font: 'Calibri', size: 24 },
                     },
                 },
             },
             sections: [{
                 properties: {
                     page: {
-                        margin: { top: 1200, right: 1000, bottom: 1000, left: 1000 },
+                        size: { width: 11906, height: 16838 }, // A4
+                        margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
                     },
                 },
                 headers: {
-                    default: new Header({
-                        children: [
-                            new Paragraph({
-                                alignment: AlignmentType.CENTER,
-                                spacing: { after: 0 },
-                                children: [
-                                    new TextRun({
-                                        text: t('doc_subtitle').toUpperCase(),
-                                        bold: true,
-                                        size: 18,
-                                        font: 'Calibri',
-                                        color: PRIMARY,
-                                    }),
-                                ],
-                            }),
-                            new Paragraph({
-                                alignment: AlignmentType.CENTER,
-                                spacing: { after: 0 },
-                                children: [
-                                    new TextRun({
-                                        text: t('doc_annexe'),
-                                        size: 16,
-                                        font: 'Calibri',
-                                        color: GRAY,
-                                    }),
-                                ],
-                            }),
-                        ],
-                    }),
+                    default: new Header({ children: headerChildren }),
                 },
                 footers: {
                     default: new Footer({
                         children: [
                             new Paragraph({
-                                alignment: AlignmentType.RIGHT,
+                                alignment: AlignmentType.CENTER,
+                                spacing: { after: 0 },
                                 children: [
-                                    new TextRun({
-                                        text: `${t('doc_confidential')}`,
-                                        size: 16,
-                                        italics: true,
-                                        color: RED,
-                                        font: 'Calibri',
-                                    }),
+                                    new TextRun({ text: t('doc_footer_address'), size: 18, font: 'Calibri', color: '666666' }),
+                                    new TextRun({ text: '\t\t', size: 18 }),
+                                    new TextRun({ text: t('doc_footer_phone'), size: 18, font: 'Calibri', color: '666666' }),
+                                ],
+                            }),
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                spacing: { after: 0 },
+                                children: [
+                                    new TextRun({ text: t('doc_footer_city'), size: 18, font: 'Calibri', color: '666666' }),
+                                    new TextRun({ text: '\t\t', size: 18 }),
+                                    new TextRun({ text: t('doc_footer_email'), size: 18, font: 'Calibri', color: '666666' }),
                                 ],
                             }),
                         ],
                     }),
                 },
                 children: [
-                    // === TITLE ===
-                    new Paragraph({
-                        alignment: AlignmentType.CENTER,
-                        spacing: { before: 200, after: 80 },
-                        children: [
-                            new TextRun({
-                                text: t('doc_title'),
-                                bold: true,
-                                size: 40,
-                                font: 'Calibri',
-                                color: PRIMARY,
-                            }),
-                        ],
-                    }),
-                    new Paragraph({
-                        alignment: AlignmentType.CENTER,
-                        spacing: { after: 60 },
-                        children: [
-                            new TextRun({
-                                text: `${t('doc_generated')} ${formatDate(data.generatedAt)}`,
-                                size: 18,
-                                italics: true,
-                                color: GRAY,
-                                font: 'Calibri',
-                            }),
-                        ],
-                    }),
-                    new Paragraph({
-                        alignment: AlignmentType.CENTER,
-                        spacing: { after: 200 },
-                        border: {
-                            bottom: { color: PRIMARY, space: 8, style: BorderStyle.SINGLE, size: 12 },
-                        },
-                        children: [
-                            new TextRun({
-                                text: t('doc_confidential'),
-                                bold: true,
-                                size: 20,
-                                color: RED,
-                                font: 'Calibri',
-                            }),
-                        ],
+                    // === Recipient ===
+                    ...recipientParagraphs,
+
+                    // === Date (right-aligned) ===
+                    emptyPara(100),
+                    bodyPara(formatDate(data.signatureDate, data.signaturePlace), {
+                        align: AlignmentType.RIGHT,
+                        after: 300,
                     }),
 
-                    // === SECTION 1: Student Info ===
-                    sectionHeading('1', t('section_student')),
-                    fieldLine(t('label_lastname'), data.studentLastName),
-                    fieldLine(t('label_firstname'), data.studentFirstName),
-                    fieldLine(t('label_dob'), formatDate(data.studentDOB)),
-                    fieldLine(t('label_class'), data.studentClass),
-                    fieldLine(t('label_school'), data.studentSchool),
-                    fieldLine(t('label_school_year'), data.schoolYear),
-                    fieldLine(t('label_teacher'), data.classTeacher),
-                    fieldLine(t('label_nationality'), data.studentNationality),
-                    fieldLine(t('label_home_language'), data.homeLanguage),
-                    fieldLine(t('label_lux_level'), levelText(data.luxembourgishLevel)),
+                    // === Subject (bold) ===
+                    bodyPara(subjectText, { bold: true, after: 300 }),
 
-                    // === SECTION 2: Parents ===
-                    sectionHeading('2', t('section_parents')),
-                    categoryHeading(t('label_parent1')),
-                    fieldLine(t('label_name'), data.parent1Name),
-                    fieldLine(t('label_phone'), data.parent1Phone),
-                    fieldLine(t('label_email'), data.parent1Email),
-                    categoryHeading(t('label_parent2')),
-                    fieldLine(t('label_name'), data.parent2Name),
-                    fieldLine(t('label_phone'), data.parent2Phone),
-                    fieldLine(t('label_email'), data.parent2Email),
-                    fieldLine(t('label_address'), data.parentAddress),
+                    // === Salutation ===
+                    bodyPara(t('doc_salutation'), { after: 200 }),
 
-                    // === SECTION 3: Motifs ===
-                    sectionHeading('3', t('section_motif')),
-                    ...allMotifs.map(m => checkItem(m, checkedMotifs.includes(m))),
-                    ...(data.motifOther ? [
-                        emptyLine(),
-                        fieldLine(t('label_other_motif'), data.motifOther),
-                    ] : []),
+                    // === Context ===
+                    ...(data.contextText ? data.contextText.split('\n').filter(p => p.trim()).map(p =>
+                        bodyPara(p.trim())
+                    ) : []),
 
-                    // === SECTION 4: Learning ===
-                    sectionHeading('4', t('section_learning')),
-                    buildRatingTableDoc(data.learningRatings || {}, qData.learning[lang]),
-                    ...(data.learningComments ? [
-                        emptyLine(),
-                        fieldLine(t('label_learning_comments'), data.learningComments),
-                    ] : []),
+                    // === Measures ===
+                    ...(data.measuresText ? data.measuresText.split('\n').filter(p => p.trim()).map(p =>
+                        bodyPara(p.trim())
+                    ) : []),
 
-                    // === SECTION 5: Social ===
-                    sectionHeading('5', t('section_social')),
-                    buildRatingTableDoc(data.socialRatings || {}, qData.social[lang]),
-                    ...(data.socialComments ? [
-                        emptyLine(),
-                        fieldLine(t('label_social_comments'), data.socialComments),
-                    ] : []),
+                    // === Facts list ===
+                    ...factsParagraphs,
 
-                    // === SECTION 6: Language ===
-                    sectionHeading('6', t('section_language')),
-                    buildRatingTableDoc(data.languageRatings || {}, qData.language[lang]),
-                    ...(data.languageComments ? [
-                        emptyLine(),
-                        fieldLine(t('label_language_comments'), data.languageComments),
-                    ] : []),
+                    // === Facts conclusion ===
+                    ...(data.factsConclusion ? data.factsConclusion.split('\n').filter(p => p.trim()).map(p =>
+                        bodyPara(p.trim())
+                    ) : []),
 
-                    // === SECTION 7: Motor ===
-                    sectionHeading('7', t('section_motor')),
-                    buildRatingTableDoc(data.motorRatings || {}, qData.motor[lang]),
-                    ...(data.motorComments ? [
-                        emptyLine(),
-                        fieldLine(t('label_motor_comments'), data.motorComments),
-                    ] : []),
+                    // === Additional info ===
+                    ...(data.additionalInfo ? data.additionalInfo.split('\n').filter(p => p.trim()).map(p =>
+                        bodyPara(p.trim())
+                    ) : []),
 
-                    // === SECTION 8: Measures ===
-                    sectionHeading('8', t('section_measures')),
-                    ...allMeasures.map(m => checkItem(m, checkedMeasures.includes(m))),
-                    ...(data.measuresDetails ? [
-                        emptyLine(),
-                        fieldLine(t('label_measures_details'), data.measuresDetails),
-                    ] : []),
-                    ...(data.measuresEffect ? [
-                        fieldLine(t('label_measures_effect'), data.measuresEffect),
-                    ] : []),
+                    // === Request ===
+                    ...(data.requestText ? data.requestText.split('\n').filter(p => p.trim()).map(p =>
+                        bodyPara(p.trim())
+                    ) : []),
 
-                    // === SECTION 9: Observations ===
-                    sectionHeading('9', t('section_observations')),
-                    ...(data.teacherObservations ? [
+                    // === Closing ===
+                    bodyPara(t('doc_closing'), { after: 200 }),
+                    bodyPara(t('doc_regards'), { after: 400 }),
+
+                    // === Signatures ===
+                    emptyPara(200),
+                    ...(data.signatory1Name || data.signatory2Name ? [
                         new Paragraph({
-                            spacing: { before: 80, after: 60 },
+                            alignment: AlignmentType.LEFT,
+                            spacing: { after: 0 },
                             children: [
-                                new TextRun({ text: `${t('label_teacher_obs')} :`, bold: true, size: 21, font: 'Calibri', color: BLACK }),
+                                ...(data.signatory1Name ? [
+                                    new TextRun({ text: data.signatory1Name, bold: true, size: 24, font: 'Calibri' }),
+                                ] : []),
+                                ...(data.signatory2Name ? [
+                                    new TextRun({ text: '\t\t\t\t', size: 24 }),
+                                    new TextRun({ text: data.signatory2Name, bold: true, size: 24, font: 'Calibri' }),
+                                ] : []),
                             ],
                         }),
                         new Paragraph({
-                            spacing: { after: 100 },
+                            spacing: { after: 0 },
                             children: [
-                                new TextRun({ text: data.teacherObservations, size: 21, font: 'Calibri', color: BLACK }),
+                                ...(data.signatory1Role ? [
+                                    new TextRun({ text: data.signatory1Role, size: 22, font: 'Calibri', color: '444444' }),
+                                ] : []),
+                                ...(data.signatory2Role ? [
+                                    new TextRun({ text: '\t\t\t\t', size: 22 }),
+                                    new TextRun({ text: data.signatory2Role, size: 22, font: 'Calibri', color: '444444' }),
+                                ] : []),
+                            ],
+                        }),
+                        new Paragraph({
+                            spacing: { after: 0 },
+                            children: [
+                                ...(data.signatory1Email ? [
+                                    new TextRun({ text: data.signatory1Email, size: 20, font: 'Calibri', color: '666666' }),
+                                ] : []),
+                                ...(data.signatory2Email ? [
+                                    new TextRun({ text: '\t\t\t\t', size: 20 }),
+                                    new TextRun({ text: data.signatory2Email, size: 20, font: 'Calibri', color: '666666' }),
+                                ] : []),
+                            ],
+                        }),
+                        new Paragraph({
+                            spacing: { after: 0 },
+                            children: [
+                                ...(data.signatory1Phone ? [
+                                    new TextRun({ text: data.signatory1Phone, size: 20, font: 'Calibri', color: '666666' }),
+                                ] : []),
+                                ...(data.signatory2Phone ? [
+                                    new TextRun({ text: '\t\t\t\t', size: 20 }),
+                                    new TextRun({ text: data.signatory2Phone, size: 20, font: 'Calibri', color: '666666' }),
+                                ] : []),
                             ],
                         }),
                     ] : []),
-                    ...(data.recommendations ? [
-                        new Paragraph({
-                            spacing: { before: 80, after: 60 },
-                            children: [
-                                new TextRun({ text: `${t('label_recommendations')} :`, bold: true, size: 21, font: 'Calibri', color: BLACK }),
-                            ],
-                        }),
-                        new Paragraph({
-                            spacing: { after: 100 },
-                            children: [
-                                new TextRun({ text: data.recommendations, size: 21, font: 'Calibri', color: BLACK }),
-                            ],
-                        }),
-                    ] : []),
-                    ...(data.additionalInfo ? [
-                        new Paragraph({
-                            spacing: { before: 80, after: 60 },
-                            children: [
-                                new TextRun({ text: `${t('label_additional')} :`, bold: true, size: 21, font: 'Calibri', color: BLACK }),
-                            ],
-                        }),
-                        new Paragraph({
-                            spacing: { after: 100 },
-                            children: [
-                                new TextRun({ text: data.additionalInfo, size: 21, font: 'Calibri', color: BLACK }),
-                            ],
-                        }),
-                    ] : []),
-
-                    // === SECTION 10: Signature ===
-                    sectionHeading('10', t('section_signature')),
-                    fieldLine(t('label_date'), formatDate(data.signatureDate)),
-                    fieldLine(t('label_place'), data.signaturePlace),
-                    fieldLine(t('label_signatory'), data.signatureName),
-                    fieldLine(t('label_signatory_role'), data.signatoryRole),
-                    emptyLine(),
-                    emptyLine(),
-                    new Paragraph({
-                        spacing: { before: 200 },
-                        children: [
-                            new TextRun({
-                                text: t('doc_signature_line'),
-                                bold: true,
-                                size: 21,
-                                font: 'Calibri',
-                                color: BLACK,
-                            }),
-                        ],
-                    }),
-                    new Paragraph({
-                        spacing: { before: 40 },
-                        border: {
-                            bottom: { color: BLACK, space: 1, style: BorderStyle.SINGLE, size: 4 },
-                        },
-                        children: [
-                            new TextRun({ text: '                                                                          ', size: 21 }),
-                        ],
-                    }),
                 ],
             }],
         });
 
         // Generate and download
         const blob = await Packer.toBlob(doc);
-        const studentName = `${data.studentLastName || 'Eleve'}_${data.studentFirstName || ''}`.trim().replace(/\s+/g, '_');
-        const dateStr = new Date().toISOString().slice(0, 10);
-        const filename = `Signalement_${studentName}_${dateStr}.docx`;
+        const studentName = (data.studentName || 'Eleve').trim().replace(/\s+/g, '_');
+        const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const filename = `${dateStr} Signalement MiTe ${data.studentName || 'Eleve'}.docx`;
 
         saveAs(blob, filename);
         return filename;

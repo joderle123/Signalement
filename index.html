@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signalement - CDSE Annexe Junglinster</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header no-print">
+        <div class="header-left">
+            <div class="logo-area">
+                <div class="logo-placeholder" id="logoPlaceholder">CDSE</div>
+                <div class="header-text">
+                    <h1 data-i18n="app_title">Signalement</h1>
+                    <p data-i18n="app_subtitle">Annexe Junglinster</p>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="fr" title="Français">FR</button>
+                <button class="lang-btn" data-lang="de" title="Deutsch">DE</button>
+            </div>
+            <button class="btn btn-outline" id="btnReset" data-i18n="btn_reset">Nouveau signalement</button>
+            <button class="btn btn-primary" id="btnExportPDF" data-i18n="btn_export">Exporter PDF</button>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container no-print">
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-steps" id="progressSteps"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <form id="signalementForm" novalidate>
+
+            <!-- Section 1: Informations de l'élève -->
+            <section class="form-section" data-section="1" id="sectionStudent">
+                <div class="section-header">
+                    <span class="section-number">1</span>
+                    <h2 data-i18n="section_student">Informations de l'élève</h2>
+                </div>
+                <div class="section-body">
+                    <div class="form-grid cols-3">
+                        <div class="form-group">
+                            <label for="studentLastName" data-i18n="label_lastname">Nom</label>
+                            <input type="text" id="studentLastName" name="studentLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentFirstName" data-i18n="label_firstname">Prénom</label>
+                            <input type="text" id="studentFirstName" name="studentFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentDOB" data-i18n="label_dob">Date de naissance</label>
+                            <input type="date" id="studentDOB" name="studentDOB" required>
+                        </div>
+                    </div>
+                    <div class="form-grid cols-3">
+                        <div class="form-group">
+                            <label for="studentClass" data-i18n="label_class">Classe</label>
+                            <input type="text" id="studentClass" name="studentClass" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentSchool" data-i18n="label_school">École</label>
+                            <input type="text" id="studentSchool" name="studentSchool" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="schoolYear" data-i18n="label_school_year">Année scolaire</label>
+                            <input type="text" id="schoolYear" name="schoolYear" placeholder="2025-2026">
+                        </div>
+                    </div>
+                    <div class="form-grid cols-2">
+                        <div class="form-group">
+                            <label for="classTeacher" data-i18n="label_teacher">Titulaire de classe</label>
+                            <input type="text" id="classTeacher" name="classTeacher">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentNationality" data-i18n="label_nationality">Nationalité</label>
+                            <input type="text" id="studentNationality" name="studentNationality">
+                        </div>
+                    </div>
+                    <div class="form-grid cols-2">
+                        <div class="form-group">
+                            <label for="homeLanguage" data-i18n="label_home_language">Langue(s) parlée(s) à la maison</label>
+                            <input type="text" id="homeLanguage" name="homeLanguage">
+                        </div>
+                        <div class="form-group">
+                            <label for="luxembourgishLevel" data-i18n="label_lux_level">Niveau de luxembourgeois</label>
+                            <select id="luxembourgishLevel" name="luxembourgishLevel">
+                                <option value="" data-i18n="select_placeholder">-- Choisir --</option>
+                                <option value="none" data-i18n="level_none">Aucune connaissance</option>
+                                <option value="basic" data-i18n="level_basic">Notions de base</option>
+                                <option value="intermediate" data-i18n="level_intermediate">Intermédiaire</option>
+                                <option value="good" data-i18n="level_good">Bon</option>
+                                <option value="fluent" data-i18n="level_fluent">Courant</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Parents / Responsables -->
+            <section class="form-section" data-section="2" id="sectionParents">
+                <div class="section-header">
+                    <span class="section-number">2</span>
+                    <h2 data-i18n="section_parents">Parents / Responsables légaux</h2>
+                </div>
+                <div class="section-body">
+                    <div class="parent-block">
+                        <h3 data-i18n="label_parent1">Parent / Responsable 1</h3>
+                        <div class="form-grid cols-3">
+                            <div class="form-group">
+                                <label for="parent1Name" data-i18n="label_name">Nom et prénom</label>
+                                <input type="text" id="parent1Name" name="parent1Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="parent1Phone" data-i18n="label_phone">Téléphone</label>
+                                <input type="tel" id="parent1Phone" name="parent1Phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="parent1Email" data-i18n="label_email">Email</label>
+                                <input type="email" id="parent1Email" name="parent1Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="parent-block">
+                        <h3 data-i18n="label_parent2">Parent / Responsable 2</h3>
+                        <div class="form-grid cols-3">
+                            <div class="form-group">
+                                <label for="parent2Name" data-i18n="label_name">Nom et prénom</label>
+                                <input type="text" id="parent2Name" name="parent2Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="parent2Phone" data-i18n="label_phone">Téléphone</label>
+                                <input type="tel" id="parent2Phone" name="parent2Phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="parent2Email" data-i18n="label_email">Email</label>
+                                <input type="email" id="parent2Email" name="parent2Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentAddress" data-i18n="label_address">Adresse</label>
+                        <input type="text" id="parentAddress" name="parentAddress">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Motif du signalement -->
+            <section class="form-section" data-section="3" id="sectionMotif">
+                <div class="section-header">
+                    <span class="section-number">3</span>
+                    <h2 data-i18n="section_motif">Motif du signalement</h2>
+                </div>
+                <div class="section-body">
+                    <p class="section-instruction" data-i18n="instruction_motif">Veuillez sélectionner le(s) motif(s) du signalement :</p>
+                    <div class="checkbox-grid" id="motifGrid">
+                        <!-- Populated by questionnaire.js -->
+                    </div>
+                    <div class="form-group mt-1">
+                        <label for="motifOther" data-i18n="label_other_motif">Autre motif (préciser)</label>
+                        <textarea id="motifOther" name="motifOther" rows="2"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Comportement d'apprentissage -->
+            <section class="form-section" data-section="4" id="sectionLearning">
+                <div class="section-header">
+                    <span class="section-number">4</span>
+                    <h2 data-i18n="section_learning">Comportement d'apprentissage</h2>
+                </div>
+                <div class="section-body">
+                    <p class="section-instruction" data-i18n="instruction_learning">Évaluez les domaines suivants :</p>
+                    <div class="rating-section" id="learningRatings">
+                        <!-- Populated by questionnaire.js -->
+                    </div>
+                    <div class="form-group mt-1">
+                        <label for="learningComments" data-i18n="label_learning_comments">Observations complémentaires</label>
+                        <textarea id="learningComments" name="learningComments" rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Comportement social et émotionnel -->
+            <section class="form-section" data-section="5" id="sectionSocial">
+                <div class="section-header">
+                    <span class="section-number">5</span>
+                    <h2 data-i18n="section_social">Comportement social et émotionnel</h2>
+                </div>
+                <div class="section-body">
+                    <p class="section-instruction" data-i18n="instruction_social">Évaluez les aspects suivants :</p>
+                    <div class="rating-section" id="socialRatings">
+                        <!-- Populated by questionnaire.js -->
+                    </div>
+                    <div class="form-group mt-1">
+                        <label for="socialComments" data-i18n="label_social_comments">Observations complémentaires</label>
+                        <textarea id="socialComments" name="socialComments" rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: Développement langagier -->
+            <section class="form-section" data-section="6" id="sectionLanguage">
+                <div class="section-header">
+                    <span class="section-number">6</span>
+                    <h2 data-i18n="section_language">Développement langagier</h2>
+                </div>
+                <div class="section-body">
+                    <p class="section-instruction" data-i18n="instruction_language">Évaluez les compétences langagières :</p>
+                    <div class="rating-section" id="languageRatings">
+                        <!-- Populated by questionnaire.js -->
+                    </div>
+                    <div class="form-group mt-1">
+                        <label for="languageComments" data-i18n="label_language_comments">Observations complémentaires</label>
+                        <textarea id="languageComments" name="languageComments" rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 7: Motricité et concentration -->
+            <section class="form-section" data-section="7" id="sectionMotor">
+                <div class="section-header">
+                    <span class="section-number">7</span>
+                    <h2 data-i18n="section_motor">Motricité et concentration</h2>
+                </div>
+                <div class="section-body">
+                    <p class="section-instruction" data-i18n="instruction_motor">Évaluez les aspects suivants :</p>
+                    <div class="rating-section" id="motorRatings">
+                        <!-- Populated by questionnaire.js -->
+                    </div>
+                    <div class="form-group mt-1">
+                        <label for="motorComments" data-i18n="label_motor_comments">Observations complémentaires</label>
+                        <textarea id="motorComments" name="motorComments" rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: Mesures déjà prises -->
+            <section class="form-section" data-section="8" id="sectionMeasures">
+                <div class="section-header">
+                    <span class="section-number">8</span>
+                    <h2 data-i18n="section_measures">Mesures déjà prises</h2>
+                </div>
+                <div class="section-body">
+                    <p class="section-instruction" data-i18n="instruction_measures">Quelles mesures ont déjà été mises en place ?</p>
+                    <div class="checkbox-grid" id="measuresGrid">
+                        <!-- Populated by questionnaire.js -->
+                    </div>
+                    <div class="form-group mt-1">
+                        <label for="measuresDetails" data-i18n="label_measures_details">Détails des mesures prises</label>
+                        <textarea id="measuresDetails" name="measuresDetails" rows="3"></textarea>
+                    </div>
+                    <div class="form-group mt-1">
+                        <label for="measuresEffect" data-i18n="label_measures_effect">Effets observés</label>
+                        <textarea id="measuresEffect" name="measuresEffect" rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Observations et recommandations -->
+            <section class="form-section" data-section="9" id="sectionObservations">
+                <div class="section-header">
+                    <span class="section-number">9</span>
+                    <h2 data-i18n="section_observations">Observations et recommandations</h2>
+                </div>
+                <div class="section-body">
+                    <div class="form-group">
+                        <label for="teacherObservations" data-i18n="label_teacher_obs">Observations de l'enseignant(e)</label>
+                        <textarea id="teacherObservations" name="teacherObservations" rows="5" data-i18n-placeholder="placeholder_observations"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="recommendations" data-i18n="label_recommendations">Recommandations / Demandes</label>
+                        <textarea id="recommendations" name="recommendations" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="additionalInfo" data-i18n="label_additional">Informations supplémentaires</label>
+                        <textarea id="additionalInfo" name="additionalInfo" rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 10: Signature -->
+            <section class="form-section" data-section="10" id="sectionSignature">
+                <div class="section-header">
+                    <span class="section-number">10</span>
+                    <h2 data-i18n="section_signature">Date et signature</h2>
+                </div>
+                <div class="section-body">
+                    <div class="form-grid cols-2">
+                        <div class="form-group">
+                            <label for="signatureDate" data-i18n="label_date">Date</label>
+                            <input type="date" id="signatureDate" name="signatureDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="signaturePlace" data-i18n="label_place">Lieu</label>
+                            <input type="text" id="signaturePlace" name="signaturePlace" value="Junglinster">
+                        </div>
+                    </div>
+                    <div class="form-grid cols-2">
+                        <div class="form-group">
+                            <label for="signatureName" data-i18n="label_signatory">Nom du signataire</label>
+                            <input type="text" id="signatureName" name="signatureName">
+                        </div>
+                        <div class="form-group">
+                            <label for="signatoryRole" data-i18n="label_signatory_role">Fonction</label>
+                            <input type="text" id="signatoryRole" name="signatoryRole">
+                        </div>
+                    </div>
+                    <div class="signature-area">
+                        <label data-i18n="label_signature_area">Signature</label>
+                        <div class="signature-box" id="signatureBox">
+                            <canvas id="signatureCanvas" width="500" height="150"></canvas>
+                            <button type="button" class="btn btn-small btn-outline" id="btnClearSignature" data-i18n="btn_clear_signature">Effacer</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </form>
+    </main>
+
+    <!-- Footer Actions (sticky) -->
+    <div class="footer-actions no-print">
+        <div class="footer-left">
+            <button class="btn btn-outline" id="btnSaveDraft" data-i18n="btn_save_draft">Sauvegarder brouillon</button>
+            <button class="btn btn-outline" id="btnLoadDraft" data-i18n="btn_load_draft">Charger brouillon</button>
+        </div>
+        <div class="footer-right">
+            <button class="btn btn-secondary" id="btnPreview" data-i18n="btn_preview">Aperçu</button>
+            <button class="btn btn-primary btn-large" id="btnExportPDFBottom" data-i18n="btn_export">Exporter PDF</button>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="preview_title">Aperçu du signalement</h2>
+                <button class="modal-close" id="btnClosePreview">&times;</button>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Preview rendered here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btnClosePreviewBottom" data-i18n="btn_close">Fermer</button>
+                <button class="btn btn-primary" id="btnExportFromPreview" data-i18n="btn_export">Exporter PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="js/i18n.js"></script>
+    <script src="js/questionnaire.js"></script>
+    <script src="js/form-handler.js"></script>
+    <script src="js/pdf-generator.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

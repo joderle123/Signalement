@@ -1,76 +1,53 @@
 /* ============================================
-   Form Handler
-   Signalement Generator - CDSE Annexe Junglinster
+   Form Handler - Signalement MiTe
+   CDSE Annexe Junglinster
    ============================================ */
 
 class FormHandler {
     constructor() {
         this.form = document.getElementById('signalementForm');
-        this.draftKey = 'signalement_draft';
+        this.draftKey = 'signalement_mite_draft';
     }
 
-    // Collect all form data
     collectData() {
-        const data = {
-            // Student info
-            studentLastName: this.val('studentLastName'),
-            studentFirstName: this.val('studentFirstName'),
-            studentDOB: this.val('studentDOB'),
+        return {
+            // Recipient
+            recipientInstitution: this.val('recipientInstitution'),
+            recipientAddress: this.val('recipientAddress'),
+
+            // Student
+            studentName: this.val('studentName'),
+            studentMatricule: this.val('studentMatricule'),
+            studentAge: this.val('studentAge'),
             studentClass: this.val('studentClass'),
-            studentSchool: this.val('studentSchool'),
             schoolYear: this.val('schoolYear'),
-            classTeacher: this.val('classTeacher'),
-            studentNationality: this.val('studentNationality'),
-            homeLanguage: this.val('homeLanguage'),
-            luxembourgishLevel: this.val('luxembourgishLevel'),
 
-            // Parents
-            parent1Name: this.val('parent1Name'),
-            parent1Phone: this.val('parent1Phone'),
-            parent1Email: this.val('parent1Email'),
-            parent2Name: this.val('parent2Name'),
-            parent2Phone: this.val('parent2Phone'),
-            parent2Email: this.val('parent2Email'),
-            parentAddress: this.val('parentAddress'),
-
-            // Motifs (checkboxes)
-            motifs: this.collectCheckboxes('motif'),
-
-            // Rating sections
-            learningRatings: this.collectRatings('learningRatings'),
-            socialRatings: this.collectRatings('socialRatings'),
-            languageRatings: this.collectRatings('languageRatings'),
-            motorRatings: this.collectRatings('motorRatings'),
-
-            // Comments
-            learningComments: this.val('learningComments'),
-            socialComments: this.val('socialComments'),
-            languageComments: this.val('languageComments'),
-            motorComments: this.val('motorComments'),
-            motifOther: this.val('motifOther'),
-
-            // Measures
-            measures: this.collectCheckboxes('measure'),
-            measuresDetails: this.val('measuresDetails'),
-            measuresEffect: this.val('measuresEffect'),
-
-            // Observations
-            teacherObservations: this.val('teacherObservations'),
-            recommendations: this.val('recommendations'),
+            // Content
+            contextText: this.val('contextText'),
+            measuresText: this.val('measuresText'),
+            facts: this.collectFacts(),
+            factsConclusion: this.val('factsConclusion'),
             additionalInfo: this.val('additionalInfo'),
+            requestText: this.val('requestText'),
 
             // Signature
             signatureDate: this.val('signatureDate'),
             signaturePlace: this.val('signaturePlace'),
-            signatureName: this.val('signatureName'),
-            signatoryRole: this.val('signatoryRole'),
+
+            // Signatories
+            signatory1Name: this.valByName('signatory1Name'),
+            signatory1Role: this.valByName('signatory1Role'),
+            signatory1Email: this.valByName('signatory1Email'),
+            signatory1Phone: this.valByName('signatory1Phone'),
+            signatory2Name: this.valByName('signatory2Name'),
+            signatory2Role: this.valByName('signatory2Role'),
+            signatory2Email: this.valByName('signatory2Email'),
+            signatory2Phone: this.valByName('signatory2Phone'),
 
             // Meta
             language: i18n.getLang(),
             generatedAt: new Date().toISOString(),
         };
-
-        return data;
     }
 
     val(id) {
@@ -78,42 +55,23 @@ class FormHandler {
         return el ? el.value : '';
     }
 
-    collectCheckboxes(prefix) {
-        const checked = [];
-        const checkboxes = document.querySelectorAll(`input[name^="${prefix}_"]:checked`);
-        checkboxes.forEach(cb => {
-            checked.push(cb.value);
-        });
-        return checked;
+    valByName(name) {
+        const el = document.querySelector(`[name="${name}"]`);
+        return el ? el.value : '';
     }
 
-    collectRatings(containerId) {
-        const ratings = {};
-        const container = document.getElementById(containerId);
-        if (!container) return ratings;
-
-        const rows = container.querySelectorAll('tbody tr:not(.rating-category)');
-        rows.forEach(row => {
-            const label = row.querySelector('td:first-child');
-            const selected = row.querySelector('input[type="radio"]:checked');
-            if (label && selected) {
-                ratings[label.textContent.trim()] = selected.value;
-            } else if (label) {
-                ratings[label.textContent.trim()] = null;
-            }
+    collectFacts() {
+        const facts = [];
+        document.querySelectorAll('.fact-entry textarea').forEach(ta => {
+            const text = ta.value.trim();
+            if (text) facts.push(text);
         });
-        return ratings;
+        return facts;
     }
 
-    // Save draft to localStorage
     saveDraft() {
         try {
             const data = this.collectData();
-            // Also save signature canvas
-            const canvas = document.getElementById('signatureCanvas');
-            if (canvas) {
-                data.signatureImage = canvas.toDataURL();
-            }
             localStorage.setItem(this.draftKey, JSON.stringify(data));
             return true;
         } catch (e) {
@@ -122,7 +80,6 @@ class FormHandler {
         }
     }
 
-    // Load draft from localStorage
     loadDraft() {
         try {
             const raw = localStorage.getItem(this.draftKey);
@@ -134,136 +91,77 @@ class FormHandler {
         }
     }
 
-    // Restore form from draft data
     restoreFromDraft(data) {
         if (!data) return;
 
-        // Set language first
         if (data.language) {
             i18n.setLanguage(data.language);
-            buildQuestionnaire(data.language);
         }
 
-        // Text fields
-        const textFields = [
-            'studentLastName', 'studentFirstName', 'studentDOB', 'studentClass',
-            'studentSchool', 'schoolYear', 'classTeacher', 'studentNationality',
-            'homeLanguage', 'luxembourgishLevel', 'parent1Name', 'parent1Phone',
-            'parent1Email', 'parent2Name', 'parent2Phone', 'parent2Email',
-            'parentAddress', 'learningComments', 'socialComments', 'languageComments',
-            'motorComments', 'motifOther', 'measuresDetails', 'measuresEffect',
-            'teacherObservations', 'recommendations', 'additionalInfo',
-            'signatureDate', 'signaturePlace', 'signatureName', 'signatoryRole'
+        // Simple fields
+        const fields = [
+            'recipientInstitution', 'recipientAddress',
+            'studentName', 'studentMatricule', 'studentAge', 'studentClass', 'schoolYear',
+            'contextText', 'measuresText', 'factsConclusion', 'additionalInfo', 'requestText',
+            'signatureDate', 'signaturePlace',
         ];
-
-        textFields.forEach(field => {
-            const el = document.getElementById(field);
-            if (el && data[field]) {
-                el.value = data[field];
-            }
+        fields.forEach(f => {
+            const el = document.getElementById(f);
+            if (el && data[f]) el.value = data[f];
         });
 
-        // Checkboxes - motifs
-        if (data.motifs) {
-            data.motifs.forEach(val => {
-                const cb = document.querySelector(`input[name^="motif_"][value="${CSS.escape(val)}"]`);
-                if (cb) {
-                    cb.checked = true;
-                    cb.closest('.checkbox-item')?.classList.add('checked');
-                }
+        // Named fields (signatories)
+        const namedFields = [
+            'signatory1Name', 'signatory1Role', 'signatory1Email', 'signatory1Phone',
+            'signatory2Name', 'signatory2Role', 'signatory2Email', 'signatory2Phone',
+        ];
+        namedFields.forEach(f => {
+            const el = document.querySelector(`[name="${f}"]`);
+            if (el && data[f]) el.value = data[f];
+        });
+
+        // Facts - rebuild entries
+        if (data.facts && data.facts.length > 0) {
+            const container = document.getElementById('factsContainer');
+            container.innerHTML = '';
+            data.facts.forEach((fact, idx) => {
+                addFactEntry(container, fact);
             });
-        }
-
-        // Checkboxes - measures
-        if (data.measures) {
-            data.measures.forEach(val => {
-                const cb = document.querySelector(`input[name^="measure_"][value="${CSS.escape(val)}"]`);
-                if (cb) {
-                    cb.checked = true;
-                    cb.closest('.checkbox-item')?.classList.add('checked');
-                }
-            });
-        }
-
-        // Ratings
-        this.restoreRatings('learningRatings', data.learningRatings);
-        this.restoreRatings('socialRatings', data.socialRatings);
-        this.restoreRatings('languageRatings', data.languageRatings);
-        this.restoreRatings('motorRatings', data.motorRatings);
-
-        // Signature image
-        if (data.signatureImage) {
-            const canvas = document.getElementById('signatureCanvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const img = new Image();
-                img.onload = () => ctx.drawImage(img, 0, 0);
-                img.src = data.signatureImage;
-            }
         }
     }
 
-    restoreRatings(containerId, ratings) {
-        if (!ratings) return;
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
-        const rows = container.querySelectorAll('tbody tr:not(.rating-category)');
-        rows.forEach(row => {
-            const label = row.querySelector('td:first-child');
-            if (label) {
-                const key = label.textContent.trim();
-                const value = ratings[key];
-                if (value) {
-                    const radio = row.querySelector(`input[value="${value}"]`);
-                    if (radio) radio.checked = true;
-                }
-            }
-        });
-    }
-
-    // Reset the entire form
     resetForm() {
         this.form.reset();
-        // Clear checkbox visual states
-        document.querySelectorAll('.checkbox-item.checked').forEach(el => {
-            el.classList.remove('checked');
-        });
-        // Clear signature
-        const canvas = document.getElementById('signatureCanvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const container = document.getElementById('factsContainer');
+        if (container) container.innerHTML = '';
+        // Re-add 3 empty facts
+        for (let i = 0; i < 3; i++) {
+            addFactEntry(container);
         }
     }
+}
 
-    // Calculate form completion percentage
-    getCompletionPercentage() {
-        const sections = document.querySelectorAll('.form-section');
-        let totalSections = sections.length;
-        let completedSections = 0;
+// Global fact entry helper
+function addFactEntry(container, text = '') {
+    if (!container) container = document.getElementById('factsContainer');
+    const count = container.querySelectorAll('.fact-entry').length + 1;
+    const div = document.createElement('div');
+    div.className = 'fact-entry';
+    div.innerHTML = `
+        <span class="fact-number">${count}</span>
+        <textarea name="fact_${count}" rows="2" placeholder="">${text}</textarea>
+        <button type="button" class="btn-remove-fact" title="Supprimer">&times;</button>
+    `;
+    div.querySelector('.btn-remove-fact').addEventListener('click', () => {
+        div.remove();
+        renumberFacts();
+    });
+    container.appendChild(div);
+}
 
-        sections.forEach(section => {
-            const inputs = section.querySelectorAll('input:not([type="radio"]):not([type="checkbox"]), textarea, select');
-            const radios = section.querySelectorAll('input[type="radio"]');
-            const checkboxes = section.querySelectorAll('input[type="checkbox"]');
-
-            let hasContent = false;
-
-            // Check text inputs
-            inputs.forEach(input => {
-                if (input.value && input.value.trim()) hasContent = true;
-            });
-
-            // Check radios
-            if (section.querySelector('input[type="radio"]:checked')) hasContent = true;
-
-            // Check checkboxes
-            if (section.querySelector('input[type="checkbox"]:checked')) hasContent = true;
-
-            if (hasContent) completedSections++;
-        });
-
-        return Math.round((completedSections / totalSections) * 100);
-    }
+function renumberFacts() {
+    const entries = document.querySelectorAll('.fact-entry');
+    entries.forEach((entry, idx) => {
+        entry.querySelector('.fact-number').textContent = idx + 1;
+    });
 }

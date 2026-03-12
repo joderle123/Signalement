@@ -1,115 +1,64 @@
 /* ============================================
    i18n - Français / Deutsch
-   Signalement Generator - CDSE Annexe Junglinster
+   Signalement MiTe - CDSE Annexe Junglinster
    ============================================ */
 
 const translations = {
     fr: {
-        // App header
-        app_title: "Signalement",
-        app_subtitle: "CDSE — Annexe Junglinster",
+        // Header
         btn_reset: "Nouveau signalement",
         btn_export: "Exporter Word",
         btn_save_draft: "Sauvegarder brouillon",
         btn_load_draft: "Charger brouillon",
         btn_preview: "Aperçu",
         btn_close: "Fermer",
-        btn_clear_signature: "Effacer",
+        btn_add_fact: "Ajouter un fait",
         preview_title: "Aperçu du signalement",
 
         // Section titles
+        section_recipient: "Destinataire",
         section_student: "Informations de l'élève",
-        section_parents: "Parents / Responsables légaux",
-        section_motif: "Motif du signalement",
-        section_learning: "Comportement d'apprentissage",
-        section_social: "Comportement social et émotionnel",
-        section_language: "Développement langagier",
-        section_motor: "Motricité et concentration",
+        section_context: "Contexte et parcours scolaire",
         section_measures: "Mesures déjà prises",
-        section_observations: "Observations et recommandations",
-        section_signature: "Date et signature",
+        section_observations: "Faits observés",
+        section_additional: "Éléments supplémentaires",
+        section_request: "Démarche et demande",
+        section_signatories: "Signataires",
 
-        // Section short names (progress bar)
-        section_short_1: "Élève",
-        section_short_2: "Parents",
-        section_short_3: "Motif",
-        section_short_4: "Apprentissage",
-        section_short_5: "Social",
-        section_short_6: "Langagier",
-        section_short_7: "Motricité",
-        section_short_8: "Mesures",
-        section_short_9: "Observations",
-        section_short_10: "Signature",
-
-        // Student info labels
-        label_lastname: "Nom",
-        label_firstname: "Prénom",
-        label_dob: "Date de naissance",
-        label_class: "Classe",
-        label_school: "École",
+        // Labels
+        label_institution: "Institution / Destinataire",
+        label_recipient_address: "Adresse",
+        label_student_name: "Nom et prénom de l'élève",
+        label_matricule: "Matricule",
+        label_age: "Âge",
+        label_class: "Classe / Structure",
         label_school_year: "Année scolaire",
-        label_teacher: "Titulaire de classe",
-        label_nationality: "Nationalité",
-        label_home_language: "Langue(s) parlée(s) à la maison",
-        label_lux_level: "Niveau de luxembourgeois",
-
-        // Select options
-        select_placeholder: "-- Choisir --",
-        level_none: "Aucune connaissance",
-        level_basic: "Notions de base",
-        level_intermediate: "Intermédiaire",
-        level_good: "Bon",
-        level_fluent: "Courant",
-
-        // Parents
-        label_parent1: "Parent / Responsable 1",
-        label_parent2: "Parent / Responsable 2",
-        label_name: "Nom et prénom",
-        label_phone: "Téléphone",
-        label_email: "Email",
-        label_address: "Adresse",
-
-        // Motif
-        instruction_motif: "Veuillez sélectionner le(s) motif(s) du signalement :",
-        label_other_motif: "Autre motif (préciser)",
-
-        // Rating instructions
-        instruction_learning: "Évaluez les domaines suivants :",
-        instruction_social: "Évaluez les aspects suivants :",
-        instruction_language: "Évaluez les compétences langagières :",
-        instruction_motor: "Évaluez les aspects suivants :",
-
-        // Rating scale headers
-        rating_na: "N/A",
-        rating_1: "Très insuffisant",
-        rating_2: "Insuffisant",
-        rating_3: "Satisfaisant",
-        rating_4: "Bon",
-        rating_5: "Très bon",
-
-        // Comments
-        label_learning_comments: "Observations complémentaires",
-        label_social_comments: "Observations complémentaires",
-        label_language_comments: "Observations complémentaires",
-        label_motor_comments: "Observations complémentaires",
-
-        // Measures
-        instruction_measures: "Quelles mesures ont déjà été mises en place ?",
-        label_measures_details: "Détails des mesures prises",
-        label_measures_effect: "Effets observés",
-
-        // Observations
-        label_teacher_obs: "Observations de l'enseignant(e)",
-        placeholder_observations: "Décrivez vos observations concernant l'élève...",
-        label_recommendations: "Recommandations / Demandes",
-        label_additional: "Informations supplémentaires",
-
-        // Signature
+        label_context: "Introduction et contexte",
+        label_measures_text: "Mesures antérieures",
+        label_facts_conclusion: "Conclusion / Analyse des faits",
+        label_additional_info: "Informations complémentaires",
+        label_request: "Motif du signalement et demande",
         label_date: "Date",
         label_place: "Lieu",
-        label_signatory: "Nom du signataire",
+        label_signatory_1: "Signataire 1",
+        label_signatory_2: "Signataire 2",
+        label_signatory_name: "Nom",
         label_signatory_role: "Fonction",
-        label_signature_area: "Signature",
+        label_signatory_email: "Email",
+        label_signatory_phone: "Téléphone",
+
+        // Instructions
+        instruction_context: "Décrivez le contexte général, le parcours scolaire et les antécédents pertinents de l'élève.",
+        instruction_measures: "Énumérez les mesures mises en place et leur effet.",
+        instruction_observations: "Listez les faits et comportements observés. Chaque fait sera présenté sous forme de point dans le document final.",
+        instruction_additional: "Ajoutez tout élément complémentaire pertinent (situations particulières, enjeux éducatifs, etc.).",
+        instruction_request: "Précisez la démarche entreprise et la demande adressée au destinataire.",
+
+        // Placeholders
+        placeholder_context: "Par la présente, nous voulons faire part de nos inquiétudes quant au bien-être de l'élève...",
+        placeholder_measures: "Différentes mesures ont été mises en place depuis... (assistance en famille, thérapie, etc.)",
+        placeholder_facts_conclusion: "Ces événements ne constituent pas des situations isolées mais s'inscrivent dans une dynamique comportementale...",
+        placeholder_request: "Le présent signalement s'inscrit dans une démarche de protection et de prévention...",
 
         // Messages
         msg_saved: "Brouillon sauvegardé avec succès",
@@ -120,123 +69,71 @@ const translations = {
         msg_export_error: "Erreur lors de l'export",
 
         // Word document
-        doc_title: "SIGNALEMENT",
-        doc_subtitle: "Centre pour le Développement Socio-Émotionnel",
-        doc_annexe: "Annexe Junglinster",
-        doc_confidential: "CONFIDENTIEL",
-        doc_page: "Page",
-        doc_generated: "Généré le",
-        doc_signature_line: "Signature :",
-        doc_yes: "Oui",
-        doc_no: "Non",
+        doc_salutation: "Madame, Monsieur,",
+        doc_closing: "Nous restons bien entendu à votre disposition pour toute information complémentaire.",
+        doc_regards: "Veuillez agréer, Madame, Monsieur, l'expression de nos sentiments distingués.",
+        doc_subject_prefix: "Objet: Signalement de l'élève",
+        doc_footer_address: "31, rue du Parc",
+        doc_footer_phone: "Tél: 247-65117",
+        doc_footer_city: "L-5374 Munsbach-Château",
+        doc_footer_email: "Email: info@cc-cdse.lu",
     },
 
     de: {
-        // App header
-        app_title: "Signalement",
-        app_subtitle: "CDSE — Annexe Junglinster",
+        // Header
         btn_reset: "Neues Signalement",
         btn_export: "Word exportieren",
         btn_save_draft: "Entwurf speichern",
         btn_load_draft: "Entwurf laden",
         btn_preview: "Vorschau",
         btn_close: "Schließen",
-        btn_clear_signature: "Löschen",
+        btn_add_fact: "Fakt hinzufügen",
         preview_title: "Vorschau des Signalements",
 
         // Section titles
+        section_recipient: "Empfänger",
         section_student: "Schülerinformationen",
-        section_parents: "Eltern / Erziehungsberechtigte",
-        section_motif: "Grund des Signalements",
-        section_learning: "Lernverhalten",
-        section_social: "Sozial- und Emotionalverhalten",
-        section_language: "Sprachentwicklung",
-        section_motor: "Motorik und Konzentration",
+        section_context: "Kontext und schulischer Werdegang",
         section_measures: "Bereits ergriffene Maßnahmen",
-        section_observations: "Beobachtungen und Empfehlungen",
-        section_signature: "Datum und Unterschrift",
+        section_observations: "Beobachtete Fakten",
+        section_additional: "Zusätzliche Elemente",
+        section_request: "Vorgehen und Antrag",
+        section_signatories: "Unterzeichner",
 
-        // Section short names (progress bar)
-        section_short_1: "Schüler",
-        section_short_2: "Eltern",
-        section_short_3: "Grund",
-        section_short_4: "Lernen",
-        section_short_5: "Sozial",
-        section_short_6: "Sprache",
-        section_short_7: "Motorik",
-        section_short_8: "Maßnahmen",
-        section_short_9: "Beobachtungen",
-        section_short_10: "Unterschrift",
-
-        // Student info labels
-        label_lastname: "Nachname",
-        label_firstname: "Vorname",
-        label_dob: "Geburtsdatum",
-        label_class: "Klasse",
-        label_school: "Schule",
+        // Labels
+        label_institution: "Institution / Empfänger",
+        label_recipient_address: "Adresse",
+        label_student_name: "Name und Vorname des Schülers",
+        label_matricule: "Matrikelnummer",
+        label_age: "Alter",
+        label_class: "Klasse / Struktur",
         label_school_year: "Schuljahr",
-        label_teacher: "Klassenlehrer/in",
-        label_nationality: "Nationalität",
-        label_home_language: "Zu Hause gesprochene Sprache(n)",
-        label_lux_level: "Luxemburgisch-Niveau",
-
-        // Select options
-        select_placeholder: "-- Auswählen --",
-        level_none: "Keine Kenntnisse",
-        level_basic: "Grundkenntnisse",
-        level_intermediate: "Mittelstufe",
-        level_good: "Gut",
-        level_fluent: "Fließend",
-
-        // Parents
-        label_parent1: "Elternteil / Erziehungsberechtigte(r) 1",
-        label_parent2: "Elternteil / Erziehungsberechtigte(r) 2",
-        label_name: "Name und Vorname",
-        label_phone: "Telefon",
-        label_email: "E-Mail",
-        label_address: "Adresse",
-
-        // Motif
-        instruction_motif: "Bitte wählen Sie den/die Grund/Gründe des Signalements:",
-        label_other_motif: "Anderer Grund (bitte angeben)",
-
-        // Rating instructions
-        instruction_learning: "Bewerten Sie die folgenden Bereiche:",
-        instruction_social: "Bewerten Sie die folgenden Aspekte:",
-        instruction_language: "Bewerten Sie die sprachlichen Kompetenzen:",
-        instruction_motor: "Bewerten Sie die folgenden Aspekte:",
-
-        // Rating scale headers
-        rating_na: "N/A",
-        rating_1: "Sehr unzureichend",
-        rating_2: "Unzureichend",
-        rating_3: "Befriedigend",
-        rating_4: "Gut",
-        rating_5: "Sehr gut",
-
-        // Comments
-        label_learning_comments: "Ergänzende Beobachtungen",
-        label_social_comments: "Ergänzende Beobachtungen",
-        label_language_comments: "Ergänzende Beobachtungen",
-        label_motor_comments: "Ergänzende Beobachtungen",
-
-        // Measures
-        instruction_measures: "Welche Maßnahmen wurden bereits ergriffen?",
-        label_measures_details: "Details der ergriffenen Maßnahmen",
-        label_measures_effect: "Beobachtete Wirkungen",
-
-        // Observations
-        label_teacher_obs: "Beobachtungen der Lehrkraft",
-        placeholder_observations: "Beschreiben Sie Ihre Beobachtungen zum Schüler/zur Schülerin...",
-        label_recommendations: "Empfehlungen / Anträge",
-        label_additional: "Zusätzliche Informationen",
-
-        // Signature
+        label_context: "Einleitung und Kontext",
+        label_measures_text: "Bisherige Maßnahmen",
+        label_facts_conclusion: "Schlussfolgerung / Analyse der Fakten",
+        label_additional_info: "Ergänzende Informationen",
+        label_request: "Grund des Signalements und Antrag",
         label_date: "Datum",
         label_place: "Ort",
-        label_signatory: "Name des Unterzeichners",
+        label_signatory_1: "Unterzeichner 1",
+        label_signatory_2: "Unterzeichner 2",
+        label_signatory_name: "Name",
         label_signatory_role: "Funktion",
-        label_signature_area: "Unterschrift",
+        label_signatory_email: "E-Mail",
+        label_signatory_phone: "Telefon",
+
+        // Instructions
+        instruction_context: "Beschreiben Sie den allgemeinen Kontext, den schulischen Werdegang und die relevanten Vorgeschichten des Schülers.",
+        instruction_measures: "Führen Sie die bereits ergriffenen Maßnahmen und deren Wirkung auf.",
+        instruction_observations: "Listen Sie die beobachteten Fakten und Verhaltensweisen auf. Jeder Fakt wird im Dokument als Aufzählungspunkt dargestellt.",
+        instruction_additional: "Fügen Sie alle relevanten ergänzenden Elemente hinzu (besondere Situationen, pädagogische Herausforderungen etc.).",
+        instruction_request: "Erläutern Sie das Vorgehen und den Antrag an den Empfänger.",
+
+        // Placeholders
+        placeholder_context: "Hiermit möchten wir unsere Bedenken bezüglich des Wohlbefindens des Schülers mitteilen...",
+        placeholder_measures: "Seit... wurden verschiedene Maßnahmen ergriffen (Familienbegleitung, Therapie etc.)",
+        placeholder_facts_conclusion: "Diese Vorfälle stellen keine Einzelfälle dar, sondern reihen sich in eine anhaltende Verhaltensdynamik ein...",
+        placeholder_request: "Dieses Signalement erfolgt im Rahmen einer Schutz- und Präventionsmaßnahme...",
 
         // Messages
         msg_saved: "Entwurf erfolgreich gespeichert",
@@ -247,19 +144,17 @@ const translations = {
         msg_export_error: "Fehler beim Export",
 
         // Word document
-        doc_title: "SIGNALEMENT",
-        doc_subtitle: "Centre pour le Développement Socio-Émotionnel",
-        doc_annexe: "Annexe Junglinster",
-        doc_confidential: "VERTRAULICH",
-        doc_page: "Seite",
-        doc_generated: "Erstellt am",
-        doc_signature_line: "Unterschrift:",
-        doc_yes: "Ja",
-        doc_no: "Nein",
+        doc_salutation: "Sehr geehrte Damen und Herren,",
+        doc_closing: "Für weitere Informationen stehen wir Ihnen selbstverständlich gerne zur Verfügung.",
+        doc_regards: "Mit freundlichen Grüßen",
+        doc_subject_prefix: "Betreff: Signalement des Schülers",
+        doc_footer_address: "31, rue du Parc",
+        doc_footer_phone: "Tel: 247-65117",
+        doc_footer_city: "L-5374 Munsbach-Château",
+        doc_footer_email: "E-Mail: info@cc-cdse.lu",
     }
 };
 
-// i18n engine
 class I18n {
     constructor(defaultLang = 'fr') {
         this.currentLang = defaultLang;
@@ -281,20 +176,15 @@ class I18n {
     }
 
     applyTranslations() {
-        // Translate data-i18n elements
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             const text = this.t(key);
-            if (el.tagName === 'INPUT' && el.type !== 'submit') {
-                // skip input values
-            } else if (el.tagName === 'OPTION') {
+            if (el.tagName === 'OPTION') {
                 el.textContent = text;
             } else {
                 el.textContent = text;
             }
         });
-
-        // Translate placeholders
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             el.placeholder = this.t(key);
@@ -310,5 +200,4 @@ class I18n {
     }
 }
 
-// Global instance
 const i18n = new I18n('fr');

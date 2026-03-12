@@ -1,0 +1,78 @@
+/* ============================================
+   Print Styles - Signalement Generator
+   ============================================ */
+
+@media print {
+    .no-print,
+    .app-header,
+    .progress-container,
+    .footer-actions,
+    .modal-overlay,
+    .toast {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        padding: 0;
+        font-size: 12pt;
+    }
+
+    .main-content {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .form-section {
+        box-shadow: none;
+        border: none;
+        page-break-inside: avoid;
+        margin-bottom: 12pt;
+    }
+
+    .section-header {
+        background: none !important;
+        border-bottom: 2pt solid #1a56db;
+        padding: 6pt 0;
+    }
+
+    .section-number {
+        background: #1a56db;
+        width: 24pt;
+        height: 24pt;
+        font-size: 11pt;
+    }
+
+    .section-header h2 {
+        font-size: 13pt;
+    }
+
+    .section-body {
+        padding: 12pt 0;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        border: none;
+        border-bottom: 1pt solid #999;
+        border-radius: 0;
+        padding: 4pt 2pt;
+        font-size: 11pt;
+    }
+
+    .checkbox-item {
+        border: none;
+        padding: 2pt 0;
+    }
+
+    .rating-table {
+        font-size: 10pt;
+    }
+
+    .signature-box {
+        border: 1pt solid #999;
+        min-height: 80pt;
+    }
+}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbeitsblatt-Übersicht – CDSE</title>
+  <style>
+    :root {
+      --primary: #2C5F8A;
+      --bg: #F0F4F8;
+      --card: #fff;
+      --border: #DDE2E8;
+      --text: #2C3E50;
+      --muted: #7F8C8D;
+      --radius: 10px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    .topbar {
+      background: var(--primary);
+      color: white;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .topbar-title { font-size: 18px; font-weight: 700; flex: 1; }
+    .topbar a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px; padding: 7px 14px; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; transition: background 0.15s; }
+    .topbar a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+    .suche-leiste {
+      background: white;
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .suche-input {
+      flex: 1;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      max-width: 400px;
+    }
+    .suche-input:focus { border-color: var(--primary); }
+    .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .chip.aktiv { border-color: var(--primary); background: var(--primary); color: white; }
+
+    .content { padding: 28px 32px; }
+
+    .kategorie-titel {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+    .kategorie-titel:first-child { margin-top: 0; }
+
+    .ab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .ab-karte {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+      overflow: hidden;
+      transition: all 0.18s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .ab-karte:hover {
+      border-color: var(--akzent, var(--primary));
+      box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+      transform: translateY(-2px);
+    }
+
+    .ab-karte-kopf {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ab-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .ab-titel { font-size: 13px; font-weight: 700; line-height: 1.3; }
+
+    .ab-karte-body { padding: 10px 16px 14px; flex: 1; }
+    .ab-beschreibung { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+
+    .ab-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+    .ab-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #F3F4F6;
+      color: #6B7280;
+    }
+
+    .ab-open-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 8px;
+      background: var(--akzent, var(--primary));
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .ab-open-btn:hover { opacity: 0.87; }
+
+    .leer { text-align: center; color: var(--muted); padding: 40px; font-size: 14px; grid-column: 1/-1; }
+
+    @media (max-width: 700px) {
+      .topbar, .suche-leiste, .content { padding-left: 16px; padding-right: 16px; }
+      .ab-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span style="font-size:22px;">📋</span>
+  <div class="topbar-title">Alle Arbeitsblätter – CDSE Bezugsarbeit</div>
+  <a href="../index.html">← Zur App</a>
+</div>
+
+<div class="suche-leiste">
+  <input type="text" class="suche-input" id="suche" placeholder="🔍  Arbeitsblatt suchen…" oninput="filtern()">
+  <div class="filter-chips" id="filter-chips"></div>
+</div>
+
+<div class="content">
+  <div id="ab-container"></div>
+</div>
+
+<script>
+const ARBEITSBLÄTTER = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    blaetter: [
+      {
+        titel: 'Meine Gefühle kennenlernen',
+        datei: 'emotionserkennung.html',
+        beschreibung: 'Grundemotionen, Körperkarte, S-G-F-V-Kette, Gefühlstagebuch',
+        tags: ['Emotionen', 'Körper', 'KVT'],
+        seiten: 2,
+      },
+      {
+        titel: 'Meine Gefühle regulieren',
+        datei: 'emotionsregulation.html',
+        beschreibung: 'STOP-Technik, 4-7-8-Atmung, Notfallkoffer, 5-4-3-2-1 Grounding',
+        tags: ['DBT', 'Regulation', 'Achtsamkeit'],
+        seiten: 2,
+      },
+      {
+        titel: 'Meine Wut verstehen & steuern',
+        datei: 'wut-aggression.html',
+        beschreibung: 'Wutthermometer, Auslöser, Primäremotionen, Wutbrief',
+        tags: ['Wut', 'Aggression', 'Impulskontrolle'],
+        seiten: 2,
+      },
+      {
+        titel: 'Stress & Angst verstehen',
+        datei: 'stress-angst.html',
+        beschreibung: 'Stressoren, Stress-Ampel, Progressive Muskelentspannung, Sorgenzeit',
+        tags: ['Stress', 'Angst', 'Entspannung'],
+        seiten: 2,
+      },
+      {
+        titel: 'Mein Selbstwertgefühl stärken',
+        datei: 'selbstwertgefuehl.html',
+        beschreibung: 'Stärken, innerer Kritiker vs. Freund, Barometer, Brief an sich selbst',
+        tags: ['Selbstwert', 'Ressourcen', 'Selbstmitgefühl'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    blaetter: [
+      {
+        titel: 'Freundschaft & Konflikte',
+        datei: 'freundschaft-konflikte.html',
+        beschreibung: 'Soziogramm, WIN-WIN Konfliktmodell, Ich-Botschaften, Grenzen setzen',
+        tags: ['Freundschaft', 'Konflikt', 'GFK'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    blaetter: [
+      {
+        titel: 'Meine Familie verstehen',
+        datei: 'familie.html',
+        beschreibung: 'Familienbild, Beziehungsqualitäten, Regeln & Muster, Ressourcen',
+        tags: ['Familie', 'Genogramm', 'Systemisch'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    blaetter: [
+      {
+        titel: 'Alkohol – Was ich wirklich wissen sollte',
+        datei: 'konsum-alkohol.html',
+        beschreibung: 'Konsummuster, Risikocheck, Bilanz, Umgang mit Gruppendruck',
+        tags: ['Alkohol', 'MI', 'Prävention'],
+        seiten: 2,
+      },
+      {
+        titel: 'Cannabis & Konsum – Fakten & Motive',
+        datei: 'konsum-cannabis.html',
+        beschreibung: 'Konsummotive, Vor-/Nachteile, Konsummuster, Reduktionsplan',
+        tags: ['Cannabis', 'MI', 'Harm Reduction'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    blaetter: [
+      {
+        titel: 'Meine Zukunft – Wer will ich werden?',
+        datei: 'zukunftsplanung.html',
+        beschreibung: 'Traumwelt, Stärken-Kompass, Zielleiter, Hindernisse & Ressourcen',
+        tags: ['Beruf', 'Ziele', 'Motivation'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    blaetter: [
+      {
+        titel: 'Schlaf, Gesundheit & Energie',
+        datei: 'schlaf-gesundheit.html',
+        beschreibung: 'Schlaftagebuch, Schlafräuber, Energie-Bilanz, Schlaf-Routine, Body Scan',
+        tags: ['Schlaf', 'Gesundheit', 'Routine'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    blaetter: [
+      {
+        titel: 'Wer bin ich? – Meine Identität',
+        datei: 'identitaet.html',
+        beschreibung: 'Identitätsrad, Rollen, Werte, Prägungen, Lebensmotto',
+        tags: ['Identität', 'Werte', 'Entwicklung'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    blaetter: [
+      {
+        titel: 'Mein Sicherheitsplan',
+        datei: 'krisenplan.html',
+        beschreibung: 'Warnzeichen, Selbsthilfe, Ablenkung, Notfallkontakte Luxemburg, Gründe zu leben',
+        tags: ['Krise', 'Suizidprävention', 'Sicherheit'],
+        seiten: 2,
+      },
+    ]
+  },
+];
+
+let aktiverFilter = 'Alle';
+
+function init() {
+  const chips = document.getElementById('filter-chips');
+  const kategorien = ['Alle', ...ARBEITSBLÄTTER.map(k => k.kategorie)];
+  chips.innerHTML = kategorien.map(k =>
+    `<div class="chip ${k === 'Alle' ? 'aktiv' : ''}" onclick="setFilter('${k}')">${k === 'Alle' ? 'Alle' : k.split(' ')[0]}</div>`
+  ).join('');
+  render();
+}
+
+function setFilter(f) {
+  aktiverFilter = f;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('aktiv'));
+  document.querySelectorAll('.chip').forEach(c => {
+    if (c.textContent.trim() === (f === 'Alle' ? 'Alle' : f.split(' ')[0])) c.classList.add('aktiv');
+  });
+  render();
+}
+
+function filtern() { render(); }
+
+function render() {
+  const suche = document.getElementById('suche').value.toLowerCase();
+  const container = document.getElementById('ab-container');
+  let html = '';
+  let gesamt = 0;
+
+  ARBEITSBLÄTTER.forEach(kat => {
+    if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
+
+    const gefiltert = kat.blaetter.filter(b =>
+      !suche || b.titel.toLowerCase().includes(suche) ||
+      b.beschreibung.toLowerCase().includes(suche) ||
+      b.tags.some(t => t.toLowerCase().includes(suche))
+    );
+    if (gefiltert.length === 0) return;
+    gesamt += gefiltert.length;
+
+    html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span style="font-size:12px;font-weight:400;color:var(--muted);margin-left:6px;">${gefiltert.length} Blatt/Blätter</span></div>`;
+    html += `<div class="ab-grid">`;
+    gefiltert.forEach(b => {
+      html += `
+        <a class="ab-karte" href="${b.datei}" target="_blank" style="--akzent:${kat.farbe};">
+          <div class="ab-karte-kopf">
+            <div class="ab-icon" style="background:${kat.farbe}20;">${kat.icon}</div>
+            <div class="ab-titel">${b.titel}</div>
+          </div>
+          <div class="ab-karte-body">
+            <div class="ab-beschreibung">${b.beschreibung}</div>
+            <div class="ab-tags">
+              ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+              <span class="ab-tag">📄 ${b.seiten} Seiten</span>
+            </div>
+            <div class="ab-open-btn" style="background:${kat.farbe};">
+              📋 Öffnen & Drucken
+            </div>
+          </div>
+        </a>`;
+    });
+    html += `</div>`;
+  });
+
+  if (gesamt === 0) {
+    html = `<div class="leer">Keine Arbeitsblätter gefunden für „${suche}"</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

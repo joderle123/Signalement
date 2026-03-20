@@ -27,6 +27,16 @@
     <div class="nav-item" id="nav-kalender" onclick="showView('kalender')">
       <span class="nav-item-icon">📅</span> Kalender
     </div>
+    <a class="nav-item" href="arbeitsblatter/index.html" target="_blank">
+      <span class="nav-item-icon">📋</span> Alle Arbeitsblätter
+    </a>
+    <div class="nav-item" onclick="exportDaten()">
+      <span class="nav-item-icon">💾</span> Daten exportieren
+    </div>
+    <div class="nav-item" onclick="document.getElementById('import-input').click()">
+      <span class="nav-item-icon">📂</span> Daten importieren
+    </div>
+    <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
   </nav>
 
   <div class="sidebar-schueler-section">

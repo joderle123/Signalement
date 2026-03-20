@@ -1,0 +1,795 @@
+// ============================================================
+// CDSE Bezugsarbeit Tool - App Logic
+// ============================================================
+
+// ---- State ----
+const APP = {
+  currentView: 'home',
+  currentSchuelerId: null,
+  currentProfilTab: 'themen',
+  kalenderDatum: new Date(),
+};
+
+// ---- Init ----
+document.addEventListener('DOMContentLoaded', () => {
+  renderSidebar();
+  showView('home');
+});
+
+// ============================================================
+// VIEWS
+// ============================================================
+function showView(view, schuelerId = null) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  APP.currentView = view;
+
+  if (view === 'home') {
+    document.getElementById('view-home').classList.add('active');
+    document.getElementById('nav-home').classList.add('active');
+    renderHome();
+  } else if (view === 'profil' && schuelerId) {
+    APP.currentSchuelerId = schuelerId;
+    document.getElementById('view-profil').classList.add('active');
+    renderProfil(schuelerId);
+    updateSidebarActive(schuelerId);
+  } else if (view === 'kalender') {
+    document.getElementById('view-kalender').classList.add('active');
+    document.getElementById('nav-kalender').classList.add('active');
+    renderKalender();
+  }
+}
+
+function updateSidebarActive(schuelerId) {
+  document.querySelectorAll('.schueler-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === schuelerId);
+  });
+}
+
+// ============================================================
+// SIDEBAR
+// ============================================================
+function renderSidebar() {
+  const liste = document.getElementById('schueler-sidebar-liste');
+  const schueler = DB.getSchueler();
+
+  if (schueler.length === 0) {
+    liste.innerHTML = '<div style="padding:12px 16px;font-size:12px;color:rgba(255,255,255,0.35);">Noch keine Schüler</div>';
+    return;
+  }
+
+  liste.innerHTML = schueler.map(s => `
+    <div class="schueler-item" data-id="${s.id}" onclick="showView('profil','${s.id}')">
+      <div class="schueler-avatar">${s.foto
+        ? `<img src="${s.foto}" alt="">`
+        : getInitials(s.vorname, s.nachname)}
+      </div>
+      <div class="schueler-item-info">
+        <div class="schueler-item-name">${s.vorname} ${s.nachname}</div>
+        <div class="schueler-item-meta">${s.klasse || '—'} · ${alter(s.geburtsdatum)}</div>
+      </div>
+      <div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// HOME VIEW
+// ============================================================
+function renderHome() {
+  const schueler = DB.getSchueler();
+  const grid = document.getElementById('home-grid');
+  const suchfeld = document.getElementById('home-suche');
+  const filter = suchfeld ? suchfeld.value.toLowerCase() : '';
+  const gefiltert = schueler.filter(s =>
+    `${s.vorname} ${s.nachname} ${s.klasse}`.toLowerCase().includes(filter)
+  );
+
+  if (gefiltert.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-state-icon">👥</div>
+        <div class="empty-state-title">Noch keine Schüler</div>
+        <div class="empty-state-text">Erstelle das erste Schülerprofil um zu beginnen.</div>
+        <button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuen Schüler anlegen</button>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = gefiltert.map(s => {
+    const notizen = DB.getNotizen(s.id);
+    const abgeschlossen = countStatus(s, 'abgeschlossen');
+    const inBearbeitung = countStatus(s, 'in-bearbeitung');
+    return `
+    <div class="schueler-card" onclick="showView('profil','${s.id}')">
+      <div class="risiko-indicator ${s.risiko || 'niedrig'}">
+        <div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div>
+        ${capitalize(s.risiko || 'niedrig')}
+      </div>
+      <div class="schueler-card-header">
+        <div class="schueler-card-avatar">${s.foto
+          ? `<img src="${s.foto}" alt="">`
+          : getInitials(s.vorname, s.nachname)}
+        </div>
+        <div>
+          <div class="schueler-card-name">${s.vorname} ${s.nachname}</div>
+          <div class="schueler-card-meta">${s.klasse || '—'} &middot; ${alter(s.geburtsdatum)}</div>
+        </div>
+      </div>
+      <div class="schueler-card-stats">
+        <span class="stat-pill green">✅ ${abgeschlossen} abgeschlossen</span>
+        <span class="stat-pill blue">◐ ${inBearbeitung} aktiv</span>
+        <span class="stat-pill orange">💬 ${notizen.length} Notizen</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function countStatus(schueler, status) {
+  return Object.values(schueler.topicStatus || {}).filter(v => v === status).length;
+}
+
+// ============================================================
+// PROFIL VIEW
+// ============================================================
+function renderProfil(schuelerId) {
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) { showView('home'); return; }
+
+  // Header
+  document.getElementById('profil-name').textContent = `${s.vorname} ${s.nachname}`;
+  document.getElementById('profil-klasse').textContent = s.klasse || '—';
+  document.getElementById('profil-alter').textContent = alter(s.geburtsdatum);
+  document.getElementById('profil-seit').textContent = s.eintrittsdatum
+    ? `Seit ${formatDatum(s.eintrittsdatum)}` : '';
+
+  const avatarEl = document.getElementById('profil-avatar');
+  avatarEl.innerHTML = s.foto
+    ? `<img src="${s.foto}" alt=""><div class="profil-avatar-overlay">📷</div>`
+    : `${getInitials(s.vorname, s.nachname)}<div class="profil-avatar-overlay">📷</div>`;
+
+  // Risikoampel im Header
+  const risikoEl = document.getElementById('profil-risiko');
+  risikoEl.className = `risiko-indicator ${s.risiko || 'niedrig'}`;
+  risikoEl.innerHTML = `<div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div> ${capitalize(s.risiko || 'niedrig')} Risiko`;
+
+  // Aktiven Tab rendern
+  showProfilTab(APP.currentProfilTab);
+}
+
+function showProfilTab(tab) {
+  APP.currentProfilTab = tab;
+  document.querySelectorAll('.profil-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
+  });
+  document.querySelectorAll('.profil-tab-content').forEach(c => {
+    c.classList.toggle('active', c.dataset.tab === tab);
+  });
+
+  if (tab === 'themen') renderThemen();
+  if (tab === 'notizen') renderNotizen();
+  if (tab === 'ziele') renderZiele();
+  if (tab === 'info') renderInfo();
+}
+
+// ============================================================
+// THEMEN TAB
+// ============================================================
+function renderThemen() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  if (!s) return;
+  const container = document.getElementById('themen-container');
+  const topicStatus = s.topicStatus || {};
+
+  container.innerHTML = THEMEN_KATEGORIEN.map(kat => {
+    const total = kat.themen.length;
+    const done = kat.themen.filter(t => topicStatus[t.id] === 'abgeschlossen').length;
+    const active = kat.themen.filter(t => topicStatus[t.id] === 'in-bearbeitung').length;
+
+    return `
+    <div class="kategorie-section">
+      <div class="kategorie-header">
+        <div class="kategorie-icon" style="background:${kat.farbe}22;">${kat.icon}</div>
+        <div class="kategorie-titel">${kat.titel}</div>
+        <div class="kategorie-progress">${done}/${total} abgeschlossen</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div class="progress-bar">
+          <div class="progress-bar-fill" style="width:${(done/total)*100}%;background:${kat.farbe};"></div>
+        </div>
+      </div>
+      <div class="themen-grid">
+        ${kat.themen.map(thema => {
+          const status = topicStatus[thema.id] || 'nicht-begonnen';
+          const statusInfo = THEMA_STATUS[status];
+          return `
+          <div class="thema-card status-${status}"
+               onclick="openThemaPanel('${kat.id}','${thema.id}')"
+               style="border-left: 3px solid ${kat.farbe};">
+            <div class="thema-card-titel">${thema.titel}</div>
+            <div class="thema-card-beschreibung">${thema.beschreibung}</div>
+            <div class="thema-status-icon" title="${statusInfo.label}">${statusInfo.icon}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// THEMA PANEL (Seitenpanel für ein einzelnes Thema)
+// ============================================================
+function openThemaPanel(katId, themaId) {
+  const kat = THEMEN_KATEGORIEN.find(k => k.id === katId);
+  const thema = kat.themen.find(t => t.id === themaId);
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const status = (s.topicStatus || {})[themaId] || 'nicht-begonnen';
+  const themaNotizen = DB.getNotizen(APP.currentSchuelerId).filter(n => n.themaId === themaId);
+
+  // Remove existing panel
+  document.getElementById('thema-panel')?.remove();
+
+  const panel = document.createElement('div');
+  panel.id = 'thema-panel';
+  panel.className = 'thema-panel';
+  panel.innerHTML = `
+    <div class="thema-panel-header" style="background:${kat.farbe}18;border-bottom:2px solid ${kat.farbe}30;">
+      <span style="font-size:22px;">${kat.icon}</span>
+      <div class="thema-panel-title">${thema.titel}</div>
+      <button class="btn-icon" onclick="document.getElementById('thema-panel').remove()">✕</button>
+    </div>
+    <div class="thema-panel-body">
+      <p style="color:var(--text-light);font-size:13px;margin-bottom:16px;">${thema.beschreibung}</p>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:block;margin-bottom:8px;">Status</label>
+        <div class="status-selector">
+          ${Object.entries(THEMA_STATUS).map(([key, val]) => `
+            <button class="status-btn ${status === key ? 'active' : ''}"
+              style="${status === key ? `background:${getStatusFarbe(key)};border-color:${getStatusFarbe(key)};` : ''}"
+              onclick="setThemaStatus('${themaId}','${key}',this)">
+              ${val.icon} ${val.label}
+            </button>`).join('')}
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <label>Notizen zu diesem Thema</label>
+        </div>
+        <div id="thema-notizen-liste">
+          ${themaNotizen.length === 0
+            ? '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px;">Noch keine Notizen</div>'
+            : themaNotizen.map(n => renderNotizKarte(n)).join('')}
+        </div>
+        <div style="margin-top:12px;">
+          <textarea id="thema-notiz-input" class="notiz-textarea" placeholder="Notiz zu diesem Thema hinzufügen..." rows="3"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+            <button class="btn btn-primary btn-sm" onclick="addThemaNotiz('${themaId}')">Notiz speichern</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+}
+
+function getStatusFarbe(key) {
+  const farben = {
+    'nicht-begonnen': '#BDC3C7',
+    'in-bearbeitung': '#3498DB',
+    'abgeschlossen': '#27AE60',
+    'nicht-relevant': '#95A5A6',
+  };
+  return farben[key] || '#ccc';
+}
+
+function setThemaStatus(themaId, status, btn) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const topicStatus = s.topicStatus || {};
+  topicStatus[themaId] = status;
+  DB.updateSchueler(APP.currentSchuelerId, { topicStatus });
+
+  // Update button UI
+  const panel = document.getElementById('thema-panel');
+  panel.querySelectorAll('.status-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = '';
+    b.style.borderColor = '';
+  });
+  btn.classList.add('active');
+  btn.style.background = getStatusFarbe(status);
+  btn.style.borderColor = getStatusFarbe(status);
+
+  // Refresh themen grid in background
+  renderThemen();
+  showToast('Status aktualisiert', 'success');
+}
+
+function addThemaNotiz(themaId) {
+  const input = document.getElementById('thema-notiz-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  DB.createNotiz({
+    schuelerId: APP.currentSchuelerId,
+    datum: new Date().toISOString().split('T')[0],
+    inhalt: text,
+    kategorie: 'beobachtung',
+    themaId,
+  });
+
+  input.value = '';
+  // Refresh thema notizen
+  const notizen = DB.getNotizen(APP.currentSchuelerId).filter(n => n.themaId === themaId);
+  document.getElementById('thema-notizen-liste').innerHTML = notizen.map(n => renderNotizKarte(n)).join('');
+  showToast('Notiz gespeichert', 'success');
+}
+
+// ============================================================
+// NOTIZEN TAB
+// ============================================================
+function renderNotizen() {
+  const notizen = DB.getNotizen(APP.currentSchuelerId)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+
+  const liste = document.getElementById('notizen-liste');
+  if (notizen.length === 0) {
+    liste.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:30px;">Noch keine Notizen vorhanden</div>';
+  } else {
+    liste.innerHTML = notizen.map(n => renderNotizKarte(n)).join('');
+  }
+}
+
+function renderNotizKarte(notiz) {
+  const kat = NOTIZ_KATEGORIEN[notiz.kategorie] || NOTIZ_KATEGORIEN.session;
+  return `
+    <div class="notiz-karte" style="border-left-color:${kat.farbe};">
+      <div class="notiz-karte-header">
+        <span class="notiz-badge" style="background:${kat.farbe}22;color:${kat.farbe};">${kat.icon} ${kat.label}</span>
+        ${notiz.themaId ? `<span class="notiz-badge" style="background:#EBF5FB;color:#2980B9;">📌 Thema</span>` : ''}
+        <span class="notiz-datum">${formatDatum(notiz.datum)}</span>
+        <button class="notiz-delete" onclick="deleteNotiz('${notiz.id}')">🗑</button>
+      </div>
+      <div class="notiz-inhalt">${escapeHtml(notiz.inhalt)}</div>
+    </div>`;
+}
+
+function addNotiz() {
+  const textarea = document.getElementById('neue-notiz-text');
+  const kategorie = document.getElementById('neue-notiz-kategorie').value;
+  const datum = document.getElementById('neue-notiz-datum').value;
+  const text = textarea.value.trim();
+  if (!text) return;
+
+  DB.createNotiz({
+    schuelerId: APP.currentSchuelerId,
+    datum: datum || new Date().toISOString().split('T')[0],
+    inhalt: text,
+    kategorie,
+  });
+
+  textarea.value = '';
+  renderNotizen();
+  showToast('Notiz gespeichert', 'success');
+}
+
+function deleteNotiz(id) {
+  if (!confirm('Notiz wirklich löschen?')) return;
+  DB.deleteNotiz(id);
+  renderNotizen();
+  showToast('Notiz gelöscht');
+}
+
+// ============================================================
+// ZIELE TAB
+// ============================================================
+function renderZiele() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  const liste = document.getElementById('ziele-liste');
+
+  liste.innerHTML = ziele.length === 0
+    ? '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">Noch keine Ziele definiert</div>'
+    : ziele.map((z, i) => `
+      <div class="ziel-item">
+        <input type="checkbox" class="ziel-checkbox" ${z.erledigt ? 'checked' : ''}
+          onchange="toggleZiel(${i})">
+        <span class="ziel-text ${z.erledigt ? 'erledigt' : ''}">${escapeHtml(z.text)}</span>
+        <button class="btn-icon btn-sm" style="font-size:12px;" onclick="deleteZiel(${i})">🗑</button>
+      </div>`).join('');
+}
+
+function addZiel() {
+  const input = document.getElementById('neues-ziel-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  ziele.push({ text, erledigt: false, erstellt: new Date().toISOString() });
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  input.value = '';
+  renderZiele();
+}
+
+function toggleZiel(index) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  ziele[index].erledigt = !ziele[index].erledigt;
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  renderZiele();
+}
+
+function deleteZiel(index) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  ziele.splice(index, 1);
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  renderZiele();
+}
+
+// ============================================================
+// INFO TAB
+// ============================================================
+function renderInfo() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  document.getElementById('info-allgemein').value = s.allgemeineNotizen || '';
+  document.getElementById('info-risiko').value = s.risiko || 'niedrig';
+}
+
+function saveInfo() {
+  DB.updateSchueler(APP.currentSchuelerId, {
+    allgemeineNotizen: document.getElementById('info-allgemein').value,
+    risiko: document.getElementById('info-risiko').value,
+  });
+  renderProfil(APP.currentSchuelerId);
+  renderSidebar();
+  showToast('Informationen gespeichert', 'success');
+}
+
+// ============================================================
+// SCHÜLER MODAL (Anlegen / Bearbeiten)
+// ============================================================
+function openSchuelerModal(schuelerId = null) {
+  const s = schuelerId ? DB.getSchuelerById(schuelerId) : null;
+  const titel = s ? 'Schüler bearbeiten' : 'Neuen Schüler anlegen';
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'schueler-modal';
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-header">
+        <span>👤</span>
+        <div class="modal-title">${titel}</div>
+        <button class="modal-close" onclick="closeModal('schueler-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Vorname *</label>
+            <input type="text" id="m-vorname" value="${s?.vorname || ''}" placeholder="Vorname">
+          </div>
+          <div class="form-group">
+            <label>Nachname *</label>
+            <input type="text" id="m-nachname" value="${s?.nachname || ''}" placeholder="Nachname">
+          </div>
+          <div class="form-group">
+            <label>Geburtsdatum</label>
+            <input type="date" id="m-geburtsdatum" value="${s?.geburtsdatum || ''}">
+          </div>
+          <div class="form-group">
+            <label>Klasse / Gruppe</label>
+            <input type="text" id="m-klasse" value="${s?.klasse || ''}" placeholder="z.B. Gruppe A">
+          </div>
+          <div class="form-group">
+            <label>Eintrittsdatum</label>
+            <input type="date" id="m-eintrittsdatum" value="${s?.eintrittsdatum || ''}">
+          </div>
+          <div class="form-group">
+            <label>Risikoeinschätzung</label>
+            <select id="m-risiko">
+              <option value="niedrig" ${s?.risiko === 'niedrig' ? 'selected' : ''}>🟢 Niedrig</option>
+              <option value="mittel" ${s?.risiko === 'mittel' ? 'selected' : ''}>🟡 Mittel</option>
+              <option value="hoch" ${s?.risiko === 'hoch' ? 'selected' : ''}>🔴 Hoch</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('schueler-modal')">Abbrechen</button>
+        <button class="btn btn-primary" onclick="saveSchueler('${schuelerId || ''}')">Speichern</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal('schueler-modal'); });
+  document.getElementById('m-vorname').focus();
+}
+
+function saveSchueler(schuelerId) {
+  const vorname = document.getElementById('m-vorname').value.trim();
+  const nachname = document.getElementById('m-nachname').value.trim();
+  if (!vorname || !nachname) {
+    showToast('Vor- und Nachname sind Pflichtfelder', 'error');
+    return;
+  }
+
+  const daten = {
+    vorname,
+    nachname,
+    geburtsdatum: document.getElementById('m-geburtsdatum').value,
+    klasse: document.getElementById('m-klasse').value,
+    eintrittsdatum: document.getElementById('m-eintrittsdatum').value,
+    risiko: document.getElementById('m-risiko').value,
+  };
+
+  if (schuelerId) {
+    DB.updateSchueler(schuelerId, daten);
+    showToast('Schüler aktualisiert', 'success');
+    renderProfil(schuelerId);
+  } else {
+    const neu = DB.createSchueler(daten);
+    showToast('Schüler angelegt', 'success');
+    showView('profil', neu.id);
+  }
+
+  closeModal('schueler-modal');
+  renderSidebar();
+  if (APP.currentView === 'home') renderHome();
+}
+
+function deleteSchueler(schuelerId) {
+  const s = DB.getSchuelerById(schuelerId);
+  if (!confirm(`Schüler "${s.vorname} ${s.nachname}" wirklich löschen? Alle Daten gehen verloren!`)) return;
+  DB.deleteSchueler(schuelerId);
+  renderSidebar();
+  showView('home');
+  showToast('Schüler gelöscht');
+}
+
+// ============================================================
+// KALENDER
+// ============================================================
+function renderKalender() {
+  const jahr = APP.kalenderDatum.getFullYear();
+  const monat = APP.kalenderDatum.getMonth();
+  const monate = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+  document.getElementById('kalender-monat-label').textContent = `${monate[monat]} ${jahr}`;
+
+  // Tage im Monat
+  const ersterTag = new Date(jahr, monat, 1).getDay();
+  const startOffset = ersterTag === 0 ? 6 : ersterTag - 1; // Montag = 0
+  const tageImMonat = new Date(jahr, monat + 1, 0).getDate();
+
+  const heute = new Date();
+  const alleTermine = DB.getTermine();
+
+  let html = '';
+  // Leere Felder am Anfang
+  for (let i = 0; i < startOffset; i++) {
+    html += '<div class="kalender-tag leer"></div>';
+  }
+
+  for (let tag = 1; tag <= tageImMonat; tag++) {
+    const datumStr = `${jahr}-${String(monat+1).padStart(2,'0')}-${String(tag).padStart(2,'0')}`;
+    const isHeute = heute.getFullYear() === jahr && heute.getMonth() === monat && heute.getDate() === tag;
+    const termine = alleTermine.filter(t => t.datum === datumStr);
+
+    html += `
+      <div class="kalender-tag ${isHeute ? 'heute' : ''}" onclick="openTerminModal('${datumStr}')">
+        <div class="tag-nummer">${tag}</div>
+        <div class="tag-events">
+          ${termine.slice(0,3).map(t => {
+            const typ = TERMIN_TYPEN[t.typ] || TERMIN_TYPEN.termin;
+            return `<div class="tag-event" style="background:${typ.farbe};" title="${t.titel}">${t.uhrzeit ? t.uhrzeit + ' ' : ''}${t.titel}</div>`;
+          }).join('')}
+          ${termine.length > 3 ? `<div style="font-size:10px;color:var(--text-muted);">+${termine.length - 3} mehr</div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('kalender-tage').innerHTML = html;
+  renderTerminSidebar();
+}
+
+function renderTerminSidebar() {
+  const alleTermine = DB.getTermine()
+    .filter(t => t.datum >= new Date().toISOString().split('T')[0])
+    .sort((a, b) => a.datum.localeCompare(b.datum))
+    .slice(0, 10);
+
+  const container = document.getElementById('naechste-termine');
+  if (alleTermine.length === 0) {
+    container.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:13px;">Keine bevorstehenden Termine</div>';
+    return;
+  }
+
+  container.innerHTML = alleTermine.map(t => {
+    const typ = TERMIN_TYPEN[t.typ] || TERMIN_TYPEN.termin;
+    const schueler = t.schuelerId ? DB.getSchuelerById(t.schuelerId) : null;
+    return `
+    <div class="termin-item">
+      <div class="termin-color-bar" style="background:${typ.farbe};"></div>
+      <div class="termin-info">
+        <div class="termin-titel">${typ.icon} ${t.titel}</div>
+        <div class="termin-meta">
+          ${formatDatum(t.datum)}${t.uhrzeit ? ' · ' + t.uhrzeit : ''}
+          ${schueler ? ` · ${schueler.vorname} ${schueler.nachname}` : ''}
+        </div>
+      </div>
+      <button class="btn-icon btn-sm" style="font-size:11px;" onclick="deleteTermin('${t.id}')">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+function kalenderVor() {
+  APP.kalenderDatum = new Date(APP.kalenderDatum.getFullYear(), APP.kalenderDatum.getMonth() + 1, 1);
+  renderKalender();
+}
+
+function kalenderZurueck() {
+  APP.kalenderDatum = new Date(APP.kalenderDatum.getFullYear(), APP.kalenderDatum.getMonth() - 1, 1);
+  renderKalender();
+}
+
+// ============================================================
+// TERMIN MODAL
+// ============================================================
+function openTerminModal(datum = '') {
+  const schueler = DB.getSchueler();
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'termin-modal';
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-header">
+        <span>📅</span>
+        <div class="modal-title">Termin hinzufügen</div>
+        <button class="modal-close" onclick="closeModal('termin-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Titel *</label>
+            <input type="text" id="t-titel" placeholder="Terminbezeichnung">
+          </div>
+          <div class="form-group">
+            <label>Datum *</label>
+            <input type="date" id="t-datum" value="${datum}">
+          </div>
+          <div class="form-group">
+            <label>Uhrzeit</label>
+            <input type="time" id="t-uhrzeit">
+          </div>
+          <div class="form-group">
+            <label>Typ</label>
+            <select id="t-typ">
+              ${Object.entries(TERMIN_TYPEN).map(([k, v]) =>
+                `<option value="${k}">${v.icon} ${v.label}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Schüler</label>
+            <select id="t-schueler">
+              <option value="">— Kein Schüler —</option>
+              ${schueler.map(s => `<option value="${s.id}">${s.vorname} ${s.nachname}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Beschreibung</label>
+            <textarea id="t-beschreibung" rows="2" placeholder="Optional..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('termin-modal')">Abbrechen</button>
+        <button class="btn btn-primary" onclick="saveTermin()">Speichern</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal('termin-modal'); });
+  document.getElementById('t-titel').focus();
+}
+
+function saveTermin() {
+  const titel = document.getElementById('t-titel').value.trim();
+  const datum = document.getElementById('t-datum').value;
+  if (!titel || !datum) {
+    showToast('Titel und Datum sind Pflichtfelder', 'error');
+    return;
+  }
+  DB.createTermin({
+    titel,
+    datum,
+    uhrzeit: document.getElementById('t-uhrzeit').value,
+    typ: document.getElementById('t-typ').value,
+    schuelerId: document.getElementById('t-schueler').value || null,
+    beschreibung: document.getElementById('t-beschreibung').value,
+  });
+  closeModal('termin-modal');
+  renderKalender();
+  showToast('Termin gespeichert', 'success');
+}
+
+function deleteTermin(id) {
+  DB.deleteTermin(id);
+  renderKalender();
+  showToast('Termin gelöscht');
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function closeModal(id) {
+  document.getElementById(id)?.remove();
+}
+
+// ============================================================
+// HILFSFUNKTIONEN
+// ============================================================
+function getInitials(vorname, nachname) {
+  return `${(vorname || '?')[0]}${(nachname || '?')[0]}`.toUpperCase();
+}
+
+function alter(geburtsdatum) {
+  if (!geburtsdatum) return '—';
+  const heute = new Date();
+  const geb = new Date(geburtsdatum);
+  let a = heute.getFullYear() - geb.getFullYear();
+  if (heute.getMonth() < geb.getMonth() ||
+    (heute.getMonth() === geb.getMonth() && heute.getDate() < geb.getDate())) a--;
+  return `${a} Jahre`;
+}
+
+function formatDatum(str) {
+  if (!str) return '—';
+  const d = new Date(str);
+  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function capitalize(str) {
+  return str ? str[0].toUpperCase() + str.slice(1) : '';
+}
+
+function escapeHtml(text) {
+  return (text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, typ = '') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${typ}`;
+  toast.innerHTML = `${typ === 'success' ? '✓' : typ === 'error' ? '✕' : 'ℹ'} ${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// ============================================================
+// FOTO UPLOAD
+// ============================================================
+function uploadFoto(schuelerId) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      DB.updateSchueler(schuelerId, { foto: ev.target.result });
+      renderProfil(schuelerId);
+      renderSidebar();
+      showToast('Foto gespeichert', 'success');
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}

@@ -242,6 +242,8 @@ function openThemaPanel(katId, themaId) {
     <div class="thema-panel-body">
       <p style="color:var(--text-light);font-size:13px;margin-bottom:16px;">${thema.beschreibung}</p>
 
+      ${renderArbeitsblaetter(thema.id)}
+
       <div style="margin-bottom:20px;">
         <label style="display:block;margin-bottom:8px;">Status</label>
         <div class="status-selector">
@@ -274,6 +276,27 @@ function openThemaPanel(katId, themaId) {
   `;
 
   document.body.appendChild(panel);
+}
+
+function renderArbeitsblaetter(themaId) {
+  const blaetter = ARBEITSBLÄTTER[themaId];
+  if (!blaetter || blaetter.length === 0) return '';
+  return `
+    <div style="margin-bottom:20px;">
+      <label style="display:block;margin-bottom:8px;">📄 Arbeitsblätter</label>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        ${blaetter.map(b => `
+          <a href="arbeitsblatter/${b.datei}" target="_blank"
+             style="display:flex;align-items:center;gap:10px;padding:9px 12px;
+                    background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;
+                    text-decoration:none;color:#0369A1;font-size:12px;font-weight:600;
+                    transition:background 0.15s;">
+            <span style="font-size:16px;">📋</span>
+            <span style="flex:1;">${b.titel}</span>
+            <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
+          </a>`).join('')}
+      </div>
+    </div>`;
 }
 
 function getStatusFarbe(key) {
@@ -770,6 +793,149 @@ function showToast(msg, typ = '') {
   toast.innerHTML = `${typ === 'success' ? '✓' : typ === 'error' ? '✕' : 'ℹ'} ${msg}`;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
+}
+
+// ============================================================
+// DRUCK / EXPORT
+// ============================================================
+function druckeProfilbericht(schuelerId) {
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) return;
+
+  const notizen = DB.getNotizen(schuelerId)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+
+  const topicStatus = s.topicStatus || {};
+  const abgeschlossen = Object.values(topicStatus).filter(v => v === 'abgeschlossen').length;
+  const inBearbeitung = Object.values(topicStatus).filter(v => v === 'in-bearbeitung').length;
+
+  const themenHTML = THEMEN_KATEGORIEN.map(kat => {
+    const themenMitStatus = kat.themen.filter(t => topicStatus[t.id] && topicStatus[t.id] !== 'nicht-begonnen');
+    if (themenMitStatus.length === 0) return '';
+    return `
+      <div style="margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;color:#2C5F8A;margin-bottom:6px;border-bottom:1px solid #DDE2E8;padding-bottom:4px;">
+          ${kat.icon} ${kat.titel}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${themenMitStatus.map(t => {
+            const st = THEMA_STATUS[topicStatus[t.id]];
+            return `<span style="padding:3px 8px;border-radius:12px;font-size:11px;background:${getStatusFarbe(topicStatus[t.id])}22;color:${getStatusFarbe(topicStatus[t.id])};border:1px solid ${getStatusFarbe(topicStatus[t.id])}44;">
+              ${st.icon} ${t.titel}
+            </span>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  const notizenHTML = notizen.slice(0, 20).map(n => {
+    const kat = NOTIZ_KATEGORIEN[n.kategorie] || NOTIZ_KATEGORIEN.session;
+    return `
+      <div style="border-left:3px solid ${kat.farbe};padding:8px 10px;margin-bottom:8px;background:#F9FAFB;border-radius:0 4px 4px 0;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span style="font-size:10px;font-weight:700;color:${kat.farbe};">${kat.icon} ${kat.label}</span>
+          <span style="font-size:10px;color:#95A5A6;margin-left:auto;">${formatDatum(n.datum)}</span>
+        </div>
+        <div style="font-size:12px;white-space:pre-wrap;">${escapeHtml(n.inhalt)}</div>
+      </div>`;
+  }).join('');
+
+  const zieleHTML = (s.ziele || []).map(z =>
+    `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px;">
+      <span>${z.erledigt ? '✅' : '☐'}</span>
+      <span style="${z.erledigt ? 'text-decoration:line-through;color:#95A5A6;' : ''}">${escapeHtml(z.text)}</span>
+    </div>`).join('') || '<p style="color:#95A5A6;font-size:12px;">Keine Ziele definiert</p>';
+
+  const fenster = window.open('', '_blank');
+  fenster.document.write(`
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <title>Profil – ${s.vorname} ${s.nachname}</title>
+      <style>
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; color:#2C3E50; padding:20px; background:#F0F4F8; }
+        .seite { width:210mm; background:white; margin:0 auto 20px; padding:16mm 16mm 12mm; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+        .header { border-bottom:3px solid #2C5F8A; padding-bottom:12px; margin-bottom:16px; display:flex; align-items:center; gap:16px; }
+        .header-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2C5F8A,#3A7AB8); display:flex; align-items:center; justify-content:center; color:white; font-size:22px; font-weight:700; flex-shrink:0; overflow:hidden; }
+        .header-avatar img { width:100%; height:100%; object-fit:cover; }
+        h1 { font-size:22px; color:#2C5F8A; }
+        .meta { font-size:12px; color:#7F8C8D; margin-top:4px; }
+        .stat-row { display:flex; gap:10px; margin:12px 0 16px; }
+        .stat-chip { background:#EBF5FB; color:#2980B9; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; }
+        .stat-chip.green { background:#EAFAF1; color:#27AE60; }
+        .stat-chip.orange { background:#FEF9E7; color:#E67E22; }
+        .stat-chip.red { background:#FDEDEC; color:#E74C3C; }
+        .section { margin-bottom:20px; }
+        .section-title { font-size:14px; font-weight:700; color:#2C5F8A; margin-bottom:10px; padding-bottom:4px; border-bottom:1px solid #DDE2E8; }
+        .info-box { background:#F8FAFB; border:1px solid #DDE2E8; border-radius:6px; padding:10px; font-size:12px; line-height:1.6; }
+        .print-btn { display:flex; gap:10px; justify-content:flex-end; width:210mm; margin:0 auto 12px; }
+        .btn { padding:9px 18px; border-radius:6px; border:none; cursor:pointer; font-size:13px; font-weight:600; }
+        .btn-blue { background:#2C5F8A; color:white; }
+        @media print { body { background:white; padding:0; } .seite { box-shadow:none; } .print-btn { display:none; } }
+      </style>
+    </head>
+    <body>
+      <div class="print-btn">
+        <button class="btn btn-blue" onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
+      </div>
+      <div class="seite">
+        <div class="header">
+          <div class="header-avatar">
+            ${s.foto ? `<img src="${s.foto}" alt="">` : getInitials(s.vorname, s.nachname)}
+          </div>
+          <div>
+            <h1>${s.vorname} ${s.nachname}</h1>
+            <div class="meta">
+              Klasse: ${s.klasse || '—'} &nbsp;·&nbsp; ${alter(s.geburtsdatum)}
+              &nbsp;·&nbsp; Seit ${formatDatum(s.eintrittsdatum)}
+              &nbsp;·&nbsp; Erstellt: ${formatDatum(s.erstellt?.split('T')[0])}
+            </div>
+          </div>
+          <div style="margin-left:auto;text-align:right;">
+            <div style="font-size:11px;font-weight:700;color:${s.risiko==='hoch'?'#E74C3C':s.risiko==='mittel'?'#E67E22':'#27AE60'};">
+              ${s.risiko==='hoch'?'🔴':s.risiko==='mittel'?'🟡':'🟢'} Risiko: ${capitalize(s.risiko||'niedrig')}
+            </div>
+            <div style="font-size:10px;color:#95A5A6;margin-top:4px;">Bericht: ${new Date().toLocaleDateString('de-DE')}</div>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-chip green">✅ ${abgeschlossen} Themen abgeschlossen</div>
+          <div class="stat-chip">◐ ${inBearbeitung} in Bearbeitung</div>
+          <div class="stat-chip orange">💬 ${notizen.length} Notizen</div>
+          <div class="stat-chip">${(s.ziele||[]).length} Ziele</div>
+        </div>
+
+        ${s.allgemeineNotizen ? `
+        <div class="section">
+          <div class="section-title">ℹ️ Allgemeine Informationen</div>
+          <div class="info-box">${escapeHtml(s.allgemeineNotizen)}</div>
+        </div>` : ''}
+
+        <div class="section">
+          <div class="section-title">📋 Bearbeitete Themen</div>
+          ${themenHTML || '<p style="color:#95A5A6;font-size:12px;">Noch keine Themen bearbeitet</p>'}
+        </div>
+
+        <div class="section">
+          <div class="section-title">🎯 Ziele</div>
+          ${zieleHTML}
+        </div>
+      </div>
+
+      ${notizen.length > 0 ? `
+      <div class="seite">
+        <div class="section">
+          <div class="section-title">💬 Notizen & Sitzungsprotokolle (letzte ${Math.min(notizen.length,20)})</div>
+          ${notizenHTML}
+        </div>
+      </div>` : ''}
+    </body>
+    </html>
+  `);
+  fenster.document.close();
 }
 
 // ============================================================

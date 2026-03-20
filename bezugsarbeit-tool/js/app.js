@@ -939,6 +939,58 @@ function druckeProfilbericht(schuelerId) {
 }
 
 // ============================================================
+// BACKUP / RESTORE
+// ============================================================
+function exportDaten() {
+  const daten = {
+    version: 1,
+    exportiert: new Date().toISOString(),
+    schueler: DB.getSchueler(),
+    notizen: DB.getNotizen(),
+    termine: DB.getTermine(),
+  };
+  const json = JSON.stringify(daten, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cdse-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Daten exportiert', 'success');
+}
+
+function importDaten(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const daten = JSON.parse(e.target.result);
+      if (!daten.schueler) throw new Error('Ungültiges Format');
+      if (!confirm(`${daten.schueler.length} Schüler, ${daten.notizen?.length || 0} Notizen, ${daten.termine?.length || 0} Termine importieren?\n\nAchtung: Bestehende Daten werden ergänzt (nicht überschrieben).`)) return;
+      // Merge: bestehende IDs behalten, neue hinzufügen
+      const vorhandeneIds = new Set(DB.getSchueler().map(s => s.id));
+      const neueSchueler = [...DB.getSchueler(), ...(daten.schueler || []).filter(s => !vorhandeneIds.has(s.id))];
+      DB.saveSchueler(neueSchueler);
+      const vorhandeneNIds = new Set(DB.getNotizen().map(n => n.id));
+      const alleNotizen = [...DB.getNotizen(), ...(daten.notizen || []).filter(n => !vorhandeneNIds.has(n.id))];
+      localStorage.setItem(DB.KEYS.NOTIZEN, JSON.stringify(alleNotizen));
+      const vorhandeneTIds = new Set(DB.getTermine().map(t => t.id));
+      const alleTermine = [...DB.getTermine(), ...(daten.termine || []).filter(t => !vorhandeneTIds.has(t.id))];
+      localStorage.setItem(DB.KEYS.TERMINE, JSON.stringify(alleTermine));
+      renderSidebar();
+      renderHome();
+      showToast(`Import erfolgreich: ${daten.schueler.length} Schüler`, 'success');
+    } catch (err) {
+      showToast('Fehler beim Import: ' + err.message, 'error');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
 // FOTO UPLOAD
 // ============================================================
 function uploadFoto(schuelerId) {

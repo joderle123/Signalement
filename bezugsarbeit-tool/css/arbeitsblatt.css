@@ -1,0 +1,441 @@
+/* ============================================================
+   CDSE Arbeitsblatt – Shared Styles
+   ============================================================ */
+
+:root {
+  --farbe: #7B5EA7;        /* wird per Inline-Style pro Blatt überschrieben */
+  --farbe-hell: #F5F0FA;
+  --text: #1A1A2E;
+  --grau: #6B7280;
+  --border: #D1D5DB;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: #F3F4F6;
+  padding: 20px;
+}
+
+/* ---- Seite ---- */
+.seite {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto 30px;
+  padding: 18mm 18mm 16mm;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  border-radius: 4px;
+  page-break-after: always;
+  position: relative;
+}
+
+/* ---- Kopfzeile ---- */
+.kopfzeile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--farbe);
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+  gap: 16px;
+}
+
+.kopfzeile-links { flex: 1; }
+
+.schule-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--grau);
+  margin-bottom: 3px;
+}
+
+.ab-titel {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--farbe);
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.ab-untertitel {
+  font-size: 11px;
+  color: var(--grau);
+}
+
+.kopfzeile-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--farbe-hell);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+/* ---- Schülerinfo-Leiste ---- */
+.schuelerinfo {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.info-feld {
+  border-bottom: 1.5px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.info-feld-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--grau);
+  margin-bottom: 6px;
+}
+
+.info-feld-linie {
+  height: 20px;
+}
+
+/* ---- Infobox ---- */
+.infobox {
+  background: var(--farbe-hell);
+  border-left: 4px solid var(--farbe);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.infobox-titel {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--farbe);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infobox p { margin-bottom: 6px; }
+.infobox p:last-child { margin-bottom: 0; }
+.infobox ul { padding-left: 16px; margin-top: 4px; }
+.infobox li { margin-bottom: 3px; }
+
+/* ---- Übungsblock ---- */
+.uebung {
+  margin-bottom: 22px;
+}
+
+.uebung-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.uebung-nr {
+  width: 26px;
+  height: 26px;
+  background: var(--farbe);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.uebung-titel {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.uebung-beschreibung {
+  font-size: 12px;
+  color: var(--grau);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* ---- Schreiblinien ---- */
+.schreiblinien {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.schreiblinie {
+  border-bottom: 1px dashed var(--border);
+  height: 26px;
+  width: 100%;
+}
+
+/* ---- Grid-Übungen ---- */
+.zwei-spalten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.drei-spalten {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.box {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  min-height: 70px;
+}
+
+.box-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--grau);
+  margin-bottom: 6px;
+}
+
+/* ---- Skala ---- */
+.skala {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 10px 0;
+}
+
+.skala-punkt {
+  flex: 1;
+  text-align: center;
+}
+
+.skala-kreis {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  margin: 0 auto 4px;
+}
+
+.skala-label {
+  font-size: 9px;
+  color: var(--grau);
+}
+
+/* ---- Karten-Raster ---- */
+.karten-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.karte-mini {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 6px;
+  text-align: center;
+  min-height: 60px;
+}
+
+.karte-mini-emoji { font-size: 20px; margin-bottom: 4px; }
+.karte-mini-label { font-size: 10px; font-weight: 600; margin-bottom: 4px; }
+.karte-mini-linie { border-bottom: 1px dashed var(--border); margin: 3px 0; height: 14px; }
+
+/* ---- Körperumriss-Bereich ---- */
+.koerper-bereich {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.koerper-silhouette {
+  flex-shrink: 0;
+  width: 100px;
+}
+
+.koerper-legende { flex: 1; }
+
+/* ---- Thermometer ---- */
+.thermometer-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.thermometer {
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.thermo-rohr {
+  width: 20px;
+  height: 160px;
+  border: 2px solid var(--border);
+  border-radius: 10px 10px 0 0;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.thermo-ball {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  margin: -4px auto 0;
+  background: #FEE2E2;
+}
+
+.thermo-skala {
+  position: absolute;
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 4px 0;
+}
+
+.thermo-stufe {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: var(--grau);
+  white-space: nowrap;
+  margin-left: 24px;
+}
+
+/* ---- Reflexionsblock ---- */
+.reflexion {
+  background: #FFFBEB;
+  border: 1.5px solid #FCD34D;
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.reflexion-titel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---- Fachlicher Hinweis (für Erzieher) ---- */
+.fachhinweis {
+  background: #F0FDF4;
+  border: 1.5px solid #86EFAC;
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.fachhinweis-titel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #166534;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ---- Trennlinie ---- */
+hr.trennlinie {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 18px 0;
+}
+
+/* ---- Fußzeile ---- */
+.fusszeile {
+  position: absolute;
+  bottom: 12mm;
+  left: 18mm;
+  right: 18mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: var(--border);
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+}
+
+/* ---- Druckknopf ---- */
+.druck-leiste {
+  width: 210mm;
+  margin: 0 auto 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-drucken {
+  background: var(--farbe);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-drucken:hover { opacity: 0.85; }
+
+.btn-zurueck {
+  background: white;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ============================================================
+   DRUCK-MODUS
+   ============================================================ */
+@media print {
+  body { background: white; padding: 0; }
+  .druck-leiste { display: none; }
+  .seite {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 12mm 14mm;
+  }
+}

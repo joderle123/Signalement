@@ -114,8 +114,15 @@
 
       <!-- NOTIZEN -->
       <div class="profil-tab-content" data-tab="notizen">
-        <!-- Neue Notiz -->
-        <div class="notiz-form">
+
+        <!-- Modus-Toggle -->
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button class="btn btn-primary btn-sm" id="btn-freie-notiz" onclick="toggleNotizModus('frei')">✏️ Freie Notiz</button>
+          <button class="btn btn-secondary btn-sm" id="btn-protokoll" onclick="toggleNotizModus('protokoll')">📋 Sitzungsprotokoll</button>
+        </div>
+
+        <!-- Freie Notiz -->
+        <div id="notiz-modus-frei" class="notiz-form">
           <div class="notiz-form-row">
             <select id="neue-notiz-kategorie" style="width:160px;">
               <option value="session">💬 Sitzung</option>
@@ -125,10 +132,64 @@
               <option value="elternkontakt">📞 Elternkontakt</option>
             </select>
             <input type="date" id="neue-notiz-datum" style="width:160px;">
-            <button class="btn btn-primary btn-sm" onclick="addNotiz()" style="margin-left:auto;">+ Notiz hinzufügen</button>
+            <button class="btn btn-primary btn-sm" onclick="addNotiz()" style="margin-left:auto;">+ Speichern</button>
           </div>
           <textarea id="neue-notiz-text" class="notiz-textarea"
-            placeholder="Notiz, Beobachtung oder Sitzungsprotokoll eingeben..."></textarea>
+            placeholder="Notiz, Beobachtung oder Protokoll eingeben..."></textarea>
+        </div>
+
+        <!-- Sitzungsprotokoll-Template -->
+        <div id="notiz-modus-protokoll" class="notiz-form" style="display:none;">
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--primary);">📋 Sitzungsprotokoll</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div>
+              <label>Datum</label>
+              <input type="date" id="prot-datum">
+            </div>
+            <div>
+              <label>Dauer</label>
+              <input type="text" id="prot-dauer" placeholder="z.B. 45 Min.">
+            </div>
+            <div>
+              <label>Setting</label>
+              <select id="prot-setting">
+                <option>Einzelgespräch</option>
+                <option>Gruppengespräch</option>
+                <option>Elterngespräch</option>
+                <option>Telefon</option>
+                <option>Außenaktivität</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+            <div>
+              <label>Thema / Anlass der Sitzung</label>
+              <input type="text" id="prot-thema" placeholder="Worum ging es heute?">
+            </div>
+            <div>
+              <label>Beobachtungen & Verlauf</label>
+              <textarea id="prot-verlauf" class="notiz-textarea" rows="3"
+                placeholder="Wie war die Stimmung? Was hat der/die Jugendliche erzählt? Was ist aufgefallen?"></textarea>
+            </div>
+            <div>
+              <label>Interventionen & Methoden</label>
+              <textarea id="prot-interventionen" class="notiz-textarea" rows="2"
+                placeholder="Was wurde gemacht / ausprobiert?"></textarea>
+            </div>
+            <div>
+              <label>Fortschritte & Ressourcen</label>
+              <textarea id="prot-fortschritte" class="notiz-textarea" rows="2"
+                placeholder="Was ist gut gelaufen? Was hat der/die Jugendliche gut gemacht?"></textarea>
+            </div>
+            <div>
+              <label>Nächste Schritte & Vereinbarungen</label>
+              <textarea id="prot-naechste" class="notiz-textarea" rows="2"
+                placeholder="Was wurde vereinbart? Was passiert als nächstes?"></textarea>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary btn-sm" onclick="addProtokoll()">📋 Protokoll speichern</button>
+          </div>
         </div>
 
         <div id="notizen-liste"></div>

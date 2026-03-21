@@ -380,6 +380,56 @@ function renderNotizKarte(notiz) {
     </div>`;
 }
 
+function toggleNotizModus(modus) {
+  const frei = document.getElementById('notiz-modus-frei');
+  const prot = document.getElementById('notiz-modus-protokoll');
+  const btnFrei = document.getElementById('btn-freie-notiz');
+  const btnProt = document.getElementById('btn-protokoll');
+  if (modus === 'frei') {
+    frei.style.display = '';
+    prot.style.display = 'none';
+    btnFrei.className = 'btn btn-primary btn-sm';
+    btnProt.className = 'btn btn-secondary btn-sm';
+  } else {
+    frei.style.display = 'none';
+    prot.style.display = '';
+    btnProt.className = 'btn btn-primary btn-sm';
+    btnFrei.className = 'btn btn-secondary btn-sm';
+    const d = document.getElementById('prot-datum');
+    if (!d.value) d.value = new Date().toISOString().split('T')[0];
+  }
+}
+
+function addProtokoll() {
+  const datum       = document.getElementById('prot-datum').value;
+  const dauer       = document.getElementById('prot-dauer').value.trim();
+  const setting     = document.getElementById('prot-setting').value;
+  const thema       = document.getElementById('prot-thema').value.trim();
+  const verlauf     = document.getElementById('prot-verlauf').value.trim();
+  const interv      = document.getElementById('prot-interventionen').value.trim();
+  const fortschritt = document.getElementById('prot-fortschritte').value.trim();
+  const naechste    = document.getElementById('prot-naechste').value.trim();
+
+  if (!datum || !thema) { showToast('Datum und Thema sind Pflichtfelder', 'error'); return; }
+
+  const text = [
+    `🗓 ${datum}  |  ⏱ ${dauer || '—'}  |  📍 ${setting}`,
+    `\n📌 Thema: ${thema}`,
+    verlauf     ? `\n📝 Verlauf:\n${verlauf}` : '',
+    interv      ? `\n🛠 Interventionen:\n${interv}` : '',
+    fortschritt ? `\n📈 Fortschritte:\n${fortschritt}` : '',
+    naechste    ? `\n➡️ Nächste Schritte:\n${naechste}` : '',
+  ].filter(Boolean).join('');
+
+  DB.createNotiz({ schuelerId: APP.currentSchuelerId, datum, inhalt: text, kategorie: 'session' });
+
+  ['prot-thema','prot-verlauf','prot-interventionen','prot-fortschritte','prot-naechste'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  renderNotizen();
+  showToast('Protokoll gespeichert', 'success');
+}
+
 function addNotiz() {
   const textarea = document.getElementById('neue-notiz-text');
   const kategorie = document.getElementById('neue-notiz-kategorie').value;

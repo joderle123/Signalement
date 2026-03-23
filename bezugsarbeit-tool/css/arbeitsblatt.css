@@ -5,20 +5,23 @@
 :root {
   --farbe: #7B5EA7;        /* wird per Inline-Style pro Blatt überschrieben */
   --farbe-hell: #F5F0FA;
-  --text: #1A1A2E;
+  --text: #111827;
   --grau: #6B7280;
   --border: #D1D5DB;
   --radius: 8px;
+  --radius-sm: 5px;
+  --shadow-page: 0 2px 24px rgba(0,0,0,0.09);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   font-size: 13px;
   color: var(--text);
-  background: #F3F4F6;
+  background: #EEF2F7;
   padding: 20px;
+  line-height: 1.5;
 }
 
 /* ---- Seite ---- */
@@ -26,10 +29,10 @@ body {
   width: 210mm;
   min-height: 297mm;
   background: white;
-  margin: 0 auto 30px;
-  padding: 18mm 18mm 16mm;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  border-radius: 4px;
+  margin: 0 auto 28px;
+  padding: 17mm 17mm 22mm;
+  box-shadow: var(--shadow-page);
+  border-radius: 5px;
   page-break-after: always;
   position: relative;
 }
@@ -39,44 +42,47 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  border-bottom: 3px solid var(--farbe);
-  padding-bottom: 12px;
-  margin-bottom: 18px;
-  gap: 16px;
+  border-bottom: 2.5px solid var(--farbe);
+  padding-bottom: 11px;
+  margin-bottom: 16px;
+  gap: 14px;
 }
 
 .kopfzeile-links { flex: 1; }
 
 .schule-label {
-  font-size: 9px;
+  font-size: 8.5px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: var(--grau);
   margin-bottom: 3px;
+  font-weight: 600;
 }
 
 .ab-titel {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
   color: var(--farbe);
   line-height: 1.2;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
+  letter-spacing: -0.4px;
 }
 
 .ab-untertitel {
   font-size: 11px;
   color: var(--grau);
+  font-weight: 500;
 }
 
 .kopfzeile-icon {
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
   background: var(--farbe-hell);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 25px;
   flex-shrink: 0;
 }
 
@@ -85,7 +91,7 @@ body {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .info-feld {
@@ -94,65 +100,62 @@ body {
 }
 
 .info-feld-label {
-  font-size: 9px;
+  font-size: 8.5px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--grau);
+  font-weight: 600;
   margin-bottom: 6px;
 }
 
-.info-feld-linie {
-  height: 20px;
-}
+.info-feld-linie { height: 18px; }
 
 /* ---- Infobox ---- */
 .infobox {
   background: var(--farbe-hell);
-  border-left: 4px solid var(--farbe);
+  border-left: 3.5px solid var(--farbe);
   border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-  font-size: 12px;
+  padding: 11px 13px;
+  margin-bottom: 16px;
+  font-size: 11.5px;
   line-height: 1.6;
 }
 
 .infobox-titel {
   font-weight: 700;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--farbe);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
-.infobox p { margin-bottom: 6px; }
+.infobox p { margin-bottom: 5px; }
 .infobox p:last-child { margin-bottom: 0; }
-.infobox ul { padding-left: 16px; margin-top: 4px; }
-.infobox li { margin-bottom: 3px; }
+.infobox ul { padding-left: 15px; margin-top: 4px; }
+.infobox li { margin-bottom: 2px; }
 
 /* ---- Übungsblock ---- */
-.uebung {
-  margin-bottom: 22px;
-}
+.uebung { margin-bottom: 20px; }
 
 .uebung-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 9px;
+  margin-bottom: 9px;
 }
 
 .uebung-nr {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   background: var(--farbe);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -160,25 +163,25 @@ body {
 .uebung-titel {
   font-size: 13px;
   font-weight: 700;
+  letter-spacing: -0.1px;
 }
 
 .uebung-beschreibung {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--grau);
-  line-height: 1.5;
-  margin-bottom: 10px;
+  line-height: 1.55;
+  margin-bottom: 9px;
 }
 
 /* ---- Schreiblinien ---- */
 .schreiblinien {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .schreiblinie {
-  border-bottom: 1px dashed var(--border);
-  height: 26px;
+  border-bottom: 1px dashed #D1D5DB;
+  height: 25px;
   width: 100%;
 }
 
@@ -186,30 +189,30 @@ body {
 .zwei-spalten {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 11px;
   margin-bottom: 10px;
 }
 
 .drei-spalten {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
+  gap: 9px;
 }
 
 .box {
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
-  padding: 10px;
-  min-height: 70px;
+  padding: 9px;
+  min-height: 66px;
 }
 
 .box-label {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--grau);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 /* ---- Skala ---- */
@@ -217,7 +220,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0;
-  margin: 10px 0;
+  margin: 9px 0;
 }
 
 .skala-punkt {
@@ -226,48 +229,49 @@ body {
 }
 
 .skala-kreis {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border: 2px solid var(--border);
   border-radius: 50%;
   margin: 0 auto 4px;
 }
 
 .skala-label {
-  font-size: 9px;
+  font-size: 8.5px;
   color: var(--grau);
+  font-weight: 500;
 }
 
 /* ---- Karten-Raster ---- */
 .karten-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 7px;
   margin-bottom: 10px;
 }
 
 .karte-mini {
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
-  padding: 8px 6px;
+  padding: 7px 5px;
   text-align: center;
-  min-height: 60px;
+  min-height: 58px;
 }
 
-.karte-mini-emoji { font-size: 20px; margin-bottom: 4px; }
-.karte-mini-label { font-size: 10px; font-weight: 600; margin-bottom: 4px; }
-.karte-mini-linie { border-bottom: 1px dashed var(--border); margin: 3px 0; height: 14px; }
+.karte-mini-emoji { font-size: 19px; margin-bottom: 3px; }
+.karte-mini-label { font-size: 10px; font-weight: 600; margin-bottom: 3px; }
+.karte-mini-linie { border-bottom: 1px dashed var(--border); margin: 3px 0; height: 13px; }
 
 /* ---- Körperumriss-Bereich ---- */
 .koerper-bereich {
   display: flex;
-  gap: 20px;
+  gap: 18px;
   align-items: flex-start;
 }
 
 .koerper-silhouette {
   flex-shrink: 0;
-  width: 100px;
+  width: 98px;
 }
 
 .koerper-legende { flex: 1; }
@@ -275,7 +279,7 @@ body {
 /* ---- Thermometer ---- */
 .thermometer-wrapper {
   display: flex;
-  gap: 20px;
+  gap: 18px;
   align-items: flex-start;
 }
 
@@ -285,21 +289,21 @@ body {
 }
 
 .thermo-rohr {
-  width: 20px;
-  height: 160px;
+  width: 18px;
+  height: 155px;
   border: 2px solid var(--border);
-  border-radius: 10px 10px 0 0;
+  border-radius: 9px 9px 0 0;
   margin: 0 auto;
   position: relative;
   overflow: hidden;
 }
 
 .thermo-ball {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border: 2px solid var(--border);
   border-radius: 50%;
-  margin: -4px auto 0;
+  margin: -3px auto 0;
   background: #FEE2E2;
 }
 
@@ -316,11 +320,12 @@ body {
 .thermo-stufe {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 9px;
+  gap: 5px;
+  font-size: 8.5px;
   color: var(--grau);
   white-space: nowrap;
-  margin-left: 24px;
+  margin-left: 22px;
+  font-weight: 500;
 }
 
 /* ---- Reflexionsblock ---- */
@@ -328,18 +333,18 @@ body {
   background: #FFFBEB;
   border: 1.5px solid #FCD34D;
   border-radius: var(--radius);
-  padding: 12px 14px;
-  margin-bottom: 18px;
+  padding: 11px 13px;
+  margin-bottom: 16px;
 }
 
 .reflexion-titel {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: #92400E;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 /* ---- Fachlicher Hinweis (für Erzieher) ---- */
@@ -347,8 +352,8 @@ body {
   background: #F0FDF4;
   border: 1.5px solid #86EFAC;
   border-radius: var(--radius);
-  padding: 10px 12px;
-  margin-bottom: 14px;
+  padding: 9px 11px;
+  margin-bottom: 13px;
   font-size: 11px;
   line-height: 1.5;
 }
@@ -357,40 +362,40 @@ body {
   font-size: 11px;
   font-weight: 700;
   color: #166534;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 
 /* ---- Trennlinie ---- */
 hr.trennlinie {
   border: none;
   border-top: 1px dashed var(--border);
-  margin: 18px 0;
+  margin: 16px 0;
 }
 
 /* ---- Fußzeile ---- */
 .fusszeile {
   position: absolute;
-  bottom: 12mm;
-  left: 18mm;
-  right: 18mm;
+  bottom: 11mm;
+  left: 17mm;
+  right: 17mm;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 9px;
-  color: var(--border);
+  font-size: 8.5px;
+  color: #9CA3AF;
   border-top: 1px solid var(--border);
-  padding-top: 6px;
+  padding-top: 5px;
 }
 
-/* ---- Druckknopf ---- */
+/* ---- Druck-Leiste ---- */
 .druck-leiste {
   width: 210mm;
   margin: 0 auto 16px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: flex-end;
 }
 
@@ -398,7 +403,7 @@ hr.trennlinie {
   background: var(--farbe);
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 9px 18px;
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 13px;
@@ -406,6 +411,7 @@ hr.trennlinie {
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: opacity 0.15s;
 }
 
 .btn-drucken:hover { opacity: 0.85; }
@@ -414,7 +420,7 @@ hr.trennlinie {
   background: white;
   color: var(--text);
   border: 1.5px solid var(--border);
-  padding: 10px 20px;
+  padding: 9px 18px;
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 13px;
@@ -423,7 +429,10 @@ hr.trennlinie {
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: background 0.15s, border-color 0.15s;
 }
+
+.btn-zurueck:hover { background: #F9FAFB; border-color: #B0BAC4; }
 
 /* ============================================================
    DRUCK-MODUS
@@ -436,6 +445,6 @@ hr.trennlinie {
     box-shadow: none;
     border-radius: 0;
     margin: 0;
-    padding: 12mm 14mm;
+    padding: 12mm 14mm 18mm;
   }
 }

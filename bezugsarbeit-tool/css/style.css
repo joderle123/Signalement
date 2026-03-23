@@ -1337,6 +1337,33 @@ select {
   padding: 20px 22px;
 }
 
+.panel-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0;
+}
+
+.panel-tab {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.panel-tab:hover { color: var(--primary); }
+.panel-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+.panel-tab-content { padding-top: 8px; }
+
 /* ============================================================
    ZIELE
    ============================================================ */

@@ -202,10 +202,33 @@
       background: white;
     }
 
+    /* Tabs */
+    .tabs-leiste {
+      background: white;
+      border-bottom: 2px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+    }
+    .tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tab:hover { color: var(--primary); }
+    .tab.aktiv { color: var(--primary); border-bottom-color: var(--primary); }
+
     @media (max-width: 700px) {
       .topbar, .suche-leiste, .content { padding-left: 16px; padding-right: 16px; }
       .ab-grid { grid-template-columns: 1fr; }
       .filter-chips { display: none; }
+      .tabs-leiste { padding: 0 16px; }
     }
   </style>
 </head>
@@ -213,12 +236,18 @@
 
 <div class="topbar">
   <span style="font-size:22px;">📋</span>
-  <div class="topbar-title">Alle Arbeitsblätter – CDSE Bezugsarbeit</div>
+  <div class="topbar-title">Materialien & Methoden – CDSE Bezugsarbeit</div>
   <a href="../index.html">← Zur App</a>
 </div>
 
+<div class="tabs-leiste">
+  <div class="tab aktiv" id="tab-ab" onclick="wechselTab('ab')">📋 Arbeitsblätter</div>
+  <div class="tab" id="tab-akt" onclick="wechselTab('akt')">🎯 Aktivitäten</div>
+  <div class="tab" id="tab-int" onclick="wechselTab('int')">🧠 Therapeutische Interventionen</div>
+</div>
+
 <div class="suche-leiste">
-  <input type="text" class="suche-input" id="suche" placeholder="🔍  Arbeitsblatt suchen…" oninput="filtern()">
+  <input type="text" class="suche-input" id="suche" placeholder="🔍  Suchen…" oninput="filtern()">
   <div class="filter-chips" id="filter-chips"></div>
 </div>
 
@@ -469,10 +498,21 @@ const ARBEITSBLÄTTER = [
 ];
 
 let aktiverFilter = 'Alle';
+let aktiverTab = 'ab'; // 'ab' | 'akt' | 'int'
+
+function wechselTab(tab) {
+  aktiverTab = tab;
+  aktiverFilter = 'Alle';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('aktiv'));
+  document.getElementById('tab-' + tab).classList.add('aktiv');
+  document.getElementById('suche').value = '';
+  init();
+}
 
 function init() {
   const chips = document.getElementById('filter-chips');
-  const kategorien = ['Alle', ...ARBEITSBLÄTTER.map(k => k.kategorie)];
+  const quelle = aktiverTab === 'ab' ? ARBEITSBLÄTTER : aktiverTab === 'akt' ? AKTIVITÄTEN : INTERVENTIONEN;
+  const kategorien = ['Alle', ...quelle.map(k => k.kategorie)];
   chips.innerHTML = kategorien.map(k =>
     `<div class="chip ${k === 'Alle' ? 'aktiv' : ''}" onclick="setFilter('${k}')">${k === 'Alle' ? 'Alle' : k.split(' ')[0]}</div>`
   ).join('');
@@ -491,6 +531,12 @@ function setFilter(f) {
 function filtern() { render(); }
 
 function render() {
+  if (aktiverTab === 'ab') renderArbeitsblätter();
+  else if (aktiverTab === 'akt') renderAktivitäten();
+  else renderInterventionen();
+}
+
+function renderArbeitsblätter() {
   const suche = document.getElementById('suche').value.toLowerCase();
   const container = document.getElementById('ab-container');
   let html = '';
@@ -498,7 +544,6 @@ function render() {
 
   ARBEITSBLÄTTER.forEach(kat => {
     if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
-
     const gefiltert = kat.blaetter.filter(b =>
       !suche || b.titel.toLowerCase().includes(suche) ||
       b.beschreibung.toLowerCase().includes(suche) ||
@@ -506,7 +551,6 @@ function render() {
     );
     if (gefiltert.length === 0) return;
     gesamt += gefiltert.length;
-
     html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span class="kategorie-zaehler">${gefiltert.length}</span></div>`;
     html += `<div class="ab-grid">`;
     gefiltert.forEach(b => {
@@ -522,21 +566,258 @@ function render() {
               ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
               <span class="ab-tag">📄 ${b.seiten} Seiten</span>
             </div>
-            <div class="ab-open-btn" style="background:${kat.farbe};">
-              📋 Öffnen & Drucken
-            </div>
+            <div class="ab-open-btn" style="background:${kat.farbe};">📋 Öffnen & Drucken</div>
           </div>
         </a>`;
     });
     html += `</div>`;
   });
-
-  if (gesamt === 0) {
-    html = `<div class="leer">Keine Arbeitsblätter gefunden für „${suche}"</div>`;
-  }
-
+  if (gesamt === 0) html = `<div class="leer">Keine Arbeitsblätter gefunden für „${document.getElementById('suche').value}"</div>`;
   container.innerHTML = html;
 }
+
+function renderAktivitäten() {
+  container_render(AKTIVITÄTEN, (b, farbe) => `
+    <div class="ab-karte" style="--akzent:${farbe}; cursor:default;">
+      <div class="ab-karte-kopf">
+        <div class="ab-icon" style="background:${farbe}20;">🎯</div>
+        <div class="ab-titel">${b.titel}</div>
+      </div>
+      <div class="ab-karte-body">
+        <div class="ab-beschreibung">${b.beschreibung}</div>
+        <div class="ab-tags">
+          ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+          <span class="ab-tag">⏱ ${b.dauer}</span>
+        </div>
+      </div>
+    </div>`
+  , 'Keine Aktivitäten gefunden');
+}
+
+function renderInterventionen() {
+  container_render(INTERVENTIONEN, (b, farbe) => `
+    <div class="ab-karte" style="--akzent:${farbe}; cursor:default;">
+      <div class="ab-karte-kopf">
+        <div class="ab-icon" style="background:${farbe}20;">🧠</div>
+        <div class="ab-titel">${b.titel}</div>
+      </div>
+      <div class="ab-karte-body">
+        <div class="ab-beschreibung"><strong>${b.ansatz}</strong> — ${b.beschreibung}</div>
+        <div style="font-size:11px;color:#6B7280;margin:5px 0 8px;line-height:1.45;">📌 ${b.indikation}</div>
+        <div class="ab-tags">
+          ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+          <span class="ab-tag">⏱ ${b.dauer}</span>
+        </div>
+      </div>
+    </div>`
+  , 'Keine Interventionen gefunden');
+}
+
+function container_render(quelle, karteHtml, leerText) {
+  const suche = document.getElementById('suche').value.toLowerCase();
+  const container = document.getElementById('ab-container');
+  let html = '';
+  let gesamt = 0;
+  quelle.forEach(kat => {
+    if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
+    const gefiltert = kat.eintraege.filter(b =>
+      !suche || b.titel.toLowerCase().includes(suche) ||
+      b.beschreibung.toLowerCase().includes(suche) ||
+      b.tags.some(t => t.toLowerCase().includes(suche))
+    );
+    if (gefiltert.length === 0) return;
+    gesamt += gefiltert.length;
+    html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span class="kategorie-zaehler">${gefiltert.length}</span></div>`;
+    html += `<div class="ab-grid">`;
+    gefiltert.forEach(b => { html += karteHtml(b, kat.farbe); });
+    html += `</div>`;
+  });
+  if (gesamt === 0) html = `<div class="leer">${leerText}</div>`;
+  container.innerHTML = html;
+}
+
+const AKTIVITÄTEN = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    eintraege: [
+      { titel: 'Gefühle-Pantomime', beschreibung: 'Jugendliche zieht eine Gefühlskarte und stellt die Emotion körperlich dar – ohne Worte. Die Fachperson oder ein Mitspieler rät. Fördert Körperwahrnehmung und Emotionserkennung.', dauer: '15–20 Min', tags: ['Körper', 'Emotion', 'Gruppe'] },
+      { titel: 'Stimmungscollage', beschreibung: 'Aus Zeitschriften Bilder, Farben und Wörter ausschneiden, die ein bestimmtes Gefühl darstellen. Gut als Einstieg in ein Gefühlsthema oder zur Ressourcenarbeit.', dauer: '20–30 Min', tags: ['Kreativ', 'Ressourcen', 'Achtsamkeit'] },
+      { titel: 'Gefühls-Würfel', beschreibung: 'Würfel werfen – jede Zahl entspricht einer Situation (z. B. "Letzte Woche warst du wütend – was war der Auslöser?"). Niedrigschwelliger Einstieg ins Gespräch.', dauer: '10–15 Min', tags: ['Spiel', 'Einstieg', 'Emotion'] },
+      { titel: 'Körper-Landkarte', beschreibung: 'Körperumriss auf Papier: Schüler zeichnet oder schreibt, wo er ein bestimmtes Gefühl im Körper spürt (Angst im Magen, Wut in den Fäusten). Stärkt Körperbewusstsein.', dauer: '15 Min', tags: ['Körper', 'Achtsamkeit', 'Emotion'] },
+      { titel: 'Notfallkoffer basteln', beschreibung: 'Gemeinsam eine kleine Schachtel oder einen Umschlag mit Kärtchen füllen: Atemübung, Lieblingsmusik, Notfallkontakt, Mutmach-Satz. Konkretes Take-Home-Material.', dauer: '20–25 Min', tags: ['Krisenprävention', 'Ressourcen', 'Selbsthilfe'] },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    eintraege: [
+      { titel: 'Konflikt-Rollenspiel', beschreibung: 'Alltägliche Konfliktsituation (z. B. jemand wird übergangen bei der Gruppenarbeit) wird gespielt – mit Rollentausch. Danach Reflexion: Wie hat sich das angefühlt? Was hätte geholfen?', dauer: '20–25 Min', tags: ['Rollenspiel', 'Konflikt', 'Perspektivenwechsel'] },
+      { titel: 'Grenzen-Seile', beschreibung: 'Zwei Seile oder Klebebandstreifen auf dem Boden: Eine Person steht in der Mitte. Wie nah darf wer kommen? Körperliche Erfahrung von persönlichen Grenzen.', dauer: '10 Min', tags: ['Grenzen', 'Körper', 'Assertivität'] },
+      { titel: '"Ich"-Botschaft üben', beschreibung: 'Situationskarten vorlesen ("Dein Freund kommt immer zu spät") – Schüler übt die GFK-Formel: Ich sehe… ich fühle… ich brauche… ich bitte dich… Variante: als Dialog spielen.', dauer: '15–20 Min', tags: ['GFK', 'Kommunikation', 'Übung'] },
+      { titel: 'Empathie-Detektiv', beschreibung: 'Fotos oder Zeichnungen von Gesichtern + Situationen zeigen. Aufgabe: Was könnte diese Person fühlen? Was braucht sie gerade? Was würdest du sagen?', dauer: '15 Min', tags: ['Empathie', 'Perspektive', 'Emotion'] },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    eintraege: [
+      { titel: 'Familien-Skulptur', beschreibung: 'Figuren, Steine oder andere Objekte auf einem Tisch aufstellen als Symbol für Familienmitglieder. Wo stehen sie zueinander? Wer ist nah, wer weit? Systemische Methode ohne viel Worte.', dauer: '20–30 Min', tags: ['Systemisch', 'Familie', 'Symbol'] },
+      { titel: 'Unterstützungsnetz zeichnen', beschreibung: 'Konzentrische Kreise auf Papier: Schüler in der Mitte, dann: enge Vertraute → Bekannte → Institutionen. Wer ist wirklich da? Wo gibt es Lücken?', dauer: '15–20 Min', tags: ['Ressourcen', 'Familie', 'Soziales Netz'] },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    eintraege: [
+      { titel: 'Waage der Entscheidung', beschreibung: 'Eine gezeichnete Waage: Links die Vorteile des Konsums, rechts die Nachteile. Dann: Was kommt auf die andere Seite, wenn ich weniger konsumiere? Motivational-Interviewing-Methode.', dauer: '15–20 Min', tags: ['MI', 'Entscheidung', 'Reflektion'] },
+      { titel: 'Werbung dekonstruieren', beschreibung: 'Alkohol- oder Tabakwerbung analysieren: Welches Bild wird gezeigt? Welche Emotionen werden angesprochen? Was wird verschwiegen? Kritisches Denken fördern.', dauer: '20 Min', tags: ['Medien', 'Prävention', 'Kritisches Denken'] },
+      { titel: 'Trigger-Landkarte', beschreibung: 'Schüler zeichnet eine persönliche Karte: Welche Situationen, Orte, Menschen, Gefühle lösen den Konsumdrang aus? Welche Alternativen gibt es für jeden Trigger?', dauer: '20–25 Min', tags: ['Rückfall', 'Prävention', 'Selbstreflexion'] },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    eintraege: [
+      { titel: 'Mein Lebens-Kompass', beschreibung: 'Großer Kreis mit 8 Bereichen (Familie, Freunde, Schule, Hobby, Gesundheit, …): Schüler bewertet von 1–10, wie zufrieden er ist. Visualisiert Ungleichgewichte und Ressourcen.', dauer: '15–20 Min', tags: ['Ziele', 'Selbstreflexion', 'Ressourcen'] },
+      { titel: 'Brief aus der Zukunft', beschreibung: 'Schüler schreibt einen Brief an sich selbst aus der Perspektive in 5 Jahren: Was hat er erreicht? Wie fühlt er sich? Was hat ihm geholfen? Aktiviert Motivation und Hoffnung.', dauer: '20–30 Min', tags: ['Zukunft', 'Motivation', 'Kreativ'] },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    eintraege: [
+      { titel: 'Body-Scan-Reise', beschreibung: 'Geführte Achtsamkeitsübung im Sitzen: Aufmerksamkeit wandert von den Füßen bis zum Kopf. Fördert Körperbewusstsein und Entspannung. Kann als Audio eingespielt werden.', dauer: '10–15 Min', tags: ['Achtsamkeit', 'Körper', 'Entspannung'] },
+      { titel: 'Energie-Tagebuch (1 Woche)', beschreibung: 'Tägliches Eintragen: Schlaf, Essen, Bewegung, Bildschirmzeit, Stimmung auf einer Skala 1–10. Nach einer Woche gemeinsam Muster erkennen.', dauer: '5 Min/Tag + 20 Min Auswertung', tags: ['Schlaf', 'Routine', 'Gesundheit'] },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Werte-Kartenspiel', beschreibung: 'Karten mit Werten (Freiheit, Gerechtigkeit, Familie, Erfolg, …) sortieren: Die 5 wichtigsten oben. Dann reflektieren: Lebe ich meine Werte? Wo gibt es Konflikte?', dauer: '20–25 Min', tags: ['Werte', 'Identität', 'ACT'] },
+      { titel: 'Stärken-Interview', beschreibung: 'Die Fachperson interviewt den Schüler gezielt nach Stärken: "Erzähl mir von einem Moment, wo du stolz warst." Schüler formuliert 3 Stärken als "Ich bin jemand, der…"', dauer: '15–20 Min', tags: ['Ressourcen', 'Selbstwert', 'Stärken'] },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Sicherer-Ort-Imagination', beschreibung: 'Geführte Visualisierung: Schüler stellt sich einen sicheren Ort vor (real oder imaginär), beschreibt ihn mit allen Sinnen. Wird als Ankertechnik gespeichert. Grundlage jeder Traumaarbeit.', dauer: '15–20 Min', tags: ['Stabilisierung', 'Trauma', 'Imagination'] },
+      { titel: 'Ressourcen-Mobile', beschreibung: 'Kleine Papierstreifen mit persönlichen Ressourcen (Menschen, Aktivitäten, Eigenschaften) werden an einem selbst gebastelten Mobile befestigt. Sichtbare Erinnerung an vorhandene Stärken.', dauer: '25–30 Min', tags: ['Ressourcen', 'Kreativ', 'Stabilisierung'] },
+      { titel: 'Brief an das jüngere Ich', beschreibung: 'Schüler schreibt einen Brief an sich selbst in einem schwierigen Moment der Vergangenheit: Was hättest du damals gebraucht? Was würdest du dir sagen? Fördert Selbstmitgefühl.', dauer: '20–30 Min', tags: ['Selbstmitgefühl', 'Trauma', 'Kreativ'] },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    eintraege: [
+      { titel: 'Screen-Time-Audit', beschreibung: 'Schüler zieht die Bildschirmzeit-Statistik seines Handys heraus. Gemeinsam analysieren: Welche Apps? Wann? Wie fühlt er sich danach? Kein Moralisieren – Neugier wecken.', dauer: '15 Min', tags: ['Medien', 'Achtsamkeit', 'Reflektion'] },
+      { titel: 'Digitaler Grenzplan', beschreibung: 'Gemeinsam realistische Regeln für die Mediennutzung entwickeln (nicht verordnen). Was ist machbar? Wann ist handy-freie Zeit sinnvoll? Plan wird schriftlich festgehalten.', dauer: '20 Min', tags: ['Medien', 'Grenzen', 'Ziele'] },
+    ]
+  },
+];
+const INTERVENTIONEN = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    eintraege: [
+      { titel: 'Kognitive Umstrukturierung', ansatz: 'KVT', beschreibung: 'Automatische negative Gedanken aufdecken und hinterfragen: Was ist die Evidenz? Gibt es eine andere Sichtweise? Realistischer Alternativgedanke formulieren.', indikation: 'Grübeln, Katastrophisieren, negatives Selbstbild', dauer: '20–30 Min', tags: ['KVT', 'Gedanken', 'Reframing'] },
+      { titel: 'TIPP-Skill', ansatz: 'DBT', beschreibung: 'Temperature (kaltes Wasser ins Gesicht), Intense exercise (kurzes intensives Training), Paced breathing (Ausatmen länger als Einatmen), Progressive relaxation. Sofortmassnahme bei extremer Anspannung.', indikation: 'Akute emotionale Dysregulation, Krisenmomente', dauer: '5–10 Min', tags: ['DBT', 'Krisenintervention', 'Körper'] },
+      { titel: 'Defusion (ACT)', ansatz: 'ACT', beschreibung: 'Abstand vom Gedanken schaffen: "Ich habe den Gedanken, dass ich wertlos bin" statt "Ich bin wertlos." Techniken: Gedanken als Blätter auf einem Bach, Gedanken benennen ("Da ist wieder Angst").', indikation: 'Fusion mit negativen Gedanken, Grübeln, Angst', dauer: '10–15 Min', tags: ['ACT', 'Achtsamkeit', 'Gedanken'] },
+      { titel: '5-4-3-2-1 Grounding', ansatz: 'Stabilisierung', beschreibung: '5 Dinge sehen – 4 anfassen – 3 hören – 2 riechen – 1 schmecken. Bringt den Fokus in den Moment. Einfach zu erlernen und jederzeit anwendbar.', indikation: 'Dissoziation, Panik, Überwältigung', dauer: '3–5 Min', tags: ['Grounding', 'Trauma', 'Achtsamkeit'] },
+      { titel: 'Impact-Technik: Steingewicht', ansatz: 'Impact', beschreibung: 'Schüler hält einen schweren Stein/Gegenstand und beschreibt das Gewicht. Metapher: "Das ist das Gewicht, das du jeden Tag mit dir trägst." Dann: Was erleichtert? Was legt Gewicht ab?', indikation: 'Emotionale Erschöpfung, Gefühl der Überlastung', dauer: '10–15 Min', tags: ['Impact', 'Metapher', 'Körper'] },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    eintraege: [
+      { titel: 'GFK – Gewaltfreie Kommunikation', ansatz: 'GFK (Rosenberg)', beschreibung: 'Vierschritt: Beobachtung (ohne Bewertung) → Gefühl → Bedürfnis → Bitte. Wird in konkreten Situationen des Schülers geübt bis es flüssig wirkt.', indikation: 'Konflikte, Aggression, Schwierigkeiten Grenzen zu kommunizieren', dauer: '20–30 Min', tags: ['GFK', 'Kommunikation', 'Assertivität'] },
+      { titel: 'Assertivitätstraining', ansatz: 'Verhaltenstherapie', beschreibung: 'Direkte, respektvolle Kommunikation üben: Nein sagen, Wünsche äußern, Kritik annehmen und geben. Stufenweise Exposition (erst in Rollenspielen, dann im Alltag).', indikation: 'Unterordnung, Angst vor Ablehnung, aggressiver Kommunikationsstil', dauer: '20–30 Min', tags: ['Assertivität', 'Rollenspiel', 'Exposition'] },
+      { titel: 'Impact-Technik: Grenzen mit Seilen', ansatz: 'Impact', beschreibung: 'Seil oder Klebeband auf dem Boden markiert persönlichen Raum. Verschiedene Situationen durchspielen: Wer darf wie nah? Was passiert wenn die Grenze überschritten wird? Sehr konkret und körperlich.', indikation: 'Grenzsetzungsprobleme, Opfer von Mobbing oder Grenzverletzungen', dauer: '15–20 Min', tags: ['Impact', 'Grenzen', 'Körper'] },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    eintraege: [
+      { titel: 'Zirkuläres Fragen', ansatz: 'Systemisch', beschreibung: 'Perspektive anderer Familienmitglieder einnehmen: "Was glaubst du, würde dein Vater sagen, wenn ich ihn fragen würde, was er sich von dir wünscht?" Öffnet neue Sichtweisen ohne Konfrontation.', indikation: 'Familienkonflikte, festgefahrene Muster, mangelnde Kommunikation', dauer: '15–25 Min', tags: ['Systemisch', 'Familie', 'Perspektive'] },
+      { titel: 'Reframing', ansatz: 'Systemisch / KVT', beschreibung: 'Verhalten oder Eigenschaft in einem anderen Rahmen deuten: "Deine Sturheit könnte auch Durchhaltevermögen sein." Vorsichtig einsetzen – nicht verharmlosend.', indikation: 'Negative Selbst- oder Fremdwahrnehmung, Schuldgefühle', dauer: '10–15 Min', tags: ['Systemisch', 'Reframing', 'Perspektive'] },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    eintraege: [
+      { titel: 'Motivational Interviewing (MI)', ansatz: 'MI', beschreibung: 'OARS: Open questions, Affirmations, Reflections, Summaries. Kein Druck, kein Moralisieren. Ambivalenz erkunden: "Was spricht für eine Veränderung? Was dagegen?" Change Talk fördern.', indikation: 'Ambivalenz gegenüber Konsum, Widerstand, Riskoverhalten', dauer: '30–45 Min', tags: ['MI', 'Motivation', 'Ambivalenz'] },
+      { titel: 'Funktionsanalyse (KVT)', ansatz: 'KVT', beschreibung: 'SORKC-Schema: Stimulus – Organismus – Reaktion – Konsequenz (kurz/lang). Was löst den Konsum aus? Was hält ihn aufrecht? Verstehen ohne zu verurteilen.', indikation: 'Alle Formen von Risiko- oder Problemverhalten', dauer: '20–30 Min', tags: ['KVT', 'Verhaltensanalyse', 'Konsum'] },
+      { titel: 'Rückfallprävention', ansatz: 'RP (Marlatt)', beschreibung: 'Hochrisikosituationen identifizieren, Bewältigungsstrategien vorbereiten, Ausrutscher vs. Rückfall unterscheiden. Konkreter schriftlicher Plan.', indikation: 'Nach Entschluss zur Reduktion/Abstinenz', dauer: '25–30 Min', tags: ['Rückfall', 'Prävention', 'Konsum'] },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    eintraege: [
+      { titel: 'Werte-Klärung (ACT)', ansatz: 'ACT', beschreibung: 'Was ist dem Schüler wirklich wichtig – nicht was er will (Ziele), sondern wie er sein will (Werte)? Frage: "Wenn niemand zuschaut, woran merkst du, dass du richtig lebst?" Zukunftsmotivation aufbauen.', indikation: 'Orientierungslosigkeit, Motivationsmangel, Sinnfragen', dauer: '20–30 Min', tags: ['ACT', 'Werte', 'Motivation'] },
+      { titel: 'Problemlösetraining', ansatz: 'KVT', beschreibung: 'D-E-F-O-S: Definition – Erzeugen von Lösungen (Brainstorming) – Folgen abschätzen – Optimale Lösung wählen – Schritte planen. Strukturiertes Vorgehen bei konkreten Problemen.', indikation: 'Vermeidungsverhalten, Entscheidungsschwierigkeiten, Überforderung', dauer: '20–30 Min', tags: ['KVT', 'Problemlösen', 'Planung'] },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    eintraege: [
+      { titel: 'Progressive Muskelentspannung (PME)', ansatz: 'Entspannung (Jacobson)', beschreibung: 'Muskelgruppen nacheinander anspannen (7 Sek.) und loslassen (20 Sek.). Aufmerksamkeit auf den Unterschied. Kann als Kurzform (6 Gruppen) in 10 Min durchgeführt werden.', indikation: 'Chronischer Stress, Schlafprobleme, körperliche Anspannung', dauer: '10–20 Min', tags: ['Entspannung', 'Körper', 'Stress'] },
+      { titel: 'Achtsamkeitsbasierte Körperarbeit', ansatz: 'MBSR-Elemente', beschreibung: 'Kurze Körper-Scan-Übungen: Wo spüre ich Spannung? Was nehme ich wahr ohne es zu verändern? Fördert Selbstwahrnehmung und Stressregulation.', indikation: 'Körperfremde Jugendliche, Dissoziation, Stress', dauer: '10–15 Min', tags: ['Achtsamkeit', 'Körper', 'MBSR'] },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Narrative Therapie: Umstorying', ansatz: 'Narrativ', beschreibung: 'Dominante Problemerzählung identifizieren ("Ich bin ein Versager") und alternative Geschichte herausarbeiten: Wann war das nicht so? Was sagt das über dich? Neue Erzählung stärken.', indikation: 'Negatives Selbstbild, einschränkende Überzeugungen', dauer: '25–35 Min', tags: ['Narrativ', 'Identität', 'Selbstbild'] },
+      { titel: 'Ressourcenaktivierung', ansatz: 'Ressourcenorientiert', beschreibung: 'Gezielte Fragen nach bereits vorhandenen Stärken und Erfolgen: "Was hat dir geholfen, das bisher zu schaffen?" Erfahrungen in Ressourcen übersetzen, die auf neue Situationen übertragbar sind.', indikation: 'Hilflosigkeit, niedriger Selbstwert, Depression', dauer: '15–20 Min', tags: ['Ressourcen', 'Stärken', 'Selbstwert'] },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'EMDR – Stabilisierungsphase', ansatz: 'EMDR', beschreibung: 'Vor der Traumaverarbeitung: Sicherer Ort (Imagination + bilaterale Stimulation), Tresor-Technik (Belastendes wegschließen), Lichtstrahl-Übung. Nur durch ausgebildete Fachkraft in Phase 2 anzuwenden.', indikation: 'Traumatisierte Jugendliche – als Vorbereitung auf Verarbeitung', dauer: '20–30 Min', tags: ['EMDR', 'Trauma', 'Stabilisierung'] },
+      { titel: 'Tresor-Technik', ansatz: 'Stabilisierung / EMDR', beschreibung: 'Jugendliche stellen sich einen unzerstörbaren Tresor vor und legen belastende Erinnerungen gedanklich hinein – mit Schloss. Kann jederzeit benutzt werden, um Distanz zu schaffen.', indikation: 'Intrusionen, Flashbacks, Überwältigung durch Erinnerungen', dauer: '10–15 Min', tags: ['EMDR', 'Stabilisierung', 'Distanz'] },
+      { titel: 'Exposition in sensu (KVT)', ansatz: 'KVT / Exposition', beschreibung: 'Schrittweise Annäherung an angstauslösende Vorstellungen oder Erinnerungen in der Imagination – mit Begleitung. Angst darf steigen und sinken. Nie ohne Stabilisierungsbasis.', indikation: 'PTBS, Phobien, Angststörungen – nach sorgfältiger Vorbereitung', dauer: '30–50 Min', tags: ['Exposition', 'Angst', 'Trauma', 'KVT'] },
+      { titel: 'Exposition in vivo', ansatz: 'Verhaltenstherapie / Exposition', beschreibung: 'Reale, schrittweise Konfrontation mit angstauslösenden Situationen (Angsthierarchie von 0–10 erstellen, dann von unten beginnen). Angst hält nicht für immer an – Erfahrung des Lernens.', indikation: 'Phobien, Soziale Angst, Vermeidungsverhalten', dauer: 'Mehrere Sitzungen', tags: ['Exposition', 'Angst', 'Verhaltenstherapie'] },
+      { titel: 'Impact-Technik: Schutzwall', ansatz: 'Impact', beschreibung: 'Bücher oder Ordner aufstapeln als "Schutzwall" zwischen Schüler und einer Situation/Person. Körperlich erfahren wie es sich anfühlt, geschützt zu sein vs. ungeschützt. Dann: Was braucht es, damit der Wall bleibt?', indikation: 'Grenzverletzungen, Missbrauch, Sicherheitsgefühl fehlt', dauer: '15–20 Min', tags: ['Impact', 'Schutz', 'Grenzen', 'Körper'] },
+      { titel: 'DBT – Krisenüberlebensplan', ansatz: 'DBT', beschreibung: 'ACCEPTS: Activities, Contributing, Comparisons, Emotions, Push away, Thoughts, Sensations. Konkrete Liste erstellen, was in einer Krise hilft. Self-Soothe: 5 Sinne bewusst einsetzen.', indikation: 'Wiederholte Krisen, Suizidgedanken, Selbstverletzung', dauer: '20–30 Min', tags: ['DBT', 'Krise', 'Suizidprävention'] },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    eintraege: [
+      { titel: 'Verhaltensanalyse Medienkonsum', ansatz: 'KVT', beschreibung: 'SORKC auf Mediennutzung anwenden: Was sind die Auslöser? Was folgt danach (kurzfristig / langfristig)? Keine Verurteilung, sondern Verständnis aufbauen für das eigene Verhalten.', indikation: 'Problematische Mediennutzung, Gaming, Social-Media-Abhängigkeit', dauer: '20–25 Min', tags: ['KVT', 'Medien', 'Verhaltensanalyse'] },
+      { titel: 'ACT: Werte vs. Ablenkung', ansatz: 'ACT', beschreibung: 'Kontrast erarbeiten: Was sind echte Werte (Verbundenheit, Kreativität) vs. was ist Vermeidung durch Medien? Nicht Verzicht, sondern bewusste Wahl fördern.', indikation: 'Selbstregulationsprobleme, sinnloser Konsum als Vermeidung', dauer: '20 Min', tags: ['ACT', 'Werte', 'Medien'] },
+    ]
+  },
+];
 
 init();
 </script>

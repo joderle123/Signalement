@@ -365,8 +365,19 @@ body {
    ============================================================ */
 .content {
   flex: 1;
-  padding: 24px;
+  padding: 28px 28px;
   overflow-y: auto;
+}
+
+/* Schöner leerer Zustand für alle Listen */
+.liste-leer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: #FAFCFF;
 }
 
 /* ============================================================
@@ -875,44 +886,48 @@ body {
    ============================================================ */
 .kalender-wrapper {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 290px;
   gap: 20px;
+  align-items: start;
 }
 
 .kalender-nav {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .kalender-monat {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   flex: 1;
   text-align: center;
+  letter-spacing: -0.3px;
 }
 
 .kalender-grid {
   background: white;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 
 .kalender-wochentage {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  background: var(--primary);
-  color: white;
+  background: var(--bg-sidebar);
 }
 
 .kalender-wochentag {
-  padding: 10px;
+  padding: 10px 6px;
   text-align: center;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255,255,255,0.55);
 }
 
 .kalender-tage {
@@ -921,25 +936,42 @@ body {
 }
 
 .kalender-tag {
-  min-height: 80px;
+  min-height: 76px;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 6px;
+  padding: 7px 6px 5px;
   cursor: pointer;
   transition: background var(--transition);
   position: relative;
 }
 
-.kalender-tag:hover { background: #F8FAFC; }
+.kalender-tag:hover { background: #F8FAFD; }
 .kalender-tag:nth-child(7n) { border-right: none; }
 .kalender-tag.leer { background: #FAFAFA; cursor: default; }
-.kalender-tag.heute { background: #EBF5FB; }
-.kalender-tag.heute .tag-nummer { color: var(--primary); font-weight: 700; }
+.kalender-tag.heute { background: #EFF6FF; }
+.kalender-tag.heute .tag-nummer {
+  color: white;
+  background: var(--primary);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+}
 
 .tag-nummer {
   font-size: 12px;
   color: var(--text-light);
   margin-bottom: 4px;
+  font-weight: 500;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tag-events {
@@ -950,8 +982,9 @@ body {
 
 .tag-event {
   font-size: 10px;
+  font-weight: 500;
   padding: 1px 5px;
-  border-radius: 3px;
+  border-radius: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -962,6 +995,7 @@ body {
   background: white;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 
@@ -971,28 +1005,34 @@ body {
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);
   align-items: flex-start;
+  transition: background var(--transition);
 }
 
+.termin-item:hover { background: #FAFCFF; }
 .termin-item:last-child { border-bottom: none; }
 
 .termin-color-bar {
-  width: 4px;
+  width: 3px;
   border-radius: 2px;
   align-self: stretch;
-  min-height: 40px;
+  min-height: 36px;
+  flex-shrink: 0;
 }
 
-.termin-info { flex: 1; }
+.termin-info { flex: 1; min-width: 0; }
 
 .termin-titel {
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 2px;
+  color: var(--text);
+  letter-spacing: -0.1px;
 }
 
 .termin-meta {
   font-size: 11px;
   color: var(--text-muted);
+  font-weight: 500;
 }
 
 /* ============================================================
@@ -1191,20 +1231,28 @@ select {
   background: white;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  margin-bottom: 8px;
+  margin-bottom: 7px;
+  transition: all var(--transition);
+}
+
+.ziel-item:hover {
+  border-color: #C8D3DD;
+  box-shadow: var(--shadow);
 }
 
 .ziel-checkbox {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   cursor: pointer;
   flex-shrink: 0;
-  margin-top: 1px;
+  margin-top: 2px;
+  accent-color: var(--primary);
 }
 
 .ziel-text {
   font-size: 13px;
   flex: 1;
+  line-height: 1.45;
 }
 
 .ziel-text.erledigt {
@@ -1248,16 +1296,17 @@ select {
    FORTSCHRITTSBALKEN
    ============================================================ */
 .progress-bar {
-  height: 6px;
+  height: 5px;
   background: var(--border);
-  border-radius: 3px;
+  border-radius: 99px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  border-radius: 3px;
-  transition: width 0.3s ease;
+  border-radius: 99px;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
 }
 
 /* ============================================================
@@ -1335,10 +1384,40 @@ select {
 /* ============================================================
    SCROLLBAR
    ============================================================ */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #CBD5E0; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #A0AEC0; }
+::-webkit-scrollbar-thumb { background: #CBD5E0; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+}
+
+/* ============================================================
+   CHIP / TAG
+   ============================================================ */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-light);
+}
+
+.chip.primary { background: #EFF6FF; color: var(--primary); border-color: #BFDBFE; }
+.chip.success { background: #F0FDF4; color: #16A34A; border-color: #BBF7D0; }
+.chip.warning { background: #FFFBEB; color: #D97706; border-color: #FDE68A; }
+.chip.danger  { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
 
 /* ============================================================
    RESPONSIVE

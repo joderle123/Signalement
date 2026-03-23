@@ -258,6 +258,65 @@ const THEMA_INTERVENTIONEN = {
     { titel: 'Meine Beziehungs-Werte', ansatz: 'Werteklärung', beschreibung: 'Was ist mir in einer Beziehung wichtig? Werte sortieren und priorisieren.', indikation: 'Ungesunde Beziehungsmuster, erste Beziehungen', dauer: '20 Min' },
     { titel: 'Gesunde vs. ungesunde Beziehung', ansatz: 'Psychoedukativ', beschreibung: 'Merkmale einer gesunden Beziehung erarbeiten und auf die eigene Situation anwenden.', indikation: 'Toxische Beziehungen, Eifersucht, Kontrolle', dauer: '20 Min' },
   ],
+
+  // ── Konsum & Risikoverhalten ───────────────────────────────
+  'alkohol': [
+    { titel: 'Konsum-Protokoll', ansatz: 'Motivational Interviewing', beschreibung: 'Eine Woche lang Konsum dokumentieren: Wann, wie viel, warum, wie danach.', indikation: 'Bagatellisierung des Konsums', dauer: '5 Min täglich' },
+    { titel: 'Vor- und Nachteile abwägen', ansatz: 'Motivational Interviewing', beschreibung: 'Vier-Felder-Matrix: Was spricht für / gegen den Konsum? Kurz- und langfristig.', indikation: 'Ambivalenz bezüglich des Konsums', dauer: '20 Min' },
+    { titel: 'Meine Auslöser kennen', ansatz: 'Suchttherapie', beschreibung: 'Situationen, Gefühle und Gedanken identifizieren, die den Konsum auslösen.', indikation: 'Konditionierter Konsum, Hochrisikosituationen', dauer: '20 Min' },
+  ],
+  'cannabis': [
+    { titel: 'Cannabis-Faktencheck', ansatz: 'Psychoedukativ', beschreibung: 'Mythen und Fakten über Cannabis gemeinsam durchgehen – Was stimmt wirklich?', indikation: 'Verharmlosung, Fehlinformationen', dauer: '15 Min' },
+    { titel: 'Konsum-Motive erforschen', ansatz: 'Motivational Interviewing', beschreibung: 'Warum konsumiere ich? Stress, Spaß, Dazugehören, Langeweile – Motive benennen.', indikation: 'Selbstmedikation, Flucht vor Problemen', dauer: '20 Min' },
+    { titel: 'Alternativen zu Cannabis', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Was würde ich statt kiffen tun, wenn ich Stress/Langeweile/Traurigkeit habe?', indikation: 'Selbstmedikation, Abhängigkeit', dauer: '15 Min' },
+  ],
+  'tabak-ezigarette': [
+    { titel: 'Mein Rauch-Tagebuch', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Jeden Zug dokumentieren: Uhrzeit, Situation, Stimmung davor/danach.', indikation: 'Unbewusstes Rauchen, Routinekonsum', dauer: '5 Min täglich' },
+    { titel: 'Kosten-Nutzen-Rechnung', ansatz: 'Kognitiv-behavioral', beschreibung: 'Was kostet mich das Rauchen wirklich? Geld, Gesundheit, Zeit – konkret ausrechnen.', indikation: 'Motivationssteigerung für Ausstieg', dauer: '15 Min' },
+  ],
+  'gaming': [
+    { titel: 'Gaming-Protokoll', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Eine Woche lang Spielzeiten, Stimmung davor/danach und Vernachlässigtes notieren.', indikation: 'Exzessives Gaming, Realitätsflucht', dauer: '5 Min täglich' },
+    { titel: 'Was erfülle ich im Spiel?', ansatz: 'Motivational Interviewing', beschreibung: 'Welche Bedürfnisse erfülle ich durch Gaming (Erfolg, Zugehörigkeit, Kontrolle)? Reale Alternativen finden.', indikation: 'Suchtpotenzial, soziale Isolation durch Gaming', dauer: '20 Min' },
+  ],
+  'social-media': [
+    { titel: 'Social-Media-Audit', ansatz: 'Achtsamkeit', beschreibung: 'Screen-Time analysieren: Welche Apps, wie lange, wann? Wie fühle ich mich danach?', indikation: 'Exzessiver Medienkonsum, FOMO', dauer: '15 Min' },
+    { titel: 'Vergleichsfalle erkennen', ansatz: 'Kognitiv-behavioral', beschreibung: 'Welche Profile lösen Neid/Unzufriedenheit aus? Automatische Gedanken beim Scrollen benennen.', indikation: 'Negatives Körperbild durch Social Media, Vergleiche', dauer: '20 Min' },
+  ],
+  'gluecksspiel': [
+    { titel: 'Verlust-Protokoll', ansatz: 'Suchttherapie', beschreibung: 'Alle Einsätze und Verluste der letzten Wochen dokumentieren – reale Kosten sehen.', indikation: 'Bagatellisierung von Verlusten', dauer: '20 Min' },
+    { titel: 'Ausstiegs-Plan', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Schrittweise einen Plan erarbeiten, um den Zugang zu Glücksspielen zu reduzieren.', indikation: 'Pathologisches Spielen', dauer: '25 Min' },
+  ],
+  'selbstmedikation': [
+    { titel: 'Was betäube ich?', ansatz: 'Tiefenpsychologisch', beschreibung: 'Welche Gefühle, Gedanken oder Situationen soll der Konsum betäuben oder erleichtern?', indikation: 'Selbstmedikation bei psychischen Problemen', dauer: '20 Min' },
+    { titel: 'Ressourcen stärken', ansatz: 'Ressourcenorientiert', beschreibung: 'Was gibt mir Kraft, ohne Substanzen? Ressourcen identifizieren und gezielt einsetzen.', indikation: 'Fehlende Alternativen zur Selbstmedikation', dauer: '20 Min' },
+  ],
+
+  // ── Schule & Zukunft ───────────────────────────────────────
+  'schulisches-engagement': [
+    { titel: 'Mein Schulalltag unter der Lupe', ansatz: 'Verhaltensanalyse', beschreibung: 'Was läuft gut, was schlecht? Stunden, Pausen, Lernzeiten analysieren und optimieren.', indikation: 'Schulvermeidung, Motivationsprobleme', dauer: '20 Min' },
+    { titel: 'Kurzfristige Schulziele', ansatz: 'Zielorientiert', beschreibung: 'Drei konkrete, erreichbare Ziele für die nächsten zwei Wochen in der Schule formulieren.', indikation: 'Demotivation, Überforderung', dauer: '15 Min' },
+  ],
+  'lernstrategien': [
+    { titel: 'Lerntyp-Test', ansatz: 'Psychoedukativ', beschreibung: 'Visuell, auditiv, kinästhetisch? Lerntyp bestimmen und passende Strategien ableiten.', indikation: 'Ineffektives Lernen, schlechte Noten trotz Aufwand', dauer: '20 Min' },
+    { titel: 'Wochenplan erstellen', ansatz: 'Strukturierung', beschreibung: 'Gemeinsam einen realistischen Lernwochenplan mit Pausen und Freizeit erstellen.', indikation: 'Unstrukturiertes Lernen, Prokrastination', dauer: '20 Min' },
+    { titel: 'Pomodoro-Technik einführen', ansatz: 'Verhaltenstherapeutisch', beschreibung: '25 Min Fokus, 5 Min Pause – Technik erklären und in der Sitzung ausprobieren.', indikation: 'Konzentrationsprobleme, Ablenkung', dauer: '15 Min' },
+  ],
+  'berufsorientierung': [
+    { titel: 'Interessen-Profil', ansatz: 'Karriereberatung', beschreibung: 'Was mache ich gerne, was kann ich gut, was ist der Welt nützlich? Schnittmengen finden.', indikation: 'Orientierungslosigkeit bzgl. Beruf', dauer: '25 Min' },
+    { titel: 'Berufsfelder erkunden', ansatz: 'Psychoedukativ', beschreibung: '5 Berufsfelder recherchieren, die zu den Interessen passen – Vor- und Nachteile.', indikation: 'Eingeschränktes Berufsbild', dauer: '25 Min' },
+  ],
+  'zukunftsplanung': [
+    { titel: 'Brief aus der Zukunft', ansatz: 'Lösungsfokussiert', beschreibung: 'Schreibe einen Brief von deinem 30-jährigen Ich an dich heute – was hast du erreicht?', indikation: 'Fehlende Zukunftsperspektive, Hoffnungslosigkeit', dauer: '20 Min' },
+    { titel: 'Vision Board', ansatz: 'Positive Psychologie', beschreibung: 'Bilder, Wörter und Symbole für die Zukunft sammeln und auf ein Board kleben/zeichnen.', indikation: 'Mangelnde Ziele, Antriebslosigkeit', dauer: '30 Min' },
+  ],
+  'motivation': [
+    { titel: 'Intrinsische Motivatoren', ansatz: 'Selbstbestimmungstheorie', beschreibung: 'Was tue ich freiwillig, weil es mich erfüllt? Intrinsische vs. extrinsische Motivation unterscheiden.', indikation: 'Rein externer Antrieb, Demotivation', dauer: '20 Min' },
+    { titel: 'Mini-Ziele formulieren', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Ein großes Ziel in 5 sehr kleine Schritte aufteilen – ersten Schritt sofort angehen.', indikation: 'Überwältigung durch große Ziele', dauer: '15 Min' },
+  ],
+  'prüfungsangst': [
+    { titel: 'Katastrophen-Stopp', ansatz: 'Kognitiv-behavioral', beschreibung: 'Was ist das Schlimmste, das passieren kann? Wie wahrscheinlich ist es wirklich? Realistisch einschätzen.', indikation: 'Katastrophisieren vor Prüfungen', dauer: '15 Min' },
+    { titel: 'Prüfungs-Ritual entwickeln', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Ein persönliches Beruhigungs- und Vorbereitungsritual für den Prüfungstag erarbeiten.', indikation: 'Panik am Prüfungstag', dauer: '20 Min' },
+  ],
 };
 
 const THEMEN_KATEGORIEN = [

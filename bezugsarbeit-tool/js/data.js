@@ -223,6 +223,41 @@ const THEMA_INTERVENTIONEN = {
     { titel: 'Freuden-Inventar', ansatz: 'Positive Psychologie', beschreibung: 'Liste von 20 Dingen, die Freude machen – groß und klein. Wie oft kommen sie vor?', indikation: 'Freudlosigkeit, Anhedonie', dauer: '15 Min' },
     { titel: 'Flow-Erlebnisse finden', ansatz: 'Positive Psychologie', beschreibung: 'Wann verliere ich das Zeitgefühl? Flow-Momente identifizieren und gezielt einplanen.', indikation: 'Fehlende Motivation, Langeweile', dauer: '20 Min' },
   ],
+
+  // ── Soziale Kompetenzen ────────────────────────────────────
+  'freundschaften': [
+    { titel: 'Freundschafts-Netzwerk', ansatz: 'Systemisch', beschreibung: 'Alle Freundschaften als Netz zeichnen – Nähe, Häufigkeit, Qualität einschätzen.', indikation: 'Soziale Isolation, Beziehungsprobleme', dauer: '20 Min' },
+    { titel: 'Was macht eine gute Freundschaft aus?', ansatz: 'Psychoedukativ', beschreibung: 'Gemeinsam Kriterien für eine gesunde Freundschaft erarbeiten und auf eigene Beziehungen anwenden.', indikation: 'Toxische Freundschaften, Unsicherheit', dauer: '20 Min' },
+  ],
+  'konfliktmanagement': [
+    { titel: 'Konflikt-Analyse', ansatz: 'Kognitiv-behavioral', beschreibung: 'Einen konkreten Konflikt zerlegen: Was passierte? Wie reagierte ich? Was hätte geholfen?', indikation: 'Eskalation, destruktive Konfliktmuster', dauer: '25 Min' },
+    { titel: 'Gewaltfreie Kommunikation üben', ansatz: 'GFK nach Rosenberg', beschreibung: 'Beobachtung / Gefühl / Bedürfnis / Bitte – an einem echten Konfliktbeispiel üben.', indikation: 'Vorwürfe, Eskalation in Konflikten', dauer: '25 Min' },
+    { titel: 'Ich-Botschaften trainieren', ansatz: 'Kommunikationstraining', beschreibung: 'Du-Botschaften in Ich-Botschaften umformulieren – anhand von Alltagsbeispielen.', indikation: 'Anklagendes Kommunikationsmuster', dauer: '15 Min' },
+  ],
+  'kommunikation': [
+    { titel: 'Aktives Zuhören üben', ansatz: 'Gesprächsführung', beschreibung: 'In Paaren: einer spricht, einer hört aktiv zu (Blickkontakt, Zusammenfassen, Nachfragen).', indikation: 'Kommunikationsprobleme, Missverständnisse', dauer: '20 Min' },
+    { titel: 'Kommunikationsstile kennenlernen', ansatz: 'Psychoedukativ', beschreibung: 'Passiv / aggressiv / assertiv – eigene Muster erkennen und Assertivität einüben.', indikation: 'Schwierigkeit, Bedürfnisse zu äußern', dauer: '20 Min' },
+  ],
+  'grenzen-setzen': [
+    { titel: 'Meine Grenzen kennen', ansatz: 'Ressourcenorientiert', beschreibung: 'In welchen Bereichen fällt es mir schwer, Nein zu sagen? Körperliche Reaktion bei Grenzüberschreitung.', indikation: 'Schwierigkeit mit Grenzsetzung', dauer: '20 Min' },
+    { titel: 'Nein sagen üben', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Rollenspiel: verschiedene Situationen, in denen Nein gesagt werden muss – mit Feedback.', indikation: 'Übermäßige Anpassung, Angst vor Ablehnung', dauer: '20 Min' },
+  ],
+  'mobbing': [
+    { titel: 'Mobbing-Analyse', ansatz: 'Psychoedukativ', beschreibung: 'Was ist Mobbing, was nicht? Täter-Opfer-Zuschauer-Rollen besprechen und einordnen.', indikation: 'Mobbing-Erfahrungen, Unsicherheit über Rollen', dauer: '20 Min' },
+    { titel: 'Meine Reaktions-Strategien', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Was kann ich tun, wenn ich gemobbt werde? Konkrete Handlungsoptionen erarbeiten.', indikation: 'Hilflosigkeit bei Mobbing', dauer: '20 Min' },
+  ],
+  'gruppendynamik': [
+    { titel: 'Meine Rolle in der Gruppe', ansatz: 'Systemisch', beschreibung: 'Welche Rolle nehme ich in meiner Klasse / Gruppe ein? Anführer, Clown, Außenseiter…', indikation: 'Peer-Pressure, Rollenprobleme in der Gruppe', dauer: '15 Min' },
+    { titel: 'Peer-Pressure-Szenarien', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Rollenspiel mit typischen Situationen, in denen Gruppendruck entsteht – und wie man standhält.', indikation: 'Risikoverhalten durch Gruppendruck', dauer: '20 Min' },
+  ],
+  'empathie': [
+    { titel: 'Perspektivenwechsel-Übung', ansatz: 'Empathietraining', beschreibung: 'Eine Situation aus der Sicht einer anderen Person beschreiben – Gedanken, Gefühle, Bedürfnisse.', indikation: 'Egozentrische Sichtweise, Konflikte durch Missverständnisse', dauer: '20 Min' },
+    { titel: 'Empathie-Tagebuch', ansatz: 'Achtsamkeit', beschreibung: 'Täglich eine Person beobachten: Wie könnte sie sich fühlen? Was braucht sie gerade?', indikation: 'Soziale Wahrnehmungsprobleme', dauer: '5 Min täglich' },
+  ],
+  'romantische-beziehungen': [
+    { titel: 'Meine Beziehungs-Werte', ansatz: 'Werteklärung', beschreibung: 'Was ist mir in einer Beziehung wichtig? Werte sortieren und priorisieren.', indikation: 'Ungesunde Beziehungsmuster, erste Beziehungen', dauer: '20 Min' },
+    { titel: 'Gesunde vs. ungesunde Beziehung', ansatz: 'Psychoedukativ', beschreibung: 'Merkmale einer gesunden Beziehung erarbeiten und auf die eigene Situation anwenden.', indikation: 'Toxische Beziehungen, Eifersucht, Kontrolle', dauer: '20 Min' },
+  ],
 };
 
 const THEMEN_KATEGORIEN = [

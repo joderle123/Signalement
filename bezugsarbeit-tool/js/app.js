@@ -1056,20 +1056,43 @@ function importDaten(event) {
     try {
       const daten = JSON.parse(e.target.result);
       if (!daten.schueler) throw new Error('Ungültiges Format');
-      if (!confirm(`${daten.schueler.length} Schüler, ${daten.notizen?.length || 0} Notizen, ${daten.termine?.length || 0} Termine importieren?\n\nAchtung: Bestehende Daten werden ergänzt (nicht überschrieben).`)) return;
-      // Merge: bestehende IDs behalten, neue hinzufügen
-      const vorhandeneIds = new Set(DB.getSchueler().map(s => s.id));
-      const neueSchueler = [...DB.getSchueler(), ...(daten.schueler || []).filter(s => !vorhandeneIds.has(s.id))];
-      DB.saveSchueler(neueSchueler);
-      const vorhandeneNIds = new Set(DB.getNotizen().map(n => n.id));
-      const alleNotizen = [...DB.getNotizen(), ...(daten.notizen || []).filter(n => !vorhandeneNIds.has(n.id))];
+      const exportiertAm = daten.exportiert ? new Date(daten.exportiert).toLocaleString('de-LU') : 'unbekannt';
+      const antwort = confirm(
+        `Datei: ${file.name}\n` +
+        `Exportiert am: ${exportiertAm}\n` +
+        `Inhalt: ${daten.schueler.length} Schüler, ${daten.notizen?.length || 0} Notizen\n\n` +
+        `Zusammenführen mit bestehenden Daten?\n` +
+        `(OK = Zusammenführen, Abbrechen = Abbruch)`
+      );
+      if (!antwort) return;
+
+      // Schüler zusammenführen: neuere Version (geaendert) gewinnt
+      const lokalSchueler = DB.getSchueler();
+      const lokalMap = new Map(lokalSchueler.map(s => [s.id, s]));
+      for (const s of daten.schueler || []) {
+        const lokal = lokalMap.get(s.id);
+        if (!lokal) {
+          lokalMap.set(s.id, s);
+        } else {
+          const neuererZeitstempel = (s.geaendert || '') > (lokal.geaendert || '');
+          if (neuererZeitstempel) lokalMap.set(s.id, s);
+        }
+      }
+      DB.saveSchueler([...lokalMap.values()]);
+
+      // Notizen zusammenführen (nach ID, keine Duplikate)
+      const lokalNIds = new Set(DB.getNotizen().map(n => n.id));
+      const alleNotizen = [...DB.getNotizen(), ...(daten.notizen || []).filter(n => !lokalNIds.has(n.id))];
       localStorage.setItem(DB.KEYS.NOTIZEN, JSON.stringify(alleNotizen));
-      const vorhandeneTIds = new Set(DB.getTermine().map(t => t.id));
-      const alleTermine = [...DB.getTermine(), ...(daten.termine || []).filter(t => !vorhandeneTIds.has(t.id))];
+
+      // Termine zusammenführen
+      const lokalTIds = new Set(DB.getTermine().map(t => t.id));
+      const alleTermine = [...DB.getTermine(), ...(daten.termine || []).filter(t => !lokalTIds.has(t.id))];
       localStorage.setItem(DB.KEYS.TERMINE, JSON.stringify(alleTermine));
+
       renderSidebar();
       renderHome();
-      showToast(`Import erfolgreich: ${daten.schueler.length} Schüler`, 'success');
+      showToast(`Import erfolgreich: ${lokalMap.size} Schüler gesamt`, 'success');
     } catch (err) {
       showToast('Fehler beim Import: ' + err.message, 'error');
     }

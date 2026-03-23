@@ -317,6 +317,101 @@ const THEMA_INTERVENTIONEN = {
     { titel: 'Katastrophen-Stopp', ansatz: 'Kognitiv-behavioral', beschreibung: 'Was ist das Schlimmste, das passieren kann? Wie wahrscheinlich ist es wirklich? Realistisch einschätzen.', indikation: 'Katastrophisieren vor Prüfungen', dauer: '15 Min' },
     { titel: 'Prüfungs-Ritual entwickeln', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Ein persönliches Beruhigungs- und Vorbereitungsritual für den Prüfungstag erarbeiten.', indikation: 'Panik am Prüfungstag', dauer: '20 Min' },
   ],
+
+  // ── Gesundheit & Körper ────────────────────────────────────
+  'schlaf': [
+    { titel: 'Schlaf-Tagebuch', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Eine Woche lang Schlafzeiten, Einschlafzeit, Aufwachen und Erholung morgens notieren.', indikation: 'Schlafprobleme, Insomnie', dauer: '5 Min täglich' },
+    { titel: 'Schlafhygiene-Check', ansatz: 'Psychoedukativ', beschreibung: 'Checkliste: Koffein, Bildschirme, Rituale, Raumtemperatur – was läuft gut, was nicht?', indikation: 'Schlechte Schlafqualität', dauer: '15 Min' },
+    { titel: 'Abend-Routine entwickeln', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Eine persönliche Schlafroutine für die letzte Stunde vor dem Schlafengehen erarbeiten.', indikation: 'Einschlafprobleme', dauer: '15 Min' },
+  ],
+  'koerper-bild': [
+    { titel: 'Körper-Dankbarkeit', ansatz: 'Positive Psychologie', beschreibung: 'Was leistet mein Körper jeden Tag? 10 Dinge aufschreiben, für die man dankbar ist.', indikation: 'Negatives Körperbild', dauer: '15 Min' },
+    { titel: 'Medien-Körperbild analysieren', ansatz: 'Medienkritik', beschreibung: 'Bilder aus Magazinen/Social Media analysieren: Welche Körperbilder werden verkauft? Wer profitiert?', indikation: 'Unrealistische Körperideale, Essstörungstendenzen', dauer: '20 Min' },
+  ],
+  'ernaehrung': [
+    { titel: 'Essverhalten beobachten', ansatz: 'Achtsamkeit', beschreibung: 'Eine Woche lang aufschreiben: Was, wann, wie viel, in welcher Stimmung gegessen.', indikation: 'Emotionales Essen, Essstörungstendenzen', dauer: '5 Min täglich' },
+    { titel: 'Hunger vs. Appetit', ansatz: 'Achtsamkeit', beschreibung: 'Den Unterschied zwischen körperlichem Hunger und emotionalem Hunger kennenlernen.', indikation: 'Unkontrolliertes Essen, Emotionales Essen', dauer: '15 Min' },
+  ],
+  'bewegung': [
+    { titel: 'Bewegungs-Check', ansatz: 'Ressourcenorientiert', beschreibung: 'Welche körperlichen Aktivitäten mache ich gerne? Wie oft? Barrieren und Lösungen benennen.', indikation: 'Bewegungsmangel, Depression', dauer: '15 Min' },
+    { titel: 'Mini-Bewegungsplan', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Einen realistischen Wochenplan mit kleinen Bewegungseinheiten erstellen und erste Schritte festlegen.', indikation: 'Antriebslosigkeit, Übergewicht', dauer: '15 Min' },
+  ],
+  'sexualitaet': [
+    { titel: 'Was weiß ich über Sexualität?', ansatz: 'Psychoedukativ', beschreibung: 'Offenes Gespräch über Fragen, Mythen und Fakten zur Sexualität – ohne Wertung.', indikation: 'Scham, Fehlinformationen, Erstkontakt mit Thema', dauer: '20 Min' },
+    { titel: 'Meine Grenzen im intimen Bereich', ansatz: 'Werteklärung', beschreibung: 'Was ist okay, was nicht? Persönliche Grenzen bezüglich Intimität klar formulieren.', indikation: 'Grenzüberschreitungen, Unsicherheit', dauer: '20 Min' },
+  ],
+  'hygiene-selbstfuersorge': [
+    { titel: 'Selbstfürsorge-Plan', ansatz: 'Ressourcenorientiert', beschreibung: 'In vier Bereichen (körperlich, sozial, emotional, geistig) je eine Selbstfürsorge-Aktivität planen.', indikation: 'Vernachlässigung der Selbstfürsorge', dauer: '20 Min' },
+    { titel: 'Routine-Anker setzen', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Tätigkeiten an bestehende Routinen knüpfen (nach dem Frühstück = …), um neue Gewohnheiten zu festigen.', indikation: 'Schwierigkeiten mit Tagesstruktur', dauer: '15 Min' },
+  ],
+
+  // ── Alltag & Lebenspraxis ──────────────────────────────────
+  'alltagsstruktur': [
+    { titel: 'Tagesstruktur-Plan', ansatz: 'Strukturierung', beschreibung: 'Einen idealen Tagesablauf gemeinsam entwerfen – mit festen Ankerpunkten.', indikation: 'Chaos im Alltag, Depression, Verwahrlosen', dauer: '20 Min' },
+    { titel: 'Wochenziele setzen', ansatz: 'Zielorientiert', beschreibung: 'Jeden Montag drei kleine, erreichbare Ziele setzen – Freitag Rückschau halten.', indikation: 'Orientierungslosigkeit, mangelnde Struktur', dauer: '10 Min' },
+  ],
+  'finanzen': [
+    { titel: 'Mein Monatsbudget', ansatz: 'Psychoedukativ', beschreibung: 'Einnahmen und Ausgaben auflisten – wo geht das Taschengeld wirklich hin?', indikation: 'Schulden, impulsives Ausgeben', dauer: '20 Min' },
+    { titel: 'Sparziele definieren', ansatz: 'Zielorientiert', beschreibung: 'Ein konkretes Sparziel festlegen und ausrechnen, wie lange man dafür braucht.', indikation: 'Kein Umgang mit Geld, keine Sparziele', dauer: '15 Min' },
+  ],
+  'mediennutzung': [
+    { titel: 'Meine Medien-Welt', ansatz: 'Systemisch', beschreibung: 'Alle genutzten Medien und Plattformen aufzeichnen – Nutzen, Risiken, Alternativen.', indikation: 'Exzessiver Medienkonsum, Digital Detox', dauer: '20 Min' },
+    { titel: 'Digital Detox-Tag planen', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Einen Tag ohne Social Media planen: Was stattdessen tun? Erfahrungen hinterher besprechen.', indikation: 'Social Media Abhängigkeit', dauer: '15 Min' },
+  ],
+
+  // ── Rechtliches & Schutz ──────────────────────────────────
+  'meine-rechte': [
+    { titel: 'Meine Rechte als Minderjährige/r', ansatz: 'Psychoedukativ', beschreibung: 'Grundlegende Rechte von Kindern und Jugendlichen (UN-Kinderrechtskonvention) kennenlernen.', indikation: 'Rechtsunsicherheit, Missachtung von Rechten', dauer: '20 Min' },
+    { titel: 'Wo bekomme ich Hilfe?', ansatz: 'Ressourcenorientiert', beschreibung: 'Hilfsangebote für Jugendliche kennenlernen – Beratungsstellen, Notrufnummern, Online-Angebote.', indikation: 'Isolierung, Unwissen über Hilfsmöglichkeiten', dauer: '15 Min' },
+  ],
+  'cybermobbing': [
+    { titel: 'Cybermobbing erkennen', ansatz: 'Psychoedukativ', beschreibung: 'Was ist Cybermobbing? Formen, Täter, Opfer, Zuschauer – Unterschiede zu realem Mobbing.', indikation: 'Cybermobbing-Erfahrungen, Täter-Verhalten', dauer: '20 Min' },
+    { titel: 'Screenshot & Melden', ansatz: 'Handlungsorientiert', beschreibung: 'Schritte bei Cybermobbing: Dokumentieren, Melden, Sperren, Vertraute informieren.', indikation: 'Hilflosigkeit bei Cybermobbing', dauer: '15 Min' },
+  ],
+  'sexueller-missbrauch': [
+    { titel: 'Ich habe das Recht Nein zu sagen', ansatz: 'Empowerment', beschreibung: 'Körperliche Grenzen kennen, benennen und schützen – auch gegenüber Erwachsenen.', indikation: 'Grenzüberschreitungen, Schutzarbeit', dauer: '20 Min' },
+    { titel: 'Vertraute Erwachsene benennen', ansatz: 'Ressourcenorientiert', beschreibung: 'Drei Erwachsene identifizieren, denen man sich anvertrauen kann und die helfen würden.', indikation: 'Isolation, Missbrauchsrisiko', dauer: '15 Min' },
+  ],
+
+  // ── Identität & Entwicklung ────────────────────────────────
+  'selbstbild': [
+    { titel: 'Wer bin ich?', ansatz: 'Identitätsarbeit', beschreibung: 'Mindmap zur eigenen Person: Stärken, Werte, Rollen, Interessen, Träume.', indikation: 'Identitätsdiffusion, niedrige Selbstwirksamkeit', dauer: '20 Min' },
+    { titel: 'Mein innerer Kritiker', ansatz: 'Schematherapie', beschreibung: 'Den inneren Kritiker kennenlernen und ihm einen freundlicheren inneren Berater entgegenstellen.', indikation: 'Selbstkritik, niedriges Selbstwertgefühl', dauer: '20 Min' },
+  ],
+  'kulturelle-identitaet': [
+    { titel: 'Meine kulturellen Wurzeln', ansatz: 'Systemisch', beschreibung: 'Woher komme ich? Welche Werte, Traditionen und Sprachen gehören zu mir?', indikation: 'Identitätskonflikte durch Migration, Bikulturelle Identität', dauer: '25 Min' },
+    { titel: 'Zwischen zwei Welten', ansatz: 'Narrative Therapie', beschreibung: 'Wie navigiere ich zwischen verschiedenen kulturellen Erwartungen? Geschichte der eigenen Identität schreiben.', indikation: 'Akkulturationsstress, Zugehörigkeitsgefühl', dauer: '25 Min' },
+  ],
+  'sexuelle-orientierung': [
+    { titel: 'Was weiß ich über Sexuelle Orientierung?', ansatz: 'Psychoedukativ', beschreibung: 'Homo-, Bi-, Pan-, Asexualität und mehr – ohne Wertung informieren und Fragen beantworten.', indikation: 'Unsicherheit, Scham, Fragen zur Orientierung', dauer: '20 Min' },
+    { titel: 'Meine Geschichte mit mir', ansatz: 'Narrative Therapie', beschreibung: 'Die eigene Geschichte bezüglich Identität und Orientierung in eigenen Worten erzählen – ohne Urteil.', indikation: 'Coming-out-Prozess, Identitätsfindung', dauer: '30 Min' },
+  ],
+  'werte-lebensinn': [
+    { titel: 'Meine Werte-Hitliste', ansatz: 'Akzeptanz- und Commitmenttherapie', beschreibung: 'Aus 30 Werte-Karten die 5 wichtigsten auswählen und erklären, warum.', indikation: 'Orientierungslosigkeit, innere Leere', dauer: '20 Min' },
+    { titel: 'Leben nach meinen Werten', ansatz: 'Akzeptanz- und Commitmenttherapie', beschreibung: 'Stimmt mein Alltag mit meinen Werten überein? Wo gibt es Lücken und wie kann ich sie schließen?', indikation: 'Sinnkrise, Leere, Entfremdung', dauer: '25 Min' },
+  ],
+
+  // ── Krisenintervention ─────────────────────────────────────
+  'suizidalitaet': [
+    { titel: 'Sicherheitsplan erstellen', ansatz: 'Krisenintervention', beschreibung: 'Gemeinsam einen schriftlichen Sicherheitsplan erarbeiten: Warnzeichen, Ablenkungen, Kontakte, Notfallnummern.', indikation: 'Suizidgedanken, Suizidalität', dauer: '30 Min' },
+    { titel: 'Gründe zum Leben', ansatz: 'Lösungsfokussiert', beschreibung: 'Dinge, Menschen und Momente sammeln, die Grund zum Weiterleben geben – auch kleine.', indikation: 'Hoffnungslosigkeit, passive Suizidalität', dauer: '20 Min' },
+    { titel: 'Krisentelefon-Karte', ansatz: 'Ressourcenorientiert', beschreibung: 'Karte mit Notfallnummern (Telefonseelsorge 0800 111 0 111, Notaufnahme, Bezugsperson) anfertigen.', indikation: 'Akute Krisenmomente ohne Begleitung', dauer: '10 Min' },
+  ],
+  'selbstverletzung': [
+    { titel: 'Funktionen von Selbstverletzung verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Warum tue ich das? Gefühle regulieren, Kontrolle gewinnen, Bestrafung – ohne Verurteilung besprechen.', indikation: 'Selbstverletzung, Verständnis fördern', dauer: '25 Min' },
+    { titel: 'Alternatives Verhalten-Plan', ansatz: 'DBT', beschreibung: 'Konkrete Alternativen zur Selbstverletzung erarbeiten – Eiswürfel, Sport, Schreien ins Kissen, Malen.', indikation: 'Selbstverletzung, Impulsregulation', dauer: '20 Min' },
+    { titel: 'Emotionen benennen lernen', ansatz: 'DBT', beschreibung: 'Das Emotions-Rad nutzen: Welches Gefühl liegt hinter der Selbstverletzung? Präzise benennen.', indikation: 'Alexithymie, emotionale Dysregulation', dauer: '20 Min' },
+  ],
+  'trauma': [
+    { titel: 'Sicherer Ort', ansatz: 'Traumatherapie', beschreibung: 'Eine innere sichere Ort-Imagination erarbeiten und verankern – für akute Dissoziations- oder Überflutungsmomente.', indikation: 'PTBS, Traumafolgestörungen', dauer: '20 Min' },
+    { titel: 'Grounding-Übung 5-4-3-2-1', ansatz: 'Achtsamkeit/Traumatherapie', beschreibung: '5 sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken – zurück in die Gegenwart kommen.', indikation: 'Dissoziation, Flashbacks', dauer: '10 Min' },
+    { titel: 'Trigger-Map', ansatz: 'Traumatherapie', beschreibung: 'Was löst starke Reaktionen aus? Trigger identifizieren und Bewältigungsstrategien für jeden Trigger festlegen.', indikation: 'Häufige Triggerreaktionen, PTBS', dauer: '25 Min' },
+  ],
+  'trauer-verlust': [
+    { titel: 'Abschiedsbrief schreiben', ansatz: 'Narrative Therapie', beschreibung: 'Einen Brief an die verlorene Person / das verlorene Tier / die verlorene Situation schreiben.', indikation: 'Komplizierte Trauer, Verluste', dauer: '30 Min' },
+    { titel: 'Erinnerungs-Ritual', ansatz: 'Trauertherapie', beschreibung: 'Ein persönliches Ritual entwickeln, um an die verlorene Person zu erinnern und Abschied zu nehmen.', indikation: 'Trauerbewältigung', dauer: '20 Min' },
+    { titel: 'Phasen der Trauer', ansatz: 'Psychoedukativ', beschreibung: 'Trauerphasen kennenlernen (nicht als starre Reihenfolge!) und eigene Trauer einordnen.', indikation: 'Normalisierung von Trauerreaktionen', dauer: '20 Min' },
+  ],
 };
 
 const THEMEN_KATEGORIEN = [

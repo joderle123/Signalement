@@ -1,0 +1,450 @@
+/* ============================================================
+   CDSE Arbeitsblatt – Shared Styles
+   ============================================================ */
+
+:root {
+  --farbe: #7B5EA7;        /* wird per Inline-Style pro Blatt überschrieben */
+  --farbe-hell: #F5F0FA;
+  --text: #111827;
+  --grau: #6B7280;
+  --border: #D1D5DB;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --shadow-page: 0 2px 24px rgba(0,0,0,0.09);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: #EEF2F7;
+  padding: 20px;
+  line-height: 1.5;
+}
+
+/* ---- Seite ---- */
+.seite {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto 28px;
+  padding: 17mm 17mm 22mm;
+  box-shadow: var(--shadow-page);
+  border-radius: 5px;
+  page-break-after: always;
+  position: relative;
+}
+
+/* ---- Kopfzeile ---- */
+.kopfzeile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 2.5px solid var(--farbe);
+  padding-bottom: 11px;
+  margin-bottom: 16px;
+  gap: 14px;
+}
+
+.kopfzeile-links { flex: 1; }
+
+.schule-label {
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--grau);
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.ab-titel {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--farbe);
+  line-height: 1.2;
+  margin-bottom: 3px;
+  letter-spacing: -0.4px;
+}
+
+.ab-untertitel {
+  font-size: 11px;
+  color: var(--grau);
+  font-weight: 500;
+}
+
+.kopfzeile-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--farbe-hell);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  flex-shrink: 0;
+}
+
+/* ---- Schülerinfo-Leiste ---- */
+.schuelerinfo {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.info-feld {
+  border-bottom: 1.5px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.info-feld-label {
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--grau);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.info-feld-linie { height: 18px; }
+
+/* ---- Infobox ---- */
+.infobox {
+  background: var(--farbe-hell);
+  border-left: 3.5px solid var(--farbe);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 11px 13px;
+  margin-bottom: 16px;
+  font-size: 11.5px;
+  line-height: 1.6;
+}
+
+.infobox-titel {
+  font-weight: 700;
+  font-size: 11.5px;
+  color: var(--farbe);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.infobox p { margin-bottom: 5px; }
+.infobox p:last-child { margin-bottom: 0; }
+.infobox ul { padding-left: 15px; margin-top: 4px; }
+.infobox li { margin-bottom: 2px; }
+
+/* ---- Übungsblock ---- */
+.uebung { margin-bottom: 20px; }
+
+.uebung-header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 9px;
+}
+
+.uebung-nr {
+  width: 24px;
+  height: 24px;
+  background: var(--farbe);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.uebung-titel {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+
+.uebung-beschreibung {
+  font-size: 11.5px;
+  color: var(--grau);
+  line-height: 1.55;
+  margin-bottom: 9px;
+}
+
+/* ---- Schreiblinien ---- */
+.schreiblinien {
+  display: flex;
+  flex-direction: column;
+}
+
+.schreiblinie {
+  border-bottom: 1px dashed #D1D5DB;
+  height: 25px;
+  width: 100%;
+}
+
+/* ---- Grid-Übungen ---- */
+.zwei-spalten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+  margin-bottom: 10px;
+}
+
+.drei-spalten {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 9px;
+}
+
+.box {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 9px;
+  min-height: 66px;
+}
+
+.box-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--grau);
+  margin-bottom: 5px;
+}
+
+/* ---- Skala ---- */
+.skala {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 9px 0;
+}
+
+.skala-punkt {
+  flex: 1;
+  text-align: center;
+}
+
+.skala-kreis {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  margin: 0 auto 4px;
+}
+
+.skala-label {
+  font-size: 8.5px;
+  color: var(--grau);
+  font-weight: 500;
+}
+
+/* ---- Karten-Raster ---- */
+.karten-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.karte-mini {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 5px;
+  text-align: center;
+  min-height: 58px;
+}
+
+.karte-mini-emoji { font-size: 19px; margin-bottom: 3px; }
+.karte-mini-label { font-size: 10px; font-weight: 600; margin-bottom: 3px; }
+.karte-mini-linie { border-bottom: 1px dashed var(--border); margin: 3px 0; height: 13px; }
+
+/* ---- Körperumriss-Bereich ---- */
+.koerper-bereich {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.koerper-silhouette {
+  flex-shrink: 0;
+  width: 98px;
+}
+
+.koerper-legende { flex: 1; }
+
+/* ---- Thermometer ---- */
+.thermometer-wrapper {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.thermometer {
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.thermo-rohr {
+  width: 18px;
+  height: 155px;
+  border: 2px solid var(--border);
+  border-radius: 9px 9px 0 0;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.thermo-ball {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  margin: -3px auto 0;
+  background: #FEE2E2;
+}
+
+.thermo-skala {
+  position: absolute;
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 4px 0;
+}
+
+.thermo-stufe {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8.5px;
+  color: var(--grau);
+  white-space: nowrap;
+  margin-left: 22px;
+  font-weight: 500;
+}
+
+/* ---- Reflexionsblock ---- */
+.reflexion {
+  background: #FFFBEB;
+  border: 1.5px solid #FCD34D;
+  border-radius: var(--radius);
+  padding: 11px 13px;
+  margin-bottom: 16px;
+}
+
+.reflexion-titel {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ---- Fachlicher Hinweis (für Erzieher) ---- */
+.fachhinweis {
+  background: #F0FDF4;
+  border: 1.5px solid #86EFAC;
+  border-radius: var(--radius);
+  padding: 9px 11px;
+  margin-bottom: 13px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.fachhinweis-titel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #166534;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---- Trennlinie ---- */
+hr.trennlinie {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 16px 0;
+}
+
+/* ---- Fußzeile ---- */
+.fusszeile {
+  position: absolute;
+  bottom: 11mm;
+  left: 17mm;
+  right: 17mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8.5px;
+  color: #9CA3AF;
+  border-top: 1px solid var(--border);
+  padding-top: 5px;
+}
+
+/* ---- Druck-Leiste ---- */
+.druck-leiste {
+  width: 210mm;
+  margin: 0 auto 16px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-drucken {
+  background: var(--farbe);
+  color: white;
+  border: none;
+  padding: 9px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.15s;
+}
+
+.btn-drucken:hover { opacity: 0.85; }
+
+.btn-zurueck {
+  background: white;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  padding: 9px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-zurueck:hover { background: #F9FAFB; border-color: #B0BAC4; }
+
+/* ============================================================
+   DRUCK-MODUS
+   ============================================================ */
+@media print {
+  body { background: white; padding: 0; }
+  .druck-leiste { display: none; }
+  .seite {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 12mm 14mm 18mm;
+  }
+}

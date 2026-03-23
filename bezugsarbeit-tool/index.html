@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDSE – Bezugsarbeit Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR
+     ============================================================ -->
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🎓</div>
+      <div class="sidebar-title">Bezugsarbeit Tool</div>
+    </div>
+    <div class="sidebar-subtitle">CDSE Luxembourg</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-item active" id="nav-home" onclick="showView('home')">
+      <span class="nav-item-icon">🏠</span> Übersicht
+    </div>
+    <div class="nav-item" id="nav-kalender" onclick="showView('kalender')">
+      <span class="nav-item-icon">📅</span> Kalender
+    </div>
+    <a class="nav-item" href="arbeitsblatter/index.html" target="_blank">
+      <span class="nav-item-icon">📋</span> Alle Arbeitsblätter
+    </a>
+    <div class="nav-item" onclick="exportDaten()">
+      <span class="nav-item-icon">💾</span> Daten exportieren
+    </div>
+    <div class="nav-item" onclick="document.getElementById('import-input').click()">
+      <span class="nav-item-icon">📂</span> Daten importieren
+    </div>
+    <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
+  </nav>
+
+  <div class="sidebar-schueler-section">
+    <div class="sidebar-schueler-header">
+      Schüler
+      <button class="btn-add-schueler" onclick="openSchuelerModal()">+ Neu</button>
+    </div>
+    <div class="schueler-liste" id="schueler-sidebar-liste"></div>
+  </div>
+
+  <div class="sidebar-footer">CDSE · Spezialisierte Beschulung</div>
+</aside>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main id="main">
+
+  <!-- ---- HOME VIEW ---- -->
+  <div class="view active" id="view-home">
+    <div class="topbar">
+      <div class="topbar-title">Schülerübersicht</div>
+      <div class="topbar-actions">
+        <div class="search-input">
+          <span>🔍</span>
+          <input type="text" id="home-suche" placeholder="Schüler suchen..." oninput="renderHome()">
+        </div>
+        <button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuer Schüler</button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="home-stats" id="home-stats"></div>
+      <div class="home-grid" id="home-grid"></div>
+    </div>
+  </div>
+
+  <!-- ---- PROFIL VIEW ---- -->
+  <div class="view" id="view-profil">
+    <!-- Header -->
+    <div class="profil-header">
+      <div class="profil-avatar" id="profil-avatar" onclick="uploadFoto(APP.currentSchuelerId)">
+        <!-- Wird dynamisch gefüllt -->
+      </div>
+      <div class="profil-info">
+        <div class="profil-name" id="profil-name"></div>
+        <div class="profil-meta">
+          <div class="profil-meta-item">🎓 <span id="profil-klasse"></span></div>
+          <div class="profil-meta-item">🎂 <span id="profil-alter"></span></div>
+          <div class="profil-meta-item">📅 <span id="profil-seit"></span></div>
+          <div id="profil-risiko" class="risiko-indicator niedrig"></div>
+        </div>
+      </div>
+      <div class="profil-actions">
+        <button class="btn btn-secondary btn-sm" onclick="openSchuelerModal(APP.currentSchuelerId)">✏️ Bearbeiten</button>
+        <button class="btn btn-secondary btn-sm" onclick="druckeProfilbericht(APP.currentSchuelerId)">🖨️ Bericht drucken</button>
+        <button class="btn btn-secondary btn-sm" onclick="showView('home')">← Zurück</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteSchueler(APP.currentSchuelerId)">🗑 Löschen</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profil-tabs">
+      <div class="profil-tab active" data-tab="themen" onclick="showProfilTab('themen')">📋 Themenübersicht</div>
+      <div class="profil-tab" data-tab="notizen" onclick="showProfilTab('notizen')">💬 Notizen & Sitzungen</div>
+      <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
+      <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Infos</div>
+    </div>
+
+    <!-- Tab-Inhalte -->
+    <div class="content" style="flex:1;overflow-y:auto;">
+
+      <!-- THEMEN -->
+      <div class="profil-tab-content active" data-tab="themen">
+        <div id="themen-container"></div>
+      </div>
+
+      <!-- NOTIZEN -->
+      <div class="profil-tab-content" data-tab="notizen">
+
+        <!-- Modus-Toggle -->
+        <div class="segmented-control" id="notiz-toggle">
+          <button class="seg-btn active" id="btn-freie-notiz" onclick="toggleNotizModus('frei')">✏️ Freie Notiz</button>
+          <button class="seg-btn" id="btn-protokoll" onclick="toggleNotizModus('protokoll')">📋 Sitzungsprotokoll</button>
+        </div>
+
+        <!-- Freie Notiz -->
+        <div id="notiz-modus-frei" class="notiz-form">
+          <div class="notiz-form-row">
+            <select id="neue-notiz-kategorie" style="width:160px;">
+              <option value="session">💬 Sitzung</option>
+              <option value="beobachtung">👁 Beobachtung</option>
+              <option value="wichtig">⚠️ Wichtig</option>
+              <option value="fortschritt">📈 Fortschritt</option>
+              <option value="elternkontakt">📞 Elternkontakt</option>
+            </select>
+            <input type="date" id="neue-notiz-datum" style="width:160px;">
+            <button class="btn btn-primary btn-sm" onclick="addNotiz()" style="margin-left:auto;">+ Speichern</button>
+          </div>
+          <textarea id="neue-notiz-text" class="notiz-textarea"
+            placeholder="Notiz, Beobachtung oder Protokoll eingeben..."></textarea>
+        </div>
+
+        <!-- Sitzungsprotokoll-Template -->
+        <div id="notiz-modus-protokoll" class="notiz-form" style="display:none;">
+          <div class="protokoll-titel">📋 Sitzungsprotokoll</div>
+          <div class="protokoll-meta-grid">
+            <div class="form-group">
+              <label>Datum</label>
+              <input type="date" id="prot-datum">
+            </div>
+            <div class="form-group">
+              <label>Dauer</label>
+              <input type="text" id="prot-dauer" placeholder="z.B. 45 Min.">
+            </div>
+            <div class="form-group">
+              <label>Setting</label>
+              <select id="prot-setting">
+                <option>Einzelgespräch</option>
+                <option>Gruppengespräch</option>
+                <option>Elterngespräch</option>
+                <option>Telefon</option>
+                <option>Außenaktivität</option>
+              </select>
+            </div>
+          </div>
+          <div class="protokoll-felder">
+            <div class="form-group">
+              <label>Thema / Anlass der Sitzung</label>
+              <input type="text" id="prot-thema" placeholder="Worum ging es heute?">
+            </div>
+            <div class="form-group">
+              <label>Beobachtungen & Verlauf</label>
+              <textarea id="prot-verlauf" class="notiz-textarea" rows="3"
+                placeholder="Wie war die Stimmung? Was hat der/die Jugendliche erzählt? Was ist aufgefallen?"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Interventionen & Methoden</label>
+              <textarea id="prot-interventionen" class="notiz-textarea" rows="2"
+                placeholder="Was wurde gemacht / ausprobiert?"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Fortschritte & Ressourcen</label>
+              <textarea id="prot-fortschritte" class="notiz-textarea" rows="2"
+                placeholder="Was ist gut gelaufen? Was hat der/die Jugendliche gut gemacht?"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Nächste Schritte & Vereinbarungen</label>
+              <textarea id="prot-naechste" class="notiz-textarea" rows="2"
+                placeholder="Was wurde vereinbart? Was passiert als nächstes?"></textarea>
+            </div>
+          </div>
+          <div class="protokoll-footer">
+            <button class="btn btn-primary btn-sm" onclick="addProtokoll()">📋 Protokoll speichern</button>
+          </div>
+        </div>
+
+        <div id="notizen-liste"></div>
+      </div>
+
+      <!-- ZIELE -->
+      <div class="profil-tab-content" data-tab="ziele">
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <span>🎯</span>
+            <div class="card-title">Ziele & Fortschritte</div>
+          </div>
+          <div class="card-body">
+            <div id="ziele-liste" style="margin-bottom:16px;"></div>
+            <div style="display:flex;gap:10px;">
+              <input type="text" id="neues-ziel-input" placeholder="Neues Ziel eingeben..."
+                onkeydown="if(event.key==='Enter') addZiel()">
+              <button class="btn btn-success btn-sm" onclick="addZiel()">+ Hinzufügen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="profil-tab-content" data-tab="info">
+        <div class="card">
+          <div class="card-header">
+            <span>ℹ️</span>
+            <div class="card-title">Allgemeine Informationen</div>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>Allgemeine Notizen / Hintergrundinfos</label>
+                <textarea id="info-allgemein" rows="6"
+                  placeholder="Familienhintergrund, Besonderheiten, Anamnese..."></textarea>
+              </div>
+              <div class="form-group">
+                <label>Risikoeinschätzung</label>
+                <select id="info-risiko">
+                  <option value="niedrig">🟢 Niedrig</option>
+                  <option value="mittel">🟡 Mittel</option>
+                  <option value="hoch">🔴 Hoch</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+              <button class="btn btn-primary" onclick="saveInfo()">💾 Speichern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end content -->
+  </div><!-- end profil view -->
+
+  <!-- ---- KALENDER VIEW ---- -->
+  <div class="view" id="view-kalender">
+    <div class="topbar">
+      <div class="topbar-title">Kalender</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary" onclick="openTerminModal()">+ Neuer Termin</button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="kalender-wrapper">
+        <!-- Kalenderbereich -->
+        <div>
+          <div class="kalender-nav">
+            <button class="btn-icon" onclick="kalenderZurueck()">◀</button>
+            <div class="kalender-monat" id="kalender-monat-label"></div>
+            <button class="btn-icon" onclick="kalenderVor()">▶</button>
+          </div>
+          <div class="kalender-grid">
+            <div class="kalender-wochentage">
+              <div class="kalender-wochentag">Mo</div>
+              <div class="kalender-wochentag">Di</div>
+              <div class="kalender-wochentag">Mi</div>
+              <div class="kalender-wochentag">Do</div>
+              <div class="kalender-wochentag">Fr</div>
+              <div class="kalender-wochentag">Sa</div>
+              <div class="kalender-wochentag">So</div>
+            </div>
+            <div class="kalender-tage" id="kalender-tage"></div>
+          </div>
+        </div>
+
+        <!-- Sidebar: Nächste Termine -->
+        <div class="termin-liste-sidebar">
+          <div class="card-header">
+            <span>📋</span>
+            <div class="card-title">Nächste Termine</div>
+          </div>
+          <div id="naechste-termine"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

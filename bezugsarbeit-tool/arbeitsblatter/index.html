@@ -726,7 +726,98 @@ const AKTIVITÄTEN = [
     ]
   },
 ];
-const INTERVENTIONEN = [];
+const INTERVENTIONEN = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    eintraege: [
+      { titel: 'Kognitive Umstrukturierung', ansatz: 'KVT', beschreibung: 'Automatische negative Gedanken aufdecken und hinterfragen: Was ist die Evidenz? Gibt es eine andere Sichtweise? Realistischer Alternativgedanke formulieren.', indikation: 'Grübeln, Katastrophisieren, negatives Selbstbild', dauer: '20–30 Min', tags: ['KVT', 'Gedanken', 'Reframing'] },
+      { titel: 'TIPP-Skill', ansatz: 'DBT', beschreibung: 'Temperature (kaltes Wasser ins Gesicht), Intense exercise (kurzes intensives Training), Paced breathing (Ausatmen länger als Einatmen), Progressive relaxation. Sofortmassnahme bei extremer Anspannung.', indikation: 'Akute emotionale Dysregulation, Krisenmomente', dauer: '5–10 Min', tags: ['DBT', 'Krisenintervention', 'Körper'] },
+      { titel: 'Defusion (ACT)', ansatz: 'ACT', beschreibung: 'Abstand vom Gedanken schaffen: "Ich habe den Gedanken, dass ich wertlos bin" statt "Ich bin wertlos." Techniken: Gedanken als Blätter auf einem Bach, Gedanken benennen ("Da ist wieder Angst").', indikation: 'Fusion mit negativen Gedanken, Grübeln, Angst', dauer: '10–15 Min', tags: ['ACT', 'Achtsamkeit', 'Gedanken'] },
+      { titel: '5-4-3-2-1 Grounding', ansatz: 'Stabilisierung', beschreibung: '5 Dinge sehen – 4 anfassen – 3 hören – 2 riechen – 1 schmecken. Bringt den Fokus in den Moment. Einfach zu erlernen und jederzeit anwendbar.', indikation: 'Dissoziation, Panik, Überwältigung', dauer: '3–5 Min', tags: ['Grounding', 'Trauma', 'Achtsamkeit'] },
+      { titel: 'Impact-Technik: Steingewicht', ansatz: 'Impact', beschreibung: 'Schüler hält einen schweren Stein/Gegenstand und beschreibt das Gewicht. Metapher: "Das ist das Gewicht, das du jeden Tag mit dir trägst." Dann: Was erleichtert? Was legt Gewicht ab?', indikation: 'Emotionale Erschöpfung, Gefühl der Überlastung', dauer: '10–15 Min', tags: ['Impact', 'Metapher', 'Körper'] },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    eintraege: [
+      { titel: 'GFK – Gewaltfreie Kommunikation', ansatz: 'GFK (Rosenberg)', beschreibung: 'Vierschritt: Beobachtung (ohne Bewertung) → Gefühl → Bedürfnis → Bitte. Wird in konkreten Situationen des Schülers geübt bis es flüssig wirkt.', indikation: 'Konflikte, Aggression, Schwierigkeiten Grenzen zu kommunizieren', dauer: '20–30 Min', tags: ['GFK', 'Kommunikation', 'Assertivität'] },
+      { titel: 'Assertivitätstraining', ansatz: 'Verhaltenstherapie', beschreibung: 'Direkte, respektvolle Kommunikation üben: Nein sagen, Wünsche äußern, Kritik annehmen und geben. Stufenweise Exposition (erst in Rollenspielen, dann im Alltag).', indikation: 'Unterordnung, Angst vor Ablehnung, aggressiver Kommunikationsstil', dauer: '20–30 Min', tags: ['Assertivität', 'Rollenspiel', 'Exposition'] },
+      { titel: 'Impact-Technik: Grenzen mit Seilen', ansatz: 'Impact', beschreibung: 'Seil oder Klebeband auf dem Boden markiert persönlichen Raum. Verschiedene Situationen durchspielen: Wer darf wie nah? Was passiert wenn die Grenze überschritten wird? Sehr konkret und körperlich.', indikation: 'Grenzsetzungsprobleme, Opfer von Mobbing oder Grenzverletzungen', dauer: '15–20 Min', tags: ['Impact', 'Grenzen', 'Körper'] },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    eintraege: [
+      { titel: 'Zirkuläres Fragen', ansatz: 'Systemisch', beschreibung: 'Perspektive anderer Familienmitglieder einnehmen: "Was glaubst du, würde dein Vater sagen, wenn ich ihn fragen würde, was er sich von dir wünscht?" Öffnet neue Sichtweisen ohne Konfrontation.', indikation: 'Familienkonflikte, festgefahrene Muster, mangelnde Kommunikation', dauer: '15–25 Min', tags: ['Systemisch', 'Familie', 'Perspektive'] },
+      { titel: 'Reframing', ansatz: 'Systemisch / KVT', beschreibung: 'Verhalten oder Eigenschaft in einem anderen Rahmen deuten: "Deine Sturheit könnte auch Durchhaltevermögen sein." Vorsichtig einsetzen – nicht verharmlosend.', indikation: 'Negative Selbst- oder Fremdwahrnehmung, Schuldgefühle', dauer: '10–15 Min', tags: ['Systemisch', 'Reframing', 'Perspektive'] },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    eintraege: [
+      { titel: 'Motivational Interviewing (MI)', ansatz: 'MI', beschreibung: 'OARS: Open questions, Affirmations, Reflections, Summaries. Kein Druck, kein Moralisieren. Ambivalenz erkunden: "Was spricht für eine Veränderung? Was dagegen?" Change Talk fördern.', indikation: 'Ambivalenz gegenüber Konsum, Widerstand, Riskoverhalten', dauer: '30–45 Min', tags: ['MI', 'Motivation', 'Ambivalenz'] },
+      { titel: 'Funktionsanalyse (KVT)', ansatz: 'KVT', beschreibung: 'SORKC-Schema: Stimulus – Organismus – Reaktion – Konsequenz (kurz/lang). Was löst den Konsum aus? Was hält ihn aufrecht? Verstehen ohne zu verurteilen.', indikation: 'Alle Formen von Risiko- oder Problemverhalten', dauer: '20–30 Min', tags: ['KVT', 'Verhaltensanalyse', 'Konsum'] },
+      { titel: 'Rückfallprävention', ansatz: 'RP (Marlatt)', beschreibung: 'Hochrisikosituationen identifizieren, Bewältigungsstrategien vorbereiten, Ausrutscher vs. Rückfall unterscheiden. Konkreter schriftlicher Plan.', indikation: 'Nach Entschluss zur Reduktion/Abstinenz', dauer: '25–30 Min', tags: ['Rückfall', 'Prävention', 'Konsum'] },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    eintraege: [
+      { titel: 'Werte-Klärung (ACT)', ansatz: 'ACT', beschreibung: 'Was ist dem Schüler wirklich wichtig – nicht was er will (Ziele), sondern wie er sein will (Werte)? Frage: "Wenn niemand zuschaut, woran merkst du, dass du richtig lebst?" Zukunftsmotivation aufbauen.', indikation: 'Orientierungslosigkeit, Motivationsmangel, Sinnfragen', dauer: '20–30 Min', tags: ['ACT', 'Werte', 'Motivation'] },
+      { titel: 'Problemlösetraining', ansatz: 'KVT', beschreibung: 'D-E-F-O-S: Definition – Erzeugen von Lösungen (Brainstorming) – Folgen abschätzen – Optimale Lösung wählen – Schritte planen. Strukturiertes Vorgehen bei konkreten Problemen.', indikation: 'Vermeidungsverhalten, Entscheidungsschwierigkeiten, Überforderung', dauer: '20–30 Min', tags: ['KVT', 'Problemlösen', 'Planung'] },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    eintraege: [
+      { titel: 'Progressive Muskelentspannung (PME)', ansatz: 'Entspannung (Jacobson)', beschreibung: 'Muskelgruppen nacheinander anspannen (7 Sek.) und loslassen (20 Sek.). Aufmerksamkeit auf den Unterschied. Kann als Kurzform (6 Gruppen) in 10 Min durchgeführt werden.', indikation: 'Chronischer Stress, Schlafprobleme, körperliche Anspannung', dauer: '10–20 Min', tags: ['Entspannung', 'Körper', 'Stress'] },
+      { titel: 'Achtsamkeitsbasierte Körperarbeit', ansatz: 'MBSR-Elemente', beschreibung: 'Kurze Körper-Scan-Übungen: Wo spüre ich Spannung? Was nehme ich wahr ohne es zu verändern? Fördert Selbstwahrnehmung und Stressregulation.', indikation: 'Körperfremde Jugendliche, Dissoziation, Stress', dauer: '10–15 Min', tags: ['Achtsamkeit', 'Körper', 'MBSR'] },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Narrative Therapie: Umstorying', ansatz: 'Narrativ', beschreibung: 'Dominante Problemerzählung identifizieren ("Ich bin ein Versager") und alternative Geschichte herausarbeiten: Wann war das nicht so? Was sagt das über dich? Neue Erzählung stärken.', indikation: 'Negatives Selbstbild, einschränkende Überzeugungen', dauer: '25–35 Min', tags: ['Narrativ', 'Identität', 'Selbstbild'] },
+      { titel: 'Ressourcenaktivierung', ansatz: 'Ressourcenorientiert', beschreibung: 'Gezielte Fragen nach bereits vorhandenen Stärken und Erfolgen: "Was hat dir geholfen, das bisher zu schaffen?" Erfahrungen in Ressourcen übersetzen, die auf neue Situationen übertragbar sind.', indikation: 'Hilflosigkeit, niedriger Selbstwert, Depression', dauer: '15–20 Min', tags: ['Ressourcen', 'Stärken', 'Selbstwert'] },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'EMDR – Stabilisierungsphase', ansatz: 'EMDR', beschreibung: 'Vor der Traumaverarbeitung: Sicherer Ort (Imagination + bilaterale Stimulation), Tresor-Technik (Belastendes wegschließen), Lichtstrahl-Übung. Nur durch ausgebildete Fachkraft in Phase 2 anzuwenden.', indikation: 'Traumatisierte Jugendliche – als Vorbereitung auf Verarbeitung', dauer: '20–30 Min', tags: ['EMDR', 'Trauma', 'Stabilisierung'] },
+      { titel: 'Tresor-Technik', ansatz: 'Stabilisierung / EMDR', beschreibung: 'Jugendliche stellen sich einen unzerstörbaren Tresor vor und legen belastende Erinnerungen gedanklich hinein – mit Schloss. Kann jederzeit benutzt werden, um Distanz zu schaffen.', indikation: 'Intrusionen, Flashbacks, Überwältigung durch Erinnerungen', dauer: '10–15 Min', tags: ['EMDR', 'Stabilisierung', 'Distanz'] },
+      { titel: 'Exposition in sensu (KVT)', ansatz: 'KVT / Exposition', beschreibung: 'Schrittweise Annäherung an angstauslösende Vorstellungen oder Erinnerungen in der Imagination – mit Begleitung. Angst darf steigen und sinken. Nie ohne Stabilisierungsbasis.', indikation: 'PTBS, Phobien, Angststörungen – nach sorgfältiger Vorbereitung', dauer: '30–50 Min', tags: ['Exposition', 'Angst', 'Trauma', 'KVT'] },
+      { titel: 'Exposition in vivo', ansatz: 'Verhaltenstherapie / Exposition', beschreibung: 'Reale, schrittweise Konfrontation mit angstauslösenden Situationen (Angsthierarchie von 0–10 erstellen, dann von unten beginnen). Angst hält nicht für immer an – Erfahrung des Lernens.', indikation: 'Phobien, Soziale Angst, Vermeidungsverhalten', dauer: 'Mehrere Sitzungen', tags: ['Exposition', 'Angst', 'Verhaltenstherapie'] },
+      { titel: 'Impact-Technik: Schutzwall', ansatz: 'Impact', beschreibung: 'Bücher oder Ordner aufstapeln als "Schutzwall" zwischen Schüler und einer Situation/Person. Körperlich erfahren wie es sich anfühlt, geschützt zu sein vs. ungeschützt. Dann: Was braucht es, damit der Wall bleibt?', indikation: 'Grenzverletzungen, Missbrauch, Sicherheitsgefühl fehlt', dauer: '15–20 Min', tags: ['Impact', 'Schutz', 'Grenzen', 'Körper'] },
+      { titel: 'DBT – Krisenüberlebensplan', ansatz: 'DBT', beschreibung: 'ACCEPTS: Activities, Contributing, Comparisons, Emotions, Push away, Thoughts, Sensations. Konkrete Liste erstellen, was in einer Krise hilft. Self-Soothe: 5 Sinne bewusst einsetzen.', indikation: 'Wiederholte Krisen, Suizidgedanken, Selbstverletzung', dauer: '20–30 Min', tags: ['DBT', 'Krise', 'Suizidprävention'] },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    eintraege: [
+      { titel: 'Verhaltensanalyse Medienkonsum', ansatz: 'KVT', beschreibung: 'SORKC auf Mediennutzung anwenden: Was sind die Auslöser? Was folgt danach (kurzfristig / langfristig)? Keine Verurteilung, sondern Verständnis aufbauen für das eigene Verhalten.', indikation: 'Problematische Mediennutzung, Gaming, Social-Media-Abhängigkeit', dauer: '20–25 Min', tags: ['KVT', 'Medien', 'Verhaltensanalyse'] },
+      { titel: 'ACT: Werte vs. Ablenkung', ansatz: 'ACT', beschreibung: 'Kontrast erarbeiten: Was sind echte Werte (Verbundenheit, Kreativität) vs. was ist Vermeidung durch Medien? Nicht Verzicht, sondern bewusste Wahl fördern.', indikation: 'Selbstregulationsprobleme, sinnloser Konsum als Vermeidung', dauer: '20 Min', tags: ['ACT', 'Werte', 'Medien'] },
+    ]
+  },
+];
 
 init();
 </script>

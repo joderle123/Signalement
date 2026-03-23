@@ -636,8 +636,96 @@ function container_render(quelle, karteHtml, leerText) {
   container.innerHTML = html;
 }
 
-// Werden in den nächsten Schritten befüllt
-const AKTIVITÄTEN = [];
+const AKTIVITÄTEN = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    eintraege: [
+      { titel: 'Gefühle-Pantomime', beschreibung: 'Jugendliche zieht eine Gefühlskarte und stellt die Emotion körperlich dar – ohne Worte. Die Fachperson oder ein Mitspieler rät. Fördert Körperwahrnehmung und Emotionserkennung.', dauer: '15–20 Min', tags: ['Körper', 'Emotion', 'Gruppe'] },
+      { titel: 'Stimmungscollage', beschreibung: 'Aus Zeitschriften Bilder, Farben und Wörter ausschneiden, die ein bestimmtes Gefühl darstellen. Gut als Einstieg in ein Gefühlsthema oder zur Ressourcenarbeit.', dauer: '20–30 Min', tags: ['Kreativ', 'Ressourcen', 'Achtsamkeit'] },
+      { titel: 'Gefühls-Würfel', beschreibung: 'Würfel werfen – jede Zahl entspricht einer Situation (z. B. "Letzte Woche warst du wütend – was war der Auslöser?"). Niedrigschwelliger Einstieg ins Gespräch.', dauer: '10–15 Min', tags: ['Spiel', 'Einstieg', 'Emotion'] },
+      { titel: 'Körper-Landkarte', beschreibung: 'Körperumriss auf Papier: Schüler zeichnet oder schreibt, wo er ein bestimmtes Gefühl im Körper spürt (Angst im Magen, Wut in den Fäusten). Stärkt Körperbewusstsein.', dauer: '15 Min', tags: ['Körper', 'Achtsamkeit', 'Emotion'] },
+      { titel: 'Notfallkoffer basteln', beschreibung: 'Gemeinsam eine kleine Schachtel oder einen Umschlag mit Kärtchen füllen: Atemübung, Lieblingsmusik, Notfallkontakt, Mutmach-Satz. Konkretes Take-Home-Material.', dauer: '20–25 Min', tags: ['Krisenprävention', 'Ressourcen', 'Selbsthilfe'] },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    eintraege: [
+      { titel: 'Konflikt-Rollenspiel', beschreibung: 'Alltägliche Konfliktsituation (z. B. jemand wird übergangen bei der Gruppenarbeit) wird gespielt – mit Rollentausch. Danach Reflexion: Wie hat sich das angefühlt? Was hätte geholfen?', dauer: '20–25 Min', tags: ['Rollenspiel', 'Konflikt', 'Perspektivenwechsel'] },
+      { titel: 'Grenzen-Seile', beschreibung: 'Zwei Seile oder Klebebandstreifen auf dem Boden: Eine Person steht in der Mitte. Wie nah darf wer kommen? Körperliche Erfahrung von persönlichen Grenzen.', dauer: '10 Min', tags: ['Grenzen', 'Körper', 'Assertivität'] },
+      { titel: '"Ich"-Botschaft üben', beschreibung: 'Situationskarten vorlesen ("Dein Freund kommt immer zu spät") – Schüler übt die GFK-Formel: Ich sehe… ich fühle… ich brauche… ich bitte dich… Variante: als Dialog spielen.', dauer: '15–20 Min', tags: ['GFK', 'Kommunikation', 'Übung'] },
+      { titel: 'Empathie-Detektiv', beschreibung: 'Fotos oder Zeichnungen von Gesichtern + Situationen zeigen. Aufgabe: Was könnte diese Person fühlen? Was braucht sie gerade? Was würdest du sagen?', dauer: '15 Min', tags: ['Empathie', 'Perspektive', 'Emotion'] },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    eintraege: [
+      { titel: 'Familien-Skulptur', beschreibung: 'Figuren, Steine oder andere Objekte auf einem Tisch aufstellen als Symbol für Familienmitglieder. Wo stehen sie zueinander? Wer ist nah, wer weit? Systemische Methode ohne viel Worte.', dauer: '20–30 Min', tags: ['Systemisch', 'Familie', 'Symbol'] },
+      { titel: 'Unterstützungsnetz zeichnen', beschreibung: 'Konzentrische Kreise auf Papier: Schüler in der Mitte, dann: enge Vertraute → Bekannte → Institutionen. Wer ist wirklich da? Wo gibt es Lücken?', dauer: '15–20 Min', tags: ['Ressourcen', 'Familie', 'Soziales Netz'] },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    eintraege: [
+      { titel: 'Waage der Entscheidung', beschreibung: 'Eine gezeichnete Waage: Links die Vorteile des Konsums, rechts die Nachteile. Dann: Was kommt auf die andere Seite, wenn ich weniger konsumiere? Motivational-Interviewing-Methode.', dauer: '15–20 Min', tags: ['MI', 'Entscheidung', 'Reflektion'] },
+      { titel: 'Werbung dekonstruieren', beschreibung: 'Alkohol- oder Tabakwerbung analysieren: Welches Bild wird gezeigt? Welche Emotionen werden angesprochen? Was wird verschwiegen? Kritisches Denken fördern.', dauer: '20 Min', tags: ['Medien', 'Prävention', 'Kritisches Denken'] },
+      { titel: 'Trigger-Landkarte', beschreibung: 'Schüler zeichnet eine persönliche Karte: Welche Situationen, Orte, Menschen, Gefühle lösen den Konsumdrang aus? Welche Alternativen gibt es für jeden Trigger?', dauer: '20–25 Min', tags: ['Rückfall', 'Prävention', 'Selbstreflexion'] },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    eintraege: [
+      { titel: 'Mein Lebens-Kompass', beschreibung: 'Großer Kreis mit 8 Bereichen (Familie, Freunde, Schule, Hobby, Gesundheit, …): Schüler bewertet von 1–10, wie zufrieden er ist. Visualisiert Ungleichgewichte und Ressourcen.', dauer: '15–20 Min', tags: ['Ziele', 'Selbstreflexion', 'Ressourcen'] },
+      { titel: 'Brief aus der Zukunft', beschreibung: 'Schüler schreibt einen Brief an sich selbst aus der Perspektive in 5 Jahren: Was hat er erreicht? Wie fühlt er sich? Was hat ihm geholfen? Aktiviert Motivation und Hoffnung.', dauer: '20–30 Min', tags: ['Zukunft', 'Motivation', 'Kreativ'] },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    eintraege: [
+      { titel: 'Body-Scan-Reise', beschreibung: 'Geführte Achtsamkeitsübung im Sitzen: Aufmerksamkeit wandert von den Füßen bis zum Kopf. Fördert Körperbewusstsein und Entspannung. Kann als Audio eingespielt werden.', dauer: '10–15 Min', tags: ['Achtsamkeit', 'Körper', 'Entspannung'] },
+      { titel: 'Energie-Tagebuch (1 Woche)', beschreibung: 'Tägliches Eintragen: Schlaf, Essen, Bewegung, Bildschirmzeit, Stimmung auf einer Skala 1–10. Nach einer Woche gemeinsam Muster erkennen.', dauer: '5 Min/Tag + 20 Min Auswertung', tags: ['Schlaf', 'Routine', 'Gesundheit'] },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Werte-Kartenspiel', beschreibung: 'Karten mit Werten (Freiheit, Gerechtigkeit, Familie, Erfolg, …) sortieren: Die 5 wichtigsten oben. Dann reflektieren: Lebe ich meine Werte? Wo gibt es Konflikte?', dauer: '20–25 Min', tags: ['Werte', 'Identität', 'ACT'] },
+      { titel: 'Stärken-Interview', beschreibung: 'Die Fachperson interviewt den Schüler gezielt nach Stärken: "Erzähl mir von einem Moment, wo du stolz warst." Schüler formuliert 3 Stärken als "Ich bin jemand, der…"', dauer: '15–20 Min', tags: ['Ressourcen', 'Selbstwert', 'Stärken'] },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Sicherer-Ort-Imagination', beschreibung: 'Geführte Visualisierung: Schüler stellt sich einen sicheren Ort vor (real oder imaginär), beschreibt ihn mit allen Sinnen. Wird als Ankertechnik gespeichert. Grundlage jeder Traumaarbeit.', dauer: '15–20 Min', tags: ['Stabilisierung', 'Trauma', 'Imagination'] },
+      { titel: 'Ressourcen-Mobile', beschreibung: 'Kleine Papierstreifen mit persönlichen Ressourcen (Menschen, Aktivitäten, Eigenschaften) werden an einem selbst gebastelten Mobile befestigt. Sichtbare Erinnerung an vorhandene Stärken.', dauer: '25–30 Min', tags: ['Ressourcen', 'Kreativ', 'Stabilisierung'] },
+      { titel: 'Brief an das jüngere Ich', beschreibung: 'Schüler schreibt einen Brief an sich selbst in einem schwierigen Moment der Vergangenheit: Was hättest du damals gebraucht? Was würdest du dir sagen? Fördert Selbstmitgefühl.', dauer: '20–30 Min', tags: ['Selbstmitgefühl', 'Trauma', 'Kreativ'] },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    eintraege: [
+      { titel: 'Screen-Time-Audit', beschreibung: 'Schüler zieht die Bildschirmzeit-Statistik seines Handys heraus. Gemeinsam analysieren: Welche Apps? Wann? Wie fühlt er sich danach? Kein Moralisieren – Neugier wecken.', dauer: '15 Min', tags: ['Medien', 'Achtsamkeit', 'Reflektion'] },
+      { titel: 'Digitaler Grenzplan', beschreibung: 'Gemeinsam realistische Regeln für die Mediennutzung entwickeln (nicht verordnen). Was ist machbar? Wann ist handy-freie Zeit sinnvoll? Plan wird schriftlich festgehalten.', dauer: '20 Min', tags: ['Medien', 'Grenzen', 'Ziele'] },
+    ]
+  },
+];
 const INTERVENTIONEN = [];
 
 init();

@@ -2,8 +2,6 @@
    CDSE Bezugsarbeit Tool - Stylesheet
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 :root {
   --primary: #3B6CB7;
   --primary-light: #4E80CC;
@@ -274,7 +272,15 @@ body {
 }
 
 .view { display: none; flex-direction: column; height: 100%; }
-.view.active { display: flex; }
+.view.active {
+  display: flex;
+  animation: viewFadeIn 0.2s ease forwards;
+}
+
+@keyframes viewFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* ============================================================
    TOPBAR
@@ -412,8 +418,45 @@ body {
 }
 
 /* ============================================================
-   HOME VIEW - Schülerliste
+   HOME VIEW - Stats + Schülerliste
    ============================================================ */
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stat-box-zahl {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--text);
+  line-height: 1;
+}
+
+.stat-box-zahl.blue { color: var(--primary); }
+.stat-box-zahl.red  { color: var(--danger); }
+
+.stat-box-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .home-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));

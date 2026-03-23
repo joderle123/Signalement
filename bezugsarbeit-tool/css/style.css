@@ -1967,3 +1967,29 @@ select {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- Datenaustausch im Sidebar ---- */
+.sidebar-sync-section {
+  margin: 8px 12px 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 8px;
+}
+
+.sidebar-sync-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255,255,255,0.35);
+  padding: 4px 8px 2px;
+}
+
+.nav-item-sync {
+  font-size: 13px;
+  padding: 7px 10px;
+  opacity: 0.75;
+}
+
+.nav-item-sync:hover {
+  opacity: 1;
+}

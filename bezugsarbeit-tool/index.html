@@ -33,13 +33,16 @@
     <a class="nav-item" href="arbeitsblatter/index.html" target="_blank">
       <span class="nav-item-icon">📋</span> Alle Arbeitsblätter
     </a>
-    <div class="nav-item" onclick="exportDaten()">
-      <span class="nav-item-icon">💾</span> Daten exportieren
+    <div class="sidebar-sync-section">
+      <div class="sidebar-sync-label">Datenaustausch</div>
+      <div class="nav-item nav-item-sync" onclick="exportDaten()" title="Alle Daten als JSON-Datei speichern">
+        <span class="nav-item-icon">📤</span> Exportieren
+      </div>
+      <div class="nav-item nav-item-sync" onclick="document.getElementById('import-input').click()" title="JSON-Datei einer Kollegin / eines Kollegen importieren">
+        <span class="nav-item-icon">📥</span> Importieren
+      </div>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
     </div>
-    <div class="nav-item" onclick="document.getElementById('import-input').click()">
-      <span class="nav-item-icon">📂</span> Daten importieren
-    </div>
-    <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
   </nav>
 
   <div class="sidebar-schueler-section">

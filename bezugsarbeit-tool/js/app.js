@@ -6,8 +6,11 @@
 const APP = {
   currentView: 'home',
   currentSchuelerId: null,
-  currentProfilTab: 'themen',
+  currentProfilTab: 'dashboard',
   kalenderDatum: new Date(),
+  dashKalenderDatum: new Date(),
+  dashKalenderSelectedTag: null,
+  notizbuchAktivSektion: 0,
 };
 
 // ---- Init ----
@@ -201,6 +204,7 @@ function showProfilTab(tab) {
     c.classList.toggle('active', c.dataset.tab === tab);
   });
 
+  if (tab === 'dashboard') renderDashboard();
   if (tab === 'themen') renderThemen();
   if (tab === 'notizen') renderNotizen();
   if (tab === 'ziele') renderZiele();
@@ -1094,4 +1098,304 @@ function uploadFoto(schuelerId) {
     reader.readAsDataURL(file);
   };
   input.click();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+
+function renderDashboard() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  if (!s) return;
+  renderDashKalender();
+  renderDashTodo();
+  renderNotizbuch();
+}
+
+// ---- MINI KALENDER ----
+const MONATE_DE = ['Januar','Februar','März','April','Mai','Juni',
+  'Juli','August','September','Oktober','November','Dezember'];
+
+function renderDashKalender() {
+  const d = APP.dashKalenderDatum;
+  const jahr = d.getFullYear();
+  const monat = d.getMonth();
+
+  const monatEl = document.getElementById('dash-kalender-monat');
+  if (monatEl) monatEl.textContent = `${MONATE_DE[monat]} ${jahr}`;
+
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const notizen = DB.getNotizen(APP.currentSchuelerId);
+  const kalNotizen = s.kalenderNotizen || [];
+  const tageWithNotizen = new Set([
+    ...notizen.map(n => n.datum),
+    ...kalNotizen.map(n => n.datum),
+  ]);
+
+  const ersterTag = new Date(jahr, monat, 1);
+  const letzterTag = new Date(jahr, monat + 1, 0);
+  const startWochentag = (ersterTag.getDay() + 6) % 7;
+  const heute = new Date().toISOString().split('T')[0];
+
+  let html = `<div class="mini-kal-header">
+    <span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+  </div><div class="mini-kal-grid">`;
+
+  for (let i = 0; i < startWochentag; i++) {
+    html += '<div class="mini-kal-cell empty"></div>';
+  }
+  for (let tag = 1; tag <= letzterTag.getDate(); tag++) {
+    const datum = `${jahr}-${String(monat+1).padStart(2,'0')}-${String(tag).padStart(2,'0')}`;
+    const hatNotiz = tageWithNotizen.has(datum);
+    const istHeute = datum === heute;
+    const istSelected = datum === APP.dashKalenderSelectedTag;
+    const cls = ['mini-kal-cell',
+      istHeute ? 'heute' : '',
+      istSelected ? 'selected' : '',
+      hatNotiz ? 'has-notiz' : ''].filter(Boolean).join(' ');
+    html += `<div class="${cls}" onclick="selectDashKalenderTag('${datum}')">${tag}${hatNotiz ? '<span class="notiz-dot"></span>' : ''}</div>`;
+  }
+  html += '</div>';
+
+  const gridEl = document.getElementById('dash-kalender-grid');
+  if (gridEl) gridEl.innerHTML = html;
+
+  renderDashKalenderNotizenListe();
+}
+
+function navigateDashKalender(delta) {
+  const d = APP.dashKalenderDatum;
+  APP.dashKalenderDatum = new Date(d.getFullYear(), d.getMonth() + delta, 1);
+  renderDashKalender();
+}
+
+function selectDashKalenderTag(datum) {
+  APP.dashKalenderSelectedTag = datum;
+  renderDashKalender();
+  const form = document.getElementById('dash-kalender-notiz-form');
+  const formDatum = document.getElementById('dash-kal-form-datum');
+  if (formDatum) formDatum.textContent = formatDatum(datum);
+  if (form) form.style.display = 'block';
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const existing = (s.kalenderNotizen || []).find(n => n.datum === datum);
+  const textarea = document.getElementById('dash-kalender-notiz-text');
+  if (textarea) textarea.value = existing ? existing.text : '';
+}
+
+function saveDashKalenderNotiz() {
+  const datum = APP.dashKalenderSelectedTag;
+  if (!datum) return;
+  const textarea = document.getElementById('dash-kalender-notiz-text');
+  const text = textarea ? textarea.value.trim() : '';
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  let kalNotizen = (s.kalenderNotizen || []).filter(n => n.datum !== datum);
+  if (text) kalNotizen.push({ id: DB.generateId(), datum, text, erstellt: new Date().toISOString() });
+  DB.updateSchueler(APP.currentSchuelerId, { kalenderNotizen: kalNotizen });
+  closeDashKalenderNotiz();
+  renderDashKalender();
+  showToast('Notiz gespeichert', 'success');
+}
+
+function closeDashKalenderNotiz() {
+  const form = document.getElementById('dash-kalender-notiz-form');
+  const textarea = document.getElementById('dash-kalender-notiz-text');
+  if (form) form.style.display = 'none';
+  if (textarea) textarea.value = '';
+  APP.dashKalenderSelectedTag = null;
+  renderDashKalender();
+}
+
+function renderDashKalenderNotizenListe() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const d = APP.dashKalenderDatum;
+  const kalNotizen = (s.kalenderNotizen || [])
+    .filter(n => {
+      const nd = new Date(n.datum + 'T00:00:00');
+      return nd.getFullYear() === d.getFullYear() && nd.getMonth() === d.getMonth();
+    })
+    .sort((a, b) => a.datum.localeCompare(b.datum));
+
+  const el = document.getElementById('dash-kalender-notizen-liste');
+  if (!el) return;
+  if (kalNotizen.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="kal-notizen-liste">${
+    kalNotizen.map(n => `
+      <div class="kal-notiz-item" onclick="selectDashKalenderTag('${n.datum}')">
+        <span class="kal-notiz-datum">${formatDatum(n.datum)}</span>
+        <span class="kal-notiz-text">${escapeHtml(n.text)}</span>
+        <button class="btn-icon" onclick="event.stopPropagation();deleteDashKalenderNotiz('${n.id}')">×</button>
+      </div>`).join('')
+  }</div>`;
+}
+
+function deleteDashKalenderNotiz(id) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const kalNotizen = (s.kalenderNotizen || []).filter(n => n.id !== id);
+  DB.updateSchueler(APP.currentSchuelerId, { kalenderNotizen: kalNotizen });
+  renderDashKalender();
+}
+
+// ---- TO-DO ----
+function renderDashTodo() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const todos = s.todos || [];
+  const liste = document.getElementById('dash-todo-liste');
+  if (!liste) return;
+
+  if (todos.length === 0) {
+    liste.innerHTML = '<div class="empty-mini">Noch keine Aufgaben</div>';
+    return;
+  }
+
+  const sorted = [...todos].sort((a, b) => Number(a.erledigt) - Number(b.erledigt));
+  liste.innerHTML = sorted.map(t => `
+    <div class="todo-item ${t.erledigt ? 'erledigt' : ''}">
+      <input type="checkbox" class="todo-check" ${t.erledigt ? 'checked' : ''}
+        onchange="toggleDashTodo('${t.id}')">
+      <span class="todo-text">${escapeHtml(t.text)}</span>
+      <button class="btn-icon todo-del" onclick="deleteDashTodo('${t.id}')">×</button>
+    </div>`).join('');
+}
+
+function addDashTodo() {
+  const input = document.getElementById('dash-todo-input');
+  const text = input ? input.value.trim() : '';
+  if (!text) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const todos = s.todos || [];
+  todos.push({ id: DB.generateId(), text, erledigt: false, erstellt: new Date().toISOString() });
+  DB.updateSchueler(APP.currentSchuelerId, { todos });
+  if (input) input.value = '';
+  renderDashTodo();
+}
+
+function toggleDashTodo(id) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const todos = s.todos || [];
+  const t = todos.find(t => t.id === id);
+  if (t) t.erledigt = !t.erledigt;
+  DB.updateSchueler(APP.currentSchuelerId, { todos });
+  renderDashTodo();
+}
+
+function deleteDashTodo(id) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const todos = (s.todos || []).filter(t => t.id !== id);
+  DB.updateSchueler(APP.currentSchuelerId, { todos });
+  renderDashTodo();
+}
+
+// ---- NOTIZBUCH ----
+const STANDARD_SEKTIONEN = ['Schule', 'Familie', 'Gesundheit', 'Freizeit'];
+
+function getNotizbuch(s) {
+  if (!s.notizbuch || !s.notizbuch.sektionen || s.notizbuch.sektionen.length === 0) {
+    return {
+      sektionen: STANDARD_SEKTIONEN.map(titel => ({
+        id: DB.generateId(), titel, notizen: []
+      }))
+    };
+  }
+  return JSON.parse(JSON.stringify(s.notizbuch));
+}
+
+function renderNotizbuch() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const nb = getNotizbuch(s);
+  const aktiv = Math.min(APP.notizbuchAktivSektion, nb.sektionen.length - 1);
+  APP.notizbuchAktivSektion = aktiv;
+
+  const tabsEl = document.getElementById('notizbuch-tabs');
+  if (!tabsEl) return;
+  tabsEl.innerHTML = nb.sektionen.map((sek, i) => `
+    <div class="nb-tab ${i === aktiv ? 'active' : ''}" onclick="showNotizbuchSektion(${i})">
+      ${escapeHtml(sek.titel)}
+    </div>`).join('') +
+    `<div class="nb-tab nb-tab-add" onclick="addNotizbuchSektion()">+ Sektion</div>`;
+
+  const inhaltEl = document.getElementById('notizbuch-inhalt');
+  if (!inhaltEl) return;
+  if (nb.sektionen.length === 0) {
+    inhaltEl.innerHTML = '<div class="empty-mini" style="padding:20px;">Keine Sektionen</div>';
+    return;
+  }
+  const sek = nb.sektionen[aktiv];
+  const notizen = sek.notizen || [];
+
+  inhaltEl.innerHTML = `
+    <div class="nb-inhalt-header">
+      <span class="nb-sektion-titel">${escapeHtml(sek.titel)}</span>
+      <button class="btn btn-secondary btn-sm" onclick="deleteNotizbuchSektion(${aktiv})">🗑 Sektion löschen</button>
+    </div>
+    <div class="nb-notiz-form">
+      <textarea id="nb-neue-notiz" rows="2" placeholder="Neue Notiz in '${escapeHtml(sek.titel)}'..."></textarea>
+      <button class="btn btn-primary btn-sm" onclick="addNotizbuchNotiz(${aktiv})">+ Hinzufügen</button>
+    </div>
+    <div class="nb-notizen-liste">
+      ${notizen.length === 0
+        ? '<div class="empty-mini">Noch keine Notizen in dieser Sektion</div>'
+        : notizen.slice().reverse().map(n => `
+          <div class="nb-notiz-item">
+            <div class="nb-notiz-meta">${formatDatum(n.datum)}</div>
+            <div class="nb-notiz-text">${escapeHtml(n.text)}</div>
+            <button class="btn-icon nb-notiz-del" onclick="deleteNotizbuchNotiz('${n.id}',${aktiv})">×</button>
+          </div>`).join('')
+      }
+    </div>`;
+}
+
+function showNotizbuchSektion(index) {
+  APP.notizbuchAktivSektion = index;
+  renderNotizbuch();
+}
+
+function addNotizbuchSektion() {
+  const titel = prompt('Name der neuen Sektion:');
+  if (!titel || !titel.trim()) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const nb = getNotizbuch(s);
+  nb.sektionen.push({ id: DB.generateId(), titel: titel.trim(), notizen: [] });
+  DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
+  APP.notizbuchAktivSektion = nb.sektionen.length - 1;
+  renderNotizbuch();
+}
+
+function deleteNotizbuchSektion(index) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const nb = getNotizbuch(s);
+  if (nb.sektionen.length <= 1) { showToast('Mindestens eine Sektion behalten', 'error'); return; }
+  if (!confirm(`Sektion "${nb.sektionen[index].titel}" und alle Notizen darin löschen?`)) return;
+  nb.sektionen.splice(index, 1);
+  APP.notizbuchAktivSektion = Math.max(0, index - 1);
+  DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
+  renderNotizbuch();
+}
+
+function addNotizbuchNotiz(sektionIndex) {
+  const textarea = document.getElementById('nb-neue-notiz');
+  const text = textarea ? textarea.value.trim() : '';
+  if (!text) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const nb = getNotizbuch(s);
+  const sek = nb.sektionen[sektionIndex];
+  if (!sek) return;
+  sek.notizen.push({
+    id: DB.generateId(), text,
+    datum: new Date().toISOString().split('T')[0],
+    erstellt: new Date().toISOString(),
+  });
+  DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
+  if (textarea) textarea.value = '';
+  renderNotizbuch();
+  showToast('Notiz gespeichert', 'success');
+}
+
+function deleteNotizbuchNotiz(notizId, sektionIndex) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const nb = getNotizbuch(s);
+  const sek = nb.sektionen[sektionIndex];
+  if (!sek) return;
+  sek.notizen = sek.notizen.filter(n => n.id !== notizId);
+  DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
+  renderNotizbuch();
 }

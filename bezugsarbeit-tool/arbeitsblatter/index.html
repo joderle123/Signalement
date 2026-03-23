@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbeitsblatt-Übersicht – CDSE</title>
+  <style>
+    :root {
+      --primary: #2C5F8A;
+      --primary-dark: #1E4468;
+      --bg: #EEF2F7;
+      --card: #fff;
+      --border: #DDE3EA;
+      --text: #111827;
+      --muted: #6B7280;
+      --radius: 10px;
+      --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Topbar */
+    .topbar {
+      background: linear-gradient(135deg, #1E4468 0%, #2C5F8A 100%);
+      color: white;
+      padding: 15px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .topbar-title { font-size: 17px; font-weight: 700; flex: 1; letter-spacing: -0.2px; }
+    .topbar a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 13px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 7px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .topbar a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+    /* Suchleiste */
+    .suche-leiste {
+      background: white;
+      padding: 14px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .suche-input {
+      flex: 1;
+      padding: 8px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      max-width: 360px;
+      transition: border-color 0.15s;
+      color: var(--text);
+    }
+    .suche-input:focus { border-color: var(--primary); }
+    .suche-input::placeholder { color: #9CA3AF; }
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip {
+      padding: 4px 11px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--muted);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .chip:hover { border-color: #B0BAC4; color: var(--text); }
+    .chip.aktiv { border-color: var(--primary); background: var(--primary); color: white; }
+
+    /* Content */
+    .content { padding: 24px 32px 40px; }
+
+    .kategorie-titel {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 28px 0 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      letter-spacing: -0.2px;
+    }
+    .kategorie-titel:first-child { margin-top: 0; }
+    .kategorie-zaehler {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 4px;
+      background: #F3F4F6;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* Karten-Grid */
+    .ab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .ab-karte {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1.5px solid transparent;
+      overflow: hidden;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .ab-karte:hover {
+      border-color: var(--akzent, var(--primary));
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .ab-karte-kopf {
+      padding: 13px 15px 9px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ab-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+    .ab-titel { font-size: 13px; font-weight: 700; line-height: 1.35; letter-spacing: -0.1px; }
+
+    .ab-karte-body { padding: 9px 15px 13px; flex: 1; display: flex; flex-direction: column; }
+    .ab-beschreibung { font-size: 11.5px; color: var(--muted); line-height: 1.55; margin-bottom: 9px; flex: 1; }
+
+    .ab-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+    .ab-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: #F3F4F6;
+      color: #6B7280;
+      border: 1px solid #E5E7EB;
+    }
+
+    .ab-open-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+      padding: 8px;
+      background: var(--akzent, var(--primary));
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .ab-open-btn:hover { opacity: 0.88; }
+
+    /* Leer-Zustand */
+    .leer {
+      text-align: center;
+      color: var(--muted);
+      padding: 48px 20px;
+      font-size: 14px;
+      grid-column: 1 / -1;
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    @media (max-width: 700px) {
+      .topbar, .suche-leiste, .content { padding-left: 16px; padding-right: 16px; }
+      .ab-grid { grid-template-columns: 1fr; }
+      .filter-chips { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span style="font-size:22px;">📋</span>
+  <div class="topbar-title">Alle Arbeitsblätter – CDSE Bezugsarbeit</div>
+  <a href="../index.html">← Zur App</a>
+</div>
+
+<div class="suche-leiste">
+  <input type="text" class="suche-input" id="suche" placeholder="🔍  Arbeitsblatt suchen…" oninput="filtern()">
+  <div class="filter-chips" id="filter-chips"></div>
+</div>
+
+<div class="content">
+  <div id="ab-container"></div>
+</div>
+
+<script>
+const ARBEITSBLÄTTER = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    blaetter: [
+      {
+        titel: 'Meine Gefühle kennenlernen',
+        datei: 'emotionserkennung.html',
+        beschreibung: 'Grundemotionen, Körperkarte, S-G-F-V-Kette, Gefühlstagebuch',
+        tags: ['Emotionen', 'Körper', 'KVT'],
+        seiten: 2,
+      },
+      {
+        titel: 'Meine Gefühle regulieren',
+        datei: 'emotionsregulation.html',
+        beschreibung: 'STOP-Technik, 4-7-8-Atmung, Notfallkoffer, 5-4-3-2-1 Grounding',
+        tags: ['DBT', 'Regulation', 'Achtsamkeit'],
+        seiten: 2,
+      },
+      {
+        titel: 'Meine Wut verstehen & steuern',
+        datei: 'wut-aggression.html',
+        beschreibung: 'Wutthermometer, Auslöser, Primäremotionen, Wutbrief',
+        tags: ['Wut', 'Aggression', 'Impulskontrolle'],
+        seiten: 2,
+      },
+      {
+        titel: 'Stress & Angst verstehen',
+        datei: 'stress-angst.html',
+        beschreibung: 'Stressoren, Stress-Ampel, Progressive Muskelentspannung, Sorgenzeit',
+        tags: ['Stress', 'Angst', 'Entspannung'],
+        seiten: 2,
+      },
+      {
+        titel: 'Mein Selbstwertgefühl stärken',
+        datei: 'selbstwertgefuehl.html',
+        beschreibung: 'Stärken, innerer Kritiker vs. Freund, Barometer, Brief an sich selbst',
+        tags: ['Selbstwert', 'Ressourcen', 'Selbstmitgefühl'],
+        seiten: 2,
+      },
+      {
+        titel: 'Trauer & Verlust',
+        datei: 'trauer-verlust.html',
+        beschreibung: 'Verlustarten, Trauerphasen (Kübler-Ross), Erinnerungsraum, Trauerbegleiter, Wellenbild',
+        tags: ['Trauer', 'Verlust', 'Trauerprozess', 'Ressourcen'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    blaetter: [
+      {
+        titel: 'Freundschaft & Konflikte',
+        datei: 'freundschaft-konflikte.html',
+        beschreibung: 'Soziogramm, WIN-WIN Konfliktmodell, Ich-Botschaften, Grenzen setzen',
+        tags: ['Freundschaft', 'Konflikt', 'GFK'],
+        seiten: 2,
+      },
+      {
+        titel: 'Kommunikation & Grenzen setzen',
+        datei: 'kommunikation-grenzen.html',
+        beschreibung: 'Kommunikationsstile, Ich-Botschaften (GFK), Grenzen in 4 Bereichen, Nein sagen üben',
+        tags: ['Kommunikation', 'Grenzen', 'Assertivität', 'GFK'],
+        seiten: 2,
+      },
+      {
+        titel: 'Mobbing & Cybermobbing',
+        datei: 'mobbing-cybermobbing.html',
+        beschreibung: 'Mobbingformen, Rollensystem (Olweus), Handlungsplan, BEE SECURE, Notfallkontakte',
+        tags: ['Mobbing', 'Cybermobbing', 'Prävention', 'BEE SECURE'],
+        seiten: 2,
+      },
+      {
+        titel: 'Romantische Beziehungen & Liebe',
+        datei: 'romantische-beziehungen.html',
+        beschreibung: 'Wünsche & No-Gos, Red Flags, 5 Liebessprachen (Chapman), Trennung verarbeiten',
+        tags: ['Beziehungen', 'Liebe', 'Red Flags', 'Liebessprachen'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    blaetter: [
+      {
+        titel: 'Meine Familie verstehen',
+        datei: 'familie.html',
+        beschreibung: 'Familienbild, Beziehungsqualitäten, Regeln & Muster, Ressourcen',
+        tags: ['Familie', 'Genogramm', 'Systemisch'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    blaetter: [
+      {
+        titel: 'Alkohol – Was ich wirklich wissen sollte',
+        datei: 'konsum-alkohol.html',
+        beschreibung: 'Konsummuster, Risikocheck, Bilanz, Umgang mit Gruppendruck',
+        tags: ['Alkohol', 'MI', 'Prävention'],
+        seiten: 2,
+      },
+      {
+        titel: 'Tabak & E-Zigarette',
+        datei: 'konsum-tabak.html',
+        beschreibung: 'Mythen-Quiz, Konsumprotokoll, Kostenrechner, Motive, Ausstiegsplan & Tabaktelefon Luxemburg',
+        tags: ['Tabak', 'Rauchen', 'E-Zigarette', 'Nikotin'],
+        seiten: 2,
+      },
+      {
+        titel: 'Cannabis & Konsum – Fakten & Motive',
+        datei: 'konsum-cannabis.html',
+        beschreibung: 'Konsummotive, Vor-/Nachteile, Konsummuster, Reduktionsplan',
+        tags: ['Cannabis', 'MI', 'Harm Reduction'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    blaetter: [
+      {
+        titel: 'Meine Zukunft – Wer will ich werden?',
+        datei: 'zukunftsplanung.html',
+        beschreibung: 'Traumwelt, Stärken-Kompass, Zielleiter, Hindernisse & Ressourcen',
+        tags: ['Beruf', 'Ziele', 'Motivation'],
+        seiten: 2,
+      },
+      {
+        titel: 'Lernstrategien & Schule',
+        datei: 'lernstrategien-schule.html',
+        beschreibung: 'Lerntypen, Lernhemmnisse, Pomodoro, Karteikarten, Feynman-Methode, Wochenplan',
+        tags: ['Lernen', 'Schule', 'Organisation', 'Motivation'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    blaetter: [
+      {
+        titel: 'Schlaf, Gesundheit & Energie',
+        datei: 'schlaf-gesundheit.html',
+        beschreibung: 'Schlaftagebuch, Schlafräuber, Energie-Bilanz, Schlaf-Routine, Body Scan',
+        tags: ['Schlaf', 'Gesundheit', 'Routine'],
+        seiten: 2,
+      },
+      {
+        titel: 'Körper, Pubertät & Sexualität',
+        datei: 'koerperbild-sexualitaet.html',
+        beschreibung: 'Körperbild, Medienideale, Sexualität & Fragen, Consent, Geschlechtsidentität',
+        tags: ['Körperbild', 'Sexualität', 'Pubertät', 'Consent'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    blaetter: [
+      {
+        titel: 'Wer bin ich? – Meine Identität',
+        datei: 'identitaet.html',
+        beschreibung: 'Identitätsrad, Rollen, Werte, Prägungen, Lebensmotto',
+        tags: ['Identität', 'Werte', 'Entwicklung'],
+        seiten: 2,
+      },
+      {
+        titel: 'Resilienz & Stärken',
+        datei: 'resilienz-staerken.html',
+        beschreibung: 'Stärken-Inventur, bewältigte Schwierigkeiten, 7 Resilienz-Säulen, Ressourcen & Resilienzplan',
+        tags: ['Resilienz', 'Stärken', 'Ressourcen', 'Schutzfaktoren'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    blaetter: [
+      {
+        titel: 'Mein Sicherheitsplan',
+        datei: 'krisenplan.html',
+        beschreibung: 'Warnzeichen, Selbsthilfe, Ablenkung, Notfallkontakte Luxemburg, Gründe zu leben',
+        tags: ['Krise', 'Suizidprävention', 'Sicherheit'],
+        seiten: 2,
+      },
+      {
+        titel: 'Trauma verstehen & Stabilität finden',
+        datei: 'trauma-stabilisierung.html',
+        beschreibung: 'Sicherer Ort, Anker & Grounding, Ampelmodell (Toleranzfenster), Schutzfaktoren',
+        tags: ['Trauma', 'Stabilisierung', 'Grounding', 'EMDR'],
+        seiten: 2,
+      },
+      {
+        titel: 'Gewalt & Schutz',
+        datei: 'gewalt-schutz.html',
+        beschreibung: 'Formen von Gewalt (körperlich, psychisch, digital, sexualisiert), Körpersignale, Schutz-Netz, Notfallkontakte Luxemburg',
+        tags: ['Gewalt', 'Missbrauch', 'Schutz', 'Sicherheit', 'Red Flags'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    blaetter: [
+      {
+        titel: 'Soziale Medien & Gaming',
+        datei: 'soziale-medien-gaming.html',
+        beschreibung: 'Nutzungsaudit, Vergleichsfalle, Gaming-Warnsignale, digitaler Grenzplan',
+        tags: ['Social Media', 'Gaming', 'Medien', 'Sucht'],
+        seiten: 2,
+      },
+      {
+        titel: 'Finanzen & Geld',
+        datei: 'finanzen-geld.html',
+        beschreibung: 'Persönliches Budget, Bedarf vs. Wunsch, Sparziel-Thermometer, Schulden-Falle & Beratungsstellen Luxemburg',
+        tags: ['Finanzen', 'Budget', 'Schulden', 'Sparen'],
+        seiten: 2,
+      },
+    ]
+  },
+];
+
+let aktiverFilter = 'Alle';
+
+function init() {
+  const chips = document.getElementById('filter-chips');
+  const kategorien = ['Alle', ...ARBEITSBLÄTTER.map(k => k.kategorie)];
+  chips.innerHTML = kategorien.map(k =>
+    `<div class="chip ${k === 'Alle' ? 'aktiv' : ''}" onclick="setFilter('${k}')">${k === 'Alle' ? 'Alle' : k.split(' ')[0]}</div>`
+  ).join('');
+  render();
+}
+
+function setFilter(f) {
+  aktiverFilter = f;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('aktiv'));
+  document.querySelectorAll('.chip').forEach(c => {
+    if (c.textContent.trim() === (f === 'Alle' ? 'Alle' : f.split(' ')[0])) c.classList.add('aktiv');
+  });
+  render();
+}
+
+function filtern() { render(); }
+
+function render() {
+  const suche = document.getElementById('suche').value.toLowerCase();
+  const container = document.getElementById('ab-container');
+  let html = '';
+  let gesamt = 0;
+
+  ARBEITSBLÄTTER.forEach(kat => {
+    if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
+
+    const gefiltert = kat.blaetter.filter(b =>
+      !suche || b.titel.toLowerCase().includes(suche) ||
+      b.beschreibung.toLowerCase().includes(suche) ||
+      b.tags.some(t => t.toLowerCase().includes(suche))
+    );
+    if (gefiltert.length === 0) return;
+    gesamt += gefiltert.length;
+
+    html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span class="kategorie-zaehler">${gefiltert.length}</span></div>`;
+    html += `<div class="ab-grid">`;
+    gefiltert.forEach(b => {
+      html += `
+        <a class="ab-karte" href="${b.datei}" target="_blank" style="--akzent:${kat.farbe};">
+          <div class="ab-karte-kopf">
+            <div class="ab-icon" style="background:${kat.farbe}20;">${kat.icon}</div>
+            <div class="ab-titel">${b.titel}</div>
+          </div>
+          <div class="ab-karte-body">
+            <div class="ab-beschreibung">${b.beschreibung}</div>
+            <div class="ab-tags">
+              ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+              <span class="ab-tag">📄 ${b.seiten} Seiten</span>
+            </div>
+            <div class="ab-open-btn" style="background:${kat.farbe};">
+              📋 Öffnen & Drucken
+            </div>
+          </div>
+        </a>`;
+    });
+    html += `</div>`;
+  });
+
+  if (gesamt === 0) {
+    html = `<div class="leer">Keine Arbeitsblätter gefunden für „${suche}"</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

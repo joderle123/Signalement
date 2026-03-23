@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Lernstrategien & Schule – CDSE Arbeitsblatt</title>
+  <link rel="stylesheet" href="arbeitsblatt.css">
+</head>
+<body>
+
+<!-- ═══════════ SEITE 1 ═══════════ -->
+<div class="seite">
+  <div class="druck-leiste">
+    <button onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
+    <a href="index.html">← Zur Übersicht</a>
+  </div>
+
+  <div class="kopfzeile">
+    <div>
+      <div class="kopf-titel">Lernstrategien & Schule</div>
+      <div class="kopf-untertitel">Wie ich lerne, was mich hemmt – und wie ich besser werde</div>
+    </div>
+    <div class="cdse-logo">CDSE</div>
+  </div>
+
+  <div class="schuelerinfo">
+    <div class="info-feld"><label>Name</label><div class="info-linie"></div></div>
+    <div class="info-feld"><label>Datum</label><div class="info-linie"></div></div>
+    <div class="info-feld"><label>Bezugsperson</label><div class="info-linie"></div></div>
+  </div>
+
+  <!-- Übung 1: Mein Lerntyp -->
+  <div class="uebung">
+    <div class="uebung-nr">Übung 1</div>
+    <div class="uebung-titel">Wie lerne ich am besten?</div>
+    <p style="font-size:12px;margin-bottom:10px;">Menschen lernen auf verschiedene Arten. Markiere, was auf dich zutrifft:</p>
+    <div class="zwei-spalten">
+      <div>
+        <div class="box" style="margin-bottom:8px;">
+          <div style="font-weight:700;margin-bottom:6px;">👁️ Visuell (Sehen)</div>
+          <label class="check-item"><input type="checkbox"> Ich lerne gut mit Bildern & Diagrammen</label>
+          <label class="check-item"><input type="checkbox"> Ich schreibe mir Dinge auf / male Mindmaps</label>
+          <label class="check-item"><input type="checkbox"> Farben und Markierungen helfen mir</label>
+        </div>
+        <div class="box">
+          <div style="font-weight:700;margin-bottom:6px;">👂 Auditiv (Hören)</div>
+          <label class="check-item"><input type="checkbox"> Ich erkläre Stoff laut vor mich hin</label>
+          <label class="check-item"><input type="checkbox"> Erklärungen von anderen helfen mir</label>
+          <label class="check-item"><input type="checkbox"> Ich höre Podcasts / YouTube-Videos</label>
+        </div>
+      </div>
+      <div>
+        <div class="box" style="margin-bottom:8px;">
+          <div style="font-weight:700;margin-bottom:6px;">✋ Kinästhetisch (Tun)</div>
+          <label class="check-item"><input type="checkbox"> Ich lerne durch Ausprobieren & Üben</label>
+          <label class="check-item"><input type="checkbox"> Bewegung beim Lernen hilft mir</label>
+          <label class="check-item"><input type="checkbox"> Ich brauche praktische Beispiele</label>
+        </div>
+        <div class="box">
+          <div style="font-weight:700;margin-bottom:6px;">📖 Lesen / Schreiben</div>
+          <label class="check-item"><input type="checkbox"> Ich lese Texte und notiere Wichtiges</label>
+          <label class="check-item"><input type="checkbox"> Eigene Zusammenfassungen schreiben hilft</label>
+          <label class="check-item"><input type="checkbox"> Ich lerne mit Karteikarten</label>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;font-weight:700;margin-top:10px;margin-bottom:4px;">Mein Lerntyp scheint vor allem zu sein:</p>
+    <div class="schreiblinien" data-lines="1"></div>
+  </div>
+
+  <!-- Übung 2: Was mich beim Lernen stört -->
+  <div class="uebung">
+    <div class="uebung-nr">Übung 2</div>
+    <div class="uebung-titel">Was mich beim Lernen hemmt – ehrlicher Check</div>
+    <p style="font-size:12px;margin-bottom:10px;">Kreuze an, was bei dir zutrifft, und schätze ein, wie stark (1 = wenig, 5 = sehr stark):</p>
+    <div style="display:grid;gap:5px;">
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;">
+        <label class="check-item"><input type="checkbox"> Smartphone / Social Media lenkt mich ab</label>
+        <div style="display:flex;gap:4px;">
+          <label><input type="radio" name="s1" value="1">1</label>
+          <label><input type="radio" name="s1" value="2">2</label>
+          <label><input type="radio" name="s1" value="3">3</label>
+          <label><input type="radio" name="s1" value="4">4</label>
+          <label><input type="radio" name="s1" value="5">5</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;">
+        <label class="check-item"><input type="checkbox"> Lärm / kein ruhiger Platz zuhause</label>
+        <div style="display:flex;gap:4px;">
+          <label><input type="radio" name="s2" value="1">1</label>
+          <label><input type="radio" name="s2" value="2">2</label>
+          <label><input type="radio" name="s2" value="3">3</label>
+          <label><input type="radio" name="s2" value="4">4</label>
+          <label><input type="radio" name="s2" value="5">5</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;">
+        <label class="check-item"><input type="checkbox"> Ich weiß nicht, wo ich anfangen soll</label>
+        <div style="display:flex;gap:4px;">
+          <label><input type="radio" name="s3" value="1">1</label>
+          <label><input type="radio" name="s3" value="2">2</label>
+          <label><input type="radio" name="s3" value="3">3</label>
+          <label><input type="radio" name="s3" value="4">4</label>
+          <label><input type="radio" name="s3" value="5">5</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;">
+        <label class="check-item"><input type="checkbox"> Ich schiebe Aufgaben auf (Prokrastination)</label>
+        <div style="display:flex;gap:4px;">
+          <label><input type="radio" name="s4" value="1">1</label>
+          <label><input type="radio" name="s4" value="2">2</label>
+          <label><input type="radio" name="s4" value="3">3</label>
+          <label><input type="radio" name="s4" value="4">4</label>
+          <label><input type="radio" name="s4" value="5">5</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;">
+        <label class="check-item"><input type="checkbox"> Prüfungsangst / Blockaden unter Druck</label>
+        <div style="display:flex;gap:4px;">
+          <label><input type="radio" name="s5" value="1">1</label>
+          <label><input type="radio" name="s5" value="2">2</label>
+          <label><input type="radio" name="s5" value="3">3</label>
+          <label><input type="radio" name="s5" value="4">4</label>
+          <label><input type="radio" name="s5" value="5">5</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;">
+        <label class="check-item"><input type="checkbox"> Stress, Probleme zuhause oder mit Freunden</label>
+        <div style="display:flex;gap:4px;">
+          <label><input type="radio" name="s6" value="1">1</label>
+          <label><input type="radio" name="s6" value="2">2</label>
+          <label><input type="radio" name="s6" value="3">3</label>
+          <label><input type="radio" name="s6" value="4">4</label>
+          <label><input type="radio" name="s6" value="5">5</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:12px;">
+        <label class="check-item"><input type="checkbox"> Fehlende Motivation – Schule fühlt sich sinnlos an</label>
+        <div style="display:flex;gap:4px;">
+          <label><input type="radio" name="s7" value="1">1</label>
+          <label><input type="radio" name="s7" value="2">2</label>
+          <label><input type="radio" name="s7" value="3">3</label>
+          <label><input type="radio" name="s7" value="4">4</label>
+          <label><input type="radio" name="s7" value="5">5</label>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Mein größtes Hindernis:</p>
+    <div class="schreiblinien" data-lines="1"></div>
+  </div>
+
+  <div class="fachhinweis">
+    <strong>Fachlicher Hinweis (Bezugsperson):</strong> Lernschwierigkeiten bei Jugendlichen in spezialisierter Beschulung sind oft emotionsbedingt (Stress, Trauma, Angst) statt kognitiv. Zunächst die emotionalen Barrieren explorieren, bevor Lerntechniken eingeführt werden. LRS/ADHS-Verdacht dokumentieren und Fachpersonen einbeziehen. Selbstwirksamkeit stärken: kleine, erreichbare Zwischenziele setzen.
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
+    <span>Lernstrategien & Schule – Seite 1 von 2</span>
+  </div>
+</div>
+
+<!-- ═══════════ SEITE 2 ═══════════ -->
+<div class="seite">
+
+  <div class="kopfzeile">
+    <div>
+      <div class="kopf-titel">Lernstrategien & Schule</div>
+      <div class="kopf-untertitel">Mein Lernplan & konkrete Strategien</div>
+    </div>
+    <div class="cdse-logo">CDSE</div>
+  </div>
+
+  <!-- Übung 3: Lernstrategien -->
+  <div class="uebung">
+    <div class="uebung-nr">Übung 3</div>
+    <div class="uebung-titel">5 bewährte Lernstrategien – was davon probiere ich aus?</div>
+    <div style="display:grid;gap:7px;">
+      <div class="box" style="display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;">
+        <div style="font-size:20px;">🍅</div>
+        <div>
+          <div style="font-weight:700;font-size:12px;">Pomodoro-Technik</div>
+          <div style="font-size:11px;color:var(--muted);">25 Min. lernen → 5 Min. Pause → wiederholen. Strukturiert Arbeit in überschaubare Blöcke.</div>
+        </div>
+        <label style="font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;"><input type="checkbox"> Probiere ich aus</label>
+      </div>
+      <div class="box" style="display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;">
+        <div style="font-size:20px;">🃏</div>
+        <div>
+          <div style="font-weight:700;font-size:12px;">Karteikarten & aktives Abrufen</div>
+          <div style="font-size:11px;color:var(--muted);">Statt nochmals lesen: sich selbst abfragen. Stärkt das Gedächtnis deutlich mehr als passives Wiederholen.</div>
+        </div>
+        <label style="font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;"><input type="checkbox"> Probiere ich aus</label>
+      </div>
+      <div class="box" style="display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;">
+        <div style="font-size:20px;">🗺️</div>
+        <div>
+          <div style="font-weight:700;font-size:12px;">Mindmap / Lernlandkarte</div>
+          <div style="font-size:11px;color:var(--muted);">Thema in der Mitte, Äste für Unterthemen. Verbindungen sehen, nicht nur Fakten lernen.</div>
+        </div>
+        <label style="font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;"><input type="checkbox"> Probiere ich aus</label>
+      </div>
+      <div class="box" style="display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;">
+        <div style="font-size:20px;">🧑‍🏫</div>
+        <div>
+          <div style="font-weight:700;font-size:12px;">Lernpartner / anderen erklären</div>
+          <div style="font-size:11px;color:var(--muted);">Stoff einer anderen Person erklären ist die effektivste Lerntechnik überhaupt (Feynman-Methode).</div>
+        </div>
+        <label style="font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;"><input type="checkbox"> Probiere ich aus</label>
+      </div>
+      <div class="box" style="display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;">
+        <div style="font-size:20px;">📅</div>
+        <div>
+          <div style="font-weight:700;font-size:12px;">Lernplan / Wochenplan</div>
+          <div style="font-size:11px;color:var(--muted);">Aufgaben auf die Woche verteilen. Puffer einplanen. Schriftlich festhalten, was bis wann fertig sein soll.</div>
+        </div>
+        <label style="font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;"><input type="checkbox"> Probiere ich aus</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Übung 4: Mein Lernplan -->
+  <div class="uebung">
+    <div class="uebung-nr">Übung 4</div>
+    <div class="uebung-titel">Mein Mini-Lernplan für diese Woche</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
+      <div class="box" style="text-align:center;">
+        <div style="font-weight:700;font-size:11px;margin-bottom:6px;">Montag</div>
+        <div class="schreiblinien" data-lines="3"></div>
+      </div>
+      <div class="box" style="text-align:center;">
+        <div style="font-weight:700;font-size:11px;margin-bottom:6px;">Dienstag</div>
+        <div class="schreiblinien" data-lines="3"></div>
+      </div>
+      <div class="box" style="text-align:center;">
+        <div style="font-weight:700;font-size:11px;margin-bottom:6px;">Mittwoch</div>
+        <div class="schreiblinien" data-lines="3"></div>
+      </div>
+      <div class="box" style="text-align:center;">
+        <div style="font-weight:700;font-size:11px;margin-bottom:6px;">Donnerstag</div>
+        <div class="schreiblinien" data-lines="3"></div>
+      </div>
+      <div class="box" style="text-align:center;">
+        <div style="font-weight:700;font-size:11px;margin-bottom:6px;">Freitag</div>
+        <div class="schreiblinien" data-lines="3"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+      <div class="box">
+        <div style="font-weight:700;font-size:12px;margin-bottom:4px;">📍 Mein bester Lernort</div>
+        <div class="schreiblinien" data-lines="2"></div>
+      </div>
+      <div class="box">
+        <div style="font-weight:700;font-size:12px;margin-bottom:4px;">⏰ Meine beste Lernzeit</div>
+        <div class="schreiblinien" data-lines="2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reflexion -->
+  <div class="reflexion">
+    <div class="reflexion-titel">💬 Meine Reflexion</div>
+    <div class="reflexion-fragen">
+      <div class="reflexion-frage">
+        <p>Warum ist Schule / Bildung für mich persönlich wichtig – oder warum nicht?</p>
+        <div class="schreiblinien" data-lines="2"></div>
+      </div>
+      <div class="reflexion-frage">
+        <p>Was wäre ein kleiner, realistischer Schritt, den ich diese Woche in der Schule ausprobieren kann?</p>
+        <div class="schreiblinien" data-lines="2"></div>
+      </div>
+      <div class="reflexion-frage">
+        <p>Welche Person in der Schule / im CDSE kann mir am meisten helfen? Habe ich sie schon um Hilfe gebeten?</p>
+        <div class="schreiblinien" data-lines="2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
+    <span>Lernstrategien & Schule – Seite 2 von 2</span>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.schreiblinien[data-lines]').forEach(el => {
+  const n = parseInt(el.dataset.lines) || 3;
+  el.innerHTML = Array(n).fill('<div class="schreiblinie"></div>').join('');
+});
+</script>
+</body>
+</html>

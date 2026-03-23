@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Tabak & E-Zigarette – CDSE Arbeitsblatt</title>
+  <link rel="stylesheet" href="arbeitsblatt.css">
+</head>
+<body>
+
+<!-- ═══════════ SEITE 1 ═══════════ -->
+<div class="seite">
+  <div class="druck-leiste">
+    <button onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
+    <a href="index.html">← Zur Übersicht</a>
+  </div>
+
+  <div class="kopfzeile">
+    <div>
+      <div class="kopf-titel">Tabak & E-Zigarette</div>
+      <div class="kopf-untertitel">Fakten, Motive & mein ehrlicher Blick auf meinen Konsum</div>
+    </div>
+    <div class="cdse-logo">CDSE</div>
+  </div>
+
+  <div class="schuelerinfo">
+    <div class="info-feld"><label>Name</label><div class="info-linie"></div></div>
+    <div class="info-feld"><label>Datum</label><div class="info-linie"></div></div>
+    <div class="info-feld"><label>Bezugsperson</label><div class="info-linie"></div></div>
+  </div>
+
+  <!-- Wissens-Quiz -->
+  <div class="uebung">
+    <div class="uebung-nr">Wissens-Check</div>
+    <div class="uebung-titel">Stimmt das – oder ist das ein Mythos?</div>
+    <p style="font-size:12px;margin-bottom:10px;">Kreuze an, was du glaubst – und vergleiche danach mit den Fakten:</p>
+    <div style="display:grid;gap:6px;">
+      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
+        <div>„E-Zigaretten / Vapes sind harmloser als Zigaretten"</div>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q1" value="wahr"> Stimmt</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q1" value="falsch"> Stimmt nicht</label>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
+        <div>„Nikotin macht nicht wirklich abhängig"</div>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q2" value="wahr"> Stimmt</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q2" value="falsch"> Stimmt nicht</label>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
+        <div>„Einige Hundert Zigaretten kosten im Jahr mehrere Hundert Euro"</div>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q3" value="wahr"> Stimmt</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q3" value="falsch"> Stimmt nicht</label>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
+        <div>„Passivrauchen schadet anderen Menschen"</div>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q4" value="wahr"> Stimmt</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q4" value="falsch"> Stimmt nicht</label>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
+        <div>„Jugendliche Raucher hören meist vor dem 25. Lebensjahr auf"</div>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q5" value="wahr"> Stimmt</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q5" value="falsch"> Stimmt nicht</label>
+      </div>
+    </div>
+    <div class="box" style="margin-top:8px;font-size:11px;border-top:3px solid #27AE60;">
+      <div style="font-weight:700;color:#27AE60;margin-bottom:6px;">✅ Auflösung:</div>
+      <div style="display:grid;gap:4px;">
+        <div><strong>1. Stimmt nicht.</strong> E-Zigaretten/Vapes enthalten Nikotin und Schadstoffe – sie sind nicht harmlos. Langzeitfolgen für Lungen und Herz-Kreislauf sind belegt.</div>
+        <div><strong>2. Stimmt nicht.</strong> Nikotin ist hochgradig abhängigkeitserzeugend – oft bereits nach wenigen Wochen regelmäßigen Rauchens.</div>
+        <div><strong>3. Stimmt.</strong> Wer täglich raucht, gibt in Luxemburg oft 1.500–2.500 € pro Jahr für Tabak aus.</div>
+        <div><strong>4. Stimmt.</strong> Passivrauchen erhöht das Risiko für Krebs, Herzkrankheiten und Atemwegserkrankungen bei anderen.</div>
+        <div><strong>5. Stimmt nicht.</strong> Die Mehrheit bleibt Raucher – nur etwa 1 von 3 schafft es dauerhaft aufzuhören.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Übung 1: Mein Konsum-Protokoll -->
+  <div class="uebung">
+    <div class="uebung-nr">Übung 1</div>
+    <div class="uebung-titel">Mein Konsum – ehrlich hinschauen</div>
+    <div class="zwei-spalten">
+      <div>
+        <div class="box">
+          <p style="font-size:12px;font-weight:700;margin-bottom:8px;">Ich rauche / vape:</p>
+          <label class="check-item"><input type="checkbox"> Gar nicht</label>
+          <label class="check-item"><input type="checkbox"> Gelegentlich (mit Freunden / auf Partys)</label>
+          <label class="check-item"><input type="checkbox"> Mehrmals pro Woche</label>
+          <label class="check-item"><input type="checkbox"> Täglich</label>
+          <label class="check-item"><input type="checkbox"> Mehrmals täglich</label>
+          <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Was ich konsumiere:</p>
+          <label class="check-item"><input type="checkbox"> Klassische Zigaretten</label>
+          <label class="check-item"><input type="checkbox"> E-Zigarette / Vape / Puff Bar</label>
+          <label class="check-item"><input type="checkbox"> Tabak zum Drehen</label>
+          <label class="check-item"><input type="checkbox"> Wasserpfeife / Shisha</label>
+          <label class="check-item"><input type="checkbox"> Nikotinbeutel / Snus</label>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <p style="font-size:12px;font-weight:700;margin-bottom:6px;">Seit wann? Wie viel pro Tag (ca.)?</p>
+          <div class="schreiblinien" data-lines="2"></div>
+          <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Monatliche Kosten (schätzen):</p>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
+            <div style="width:80px;border-bottom:1px solid var(--border);"></div>
+            <span style="font-size:12px;">€ / Monat</span>
+          </div>
+          <p style="font-size:12px;font-weight:700;margin-bottom:4px;">Im Jahr wären das:</p>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div style="width:80px;border-bottom:2px solid #E74C3C;"></div>
+            <span style="font-size:12px;">€ / Jahr</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fachhinweis">
+    <strong>Fachlicher Hinweis (Bezugsperson):</strong> Nikotinkonsum bei Jugendlichen ist oft mit Stress, sozialer Zugehörigkeit oder Gewohnheit verknüpft. Motivierende Gesprächsführung (Miller & Rollnick): keine direkte Konfrontation, sondern Ambivalenzexploration. Luxemburger Ausstiegshilfe: <em>Tabaktelefon</em> 27 55 33 12 (kostenlos), <em>CHL Stop-Tabac</em>, <em>Fondation Cancer</em> 45 30 331. E-Zigaretten/Vapes enthalten laut WHO-Berichten 2023/24 teils höhere Nikotinkonzentrationen als klassische Zigaretten.
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
+    <span>Tabak & E-Zigarette – Seite 1 von 2</span>
+  </div>
+</div>
+
+<!-- ═══════════ SEITE 2 ═══════════ -->
+<div class="seite">
+
+  <div class="kopfzeile">
+    <div>
+      <div class="kopf-titel">Tabak & E-Zigarette</div>
+      <div class="kopf-untertitel">Warum ich rauche – und was ich mir wünsche</div>
+    </div>
+    <div class="cdse-logo">CDSE</div>
+  </div>
+
+  <!-- Übung 2: Motive -->
+  <div class="uebung">
+    <div class="uebung-nr">Übung 2</div>
+    <div class="uebung-titel">Warum rauche / vape ich? – Meine Motive</div>
+    <p style="font-size:12px;margin-bottom:8px;">Hinter jedem Konsum stecken Gründe. Was trifft auf dich zu?</p>
+    <div class="zwei-spalten">
+      <div>
+        <label class="check-item"><input type="checkbox"> Es beruhigt mich / baut Stress ab</label>
+        <label class="check-item"><input type="checkbox"> Alle in meiner Clique machen es</label>
+        <label class="check-item"><input type="checkbox"> Es gibt mir etwas zu tun (Hände beschäftigt)</label>
+        <label class="check-item"><input type="checkbox"> Es hilft mir in sozialen Situationen (weniger schüchtern)</label>
+        <label class="check-item"><input type="checkbox"> Es ist einfach zur Gewohnheit geworden</label>
+        <label class="check-item"><input type="checkbox"> Ich war neugierig / wollte es ausprobieren</label>
+      </div>
+      <div>
+        <label class="check-item"><input type="checkbox"> Es fühlt sich „cool" oder erwachsen an</label>
+        <label class="check-item"><input type="checkbox"> Ich vertreibe Langeweile damit</label>
+        <label class="check-item"><input type="checkbox"> Es macht mir wirklich Spaß / schmeckt mir</label>
+        <label class="check-item"><input type="checkbox"> Ich weiß eigentlich nicht warum</label>
+        <label class="check-item"><input type="checkbox"> Ich kann ohne es nicht mehr gut schlafen / entspannen</label>
+        <label class="check-item"><input type="checkbox"> Anderes: <div style="display:inline-block;width:80px;border-bottom:1px solid var(--border);vertical-align:bottom;"></div></label>
+      </div>
+    </div>
+    <p style="font-size:12px;font-weight:700;margin-top:10px;margin-bottom:4px;">Was bringt mir das Rauchen / Vapen wirklich – und was kostet es mich?</p>
+    <div class="zwei-spalten">
+      <div>
+        <p style="font-size:11px;font-weight:700;color:#27AE60;margin-bottom:4px;">+ Vorteile (wie ich sie erlebe):</p>
+        <div class="schreiblinien" data-lines="3"></div>
+      </div>
+      <div>
+        <p style="font-size:11px;font-weight:700;color:#E74C3C;margin-bottom:4px;">− Nachteile / Kosten:</p>
+        <div class="schreiblinien" data-lines="3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Übung 3: Ausstieg / Veränderung -->
+  <div class="uebung">
+    <div class="uebung-nr">Übung 3</div>
+    <div class="uebung-titel">Meine Haltung zu meinem Konsum</div>
+    <p style="font-size:12px;margin-bottom:8px;">Wo stehe ich gerade?</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
+      <div class="box" style="text-align:center;">
+        <div style="font-size:20px;">😐</div>
+        <div style="font-size:11px;font-weight:700;margin:4px 0;">Kein Problem</div>
+        <div style="font-size:10px;color:var(--muted);">Ich sehe keinen Grund etwas zu ändern</div>
+        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
+      </div>
+      <div class="box" style="text-align:center;">
+        <div style="font-size:20px;">🤔</div>
+        <div style="font-size:11px;font-weight:700;margin:4px 0;">Nachdenklich</div>
+        <div style="font-size:10px;color:var(--muted);">Ich denke manchmal daran, es zu reduzieren</div>
+        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
+      </div>
+      <div class="box" style="text-align:center;">
+        <div style="font-size:20px;">💪</div>
+        <div style="font-size:11px;font-weight:700;margin:4px 0;">Bereit</div>
+        <div style="font-size:10px;color:var(--muted);">Ich möchte wirklich weniger oder aufhören</div>
+        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
+      </div>
+      <div class="box" style="text-align:center;">
+        <div style="font-size:20px;">🚭</div>
+        <div style="font-size:11px;font-weight:700;margin:4px 0;">Bereits dabei</div>
+        <div style="font-size:10px;color:var(--muted);">Ich habe schon versucht aufzuhören / reduziert</div>
+        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
+      </div>
+    </div>
+
+    <div class="box" style="margin-top:4px;">
+      <div style="font-weight:700;margin-bottom:8px;color:#2C5F8A;">Falls ich aufhören / reduzieren möchte – mein Plan:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <p style="font-size:11px;font-weight:700;margin-bottom:4px;">Mein Zieldatum:</p>
+          <div class="schreiblinien" data-lines="1"></div>
+          <p style="font-size:11px;font-weight:700;margin-top:6px;margin-bottom:4px;">Was ich stattdessen tue, wenn der Drang kommt:</p>
+          <div class="schreiblinien" data-lines="2"></div>
+        </div>
+        <div>
+          <p style="font-size:11px;font-weight:700;margin-bottom:4px;">Wer unterstützt mich dabei:</p>
+          <div class="schreiblinien" data-lines="2"></div>
+          <div style="font-size:10px;background:#E8F5E9;padding:6px;border-radius:4px;margin-top:8px;">📞 <strong>Tabaktelefon Luxemburg:</strong> 27 55 33 12 (kostenlos)<br>🌐 <strong>Fondation Cancer:</strong> stopmyrauchen.lu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reflexion -->
+  <div class="reflexion">
+    <div class="reflexion-titel">💬 Meine Reflexion</div>
+    <div class="reflexion-fragen">
+      <div class="reflexion-frage">
+        <p>Was hat mich an diesem Blatt am meisten zum Nachdenken gebracht?</p>
+        <div class="schreiblinien" data-lines="2"></div>
+      </div>
+      <div class="reflexion-frage">
+        <p>Was würde ich mir für meinen Konsum in 1 Jahr wünschen?</p>
+        <div class="schreiblinien" data-lines="2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
+    <span>Tabak & E-Zigarette – Seite 2 von 2</span>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.schreiblinien[data-lines]').forEach(el => {
+  const n = parseInt(el.dataset.lines) || 3;
+  el.innerHTML = Array(n).fill('<div class="schreiblinie"></div>').join('');
+});
+</script>
+</body>
+</html>

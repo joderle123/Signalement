@@ -317,24 +317,67 @@ function openThemaPanel(katId, themaId) {
 }
 
 function renderArbeitsblaetter(themaId) {
-  const blaetter = ARBEITSBLÄTTER[themaId];
-  if (!blaetter || blaetter.length === 0) return '';
+  const blaetter = ARBEITSBLÄTTER[themaId] || [];
+  const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
+  const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
+
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0) return '';
+
   return `
     <div style="margin-bottom:20px;">
-      <label style="display:block;margin-bottom:8px;">📄 Arbeitsblätter</label>
-      <div style="display:flex;flex-direction:column;gap:6px;">
-        ${blaetter.map(b => `
+      <div class="panel-tabs" id="panel-tabs-${themaId}">
+        <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">📋 Blätter</button>
+        <button class="panel-tab" onclick="switchPanelTab('${themaId}','akt')">🎯 Aktivitäten</button>
+        <button class="panel-tab" onclick="switchPanelTab('${themaId}','int')">🧠 Interventionen</button>
+      </div>
+
+      <div id="pt-ab-${themaId}" class="panel-tab-content">
+        ${blaetter.length === 0
+          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Kein Arbeitsblatt verfügbar</p>'
+          : blaetter.map(b => `
           <a href="arbeitsblatter/${b.datei}" target="_blank"
-             style="display:flex;align-items:center;gap:10px;padding:9px 12px;
+             style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;
                     background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;
-                    text-decoration:none;color:#0369A1;font-size:12px;font-weight:600;
-                    transition:background 0.15s;">
+                    text-decoration:none;color:#0369A1;font-size:12px;font-weight:600;">
             <span style="font-size:16px;">📋</span>
             <span style="flex:1;">${b.titel}</span>
             <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
           </a>`).join('')}
       </div>
+
+      <div id="pt-akt-${themaId}" class="panel-tab-content" style="display:none;">
+        ${aktivitaeten.length === 0
+          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Aktivitäten hinterlegt</p>'
+          : aktivitaeten.map(a => `
+          <div style="padding:10px 12px;margin-bottom:8px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;">
+            <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:4px;">🎯 ${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
+            <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
+          </div>`).join('')}
+      </div>
+
+      <div id="pt-int-${themaId}" class="panel-tab-content" style="display:none;">
+        ${interventionen.length === 0
+          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Interventionen hinterlegt</p>'
+          : interventionen.map(i => `
+          <div style="padding:10px 12px;margin-bottom:8px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
+            <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">🧠 ${i.titel}</div>
+            <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+            <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
+            <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
+          </div>`).join('')}
+      </div>
     </div>`;
+}
+
+function switchPanelTab(themaId, tab) {
+  ['ab','akt','int'].forEach(t => {
+    const el = document.getElementById(`pt-${t}-${themaId}`);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+  const tabs = document.getElementById(`panel-tabs-${themaId}`);
+  if (tabs) tabs.querySelectorAll('.panel-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', ['ab','akt','int'][i] === tab);
+  });
 }
 
 function getStatusFarbe(key) {

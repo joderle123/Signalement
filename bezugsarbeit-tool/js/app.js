@@ -80,19 +80,46 @@ function renderSidebar() {
 function renderHome() {
   const schueler = DB.getSchueler();
   const grid = document.getElementById('home-grid');
+  const statsEl = document.getElementById('home-stats');
   const suchfeld = document.getElementById('home-suche');
   const filter = suchfeld ? suchfeld.value.toLowerCase() : '';
   const gefiltert = schueler.filter(s =>
     `${s.vorname} ${s.nachname} ${s.klasse}`.toLowerCase().includes(filter)
   );
 
+  // Stats-Leiste
+  if (schueler.length > 0 && statsEl) {
+    const alleNotizen = schueler.reduce((n, s) => n + DB.getNotizen(s.id).length, 0);
+    const aktiveThemen = schueler.reduce((n, s) => n + countStatus(s, 'in-bearbeitung'), 0);
+    const hochrisiko = schueler.filter(s => s.risiko === 'hoch').length;
+    statsEl.innerHTML = `
+      <div class="stat-box">
+        <div class="stat-box-zahl">${schueler.length}</div>
+        <div class="stat-box-label">Schüler gesamt</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-zahl blue">${aktiveThemen}</div>
+        <div class="stat-box-label">Aktive Themen</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-zahl">${alleNotizen}</div>
+        <div class="stat-box-label">Notizen & Sitzungen</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-zahl ${hochrisiko > 0 ? 'red' : ''}">${hochrisiko}</div>
+        <div class="stat-box-label">Hochrisiko</div>
+      </div>`;
+  } else if (statsEl) {
+    statsEl.innerHTML = '';
+  }
+
   if (gefiltert.length === 0) {
     grid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
         <div class="empty-state-icon">👥</div>
-        <div class="empty-state-title">Noch keine Schüler</div>
-        <div class="empty-state-text">Erstelle das erste Schülerprofil um zu beginnen.</div>
-        <button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuen Schüler anlegen</button>
+        <div class="empty-state-title">${filter ? 'Kein Treffer' : 'Noch keine Schüler'}</div>
+        <div class="empty-state-text">${filter ? `Keine Schüler gefunden für „${filter}".` : 'Erstelle das erste Schülerprofil um zu beginnen.'}</div>
+        ${!filter ? '<button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuen Schüler anlegen</button>' : ''}
       </div>`;
     return;
   }
@@ -101,6 +128,12 @@ function renderHome() {
     const notizen = DB.getNotizen(s.id);
     const abgeschlossen = countStatus(s, 'abgeschlossen');
     const inBearbeitung = countStatus(s, 'in-bearbeitung');
+    const letzteNotiz = notizen.length > 0
+      ? notizen.slice().sort((a, b) => b.datum.localeCompare(a.datum))[0]
+      : null;
+    const letzteAnzeige = letzteNotiz
+      ? `<span class="stat-pill">🕐 ${formatDatum(letzteNotiz.datum)}</span>`
+      : '';
     return `
     <div class="schueler-card" onclick="showView('profil','${s.id}')">
       <div class="risiko-indicator ${s.risiko || 'niedrig'}">
@@ -118,9 +151,10 @@ function renderHome() {
         </div>
       </div>
       <div class="schueler-card-stats">
-        <span class="stat-pill green">✅ ${abgeschlossen} abgeschlossen</span>
-        <span class="stat-pill blue">◐ ${inBearbeitung} aktiv</span>
-        <span class="stat-pill orange">💬 ${notizen.length} Notizen</span>
+        <span class="stat-pill green">✅ ${abgeschlossen}</span>
+        <span class="stat-pill blue">◐ ${inBearbeitung}</span>
+        <span class="stat-pill orange">💬 ${notizen.length}</span>
+        ${letzteAnzeige}
       </div>
     </div>`;
   }).join('');

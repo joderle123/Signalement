@@ -388,13 +388,13 @@ function toggleNotizModus(modus) {
   if (modus === 'frei') {
     frei.style.display = '';
     prot.style.display = 'none';
-    btnFrei.className = 'btn btn-primary btn-sm';
-    btnProt.className = 'btn btn-secondary btn-sm';
+    btnFrei.classList.add('active');
+    btnProt.classList.remove('active');
   } else {
     frei.style.display = 'none';
     prot.style.display = '';
-    btnProt.className = 'btn btn-primary btn-sm';
-    btnFrei.className = 'btn btn-secondary btn-sm';
+    btnProt.classList.add('active');
+    btnFrei.classList.remove('active');
     const d = document.getElementById('prot-datum');
     if (!d.value) d.value = new Date().toISOString().split('T')[0];
   }

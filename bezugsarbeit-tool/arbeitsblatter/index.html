@@ -202,10 +202,33 @@
       background: white;
     }
 
+    /* Tabs */
+    .tabs-leiste {
+      background: white;
+      border-bottom: 2px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+    }
+    .tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tab:hover { color: var(--primary); }
+    .tab.aktiv { color: var(--primary); border-bottom-color: var(--primary); }
+
     @media (max-width: 700px) {
       .topbar, .suche-leiste, .content { padding-left: 16px; padding-right: 16px; }
       .ab-grid { grid-template-columns: 1fr; }
       .filter-chips { display: none; }
+      .tabs-leiste { padding: 0 16px; }
     }
   </style>
 </head>
@@ -213,12 +236,18 @@
 
 <div class="topbar">
   <span style="font-size:22px;">📋</span>
-  <div class="topbar-title">Alle Arbeitsblätter – CDSE Bezugsarbeit</div>
+  <div class="topbar-title">Materialien & Methoden – CDSE Bezugsarbeit</div>
   <a href="../index.html">← Zur App</a>
 </div>
 
+<div class="tabs-leiste">
+  <div class="tab aktiv" id="tab-ab" onclick="wechselTab('ab')">📋 Arbeitsblätter</div>
+  <div class="tab" id="tab-akt" onclick="wechselTab('akt')">🎯 Aktivitäten</div>
+  <div class="tab" id="tab-int" onclick="wechselTab('int')">🧠 Therapeutische Interventionen</div>
+</div>
+
 <div class="suche-leiste">
-  <input type="text" class="suche-input" id="suche" placeholder="🔍  Arbeitsblatt suchen…" oninput="filtern()">
+  <input type="text" class="suche-input" id="suche" placeholder="🔍  Suchen…" oninput="filtern()">
   <div class="filter-chips" id="filter-chips"></div>
 </div>
 
@@ -469,10 +498,21 @@ const ARBEITSBLÄTTER = [
 ];
 
 let aktiverFilter = 'Alle';
+let aktiverTab = 'ab'; // 'ab' | 'akt' | 'int'
+
+function wechselTab(tab) {
+  aktiverTab = tab;
+  aktiverFilter = 'Alle';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('aktiv'));
+  document.getElementById('tab-' + tab).classList.add('aktiv');
+  document.getElementById('suche').value = '';
+  init();
+}
 
 function init() {
   const chips = document.getElementById('filter-chips');
-  const kategorien = ['Alle', ...ARBEITSBLÄTTER.map(k => k.kategorie)];
+  const quelle = aktiverTab === 'ab' ? ARBEITSBLÄTTER : aktiverTab === 'akt' ? AKTIVITÄTEN : INTERVENTIONEN;
+  const kategorien = ['Alle', ...quelle.map(k => k.kategorie)];
   chips.innerHTML = kategorien.map(k =>
     `<div class="chip ${k === 'Alle' ? 'aktiv' : ''}" onclick="setFilter('${k}')">${k === 'Alle' ? 'Alle' : k.split(' ')[0]}</div>`
   ).join('');
@@ -491,6 +531,12 @@ function setFilter(f) {
 function filtern() { render(); }
 
 function render() {
+  if (aktiverTab === 'ab') renderArbeitsblätter();
+  else if (aktiverTab === 'akt') renderAktivitäten();
+  else renderInterventionen();
+}
+
+function renderArbeitsblätter() {
   const suche = document.getElementById('suche').value.toLowerCase();
   const container = document.getElementById('ab-container');
   let html = '';
@@ -498,7 +544,6 @@ function render() {
 
   ARBEITSBLÄTTER.forEach(kat => {
     if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
-
     const gefiltert = kat.blaetter.filter(b =>
       !suche || b.titel.toLowerCase().includes(suche) ||
       b.beschreibung.toLowerCase().includes(suche) ||
@@ -506,7 +551,6 @@ function render() {
     );
     if (gefiltert.length === 0) return;
     gesamt += gefiltert.length;
-
     html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span class="kategorie-zaehler">${gefiltert.length}</span></div>`;
     html += `<div class="ab-grid">`;
     gefiltert.forEach(b => {
@@ -522,21 +566,79 @@ function render() {
               ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
               <span class="ab-tag">📄 ${b.seiten} Seiten</span>
             </div>
-            <div class="ab-open-btn" style="background:${kat.farbe};">
-              📋 Öffnen & Drucken
-            </div>
+            <div class="ab-open-btn" style="background:${kat.farbe};">📋 Öffnen & Drucken</div>
           </div>
         </a>`;
     });
     html += `</div>`;
   });
-
-  if (gesamt === 0) {
-    html = `<div class="leer">Keine Arbeitsblätter gefunden für „${suche}"</div>`;
-  }
-
+  if (gesamt === 0) html = `<div class="leer">Keine Arbeitsblätter gefunden für „${document.getElementById('suche').value}"</div>`;
   container.innerHTML = html;
 }
+
+function renderAktivitäten() {
+  container_render(AKTIVITÄTEN, (b, farbe) => `
+    <div class="ab-karte" style="--akzent:${farbe}; cursor:default;">
+      <div class="ab-karte-kopf">
+        <div class="ab-icon" style="background:${farbe}20;">🎯</div>
+        <div class="ab-titel">${b.titel}</div>
+      </div>
+      <div class="ab-karte-body">
+        <div class="ab-beschreibung">${b.beschreibung}</div>
+        <div class="ab-tags">
+          ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+          <span class="ab-tag">⏱ ${b.dauer}</span>
+        </div>
+      </div>
+    </div>`
+  , 'Keine Aktivitäten gefunden');
+}
+
+function renderInterventionen() {
+  container_render(INTERVENTIONEN, (b, farbe) => `
+    <div class="ab-karte" style="--akzent:${farbe}; cursor:default;">
+      <div class="ab-karte-kopf">
+        <div class="ab-icon" style="background:${farbe}20;">🧠</div>
+        <div class="ab-titel">${b.titel}</div>
+      </div>
+      <div class="ab-karte-body">
+        <div class="ab-beschreibung"><strong>${b.ansatz}</strong> — ${b.beschreibung}</div>
+        <div style="font-size:11px;color:#6B7280;margin:5px 0 8px;line-height:1.45;">📌 ${b.indikation}</div>
+        <div class="ab-tags">
+          ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+          <span class="ab-tag">⏱ ${b.dauer}</span>
+        </div>
+      </div>
+    </div>`
+  , 'Keine Interventionen gefunden');
+}
+
+function container_render(quelle, karteHtml, leerText) {
+  const suche = document.getElementById('suche').value.toLowerCase();
+  const container = document.getElementById('ab-container');
+  let html = '';
+  let gesamt = 0;
+  quelle.forEach(kat => {
+    if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
+    const gefiltert = kat.eintraege.filter(b =>
+      !suche || b.titel.toLowerCase().includes(suche) ||
+      b.beschreibung.toLowerCase().includes(suche) ||
+      b.tags.some(t => t.toLowerCase().includes(suche))
+    );
+    if (gefiltert.length === 0) return;
+    gesamt += gefiltert.length;
+    html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span class="kategorie-zaehler">${gefiltert.length}</span></div>`;
+    html += `<div class="ab-grid">`;
+    gefiltert.forEach(b => { html += karteHtml(b, kat.farbe); });
+    html += `</div>`;
+  });
+  if (gesamt === 0) html = `<div class="leer">${leerText}</div>`;
+  container.innerHTML = html;
+}
+
+// Werden in den nächsten Schritten befüllt
+const AKTIVITÄTEN = [];
+const INTERVENTIONEN = [];
 
 init();
 </script>

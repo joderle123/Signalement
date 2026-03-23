@@ -116,6 +116,44 @@ const THEMA_AKTIVITÄTEN = {
     { titel: 'Meine Geschichte', beschreibung: 'Schreibe oder erzähle deine Lebensgeschichte – woher du kommst und wo du jetzt bist.', dauer: '25 Min' },
     { titel: 'Wichtige Personen in meinem Leben', beschreibung: 'Zeichne ein Netzwerk aller Menschen, die dir wichtig sind – Familie, Pflege, Freunde.', dauer: '20 Min' },
   ],
+
+  // ── Emotionen ──────────────────────────────────────────────
+  'emotionserkennung': [
+    { titel: 'Gefühls-Tagebuch', beschreibung: 'Schreibe täglich 3 Gefühle auf, die du erlebt hast – mit Auslöser und Körpergefühl.', dauer: '5 Min täglich' },
+    { titel: 'Gefühls-Rad ausfüllen', beschreibung: 'Male ein Rad mit deinen häufigsten Gefühlen – wie groß ist jedes Stück?', dauer: '15 Min' },
+    { titel: 'Körper-Landkarte', beschreibung: 'Zeichne einen Körperumriss und markiere, wo du Wut, Angst, Trauer und Freude spürst.', dauer: '20 Min' },
+  ],
+  'emotionsregulation': [
+    { titel: 'Mein Notfallkoffer', beschreibung: 'Sammle 5 persönliche Strategien für schwierige Momente – was hilft dir wirklich?', dauer: '20 Min' },
+    { titel: 'Entspannungs-Experiment', beschreibung: 'Probiere 3 verschiedene Entspannungstechniken aus (Atmung, PMR, Visualisierung) und bewerte sie.', dauer: '25 Min' },
+  ],
+  'wut-aggression': [
+    { titel: 'Mein Wut-Auslöser-Kalender', beschreibung: 'Eine Woche lang: Wann, wo und warum war ich wütend? Muster erkennen.', dauer: '5 Min täglich' },
+    { titel: 'Wut kreativ rauslassen', beschreibung: 'Zeichne deine Wut – Farben, Formen, Symbole – ohne Worte.', dauer: '15 Min' },
+    { titel: 'Stopp-Signal üben', beschreibung: 'Entwickle ein persönliches Stopp-Signal (Wort, Geste) für den Moment, bevor die Wut eskaliert.', dauer: '10 Min' },
+  ],
+  'stress-angst': [
+    { titel: 'Sorgen-Box', beschreibung: 'Schreibe Sorgen auf Zettel und lege sie in eine Box – aus dem Kopf, in die Box.', dauer: '10 Min' },
+    { titel: 'Mein Entspannungs-Ritual', beschreibung: 'Entwickle ein 5-minütiges Ritual für stressige Momente (Musik, Atemübung, Bewegung).', dauer: '15 Min' },
+    { titel: 'Ressourcen-Oase', beschreibung: 'Stelle dir einen inneren Rückzugsort vor – beschreibe oder zeichne ihn detailliert.', dauer: '20 Min' },
+  ],
+  'selbstwertgefuehl': [
+    { titel: 'Mein Stärken-Poster', beschreibung: 'Erstelle ein Poster mit deinen 10 größten Stärken – mit Beispielen und Symbolen.', dauer: '30 Min' },
+    { titel: 'Kompliment-Tagebuch', beschreibung: 'Notiere jedes Kompliment, das du erhältst – und wie es sich anfühlt.', dauer: '5 Min täglich' },
+    { titel: 'Brief an mein jüngeres Ich', beschreibung: 'Was würdest du deinem 10-jährigen Ich sagen? Schreibe einen ermutigenden Brief.', dauer: '20 Min' },
+  ],
+  'depressive-stimmungen': [
+    { titel: 'Freude-Liste', beschreibung: 'Schreibe 20 Dinge auf, die dir (früher) Freude gemacht haben – klein und groß.', dauer: '15 Min' },
+    { titel: 'Wochenplan mit Highlights', beschreibung: 'Plane für jeden Tag der Woche mindestens eine angenehme Aktivität ein.', dauer: '15 Min' },
+  ],
+  'trauer-verlust': [
+    { titel: 'Abschiedsbrief', beschreibung: 'Schreibe einen Brief an etwas oder jemanden, den du verloren hast – was du sagen möchtest.', dauer: '20 Min' },
+    { titel: 'Erinnerungs-Collage', beschreibung: 'Gestalte eine Collage aus Fotos, Symbolen und Wörtern, die die verlorene Person beschreiben.', dauer: '30 Min' },
+  ],
+  'freude-wohlbefinden': [
+    { titel: 'Glücks-Tagebuch', beschreibung: 'Notiere täglich 3 Dinge, für die du dankbar bist oder die dich gefreut haben.', dauer: '5 Min täglich' },
+    { titel: 'Mein Flow-Profil', beschreibung: 'Wann verliere ich das Zeitgefühl? Identifiziere deine persönlichen Flow-Aktivitäten.', dauer: '15 Min' },
+  ],
 };
 
 const THEMA_INTERVENTIONEN = {
@@ -144,6 +182,46 @@ const THEMA_INTERVENTIONEN = {
   'pflegefamilie': [
     { titel: 'Lebensgeschichtsbuch', ansatz: 'Narrativ', beschreibung: 'Gemeinsames Erstellen eines Buches über die Lebensgeschichte des Jugendlichen – Herkunft bis heute.', indikation: 'Identitätsfragen, Brüche in der Biografie', dauer: 'mehrere Sitzungen' },
     { titel: 'Doppelte Loyalität', ansatz: 'Systemisch', beschreibung: 'Loyalitätskonflikte zwischen Herkunfts- und Pflegefamilie sichtbar machen und bearbeiten.', indikation: 'Ambivalenz zwischen zwei Familien', dauer: '30–40 Min' },
+  ],
+
+  // ── Emotionen ──────────────────────────────────────────────
+  'emotionserkennung': [
+    { titel: 'Gefühls-Barometer', ansatz: 'Emotionsfokussiert', beschreibung: 'Jugendlicher markiert auf einem Thermometer täglich seine Stimmung und benennt den Auslöser.', indikation: 'Schwierigkeiten beim Benennen von Gefühlen', dauer: '10–15 Min' },
+    { titel: 'Körper-Scan', ansatz: 'Körpertherapeutisch', beschreibung: 'Wo im Körper spüre ich welches Gefühl? Körperumriss zeichnen und Gefühle einzeichnen.', indikation: 'Dissoziation, mangelndes Körpergefühl', dauer: '20 Min' },
+    { titel: 'Gefühlskarten-Sortierung', ansatz: 'Psychoedukativ', beschreibung: 'Gefühlskarten sortieren: welche kenne ich, welche fühle ich oft, welche kaum?', indikation: 'Eingeschränktes emotionales Vokabular', dauer: '15 Min' },
+  ],
+  'emotionsregulation': [
+    { titel: '5-4-3-2-1 Grounding', ansatz: 'Achtsamkeit', beschreibung: '5 Dinge sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken – Rückkehr in den Moment.', indikation: 'Überwältigung, Dissoziation, Flashbacks', dauer: '5–10 Min' },
+    { titel: 'Notfallkoffer basteln', ansatz: 'DBT', beschreibung: 'Gemeinsam einen symbolischen Koffer mit persönlichen Regulationsstrategien befüllen.', indikation: 'Fehlende Bewältigungsstrategien', dauer: '25 Min' },
+    { titel: 'Ampel-Modell', ansatz: 'Kognitiv-behavioral', beschreibung: 'Grün = ruhig, Gelb = angespannt, Rot = Krise. Signale und Strategien für jede Phase erarbeiten.', indikation: 'Impulsivität, Eskalationsmuster', dauer: '20 Min' },
+  ],
+  'wut-aggression': [
+    { titel: 'Wut-Tagebuch', ansatz: 'Kognitiv-behavioral', beschreibung: 'Auslöser, Gedanken, Körpergefühle und Reaktionen bei Wutepisoden festhalten.', indikation: 'Häufige Wutausbrüche, Fremdaggression', dauer: '10 Min täglich' },
+    { titel: 'Wut-Thermometer', ansatz: 'Psychoedukativ', beschreibung: 'Skala von 1–10: Was passiert in mir bei Stufe 3, 6, 9? Frühwarnsignale erkennen.', indikation: 'Mangelnde Selbstwahrnehmung bei Wut', dauer: '15 Min' },
+    { titel: 'Alternative Ventile', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Liste mit körperlichen Alternativen zur Wutentladung (Sport, Zerreißen, Schreien im Auto).', indikation: 'Destruktive Wutentladung', dauer: '15 Min' },
+  ],
+  'stress-angst': [
+    { titel: 'Stressoren-Karte', ansatz: 'Kognitiv-behavioral', beschreibung: 'Alle Stressquellen aufschreiben und in beeinflussbar / nicht beeinflussbar einteilen.', indikation: 'Generalisierter Stress, Überforderung', dauer: '20 Min' },
+    { titel: 'Atemübung 4-7-8', ansatz: 'Physiologisch', beschreibung: '4 Sek einatmen, 7 Sek halten, 8 Sek ausatmen. Aktiviert den Parasympathikus.', indikation: 'Akute Angst, Panikattacken', dauer: '5 Min' },
+    { titel: 'Sorgenzeit einführen', ansatz: 'Kognitiv-behavioral', beschreibung: '10 Min täglich bewusst für Sorgen einplanen – außerhalb dieser Zeit Gedanken verschieben.', indikation: 'Grübeln, Gedankenkarussell', dauer: '10 Min täglich' },
+  ],
+  'selbstwertgefuehl': [
+    { titel: 'Stärken-Inventar', ansatz: 'Positive Psychologie', beschreibung: '10 persönliche Stärken aufschreiben – mit Beispielen aus dem Alltag belegen.', indikation: 'Negatives Selbstbild, Selbstkritik', dauer: '20 Min' },
+    { titel: 'Innerer Kritiker vs. Innerer Coach', ansatz: 'Schematherapie', beschreibung: 'Typische Selbstkritik aufschreiben und in eine wohlwollende Coach-Stimme umformulieren.', indikation: 'Perfektionismus, harte Selbstkritik', dauer: '20 Min' },
+    { titel: 'Erfolgs-Tagebuch', ansatz: 'Kognitiv-behavioral', beschreibung: 'Täglich 3 kleine Erfolge notieren – unabhängig von Leistung.', indikation: 'Niedriges Selbstwertgefühl, Hoffnungslosigkeit', dauer: '5 Min täglich' },
+  ],
+  'depressive-stimmungen': [
+    { titel: 'Aktivitätsplanung', ansatz: 'Verhaltensaktivierung', beschreibung: 'Angenehme Aktivitäten planen und im Stimmungs-Tagebuch mit Wohlbefinden verknüpfen.', indikation: 'Rückzug, Antriebslosigkeit', dauer: '20 Min' },
+    { titel: 'Gedankenprotokoll', ansatz: 'Kognitiv-behavioral', beschreibung: 'Negative automatische Gedanken identifizieren und realistische Alternativen erarbeiten.', indikation: 'Negative Denkmuster, Hoffnungslosigkeit', dauer: '20–30 Min' },
+  ],
+  'trauer-verlust': [
+    { titel: 'Erinnerungsbox', ansatz: 'Trauertherapie', beschreibung: 'Eine symbolische Box befüllen mit Dingen, Fotos oder Texten, die an die verlorene Person erinnern.', indikation: 'Trauer nach Verlust, Abschied', dauer: '30 Min' },
+    { titel: 'Brief an die verstorbene Person', ansatz: 'Narrativ', beschreibung: 'Ungesagte Dinge in einem Brief ausdrücken – was ich noch sagen wollte.', indikation: 'Komplizierte Trauer, Schuldgefühle', dauer: '20 Min' },
+    { titel: 'Trauerphasen-Psychoedukation', ansatz: 'Psychoedukativ', beschreibung: 'Trauerphasen nach Kübler-Ross erklären und einordnen, wo man sich gerade befindet.', indikation: 'Normalisierungsbedarf, Verstehen der eigenen Reaktion', dauer: '15 Min' },
+  ],
+  'freude-wohlbefinden': [
+    { titel: 'Freuden-Inventar', ansatz: 'Positive Psychologie', beschreibung: 'Liste von 20 Dingen, die Freude machen – groß und klein. Wie oft kommen sie vor?', indikation: 'Freudlosigkeit, Anhedonie', dauer: '15 Min' },
+    { titel: 'Flow-Erlebnisse finden', ansatz: 'Positive Psychologie', beschreibung: 'Wann verliere ich das Zeitgefühl? Flow-Momente identifizieren und gezielt einplanen.', indikation: 'Fehlende Motivation, Langeweile', dauer: '20 Min' },
   ],
 };
 

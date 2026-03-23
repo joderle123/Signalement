@@ -539,12 +539,21 @@ body {
   overflow: hidden;
 }
 
+.profil-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
 .profil-header::after {
   content: '';
   position: absolute;
-  top: -40px; right: -40px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(78,128,204,0.25) 0%, transparent 70%);
+  top: -60px; right: -60px;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(78,128,204,0.3) 0%, transparent 68%);
   pointer-events: none;
 }
 
@@ -773,6 +782,70 @@ body {
 
 .status-btn:hover { background: var(--bg); border-color: #C8D3DD; }
 .status-btn.active { color: white; border-color: transparent; }
+
+/* ============================================================
+   SEGMENTED CONTROL
+   ============================================================ */
+.segmented-control {
+  display: inline-flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.seg-btn {
+  padding: 5px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text-light);
+  background: transparent;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.seg-btn:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+
+.seg-btn.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+}
+
+/* ============================================================
+   SITZUNGSPROTOKOLL FORMULAR
+   ============================================================ */
+.protokoll-titel {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--primary);
+}
+
+.protokoll-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.protokoll-felder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.protokoll-footer {
+  display: flex;
+  justify-content: flex-end;
+}
 
 /* ============================================================
    NOTIZEN

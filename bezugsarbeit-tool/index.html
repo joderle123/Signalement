@@ -102,7 +102,8 @@
 
     <!-- Tabs -->
     <div class="profil-tabs">
-      <div class="profil-tab active" data-tab="themen" onclick="showProfilTab('themen')">📋 Themenübersicht</div>
+      <div class="profil-tab active" data-tab="dashboard" onclick="showProfilTab('dashboard')">🏠 Übersicht</div>
+      <div class="profil-tab" data-tab="themen" onclick="showProfilTab('themen')">📋 Themenübersicht</div>
       <div class="profil-tab" data-tab="notizen" onclick="showProfilTab('notizen')">💬 Notizen & Sitzungen</div>
       <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
       <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Infos</div>
@@ -111,8 +112,69 @@
     <!-- Tab-Inhalte -->
     <div class="content" style="flex:1;overflow-y:auto;">
 
+      <!-- DASHBOARD -->
+      <div class="profil-tab-content active" data-tab="dashboard">
+        <div class="dashboard-grid">
+
+          <!-- Mini-Kalender -->
+          <div class="card dashboard-card-kalender">
+            <div class="card-header">
+              <span>📅</span>
+              <div class="card-title">Kalender</div>
+              <div class="dash-kal-nav">
+                <button class="btn-icon" onclick="navigateDashKalender(-1)">‹</button>
+                <span id="dash-kalender-monat" class="dash-kal-monat"></span>
+                <button class="btn-icon" onclick="navigateDashKalender(1)">›</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="dash-kalender-grid"></div>
+              <div id="dash-kalender-notiz-form" class="dash-kal-form" style="display:none;">
+                <div class="dash-kal-form-datum" id="dash-kal-form-datum"></div>
+                <textarea id="dash-kalender-notiz-text" placeholder="Notiz für diesen Tag..."></textarea>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                  <button class="btn btn-primary btn-sm" onclick="saveDashKalenderNotiz()">Speichern</button>
+                  <button class="btn btn-secondary btn-sm" onclick="closeDashKalenderNotiz()">Abbrechen</button>
+                </div>
+              </div>
+              <div id="dash-kalender-notizen-liste"></div>
+            </div>
+          </div>
+
+          <!-- To-Do -->
+          <div class="card dashboard-card-todo">
+            <div class="card-header">
+              <span>✅</span>
+              <div class="card-title">To-Do</div>
+            </div>
+            <div class="card-body">
+              <div id="dash-todo-liste"></div>
+              <div class="todo-add-row">
+                <input type="text" id="dash-todo-input" placeholder="Neue Aufgabe..."
+                  onkeydown="if(event.key==='Enter') addDashTodo()">
+                <button class="btn btn-primary btn-sm" onclick="addDashTodo()">+</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end dashboard-grid -->
+
+        <!-- Notizbuch (OneNote-Stil) -->
+        <div class="card dashboard-notizbuch">
+          <div class="card-header">
+            <span>📓</span>
+            <div class="card-title">Notizbuch</div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div class="notizbuch-tabs" id="notizbuch-tabs"></div>
+            <div class="notizbuch-inhalt" id="notizbuch-inhalt"></div>
+          </div>
+        </div>
+
+      </div><!-- end dashboard tab -->
+
       <!-- THEMEN -->
-      <div class="profil-tab-content active" data-tab="themen">
+      <div class="profil-tab-content" data-tab="themen">
         <div id="themen-container"></div>
       </div>
 

@@ -110,6 +110,7 @@
       <div class="profil-tab" data-tab="notizen" onclick="showProfilTab('notizen')">💬 Notizen & Sitzungen</div>
       <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
       <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Infos</div>
+      <div class="profil-tab" id="profil-tab-screening" onclick="showView('screening', APP.currentSchuelerId)">🔍 Screening</div>
     </div>
 
     <!-- Tab-Inhalte -->
@@ -358,12 +359,179 @@
     </div>
   </div>
 
+  <!-- ---- SCREENING VIEW ---- -->
+  <div class="view" id="view-screening">
+    <div class="topbar">
+      <div class="topbar-title" id="screening-topbar-titel">Screening</div>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary btn-sm" onclick="showView('profil', APP.currentSchuelerId)">← Zurück zum Profil</button>
+      </div>
+    </div>
+
+    <!-- Screening-Alarm Banner (hidden by default) -->
+    <div id="screening-alert-banner" class="screening-alert-banner" style="display:none;">
+      <span class="screening-alert-icon">🚨</span>
+      <div>
+        <strong>Wichtiger Sicherheitshinweis</strong> – Antworten deuten auf akute Selbstverletzung oder Suizidgedanken hin.
+        Bitte direkt ansprechen und ggf. Krisenprotokoll einleiten.
+      </div>
+      <button onclick="document.getElementById('screening-alert-banner').style.display='none'">✕</button>
+    </div>
+
+    <div class="content">
+
+      <!-- Screening-Liste (wenn kein aktives Screening) -->
+      <div id="screening-liste-container">
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header">
+            <span>🔍</span>
+            <div class="card-title">Screenings</div>
+            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="neuesScreeningStarten()">+ Neues Screening</button>
+          </div>
+          <div class="card-body">
+            <div id="screening-historie"></div>
+          </div>
+        </div>
+        <div class="screening-disclaimer">
+          <strong>⚠️ Hinweis:</strong> Dieses Screening-Tool ist kein diagnostisches Instrument und ersetzt keine klinische Diagnose.
+          Es liefert <em>Hinweise auf mögliche Belastungsbereiche</em> für den pädagogischen Kontext.
+          Für klinische Diagnosen ist eine psychiatrische Fachkraft zuständig.
+        </div>
+      </div>
+
+      <!-- Aktives Screening Formular -->
+      <div id="screening-formular-container" style="display:none;">
+
+        <!-- Progress Bar -->
+        <div class="screening-progress-wrap">
+          <div class="screening-progress-info">
+            <span id="scr-domain-label">Domain</span>
+            <span id="scr-step-info">Schritt 1 / 18</span>
+          </div>
+          <div class="screening-progress-bar">
+            <div class="screening-progress-fill" id="scr-progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Fragebogen Karte -->
+        <div class="card screening-frage-card">
+          <div class="card-header" id="scr-domain-header">
+            <span id="scr-domain-icon">🔍</span>
+            <div>
+              <div class="card-title" id="scr-domain-name"></div>
+              <div class="card-subtitle" id="scr-domain-icd"></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="screening-skala-legende">
+              <span class="skala-0">0 = Nie / gar nicht</span>
+              <span class="skala-1">1 = Selten / manchmal</span>
+              <span class="skala-2">2 = Oft</span>
+              <span class="skala-3">3 = Fast immer / sehr stark</span>
+            </div>
+            <div id="scr-items-liste"></div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="screening-nav-buttons">
+          <button class="btn btn-secondary" id="scr-btn-zurueck" onclick="screeningZurueck()">← Zurück</button>
+          <button class="btn btn-primary" id="scr-btn-weiter" onclick="screeningWeiter()">Weiter →</button>
+        </div>
+      </div>
+
+      <!-- Screening Ergebnis (3 Tabs) -->
+      <div id="screening-ergebnis-container" style="display:none;">
+
+        <!-- Ergebnis-Tabs -->
+        <div class="profil-tabs" id="screening-ergebnis-tabs" style="margin-bottom:0;">
+          <div class="profil-tab active" data-scrtab="risikoprofil" onclick="showScrTab('risikoprofil')">📊 Risikoprofil</div>
+          <div class="profil-tab" data-scrtab="empfehlungen" onclick="showScrTab('empfehlungen')">📋 Empfehlungen</div>
+          <div class="profil-tab" data-scrtab="verlauf" onclick="showScrTab('verlauf')">📈 Verlauf</div>
+        </div>
+
+        <!-- TAB: Risikoprofil -->
+        <div class="screening-ergebnis-tab active" data-scrtab="risikoprofil">
+
+          <!-- Severity Badge + Meta -->
+          <div class="scr-meta-row">
+            <div id="scr-severity-badge" class="scr-severity-badge"></div>
+            <div id="scr-datum-info" class="scr-datum-info"></div>
+            <div style="margin-left:auto;display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="screeningBearbeiten()">✏️ Bearbeiten</button>
+              <button class="btn btn-danger btn-sm" onclick="screeningLoeschen()">🗑 Löschen</button>
+            </div>
+          </div>
+
+          <!-- Comorbidity Patterns -->
+          <div id="scr-komorbiditat-patterns" style="margin-bottom:16px;"></div>
+
+          <!-- Bar Chart -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <span>📊</span>
+              <div class="card-title">Belastungsprofil</div>
+            </div>
+            <div class="card-body">
+              <div style="position:relative;height:320px;">
+                <canvas id="scr-chart-profil"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flagged Areas Detail -->
+          <div id="scr-flagged-areas"></div>
+
+          <!-- Clinical Notes -->
+          <div class="card" style="margin-top:16px;">
+            <div class="card-header"><span>📝</span><div class="card-title">Klinische Notizen</div></div>
+            <div class="card-body">
+              <textarea id="scr-clinical-notes" class="notiz-textarea" rows="3"
+                placeholder="Beobachtungen, Kontext, Auffälligkeiten..." oninput="saveScrNotes()"></textarea>
+              <div style="display:flex;gap:12px;margin-top:8px;align-items:center;">
+                <label style="font-size:13px;font-weight:500;">Follow-up Datum:</label>
+                <input type="date" id="scr-followup-date" onchange="saveScrNotes()" style="width:160px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Empfehlungen -->
+        <div class="screening-ergebnis-tab" data-scrtab="empfehlungen">
+          <div class="scr-disclaimer" style="margin-bottom:16px;">
+            Die folgenden Empfehlungen basieren auf den Screening-Ergebnissen und sind als Arbeitshilfe gedacht.
+          </div>
+          <div id="scr-empfehlungen-liste"></div>
+        </div>
+
+        <!-- TAB: Verlauf -->
+        <div class="screening-ergebnis-tab" data-scrtab="verlauf">
+          <div class="card">
+            <div class="card-header"><span>📈</span><div class="card-title">Screening-Verlauf (T1 / T2 / T3)</div></div>
+            <div class="card-body">
+              <div id="scr-verlauf-selector" style="margin-bottom:16px;"></div>
+              <div style="position:relative;height:300px;">
+                <canvas id="scr-chart-verlauf"></canvas>
+              </div>
+              <div id="scr-verlauf-leer" style="display:none;text-align:center;color:#888;padding:40px;">
+                Noch kein Verlauf vorhanden. Führe mindestens zwei Screenings durch.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end ergebnis container -->
+
+    </div><!-- end content -->
+  </div><!-- end screening view -->
+
 </main>
 
 <!-- Toast Container -->
 <div id="toast-container"></div>
 
 <!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 

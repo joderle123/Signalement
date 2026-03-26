@@ -11,6 +11,11 @@ const APP = {
   dashKalenderDatum: new Date(),
   dashKalenderSelectedTag: null,
   notizbuchAktivSektion: 0,
+  currentScreeningId: null,
+  screeningStep: 0,
+  screeningAntworten: {},
+  scrProfilChart: null,
+  scrVerlaufChart: null,
 };
 
 // ---- Init ----
@@ -41,6 +46,11 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-kalender').classList.add('active');
     document.getElementById('nav-kalender').classList.add('active');
     renderKalender();
+  } else if (view === 'screening' && schuelerId) {
+    APP.currentSchuelerId = schuelerId;
+    document.getElementById('view-screening').classList.add('active');
+    updateSidebarActive(schuelerId);
+    renderScreening(schuelerId);
   }
 }
 
@@ -62,19 +72,26 @@ function renderSidebar() {
     return;
   }
 
-  liste.innerHTML = schueler.map(s => `
-    <div class="schueler-item" data-id="${s.id}" onclick="showView('profil','${s.id}')">
+  liste.innerHTML = schueler.map(s => {
+    const screenings = DB.getScreenings(s.id);
+    const urgent = screenings.some(scr => scr.severity === 'urgent');
+    const latestScr = screenings.filter(scr => scr.abgeschlossen).sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+    const scrDot = urgent ? '<span class="scr-urgent-dot" title="Dringendes Screening">!</span>' : '';
+    return `<div class="schueler-item" data-id="${s.id}" onclick="showView('profil','${s.id}')">
       <div class="schueler-avatar">${s.foto
         ? `<img src="${s.foto}" alt="">`
         : getInitials(s.vorname, s.nachname)}
       </div>
       <div class="schueler-item-info">
-        <div class="schueler-item-name">${s.vorname} ${s.nachname}</div>
+        <div class="schueler-item-name">${s.vorname} ${s.nachname}${scrDot}</div>
         <div class="schueler-item-meta">${s.klasse || '—'} · ${alter(s.geburtsdatum)}</div>
       </div>
-      <div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div>
-    </div>
-  `).join('');
+      <div style="display:flex;align-items:center;gap:4px;">
+        ${latestScr ? `<button class="btn-scr-mini" title="Screening öffnen" onclick="event.stopPropagation();showView('screening','${s.id}')">🔍</button>` : ''}
+        <div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ============================================================
@@ -317,24 +334,67 @@ function openThemaPanel(katId, themaId) {
 }
 
 function renderArbeitsblaetter(themaId) {
-  const blaetter = ARBEITSBLÄTTER[themaId];
-  if (!blaetter || blaetter.length === 0) return '';
+  const blaetter = ARBEITSBLÄTTER[themaId] || [];
+  const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
+  const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
+
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0) return '';
+
   return `
     <div style="margin-bottom:20px;">
-      <label style="display:block;margin-bottom:8px;">📄 Arbeitsblätter</label>
-      <div style="display:flex;flex-direction:column;gap:6px;">
-        ${blaetter.map(b => `
+      <div class="panel-tabs" id="panel-tabs-${themaId}">
+        <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">📋 Blätter</button>
+        <button class="panel-tab" onclick="switchPanelTab('${themaId}','akt')">🎯 Aktivitäten</button>
+        <button class="panel-tab" onclick="switchPanelTab('${themaId}','int')">🧠 Interventionen</button>
+      </div>
+
+      <div id="pt-ab-${themaId}" class="panel-tab-content">
+        ${blaetter.length === 0
+          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Kein Arbeitsblatt verfügbar</p>'
+          : blaetter.map(b => `
           <a href="arbeitsblatter/${b.datei}" target="_blank"
-             style="display:flex;align-items:center;gap:10px;padding:9px 12px;
+             style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;
                     background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;
-                    text-decoration:none;color:#0369A1;font-size:12px;font-weight:600;
-                    transition:background 0.15s;">
+                    text-decoration:none;color:#0369A1;font-size:12px;font-weight:600;">
             <span style="font-size:16px;">📋</span>
             <span style="flex:1;">${b.titel}</span>
             <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
           </a>`).join('')}
       </div>
+
+      <div id="pt-akt-${themaId}" class="panel-tab-content" style="display:none;">
+        ${aktivitaeten.length === 0
+          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Aktivitäten hinterlegt</p>'
+          : aktivitaeten.map(a => `
+          <div style="padding:10px 12px;margin-bottom:8px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;">
+            <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:4px;">🎯 ${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
+            <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
+          </div>`).join('')}
+      </div>
+
+      <div id="pt-int-${themaId}" class="panel-tab-content" style="display:none;">
+        ${interventionen.length === 0
+          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Interventionen hinterlegt</p>'
+          : interventionen.map(i => `
+          <div style="padding:10px 12px;margin-bottom:8px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
+            <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">🧠 ${i.titel}</div>
+            <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+            <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
+            <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
+          </div>`).join('')}
+      </div>
     </div>`;
+}
+
+function switchPanelTab(themaId, tab) {
+  ['ab','akt','int'].forEach(t => {
+    const el = document.getElementById(`pt-${t}-${themaId}`);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+  const tabs = document.getElementById(`panel-tabs-${themaId}`);
+  if (tabs) tabs.querySelectorAll('.panel-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', ['ab','akt','int'][i] === tab);
+  });
 }
 
 function getStatusFarbe(key) {
@@ -1421,4 +1481,487 @@ function deleteNotizbuchNotiz(notizId, sektionIndex) {
   sek.notizen = sek.notizen.filter(n => n.id !== notizId);
   DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
   renderNotizbuch();
+}
+
+// ============================================================
+// SCREENING MODULE
+// ============================================================
+
+function renderScreening(schuelerId) {
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) return;
+
+  document.getElementById('screening-topbar-titel').textContent =
+    `Screening – ${s.vorname} ${s.nachname}`;
+  document.getElementById('screening-alert-banner').style.display = 'none';
+
+  // Reset to list view
+  scrShowContainer('liste');
+  APP.currentScreeningId = null;
+
+  renderScreeningHistorie(schuelerId);
+}
+
+function renderScreeningHistorie(schuelerId) {
+  const screenings = DB.getScreenings(schuelerId).sort(
+    (a, b) => new Date(b.datum) - new Date(a.datum)
+  );
+  const el = document.getElementById('screening-historie');
+  if (!screenings.length) {
+    el.innerHTML = '<div style="color:#888;padding:20px;text-align:center;">Noch kein Screening vorhanden. Klicke auf "+ Neues Screening".</div>';
+    return;
+  }
+  el.innerHTML = screenings.map((scr, i) => {
+    const sev = scr.severity || 'low';
+    const sevBadge = severityBadgeHtml(sev);
+    const datum = new Date(scr.datum).toLocaleDateString('de-DE');
+    const flagged = (scr.flaggedAreas || []).length;
+    const label = `T${screenings.length - i}`;
+    return `<div class="scr-historie-item" onclick="screeningOeffnen('${scr.id}')">
+      <div class="scr-historie-label">${label}</div>
+      <div class="scr-historie-datum">${datum}</div>
+      <div style="flex:1;">${flagged} auffällige Bereiche</div>
+      ${sevBadge}
+      ${!scr.abgeschlossen ? '<span class="scr-badge-entwurf">Entwurf</span>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function neuesScreeningStarten() {
+  APP.screeningStep = 0;
+  APP.screeningAntworten = {};
+  APP.currentScreeningId = null;
+  scrShowContainer('formular');
+  renderScreeningSchritt(0);
+}
+
+function screeningOeffnen(screeningId) {
+  const scr = DB.getScreenings().find(s => s.id === screeningId);
+  if (!scr) return;
+  APP.currentScreeningId = screeningId;
+
+  if (!scr.abgeschlossen) {
+    // Reopen for editing
+    APP.screeningAntworten = { ...scr.antworten };
+    APP.screeningStep = 0;
+    scrShowContainer('formular');
+    renderScreeningSchritt(0);
+  } else {
+    scrShowContainer('ergebnis');
+    renderScreeningErgebnis(scr);
+  }
+}
+
+function renderScreeningSchritt(step) {
+  const domain = SCREENING_DOMAINS[step];
+  const total = SCREENING_DOMAINS.length;
+  const pct = Math.round((step / total) * 100);
+
+  document.getElementById('scr-domain-label').textContent = domain.label;
+  document.getElementById('scr-step-info').textContent = `Schritt ${step + 1} / ${total}`;
+  document.getElementById('scr-progress-fill').style.width = pct + '%';
+  document.getElementById('scr-domain-icon').textContent = domain.icon;
+  document.getElementById('scr-domain-name').textContent = domain.label;
+  document.getElementById('scr-domain-icd').textContent = domain.icd ? `ICD-10: ${domain.icd}` : 'Risikofaktor / Schutzfaktor';
+
+  const liste = document.getElementById('scr-items-liste');
+  liste.innerHTML = domain.items.map((item, idx) => {
+    const key = `${domain.id}_${idx}`;
+    const gespeichert = APP.screeningAntworten[key];
+    return `<div class="scr-item-row">
+      <div class="scr-item-text">${item}</div>
+      <div class="scr-skala-buttons">
+        ${[0,1,2,3].map(v => `<button
+          class="scr-skala-btn ${gespeichert === v ? 'selected' : ''}"
+          data-key="${key}" data-val="${v}"
+          onclick="scrWaehlen('${key}', ${v}, this)">${v}</button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Back button
+  document.getElementById('scr-btn-zurueck').style.display = step === 0 ? 'none' : '';
+  document.getElementById('scr-btn-weiter').textContent =
+    step === total - 1 ? '✅ Auswerten' : 'Weiter →';
+}
+
+function scrWaehlen(key, val, btn) {
+  APP.screeningAntworten[key] = val;
+  // Update button states in this row
+  const row = btn.closest('.scr-skala-buttons');
+  row.querySelectorAll('.scr-skala-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.dataset.val) === val);
+  });
+  // Check alert items (self-harm domain)
+  const domain = SCREENING_DOMAINS.find(d => d.alertItems && key.startsWith(d.id + '_'));
+  if (domain) {
+    const itemIdx = parseInt(key.split('_').pop());
+    if (domain.alertItems.includes(itemIdx) && val > 1) {
+      document.getElementById('screening-alert-banner').style.display = 'flex';
+    }
+  }
+}
+
+function screeningWeiter() {
+  const step = APP.screeningStep;
+  const domain = SCREENING_DOMAINS[step];
+
+  // Check all items answered
+  const unanswered = domain.items.filter((_, idx) => {
+    const key = `${domain.id}_${idx}`;
+    return APP.screeningAntworten[key] === undefined;
+  });
+  if (unanswered.length > 0) {
+    showToast('Bitte alle Fragen beantworten', 'warning');
+    // Highlight unanswered
+    document.querySelectorAll('.scr-item-row').forEach((row, idx) => {
+      const key = `${domain.id}_${idx}`;
+      row.classList.toggle('scr-unanswered', APP.screeningAntworten[key] === undefined);
+    });
+    return;
+  }
+
+  if (step < SCREENING_DOMAINS.length - 1) {
+    APP.screeningStep = step + 1;
+    renderScreeningSchritt(APP.screeningStep);
+  } else {
+    // Auswerten
+    screeningAuswerten();
+  }
+}
+
+function screeningZurueck() {
+  if (APP.screeningStep > 0) {
+    APP.screeningStep--;
+    renderScreeningSchritt(APP.screeningStep);
+  }
+}
+
+function screeningAuswerten() {
+  const antworten = APP.screeningAntworten;
+
+  // Scores per domain
+  const scores = {};
+  SCREENING_DOMAINS.forEach(domain => {
+    const summe = domain.items.reduce((acc, _, idx) => {
+      const key = `${domain.id}_${idx}`;
+      return acc + (antworten[key] || 0);
+    }, 0);
+    scores[domain.id] = summe;
+  });
+
+  // Flagged areas (above cutoff)
+  const flaggedAreas = SCREENING_DOMAINS
+    .filter(d => !d.invertiert && scores[d.id] >= d.cutoff && d.cutoff > 0)
+    .map(d => d.id);
+
+  // Comorbidity patterns
+  const comorbidityPattern = KOMORBIDITÄT_MUSTER
+    .filter(m => m.bedingung(flaggedAreas))
+    .map(m => m.id);
+
+  // Severity
+  let severity = 'low';
+  const selfharmDomain = SCREENING_DOMAINS.find(d => d.id === 'selbstverletzung');
+  const selfharmScore = scores['selbstverletzung'] || 0;
+  const psychoseScore = scores['psychose'] || 0;
+
+  if (selfharmScore >= 4 || psychoseScore >= 2) severity = 'urgent';
+  else if (flaggedAreas.length >= 5 || comorbidityPattern.includes('krisenindikator')) severity = 'high';
+  else if (flaggedAreas.length >= 3) severity = 'medium';
+  else severity = 'low';
+
+  // Worksheet recommendations
+  const worksheetScores = {};
+  SCREENING_DOMAINS.forEach(domain => {
+    if (!domain.invertiert) {
+      const score = scores[domain.id];
+      (domain.worksheets || []).forEach(ws => {
+        if (!worksheetScores[ws]) worksheetScores[ws] = 0;
+        worksheetScores[ws] += score;
+      });
+    }
+  });
+  const worksheetRecommendations = Object.entries(worksheetScores)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([datei, score]) => ({ datei, score }));
+
+  // Save
+  let scr;
+  if (APP.currentScreeningId) {
+    scr = DB.getScreenings().find(s => s.id === APP.currentScreeningId);
+    scr = { ...scr, antworten, scores, flaggedAreas, comorbidityPattern, worksheetRecommendations, severity, abgeschlossen: true, geaendert: new Date().toISOString() };
+  } else {
+    scr = DB.createScreening(APP.currentSchuelerId);
+    scr = { ...scr, antworten, scores, flaggedAreas, comorbidityPattern, worksheetRecommendations, severity, abgeschlossen: true };
+  }
+  DB.saveScreening(scr);
+  APP.currentScreeningId = scr.id;
+
+  scrShowContainer('ergebnis');
+  renderScreeningErgebnis(scr);
+  renderSidebar(); // Update urgent indicator
+  showToast('Screening ausgewertet', 'success');
+}
+
+function renderScreeningErgebnis(scr) {
+  // Meta row
+  document.getElementById('scr-severity-badge').innerHTML = severityBadgeHtml(scr.severity, true);
+  document.getElementById('scr-datum-info').textContent =
+    'Screening vom ' + new Date(scr.datum).toLocaleDateString('de-DE');
+
+  // Comorbidity patterns
+  const muster = KOMORBIDITÄT_MUSTER.filter(m => (scr.comorbidityPattern || []).includes(m.id));
+  const musterEl = document.getElementById('scr-komorbiditat-patterns');
+  if (muster.length) {
+    musterEl.innerHTML = '<div class="scr-muster-row">' + muster.map(m =>
+      `<div class="scr-muster-chip" style="background:${m.farbe}20;border:1.5px solid ${m.farbe};color:${m.farbe};">
+        <strong>${m.label}</strong> – ${m.beschreibung}
+      </div>`).join('') + '</div>';
+  } else {
+    musterEl.innerHTML = '';
+  }
+
+  // Flagged areas
+  const flagged = scr.flaggedAreas || [];
+  const flaggedEl = document.getElementById('scr-flagged-areas');
+  if (flagged.length) {
+    const flaggedDomains = SCREENING_DOMAINS.filter(d => flagged.includes(d.id));
+    flaggedEl.innerHTML = '<div class="scr-flagged-grid">' + flaggedDomains.map(d => {
+      const score = scr.scores[d.id] || 0;
+      const max = d.items.length * 3;
+      const pct = Math.round((score / max) * 100);
+      return `<div class="scr-flagged-chip" style="border-left:4px solid ${d.farbe};">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-weight:600;font-size:13px;">${d.icon} ${d.label}</span>
+          <span style="font-size:12px;color:${d.farbe};font-weight:700;">${score}/${max}</span>
+        </div>
+        <div class="scr-mini-bar"><div class="scr-mini-bar-fill" style="width:${pct}%;background:${d.farbe};"></div></div>
+        ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:4px;">ICD-10: ${d.icd}</div>` : ''}
+      </div>`;
+    }).join('') + '</div>';
+  } else {
+    flaggedEl.innerHTML = '<div style="color:#22c55e;padding:12px;font-weight:500;">✅ Keine Bereiche über dem Cutoff-Wert.</div>';
+  }
+
+  // Notes
+  document.getElementById('scr-clinical-notes').value = scr.clinicalNotes || '';
+  document.getElementById('scr-followup-date').value = scr.followUpDate || '';
+
+  // Chart
+  renderScrProfilChart(scr);
+  renderScrEmpfehlungen(scr);
+  renderScrVerlauf(scr.schuelerId);
+
+  // Tab reset
+  showScrTab('risikoprofil');
+}
+
+function renderScrProfilChart(scr) {
+  const ctx = document.getElementById('scr-chart-profil');
+  if (!ctx) return;
+
+  if (APP.scrProfilChart) {
+    APP.scrProfilChart.destroy();
+    APP.scrProfilChart = null;
+  }
+
+  const domains = SCREENING_DOMAINS.filter(d => !d.invertiert);
+  const labels = domains.map(d => d.label);
+  const data = domains.map(d => scr.scores[d.id] || 0);
+  const maxScores = domains.map(d => d.items.length * 3);
+  const cutoffs = domains.map(d => d.cutoff);
+  const colors = domains.map(d => {
+    const score = scr.scores[d.id] || 0;
+    return score >= d.cutoff && d.cutoff > 0 ? d.farbe : d.farbe + '80';
+  });
+
+  APP.scrProfilChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Score',
+          data,
+          backgroundColor: colors,
+          borderColor: domains.map(d => d.farbe),
+          borderWidth: 1.5,
+          borderRadius: 4,
+        },
+        {
+          label: 'Cutoff',
+          data: cutoffs,
+          type: 'line',
+          borderColor: '#EF4444',
+          borderDash: [4, 4],
+          borderWidth: 1.5,
+          pointRadius: 0,
+          fill: false,
+          tension: 0,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            afterLabel: (ctx) => {
+              if (ctx.datasetIndex === 0) {
+                const d = domains[ctx.dataIndex];
+                return `Max: ${d.items.length * 3} · Cutoff: ${d.cutoff}`;
+              }
+            },
+          },
+        },
+      },
+      scales: {
+        x: { ticks: { font: { size: 10 }, maxRotation: 45 } },
+        y: { beginAtZero: true, ticks: { stepSize: 1 } },
+      },
+    },
+  });
+}
+
+function renderScrEmpfehlungen(scr) {
+  const el = document.getElementById('scr-empfehlungen-liste');
+  const recs = scr.worksheetRecommendations || [];
+
+  if (!recs.length) {
+    el.innerHTML = '<div style="color:#888;padding:20px;text-align:center;">Keine Empfehlungen verfügbar.</div>';
+    return;
+  }
+
+  el.innerHTML = recs.map((rec, i) => {
+    const domain = SCREENING_DOMAINS.find(d => (d.worksheets || []).includes(rec.datei));
+    const icon = domain ? domain.icon : '📋';
+    const farbe = domain ? domain.farbe : '#3B6CB7';
+    // Find worksheet title from ARBEITSBLÄTTER
+    const key = rec.datei.replace('.html', '');
+    const titel = (ARBEITSBLÄTTER[key] && ARBEITSBLÄTTER[key][0]) ?
+      ARBEITSBLÄTTER[key][0].titel : rec.datei;
+
+    return `<div class="scr-empfehlung-card" style="border-left:4px solid ${farbe};">
+      <div class="scr-empf-rank">${i + 1}</div>
+      <div class="scr-empf-info">
+        <div class="scr-empf-titel">${icon} ${titel}</div>
+        <div class="scr-empf-meta">Relevanz-Score: ${rec.score}</div>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="arbeitsblatter/${rec.datei}" target="_blank">📄 Öffnen</a>
+    </div>`;
+  }).join('');
+}
+
+function renderScrVerlauf(schuelerId) {
+  const screenings = DB.getScreenings(schuelerId)
+    .filter(s => s.abgeschlossen)
+    .sort((a, b) => new Date(a.datum) - new Date(b.datum));
+
+  const verlaufEl = document.getElementById('scr-verlauf-leer');
+  const canvas = document.getElementById('scr-chart-verlauf');
+
+  if (screenings.length < 2) {
+    if (verlaufEl) verlaufEl.style.display = 'block';
+    if (canvas) canvas.style.display = 'none';
+    return;
+  }
+
+  if (verlaufEl) verlaufEl.style.display = 'none';
+  if (canvas) canvas.style.display = 'block';
+
+  if (APP.scrVerlaufChart) {
+    APP.scrVerlaufChart.destroy();
+    APP.scrVerlaufChart = null;
+  }
+
+  const labels = screenings.map((s, i) => `T${i + 1} (${new Date(s.datum).toLocaleDateString('de-DE')})`);
+  const flaggedDomains = SCREENING_DOMAINS.filter(d => {
+    return screenings.some(s => (s.flaggedAreas || []).includes(d.id));
+  }).slice(0, 6); // Max 6 lines for readability
+
+  const datasets = flaggedDomains.map(d => ({
+    label: d.label,
+    data: screenings.map(s => s.scores[d.id] || 0),
+    borderColor: d.farbe,
+    backgroundColor: d.farbe + '20',
+    tension: 0.3,
+    fill: false,
+    pointRadius: 4,
+  }));
+
+  APP.scrVerlaufChart = new Chart(canvas, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } },
+      scales: { y: { beginAtZero: true } },
+    },
+  });
+}
+
+function showScrTab(tab) {
+  document.querySelectorAll('#screening-ergebnis-tabs .profil-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.scrtab === tab);
+  });
+  document.querySelectorAll('.screening-ergebnis-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.scrtab === tab);
+  });
+  if (tab === 'verlauf') {
+    renderScrVerlauf(APP.currentSchuelerId);
+  }
+}
+
+function saveScrNotes() {
+  if (!APP.currentScreeningId) return;
+  const scr = DB.getScreenings().find(s => s.id === APP.currentScreeningId);
+  if (!scr) return;
+  scr.clinicalNotes = document.getElementById('scr-clinical-notes').value;
+  scr.followUpDate = document.getElementById('scr-followup-date').value;
+  scr.geaendert = new Date().toISOString();
+  DB.saveScreening(scr);
+}
+
+function screeningBearbeiten() {
+  if (!APP.currentScreeningId) return;
+  const scr = DB.getScreenings().find(s => s.id === APP.currentScreeningId);
+  if (!scr) return;
+  APP.screeningAntworten = { ...scr.antworten };
+  APP.screeningStep = 0;
+  scrShowContainer('formular');
+  renderScreeningSchritt(0);
+}
+
+function screeningLoeschen() {
+  if (!APP.currentScreeningId) return;
+  if (!confirm('Screening wirklich löschen?')) return;
+  DB.deleteScreening(APP.currentScreeningId);
+  APP.currentScreeningId = null;
+  scrShowContainer('liste');
+  renderScreeningHistorie(APP.currentSchuelerId);
+  renderSidebar();
+  showToast('Screening gelöscht', 'success');
+}
+
+function scrShowContainer(which) {
+  document.getElementById('screening-liste-container').style.display = which === 'liste' ? '' : 'none';
+  document.getElementById('screening-formular-container').style.display = which === 'formular' ? '' : 'none';
+  document.getElementById('screening-ergebnis-container').style.display = which === 'ergebnis' ? '' : 'none';
+}
+
+function severityBadgeHtml(severity, large = false) {
+  const map = {
+    low:    { label: 'Unauffällig', bg: '#DCFCE7', color: '#166534' },
+    medium: { label: 'Erhöhter Bedarf', bg: '#FEF9C3', color: '#854D0E' },
+    high:   { label: 'Hoher Bedarf', bg: '#FEE2E2', color: '#991B1B' },
+    urgent: { label: '🚨 Dringend', bg: '#7F1D1D', color: '#FEF2F2' },
+  };
+  const s = map[severity] || map.low;
+  const sz = large ? 'font-size:13px;padding:6px 14px;' : 'font-size:11px;padding:3px 10px;';
+  return `<span class="scr-severity" style="background:${s.bg};color:${s.color};${sz}border-radius:20px;font-weight:600;">${s.label}</span>`;
 }

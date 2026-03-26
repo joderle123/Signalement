@@ -40,7 +40,7 @@ body {
   min-height: 297mm;
   background: white;
   margin: 0 auto 32px;
-  padding: 0 17mm 24mm;       /* links/rechts normal, oben 0 – Banner übernimmt */
+  padding: 14mm 17mm 24mm;    /* top 14mm: für Seiten ohne Banner; Banner bricht mit neg. margin heraus */
   box-shadow: var(--shadow-page);
   border-radius: 12px;
   page-break-after: always;
@@ -56,7 +56,8 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  /* Banner bricht aus dem Seiten-Padding heraus */
+  /* Banner bricht aus dem gesamten Seiten-Padding heraus → volle Breite + bis zum Rand oben */
+  margin-top: -14mm;
   margin-left: -17mm;
   margin-right: -17mm;
   padding: 18px 17mm 16px;
@@ -548,25 +549,109 @@ hr.trennlinie {
    DRUCK-MODUS
    ============================================================ */
 @media print {
-  body { background: white; padding: 0; }
-  .druck-leiste { display: none; }
+  /* ── Seitenformat ─────────────────────────────── */
+  @page {
+    size: A4;
+    margin: 0;          /* Ränder komplett über .seite padding */
+  }
+
+  /* ── Alle Farben & Hintergründe drucken ────────── */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background: white;
+    padding: 0;
+    margin: 0;
+    font-size: 11px;    /* leicht kleiner für besseres Fit */
+  }
+
+  /* ── Druckleiste ausblenden ─────────────────────── */
+  .druck-leiste { display: none !important; }
+
+  /* ── Seite = exakt 1 DIN-A4-Blatt ──────────────── */
   .seite {
-    width: 100%;
+    width: 210mm;
+    height: 297mm;
+    min-height: unset;
     box-shadow: none;
     border-radius: 0;
     margin: 0;
-    padding: 0 17mm 18mm;
-    overflow: visible;
+    padding: 14mm 17mm 20mm;   /* top 14mm wie im Screen-Layout */
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    position: relative;
   }
+
+  /* Letzte Seite braucht keinen Umbruch */
+  .seite:last-of-type {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* ── Kopfzeile Banner (Gradient erhalten) ────────── */
   .kopfzeile {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    margin-top: -14mm;          /* passt zu seite padding-top */
     margin-left: -17mm;
     margin-right: -17mm;
     padding-left: 17mm;
     padding-right: 17mm;
+    background: linear-gradient(135deg, var(--farbe) 0%, color-mix(in srgb, var(--farbe) 72%, #0F172A) 100%) !important;
   }
-  .uebung { box-shadow: none; background: white; }
-  .reflexion, .fachhinweis { box-shadow: none; }
-  table { box-shadow: none; }
+
+  /* ── Übungsblöcke: Hintergründe erhalten ────────── */
+  .uebung {
+    box-shadow: none;
+    background: #F8FAFC !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* ── Infobox, Reflexion, Fachhinweis ─────────────── */
+  .infobox {
+    background: var(--farbe-hell) !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .reflexion {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%) !important;
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .fachhinweis {
+    background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%) !important;
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* ── Tabellen nicht zerreißen ───────────────────── */
+  table {
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* ── Schülerinfo Hintergrund erhalten ───────────── */
+  .schuelerinfo {
+    background: var(--farbe-hell) !important;
+  }
+
+  /* ── Fußzeile immer unten ───────────────────────── */
+  .fusszeile {
+    position: absolute;
+    bottom: 8mm;
+    left: 17mm;
+    right: 17mm;
+  }
+
+  /* ── Links nicht unterstrichen im Druck ─────────── */
+  a { text-decoration: none; color: inherit; }
 }

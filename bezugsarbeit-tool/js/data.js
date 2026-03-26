@@ -595,6 +595,329 @@ const TERMIN_TYPEN = {
 };
 
 // ============================================================
+// Screening – Domänen & Items (ICD-10 orientiert)
+// Skala: 0 = nie/gar nicht, 1 = selten/manchmal, 2 = oft, 3 = fast immer/sehr stark
+// ============================================================
+const SCREENING_DOMAINS = [
+  {
+    id: 'depression',
+    label: 'Depressive Stimmung',
+    icd: 'F32/F33',
+    farbe: '#5B6ABF',
+    icon: '😔',
+    cutoff: 6,
+    items: [
+      'Fühlt sich die meiste Zeit traurig oder leer',
+      'Hat kaum Freude oder Interesse an Dingen, die früher Spaß gemacht haben',
+      'Fühlt sich wertlos oder macht sich übermäßig Vorwürfe',
+      'Hat Konzentrationsschwierigkeiten oder Entscheidungsprobleme',
+      'Zieht sich von Freunden und Familie zurück',
+    ],
+    worksheets: ['depressive-stimmungen', 'selbstwertgefuehl', 'resilienz-staerken'],
+  },
+  {
+    id: 'angst-generalisiert',
+    label: 'Generalisierte Angst',
+    icd: 'F41.1',
+    farbe: '#E8A838',
+    icon: '😰',
+    cutoff: 5,
+    items: [
+      'Sorgt sich übermäßig und unkontrollierbar um viele Dinge',
+      'Fühlt sich angespannt, nervös oder innerlich unruhig',
+      'Hat körperliche Anzeichen (Zittern, Schwitzen, Herzklopfen)',
+      'Schläft schlecht wegen Sorgen',
+    ],
+    worksheets: ['stress-angst', 'emotionsregulation'],
+  },
+  {
+    id: 'angst-sozial',
+    label: 'Soziale Angst',
+    icd: 'F40.1',
+    farbe: '#E07B39',
+    icon: '😶',
+    cutoff: 5,
+    items: [
+      'Vermeidet soziale Situationen (Klasse, Gruppenarbeit, Mensa)',
+      'Fürchtet, bewertet oder ausgelacht zu werden',
+      'Errötet, zittert oder schwitzt stark in sozialen Situationen',
+      'Spricht kaum in der Gruppe, obwohl er/sie etwas zu sagen hätte',
+    ],
+    worksheets: ['stress-angst', 'kommunikation-grenzen', 'selbstwertgefuehl'],
+  },
+  {
+    id: 'trauma',
+    label: 'Trauma / Belastungsreaktion',
+    icd: 'F43',
+    farbe: '#9C4E77',
+    icon: '⚡',
+    cutoff: 4,
+    items: [
+      'Erlebt Flashbacks oder aufdringliche Erinnerungen an belastende Ereignisse',
+      'Vermeidet Orte, Menschen oder Situationen, die an das Ereignis erinnern',
+      'Zeigt übermäßige Schreckreaktionen oder ist hypervigilant',
+      'Hat Schlafprobleme oder Alpträume in Zusammenhang mit dem Ereignis',
+    ],
+    worksheets: ['krisenplan', 'stress-angst', 'resilienz-staerken'],
+  },
+  {
+    id: 'adhs',
+    label: 'ADHS / Aufmerksamkeit',
+    icd: 'F90',
+    farbe: '#3DA8A8',
+    icon: '⚡',
+    cutoff: 7,
+    items: [
+      'Hat große Schwierigkeiten, die Aufmerksamkeit aufrechtzuerhalten',
+      'Vergisst Aufgaben, verliert Gegenstände, ist unorganisiert',
+      'Handelt impulsiv, ohne nachzudenken',
+      'Ist motorisch unruhig, kann schlecht stillsitzen',
+      'Wechselt häufig Aktivitäten, ohne eine zu beenden',
+    ],
+    worksheets: ['lernstrategien-schule', 'motivation', 'stress-angst'],
+  },
+  {
+    id: 'conduct',
+    label: 'Verhaltensauffälligkeiten',
+    icd: 'F91',
+    farbe: '#C0392B',
+    icon: '🔥',
+    cutoff: 5,
+    items: [
+      'Zeigt aggressives Verhalten gegenüber Personen oder Tieren',
+      'Verstößt wiederholt gegen Regeln (Schule, Heimregeln)',
+      'Lügt, stiehlt oder täuscht andere',
+      'Zerstört absichtlich Eigentum anderer',
+    ],
+    worksheets: ['wut-aggression', 'kommunikation-grenzen', 'mobbing-cybermobbing'],
+  },
+  {
+    id: 'selbstverletzung',
+    label: 'Selbstverletzung / Suizidalität',
+    icd: 'F43.2/F33.8',
+    farbe: '#7B2D2D',
+    icon: '⚠️',
+    cutoff: 2,
+    items: [
+      'Verletzt sich absichtlich (Schneiden, Kratzen, Verbrennen)',
+      'Hat Gedanken daran, sich selbst zu verletzen',
+      'Hat Gedanken, nicht mehr leben zu wollen',
+      'Hat konkrete Pläne, sich das Leben zu nehmen',
+    ],
+    worksheets: ['krisenplan', 'selbstverletzung', 'depressive-stimmungen'],
+    alertItems: [2, 3], // 0-indexed — bei Score > 1 → Alarmbanner
+  },
+  {
+    id: 'essstoerung',
+    label: 'Essstörung / Körperbild',
+    icd: 'F50',
+    farbe: '#8E5EA2',
+    icon: '🍽️',
+    cutoff: 5,
+    items: [
+      'Hat ein sehr negatives Körperbild oder fühlt sich zu dick/dünn',
+      'Isst extrem wenig oder verweigert Mahlzeiten',
+      'Isst unkontrolliert große Mengen (Essanfälle)',
+      'Kompensiert durch Erbrechen, Abführmittel oder übermäßigen Sport',
+    ],
+    worksheets: ['selbstwertgefuehl', 'stress-angst', 'emotionserkennung'],
+  },
+  {
+    id: 'substanz',
+    label: 'Substanzkonsum',
+    icd: 'F10-F19',
+    farbe: '#556B2F',
+    icon: '🚬',
+    cutoff: 5,
+    items: [
+      'Konsumiert regelmäßig Alkohol (mehr als 1x/Woche)',
+      'Konsumiert Cannabis oder andere Drogen',
+      'Benutzt Substanzen, um negative Gefühle zu regulieren',
+      'Hat Schwierigkeiten, den Konsum zu kontrollieren oder zu reduzieren',
+    ],
+    worksheets: ['konsum-cannabis', 'konsum-alkohol', 'stress-angst'],
+  },
+  {
+    id: 'schlaf',
+    label: 'Schlafstörungen',
+    icd: 'G47/F51',
+    farbe: '#2C5F7A',
+    icon: '🌙',
+    cutoff: 5,
+    items: [
+      'Hat anhaltende Ein- oder Durchschlafprobleme',
+      'Schläft am Tag sehr viel (mehr als 10h) oder ist tagsüber sehr müde',
+      'Hat einen stark verschobenen Schlaf-Wach-Rhythmus',
+      'Die Schlafprobleme beeinträchtigen Schule und Alltag erheblich',
+    ],
+    worksheets: ['schlaf-gesundheit', 'stress-angst'],
+  },
+  {
+    id: 'psychose',
+    label: 'Psychose-Hinweise',
+    icd: 'F20-F29',
+    farbe: '#4A2D6B',
+    icon: '🔮',
+    cutoff: 2,
+    items: [
+      'Berichtet über Stimmen oder Wahrnehmungen ohne äußere Ursache',
+      'Hat ungewöhnliche oder bizarre Überzeugungen (Verfolgung, besondere Mission)',
+      'Zeigt deutlich veränderte oder flache Emotionen',
+    ],
+    worksheets: ['krisenplan'],
+  },
+  {
+    id: 'autismus',
+    label: 'Autismus-Spektrum',
+    icd: 'F84',
+    farbe: '#2A7D6E',
+    icon: '🧩',
+    cutoff: 6,
+    items: [
+      'Hat große Schwierigkeiten mit sozialer Kommunikation',
+      'Zeigt ungewöhnliche oder sehr eingeschränkte Interessen',
+      'Besteht auf strikten Routinen, reagiert stark auf Veränderungen',
+      'Hat sensorische Über- oder Unterempfindlichkeiten',
+    ],
+    worksheets: ['kommunikation-grenzen', 'emotionserkennung', 'stress-angst'],
+  },
+  {
+    id: 'trennungsangst',
+    label: 'Trennungsangst',
+    icd: 'F93.0',
+    farbe: '#C0834A',
+    icon: '🏠',
+    cutoff: 4,
+    items: [
+      'Hat übermäßige Angst, von Bezugspersonen getrennt zu werden',
+      'Weigert sich, alleine zu sein oder ohne Bezugspersonen zur Schule zu gehen',
+      'Hat körperliche Beschwerden (Bauchschmerzen, Kopfschmerzen) vor Trennungen',
+    ],
+    worksheets: ['stress-angst', 'familie', 'resilienz-staerken'],
+  },
+  {
+    id: 'mobbing',
+    label: 'Mobbing / Viktimisierung',
+    icd: null,
+    farbe: '#B05030',
+    icon: '👊',
+    cutoff: 4,
+    items: [
+      'Wird von Peers regelmäßig ausgegrenzt, gehänselt oder schikaniert',
+      'Erlebt Cybermobbing (Nachrichten, Bilder, Gruppen)',
+      'Hat Angst vor bestimmten Schüler/innen oder Situationen in der Schule',
+    ],
+    worksheets: ['mobbing-cybermobbing', 'kommunikation-grenzen', 'selbstwertgefuehl'],
+  },
+  {
+    id: 'familie',
+    label: 'Familiäre Belastungen',
+    icd: null,
+    farbe: '#6B4F30',
+    icon: '👨‍👩‍👦',
+    cutoff: 5,
+    items: [
+      'Erlebt oder erlebte häusliche Gewalt (direkt oder als Zeuge)',
+      'Hat einen Elternteil mit psychischer Erkrankung oder Suchtproblem',
+      'Lebt in sehr instabilen oder wechselnden Wohnverhältnissen',
+      'Hat keinen oder kaum Kontakt zu einem Elternteil',
+    ],
+    worksheets: ['familie', 'resilienz-staerken', 'krisenplan'],
+  },
+  {
+    id: 'diskriminierung',
+    label: 'Diskriminierung / Identität',
+    icd: null,
+    farbe: '#B03060',
+    icon: '⚖️',
+    cutoff: 4,
+    items: [
+      'Erlebt Diskriminierung aufgrund von Herkunft, Religion oder Aussehen',
+      'Hat Schwierigkeiten mit der eigenen kulturellen oder religiösen Identität',
+      'Fühlt sich in der Gesellschaft oder Schule nicht zugehörig',
+    ],
+    worksheets: ['diskriminierung', 'identitaet', 'selbstwertgefuehl'],
+  },
+  {
+    id: 'soziale-isolation',
+    label: 'Soziale Isolation',
+    icd: null,
+    farbe: '#445566',
+    icon: '🏝️',
+    cutoff: 4,
+    items: [
+      'Hat keine oder kaum Freundschaften',
+      'Verbringt die meiste Freizeit allein (ohne bewusste Wahl)',
+      'Fühlt sich einsam und unverstanden',
+      'Zieht sich aus sozialen Aktivitäten zurück',
+    ],
+    worksheets: ['freundschaft-konflikte', 'kommunikation-grenzen', 'selbstwertgefuehl'],
+  },
+  {
+    id: 'resilienz',
+    label: 'Schutzfaktoren / Resilienz',
+    icd: null,
+    farbe: '#2E7D32',
+    icon: '💪',
+    cutoff: 0,
+    invertiert: true, // Höherer Score = besser (Ressourcen)
+    items: [
+      'Hat mindestens eine stabile Vertrauensperson (Familie oder Peers)',
+      'Hat Hobbys oder Interessen, die ihm/ihr Freude machen',
+      'Kann über Probleme sprechen und Hilfe annehmen',
+      'Zeigt Durchhaltevermögen bei Schwierigkeiten',
+    ],
+    worksheets: ['resilienz-staerken', 'identitaet'],
+  },
+];
+
+// Komorbiditats-Muster-Erkennung
+const KOMORBIDITÄT_MUSTER = [
+  {
+    id: 'internalisierend',
+    label: 'Internalisierendes Muster',
+    beschreibung: 'Depression + Angst deutet auf internalisierendes Syndrom hin',
+    farbe: '#5B6ABF',
+    bedingung: (flags) => flags.includes('depression') && (flags.includes('angst-generalisiert') || flags.includes('angst-sozial')),
+  },
+  {
+    id: 'externalisierend',
+    label: 'Externalisierendes Muster',
+    beschreibung: 'ADHS + Verhaltensauffälligkeiten deutet auf externalisierendes Syndrom hin',
+    farbe: '#C0392B',
+    bedingung: (flags) => flags.includes('adhs') && flags.includes('conduct'),
+  },
+  {
+    id: 'krisenindikator',
+    label: 'Krisenindikator',
+    beschreibung: 'Depression + Selbstverletzung/Suizidalität — sofortige Begleitung erforderlich',
+    farbe: '#7B2D2D',
+    bedingung: (flags) => flags.includes('selbstverletzung') && flags.includes('depression'),
+  },
+  {
+    id: 'trauma-komplex',
+    label: 'Komplextrauma-Hinweis',
+    beschreibung: 'Trauma + familiäre Belastungen + Dissoziation/Psychose',
+    farbe: '#9C4E77',
+    bedingung: (flags) => flags.includes('trauma') && flags.includes('familie'),
+  },
+  {
+    id: 'sozial-rueckzug',
+    label: 'Sozialer Rückzug',
+    beschreibung: 'Soziale Angst + Isolation + Depression',
+    farbe: '#445566',
+    bedingung: (flags) => flags.includes('soziale-isolation') && (flags.includes('angst-sozial') || flags.includes('depression')),
+  },
+  {
+    id: 'substanz-selbstmedikation',
+    label: 'Selbstmedikation',
+    beschreibung: 'Substanzkonsum als Bewältigungsstrategie bei Angst/Depression',
+    farbe: '#556B2F',
+    bedingung: (flags) => flags.includes('substanz') && (flags.includes('depression') || flags.includes('angst-generalisiert') || flags.includes('trauma')),
+  },
+];
+
+// ============================================================
 // Datenverwaltung (localStorage)
 // ============================================================
 const DB = {
@@ -602,6 +925,7 @@ const DB = {
     SCHUELER: 'cdse_schueler',
     NOTIZEN: 'cdse_notizen',
     TERMINE: 'cdse_termine',
+    SCREENINGS: 'cdse_screenings',
   },
 
   generateId() {
@@ -707,5 +1031,48 @@ const DB = {
   deleteTermin(id) {
     const alle = this.getTermine().filter(t => t.id !== id);
     localStorage.setItem(this.KEYS.TERMINE, JSON.stringify(alle));
+  },
+
+  // Screenings
+  getScreenings(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.SCREENINGS) || '[]');
+    return schuelerId ? alle.filter(s => s.schuelerId === schuelerId) : alle;
+  },
+  saveScreening(data) {
+    const alle = this.getScreenings();
+    const idx = alle.findIndex(s => s.id === data.id);
+    if (idx >= 0) {
+      alle[idx] = data;
+    } else {
+      alle.push(data);
+    }
+    localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
+    return data;
+  },
+  createScreening(schuelerId) {
+    const neu = {
+      id: this.generateId(),
+      schuelerId,
+      datum: new Date().toISOString(),
+      antworten: {},          // { domainId_itemIdx: 0-3 }
+      scores: {},             // { domainId: number }
+      flaggedAreas: [],       // [domainId]
+      comorbidityPattern: [], // [string]
+      worksheetRecommendations: [], // [{ datei, titel, score }]
+      severity: 'low',        // 'low'|'medium'|'high'|'urgent'
+      clinicalNotes: '',
+      followUpDate: '',
+      abgeschlossen: false,
+      erstellt: new Date().toISOString(),
+      geaendert: new Date().toISOString(),
+    };
+    const alle = this.getScreenings();
+    alle.push(neu);
+    localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
+    return neu;
+  },
+  deleteScreening(id) {
+    const alle = this.getScreenings().filter(s => s.id !== id);
+    localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
   },
 };

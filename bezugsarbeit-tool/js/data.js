@@ -695,6 +695,128 @@ const THEMA_INTERVENTIONEN = {
     { titel: 'Erinnerungs-Ritual', ansatz: 'Trauertherapie', beschreibung: 'Ein persönliches Ritual entwickeln, um an die verlorene Person zu erinnern und Abschied zu nehmen.', indikation: 'Trauerbewältigung', dauer: '20 Min' },
     { titel: 'Phasen der Trauer', ansatz: 'Psychoedukativ', beschreibung: 'Trauerphasen kennenlernen (nicht als starre Reihenfolge!) und eigene Trauer einordnen.', indikation: 'Normalisierung von Trauerreaktionen', dauer: '20 Min' },
   ],
+
+  // ── ID-Aliase für korrektes Themen-Mapping ─────────────────
+  'sport-bewegung': [
+    { titel: 'Bewegungs-Check', ansatz: 'Ressourcenorientiert', beschreibung: 'Welche körperlichen Aktivitäten werden gerne gemacht? Wie oft? Barrieren und Lösungen benennen.', indikation: 'Bewegungsmangel, Depression', dauer: '15 Min' },
+    { titel: 'Mini-Bewegungsplan', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Einen realistischen Wochenplan mit kleinen Bewegungseinheiten erstellen und erste Schritte festlegen.', indikation: 'Antriebslosigkeit, Übergewicht', dauer: '15 Min' },
+  ],
+  'koerperbild': [
+    { titel: 'Körper-Dankbarkeit', ansatz: 'Positive Psychologie', beschreibung: 'Was leistet mein Körper jeden Tag? 10 Dinge aufschreiben, für die man dankbar ist.', indikation: 'Negatives Körperbild', dauer: '15 Min' },
+    { titel: 'Medien-Körperbild analysieren', ansatz: 'Medienkritik', beschreibung: 'Bilder aus Magazinen/Social Media analysieren: Welche Körperbilder werden verkauft? Wer profitiert?', indikation: 'Unrealistische Körperideale, Essstörungstendenzen', dauer: '20 Min' },
+    { titel: 'Selbstmitgefühl üben', ansatz: 'Achtsamkeit', beschreibung: 'Wie würde ich mit einer guten Freundin sprechen, die sich schlecht über ihren Körper fühlt? Dieselben Worte an sich selbst richten.', indikation: 'Starke Selbstkritik bzgl. Körper', dauer: '15 Min' },
+  ],
+  'suizidpraevention': [
+    { titel: 'Sicherheitsplan erstellen', ansatz: 'Krisenintervention', beschreibung: 'Gemeinsam einen schriftlichen Sicherheitsplan erarbeiten: Warnzeichen, Ablenkungen, Kontakte, Notfallnummern.', indikation: 'Suizidgedanken, Suizidalität', dauer: '30 Min' },
+    { titel: 'Gründe zum Leben', ansatz: 'Lösungsfokussiert', beschreibung: 'Dinge, Menschen und Momente sammeln, die Grund zum Weiterleben geben – auch kleine.', indikation: 'Hoffnungslosigkeit, passive Suizidalität', dauer: '20 Min' },
+    { titel: 'Krisentelefon-Karte', ansatz: 'Ressourcenorientiert', beschreibung: 'Karte mit Notfallnummern (Kanner-Jugendtelefon 116 111, SOS Détresse 454545) anfertigen und griffbereit aufbewahren.', indikation: 'Akute Krisenmomente ohne Begleitung', dauer: '10 Min' },
+  ],
+  'werte-moral': [
+    { titel: 'Werte-Karten sortieren', ansatz: 'Akzeptanz- und Commitmenttherapie', beschreibung: 'Aus einer Liste von 30 Werten die 5 wichtigsten auswählen und erklären warum.', indikation: 'Orientierungslosigkeit, Identitätsunsicherheit', dauer: '20 Min' },
+    { titel: 'Moralische Dilemmata besprechen', ansatz: 'Werteklärung', beschreibung: 'Anhand von Alltagsszenarien moralische Überzeugungen herausarbeiten und auf Konflikte mit dem Umfeld eingehen.', indikation: 'Wertekonflikt mit Familie/Peers', dauer: '25 Min' },
+    { titel: 'Leben nach meinen Werten', ansatz: 'Akzeptanz- und Commitmenttherapie', beschreibung: 'Wo gibt es Diskrepanz zwischen meinen Werten und meinem Handeln? Schritte zur Konsistenz erarbeiten.', indikation: 'Innere Leere, Sinnlosigkeit', dauer: '20 Min' },
+  ],
+  'lebenssinn': [
+    { titel: 'Sinnquellen erkunden', ansatz: 'Existenzielle Therapie', beschreibung: 'Was gibt meinem Leben Bedeutung? Beziehungen, Tätigkeit, Werte, Leid-Bewältigung – alle Dimensionen erkunden.', indikation: 'Sinnkrise, existenzielle Leere', dauer: '30 Min' },
+    { titel: 'Flow-Erlebnisse finden', ansatz: 'Positive Psychologie', beschreibung: 'Wann verliere ich das Zeitgefühl? Flow-Momente identifizieren und gezielt einplanen.', indikation: 'Fehlende Motivation, Anhedonie', dauer: '20 Min' },
+    { titel: 'Brief an die Zukunft', ansatz: 'Lösungsfokussiert', beschreibung: 'Brief von einem erfüllten Ich in 10 Jahren – was wurde anders, was ist wichtig geblieben?', indikation: 'Hoffnungslosigkeit, fehlendes Zukunftsbild', dauer: '25 Min' },
+  ],
+  'geschlechtsidentitaet': [
+    { titel: 'Psychoedukation Geschlechtsidentität', ansatz: 'Psychoedukativ', beschreibung: 'Erklärung von biologischem Geschlecht, Geschlechtsidentität, Ausdruck und sexueller Orientierung – ohne Wertung.', indikation: 'Verwirrung über Begriffe, erstes Nachdenken über Identität', dauer: '20 Min' },
+    { titel: 'Affirmatives Gespräch', ansatz: 'Affirmative Therapie', beschreibung: 'Raum schaffen für das Erzählen der eigenen Geschichte zur Identität – aktiv zuhören ohne Bewertung oder Ratschläge.', indikation: 'Coming-out-Prozess, Scham, Einsamkeit', dauer: '30 Min' },
+    { titel: 'Meine Geschichte', ansatz: 'Narrative Therapie', beschreibung: 'Die eigene Identitätsgeschichte in eigenen Worten erzählen oder aufschreiben – als Akt der Selbstbestimmung.', indikation: 'Identitätsfindung, Selbstakzeptanz', dauer: '30 Min' },
+  ],
+
+  // ── Fehlende Kategorien ergänzen ───────────────────────────
+  'soziales-netzwerk': [
+    { titel: 'Soziales Netzwerk kartieren', ansatz: 'Systemisch', beschreibung: 'Alle wichtigen Personen als Netz zeichnen – Nähe, Häufigkeit des Kontakts, Qualität der Unterstützung einschätzen.', indikation: 'Soziale Isolation, fehlende Ressourcen', dauer: '25 Min' },
+    { titel: 'Ressourcen-Interview', ansatz: 'Lösungsfokussiert', beschreibung: 'Strukturiertes Interview: Wer unterstützt wofür? Wo gibt es Lücken? Was könnte das Netz stärken?', indikation: 'Defizitfokus, Übersehen vorhandener Ressourcen', dauer: '20 Min' },
+    { titel: 'Netzwerk-Intervention planen', ansatz: 'Ressourcenorientiert', beschreibung: 'Eine konkrete Maßnahme zur Netzwerkstärkung identifizieren und die ersten Schritte gemeinsam planen.', indikation: 'Isolation, schwaches soziales Netz', dauer: '20 Min' },
+  ],
+  'schulkonflikt': [
+    { titel: 'Konflikt-Analyse', ansatz: 'Kognitiv-behavioral', beschreibung: 'Den Schulkonflikt systematisch analysieren: Auslöser, beteiligte Personen, Reaktionen, Eskalationsmuster.', indikation: 'Eskalierte Schulkonflikte, Ausschluss', dauer: '25 Min' },
+    { titel: 'Mediation vorbereiten', ansatz: 'Mediation', beschreibung: 'Klärung der eigenen Position, Bedürfnisse und Verhandlungsbereitschaft vor einem Gespräch mit Lehrern/Direktion.', indikation: 'Schwierige Lehrer-Schüler-Beziehung, Schulabbruchrisiko', dauer: '20 Min' },
+    { titel: 'De-Eskalationstechniken', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Konkrete Techniken für hitzige Schulsituationen: Pause nehmen, tief atmen, weg gehen, Vertrauensperson einschalten.', indikation: 'Impulsdurchbrüche in der Schule', dauer: '15 Min' },
+  ],
+  'mentale-gesundheit': [
+    { titel: 'Psychoedukation psychische Gesundheit', ansatz: 'Psychoedukativ', beschreibung: 'Was bedeutet psychische Gesundheit? Kontinuum zwischen gesund und krank, Entstigmatisierung, Schutzfaktoren.', indikation: 'Stigma, Unwissenheit über psychische Gesundheit', dauer: '20 Min' },
+    { titel: 'Ressourcen-Inventar', ansatz: 'Ressourcenorientiert', beschreibung: 'Alle vorhandenen Schutzfaktoren sichtbar machen: sozial, körperlich, emotional, kognitiv.', indikation: 'Defizitfokus, unerkannte Stärken', dauer: '20 Min' },
+    { titel: 'Hilfe suchen entstigmatisieren', ansatz: 'Psychoedukativ', beschreibung: 'Gemeinsam Hindernisse für Hilfsuche besprechen und konkrete nächste Schritte zur Unterstützung planen.', indikation: 'Widerstand gegen professionelle Hilfe', dauer: '20 Min' },
+  ],
+  'chronische-erkrankung': [
+    { titel: 'Akzeptanz-Arbeit', ansatz: 'Akzeptanz- und Commitmenttherapie', beschreibung: 'Raum schaffen für Trauer und Wut über die Erkrankung – Akzeptanz als aktiver Prozess, nicht Aufgabe.', indikation: 'Widerstand gegen Erkrankung, Nicht-Wahrhaben-Wollen', dauer: '25 Min' },
+    { titel: 'Selbstmanagement stärken', ansatz: 'Ressourcenorientiert', beschreibung: 'Was hat der Jugendliche bereits entwickelt, um mit der Erkrankung umzugehen? Kompetenzen sichtbar machen.', indikation: 'Hilflosigkeit, passives Krankheitskonzept', dauer: '20 Min' },
+    { titel: 'Schnittstelle Schule', ansatz: 'Systemisch', beschreibung: 'Welche Anpassungen in der Schule würden helfen? Wie kann die Bezugsperson zwischen Jugendlichem und Schule vermitteln?', indikation: 'Schulische Probleme durch chronische Erkrankung', dauer: '20 Min' },
+  ],
+  'transport': [
+    { titel: 'Mobilitäts-Kompetenzaufbau', ansatz: 'Kompetenzaufbau', beschreibung: 'Schrittweise Einführung in öffentliche Verkehrsmittel: gemeinsam Verbindungen suchen, Tickets kaufen, planen.', indikation: 'Abhängigkeit von anderen für Transport, Mobilitätsangst', dauer: '30 Min' },
+    { titel: 'Selbstständigkeit stärken', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Kleine Schritte zu mehr Selbstständigkeit: erst mit Begleitung, dann alleine – Erfolgserlebnisse aufbauen.', indikation: 'Trennungsangst, geringe Selbstständigkeit', dauer: '20 Min' },
+  ],
+  'haushalt': [
+    { titel: 'Haushaltskompetenzen aufbauen', ansatz: 'Kompetenzaufbau', beschreibung: 'Konkrete Haushaltstätigkeiten schrittweise einführen und üben – Kochen, Waschen, Einkaufen.', indikation: 'Mangelnde Alltagskompetenzen, Vorbereitung auf Selbstständigkeit', dauer: '30 Min' },
+    { titel: 'Zukunftsorientierte Planung', ansatz: 'Lösungsfokussiert', beschreibung: 'Wie sieht mein Leben in 2 Jahren aus? Welche Alltagskompetenzen brauche ich dafür?', indikation: 'Unklare Zukunftsperspektive, fehlende Eigenverantwortung', dauer: '20 Min' },
+  ],
+  'freizeit': [
+    { titel: 'Freizeitgestaltung optimieren', ansatz: 'Positive Psychologie', beschreibung: 'Bestehende Aktivitäten nach Flow, Genuss und Sinn bewerten und neue Aktivitäten gezielt einplanen.', indikation: 'Langeweile, Antriebslosigkeit, fehlende Interessen', dauer: '20 Min' },
+    { titel: 'Aktivitätsplanung', ansatz: 'Verhaltensaktivierung', beschreibung: 'Angenehme Freizeitaktivitäten konkret in den Wochenplan einbauen – Datum, Zeit, Ort festlegen.', indikation: 'Rückzug, depressive Stimmung', dauer: '20 Min' },
+  ],
+  'ehrenamt': [
+    { titel: 'Sinn und Identität', ansatz: 'Positive Psychologie', beschreibung: 'Wie kann Ehrenamt zu Sinnerleben und Identitätsbildung beitragen? Eigene Werte mit möglichem Engagement verknüpfen.', indikation: 'Sinnkrise, Identitätsunsicherheit', dauer: '20 Min' },
+    { titel: 'Stärken einsetzen', ansatz: 'Lösungsfokussiert', beschreibung: 'Welche Stärken könnte der Jugendliche in ein Ehrenamt einbringen? Passende Einsatzfelder finden.', indikation: 'Geringe Selbstwirksamkeit, unerkannte Stärken', dauer: '20 Min' },
+  ],
+  'jugendrecht': [
+    { titel: 'Psychoedukation Jugendrecht', ansatz: 'Psychoedukativ', beschreibung: 'Grundlegende Rechte Minderjähriger in Luxemburg erklären (UN-Kinderrechtskonvention, Code de la jeunesse).', indikation: 'Rechtsunsicherheit, Schutz vor Ausbeutung', dauer: '20 Min' },
+    { titel: 'Empowerment durch Rechtswissen', ansatz: 'Empowerment', beschreibung: 'Rechtliche Handlungsmöglichkeiten bei Rechtsverletzungen kennenlernen – wen kontaktieren, was tun.', indikation: 'Ohnmacht, Missachtung von Rechten', dauer: '20 Min' },
+  ],
+  'jugendschutz': [
+    { titel: 'Schutzrechte verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Wer ist verpflichtet Jugendliche zu schützen? Meldepflichten, Behörden, Schutzmaßnahmen erklären.', indikation: 'Gefährdungssituationen, Schutzarbeit', dauer: '20 Min' },
+    { titel: 'Sicherheitsplanung', ansatz: 'Ressourcenorientiert', beschreibung: 'Konkreten Schutzplan erstellen: Vertrauenspersonen, Notfallkontakte, sichere Orte.', indikation: 'Häusliche Gewalt, Vernachlässigung, Gefährdung', dauer: '25 Min' },
+  ],
+  'soziale-dienste': [
+    { titel: 'Hilfesystem Luxemburg', ansatz: 'Psychoedukativ', beschreibung: 'Überblick über Beratungsstellen, Krisendienste und soziale Einrichtungen in Luxemburg vermitteln.', indikation: 'Unkenntnis des Hilfesystems, Isolation', dauer: '20 Min' },
+    { titel: 'Brücke zu Hilfsangeboten', ansatz: 'Ressourcenorientiert', beschreibung: 'Hindernisse für Inanspruchnahme von Hilfe besprechen. Begleitung zum ersten Kontakt anbieten.', indikation: 'Schwellenangst, fehlende Unterstützung', dauer: '20 Min' },
+  ],
+  'polizei-justiz': [
+    { titel: 'Psychoedukation Jugendstrafrecht', ansatz: 'Psychoedukativ', beschreibung: 'Luxemburger Jugendstrafrecht erklären: Tribunal de la jeunesse, Erziehungsmaßnahmen vs. Strafe.', indikation: 'Delinquenz, Kontakt mit Strafverfolgung', dauer: '25 Min' },
+    { titel: 'Konsequenzen realistisch einschätzen', ansatz: 'Kognitiv-behavioral', beschreibung: 'Risiken und Folgen von Straftaten realistisch durchdenken – ohne zu moralisieren, aber klar benennen.', indikation: 'Verharmlosung von Delinquenz, Impulshandlungen', dauer: '20 Min' },
+  ],
+  'buergerrechte': [
+    { titel: 'Demokratische Teilhabe', ansatz: 'Psychoedukativ', beschreibung: 'Möglichkeiten der demokratischen Teilhabe für Jugendliche in Luxemburg vorstellen – Jugendparlament, Petitionen, Wahlen.', indikation: 'Politische Apathie, Ohnmachtsgefühl', dauer: '20 Min' },
+    { titel: 'Bürgerrechte und Pflichten', ansatz: 'Empowerment', beschreibung: 'Grundrechte und Pflichten als Bürger/in besprechen. Was schützt mich, was wird von mir erwartet?', indikation: 'Unkenntnis über Rechte, fehlende Eigenverantwortung', dauer: '20 Min' },
+  ],
+  'diskriminierung': [
+    { titel: 'Diskriminierungserfahrungen anerkennen', ansatz: 'Narrative Therapie', beschreibung: 'Raum für Erfahrungen mit Diskriminierung schaffen – zuhören, validieren, benennen ohne zu bagatellisieren.', indikation: 'Erfahrungen mit Rassismus, Ausgrenzung, Stigmatisierung', dauer: '25 Min' },
+    { titel: 'Empowerment und Gegenstrategien', ansatz: 'Empowerment', beschreibung: 'Welche Handlungsmöglichkeiten gibt es bei Diskriminierung? Rechtswege, Anlaufstellen (CET), eigene Stärken.', indikation: 'Ohnmacht, Hilflosigkeit bei Diskriminierung', dauer: '20 Min' },
+    { titel: 'Identitätsstärkung', ansatz: 'Ressourcenorientiert', beschreibung: 'Kulturelle oder andere marginalisierte Identitäten als Ressource und Stärke neu verankern.', indikation: 'Negative Selbstwahrnehmung durch Diskriminierung', dauer: '25 Min' },
+  ],
+  'spiritualitaet': [
+    { titel: 'Sinnquellen erkunden', ansatz: 'Existenzielle Therapie', beschreibung: 'Welche spirituellen, religiösen oder weltanschaulichen Überzeugungen tragen den Jugendlichen? Ohne Wertung erkunden.', indikation: 'Sinnkrise, existenzielle Fragen', dauer: '25 Min' },
+    { titel: 'Rituale als Ressource', ansatz: 'Ressourcenorientiert', beschreibung: 'Welche Rituale (religiös, kulturell, persönlich) geben Halt und Orientierung? Bewusst einsetzen.', indikation: 'Mangel an Stabilität und Struktur', dauer: '20 Min' },
+  ],
+  'zugehoerigkeit': [
+    { titel: 'Zugehörigkeitsanalyse', ansatz: 'Systemisch', beschreibung: 'In welchen Gruppen fühlt sich der Jugendliche zugehörig? Was erzeugt das Gefühl der Zugehörigkeit? Was fehlt?', indikation: 'Außenseiter-Erleben, soziale Isolation', dauer: '20 Min' },
+    { titel: 'Gemeinschaft aufbauen', ansatz: 'Ressourcenorientiert', beschreibung: 'Konkrete Schritte erarbeiten, um Zugehörigkeit zu einer gewünschten Gemeinschaft zu erleben.', indikation: 'Einsamkeit, fehlendes Zugehörigkeitsgefühl', dauer: '20 Min' },
+  ],
+  'krisenintervention': [
+    { titel: 'Krisenentspannung', ansatz: 'Stabilisierung', beschreibung: 'In der akuten Krise: Grounding, Atemtechniken, sicherer Ort – Rückkehr zur Handlungsfähigkeit.', indikation: 'Akute Krise, Überwältigung', dauer: '15 Min' },
+    { titel: 'Sicherheitsplan gemeinsam erstellen', ansatz: 'Krisenintervention', beschreibung: 'Schriftlichen Sicherheitsplan erarbeiten: Frühwarnsignale, Strategien, Kontakte, Notfallnummern.', indikation: 'Suizidalität, selbstgefährdendes Verhalten', dauer: '25 Min' },
+    { titel: 'Nächste Schritte planen', ansatz: 'Lösungsfokussiert', beschreibung: 'Nach Stabilisierung: Was sind die nächsten kleinen Schritte? Welche Unterstützung ist notwendig?', indikation: 'Nach akuter Krise, Destabilisierung', dauer: '20 Min' },
+  ],
+  'gewalt': [
+    { titel: 'Gewalt benennen und validieren', ansatz: 'Traumatherapie', beschreibung: 'Erfahrungen von Gewalt benennen ohne Bagatellisierung. Validierung, Entlastung von Schuldgefühlen.', indikation: 'Häusliche Gewalt, Missbrauch, sexuelle Übergriffe', dauer: '25 Min' },
+    { titel: 'Sicherheitsplan erstellen', ansatz: 'Empowerment', beschreibung: 'Gemeinsam einen Plan entwickeln: Warnzeichen, sichere Orte, Vertrauenspersonen, Notfallkontakte in Luxemburg.', indikation: 'Anhaltende Gewaltsituation', dauer: '25 Min' },
+    { titel: 'Ressourcen und Stärken aktivieren', ansatz: 'Ressourcenorientiert', beschreibung: 'Welche Stärken hat der Jugendliche entwickelt, um mit Gewalt umzugehen? Diese sichtbar machen und stärken.', indikation: 'Erfahrungen mit Gewalt, Traumafolgen', dauer: '20 Min' },
+  ],
+  'resilienz': [
+    { titel: 'Resilienzfaktoren sichtbar machen', ansatz: 'Positive Psychologie', beschreibung: 'Die 7 Säulen der Resilienz (Optimismus, Akzeptanz, Lösungsorientierung, Netzwerk, Verantwortung, Zukunftsorientierung, Selbstfürsorge) anwenden.', indikation: 'Geringe Widerstandsfähigkeit, Rückschläge', dauer: '25 Min' },
+    { titel: 'Überlebensstärken', ansatz: 'Narrative Therapie', beschreibung: 'Wie hat der Jugendliche bisher schwierige Situationen überwunden? Diese Stärken benennen und als Ressource verankern.', indikation: 'Negatives Selbstbild, Übersehen eigener Stärken', dauer: '20 Min' },
+    { titel: 'Resilienz-Strategie einüben', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Eine konkrete Strategie auswählen und in den Alltag integrieren (z.B. tägliche Dankbarkeitsübung, Bewegung, soziale Kontakte).', indikation: 'Fehlende Resilienzstrategien', dauer: '20 Min' },
+  ],
+  'trennungsangst': [
+    { titel: 'Bindungsstil erkunden', ansatz: 'Bindungstheorie', beschreibung: 'Den eigenen Bindungsstil verstehen (sicher/unsicher-vermeidend/unsicher-ängstlich) und auf aktuelle Beziehungen anwenden.', indikation: 'Verlassensangst, Klammern, extreme Eifersucht', dauer: '25 Min' },
+    { titel: 'Innere Sicherheit aufbauen', ansatz: 'Ressourcenorientiert', beschreibung: 'Imaginationsübung: Was gibt mir Sicherheit unabhängig von anderen Menschen? Innere Ressourcen verankern.', indikation: 'Starke Trennungsangst, Verlassenheitsangst', dauer: '20 Min' },
+    { titel: 'Grounding bei Trennungsangst', ansatz: 'Kognitiv-behavioral', beschreibung: 'In akuten Angstsituationen: 5-4-3-2-1-Grounding anwenden. Automatische Katastrophengedanken identifizieren und hinterfragen.', indikation: 'Panikattacken bei Trennungen, Überflutung', dauer: '15 Min' },
+  ],
 };
 
 const THEMEN_KATEGORIEN = [

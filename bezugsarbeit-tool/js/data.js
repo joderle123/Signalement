@@ -251,6 +251,104 @@ const THEMA_AKTIVITÄTEN = {
     { titel: 'Was betäube ich?', beschreibung: 'Welche Gefühle oder Situationen soll der Konsum betäuben? Ehrlich aufschreiben.', dauer: '20 Min' },
     { titel: 'Meine Ressourcen aufbauen', beschreibung: 'Was gibt mir Kraft ohne Substanzen? Liste mit 10 echten Alternativen erstellen.', dauer: '15 Min' },
   ],
+
+  // ── Schule & Zukunft ───────────────────────────────────────
+  'schulisches-engagement': [
+    { titel: 'Mein Schulalltag unter der Lupe', beschreibung: 'Was läuft gut, was schlecht? Stunden, Pausen, Lernzeiten analysieren und einen Punkt verbessern.', dauer: '20 Min' },
+    { titel: '2-Wochen-Ziele setzen', beschreibung: 'Drei konkrete, erreichbare Ziele für die nächsten zwei Wochen in der Schule formulieren.', dauer: '15 Min' },
+  ],
+  'lernstrategien': [
+    { titel: 'Mein Lerntyp', beschreibung: 'Bin ich eher visuell, auditiv oder kinästhetisch? Lerntyp bestimmen und passende Strategien ableiten.', dauer: '20 Min' },
+    { titel: 'Realistischer Lernplan', beschreibung: 'Gemeinsam einen Wochenplan mit Lernzeiten, Pausen und Freizeit erstellen.', dauer: '20 Min' },
+    { titel: 'Pomodoro ausprobieren', beschreibung: '25 Min konzentriert lernen, 5 Min Pause. Technik erklären und einmal direkt ausprobieren.', dauer: '15 Min' },
+  ],
+  'schulkonflikt': [
+    { titel: 'Konflikt analysieren', beschreibung: 'Was passierte genau? Wer war beteiligt, wie habe ich reagiert, was hätte geholfen?', dauer: '20 Min' },
+    { titel: 'Meine Rechte und Pflichten', beschreibung: 'Was sind meine Rechte in der Schule? Was sind meine Pflichten? Wo liegt die Grenze?', dauer: '15 Min' },
+    { titel: 'De-Eskalation planen', beschreibung: 'Beim nächsten Konflikt: Was tue ich in den ersten 60 Sekunden um nicht zu eskalieren?', dauer: '10 Min' },
+  ],
+  'berufsorientierung': [
+    { titel: 'Interessen-Profil', beschreibung: 'Was mache ich gerne, was kann ich gut, was ist der Welt nützlich? Schnittmengen finden.', dauer: '25 Min' },
+    { titel: '3 Berufsfelder erkunden', beschreibung: 'Drei Berufsfelder recherchieren die zu den Interessen passen – Vor- und Nachteile notieren.', dauer: '25 Min' },
+  ],
+  'zukunftsplanung': [
+    { titel: 'Brief aus der Zukunft', beschreibung: 'Schreibe einen Brief von deinem 30-jährigen Ich an dich heute – was hast du erreicht?', dauer: '20 Min' },
+    { titel: 'Vision Board', beschreibung: 'Bilder, Wörter und Symbole für die Zukunft sammeln und auf ein Blatt Papier anordnen.', dauer: '30 Min' },
+    { titel: '3 Lebensziele', beschreibung: 'Schreibe 3 Dinge auf, die du in 10 Jahren erreicht haben möchtest – und je einen ersten Schritt.', dauer: '15 Min' },
+  ],
+  'motivation': [
+    { titel: 'Intrinsische Motivatoren finden', beschreibung: 'Was tue ich freiwillig, weil es mich erfüllt – nicht wegen Belohnung? Liste erstellen.', dauer: '20 Min' },
+    { titel: 'Mini-Ziele formulieren', beschreibung: 'Ein großes Ziel in 5 sehr kleine Schritte aufteilen – ersten Schritt sofort angehen.', dauer: '15 Min' },
+  ],
+  'prüfungsangst': [
+    { titel: 'Katastrophen-Stopp', beschreibung: 'Was ist das Schlimmste, das passieren kann? Wie wahrscheinlich ist das wirklich? Realistisch einschätzen.', dauer: '15 Min' },
+    { titel: 'Mein Prüfungs-Ritual', beschreibung: 'Ein persönliches Beruhigungs-Ritual für den Prüfungstag entwickeln (Musik, Atemübung, Routine).', dauer: '20 Min' },
+    { titel: 'Vorbereitung sichtbar machen', beschreibung: 'Liste alles auf was du schon weißt – manchmal hilft es zu sehen wie viel man bereits kann.', dauer: '15 Min' },
+  ],
+
+  // ── Gesundheit & Körper ────────────────────────────────────
+  'schlaf': [
+    { titel: 'Schlaf-Tagebuch', beschreibung: 'Eine Woche: Schlafzeiten, Einschlafzeit, Aufwachen und Erholung morgens notieren.', dauer: '5 Min täglich' },
+    { titel: 'Schlafhygiene-Check', beschreibung: 'Checkliste: Koffein, Bildschirme, Rituale, Raumtemperatur – was läuft gut, was nicht?', dauer: '15 Min' },
+    { titel: 'Abend-Routine entwickeln', beschreibung: 'Eine persönliche Routine für die letzte Stunde vor dem Schlafen entwickeln.', dauer: '15 Min' },
+  ],
+  'ernaehrung': [
+    { titel: 'Essverhalten beobachten', beschreibung: 'Eine Woche: Was, wann, wie viel, in welcher Stimmung gegessen? Muster erkennen.', dauer: '5 Min täglich' },
+    { titel: 'Hunger vs. Appetit', beschreibung: 'Wann habe ich körperlichen Hunger, wann esse ich aus emotionalen Gründen? Unterschied kennenlernen.', dauer: '15 Min' },
+  ],
+  'sport-bewegung': [
+    { titel: 'Lieblingsaktivitäten', beschreibung: 'Welche körperlichen Aktivitäten mache ich gerne? Wie oft? Was verhindert mich öfter dabei?', dauer: '15 Min' },
+    { titel: 'Mini-Bewegungsplan', beschreibung: 'Einen realistischen Wochenplan mit kleinen Bewegungseinheiten erstellen und erste Schritte festlegen.', dauer: '15 Min' },
+  ],
+  'sexualitaet': [
+    { titel: 'Fakten und Mythen', beschreibung: 'Was weiß ich über Sexualität? Schreibe Fragen auf, die du hast – ohne sie bewerten zu müssen.', dauer: '15 Min' },
+    { titel: 'Meine persönlichen Grenzen', beschreibung: 'Was ist okay für mich, was nicht? Persönliche Grenzen im intimen Bereich klar formulieren.', dauer: '20 Min' },
+  ],
+  'koerperbild': [
+    { titel: 'Körper-Dankbarkeit', beschreibung: 'Was leistet mein Körper jeden Tag? 10 Dinge aufschreiben für die du dankbar sein kannst.', dauer: '15 Min' },
+    { titel: 'Medien-Körperbild analysieren', beschreibung: 'Bilder aus Magazinen/Social Media: Welche Körperbilder werden verkauft? Wer profitiert davon?', dauer: '20 Min' },
+  ],
+  'mentale-gesundheit': [
+    { titel: 'Wohlbefindens-Check', beschreibung: 'Wie geht es mir in verschiedenen Lebensbereichen (Schule, Familie, Freunde, Gefühle)? Skala von 1–10.', dauer: '15 Min' },
+    { titel: 'Meine Schutzfaktoren', beschreibung: 'Was hält mich stabil? Personen, Aktivitäten, Gedanken – liste alle Schutzfaktoren auf.', dauer: '15 Min' },
+    { titel: 'Frühwarnsignale kennen', beschreibung: 'Woran merkst du, dass es dir nicht gut geht? Körperlich, emotional, sozial – liste deine persönlichen Signale.', dauer: '15 Min' },
+  ],
+  'chronische-erkrankung': [
+    { titel: 'Meine Erkrankung erklären', beschreibung: 'Erkläre deine Erkrankung in eigenen Worten: Was ist es, was passiert in meinem Körper?', dauer: '20 Min' },
+    { titel: 'Alltag mit der Erkrankung', beschreibung: 'Wie beeinflusst die Erkrankung Schule, Freundschaften, Sport, Stimmung? Ehrlich aufschreiben.', dauer: '15 Min' },
+    { titel: 'Was anderen helfen würde zu wissen', beschreibung: 'Was sollten Lehrer, Freunde, Familie über meine Erkrankung wissen, um mir besser helfen zu können?', dauer: '15 Min' },
+  ],
+
+  // ── Alltag & Mobilität ─────────────────────────────────────
+  'transport': [
+    { titel: 'Meine Transport-Situation', beschreibung: 'Wie komme ich derzeit zur Schule, zu Freunden, zu Aktivitäten? Was ist einfach, was schwierig?', dauer: '15 Min' },
+    { titel: 'Wichtige Verbindungen', beschreibung: 'Schreibe 5 Wege auf, die du regelmäßig brauchst. Welche öffentlichen Verbindungen gibt es?', dauer: '15 Min' },
+    { titel: 'Ziel: Selbstständige Mobilität', beschreibung: 'Was fehlt mir noch zur Selbstständigkeit (Führerschein, ÖPNV-Kenntnisse)? Ersten Schritt planen.', dauer: '10 Min' },
+  ],
+  'finanzen': [
+    { titel: 'Mein Monatsbudget', beschreibung: 'Einnahmen und Ausgaben auflisten – wo geht das Geld wirklich hin?', dauer: '20 Min' },
+    { titel: 'Sparziel definieren', beschreibung: 'Ein konkretes Sparziel festlegen und ausrechnen, wie lange man dafür braucht.', dauer: '15 Min' },
+    { titel: 'Impulskäufe erkennen', beschreibung: 'Denke an die letzten Käufe: Was davon hätte ich nicht gebraucht? Was wäre besser gewesen?', dauer: '10 Min' },
+  ],
+  'haushalt': [
+    { titel: 'Selbstcheck Haushaltsskills', beschreibung: 'Checkliste: Kochen, Waschen, Putzen, Einkaufen, Budget – was kann ich, was noch nicht?', dauer: '15 Min' },
+    { titel: 'Einfaches Gericht planen', beschreibung: 'Plane eine einfache Mahlzeit: Zutaten, Kosten, Zubereitung Schritt für Schritt.', dauer: '20 Min' },
+    { titel: 'Mein Wochenputzplan', beschreibung: 'Welche Aufgaben fallen wöchentlich an? Erstelle einen realistischen Reinigungsplan.', dauer: '10 Min' },
+  ],
+  'freizeit': [
+    { titel: 'Meine Freizeitaktivitäten', beschreibung: 'Was tue ich in meiner Freizeit? Wie oft? Wie fühle ich mich danach – Energie oder Erschöpfung?', dauer: '15 Min' },
+    { titel: 'Eine neue Aktivität ausprobieren', beschreibung: 'Wähle eine Aktivität, die du noch nie probiert hast. Was brauchst du, um sie auszuprobieren?', dauer: '15 Min' },
+    { titel: 'Balance-Check', beschreibung: 'Wie verteilt sich meine Zeit zwischen Schule, Schlafen, Familie und Freizeit? Ist das ausgewogen?', dauer: '10 Min' },
+  ],
+  'mediennutzung': [
+    { titel: 'Medien-Audit', beschreibung: 'Welche Medien nutze ich täglich, wie lange und wann? Wie fühle ich mich danach?', dauer: '15 Min' },
+    { titel: 'Fake News erkennen', beschreibung: 'Was macht eine Quelle vertrauenswürdig? Überprüfe eine aktuelle Schlagzeile auf ihre Quellen.', dauer: '20 Min' },
+  ],
+  'ehrenamt': [
+    { titel: 'Was liegt mir am Herzen?', beschreibung: 'Wofür würde ich mich einsetzen? Umwelt, Tiere, ältere Menschen, Sport? Schreibe auf was dich berührt.', dauer: '15 Min' },
+    { titel: 'Lokale Angebote recherchieren', beschreibung: 'Finde 2–3 Möglichkeiten für Ehrenamt oder Engagement in deiner Nähe oder online.', dauer: '20 Min' },
+    { titel: 'Vorteile des Engagements', beschreibung: 'Was könnte ich durch Ehrenamt gewinnen? Neue Kontakte, Fähigkeiten, Sinn? Liste aufstellen.', dauer: '10 Min' },
+  ],
 };
 
 const THEMA_INTERVENTIONEN = {

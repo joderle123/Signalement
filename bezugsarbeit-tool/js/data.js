@@ -174,6 +174,83 @@ const THEMA_AKTIVITÄTEN = {
     { titel: 'Glücks-Tagebuch', beschreibung: 'Notiere täglich 3 Dinge, für die du dankbar bist oder die dich gefreut haben.', dauer: '5 Min täglich' },
     { titel: 'Mein Flow-Profil', beschreibung: 'Wann verliere ich das Zeitgefühl? Identifiziere deine persönlichen Flow-Aktivitäten.', dauer: '15 Min' },
   ],
+
+  // ── Soziale Kompetenzen ────────────────────────────────────
+  'soziales-netzwerk': [
+    { titel: 'Mein Netzwerk zeichnen', beschreibung: 'Zeichne dein soziales Netz: Wer ist sehr nah, wer weiter weg? Wer fehlt dir?', dauer: '20 Min' },
+    { titel: 'Unterstützungsquellen benennen', beschreibung: 'Wer hilft dir bei Problemen, bei Freude, bei Hausaufgaben, in der Krise? Ordne Personen zu.', dauer: '15 Min' },
+    { titel: 'Netzwerk stärken', beschreibung: 'Wähle eine Person und plane eine konkrete Aktion, um die Verbindung zu stärken.', dauer: '10 Min' },
+  ],
+  'freundschaften': [
+    { titel: 'Freundschafts-Qualitäts-Check', beschreibung: 'Bewerte deine engsten Freundschaften: Vertrauen, Gegenseitigkeit, Spaß, Ehrlichkeit – von 1 bis 10.', dauer: '15 Min' },
+    { titel: 'Was ich gebe und bekomme', beschreibung: 'Was bringst du in Freundschaften ein? Was bekommst du zurück? Ist das ausgeglichen?', dauer: '15 Min' },
+    { titel: 'Neue Kontakte knüpfen', beschreibung: 'Wo könntest du neue Freundschaften finden? Plane einen ersten konkreten Schritt.', dauer: '10 Min' },
+  ],
+  'konfliktmanagement': [
+    { titel: 'Konflikt analysieren', beschreibung: 'Beschreibe einen echten Konflikt: Was passierte, wie reagierte ich, was hätte besser funktioniert?', dauer: '20 Min' },
+    { titel: 'WIN-WIN Lösung finden', beschreibung: 'Was will ich, was will die andere Person? Schreibe eine Lösung, die für beide passt.', dauer: '15 Min' },
+    { titel: 'Ich-Botschaften formulieren', beschreibung: 'Wandle 5 Du-Botschaften um: "Wenn du X, fühle ich Y, weil Z, ich wünsche mir W."', dauer: '15 Min' },
+  ],
+  'kommunikation': [
+    { titel: 'Mein Kommunikationsstil', beschreibung: 'Bin ich eher passiv, aggressiv oder assertiv? Erkenne deine Muster anhand konkreter Beispiele.', dauer: '15 Min' },
+    { titel: 'Aktives Zuhören', beschreibung: 'Höre einer Person 5 Minuten zu ohne zu unterbrechen. Fasse danach zusammen was sie gesagt hat.', dauer: '15 Min' },
+  ],
+  'romantische-beziehungen': [
+    { titel: 'Meine Beziehungswerte', beschreibung: 'Was ist mir in einer Beziehung wirklich wichtig? Erstelle eine Rangliste deiner 5 wichtigsten Werte.', dauer: '15 Min' },
+    { titel: 'Gesunde Beziehung – Checkliste', beschreibung: 'Merkmale einer gesunden Beziehung vs. Warnsignale: Zwei Spalten ausfüllen und mit eigenen Erfahrungen vergleichen.', dauer: '20 Min' },
+  ],
+  'grenzen-setzen': [
+    { titel: 'Meine Grenzen kennen', beschreibung: 'In welchen Bereichen fällt mir Nein-sagen schwer? Schreibe Beispiele auf.', dauer: '15 Min' },
+    { titel: 'Nein formulieren üben', beschreibung: 'Schreibe 3 Situationen auf, wo du Nein sagen solltest – und formuliere jeweils eine klare, freundliche Antwort.', dauer: '15 Min' },
+  ],
+  'mobbing': [
+    { titel: 'Mobbing dokumentieren', beschreibung: 'Notiere: Wann, wo, was, wer war dabei, wer hat es gesehen? Dokumentation ist wichtig.', dauer: '15 Min' },
+    { titel: 'Meine Reaktionsstrategien', beschreibung: 'Was kannst du tun, wenn du gemobbt wirst? Erstelle eine persönliche Liste mit 5 konkreten Optionen.', dauer: '15 Min' },
+    { titel: 'Unterstützungsnetz aktivieren', beschreibung: 'Wer in der Schule kann helfen? Wer außerhalb? Plane wen du als nächstes ansprechen würdest.', dauer: '10 Min' },
+  ],
+  'gruppendynamik': [
+    { titel: 'Meine Rolle in der Gruppe', beschreibung: 'Welche Rolle nehme ich ein? Anführer, Vermittler, Mitläufer? Schreibe konkrete Beispiele auf.', dauer: '15 Min' },
+    { titel: 'Peer-Pressure erkennen', beschreibung: 'Erinnere dich an eine Situation mit Gruppendruck. Wie hast du reagiert? Wie würdest du heute reagieren?', dauer: '15 Min' },
+  ],
+  'empathie': [
+    { titel: 'Perspektivenwechsel', beschreibung: 'Beschreibe einen Streit aus der Sicht der anderen Person: ihre Gedanken, Gefühle, Bedürfnisse.', dauer: '20 Min' },
+    { titel: 'Empathie-Tagebuch', beschreibung: 'Beobachte täglich eine Person: Wie könnte sie sich fühlen? Was braucht sie gerade?', dauer: '5 Min täglich' },
+  ],
+
+  // ── Konsum & Risikoverhalten ───────────────────────────────
+  'alkohol': [
+    { titel: 'Konsum-Tagebuch', beschreibung: 'Eine Woche: Wann, wie viel, warum, wie fühlte ich mich davor/danach?', dauer: '5 Min täglich' },
+    { titel: 'Vor- und Nachteile', beschreibung: 'Vier-Felder: Was spricht für meinen Konsum, was dagegen – kurz- und langfristig?', dauer: '20 Min' },
+    { titel: 'Meine Auslöser kennen', beschreibung: 'Welche Situationen, Gefühle oder Personen lösen den Wunsch zu trinken aus?', dauer: '15 Min' },
+  ],
+  'cannabis': [
+    { titel: 'Faktencheck Cannabis', beschreibung: 'Schreibe auf was du über Cannabis weißt. Markiere: Was ist Fakt, was ist Mythos?', dauer: '15 Min' },
+    { titel: 'Meine Konsummotive', beschreibung: 'Warum konsumiere ich? Stress, Spaß, Langeweile, Dazugehören? Benenne deine echten Motive.', dauer: '15 Min' },
+    { titel: 'Alternativen finden', beschreibung: 'Was würde ich statt kiffen tun bei Stress / Langeweile / Traurigkeit? Liste mit 10 Alternativen.', dauer: '15 Min' },
+  ],
+  'tabak-ezigarette': [
+    { titel: 'Rauch-Protokoll', beschreibung: 'Jeden Zug dokumentieren: Uhrzeit, Situation, Stimmung davor/danach – Muster erkennen.', dauer: '5 Min täglich' },
+    { titel: 'Wahre Kosten ausrechnen', beschreibung: 'Was kostet das Rauchen wirklich? Geld pro Tag, Monat, Jahr – und was könnte ich stattdessen kaufen?', dauer: '15 Min' },
+  ],
+  'gaming': [
+    { titel: 'Gaming-Protokoll', beschreibung: 'Eine Woche: Spielzeiten, Stimmung davor/danach, was ich deswegen vernachlässigt habe.', dauer: '5 Min täglich' },
+    { titel: 'Was erfülle ich im Spiel?', beschreibung: 'Welche Bedürfnisse erfülle ich durch Gaming? Erfolg, Zugehörigkeit, Kontrolle? Echte Alternativen finden.', dauer: '20 Min' },
+    { titel: 'Balance-Plan', beschreibung: 'Wie viele Stunden Gaming pro Tag ist gesund für mich? Eigene Regeln aufstellen.', dauer: '10 Min' },
+  ],
+  'social-media': [
+    { titel: 'Social-Media-Audit', beschreibung: 'Screen-Time analysieren: Welche Apps, wie lange, wann? Wie fühle ich mich danach?', dauer: '15 Min' },
+    { titel: 'Vergleichsfalle erkennen', beschreibung: 'Welche Profile lösen Neid oder Unzufriedenheit aus? Was denke ich automatisch beim Scrollen?', dauer: '15 Min' },
+    { titel: 'Digital-Detox-Tag planen', beschreibung: 'Einen Tag ohne Social Media planen: Was machst du stattdessen? Wie war es danach?', dauer: '15 Min' },
+  ],
+  'gluecksspiel': [
+    { titel: 'Wahre Kosten berechnen', beschreibung: 'Addiere alle Verluste der letzten Wochen. Was könntest du stattdessen damit machen?', dauer: '20 Min' },
+    { titel: 'Meine Auslöser kennen', beschreibung: 'Wann zocke ich? Langeweile, Stress, nach Verlust? Muster erkennen.', dauer: '15 Min' },
+    { titel: 'Gesunde Alternativen', beschreibung: 'Was gibt mir ähnliche Gefühle wie Glücksspiel (Spannung, Risiko), ohne die Risiken?', dauer: '10 Min' },
+  ],
+  'selbstmedikation': [
+    { titel: 'Was betäube ich?', beschreibung: 'Welche Gefühle oder Situationen soll der Konsum betäuben? Ehrlich aufschreiben.', dauer: '20 Min' },
+    { titel: 'Meine Ressourcen aufbauen', beschreibung: 'Was gibt mir Kraft ohne Substanzen? Liste mit 10 echten Alternativen erstellen.', dauer: '15 Min' },
+  ],
 };
 
 const THEMA_INTERVENTIONEN = {

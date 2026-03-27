@@ -340,15 +340,25 @@ function renderArbeitsblaetter(themaId) {
 
   if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0) return '';
 
+  const hasModul = aktivitaeten.length > 0 || interventionen.length > 0;
+
   return `
     <div style="margin-bottom:20px;">
       <div class="panel-tabs" id="panel-tabs-${themaId}">
-        <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">📋 Blätter</button>
-        <button class="panel-tab" onclick="switchPanelTab('${themaId}','akt')">🎯 Aktivitäten</button>
-        <button class="panel-tab" onclick="switchPanelTab('${themaId}','int')">🧠 Interventionen</button>
+        <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">
+          📋 Arbeitsblatt
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 1 · Einstieg</span>
+        </button>
+        ${hasModul ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','tm')">
+          🏥 Therapiemodul
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 2 · Vertiefung</span>
+        </button>` : ''}
       </div>
 
       <div id="pt-ab-${themaId}" class="panel-tab-content">
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#1D4ED8;">
+          Einstieg in das Thema · 1 Sitzung · Direkt ausfüllbar
+        </div>
         ${blaetter.length === 0
           ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Kein Arbeitsblatt verfügbar</p>'
           : blaetter.map(b => `
@@ -362,38 +372,99 @@ function renderArbeitsblaetter(themaId) {
           </a>`).join('')}
       </div>
 
-      <div id="pt-akt-${themaId}" class="panel-tab-content" style="display:none;">
-        ${aktivitaeten.length === 0
-          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Aktivitäten hinterlegt</p>'
-          : aktivitaeten.map(a => `
-          <div style="padding:10px 12px;margin-bottom:8px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;">
-            <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:4px;">🎯 ${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
-            <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
-          </div>`).join('')}
-      </div>
-
-      <div id="pt-int-${themaId}" class="panel-tab-content" style="display:none;">
-        ${interventionen.length === 0
-          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Interventionen hinterlegt</p>'
-          : interventionen.map(i => `
-          <div style="padding:10px 12px;margin-bottom:8px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
-            <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">🧠 ${i.titel}</div>
-            <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
-            <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
-            <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
-          </div>`).join('')}
-      </div>
+      ${hasModul ? `
+      <div id="pt-tm-${themaId}" class="panel-tab-content" style="display:none;">
+        ${renderTherapiemodul(aktivitaeten, interventionen)}
+      </div>` : ''}
     </div>`;
 }
 
+function renderTherapiemodul(aktivitaeten, interventionen) {
+  const psychoedukativ = interventionen.filter(i =>
+    i.ansatz && i.ansatz.toLowerCase().includes('psychoeduk')
+  );
+  const therapeutisch = interventionen.filter(i =>
+    !i.ansatz || !i.ansatz.toLowerCase().includes('psychoeduk')
+  );
+  const hausaufgaben = aktivitaeten.filter(a => a.dauer && a.dauer.toLowerCase().includes('täglich'));
+  const uebungen = aktivitaeten.filter(a => !a.dauer || !a.dauer.toLowerCase().includes('täglich'));
+
+  let html = `<div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+    <strong>Therapiemodul (Ebene 2)</strong> · Vollständige Behandlungseinheit · 2–8 Stunden<br>
+    <span style="opacity:0.75;">Für Schüler, bei denen dieses Thema ein zentraler Arbeitsbereich ist.</span>
+  </div>`;
+
+  if (psychoedukativ.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">📚 Psychoedukation</div>
+      ${psychoedukativ.map(i => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">${i.titel}</div>
+          <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
+          <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  if (therapeutisch.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🧠 Interventionen</div>
+      ${therapeutisch.map(i => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">${i.titel}</div>
+          <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
+          <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  if (uebungen.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🎯 Übungen</div>
+      ${uebungen.map(a => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:4px;">${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  if (hausaufgaben.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">📝 Hausaufgaben</div>
+      ${hausaufgaben.map(a => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#92400E;margin-bottom:4px;">${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  html += `<div style="margin-bottom:8px;">
+    <div style="font-size:11px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">💭 Reflexion</div>
+    <div style="padding:10px 12px;background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;font-size:12px;color:#374151;">
+      <ul style="margin:0;padding-left:16px;line-height:1.9;">
+        <li>Was war für dich in diesem Modul besonders wichtig?</li>
+        <li>Was hat sich seit Beginn der Arbeit an diesem Thema verändert?</li>
+        <li>Welche Strategien möchtest du im Alltag weiter einsetzen?</li>
+        <li>Was würdest du dir noch wünschen oder brauchen?</li>
+      </ul>
+    </div>
+  </div>`;
+
+  return html;
+}
+
 function switchPanelTab(themaId, tab) {
-  ['ab','akt','int'].forEach(t => {
+  ['ab','tm'].forEach(t => {
     const el = document.getElementById(`pt-${t}-${themaId}`);
     if (el) el.style.display = t === tab ? 'block' : 'none';
   });
   const tabs = document.getElementById(`panel-tabs-${themaId}`);
   if (tabs) tabs.querySelectorAll('.panel-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', ['ab','akt','int'][i] === tab);
+    btn.classList.toggle('active', ['ab','tm'][i] === tab);
   });
 }
 

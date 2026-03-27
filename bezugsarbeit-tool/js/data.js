@@ -349,6 +349,94 @@ const THEMA_AKTIVITÄTEN = {
     { titel: 'Lokale Angebote recherchieren', beschreibung: 'Finde 2–3 Möglichkeiten für Ehrenamt oder Engagement in deiner Nähe oder online.', dauer: '20 Min' },
     { titel: 'Vorteile des Engagements', beschreibung: 'Was könnte ich durch Ehrenamt gewinnen? Neue Kontakte, Fähigkeiten, Sinn? Liste aufstellen.', dauer: '10 Min' },
   ],
+
+  // ── Recht & Gesellschaft ───────────────────────────────────
+  'jugendrecht': [
+    { titel: 'Meine Rechte als Minderjährige/r', beschreibung: 'Welche Rechte habe ich in Luxemburg? Nenne 5 und erkläre sie in eigenen Worten.', dauer: '20 Min' },
+    { titel: 'Altersgrenzen kennen', beschreibung: 'Was darf ich ab welchem Alter? Alkohol, Führerschein, Ausgehen, Arbeiten – Tabelle ausfüllen.', dauer: '15 Min' },
+  ],
+  'jugendschutz': [
+    { titel: 'Schutzmechanismen kennen', beschreibung: 'Wer ist verpflichtet mich zu schützen? Was passiert, wenn jemand meinen Schutz verletzt?', dauer: '15 Min' },
+    { titel: 'Mein Sicherheitsnetz', beschreibung: 'Welche Personen und Stellen würden mir helfen, wenn ich in Gefahr bin? Liste aufstellen.', dauer: '15 Min' },
+  ],
+  'soziale-dienste': [
+    { titel: 'Hilfsstellen in Luxemburg', beschreibung: 'Recherchiere 5 Stellen, die Jugendlichen helfen. Notiere: Name, Telefon, wofür zuständig.', dauer: '20 Min' },
+    { titel: 'Wann brauche ich Hilfe?', beschreibung: 'Erkenne Situationen, in denen du professionelle Hilfe suchen solltest – ohne Scham.', dauer: '15 Min' },
+    { titel: 'Um Hilfe bitten üben', beschreibung: 'Schreibe auf, was du sagen würdest, wenn du einen Beratungstermin anfragen möchtest.', dauer: '10 Min' },
+  ],
+  'polizei-justiz': [
+    { titel: 'Was passiert wenn...?', beschreibung: 'Beschreibe für 3 Szenarien (Diebstahl, Schlägerei, Sachbeschädigung): Was sind die rechtlichen Folgen?', dauer: '20 Min' },
+    { titel: 'Meine Rechte bei einer Kontrolle', beschreibung: 'Was darf ich tun und was nicht, wenn die Polizei mich anhält? Liste aufstellen.', dauer: '15 Min' },
+  ],
+  'buergerrechte': [
+    { titel: 'Demokratisch mitmachen', beschreibung: 'Welche Möglichkeiten habe ich als Jugendliche/r, die Gesellschaft mitzugestalten? 5 Optionen finden.', dauer: '15 Min' },
+    { titel: 'Was liegt mir an der Gesellschaft?', beschreibung: 'Nenne 3 Dinge in der Gesellschaft, die du verändern möchtest – und eine mögliche Aktion.', dauer: '15 Min' },
+  ],
+  'diskriminierung': [
+    { titel: 'Diskriminierung erkennen', beschreibung: 'Was ist Diskriminierung? Beschreibe 3 Formen (direkt, indirekt, strukturell) mit je einem Beispiel.', dauer: '20 Min' },
+    { titel: 'Meine Erfahrungen', beschreibung: 'Hast du Diskriminierung erlebt oder beobachtet? Wie hast du dich dabei gefühlt, was hättest du gebraucht?', dauer: '15 Min' },
+    { titel: 'Gegenstrategie entwickeln', beschreibung: 'Was kann ich tun, wenn ich Diskriminierung erlebe oder sehe? Konkrete Optionen erarbeiten.', dauer: '15 Min' },
+  ],
+
+  // ── Identität & Werte ──────────────────────────────────────
+  'selbstbild': [
+    { titel: 'Wer bin ich? – Mindmap', beschreibung: 'Erstelle eine Mindmap zu deiner Person: Stärken, Werte, Rollen, Interessen, Träume.', dauer: '20 Min' },
+    { titel: 'Innerer Kritiker vs. Innerer Coach', beschreibung: 'Was sagt dein innerer Kritiker? Was würde ein wohlwollender Coach stattdessen sagen?', dauer: '20 Min' },
+  ],
+  'werte-moral': [
+    { titel: 'Meine Werte-Hitliste', beschreibung: 'Wähle aus einer Liste von 20 Werten deine 5 wichtigsten und erkläre warum.', dauer: '20 Min' },
+    { titel: 'Werte im Alltag', beschreibung: 'Stimmt mein Alltag mit meinen Werten überein? Wo gibt es Lücken und wie könnte ich sie schließen?', dauer: '20 Min' },
+  ],
+  'kulturelle-identitaet': [
+    { titel: 'Meine kulturellen Wurzeln', beschreibung: 'Woher komme ich? Welche Werte, Traditionen und Sprachen gehören zu mir?', dauer: '20 Min' },
+    { titel: 'Zwischen den Kulturen', beschreibung: 'Wie navigiere ich zwischen verschiedenen kulturellen Erwartungen? Was stärkt mich dabei?', dauer: '20 Min' },
+  ],
+  'geschlechtsidentitaet': [
+    { titel: 'Was ich weiß und was mich beschäftigt', beschreibung: 'Schreibe Fragen auf, die du zur Geschlechtsidentität oder sexuellen Orientierung hast – ohne Bewertung.', dauer: '15 Min' },
+    { titel: 'Meine Geschichte mit mir', beschreibung: 'Erzähle oder schreibe deine persönliche Geschichte zum Thema Identität – in eigenen Worten.', dauer: '25 Min' },
+  ],
+  'spiritualitaet': [
+    { titel: 'Was gibt mir Kraft?', beschreibung: 'Was gibt mir Halt und Sinn? Glaube, Natur, Gemeinschaft, Kunst? Schreibe deine persönlichen Quellen auf.', dauer: '15 Min' },
+    { titel: 'Mein Verhältnis zur Religion', beschreibung: 'Bin ich religiös, spirituell oder keines von beidem? Reflektiere deine Haltung ohne Bewertung.', dauer: '15 Min' },
+    { titel: 'Rituale die mir wichtig sind', beschreibung: 'Welche Rituale oder Praktiken geben dir Halt? Überlege wie du sie im Alltag bewusster einsetzen kannst.', dauer: '15 Min' },
+  ],
+  'zugehoerigkeit': [
+    { titel: 'Wo gehöre ich dazu?', beschreibung: 'In welchen Gruppen, Orten oder Gemeinschaften fühle ich mich zugehörig? Was macht das aus?', dauer: '15 Min' },
+    { titel: 'Erfahrungen mit Ausgrenzung', beschreibung: 'Wann habe ich mich ausgeschlossen gefühlt? Was hätte mir damals geholfen?', dauer: '15 Min' },
+    { titel: 'Zugehörigkeit aufbauen', beschreibung: 'Was kann ich tun, um mich in einem Bereich stärker zugehörig zu fühlen? Einen konkreten Schritt planen.', dauer: '10 Min' },
+  ],
+  'lebenssinn': [
+    { titel: 'Gründe zu leben', beschreibung: 'Schreibe 20 Dinge auf, für die es sich lohnt aufzustehen – Menschen, Momente, Dinge.', dauer: '20 Min' },
+    { titel: 'Wann fühle ich mich lebendig?', beschreibung: 'In welchen Momenten bist du ganz bei dir und fühlst dich lebendig? Was haben sie gemeinsam?', dauer: '15 Min' },
+    { titel: 'Mein Beitrag zur Welt', beschreibung: 'Was möchtest du der Welt geben oder hinterlassen? Schreibe in Sätzen oder als Mindmap.', dauer: '20 Min' },
+  ],
+
+  // ── Krisen & Trauma ────────────────────────────────────────
+  'krisenintervention': [
+    { titel: 'Eine Krise erkennen', beschreibung: 'Welche Zeichen zeigen mir, dass ich in einer Krise bin? Körperlich, emotional, im Verhalten?', dauer: '15 Min' },
+    { titel: 'Mein Sicherheitsplan', beschreibung: 'Erstelle die Grundzüge eines Sicherheitsplans: Warnzeichen, Ablenkungen, wen ich anrufe.', dauer: '20 Min' },
+    { titel: 'Krisen-Kontaktkarte', beschreibung: 'Karte mit Notfallnummern anlegen: Telefonseelsorge, Vertrauensperson, Krisentelefon.', dauer: '10 Min' },
+  ],
+  'suizidpraevention': [
+    { titel: 'Mein Sicherheitsplan', beschreibung: 'Warnzeichen, Ablenkungsstrategien, Notfallnummern und Vertrauenspersonen schriftlich festhalten.', dauer: '30 Min' },
+    { titel: 'Gründe zum Leben', beschreibung: 'Menschen, Dinge, Momente, Pläne die mir wichtig sind – auch kleine Dinge zählen.', dauer: '20 Min' },
+    { titel: 'Krisen-Telefon-Karte', beschreibung: 'Karte mit Notfallnummern anfertigen und griffbereit aufbewahren.', dauer: '10 Min' },
+  ],
+  'gewalt': [
+    { titel: 'Gewalt erkennen', beschreibung: 'Was sind die verschiedenen Formen von Gewalt? Körperlich, emotional, sexuell, digital – Beispiele benennen.', dauer: '20 Min' },
+    { titel: 'Mein Sicherheitsplan', beschreibung: 'Was kann ich tun, wenn ich in Gefahr bin? Wer kann helfen, wohin kann ich gehen?', dauer: '20 Min' },
+    { titel: 'Anzeige und Hilfe in Luxemburg', beschreibung: 'Welche Möglichkeiten habe ich, Hilfe zu suchen oder eine Situation zu melden?', dauer: '15 Min' },
+  ],
+  'resilienz': [
+    { titel: 'Meine Resilienz-Faktoren', beschreibung: 'Was hat mir bisher geholfen, schwierige Zeiten zu überwinden? Liste alle Faktoren auf.', dauer: '20 Min' },
+    { titel: 'Wie ich Schwieriges überwunden habe', beschreibung: 'Erinnere dich an eine Zeit, die schwierig war – und wie du es geschafft hast. Was war deine Stärke?', dauer: '20 Min' },
+    { titel: 'Resilienz-Muskel stärken', beschreibung: 'Wähle eine Resilienz-Strategie aus (z.B. Dankbarkeit, Sport, Verbindung) und übe sie eine Woche.', dauer: '10 Min' },
+  ],
+  'trennungsangst': [
+    { titel: 'Meine Bindungsängste benennen', beschreibung: 'Wovor habe ich Angst, wenn es um Beziehungen geht? Verlassen werden, allein sein, abgelehnt werden?', dauer: '20 Min' },
+    { titel: 'Innere Sicherheit aufbauen', beschreibung: 'Was gibt mir Sicherheit, auch wenn andere Menschen nicht da sind? Liste erstellen.', dauer: '15 Min' },
+    { titel: 'Grounding bei Trennungsangst', beschreibung: 'Übe 5-4-3-2-1: 5 sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken – jetzt, in diesem Moment.', dauer: '10 Min' },
+  ],
 };
 
 const THEMA_INTERVENTIONEN = {

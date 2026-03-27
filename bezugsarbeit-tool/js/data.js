@@ -79,6 +79,26 @@ const ARBEITSBLÄTTER = {
   'schulden':                [{ titel: 'Finanzen & Geld',                   datei: 'finanzen-geld.html' }],
   'taschengeld':             [{ titel: 'Finanzen & Geld',                   datei: 'finanzen-geld.html' }],
   'budget':                  [{ titel: 'Finanzen & Geld',                   datei: 'finanzen-geld.html' }],
+  // Fixes for existing worksheets with different IDs
+  'tabak-ezigarette':      [{ titel: 'Tabak & E-Zigarette',                        datei: 'konsum-tabak.html' }],
+  'diskriminierung':       [{ titel: 'Diskriminierung & Rassismus',                datei: 'diskriminierung.html' }],
+  // New worksheets
+  'soziales-netzwerk':     [{ titel: 'Mein soziales Netzwerk',                     datei: 'soziales-netzwerk.html' }],
+  'pflegefamilie':         [{ titel: 'Pflegefamilie & meine Geschichte',           datei: 'pflegefamilie.html' }],
+  'gluecksspiel':          [{ titel: 'Glücksspiel & Wetten',                       datei: 'gluecksspiel.html' }],
+  'schulkonflikt':         [{ titel: 'Schulkonflikte verstehen & lösen',           datei: 'schulkonflikt.html' }],
+  'mentale-gesundheit':    [{ titel: 'Meine mentale Gesundheit',                   datei: 'mentale-gesundheit.html' }],
+  'chronische-erkrankung': [{ titel: 'Leben mit chronischer Erkrankung',           datei: 'chronische-erkrankung.html' }],
+  'transport':             [{ titel: 'Transport & Mobilität',                      datei: 'transport.html' }],
+  'haushalt':              [{ titel: 'Haushalt & Selbstversorgung',               datei: 'haushalt.html' }],
+  'freizeit':              [{ titel: 'Freizeit & Hobbys',                         datei: 'freizeit.html' }],
+  'ehrenamt':              [{ titel: 'Ehrenamt & gesellschaftliches Engagement',   datei: 'ehrenamt.html' }],
+  'jugendrecht':           [{ titel: 'Jugendrecht & Jugendschutz',                datei: 'jugendrecht.html' }],
+  'jugendschutz':          [{ titel: 'Jugendrecht & Jugendschutz',                datei: 'jugendrecht.html' }],
+  'soziale-dienste':       [{ titel: 'Hilfe finden – Soziale Dienste & Beratung', datei: 'soziale-dienste.html' }],
+  'polizei-justiz':        [{ titel: 'Polizei, Justiz & Bürgerrechte',            datei: 'polizei-justiz.html' }],
+  'buergerrechte':         [{ titel: 'Polizei, Justiz & Bürgerrechte',            datei: 'polizei-justiz.html' }],
+  'spiritualitaet':        [{ titel: 'Spiritualität, Religion & Sinn',            datei: 'spiritualitaet.html' }],
 };
 
 // ============================================================

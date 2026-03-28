@@ -1737,4 +1737,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'geschwister': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Rivalitäts-, Eifersucht- oder Rollenthemen im Geschwistersystem',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Geschwister und ich',
+        dauer: '60 Min',
+        ziel: 'Geschwisterdynamik bewusst wahrnehmen und einordnen',
+        psychoedukation: {
+          titel: 'Geschwisterpositionen und ihre Wirkung',
+          inhalt: 'Die Position in der Geschwisterreihe – Älteste/r, Mittleres Kind, Jüngste/r, Einzelkind – beeinflusst, welche Rolle man in der Familie einnimmt. Älteste übernehmen oft Verantwortung, Jüngste genießen mehr Freiheit, mittlere Kinder lernen früh Vermitteln. Diese Muster sind keine Schicksale, aber es lohnt sich, sie zu kennen.'
+        },
+        interventionen: [
+          {
+            titel: 'Geschwister-Landkarte',
+            ansatz: 'Systemisch',
+            beschreibung: 'Der Schüler zeichnet sich und seine Geschwister mit Pfeilen: Wer ist wem wie nah? Wo gibt es Spannung? Was verbindet? Anschließend besprechen: Was überrascht dich daran?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Geschwister in drei Worten',
+            beschreibung: 'Beschreibe jedes Geschwister in drei Adjektiven – und dann dich selbst im Vergleich. Was fällt auf?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beobachtungsauftrag',
+          beschreibung: 'Beobachte diese Woche, wann du dich mit einem Geschwister verbunden fühlst – und wann nicht.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Welche Rolle spielst du unter deinen Geschwistern?',
+          'Wurde dir diese Rolle zugewiesen oder hast du sie selbst gewählt?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Rivalität und Eifersucht verstehen',
+        dauer: '60 Min',
+        ziel: 'Geschwisterrivalität normalisieren und konstruktiv umgehen',
+        psychoedukation: {
+          titel: 'Warum gibt es Geschwisterrivalität?',
+          inhalt: 'Geschwisterrivalität entsteht, weil Kinder um die Aufmerksamkeit und Liebe der Eltern konkurrieren – das ist biologisch normal. Vergleiche ("Dein Bruder schafft das doch auch") verstärken Rivalität. Was hilft: das eigene Ich stärken, statt sich ständig zu vergleichen.'
+        },
+        interventionen: [
+          {
+            titel: 'Vergleichs-Falle aufdecken',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Welche Vergleiche machen dich traurig oder wütend? Gemeinsam analysieren: Was steckt dahinter? Wessen Bewertung ist das wirklich – und wie siehst du das selbst?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meine eigenen Stärken',
+            beschreibung: 'Liste 5 Dinge auf, in denen du gut bist – unabhängig davon, was deine Geschwister können oder nicht.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Vergleich-Stopp',
+          beschreibung: 'Achte diese Woche darauf, wann du dich mit Geschwistern vergleichst. Schreibe auf: Was denkst du dann? Was könntest du stattdessen denken?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann fühlst du dich deinen Geschwistern gegenüber im Nachteil?',
+          'Was würdest du dir von deinen Eltern wünschen, damit das besser wird?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Geschwisterbeziehung stärken',
+        dauer: '60 Min',
+        ziel: 'Ressourcen in der Geschwisterbeziehung aktivieren',
+        psychoedukation: {
+          titel: 'Geschwister als lebenslange Beziehung',
+          inhalt: 'Geschwisterbeziehungen sind oft die längsten Beziehungen im Leben. Selbst wenn es jetzt schwierig ist: Die Möglichkeit, diese Beziehung zu gestalten, bleibt. Kleine Schritte – Interesse zeigen, gemeinsam etwas erleben – können viel verändern.'
+        },
+        interventionen: [
+          {
+            titel: 'Positive Geschwistermomente',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Gemeinsam positive Erinnerungen mit Geschwistern sammeln. Was habt ihr gemeinsam erlebt? Was verbindet euch, auch wenn es gerade schwierig ist? Wie könnte eine bessere Beziehung aussehen?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Eine Geste planen',
+            beschreibung: 'Überlege eine konkrete kleine Geste, die deine Beziehung zu einem Geschwister stärken könnte. Was genau, wann, wie?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gemeinsame Zeit',
+          beschreibung: 'Verbringe diese Woche bewusst 15 Minuten mit einem Geschwister – ohne Ablenkung.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie möchtest du deine Geschwisterbeziehung in Zukunft gestalten?'
+        ]
+      }
+    ]
+  },
+
 };

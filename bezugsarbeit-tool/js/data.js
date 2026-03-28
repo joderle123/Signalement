@@ -2459,4 +2459,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'emotionserkennung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Schwierigkeiten beim Benennen, Erkennen oder Differenzieren von Gefühlen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Gefühle – was sind das überhaupt?',
+        dauer: '60 Min',
+        ziel: 'Grundverständnis von Emotionen aufbauen; Körpersignale kennenlernen',
+        psychoedukation: {
+          titel: 'Wozu sind Gefühle da?',
+          inhalt: 'Gefühle sind keine Schwäche – sie sind Informationen. Angst warnt vor Gefahr, Wut zeigt, dass eine Grenze überschritten wurde, Trauer hilft beim Verarbeiten von Verlusten, Freude zeigt, was uns gut tut. Jedes Gefühl hat eine Funktion. Probleme entstehen nicht durch das Fühlen, sondern dadurch, Gefühle nicht zu erkennen oder nicht ausdrücken zu können.'
+        },
+        interventionen: [
+          {
+            titel: 'Körperkarte der Gefühle',
+            ansatz: 'Körperorientiert / Psychoedukativ',
+            beschreibung: 'Auf einer Körperumriss-Zeichnung: Wo spürst du Wut, Angst, Freude, Trauer im Körper? Einzeichnen und besprechen. Viele Schüler sind überrascht, wie präzise der Körper Gefühle zeigt.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühlswörterbuch',
+            beschreibung: 'Sammle gemeinsam so viele Gefühlswörter wie möglich (Ziel: 20+). Ordne sie in Gruppen: zur Freude, Trauer, Wut, Angst, Scham, Überraschung.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gefühls-Check-in',
+          beschreibung: 'Jeden Abend kurz innehalten: Welche Gefühle hatte ich heute? Kannst du sie benennen? Notiere sie kurz.',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Welche Gefühle fällt dir leicht zu benennen – und welche schwer?',
+          'Gibt es Gefühle, die du lieber nicht haben möchtest? Warum?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Gefühle lesen – bei mir und anderen',
+        dauer: '60 Min',
+        ziel: 'Mimik, Gestik und Körpersprache als Gefühlssignale lesen lernen',
+        psychoedukation: {
+          titel: 'Emotionale Intelligenz',
+          inhalt: 'Emotionen zeigen sich nicht nur innen, sondern auch außen: in der Mimik, Körperhaltung, Stimme und im Verhalten. Wer diese Signale lesen kann – bei sich selbst und bei anderen – kommuniziert klarer, versteht Konflikte besser und kann gezielter helfen oder Grenzen setzen.'
+        },
+        interventionen: [
+          {
+            titel: 'Mimik-Detektiv',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Bilder oder kurze Filmclips mit Personen zeigen. Der Schüler erkennt und benennt Gefühle anhand von Mimik und Körpersprache. Was signalisiert dieser Ausdruck? Was könnte die Person gerade brauchen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Eigene Mimik spüren',
+            beschreibung: 'Stell Gefühle mimisch dar und schau in den Spiegel: Wie sieht Wut aus? Freude? Traurigkeit? Was verrät dein Gesicht, das du vielleicht nicht zeigen wolltest?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beobachtungsauftrag',
+          beschreibung: 'Beobachte diese Woche eine Person in deinem Umfeld: Was erkennst du an ihrer Körpersprache? Was fühlt sie gerade – ohne Worte?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hast du diese Woche bei anderen an Gefühlen wahrgenommen?',
+          'Wann hast du selbst Gefühle „versteckt"?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gefühle differenzieren und ausdrücken',
+        dauer: '60 Min',
+        ziel: 'Gefühlstiefe und -nuancen kennenlernen; angemessenen Ausdruck üben',
+        psychoedukation: {
+          titel: 'Das Rad der Emotionen',
+          inhalt: 'Gefühle sind nicht schwarz-weiß. Zwischen „gut" und „schlecht" liegen Hunderte von Nuancen. Wut kann Ärger, Frustration, Empörung oder Enttäuschung sein – je nach Intensität und Ursache. Je mehr Worte wir für unsere Gefühle haben, desto besser können wir kommunizieren, was wir brauchen.'
+        },
+        interventionen: [
+          {
+            titel: 'Gefühlsintensitäts-Skala',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Eine Emotion auswählen (z.B. Wut). Auf einer Skala 1–10: Was ist „leichte Verstimmung" vs. „Raserei"? Welche körperlichen, gedanklichen und Verhaltensänderungen gibt es bei unterschiedlichen Intensitäten?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühle in Worte fassen',
+            beschreibung: 'Übe, ein Gefühl in einem Satz zu beschreiben: „Ich fühle mich _____, weil _____, und ich brauche _____."',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gefühls-Tagebuch',
+          beschreibung: 'Führe drei Tage lang ein Gefühls-Tagebuch: Situation → Gefühl (mit Intensität 1–10) → Körpersignal → Reaktion.',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Welche Emotion ist für dich am schwersten auszudrücken?',
+          'Was nimmst du aus diesem Modul für deinen Alltag mit?'
+        ]
+      }
+    ]
+  },
+
 };

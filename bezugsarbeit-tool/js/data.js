@@ -3936,4 +3936,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'romantische-beziehungen': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit Fragen zu Liebe, Partnerschaft, Trennung oder toxischen Beziehungsmustern',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist Liebe – und was nicht?',
+        dauer: '60 Min',
+        ziel: 'Gesunde vs. ungesunde Beziehungsmuster erkennen',
+        psychoedukation: {
+          titel: 'Liebe vs. Abhängigkeit',
+          inhalt: 'Echte Liebe stärkt beide Partner – sie lässt Raum für Eigenständigkeit, Freundschaften und individuelle Interessen. Eifersucht, Kontrolle oder das Gefühl, ohne die andere Person nicht existieren zu können, sind keine Liebeszeichen – sie deuten auf ungesunde Muster hin. Liebe muss sich gut anfühlen – nicht beängstigend.'
+        },
+        interventionen: [
+          {
+            titel: 'Gesund vs. toxisch',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Gemeinsam eine Liste erstellen: Was sind Zeichen einer gesunden Beziehung? Was sind Warnsignale (Red Flags)? Der Schüler ordnet eigene Erfahrungen oder Beobachtungen ein.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meine Vorstellung von Partnerschaft',
+            beschreibung: 'Beschreibe deine ideale Beziehung: Wie sieht sie aus? Was ist dir wichtig? Was möchtest du nicht?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beziehungsvorbilder beobachten',
+          beschreibung: 'Beobachte diese Woche eine Beziehung in deinem Umfeld (oder in Medien): Welche Muster erkennst du? Gesund oder nicht?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hast du in der Vergangenheit in Beziehungen akzeptiert, das nicht okay war?',
+          'Was ist für dich eine absolute Grenze in einer Beziehung?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Kommunikation in Beziehungen',
+        dauer: '60 Min',
+        ziel: 'Offen über Gefühle, Bedürfnisse und Grenzen sprechen',
+        psychoedukation: {
+          titel: 'Warum Paare aneinander vorbeireden',
+          inhalt: 'In romantischen Beziehungen steigen die emotionalen Einsätze – und damit auch das Risiko von Missverständnissen. Viele Konflikte entstehen, weil Bedürfnisse nicht ausgesprochen werden. Offene, ehrliche Kommunikation ohne Vorwürfe ist die Grundlage jeder gesunden Beziehung.'
+        },
+        interventionen: [
+          {
+            titel: 'Bedürfnisse in Beziehungen',
+            ansatz: 'Emotionsfokussiert',
+            beschreibung: 'Welche Bedürfnisse hast du in einer romantischen Beziehung? (Nähe, Freiheit, Sicherheit, Bestätigung, Abwechslung…). Welche dieser Bedürfnisse hast du bisher ausgesprochen – welche nicht?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Grenzgespräch üben',
+            beschreibung: 'Rollenspiel: Eine Grenze in einer romantischen Situation klar kommunizieren. Feedback: War es klar? Respektvoll? Wie hat es sich angefühlt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Bedürfnisliste schreiben',
+          beschreibung: 'Erstelle eine persönliche Liste: Was brauche ich in einer Beziehung? Was kann ich geben?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was ist schwer daran, in romantischen Beziehungen offen zu sein?',
+          'Was passiert, wenn du deine Bedürfnisse nicht ausdrückst?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Trennungen verarbeiten',
+        dauer: '60 Min',
+        ziel: 'Trennungsschmerz normalisieren; konstruktive Verarbeitungsstrategien entwickeln',
+        psychoedukation: {
+          titel: 'Trennungsschmerz ist echter Schmerz',
+          inhalt: 'Bildgebende Studien zeigen: Trennungsschmerz aktiviert dieselben Gehirnregionen wie körperlicher Schmerz. Er ist real. Er vergeht – aber nicht von allein. Aktives Verarbeiten (Gefühle zulassen, Abstand schaffen, neue Routinen aufbauen) beschleunigt die Heilung.'
+        },
+        interventionen: [
+          {
+            titel: 'Trennung verarbeiten',
+            ansatz: 'Emotionsfokussiert / Narrativ',
+            beschreibung: 'Was ist passiert? Was vermisst du? Was ist erleichternd? Was hast du gelernt? Keine Wertung – nur Raum geben für alle Gefühle.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Abschlussbrief',
+            beschreibung: 'Schreibe einen Brief an die Ex-Person (der nicht abgeschickt wird): Was willst du sagen? Was lässt du los?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Neue Routine einführen',
+          beschreibung: 'Plane diese Woche eine neue Aktivität oder Routine ein, die dir hilft, vorwärtszukommen.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat die Beziehung dir gegeben?',
+          'Was nimmst du als Lernerfahrung mit?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Beziehungsfähigkeit stärken',
+        dauer: '60 Min',
+        ziel: 'Eigene Bindungsmuster verstehen; gesunde Beziehungen aktiv gestalten',
+        psychoedukation: {
+          titel: 'Bindungsstile in der Liebe',
+          inhalt: 'Wie wir als Kinder Bindung erfahren haben, beeinflusst unsere romantischen Beziehungen im Erwachsenenleben. Sicher gebundene Menschen können Nähe und Distanz gut regulieren. Ängstlich gebundene klammern sich, vermeidend gebundene distanzieren sich. Diese Muster sind nicht Schicksal – sie können verändert werden.'
+        },
+        interventionen: [
+          {
+            titel: 'Eigener Bindungsstil',
+            ansatz: 'Psychoedukativ / Ressourcenorientiert',
+            beschreibung: 'Gemeinsam herausarbeiten: Welcher Bindungsstil ist meiner? Woher kommt er? Wie zeigt er sich in meinen Beziehungen? Was will ich anders machen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gesunde Beziehung visualisieren',
+            beschreibung: 'Beschreibe oder zeichne eine Szene aus deiner idealen Beziehung in 5 Jahren. Was ist dabei anders als bisher?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Einen Schritt zur Beziehungsfähigkeit',
+          beschreibung: 'Was ist ein konkreter Schritt, den du tun kannst, um in zukünftigen Beziehungen gesünder zu sein?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du in zukünftigen Beziehungen anders machen?'
+        ]
+      }
+    ]
+  },
+
 };

@@ -9297,4 +9297,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'suizidpraevention': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit Suizidgedanken oder nach Suizidversuch (stabilisierungsphase)',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Über Suizidgedanken sprechen – Tabu brechen',
+        dauer: '60 Min',
+        ziel: 'Suizidgedanken offen und sicher thematisieren',
+        psychoedukation: {
+          titel: 'Suizidgedanken sind häufiger als wir denken',
+          inhalt: 'Viele Menschen haben in schwierigen Zeiten Gedanken daran, das Leben zu beenden. Das ist kein Zeichen von Schwäche – sondern ein Zeichen extremen Schmerzes. Über diese Gedanken zu sprechen erhöht nicht das Risiko – es senkt es. Schweigen macht es schlimmer.'
+        },
+        interventionen: [
+          {
+            titel: 'Suizidgedanken einordnen',
+            ansatz: 'Sicherheitscheck',
+            beschreibung: 'Wie intensiv sind die Gedanken? (Wunsch zu sterben / Gedanken an Suizid / konkrete Pläne / Vorbereitungen?) Strukturiertes Einschätzungsgespräch – ohne Wertung, mit Fürsorge.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gründe zum Leben',
+            beschreibung: 'Was hält mich am Leben? Was möchte ich noch erleben? Wer würde mich vermissen? Auch kleine Dinge zählen – eine Person, ein Tier, ein Traum.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gründe-Liste aufbewahren',
+          beschreibung: 'Schreibe deine Gründe zum Leben auf und bewahre sie griffbereit auf – für Momente, in denen du sie brauchst.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hat dich bisher davon abgehalten, die Gedanken in die Tat umzusetzen?',
+          'Wem kannst du vertrauen, wenn es dir sehr schlecht geht?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Den Schmerz verstehen',
+        dauer: '60 Min',
+        ziel: 'Den Schmerz hinter Suizidgedanken erkennen und benennen',
+        psychoedukation: {
+          titel: 'Suizidgedanken als Schmerzsignal',
+          inhalt: 'Suizidgedanken sind oft ein Zeichen, dass jemand extreme psychische Schmerzen erlebt – und keinen anderen Ausweg sieht. Ziel ist nicht der Tod selbst, sondern das Ende des Schmerzes. Wenn wir den Schmerz verstehen, können wir andere Wege finden.'
+        },
+        interventionen: [
+          {
+            titel: 'Schmerzlandkarte',
+            ansatz: 'Emotionsfokussiert',
+            beschreibung: 'Was tut so weh? Woher kommt der Schmerz? Wie lange hält er schon an? Wann ist er am stärksten? Gemeinsam den Schmerz konkret benennen statt ihn abstrakt zu lassen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schmerz und Bedürfnis',
+            beschreibung: 'Hinter jedem Schmerz steckt ein unerfülltes Bedürfnis. Was brauche ich wirklich? (Zugehörigkeit, Liebe, Anerkennung, Kontrolle, Ruhe?)',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Schmerz-Tagebuch',
+          beschreibung: 'Notiere diese Woche, wann der Schmerz stärker oder schwächer ist. Was beeinflusst ihn?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was wäre, wenn du nicht sterben müsstest – nur der Schmerz aufhören?',
+          'Was bräuchtest du, damit es dir besser geht?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Sicherheitsplan erstellen',
+        dauer: '60 Min',
+        ziel: 'Einen persönlichen Sicherheitsplan für Krisen entwickeln',
+        psychoedukation: {
+          titel: 'Was ist ein Sicherheitsplan?',
+          inhalt: 'Ein Sicherheitsplan ist ein persönlicher Notfallplan für suizidale Krisen. Er hilft, gefährliche Momente zu überstehen. Er enthält: Warnzeichen, was mir hilft, wen ich anrufe, Krisentelefone. Er muss vor der nächsten Krise fertig sein – nicht in ihr.'
+        },
+        interventionen: [
+          {
+            titel: 'Sicherheitsplan gemeinsam erstellen',
+            ansatz: 'Sicherheitsplanung (Stanley & Brown)',
+            beschreibung: 'Schritt für Schritt: 1) Warnzeichen / 2) Ablenkungen und Coping / 3) Soziale Kontakte / 4) Professionelle Hilfe / 5) Mittel sichern / 6) Gründe zum Leben.',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sicherheitsplan testen',
+            beschreibung: 'Gehe den Plan durch: Würde ich ihn wirklich nutzen? Gibt es Lücken? Passe ihn gemeinsam mit dem Fachkraft an.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Plan verfügbar machen',
+          beschreibung: 'Speichere den Sicherheitsplan auf dem Handy, drucke ihn aus oder gib ihn einer Vertrauensperson. Stelle sicher, dass du ihn in einer Krise findest.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Kannst du dir vorstellen, diesen Plan in einer Krise zu nutzen?',
+          'Wer weiß, dass dieser Plan existiert?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Weiter leben – Hoffnung und Zukunft',
+        dauer: '60 Min',
+        ziel: 'Hoffnung und Zukunftsperspektive aufbauen',
+        psychoedukation: {
+          titel: 'Hoffnung ist lernbar',
+          inhalt: 'Hoffnung bedeutet nicht, dass alles gut sein wird – sondern dass Veränderung möglich ist. Hoffnung kann man aufbauen: durch kleine Ziele, positive Erfahrungen, Verbindung zu anderen. Sie entsteht langsam – und das ist in Ordnung.'
+        },
+        interventionen: [
+          {
+            titel: 'Hoffnungs-Galerie',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was könnte besser werden? In einem Monat? In einem Jahr? Was wünschst du dir für dein Leben? Bilder, Sätze oder Symbole sammeln.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief in die Zukunft',
+            beschreibung: 'Schreibe dir einen Brief, den du in einem Jahr lesen wirst: Was hoffst du, dass sich verändert hat? Was möchtest du dir sagen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Kleines Ziel',
+          beschreibung: 'Wähle ein kleines, erreichbares Ziel für diese Woche – etwas, das Leben bedeutet.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was gibst du nicht auf, auch wenn es schwer ist?',
+          'Wer oder was hält die Hoffnung in dir am Leben?'
+        ]
+      }
+    ]
+  },
+
 };

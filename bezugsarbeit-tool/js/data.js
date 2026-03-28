@@ -3793,4 +3793,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'kommunikation': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit Kommunikationsschwierigkeiten, Missverständnissen oder passivem/aggressivem Kommunikationsstil',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie kommuniziere ich?',
+        dauer: '60 Min',
+        ziel: 'Eigenen Kommunikationsstil erkennen; Grundlagen der Kommunikation verstehen',
+        psychoedukation: {
+          titel: 'Man kann nicht nicht kommunizieren',
+          inhalt: 'Kommunikation ist mehr als Worte. 55% der Botschaft kommt über Körpersprache, 38% über Tonfall, nur 7% über den Inhalt. Missverständnisse entstehen, weil Sender und Empfänger dieselbe Nachricht unterschiedlich verstehen. Das 4-Ohren-Modell zeigt: Jede Nachricht hat Sachebene, Beziehungsebene, Selbstoffenbarung und Appell.'
+        },
+        interventionen: [
+          {
+            titel: '4-Ohren-Analyse',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Ein Beispielsatz analysieren (z.B. „Das Essen ist kalt."): Was sagt der Sender auf jeder Ebene? Wie hört der Empfänger es auf jeder Ebene? Wo entstehen Missverständnisse?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Eigenen Stil einschätzen',
+            beschreibung: 'Bin ich eher passiv (schweige, weiche aus), aggressiv (kritisiere, greife an) oder assertiv (klar, direkt, respektvoll)? Beispiele aus dem Alltag sammeln.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Kommunikation beobachten',
+          beschreibung: 'Beobachte diese Woche ein Gespräch: Auf welcher Ebene kommuniziert jeder? Gibt es Missverständnisse? Warum?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher Kommunikationsstil ist deiner? Was sind die Folgen?',
+          'Wann kommunizierst du am klarsten?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Aktiv zuhören',
+        dauer: '60 Min',
+        ziel: 'Aktives Zuhören als Kernkompetenz entwickeln',
+        psychoedukation: {
+          titel: 'Zuhören ist aktiv',
+          inhalt: 'Die meisten Menschen hören nicht wirklich zu – sie warten auf ihre Antwort. Aktives Zuhören bedeutet: vollständige Aufmerksamkeit geben, nachfragen, zusammenfassen, Gefühle spiegeln. Das zeigt dem anderen: Du bist wichtig. Und es verhindert Missverständnisse, bevor sie entstehen.'
+        },
+        interventionen: [
+          {
+            titel: 'Aktives Zuhören üben',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Übung in Paaren: Eine Person erzählt 3 Minuten etwas. Die andere hört zu (kein Smartphone, kein Unterbrechen). Danach: Zusammenfassung + Nachfrage. Dann Rollen tauschen. Feedback: Wie hat es sich angefühlt, wirklich zugehört zu werden?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühle spiegeln',
+            beschreibung: 'Übe, Gefühle zu benennen, die du beim Gegenüber wahrnimmst: „Ich höre, dass du frustriert bist…" – ohne zu interpretieren oder zu bewerten.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Zuhör-Experiment',
+          beschreibung: 'Führe diese Woche ein Gespräch, in dem du bewusst aktiv zuhörst. Danach aufschreiben: Was war anders?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war beim aktiven Zuhören schwierig?',
+          'Wie hat sich der andere verändert, wenn er merkte, dass du wirklich zuhörst?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gewaltfreie Kommunikation',
+        dauer: '60 Min',
+        ziel: 'GFK-Modell (Beobachtung, Gefühl, Bedürfnis, Bitte) kennen und anwenden',
+        psychoedukation: {
+          titel: 'Gewaltfreie Kommunikation nach Rosenberg',
+          inhalt: 'Gewaltfrei bedeutet nicht schwach – sondern klar und ehrlich ohne Vorwürfe. Das GFK-Modell hat 4 Schritte: 1. Beobachtung (ohne Bewertung), 2. Gefühl, 3. Bedürfnis, 4. Konkrete Bitte. Beispiel: „Als du gestern nicht kamst (B), war ich enttäuscht (G), weil mir Verlässlichkeit wichtig ist (B). Bitte sag mir vorher Bescheid (Bitte)."'
+        },
+        interventionen: [
+          {
+            titel: 'GFK-Sätze formulieren',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Aus typischen Alltagskonflikten GFK-Formulierungen entwickeln. Zuerst gemeinsam, dann selbstständig. Rollenspiel: GFK in einer schwierigen Situation ausprobieren.',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Vorwurf → GFK umwandeln',
+            beschreibung: 'Wandle 3 typische Vorwürfe in GFK-Formulierungen um: „Du hörst mir nie zu" → „Wenn du während ich spreche auf dein Handy schaust, fühle ich mich nicht wichtig, weil ich mir Aufmerksamkeit wünsche. Könntest du das Handy kurz weglegen?"',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'GFK im Alltag',
+          beschreibung: 'Verwende diese Woche in mindestens einem Gespräch eine GFK-Formulierung.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war überraschend an der GFK?',
+          'In welcher Situation wäre sie am hilfreichsten?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Assertive Kommunikation in schwierigen Situationen',
+        dauer: '60 Min',
+        ziel: 'In herausfordernden Situationen klar und respektvoll kommunizieren',
+        psychoedukation: {
+          titel: 'Assertivität – für sich einstehen ohne anzugreifen',
+          inhalt: 'Assertiv zu sein bedeutet: eigene Bedürfnisse und Meinungen klar zu vertreten, ohne andere zu verletzen oder selbst zu kapitulieren. Es ist der Mittelweg zwischen Passivität und Aggression. Assertivität schützt Beziehungen und stärkt das Selbstwertgefühl.'
+        },
+        interventionen: [
+          {
+            titel: 'Schwierige Gespräche üben',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Rollenspiele mit herausfordernden Situationen: Kritik äußern, Nein sagen, um etwas bitten, eine Entschuldigung annehmen. Jeweils mit Feedback: Was war assertiv? Was war passiv oder aggressiv?',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Persönlicher Kommunikationsplan',
+            beschreibung: 'Welche kommunikativen Stärken habe ich? Wo möchte ich mich verbessern? Welche Technik nehme ich als erstes mit in den Alltag?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Assertives Gespräch führen',
+          beschreibung: 'Führe diese Woche bewusst ein Gespräch, in dem du assertiv kommunizierst – etwas sagst, das du sonst vermieden hättest.',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was hat sich in diesem Modul in deiner Kommunikation verändert?',
+          'Welche Technik nimmst du als wichtigste mit?'
+        ]
+      }
+    ]
+  },
+
 };

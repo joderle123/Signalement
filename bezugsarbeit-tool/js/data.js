@@ -10974,4 +10974,175 @@ const THEMA_MODULE = {
     ]
   },
 
+  'wiederkehrende-gedanken': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit aufdringlichen Gedanken, Grübeln oder zwanghaften Mustern',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Gedanken, die nicht loslassen',
+        dauer: '60 Min',
+        ziel: 'Wiederkehrende Gedankenmuster erkennen und einordnen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch (bevorzugt)',
+        hinweis_paedagoge: 'Viele Jugendliche schämen sich für "seltsame" oder beängstigende Gedanken. Wichtig: Der Inhalt eines Gedankens ist nicht dasselbe wie eine Handlungsabsicht. "Ich denke, dass ich meinen Bruder stoßen könnte" bedeutet nicht, dass ich es will. Diese Unterscheidung ist zentral.',
+        psychoedukation: {
+          titel: 'Jeder Mensch hat seltsame Gedanken',
+          inhalt: 'Aufdringliche Gedanken (über Fehler, über Gefahr, über "verbotene" Inhalte) haben fast alle Menschen. Das Gehirn produziert Gedanken wie das Herz Herzschläge – unkontrolliert. Das Problem entsteht, wenn man diesen Gedanken zu viel Bedeutung gibt und sie bekämpft. Das nennt man den "Gedanken-Fusions-Irrtum".'
+        },
+        interventionen: [
+          {
+            titel: 'Gedankenmuster-Analyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Welche Gedanken kommen immer wieder? Wie reagierst du darauf? (Unterdrücken, analysieren, handeln, beten, sichern?) Was passiert danach – werden die Gedanken weniger oder mehr? Erkenntnis: Kampf verstärkt Gedanken.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Weiß-Bären-Experiment',
+            beschreibung: 'Versuche jetzt 2 Minuten lang NICHT an einen weißen Bären zu denken. Was passiert? Demonstration: Unterdrücken macht Gedanken stärker. Das Gegenteil ist die Lösung: zulassen ohne zu kämpfen.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gedankenvirus',
+          beschreibung: 'Gruppe versteht: Aufdringliche Gedanken sind wie ein "Gedankenvirus" – je mehr man sie bekämpft, desto stärker werden sie. Gemeinsam: Was wäre, wenn wir sie einfach beobachten statt kämpfen?'
+        },
+        hausaufgabe: {
+          titel: 'Gedanken-Protokoll',
+          beschreibung: 'Notiere diese Woche, wann wiederkehrende Gedanken auftauchen. Schreibe den Gedanken auf – und dann: "Das ist nur ein Gedanke."',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welche Gedanken kommen bei dir am häufigsten wieder?',
+          'Was tust du normalerweise dagegen – und hilft es?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Distanz zum Gedanken gewinnen',
+        dauer: '60 Min',
+        ziel: 'Defusion von Gedanken lernen – Gedanken sind nicht die Realität',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'ACT-basierter Ansatz (Akzeptanz und Commitment). Das Ziel ist nicht, Gedanken zu ändern, sondern ihnen weniger Macht zu geben. Metaphern sind hier sehr hilfreich (Gedanken wie Wolken, Züge, Stimmen im Radio).',
+        psychoedukation: {
+          titel: 'Gedanken ≠ Fakten',
+          inhalt: 'Gedanken sind mentale Ereignisse – keine Fakten und keine Befehle. "Ich bin wertlos" ist ein Gedanke, keine Tatsache. "Ich muss das tun" ist ein Gedanke, keine Pflicht. Distanz zum Gedanken schaffen heißt: ich beobachte ihn, ohne ihn zu glauben.'
+        },
+        interventionen: [
+          {
+            titel: 'Defusions-Techniken',
+            ansatz: 'ACT (Acceptance and Commitment Therapy)',
+            beschreibung: 'Techniken: 1) Gedanke auf ein Blatt schreiben und wegschieben. 2) "Ich bemerke, dass ich den Gedanken habe, dass..." (Distanzierung). 3) Gedanken wie Züge beobachten, die kommen und gehen. Alle drei ausprobieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wolken-Übung',
+            beschreibung: 'Augen schließen. Stelle dir vor, deine Gedanken sind Wolken, die über den Himmel ziehen. Du siehst sie, aber du steigst nicht hinein. 5 Minuten lang beobachten.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gedanken-Theater',
+          beschreibung: 'Gruppe schreibt aufdringliche (anonyme) Gedanken auf Karten. Eine Person liest sie laut vor wie ein Radiosprecher – mit übertriebener, lustiger Stimme. Was passiert mit der Macht des Gedankens?'
+        },
+        hausaufgabe: {
+          titel: 'Defusions-Technik täglich',
+          beschreibung: 'Wenn ein aufdringlicher Gedanke kommt: "Ich bemerke, dass ich den Gedanken habe, dass..." Schreibe es auf oder sage es laut. Was verändert sich?',
+          dauer: '3 Min täglich'
+        },
+        reflexion: [
+          'Fühlt sich ein Gedanke anders an, wenn du ihm gegenüber Distanz schaffst?',
+          'Welche Defusions-Technik hat am besten funktioniert?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Rituale und Zwänge verstehen',
+        dauer: '60 Min',
+        ziel: 'Zwanghafte Reaktionen auf Gedanken erkennen und Alternativen entwickeln',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch (sensitiv)',
+        hinweis_paedagoge: 'Bei klinisch ausgeprägten Zwängen (häufige Rituale, stark beeinträchtigend) unbedingt Fachperson einbeziehen. Dieses Modul dient der Aufklärung und leichten Unterstützung, ersetzt keine OCD-Therapie. Ohne Druck vorgehen.',
+        psychoedukation: {
+          titel: 'Rituale geben kurzfristige Erleichterung',
+          inhalt: 'Zwanghafte Rituale (Prüfen, Waschen, Zählen, Wiederholen) entstehen, weil sie kurzfristig Angst lindern. Das Problem: das Gehirn lernt, dass das Ritual notwendig ist – und der Drang wird stärker. Der Ausweg ist: Angst aushalten ohne Ritual (sogenannte Reaktionsverhinderung).'
+        },
+        interventionen: [
+          {
+            titel: 'Ritual-Analyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Gibt es Rituale oder Handlungen, die du ausführst, um Gedanken zu beruhigen? (z.B. mehrfach prüfen, Gegenstände anordnen, bestimmte Sätze wiederholen) Gemeinsam analysieren: Gedanke → Angst → Ritual → kurzfristige Erleichterung → Verstärkung.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Kleines Ritual hinauszögern',
+            beschreibung: 'Wähle ein kleines Ritual. Versuche, es um 5 Minuten hinauszuzögern. Was passiert mit der Angst? (Sie steigt – aber dann fällt sie von selbst.)',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Sicherheitsverhalten identifizieren',
+          beschreibung: 'Gruppe bespricht allgemein: Was tun Menschen, um Angst zu beruhigen? (Checklisten, wiederholt fragen, checken, meiden...) Was haben diese Verhaltensweisen gemeinsam? (Kurzfristige Erleichterung, langfristige Verstärkung)'
+        },
+        hausaufgabe: {
+          titel: 'Ein Ritual 5 Min hinauszögern',
+          beschreibung: 'Diese Woche: Wenn du das Ritual ausführen möchtest, warte 5 Minuten. Notiere: Was ist passiert? Wie hast du dich danach gefühlt?',
+          dauer: '5 Min bei Auftreten'
+        },
+        reflexion: [
+          'Welche Rituale haben in deinem Leben die meiste Macht?',
+          'Wie wäre es, wenn das Ritual kleiner oder seltener würde?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Ein Leben nach den eigenen Werten',
+        dauer: '60 Min',
+        ziel: 'Gedanken und Rituale weniger Raum geben – Werte als Leitfaden',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'ACT-Werte-Arbeit: Was ist mir wichtig, unabhängig von Angst und Gedanken? Weg vom Problem-Fokus hin zum Leben, das man führen möchte. Das gibt Energie und reduziert die Bedeutung der Gedanken.',
+        psychoedukation: {
+          titel: 'Werte als Kompass',
+          inhalt: 'Wenn Gedanken und Rituale viel Raum einnehmen, wird das Leben kleiner. Die Lösung: nicht warten, bis die Gedanken weg sind – sondern trotz ihnen handeln. Was ist mir wichtig? Was möchte ich tun – egal was mein Kopf sagt?'
+        },
+        interventionen: [
+          {
+            titel: 'Werte-Kompass',
+            ansatz: 'ACT',
+            beschreibung: 'Welche Werte möchtest du in deinem Leben verkörpern? (Freundschaft, Mut, Kreativität, Wachstum?) Wie verhindern die Gedanken/Rituale gerade, danach zu leben? Welchen kleinen Schritt könntest du unternehmen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wertvoller Tag',
+            beschreibung: 'Wenn deine Gedanken heute weniger Macht hätten – was würdest du tun? Plane einen "wertvollen Tag" ohne Rücksicht auf die Gedanken.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Werte-Galerie',
+          beschreibung: 'Gruppe erstellt eine "Werte-Galerie" – jede/r zeichnet oder schreibt einen Wert und warum er/sie wichtig ist. Gemeinsam ausstellen und vorstellen.'
+        },
+        hausaufgabe: {
+          titel: 'Ein wertvolles Handlung',
+          beschreibung: 'Tu diese Woche eine Sache, die mit einem wichtigen Wert übereinstimmt – auch wenn Gedanken dagegen sprechen.',
+          dauer: '10 Min Reflexion'
+        },
+        reflexion: [
+          'Was ist dir im Leben am wichtigsten, unabhängig von deinen Gedanken?',
+          'Was nimmst du aus diesem Modul mit?'
+        ]
+      }
+    ]
+  },
+
 };

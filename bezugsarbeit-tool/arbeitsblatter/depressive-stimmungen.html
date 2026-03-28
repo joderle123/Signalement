@@ -2,10 +2,14 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Arbeitsblatt – Depressive Stimmungen</title>
+  <title>Arbeitsblatt – Wenn alles grau wird</title>
   <link rel="stylesheet" href="../css/arbeitsblatt.css">
   <style>
-    :root { --farbe: #475569; --farbe-hell: #F1F5F9; }
+    :root { --farbe: #2563EB; --farbe-hell: #EFF6FF; }
+    .bubble-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+    .bubble { background:var(--farbe-hell); border:1.5px solid #BFDBFE; border-radius:8px; padding:8px 10px; font-size:11px; }
+    .mood-box { display:inline-block; width:30px; height:30px; border-radius:6px; border:1.5px solid var(--border); margin:2px; vertical-align:middle; }
+    .spiral-row { display:grid; grid-template-columns:90px 1fr; gap:8px; align-items:center; margin-bottom:6px; }
   </style>
 </head>
 <body>
@@ -15,13 +19,13 @@
   <button class="btn-drucken" onclick="window.print()">🖨️ Drucken / PDF</button>
 </div>
 
-<!-- ===== SEITE 1 ===== -->
+<!-- SEITE 1 -->
 <div class="seite">
   <div class="kopfzeile">
     <div class="kopfzeile-links">
       <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
-      <div class="ab-titel">Wenn alles grau ist – Depressive Stimmungen verstehen</div>
-      <div class="ab-untertitel">Emotionen & Wohlbefinden · Kategorie: Depressive Stimmungen</div>
+      <div class="ab-titel">Wenn alles grau wird – und wie du wieder Farbe findest</div>
+      <div class="ab-untertitel">Depressive Stimmungen · Kategorie: Emotionen &amp; Wohlbefinden</div>
     </div>
     <div class="kopfzeile-icon">🌧️</div>
   </div>
@@ -33,82 +37,73 @@
   </div>
 
   <div class="infobox">
-    <div class="infobox-titel">💡 Was sind depressive Stimmungen?</div>
-    <p>Traurigkeit, Schwere, Erschöpfung, innere Leere – manchmal fühlen sich Tage grau und schwer an. Das ist menschlich. Wenn diese Gefühle lange anhalten oder sehr stark sind, braucht es Unterstützung. Dieses Blatt hilft dir, deine Stimmung besser zu verstehen.</p>
-    <p><strong>Wichtig:</strong> Depressive Stimmungen ≠ Schwäche. Es gibt immer Wege heraus – auch wenn es sich nicht so anfühlt.</p>
+    <div class="infobox-titel">💡 Grau ist kein Versagen – es ist ein Signal.</div>
+    <p>Manchmal fühlen sich Tage schwer an, als ob man durch Watte läuft. Das ist menschlich – und du bist damit nicht allein. <strong>Das macht Sinn.</strong> Wenn Grau zur Dauerwolke wird, lohnt es sich hinzuschauen.</p>
+    <p>🧠 <em>Wusstest du? Bis zu 20 % aller Jugendlichen erleben depressive Phasen. Das Gehirn in der Pubertät baut sich komplett um – das Gefühlssystem ist dabei besonders empfindlich. Das ist Biologie, keine Schwäche.</em></p>
   </div>
 
   <!-- Übung 1 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">1</div>
-      <div class="uebung-titel">Wie geht es mir gerade? – Der Stimmungscheck</div>
+    <div class="uebung-header"><div class="uebung-nr">1</div><div class="uebung-titel">Erkenne deinen Körper – Kreise ein, was du kennst</div></div>
+    <div class="uebung-beschreibung">Depressive Stimmungen zeigen sich oft im Körper. Kreise ein, was du manchmal kennst (mehrere möglich):</div>
+    <div class="bubble-grid">
+      <div class="bubble">😴 Ich bin ständig müde, egal wie viel ich schlafe</div>
+      <div class="bubble">🪨 Mein Körper fühlt sich schwer und bleiern an</div>
+      <div class="bubble">🍽️ Ich habe keinen Hunger – oder fresse alles in mich rein</div>
+      <div class="bubble">🧠 Ich kann mich kaum konzentrieren, alles ist Matsch</div>
+      <div class="bubble">💤 Ich schlafe zu viel oder kann gar nicht schlafen</div>
+      <div class="bubble">😶 Ich fühle mich taub – weder traurig noch glücklich</div>
+      <div class="bubble">🚿 Ich vernachlässige mich (duschen, essen, rausgehen)</div>
+      <div class="bubble">💔 Dinge die früher Spaß gemacht haben, interessieren mich nicht mehr</div>
     </div>
-    <div class="uebung-beschreibung">
-      Lies die folgenden Aussagen. Kreuze an, was auf dich zutrifft – <strong>in den letzten 2 Wochen</strong>.
-    </div>
-
-    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:10px;">
-      <thead>
-        <tr style="background:var(--farbe-hell);">
-          <th style="padding:7px;text-align:left;border:1px solid var(--border);">Wie es mir geht …</th>
-          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:55px;">Nie</th>
-          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:65px;">Manchmal</th>
-          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:55px;">Oft</th>
-          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:65px;">Fast immer</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Ich fühle mich traurig oder leer</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Ich habe keine Energie / bin erschöpft</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Dinge, die mir früher Spaß machten, interessieren mich nicht mehr</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Ich ziehe mich von anderen zurück</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Ich habe Schlafprobleme (zu viel / zu wenig)</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Ich mache mir viele negative Gedanken über mich selbst</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Ich habe Schwierigkeiten mich zu konzentrieren</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);">Ich denke manchmal daran, nicht mehr da sein zu wollen</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td><td style="padding:7px;border:1px solid var(--border);text-align:center;">○</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:10px;color:var(--grau);">⚠️ Wenn du die letzte Zeile angekreuzt hast – bitte sprich sofort mit einer Vertrauensperson oder rufe die Krisenhotline an: <strong>Kanner-Jugendtelefon 116 111</strong> (kostenlos, 24h).</p>
+    <p style="font-size:11px;color:var(--grau);">Das macht Sinn. Dein Körper kommuniziert mit dir. Was hast du eingekreist? Notiere 1–2 Worte dazu: <span style="border-bottom:1px dashed var(--border);display:inline-block;width:160px;"></span></p>
   </div>
 
   <!-- Übung 2 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">2</div>
-      <div class="uebung-titel">Meine Stimmungs-Kurve der letzten Woche</div>
+    <div class="uebung-header"><div class="uebung-nr">2</div><div class="uebung-titel">Dein 7-Tage-Stimmungsthermometer – Farbe eintragen</div></div>
+    <div class="uebung-beschreibung">Wie war deine Stimmung die letzten 7 Tage? Male jeden Tag in einer Farbe aus (🔵 = sehr schlecht · 🟣 = okay · 🟡 = gut · 🟢 = super). Verbinde danach die Punkte mit einem Strich.</div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;color:var(--farbe);">Mo</div>
+      <div style="font-size:10px;font-weight:700;color:var(--farbe);">Di</div>
+      <div style="font-size:10px;font-weight:700;color:var(--farbe);">Mi</div>
+      <div style="font-size:10px;font-weight:700;color:var(--farbe);">Do</div>
+      <div style="font-size:10px;font-weight:700;color:var(--farbe);">Fr</div>
+      <div style="font-size:10px;font-weight:700;color:var(--farbe);">Sa</div>
+      <div style="font-size:10px;font-weight:700;color:var(--farbe);">So</div>
+      <div style="background:#F3F4F6;border:1.5px solid var(--border);border-radius:8px;height:52px;"></div>
+      <div style="background:#F3F4F6;border:1.5px solid var(--border);border-radius:8px;height:52px;"></div>
+      <div style="background:#F3F4F6;border:1.5px solid var(--border);border-radius:8px;height:52px;"></div>
+      <div style="background:#F3F4F6;border:1.5px solid var(--border);border-radius:8px;height:52px;"></div>
+      <div style="background:#F3F4F6;border:1.5px solid var(--border);border-radius:8px;height:52px;"></div>
+      <div style="background:#F3F4F6;border:1.5px solid var(--border);border-radius:8px;height:52px;"></div>
+      <div style="background:#F3F4F6;border:1.5px solid var(--border);border-radius:8px;height:52px;"></div>
     </div>
-    <div class="uebung-beschreibung">
-      Zeichne eine Kurve: Wie war deine Stimmung an jedem Tag? (10 = sehr gut, 1 = sehr schlecht). Verbinde die Punkte.
+    <div style="display:flex;gap:12px;font-size:10px;color:var(--grau);flex-wrap:wrap;">
+      <span>🔵 Sehr grau</span><span>🟣 So lala</span><span>🟡 Geht so</span><span>🟢 Richtig gut</span>
     </div>
+    <p style="font-size:11px;margin-top:6px;color:var(--grau);">Was war an deinen besseren Tagen anders? <span style="border-bottom:1px dashed var(--border);display:inline-block;width:200px;"></span></p>
+  </div>
 
-    <div style="position:relative;border:1.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;background:#FAFAFA;">
-      <!-- Y-Achse Labels -->
-      <div style="position:absolute;left:8px;top:10px;font-size:9px;color:var(--grau);">10</div>
-      <div style="position:absolute;left:8px;top:38px;font-size:9px;color:var(--grau);">8</div>
-      <div style="position:absolute;left:8px;top:66px;font-size:9px;color:var(--grau);">6</div>
-      <div style="position:absolute;left:8px;top:94px;font-size:9px;color:var(--grau);">4</div>
-      <div style="position:absolute;left:8px;top:122px;font-size:9px;color:var(--grau);">2</div>
-      <!-- Grid lines -->
-      <div style="margin-left:22px;height:140px;border-left:1px solid #E5E7EB;border-bottom:1px solid #E5E7EB;position:relative;">
-        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#F3F4F6;"></div>
-        <div style="position:absolute;top:28px;left:0;right:0;height:1px;background:#F3F4F6;"></div>
-        <div style="position:absolute;top:56px;left:0;right:0;height:1px;background:#F3F4F6;"></div>
-        <div style="position:absolute;top:84px;left:0;right:0;height:1px;background:#F3F4F6;"></div>
-        <div style="position:absolute;top:112px;left:0;right:0;height:1px;background:#F3F4F6;"></div>
-        <!-- Day columns -->
-        <div style="display:flex;height:100%;align-items:flex-end;">
-          <div style="flex:1;text-align:center;font-size:9px;color:var(--grau);padding-bottom:3px;border-right:1px dashed #E5E7EB;">Mo</div>
-          <div style="flex:1;text-align:center;font-size:9px;color:var(--grau);padding-bottom:3px;border-right:1px dashed #E5E7EB;">Di</div>
-          <div style="flex:1;text-align:center;font-size:9px;color:var(--grau);padding-bottom:3px;border-right:1px dashed #E5E7EB;">Mi</div>
-          <div style="flex:1;text-align:center;font-size:9px;color:var(--grau);padding-bottom:3px;border-right:1px dashed #E5E7EB;">Do</div>
-          <div style="flex:1;text-align:center;font-size:9px;color:var(--grau);padding-bottom:3px;border-right:1px dashed #E5E7EB;">Fr</div>
-          <div style="flex:1;text-align:center;font-size:9px;color:var(--grau);padding-bottom:3px;border-right:1px dashed #E5E7EB;">Sa</div>
-          <div style="flex:1;text-align:center;font-size:9px;color:var(--grau);padding-bottom:3px;">So</div>
-        </div>
+  <!-- Übung 3 -->
+  <div class="uebung">
+    <div class="uebung-header"><div class="uebung-nr">3</div><div class="uebung-titel">Deine Aktivierungs-Spirale – Was hat dir früher gut getan?</div></div>
+    <div class="uebung-beschreibung">Bei Grau zieht man sich zurück – das macht alles noch grauer. Kleine Schritte brechen den Kreislauf. Fülle die Spirale aus:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div style="border:1.5px solid #BFDBFE;border-radius:8px;padding:10px;background:var(--farbe-hell);">
+        <div style="font-size:10px;font-weight:700;color:var(--farbe);margin-bottom:6px;">⭐ Das habe ich früher geliebt</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+      <div style="border:1.5px solid #A5B4FC;border-radius:8px;padding:10px;background:#EEF2FF;">
+        <div style="font-size:10px;font-weight:700;color:#4338CA;margin-bottom:6px;">🌱 Das mache ich noch manchmal</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+      <div style="border:1.5px solid #6EE7B7;border-radius:8px;padding:10px;background:#F0FDF4;">
+        <div style="font-size:10px;font-weight:700;color:#059669;margin-bottom:6px;">🚀 Das probiere ich diese Woche</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--grau);">Was hat an deinen besten Tagen anders gewesen? _______________________________________________</p>
+    <p style="font-size:11px;color:var(--grau);">💡 Tipp: Schon 10 Minuten Aktivität kann die Stimmung heben – auch wenn du keine Lust hast.</p>
   </div>
 
   <div class="fusszeile">
@@ -117,194 +112,82 @@
   </div>
 </div>
 
-<!-- ===== SEITE 2 ===== -->
+<!-- SEITE 2 -->
 <div class="seite">
-
-  <!-- Übung 3 -->
-  <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">3</div>
-      <div class="uebung-titel">Was verschlimmert, was hilft? – Meine Einfluss-Faktoren</div>
-    </div>
-    <div class="uebung-beschreibung">
-      Trage ein, was deine Stimmung verschlechtert und was sie verbessert – auch wenn der Effekt klein ist.
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div style="border:1.5px solid #EF4444;border-radius:8px;padding:10px;background:#FEF2F2;">
-        <div style="font-size:11px;font-weight:700;color:#DC2626;margin-bottom:8px;">⬇️ Das verschlechtert meine Stimmung</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div>
-        </div>
-      </div>
-      <div style="border:1.5px solid #22C55E;border-radius:8px;padding:10px;background:#F0FDF4;">
-        <div style="font-size:11px;font-weight:700;color:#16A34A;margin-bottom:8px;">⬆️ Das verbessert meine Stimmung</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="trennlinie">
 
   <!-- Übung 4 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">4</div>
-      <div class="uebung-titel">Behavioral Activation – Aktivitäten gegen die graue Wand</div>
+    <div class="uebung-header"><div class="uebung-nr">4</div><div class="uebung-titel">Gedankenfallen entlarven – Kreise ein, was du kennst</div></div>
+    <div class="uebung-beschreibung">Wenn man depressiv ist, denkt das Gehirn in Fallen. Das ist keine Wahrheit – es sind Muster. Erkenne sie, kreise ein:</div>
+    <div class="bubble-grid">
+      <div class="bubble">💭 <strong>Alles-oder-Nichts:</strong> "Wenn ich das nicht perfekt hinkriege, bin ich ein totaler Versager."</div>
+      <div class="bubble">🔮 <strong>Gedankenlesen:</strong> "Alle denken bestimmt, dass ich komisch bin."</div>
+      <div class="bubble">🏔️ <strong>Katastrophisieren:</strong> "Das wird nie besser. Immer passiert mir das."</div>
+      <div class="bubble">🎭 <strong>Personalisierung:</strong> "Das ist alles meine Schuld."</div>
+      <div class="bubble">🚫 <strong>Gutes ignorieren:</strong> "Das war nur Glück, das zählt nicht."</div>
+      <div class="bubble">😰 <strong>Gefühle als Fakten:</strong> "Ich fühle mich wertlos, also bin ich wertlos."</div>
     </div>
-    <div class="uebung-beschreibung">
-      Bei depressiven Stimmungen ziehen wir uns oft zurück – das macht alles schlimmer. Kleine Aktivitäten können die Stimmung schrittweise heben. Plane für diese Woche mindestens <strong>3 Aktivitäten</strong> ein.
+    <div style="background:var(--farbe-hell);border-radius:8px;padding:10px;font-size:11px;margin-top:4px;">
+      <strong>Dein Gegengift-Satz:</strong> Wähle eine Falle aus. Was könnte ein Freund dir realistisches entgegnen?<br>
+      <div class="schreiblinien" style="margin-top:6px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
     </div>
-
-    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-      <thead>
-        <tr style="background:var(--farbe-hell);">
-          <th style="padding:7px;text-align:left;border:1px solid var(--border);">Aktivität</th>
-          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:70px;">Wann?</th>
-          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:80px;">Stimmung vorher<br>(1–10)</th>
-          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:80px;">Stimmung nachher<br>(1–10)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding:7px;border:1px solid var(--border);height:28px;"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);height:28px;"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);height:28px;"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);height:28px;"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:11px;color:var(--grau);margin-top:6px;">💡 Ideen: Spaziergang, Musik hören, ein Freund anschreiben, duschen, 10 Min. im Freien, etwas kochen, ein Buch lesen…</p>
   </div>
-
-  <hr class="trennlinie">
 
   <!-- Übung 5 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">5</div>
-      <div class="uebung-titel">Mein Anker-Satz</div>
+    <div class="uebung-header"><div class="uebung-nr">5</div><div class="uebung-titel">Dein 3-Schritte-Aktivierungsplan für diese Woche</div></div>
+    <div class="uebung-beschreibung">Keine großen Heldentaten – nur 3 kleine, konkrete Schritte. Wähle etwas das realistisch ist:</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+      <div style="display:grid;grid-template-columns:28px 1fr 80px 70px;gap:8px;align-items:center;background:var(--farbe-hell);border-radius:8px;padding:10px;">
+        <div style="font-size:16px;">1️⃣</div>
+        <div class="schreiblinien" style="flex:1;"><div class="schreiblinie"></div></div>
+        <div style="font-size:10px;color:var(--grau);">Wann? <div style="border-bottom:1px dashed var(--border);height:14px;"></div></div>
+        <div style="font-size:10px;color:var(--grau);">Erledigt? ☐</div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr 80px 70px;gap:8px;align-items:center;background:var(--farbe-hell);border-radius:8px;padding:10px;">
+        <div style="font-size:16px;">2️⃣</div>
+        <div class="schreiblinien" style="flex:1;"><div class="schreiblinie"></div></div>
+        <div style="font-size:10px;color:var(--grau);">Wann? <div style="border-bottom:1px dashed var(--border);height:14px;"></div></div>
+        <div style="font-size:10px;color:var(--grau);">Erledigt? ☐</div>
+      </div>
+      <div style="display:grid;grid-template-columns:28px 1fr 80px 70px;gap:8px;align-items:center;background:var(--farbe-hell);border-radius:8px;padding:10px;">
+        <div style="font-size:16px;">3️⃣</div>
+        <div class="schreiblinien" style="flex:1;"><div class="schreiblinie"></div></div>
+        <div style="font-size:10px;color:var(--grau);">Wann? <div style="border-bottom:1px dashed var(--border);height:14px;"></div></div>
+        <div style="font-size:10px;color:var(--grau);">Erledigt? ☐</div>
+      </div>
     </div>
-    <div class="uebung-beschreibung">
-      Wenn alles dunkel erscheint, hilft ein Satz, der mich erinnert: Das geht vorüber. Schreibe deinen persönlichen Anker-Satz auf – etwas, das du dir in schwierigen Momenten sagst.
-    </div>
-    <div style="border:2px solid var(--farbe);border-radius:10px;padding:14px;margin-bottom:8px;min-height:60px;background:var(--farbe-hell);">
-      <div style="font-size:11px;color:var(--grau);margin-bottom:6px;">Mein Anker-Satz lautet:</div>
-      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <p style="font-size:11px;color:var(--grau);">💡 Ideen: 10 Min. spazieren · einen Menschen anschreiben · duschen · etwas kochen · 5 Min. tanzen · ein Buch aufschlagen</p>
+  </div>
+
+  <!-- Übung 6 -->
+  <div class="uebung">
+    <div class="uebung-header"><div class="uebung-nr">6</div><div class="uebung-titel">Selbstmitgefühl-Brief – Schreib dir selbst</div></div>
+    <div class="uebung-beschreibung">Stell dir vor, dein bester Freund fühlt sich genauso wie du. Was würdest du ihm schreiben? Schreib es jetzt dir selbst:</div>
+    <div style="border:1.5px dashed #BFDBFE;border-radius:8px;padding:12px;background:var(--farbe-hell);min-height:80px;">
+      <div style="font-size:11px;color:var(--grau);margin-bottom:6px;">Hey, ich sehe dich. Ich weiß, dass gerade alles schwer ist…</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
     </div>
   </div>
 
-  <!-- Reflexion -->
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Reflexion mit dem Erzieher / der Erzieherin</div>
-    <p style="font-size:11px;color:#92400E;margin-bottom:8px;">Beantworte diese Fragen gemeinsam oder danach:</p>
-    <div style="font-size:12px;margin-bottom:6px;">1. Wann hast du zuletzt etwas wirklich genossen? Was war das?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:6px;">2. Gibt es Menschen, bei denen du dich wohlfühlst? Was ist an diesen Kontakten anders?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:6px;">3. Wenn dein bester Freund / deine beste Freundin das Gleiche durchmachen würde – was würdest du ihm/ihr sagen?</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <div class="reflexion-titel">💬 Reflexion</div>
+    <p>Was nimmst du heute mit? Was war neu? Was hat dich überrascht?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <p style="font-size:11px;color:#92400E;margin-top:8px;">⚠️ Wenn du Gedanken hast, nicht mehr da sein zu wollen: Bitte sprich sofort mit jemandem. <strong>Kanner-Jugendtelefon 116 111</strong> – kostenlos, 24h, anonym.</p>
   </div>
 
   <div class="fachhinweis">
     <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
-    Behavioral Activation (Verhaltensaktivierung) ist eine evidenzbasierte Methode bei Depression (Dimidjian et al., 2006). Kleine, konkrete Handlungen durchbrechen den Teufelskreis aus Rückzug → Freudlosigkeit → Rückzug. Bei anhaltenden Symptomen (>2 Wochen): Ärztliche/therapeutische Abklärung empfehlen. <strong>Notfallnummern Luxemburg:</strong> Kanner-Jugendtelefon 116 111 · SOS Détresse 454545 · Notaufnahme CHL 4411-1.
+    <strong>ICD-10:</strong> F32 (depressive Episode), F33 (rezidivierende depressive Störung). Leitsymptome: gedrückte Stimmung, Interessenverlust (Anhedonie), Antriebslosigkeit &gt;2 Wochen. Bei Jugendlichen häufig atypisch: Reizbarkeit, somatische Beschwerden, sozialer Rückzug.<br>
+    <strong>Methoden:</strong> Verhaltensaktivierung (BA, Dimidjian 2006) – nachweislich wirksam wie KVT bei Depression. Kognitive Umstrukturierung (Beck, CBT). Selbstmitgefühlsübungen (Neff, MSC-Programm).<br>
+    <strong>Screening:</strong> PHQ-A (Jugendversion), DASS-21. <strong>Abklärung empfehlen</strong> bei Symptomen &gt;2 Wochen, Suizidgedanken (immer ansprechen!), starker Beeinträchtigung.<br>
+    <strong>Notfallnummern Luxemburg:</strong> Kanner-Jugendtelefon 116 111 · SOS Détresse 454545 · Notaufnahme CHL 4411-1
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
     <span>Depressive Stimmungen · Seite 2</span>
-  </div>
-</div>
-
-<!-- ===== SEITE 3 ===== -->
-<div class="seite">
-
-  <!-- Übung 6 -->
-  <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">6</div>
-      <div class="uebung-titel">Negative Gedanken umstrukturieren</div>
-    </div>
-    <div class="uebung-beschreibung">
-      Depressive Stimmungen gehen oft mit negativen automatischen Gedanken einher. Lerne, sie zu hinterfragen.
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 24px 1fr;gap:0;margin-bottom:12px;">
-      <div style="border:1.5px solid var(--border);border-radius:8px 0 0 8px;padding:10px;background:#FEF2F2;">
-        <div style="font-size:10px;font-weight:700;color:#DC2626;margin-bottom:6px;">💭 Negativer Gedanke</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="background:var(--farbe-hell);display:flex;align-items:center;justify-content:center;font-size:16px;">→</div>
-      <div style="border:1.5px solid var(--border);border-radius:0 8px 8px 0;padding:10px;background:#F0FDF4;">
-        <div style="font-size:10px;font-weight:700;color:#16A34A;margin-bottom:6px;">✅ Realistischerer Gedanke</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 24px 1fr;gap:0;margin-bottom:12px;">
-      <div style="border:1.5px solid var(--border);border-radius:8px 0 0 8px;padding:10px;background:#FEF2F2;">
-        <div style="font-size:10px;font-weight:700;color:#DC2626;margin-bottom:6px;">💭 Negativer Gedanke</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="background:var(--farbe-hell);display:flex;align-items:center;justify-content:center;font-size:16px;">→</div>
-      <div style="border:1.5px solid var(--border);border-radius:0 8px 8px 0;padding:10px;background:#F0FDF4;">
-        <div style="font-size:10px;font-weight:700;color:#16A34A;margin-bottom:6px;">✅ Realistischerer Gedanke</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-    </div>
-    <div class="infobox" style="margin-top:6px;">
-      <div class="infobox-titel">🔍 Hilfsfragen zum Hinterfragen</div>
-      <p>Stimmt das wirklich? · Was würde mein bester Freund sagen? · Wie sieht das in 1 Jahr aus? · Übertreibe ich gerade? · Was ist das Beste/Schlimmste/Wahrscheinlichste was passieren kann?</p>
-    </div>
-  </div>
-
-  <hr class="trennlinie">
-
-  <!-- Übung 7 -->
-  <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">7</div>
-      <div class="uebung-titel">Mein Mini-Selbstfürsorge-Plan für schwere Tage</div>
-    </div>
-    <div class="uebung-beschreibung">
-      An schweren Tagen ist es wichtig, einen Plan zu haben. Fülle ihn in ruhigen Momenten aus – damit du ihn parat hast, wenn du ihn brauchst.
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">🧍 Wenn ich allein bin …</div>
-        <div style="font-size:11px;color:var(--grau);margin-bottom:4px;">tue ich folgendes (3 konkrete Dinge):</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">📞 Ich rufe an / schreibe …</div>
-        <div style="font-size:11px;color:var(--grau);margin-bottom:4px;">Namen und Nummer:</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">🎵 Musik / Playlist die hilft</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:#DC2626;margin-bottom:6px;">🆘 Notfall-Nummer</div>
-        <div style="font-size:11px;">Kanner-Jugendtelefon: <strong>116 111</strong></div>
-        <div style="font-size:11px;">SOS Détresse: <strong>454545</strong></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="reflexion">
-    <div class="reflexion-titel">💬 Was nehme ich aus diesem Arbeitsblatt mit?</div>
-    <div class="schreiblinien" style="margin-top:8px;"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-  </div>
-
-  <div class="fusszeile">
-    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Depressive Stimmungen · Seite 3</span>
   </div>
 </div>
 

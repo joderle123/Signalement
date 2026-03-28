@@ -8214,4 +8214,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'selbstbild': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche, die ihr Selbstbild klären und stärken möchten',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wer bin ich? – Selbstwahrnehmung',
+        dauer: '60 Min',
+        ziel: 'Die eigene Selbstwahrnehmung bewusst machen und beschreiben',
+        psychoedukation: {
+          titel: 'Selbstbild und Fremdbild',
+          inhalt: 'Das Selbstbild ist, wie wir uns selbst sehen – geprägt durch Erfahrungen, Rückmeldungen und innere Überzeugungen. Es unterscheidet sich oft vom Fremdbild (wie andere uns sehen). Beides beeinflusst unser Verhalten und Wohlbefinden.'
+        },
+        interventionen: [
+          {
+            titel: 'Eigenschafts-Collage',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Jugendliche wählen 10 Adjektive, die sie auf sich beziehen würden. Dann: Welche davon kommen von innen, welche von außen (Rückmeldungen anderer)?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Spiegel-Übung',
+            beschreibung: 'Schreibe 5 Dinge auf, die du an dir schätzt – ohne die Meinung anderer. Was siehst du, wenn du ehrlich hinschaust?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Tagebucheintrag: Ich heute',
+          beschreibung: 'Schreibe abends auf, wie du dich heute wahrgenommen hast. Was war positiv, was negativ?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was überrascht dich an deinem Selbstbild?',
+          'Woher kommen deine Überzeugungen über dich?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Stärken und Schwächen realistisch sehen',
+        dauer: '60 Min',
+        ziel: 'Ein realistisches, ausgewogenes Selbstbild entwickeln',
+        psychoedukation: {
+          titel: 'Stärken-Schwächen-Balance',
+          inhalt: 'Ein gesundes Selbstbild bedeutet nicht, keine Schwächen zu haben – sondern sie realistisch einzuschätzen und Stärken gleichwertig anzuerkennen. Selbstkritik ist hilfreich, wenn sie konstruktiv ist; destruktive Selbstkritik schadet.'
+        },
+        interventionen: [
+          {
+            titel: 'SWOT-Analyse persönlich',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Persönliche SWOT-Analyse: Stärken, Schwächen, Chancen, Risiken. Fokus: Was kann ich aus meinen Stärken machen? Wie gehe ich mit Schwächen konstruktiv um?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Stärkenbrief',
+            beschreibung: 'Schreibe dir selbst einen Brief, in dem du deine drei größten Stärken anerkennst und begründest, warum sie wertvoll sind.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stärken beobachten',
+          beschreibung: 'Notiere diese Woche jeden Tag eine Situation, in der du eine Stärke gezeigt hast.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Fällt es dir leichter, Stärken oder Schwächen zu benennen?',
+          'Was hindert dich daran, deine Stärken anzuerkennen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Innere Kritik und Selbstmitgefühl',
+        dauer: '60 Min',
+        ziel: 'Den inneren Kritiker kennen und mit Selbstmitgefühl begegnen',
+        psychoedukation: {
+          titel: 'Der innere Kritiker',
+          inhalt: 'Viele Menschen haben eine innere Stimme, die sie bewertet und kritisiert. Diese Stimme entstand oft durch Erfahrungen. Selbstmitgefühl bedeutet, sich selbst so zu behandeln wie einen guten Freund – mit Verständnis statt Verurteilung.'
+        },
+        interventionen: [
+          {
+            titel: 'Innerer-Kritiker-Dialog',
+            ansatz: 'Schematherapeutisch',
+            beschreibung: 'Was sagt dein innerer Kritiker typischerweise? Schreibe es auf. Dann: Was würdest du einem guten Freund in dieser Situation sagen? Vergleiche beide Stimmen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Selbstmitgefühls-Brief',
+            beschreibung: 'Schreibe dir einen Brief über eine Situation, in der du Fehler gemacht hast – mit dem Mitgefühl, das du einem Freund schenken würdest.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Kritiker-Tagebuch',
+          beschreibung: 'Notiere diese Woche, wann dein innerer Kritiker laut wird. Was löst ihn aus? Was hilft, ihn zu beruhigen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann ist dein innerer Kritiker hilfreich, wann schädlich?',
+          'Was brauchst du, um freundlicher mit dir zu sein?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Mein Selbstbild – gestern, heute, morgen',
+        dauer: '60 Min',
+        ziel: 'Das Selbstbild als veränderlich und wachstumsfähig erleben',
+        psychoedukation: {
+          titel: 'Growth Mindset',
+          inhalt: 'Das Selbstbild ist keine feste Größe – es entwickelt sich. Wer glaubt, sich verändern zu können (Growth Mindset), geht offener mit Herausforderungen um. Vergangene Erfahrungen prägen, bestimmen aber nicht die Zukunft.'
+        },
+        interventionen: [
+          {
+            titel: 'Zeitstrahl des Selbstbildes',
+            ansatz: 'Narrativ',
+            beschreibung: 'Zeichne einen Zeitstrahl: Wie habe ich mich früher gesehen? Wie sehe ich mich heute? Wie möchte ich mich in 5 Jahren sehen? Was hat sich verändert?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Vision meines Selbst',
+            beschreibung: 'Beschreibe in 5 Sätzen, wie dein zukünftiges Ich aussehen soll. Was will es verkörpern?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Wachstums-Schritt',
+          beschreibung: 'Wähle eine kleine Handlung diese Woche, die dich deinem Wunsch-Selbstbild näher bringt.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hat dein Selbstbild am meisten geprägt?',
+          'Was möchtest du an deinem Selbstbild verändern?'
+        ]
+      }
+    ]
+  },
+
 };

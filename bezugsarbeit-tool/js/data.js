@@ -10803,4 +10803,175 @@ const THEMA_MODULE = {
     ]
   },
 
+  'angstanfaelle': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit Panikattacken oder intensiven körperlichen Angstreaktionen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was passiert bei einem Angstanfall?',
+        dauer: '60 Min',
+        ziel: 'Angstanfälle verstehen und körperliche Symptome normalisieren',
+        materialien: ['Körperumriss-Vorlage (A4)', 'Stifte (rot, orange)'],
+        gruppenformat: 'Einzelgespräch (bevorzugt) oder sehr kleine Gruppe',
+        hinweis_paedagoge: 'Sehr wichtig: Das Erleben der Jugendlichen ernst nehmen. Panikattacken sind real und intensiv. Niemals sagen "Das ist nur in deinem Kopf." Erklärung des physiologischen Mechanismus wirkt oft sehr beruhigend ("Das ist mein Nervensystem, kein Herzanfall").',
+        psychoedukation: {
+          titel: 'Ein Angstanfall ist kein Herzanfall',
+          inhalt: 'Bei einem Angstanfall aktiviert das Gehirn den Alarm-Modus (Fight-or-Flight): Herzrasen, Zittern, Atemnot, Schwindel, Taubheit – das fühlt sich lebensbedrohlich an, ist es aber nicht. Der Körper reagiert auf wahrgenommene Gefahr, obwohl keine reale Gefahr da ist. Das Verständnis allein hilft, die Angst vor der Angst zu reduzieren.'
+        },
+        interventionen: [
+          {
+            titel: 'Körperkarte des Angstanfalls',
+            ansatz: 'Psychoedukativ-körperorientiert',
+            beschreibung: 'Auf einem Körperumriss einzeichnen: Wo spüre ich die Angst? (Herz klopft, Brust eng, Hände zittern, Schwindel...) Danach erklären: Was passiert gerade physiologisch? Normalisieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '4-7-8 Atemtechnik',
+            beschreibung: '4 Sekunden einatmen, 7 Sekunden halten, 8 Sekunden ausatmen. Diese Technik aktiviert den Vagusnerv und bremst die Panikreaktion. Jetzt in Ruhe üben – um sie in der Krise abrufen zu können.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Angst-Fakten klären',
+          beschreibung: 'Gruppe diskutiert: Was glauben wir über Angstanfälle? (Mythen vs. Fakten) Gemeinsam richtig und falsch einordnen. Normalisierung durch Fakten.'
+        },
+        hausaufgabe: {
+          titel: 'Angstanfall-Protokoll',
+          beschreibung: 'Wenn ein Angstanfall passiert: Danach aufschreiben: Wann? Was war davor? Wie lang hat er gedauert? Was hat geholfen? (Für die nächste Sitzung mitbringen)',
+          dauer: '10 Min nach dem Anfall'
+        },
+        reflexion: [
+          'Was dachtest du früher, was bei einem Angstanfall passiert?',
+          'Was hat sich durch das heutige Wissen verändert?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Erste Hilfe bei Angstanfall',
+        dauer: '60 Min',
+        ziel: 'Konkrete Sofortmaßnahmen bei Angstanfällen erlernen',
+        materialien: ['Karte (Visitenkartenformat) für Sicherheits-Kurzplan'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Die Techniken müssen in Ruhe geübt werden – in der Panik sind sie nicht spontan abrufbar. Regelmäßiges Üben außerhalb von Angstepisoden ist das Ziel dieser Sitzung. Karte mit Kurzplan zum Mitnehmen sehr wichtig.',
+        psychoedukation: {
+          titel: 'Gegen den Strom schwimmen',
+          inhalt: 'Instinkt bei Panik: weglaufen, atmen nicht möglich. Gegenmaßnahmen: langsam atmen (auch wenn es sich falsch anfühlt), Füße spüren, Kälte, reden. Diese Techniken "überschreiben" die Panikreaktion – sie brauchen aber Training.'
+        },
+        interventionen: [
+          {
+            titel: '5-4-3-2-1 Grounding ausführlich',
+            ansatz: 'DBT-Grounding',
+            beschreibung: '5 Dinge sehen (laut benennen) / 4 Dinge hören / 3 Dinge fühlen (Oberfläche) / 2 Dinge riechen / 1 Ding schmecken. Ausführlich üben – auch mit geschlossenen Augen, dann mit offenen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Kälte-Technik',
+            beschreibung: 'Kaltes Wasser auf die Handgelenke, Gesicht ins kalte Wasser oder Eiswürfel halten. Kälte aktiviert den Tauchreflex und verlangsamt das Herz. Jetzt ausprobieren.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Erste-Hilfe-Techniken üben',
+          beschreibung: 'Gruppe übt gemeinsam verschiedene Grounding-Techniken. Jede/r wählt die 2 Techniken, die am besten für sie/ihn funktionieren. Gemeinsam eine "Angst-Erste-Hilfe-Karte" gestalten.'
+        },
+        hausaufgabe: {
+          titel: 'Technik täglich üben (5 Min)',
+          beschreibung: 'Wähle eine Technik und übe sie täglich 5 Minuten – auch wenn keine Angst da ist. So wird sie automatisch verfügbar.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welche Technik fühlt sich für dich am nützlichsten an?',
+          'Wann hast du zuletzt einen Angstanfall gehabt? Was hat damals geholfen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Auslöser kennen und Muster verstehen',
+        dauer: '60 Min',
+        ziel: 'Eigene Angstauslöser identifizieren und Muster erkennen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Vorsicht: Auslöser-Analyse kann Angst aktivieren. Immer mit einem Sicherheitsanker beginnen (kurzes Grounding). Das Ziel ist nicht, Auslöser zu vermeiden, sondern sie zu verstehen und weniger Macht über einen zu haben.',
+        psychoedukation: {
+          titel: 'Angst vor der Angst',
+          inhalt: 'Panikattacken entwickeln oft ein Eigenleben: Man beginnt, Auslöser zu vermeiden – und die Angstwelt wird immer kleiner. Das Ziel ist nicht Vermeidung, sondern Vorhersagbarkeit. Wenn ich weiß, was Angst auslöst, verliert sie Macht.'
+        },
+        interventionen: [
+          {
+            titel: 'Auslöser-Analyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Welche Situationen, Orte, Gedanken oder Körpergefühle lösen Angstanfälle aus? Gibt es Vorzeichen (Vorgefühle)? Erstelle eine persönliche Auslöser-Landkarte – mit Intensitäts-Rating.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sicherheitssignale finden',
+            beschreibung: 'Was macht dich sicher (auch mitten in der Angst)? (Person, Ort, Objekt, Satz) Diese Sicherheitssignale werden zu Ankern bei Angstanfällen.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Allgemeine Angstauslöser besprechen',
+          beschreibung: 'Gruppe bespricht allgemeine, häufige Angstauslöser (ohne persönliche Offenbarung nötig). Was steckt oft dahinter? (Kontrollverlust, Bewertungsangst, Ungewissheit?)'
+        },
+        hausaufgabe: {
+          titel: 'Auslöser-Tagebuch',
+          beschreibung: 'Notiere diese Woche Situationen, in denen die Angst steigt. Was war der Auslöser? Wie intensiv (1–10)? Was hat geholfen?',
+          dauer: '5 Min bei Auftreten'
+        },
+        reflexion: [
+          'Was sind deine häufigsten Angstauslöser?',
+          'Was hilft dir, in einem Angstmoment sicherer zu fühlen?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Leben mit und trotz Angst',
+        dauer: '60 Min',
+        ziel: 'Langfristige Strategien entwickeln und Lebensqualität zurückgewinnen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Ziel ist nicht "null Angst" – das ist unrealistisch. Ziel ist: Angst hat weniger Macht über mein Leben. Schrittweise Exposition (kleine Angst-Situationen angehen) ist evidenzbasiert, aber braucht Fachbegleitung bei klinischer Ausprägung.',
+        psychoedukation: {
+          titel: 'Angst managen, nicht besiegen',
+          inhalt: 'Angst wird nicht einfach verschwinden – und das muss sie nicht. Das Ziel ist: Angst hat nicht mehr das letzte Wort. Ich kann angstvoll sein und trotzdem handeln. Das nennt man Angst-Toleranz – und sie kann trainiert werden.'
+        },
+        interventionen: [
+          {
+            titel: 'Angst-Hierarchie und kleine Schritte',
+            ansatz: 'Expositionsbasiert (leicht)',
+            beschreibung: 'Was vermeidest du wegen der Angst? (Situationen, Orte, Aktivitäten) Erstelle eine Liste von 0 (keine Angst) bis 10 (maximale Angst). Welcher Schritt auf Level 2–3 wäre ein kleiner Anfang?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Zukunftsvision ohne Angst',
+            beschreibung: 'Wie würde dein Leben aussehen, wenn die Angst weniger Macht hätte? Was würdest du tun? Wen treffen? Wohin gehen? Diese Vision aufschreiben.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Mut-Momente teilen',
+          beschreibung: 'Gruppe teilt Situationen, in denen sie etwas getan haben, obwohl sie Angst hatten. Was war das Ergebnis? Was hat das ausgelöst?'
+        },
+        hausaufgabe: {
+          titel: 'Kleiner Mut-Schritt',
+          beschreibung: 'Unternimm diese Woche einen kleinen Schritt in Richtung einer vermiedenen Situation (Level 2–3 deiner Hierarchie). Was ist passiert?',
+          dauer: '10 Min Reflexion'
+        },
+        reflexion: [
+          'Was hat dir am meisten geholfen in diesem Modul?',
+          'Welchen nächsten Schritt nimmst du mit?'
+        ]
+      }
+    ]
+  },
+
 };

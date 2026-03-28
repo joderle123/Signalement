@@ -10502,4 +10502,175 @@ const THEMA_MODULE = {
     ]
   },
 
+  'essverhalten': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit gestörtem Essverhalten oder belasteter Körperbeziehung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Beziehung zum Essen',
+        dauer: '60 Min',
+        ziel: 'Die eigene Essensbeziehung ohne Scham erkunden',
+        materialien: ['Papier', 'Stifte', 'optional: Bildkarten mit Lebensmitteln'],
+        gruppenformat: 'Einzelgespräch (bevorzugt) oder sehr kleine Vertrauensgruppe',
+        hinweis_paedagoge: 'Essverhalten ist hochsensibel – niemals Gewicht, Kalorien oder Körperform kommentieren. Den Fokus auf Gefühle und Beziehung zum Essen legen, nicht auf Ernährungswissen. Bei Verdacht auf klinische Essstörung: direkt an Fachperson verweisen, dieses Modul ist kein Ersatz für Therapie.',
+        psychoedukation: {
+          titel: 'Essen ist mehr als Nahrung',
+          inhalt: 'Essen ist eng mit Gefühlen, Erinnerungen, Kontrolle und sozialen Situationen verknüpft. Problematisches Essverhalten entsteht oft, wenn Essen zur Regulation von Emotionen genutzt wird – nicht wegen Schwäche, sondern als erlernter Bewältigungsversuch.'
+        },
+        interventionen: [
+          {
+            titel: 'Essens-Biographie',
+            ansatz: 'Narrativ',
+            beschreibung: 'Wie war Essen früher in deiner Familie? Welche Regeln gab es? Was war Essen: Belohnung, Strafe, Gemeinschaft, Pflicht? Wie hat das deine heutige Beziehung zum Essen geprägt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Hunger-Sättigungs-Skala',
+            beschreibung: 'Skala von 1 (sehr hungrig) bis 10 (sehr satt). Wann fange ich an zu essen? Wann höre ich auf? Wann esse ich, obwohl ich gar nicht hungrig bin?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Essens-Assoziationen',
+          beschreibung: 'Gruppe schreibt auf Karten, was Essen für sie bedeutet (Genuss, Pflicht, Trost, Angst...). Anonyme Sammlung und gemeinsame Reflexion: Was überrascht uns?'
+        },
+        hausaufgabe: {
+          titel: 'Ess-Tagebuch (Fokus: Gefühle)',
+          beschreibung: 'Notiere diese Woche zu einer Mahlzeit täglich: Was habe ich gegessen – und was habe ich davor/danach gefühlt? Kein Kalorienprotokoll – nur Gefühle.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Wann isst du, weil du hungrig bist – wann aus anderen Gründen?',
+          'Welche Gefühle sind beim Essen am stärksten?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Emotionales Essen verstehen',
+        dauer: '60 Min',
+        ziel: 'Emotionales Essen als Muster erkennen und alternative Wege finden',
+        materialien: ['Papier', 'Stifte', 'Gefühls-Wörter-Liste'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Emotionales Essen nicht verurteilen – es ist ein sehr verbreitetes Muster. Ziel: Bewusstsein schaffen, nicht das Verhalten sofort ändern. Geduld einplanen. Bei Binge-Eating oder Purging-Verhalten: unbedingt Fachperson einbeziehen.',
+        psychoedukation: {
+          titel: 'Was suche ich beim Essen?',
+          inhalt: 'Emotionales Essen ist der Versuch, negative Gefühle (Stress, Langeweile, Einsamkeit, Wut) durch Essen zu regulieren. Das gibt kurzfristig Erleichterung, löst das Grundproblem aber nicht. Das Ziel ist nicht, "nie wieder" emotional zu essen – sondern mehr Alternativen zu haben.'
+        },
+        interventionen: [
+          {
+            titel: 'Trigger-Analyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Wann essen Sie impulsiv oder ohne Hunger? Was war davor? (Situation, Gefühl, Gedanke) Was hat das Essen gebracht? Gemeinsam den Kreislauf verstehen: Auslöser → Essen → kurzfristige Erleichterung → langfristige Konsequenz.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Alternatives Bedürfnis',
+            beschreibung: 'Für deinen häufigsten Essenstriggern: Was brauchst du wirklich? (Trost, Ablenkung, Energie, Verbindung?) Was außer Essen könnte dieses Bedürfnis erfüllen?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Bedürfnisliste',
+          beschreibung: 'Gruppe erstellt gemeinsam eine Liste von Bedürfnissen, die hinter emotionalem Essen stecken können. Für jedes Bedürfnis: Was sind 2–3 andere Wege, es zu erfüllen?'
+        },
+        hausaufgabe: {
+          titel: 'Eine Alternative ausprobieren',
+          beschreibung: 'Wenn der Essensdrang kommt, warte 5 Minuten und versuche eine Alternative (Spaziergang, Atemübung, Tagebuch). Was passiert?',
+          dauer: '5 Min bei Bedarf'
+        },
+        reflexion: [
+          'Was suchst du beim Essen, das du eigentlich woanders bräuchtest?',
+          'Welche Alternative fühlt sich am realistischsten an?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Körperakzeptanz',
+        dauer: '60 Min',
+        ziel: 'Einen respektvolleren Umgang mit dem eigenen Körper entwickeln',
+        materialien: ['Papier', 'Stifte', 'optional: Zeitschriften zum Analysieren von Körperbildern'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe (gleiches Vertrauen)',
+        hinweis_paedagoge: 'Körperakzeptanz ist kein "Dein Körper ist toll!"-Optimismus. Es ist der schrittweise Aufbau eines neutraleren, respektvolleren Verhältnisses. Keine Kommentare über Körper anderer, keine Vergleiche. Gesellschaftliche Schönheitsideale kritisch thematisieren.',
+        psychoedukation: {
+          titel: 'Körper als Werkzeug, nicht als Dekoration',
+          inhalt: 'Gesellschaftliche Schönheitsideale sind konstruiert – und ändern sich ständig. Der Körper ist kein Objekt zur Bewertung, sondern ein Werkzeug, das atmet, fühlt, sich bewegt und lebt. Körperakzeptanz bedeutet: den Körper für das wertschätzen, was er tut – nicht wie er aussieht.'
+        },
+        interventionen: [
+          {
+            titel: 'Körper-Dankbarkeit',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Weg vom "Wie sehe ich aus?" hin zu "Was kann mein Körper?". Schreibe 10 Dinge auf, die dein Körper für dich tut (atmet, tanzt, umarmt, heilt...). Wie fühlt sich das an?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Inneren Kritiker beobachten',
+            beschreibung: 'Was sagt dein innerer Kritiker über deinen Körper? Schreibe es auf. Dann: Was würdest du einem Freund sagen, der das über sich sagt? Der Unterschied zwischen den Stimmen.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Medien-Körperbilder analysieren',
+          beschreibung: 'Gruppe analysiert Werbung oder Social-Media-Posts: Welche Körperbilder werden gezeigt? Wer fehlt? Was ist retuschiert? Wie beeinflussen uns diese Bilder?'
+        },
+        hausaufgabe: {
+          titel: 'Tägliche Körper-Dankbarkeit',
+          beschreibung: 'Nenne jeden Abend 3 Dinge, die dein Körper heute für dich getan hat – keine Aussagen über Aussehen.',
+          dauer: '3 Min täglich'
+        },
+        reflexion: [
+          'Woher kommen deine negativen Gedanken über deinen Körper?',
+          'Was wäre, wenn du deinen Körper als deinen Verbündeten betrachten würdest?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Gesunde Essensbeziehung aufbauen',
+        dauer: '60 Min',
+        ziel: 'Konkrete Schritte zu einer entspannteren Essensbeziehung gehen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Intuitive Ernährung als Konzept einführen (ohne es als "Diät" zu verkaufen). Kein Ernährungsplan, keine Regeln – sondern Wiederverbindung mit dem eigenen Körpergefühl. Bei klinischen Symptomen: Weitervermittlung ist Priorität.',
+        psychoedukation: {
+          titel: 'Intuitives Essen',
+          inhalt: 'Intuitives Essen bedeutet: auf den Körper hören. Essen wenn hungrig, aufhören wenn satt. Alle Lebensmittel erlaubt ohne Verbote. Essen ohne Schuld. Das klingt einfach – aber für Menschen mit problematischem Essverhalten braucht es Übung und Zeit.'
+        },
+        interventionen: [
+          {
+            titel: 'Essensziele setzen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Kein Diät-Ziel – sondern ein Beziehungsziel: Wie möchte ich mich beim Essen fühlen? (Entspannt, neutral, genießend?) Was ist ein kleiner erster Schritt in diese Richtung?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Achtsames Essen',
+            beschreibung: 'Iss eine Kleinigkeit (Obst, Brot) langsam und achtsam: Textur, Geschmack, Geruch, Gefühl. Ohne Ablenkung (kein Handy). Was nimmst du wahr, was du sonst nie bemerkst?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gemeinsam essen',
+          beschreibung: 'Wenn möglich: Gruppe isst gemeinsam etwas (Obst, Snacks) in Stille und Achtsamkeit. Danach Austausch: Was war anders als sonst?'
+        },
+        hausaufgabe: {
+          titel: 'Eine Mahlzeit bewusst genießen',
+          beschreibung: 'Esse diese Woche eine Mahlzeit bewusst, ohne Ablenkung und ohne Selbstkritik. Was nimmst du wahr?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Wie möchtest du in einem Jahr zu deinem Körper und Essen stehen?',
+          'Was wäre der erste kleine Schritt?'
+        ]
+      }
+    ]
+  },
+
 };

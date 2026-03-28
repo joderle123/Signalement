@@ -9583,4 +9583,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'gewalt': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche, die Gewalt erlebt oder ausgeübt haben',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist Gewalt? – Formen erkennen',
+        dauer: '60 Min',
+        ziel: 'Verschiedene Gewaltformen erkennen und benennen',
+        psychoedukation: {
+          titel: 'Gewalt hat viele Gesichter',
+          inhalt: 'Gewalt umfasst körperliche, emotionale, sexuelle und strukturelle Gewalt. Emotionale Gewalt (Erniedrigung, Kontrolle, Isolation) wird oft unterschätzt, hinterlässt aber tiefe Spuren. Gewalt ist immer ein Macht- und Kontrollmittel – und sie ist nie die Schuld des Opfers.'
+        },
+        interventionen: [
+          {
+            titel: 'Gewaltformen-Analyse',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Unterschiedliche Gewaltformen besprechen und Beispiele aus dem Alltag erkennen. Interaktive Diskussion: Was ist Gewalt? Was ist "normal"? Wo ziehe ich die Grenze?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Grenzen kennen',
+            beschreibung: 'Zeichne einen Körperumriss. Was gehört zu dir – und was darf kein anderer ohne Erlaubnis? Körperliche und emotionale Grenzen markieren.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beobachtung im Alltag',
+          beschreibung: 'Achte diese Woche auf Situationen, in denen Grenzen verletzt werden – in der Schule, im TV, in der Familie. Was fällt dir auf?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wo hast du Gewalt erlebt oder gesehen?',
+          'Was hat dich dabei am meisten getroffen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Gewalt als Erfahrung verarbeiten',
+        dauer: '60 Min',
+        ziel: 'Erlebte Gewalt benennen und erste Verarbeitung beginnen',
+        psychoedukation: {
+          titel: 'Gewalt hinterlässt Spuren',
+          inhalt: 'Wer Gewalt erlebt hat, trägt das oft lange in sich – als Scham, Wut, Taubheit oder Angst. Das sind normale Reaktionen. Zu reden ist ein erster Schritt zur Heilung. Die erlebte Gewalt war nie deine Schuld.'
+        },
+        interventionen: [
+          {
+            titel: 'Erfahrung sicher benennen',
+            ansatz: 'Traumasensibel',
+            beschreibung: 'Was ist passiert (so viel wie sicher ist)? Wie hast du damals reagiert? Wie geht es dir heute damit? Kein Druck – in dem Tempo, das sich sicher anfühlt.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schuld und Verantwortung trennen',
+            beschreibung: 'Wer trägt die Verantwortung für die Gewalt? Gemeinsam klar machen: die Verantwortung liegt immer bei der ausübenden Person.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Brief an mein jüngeres Ich',
+          beschreibung: 'Schreibe (wenn du magst) einen Brief an dich in der Zeit der Gewalterfahrung: Was möchtest du dir sagen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie hat die Gewalt dein Bild von dir selbst beeinflusst?',
+          'Was brauchst du, um dich sicherer zu fühlen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gewalt und eigene Reaktionen',
+        dauer: '60 Min',
+        ziel: 'Eigene Gewaltbereitschaft reflektieren und Alternativen entwickeln',
+        psychoedukation: {
+          titel: 'Gewalt lernt man',
+          inhalt: 'Wer Gewalt erlebt hat, trägt manchmal das Muster in sich – und gibt es weiter. Das ist kein Versagen, sondern erlernte Reaktion. Wer das erkennt, kann es ändern. Niemand ist "gewalttätig von Natur aus" – Gewalt ist immer erlerntes Verhalten.'
+        },
+        interventionen: [
+          {
+            titel: 'Eskalations-Analyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Wann werde ich selbst gewalttätig oder aggressiv? Was geht davor? Was spüre ich im Körper? Was löst es aus? Gemeinsam den eigenen Eskalationspfad verstehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'De-Eskalationsstrategien',
+            beschreibung: 'Was hilft mir, bevor ich die Kontrolle verliere? (Raus gehen, atmen, zählen, Hilfe holen) Eigene Top-3-Strategien entwickeln.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eskalations-Protokoll',
+          beschreibung: 'Notiere diese Woche, wann du aggressiv wirst oder werden könntest. Was war der Auslöser? Was hast du getan?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was löst bei dir Aggression aus?',
+          'Was hilft dir, nicht gewalttätig zu werden?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Gewalt beenden – Sicherheit schaffen',
+        dauer: '60 Min',
+        ziel: 'Konkrete Schritte zur Sicherheit und Gewaltfreiheit planen',
+        psychoedukation: {
+          titel: 'Sicherheit ist ein Recht',
+          inhalt: 'Jeder Mensch hat das Recht, in Sicherheit zu leben – frei von Gewalt. Wenn Gewalt im direkten Umfeld stattfindet, ist es wichtig, Hilfe zu holen. Das ist kein Verrat – sondern Selbstschutz. Es gibt Anlaufstellen, die helfen können.'
+        },
+        interventionen: [
+          {
+            titel: 'Sicherheitsplan bei häuslicher Gewalt',
+            ansatz: 'Sicherheitsplanung',
+            beschreibung: 'Falls Gewalt im Umfeld stattfindet: Wer kann helfen? Wohin kann ich gehen? Was nehme ich mit? Wichtige Nummern kennen. Sicherheitsplan konkret erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Notfallnummern',
+            beschreibung: 'Welche Stellen in Luxemburg helfen bei Gewalt? (Kanner-Jugendtelefon, VISAVI, SOS-Maltraitance...) Nummern sammeln und speichern.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eine Schutzmaßnahme',
+          beschreibung: 'Wähle eine konkrete Schutzmaßnahme, die du diese Woche umsetzen kannst.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hat sich für dich durch dieses Modul verändert?',
+          'Was nimmst du mit für deine Sicherheit?'
+        ]
+      }
+    ]
+  },
+
 };

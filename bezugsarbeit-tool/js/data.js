@@ -11576,4 +11576,134 @@ const THEMA_MODULE = {
     ]
   },
 
+  'koerperbeschwerden': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche mit körperlichen Beschwerden ohne medizinischen Befund oder stressbedingten Symptomen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Der Körper spricht – was er sagen will',
+        dauer: '60 Min',
+        ziel: 'Körperliche Beschwerden als Stresssignale verstehen',
+        materialien: ['Körperumriss-Vorlage (A4)', 'Farbstifte', 'Papier'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe (2–4)',
+        hinweis_paedagoge: 'Immer zuerst fragen: Wurden die Beschwerden medizinisch abgeklärt? Falls nicht: Arztbesuch empfehlen. Dieses Modul ist für Beschwerden, bei denen keine körperliche Ursache gefunden wurde ODER die klar stressbezogen sind. Niemals sagen "Das bist du dir nur einbilden" – die Beschwerden sind real.',
+        psychoedukation: {
+          titel: 'Körper und Seele sprechen miteinander',
+          inhalt: 'Körper und Psyche sind eng verbunden. Stress, Angst und emotionaler Schmerz können sich körperlich ausdrücken: Bauchschmerzen, Kopfschmerzen, Erschöpfung, Herzrasen, Verspannungen. Das sind echte Beschwerden – auch wenn kein organischer Befund gefunden wird.'
+        },
+        interventionen: [
+          {
+            titel: 'Körperbeschwerden-Karte',
+            ansatz: 'Körperorientiert',
+            beschreibung: 'Auf Körperumriss einzeichnen: Wo spüre ich Beschwerden? Wann treten sie auf? Wie intensiv (1–10)? Was war davor? Was hilft? Zusammenhang mit emotionalen Zuständen suchen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Körper-Scan',
+            beschreibung: 'Augen schließen. Langsam von Kopf bis Fuß scannen: Wo ist Spannung? Wo Schmerz? Wo Leichtigkeit? Ohne Bewertung – nur beobachten. Was fällt auf?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Stress im Körper – Gruppenreflexion',
+          beschreibung: 'Gruppe reflektiert: Wo spürt ihr Stress körperlich? (Bauch, Kopf, Schultern, Rücken?) Normalisierende Runde: Fast alle spüren Stress irgendwo. Was sind typische Schulalltags-Stressbeschwerden?'
+        },
+        hausaufgabe: {
+          titel: 'Beschwerde-Stress-Protokoll',
+          beschreibung: 'Notiere diese Woche: Wenn eine körperliche Beschwerde auftritt – was war davor (Situation, Gefühl, Stress)?',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welche körperlichen Signale zeigt dein Körper bei Stress?',
+          'Wann sind deine Beschwerden am stärksten?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Entspannung als Medizin',
+        dauer: '60 Min',
+        ziel: 'Entspannungstechniken erlernen und bei körperlichen Beschwerden anwenden',
+        materialien: ['Matte (optional)', 'ruhige Musik (optional)'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Progressive Muskelentspannung (PME) ist sehr gut erforscht für stressbedingte körperliche Beschwerden. Heute eine vollständige Übung durchführen. Manche Jugendliche finden Entspannung anfangs unangenehm ("Ich kann nicht abschalten") – das ist normal und nimmt mit Übung ab.',
+        psychoedukation: {
+          titel: 'Entspannung ist aktiv, nicht passiv',
+          inhalt: 'Echte Entspannung ist keine Faulheit – sie ist eine aktive Fähigkeit. Das Nervensystem muss lernen, vom Stressmodus in den Ruhemodus zu wechseln. Techniken wie Progressive Muskelentspannung oder Atemübungen können körperliche Beschwerden direkt reduzieren.'
+        },
+        interventionen: [
+          {
+            titel: 'Progressive Muskelentspannung (Kurzform)',
+            ansatz: 'Evidenzbasiert',
+            beschreibung: 'Durchführung einer Kurzform PME: Muskelgruppen anspannen (5 Sek) und loslassen (20 Sek) – Hände → Arme → Schultern → Gesicht → Bauch → Beine. Körpergefühl vor und nach vergleichen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wärmevisualisierung',
+            beschreibung: 'Augen schließen. Stelle dir vor, dorthin wo dein Körper Schmerz oder Spannung hält, strahlt eine angenehme Wärme. Die Wärme löst die Spannung. 5 Minuten.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'PME gemeinsam',
+          beschreibung: 'Gruppe macht PME gemeinsam durch. Danach kurze Runde: Wie fühlt sich der Körper jetzt an? Was hat sich verändert?'
+        },
+        hausaufgabe: {
+          titel: 'PME täglich 10 Min',
+          beschreibung: 'Übe diese Woche täglich 10 Minuten PME oder eine andere Entspannungstechnik. Notiere die Wirkung auf deine körperlichen Beschwerden.',
+          dauer: '10 Min täglich'
+        },
+        reflexion: [
+          'Wie hat sich dein Körper nach der Entspannung gefühlt?',
+          'Wann könntest du Entspannung in deinen Alltag einbauen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Den Körper als Freund behandeln',
+        dauer: '60 Min',
+        ziel: 'Langfristig einen fürsorglichen Umgang mit dem eigenen Körper entwickeln',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Viele Jugendliche mit körperlichen Beschwerden behandeln ihren Körper wie einen Feind ("Er macht mir Probleme"). Ziel: Körper als Verbündeter. Kleine tägliche Fürsorge-Handlungen. Wenn Beschwerden andauern: erneute medizinische Abklärung empfehlen.',
+        psychoedukation: {
+          titel: 'Körperpflege ist Selbstfürsorge',
+          inhalt: 'Der Körper gibt viele Signale – Schmerz, Erschöpfung, Hunger, Unruhe. Sie zu ignorieren verstärkt Probleme; sie zu hören und zu antworten ist Selbstfürsorge. Das bedeutet: ausreichend Schlaf, Bewegung, Nahrung, Pausen und Entspannung – nicht als Pflicht, sondern als Fürsorge für sich selbst.'
+        },
+        interventionen: [
+          {
+            titel: 'Körperfürsorge-Plan',
+            ansatz: 'Verhaltensaktivierung',
+            beschreibung: 'Entwickle einen realistischen Körperfürsorge-Plan: 2–3 kleine tägliche Handlungen, die deinen Körper gut behandeln (z.B. 10 Min Bewegung, 8h Schlaf, Mittagspause ohne Handy). Keine Ideallösung – was ist wirklich machbar?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief an meinen Körper',
+            beschreibung: 'Schreibe einen Brief an deinen Körper: Was möchtest du ihm sagen? Wofür bist du ihm dankbar? Was tust du, um besser auf ihn zu hören?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Körperfürsorge-Challenge',
+          beschreibung: 'Gruppe wählt gemeinsam eine Körperfürsorge-Handlung für die nächste Woche. Beim nächsten Treffen: Wer hat es gemacht? Was war die Wirkung?'
+        },
+        hausaufgabe: {
+          titel: 'Körperfürsorge-Plan umsetzen',
+          beschreibung: 'Setze deinen Körperfürsorge-Plan eine Woche um. Was verändert sich an deinen körperlichen Beschwerden?',
+          dauer: '5 Min täglich Reflexion'
+        },
+        reflexion: [
+          'Was hat dir in diesem Modul am meisten geholfen?',
+          'Wie möchtest du langfristig mit deinem Körper umgehen?'
+        ]
+      }
+    ]
+  },
+
 };

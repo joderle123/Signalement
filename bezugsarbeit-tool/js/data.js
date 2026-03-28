@@ -1955,4 +1955,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'trennung-scheidung': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler, deren Eltern sich getrennt haben oder gerade trennen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was passiert gerade in meiner Familie?',
+        dauer: '60 Min',
+        ziel: 'Die Trennungssituation benennen und eigene Reaktionen normalisieren',
+        psychoedukation: {
+          titel: 'Trennung – was das bedeutet',
+          inhalt: 'Wenn Eltern sich trennen, verändert sich vieles gleichzeitig: Wohnen, Alltag, Loyalitäten. Kinder und Jugendliche reagieren sehr unterschiedlich – manche sind wütend, manche traurig, manche fühlen sich schuldig (ohne es zu sein), manche wirken nach außen hin stabil. Alle Reaktionen sind verständlich.'
+        },
+        interventionen: [
+          {
+            titel: 'Meine Situation in Worten',
+            ansatz: 'Narrativ',
+            beschreibung: 'Der Schüler erzählt oder schreibt, was passiert ist und wie es ihm dabei geht. Keine Wertung, kein Ratschlag – nur zuhören und spiegeln. Was beschäftigt dich am meisten?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühls-Thermometer',
+            beschreibung: 'Zeichne ein Thermometer: Welche Gefühle hast du wegen der Trennung? Benenne sie und ordne sie nach Intensität.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gedanken aufschreiben',
+          beschreibung: 'Schreibe diese Woche auf, was dich zum Thema Trennung beschäftigt – Gedanken, Fragen, Sorgen.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was beschäftigt dich gerade am meisten?',
+          'Gibt es jemanden, mit dem du über die Trennung reden kannst?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Schuld, Loyalität und Verantwortung klären',
+        dauer: '60 Min',
+        ziel: 'Falsche Schuldgefühle und Loyalitätskonflikte auflösen',
+        psychoedukation: {
+          titel: 'Es ist nicht deine Schuld',
+          inhalt: 'Viele Kinder glauben, die Trennung der Eltern mitverursacht zu haben – durch Streit, Verhalten oder den bloßen Wunsch, dass der andere Elternteil gewinnt. Das stimmt nicht. Eltern trennen sich wegen ihrer eigenen Beziehung. Kinder haben daran keine Schuld – und auch keine Verantwortung, es zu reparieren.'
+        },
+        interventionen: [
+          {
+            titel: 'Loyalitätskonflikt sichtbar machen',
+            ansatz: 'Systemisch',
+            beschreibung: 'Mit zwei Stühlen oder Karten: Der Schüler steht zwischen beiden Elternteilen. Was erwartet jeder von ihm? Wie fühlt sich das an? Was wäre, wenn er sich von diesem Druck befreien könnte?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief: „Es ist nicht meine Schuld"',
+            beschreibung: 'Schreibe dir selbst einen Brief, in dem du erklärst, warum die Trennung nicht deine Schuld ist.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Verantwortung abgeben',
+          beschreibung: 'Schreibe auf: Was ist NICHT meine Aufgabe in dieser Situation? Was können nur die Erwachsenen lösen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wofür fühlst du dich verantwortlich, obwohl du es nicht bist?',
+          'Was wäre, wenn du diese Last abgeben könntest?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Mit zwei Zuhausen umgehen',
+        dauer: '60 Min',
+        ziel: 'Praktische Strategien für das Leben zwischen zwei Haushalten',
+        psychoedukation: {
+          titel: 'Pendelkind – zwischen zwei Welten',
+          inhalt: 'Viele Kinder nach Trennungen pendeln zwischen zwei Wohnorten. Das bedeutet: zwei Zimmer, zwei Regelsysteme, zwei Alltage. Das kann erschöpfend sein, bietet aber auch die Chance, flexible Fähigkeiten zu entwickeln. Wichtig ist: Beide Eltern können gute Eltern sein – auch getrennt.'
+        },
+        interventionen: [
+          {
+            titel: 'Zwei-Häuser-Plan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was läuft gut beim Wechsel? Was ist schwierig? Gemeinsam konkrete Strategien entwickeln: Was kannst du tun, damit sich das Pendeln leichter anfühlt? (z.B. feste Rituale bei Ankunft, Packliste, eigene Gegenstände an beiden Orten)',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meine Regeln für beide Haushalte',
+            beschreibung: 'Was sind die wichtigsten Dinge, die du brauchst, damit es dir in beiden Häusern gut geht?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ankommens-Ritual entwickeln',
+          beschreibung: 'Entwickle ein kleines Ritual für das Ankommen am jeweils anderen Elternteil – etwas, das dir hilft, „anzukommen".',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was ist das Schwierigste am Leben in zwei Haushalten?',
+          'Was könnte dir das Pendeln erleichtern?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Meine eigene Stärke entdecken',
+        dauer: '60 Min',
+        ziel: 'Resilienz und persönliche Ressourcen nach der Trennung stärken',
+        psychoedukation: {
+          titel: 'Resilienz – was Kinder stark macht',
+          inhalt: 'Kinder, die schwierige Familiensituationen durchlebt haben, entwickeln oft besondere Stärken: Empathie, Flexibilität, Problemlösung, Selbstständigkeit. Diese Stärken sind real – auch wenn sie sich gerade nicht so anfühlen. Resilienz wächst durch Herausforderungen und durch unterstützende Beziehungen.'
+        },
+        interventionen: [
+          {
+            titel: 'Stärken aus der Krise',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Gemeinsam erarbeiten: Was hast du durch die Trennungssituation gelernt? Welche Stärken hast du entwickelt? Wie kannst du diese Ressourcen in anderen Lebensbereichen nutzen?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief aus der Zukunft',
+            beschreibung: 'Stell dir vor, du bist 25 Jahre alt und schaust zurück. Was schreibst du dem jetzigen dir über diese Zeit?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Unterstützungsnetz aktivieren',
+          beschreibung: 'Schreibe auf, wer dir in dieser Zeit hilft oder helfen könnte. Wende dich diese Woche bewusst an eine dieser Personen.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche eine Stärke möchtest du weiter ausbauen?'
+        ]
+      }
+    ]
+  },
+
 };

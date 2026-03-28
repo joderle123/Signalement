@@ -9440,4 +9440,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'selbstverletzung': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit selbstverletzendem Verhalten',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Selbstverletzung verstehen – ohne Scham',
+        dauer: '60 Min',
+        ziel: 'Selbstverletzendes Verhalten als Bewältigungsstrategie verstehen',
+        psychoedukation: {
+          titel: 'Selbstverletzung ist kein Versagen',
+          inhalt: 'Selbstverletzung ist oft eine Strategie, um mit unerträglichen Gefühlen umzugehen – nicht Aufmerksamkeitssuche oder Manipulation. Sie gibt kurzfristige Erleichterung, löst aber das Grundproblem nicht. Kein Urteil – nur Verständnis und gemeinsame Suche nach anderen Wegen.'
+        },
+        interventionen: [
+          {
+            titel: 'Funktion verstehen',
+            ansatz: 'DBT-informiert',
+            beschreibung: 'Was passiert vor der Selbstverletzung? (Auslöser) Was passiert dabei? (Gefühle) Was passiert danach? (Konsequenzen) Gemeinsam den Kreislauf ohne Wertung analysieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühlsbarometer',
+            beschreibung: 'Beschreibe die Gefühle vor der Selbstverletzung auf einer Skala von 1–10. Was macht den Unterschied zwischen einem "3" und einem "9"-Moment?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Auslöser-Tagebuch',
+          beschreibung: 'Notiere diese Woche, wann der Drang zur Selbstverletzung auftritt. Was ist passiert? Was hast du gefühlt?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was gibt dir die Selbstverletzung, das du anders nicht bekommst?',
+          'Was wäre, wenn du das auch anders bekommen könntest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Alternativen entwickeln',
+        dauer: '60 Min',
+        ziel: 'Alternative Bewältigungsstrategien entwickeln und erproben',
+        psychoedukation: {
+          titel: 'Alternativen zur Selbstverletzung',
+          inhalt: 'Alternativen müssen dieselbe Funktion erfüllen wie die Selbstverletzung: starke Gefühle entladen, Kontrolle geben, Erleichterung schaffen. Was für eine Person funktioniert, passt nicht für alle. Es braucht Ausprobieren ohne Druck.'
+        },
+        interventionen: [
+          {
+            titel: 'Alternativen-Kiste',
+            ansatz: 'DBT-Skills',
+            beschreibung: 'Gemeinsam eine Liste von Alternativen erstellen (körperlich intensive Tätigkeiten, Kälte/Wärme-Reize, Ablenkung, emotionale Entladung, soziale Verbindung). Welche passen zu mir? Was bin ich bereit auszuprobieren?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Alternative ausprobieren',
+            beschreibung: 'Wähle eine Alternative und probiere sie in der Sitzung kurz aus (z.B. Eiswürfel halten, intensiv atmen, reißen von Papier). Wie fühlt es sich an?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Alternativen-Box',
+          beschreibung: 'Erstelle eine physische oder digitale "Notfall-Box" mit deinen Top-3-Alternativen. Stelle sie griffbereit.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Alternative hat sich am besten angefühlt?',
+          'Was macht es schwer, eine Alternative zu nutzen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Emotionsregulation stärken',
+        dauer: '60 Min',
+        ziel: 'Werkzeuge zur Emotionsregulation erlernen',
+        psychoedukation: {
+          titel: 'Emotionen regulieren',
+          inhalt: 'Emotionsregulation bedeutet: Gefühle weder zu unterdrücken noch von ihnen überwältigt zu werden. Es geht darum, Gefühle zu spüren, sie zu benennen und mit ihnen umzugehen. Das ist eine Fähigkeit, die man lernen kann.'
+        },
+        interventionen: [
+          {
+            titel: 'TIPP-Skills',
+            ansatz: 'DBT',
+            beschreibung: 'TIPP: Temperatur (kaltes Wasser ins Gesicht) / Intensives Training / Paced Breathing (verlangsamtes Atmen) / Progressive Muskelentspannung. Jede Technik kurz erklären und ausprobieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühle benennen',
+            beschreibung: 'Gefühlsrad: Wähle das Gefühl, das am stärksten ist. Dann: Woher kommt es? Was brauche ich? Was kann ich tun?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Emotionsregulations-Übung täglich',
+          beschreibung: 'Wähle einen TIPP-Skill und übe ihn täglich – auch wenn kein Drang da ist. So wird er verfügbar, wenn er gebraucht wird.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welcher Skill fühlt sich am einfachsten an?',
+          'Kannst du dir vorstellen, ihn in einer schwierigen Situation zu nutzen?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Langfristige Veränderung und Unterstützung',
+        dauer: '60 Min',
+        ziel: 'Unterstützungsnetz stärken und langfristige Perspektive entwickeln',
+        psychoedukation: {
+          titel: 'Veränderung braucht Zeit',
+          inhalt: 'Selbstverletzendes Verhalten aufzugeben braucht Zeit und Rückschläge sind normal. Kein Rückfall bedeutet Versagen – sondern ein Zeichen, dass du weiter übst. Langfristige Veränderung braucht professionelle Unterstützung, nicht nur Willenskraft.'
+        },
+        interventionen: [
+          {
+            titel: 'Unterstützungsnetz stärken',
+            ansatz: 'Systemisch',
+            beschreibung: 'Wer weiß von der Selbstverletzung? Wen könnte ich ins Vertrauen ziehen? Welche Fachperson unterstützt mich? Gemeinsam ein reales Unterstützungsnetz mit konkreten Personen und Kontakten erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Zukunftsblick ohne Selbstverletzung',
+            beschreibung: 'Stelle dir vor, in einem Jahr ohne Selbstverletzung zu leben. Wie fühlt es sich an? Was ist anders? Was hast du gewonnen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Vertrauensperson informieren',
+          beschreibung: 'Sprich mit einer Vertrauensperson über deine Arbeit an diesem Thema – du musst nicht alles sagen, aber jemanden einweihen.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat sich in den letzten Wochen verändert?',
+          'Welche nächsten Schritte möchtest du gehen?'
+        ]
+      }
+    ]
+  },
+
 };

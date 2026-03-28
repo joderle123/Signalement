@@ -2,10 +2,19 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Arbeitsblatt – Zukunftsplanung & Berufsorientierung</title>
+  <title>Arbeitsblatt – Meine Zukunft gestalten</title>
   <link rel="stylesheet" href="../css/arbeitsblatt.css">
   <style>
-    :root { --farbe: #2563EB; --farbe-hell: #EFF6FF; }
+    :root { --farbe: #0891B2; --farbe-hell: #ECFEFF; }
+    .bubble-grid { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:10px; }
+    .bubble { border:2px solid var(--farbe); border-radius:20px; padding:5px 11px; font-size:11px; font-weight:600; background:var(--farbe-hell); cursor:default; }
+    .ikigai-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+    .ikigai-cell { border-radius:10px; padding:10px; }
+    .vision-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+    .vision-cell { background:#F0F9FF; border:1.5px solid #BAE6FD; border-radius:8px; padding:9px; }
+    .vision-cell .vc-label { font-size:11px; font-weight:700; color:#0891B2; margin-bottom:5px; }
+    .obstacle-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px; }
+    .obstacle-box { border-radius:8px; padding:8px 10px; }
   </style>
 </head>
 <body>
@@ -21,9 +30,9 @@
     <div class="kopfzeile-links">
       <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
       <div class="ab-titel">Meine Zukunft – Wer will ich werden?</div>
-      <div class="ab-untertitel">Zukunftsplanung & Berufsorientierung · Kategorie: Schule & Zukunft</div>
+      <div class="ab-untertitel">Zukunft &amp; Beruf · Kategorie: Schule &amp; Zukunft</div>
     </div>
-    <div class="kopfzeile-icon">🚀</div>
+    <div class="kopfzeile-icon">🔭</div>
   </div>
 
   <div class="schuelerinfo">
@@ -33,183 +42,147 @@
   </div>
 
   <div class="infobox">
-    <div class="infobox-titel">💡 Zukunft gestalten – Schritt für Schritt</div>
-    <p>Niemand muss genau wissen was er werden will. Aber es hilft, über die eigenen <strong>Stärken, Interessen und Werte</strong> nachzudenken – denn dort liegt oft der Schlüssel zu einem Beruf der einen erfüllt.</p>
-    <p>Berufswahl ist kein einmaliger Moment – sie ist ein Prozess des Ausprobierens und Lernens.</p>
+    <div class="infobox-titel">💡 Du musst nicht schon alles wissen.</div>
+    <p>Kein Mensch weiß mit 16 genau, was er werden will – und das ist vollkommen normal. Was hilft: herausfinden, was dich bewegt, was du gut kannst und was die Welt braucht. Daraus entsteht dein Weg.</p>
+    <p>🧠 <em>Wusstest du? Das Konzept "Ikigai" aus Japan beschreibt den Schnittpunkt aus Leidenschaft, Talent, Einkommen und gesellschaftlichem Nutzen – Forscher nennen es die Formel für ein erfülltes Leben.</em></p>
   </div>
 
-  <!-- Übung 1 -->
+  <!-- Übung 1: Ikigai-Kompass -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">1</div>
-      <div class="uebung-titel">Meine Traumwelt in 10 Jahren</div>
+      <div class="uebung-titel">Mein Ikigai-Kompass – Was passt zusammen?</div>
     </div>
     <div class="uebung-beschreibung">
-      Schließe kurz die Augen. Du bist 10 Jahre älter. Alles hat gut geklappt. Beschreibe deinen Tag.
+      Fülle alle vier Felder aus. Wo sich mehrere Felder überschneiden, liegt oft dein Weg.
     </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-      <div class="box">
-        <div class="box-label">🏡 Wo wohnst du?</div>
+    <div class="ikigai-grid">
+      <div class="ikigai-cell" style="background:#FEF9C3;border:1.5px solid #FDE047;">
+        <div style="font-size:11px;font-weight:700;color:#854D0E;margin-bottom:5px;">❤️ Was ich liebe</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div class="box">
-        <div class="box-label">💼 Was arbeitest du?</div>
+      <div class="ikigai-cell" style="background:#DCFCE7;border:1.5px solid #86EFAC;">
+        <div style="font-size:11px;font-weight:700;color:#166534;margin-bottom:5px;">⭐ Was ich gut kann</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div class="box">
-        <div class="box-label">👫 Mit wem bist du zusammen?</div>
+      <div class="ikigai-cell" style="background:#EDE9FE;border:1.5px solid #C4B5FD;">
+        <div style="font-size:11px;font-weight:700;color:#5B21B6;margin-bottom:5px;">💶 Womit man Geld verdienen kann</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div class="box">
-        <div class="box-label">😊 Was macht dich glücklich?</div>
+      <div class="ikigai-cell" style="background:#ECFEFF;border:1.5px solid #67E8F9;">
+        <div style="font-size:11px;font-weight:700;color:#164E63;margin-bottom:5px;">🌍 Was die Welt braucht</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
     </div>
+    <div style="font-size:11px;margin-bottom:3px;font-weight:600;">Mein Schnittfeld – Berufsideen die zu mir passen könnten:</div>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
-  <!-- Übung 2 -->
+  <!-- Übung 2: Berufsfelder entdecken -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">2</div>
-      <div class="uebung-titel">Mein Stärken-Kompass</div>
+      <div class="uebung-titel">Berufsfelder-Explorer – Kreis ein, was dich interessiert</div>
     </div>
-    <div class="uebung-beschreibung">
-      Wer bist du? Finde heraus in welche Richtung du tendierst. Kreise ein was auf dich zutrifft.
+    <div class="uebung-beschreibung">Kreise die Felder ein, die dich ansprechen – auch wenn du noch nicht weißt warum.</div>
+    <div class="bubble-grid">
+      <div class="bubble">🛠️ Handwerk &amp; Technik</div>
+      <div class="bubble">🎨 Design &amp; Kunst</div>
+      <div class="bubble">💻 IT &amp; Gaming</div>
+      <div class="bubble">🏥 Gesundheit &amp; Pflege</div>
+      <div class="bubble">👶 Pädagogik &amp; Kinder</div>
+      <div class="bubble">🌿 Natur &amp; Umwelt</div>
+      <div class="bubble">⚖️ Recht &amp; Justiz</div>
+      <div class="bubble">🍳 Kochen &amp; Gastronomie</div>
+      <div class="bubble">📊 Wirtschaft &amp; Finanzen</div>
+      <div class="bubble">🎵 Musik &amp; Medien</div>
+      <div class="bubble">🔬 Wissenschaft &amp; Forschung</div>
+      <div class="bubble">✈️ Tourismus &amp; Sprachen</div>
     </div>
-
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">🛠️ Handwerklich-technisch</div>
-        <div style="font-size:10px;color:var(--grau);line-height:1.5;">Dinge reparieren, Technik, Computer, Maschinen, Bauen</div>
-        <div style="margin-top:6px;font-size:11px;">Trifft zu? ___/10</div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">🎨 Kreativ-künstlerisch</div>
-        <div style="font-size:10px;color:var(--grau);line-height:1.5;">Musik, Kunst, Design, Schreiben, Mode, Fotografie</div>
-        <div style="margin-top:6px;font-size:11px;">Trifft zu? ___/10</div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">👥 Sozial-kommunikativ</div>
-        <div style="font-size:10px;color:var(--grau);line-height:1.5;">Helfen, beraten, lehren, pflegen, mit Menschen arbeiten</div>
-        <div style="margin-top:6px;font-size:11px;">Trifft zu? ___/10</div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">📊 Strukturiert-organisatorisch</div>
-        <div style="font-size:10px;color:var(--grau);line-height:1.5;">Büro, Verwaltung, Finanzen, Planung, Analyse</div>
-        <div style="margin-top:6px;font-size:11px;">Trifft zu? ___/10</div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">🌿 Natur-outdoor</div>
-        <div style="font-size:10px;color:var(--grau);line-height:1.5;">Tiere, Pflanzen, Landwirtschaft, Umwelt, draußen sein</div>
-        <div style="margin-top:6px;font-size:11px;">Trifft zu? ___/10</div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">🔬 Wissenschaftlich-analytisch</div>
-        <div style="font-size:10px;color:var(--grau);line-height:1.5;">Forschen, Mathematik, Medizin, Experimente</div>
-        <div style="margin-top:6px;font-size:11px;">Trifft zu? ___/10</div>
-      </div>
-    </div>
-
-    <div style="font-size:12px;margin-bottom:4px;">Meine stärksten 2 Bereiche: ______________________ und ______________________</div>
-    <div style="font-size:12px;margin-bottom:4px;">Berufsideen die dazu passen könnten:</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Zukunftsplanung · Seite 1</span>
+    <span>Zukunft &amp; Beruf · Seite 1</span>
   </div>
 </div>
 
 <!-- ===== SEITE 2 ===== -->
 <div class="seite">
 
-  <!-- Übung 3 -->
+  <!-- Übung 3: 10-Jahres-Vision -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">3</div>
-      <div class="uebung-titel">Meine Zielleiter – Von heute zu meinem Traum</div>
+      <div class="uebung-titel">Meine 10-Jahres-Vision – Stell dir vor, alles hat geklappt</div>
     </div>
-    <div class="uebung-beschreibung">
-      Große Ziele erreicht man in kleinen Schritten. Trage dein Ziel oben ein, dann planst du die Schritte rückwärts.
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:0;align-items:center;margin-bottom:14px;">
-      <div style="width:80%;background:var(--farbe);color:white;padding:10px 14px;border-radius:8px 8px 0 0;text-align:center;font-weight:700;font-size:13px;">
-        🏆 Mein Ziel:
-        <div style="border-bottom:1px solid rgba(255,255,255,0.4);height:18px;margin-top:4px;"></div>
-      </div>
-      <div style="width:4px;height:16px;background:#CBD5E0;"></div>
-      <div style="width:80%;background:var(--farbe-hell);border:1.5px solid var(--farbe);padding:9px 14px;font-size:11px;">
-        <strong>Schritt 4:</strong>
-        <div style="border-bottom:1px dashed var(--border);height:16px;margin-top:4px;"></div>
-      </div>
-      <div style="width:4px;height:12px;background:#CBD5E0;"></div>
-      <div style="width:80%;background:#F9FAFB;border:1.5px solid var(--border);padding:9px 14px;font-size:11px;">
-        <strong>Schritt 3:</strong>
-        <div style="border-bottom:1px dashed var(--border);height:16px;margin-top:4px;"></div>
-      </div>
-      <div style="width:4px;height:12px;background:#CBD5E0;"></div>
-      <div style="width:80%;background:#F9FAFB;border:1.5px solid var(--border);padding:9px 14px;font-size:11px;">
-        <strong>Schritt 2:</strong>
-        <div style="border-bottom:1px dashed var(--border);height:16px;margin-top:4px;"></div>
-      </div>
-      <div style="width:4px;height:12px;background:#CBD5E0;"></div>
-      <div style="width:80%;background:#F9FAFB;border:1.5px solid var(--border);padding:9px 14px;font-size:11px;">
-        <strong>Schritt 1 (diese Woche):</strong>
-        <div style="border-bottom:1px dashed var(--border);height:16px;margin-top:4px;"></div>
-      </div>
-      <div style="width:4px;height:12px;background:#CBD5E0;"></div>
-      <div style="width:80%;background:#F0FDF4;border:1.5px solid #BBF7D0;padding:9px 14px;border-radius:0 0 8px 8px;font-size:11px;">
-        🟢 <strong>Jetzt (wo ich heute stehe):</strong>
-        <div style="border-bottom:1px dashed var(--border);height:16px;margin-top:4px;"></div>
-      </div>
+    <div class="uebung-beschreibung">Du bist 10 Jahre älter. Alles hat gut funktioniert. Wie sieht dein Alltag aus?</div>
+    <div class="vision-grid">
+      <div class="vision-cell"><div class="vc-label">🏡 Wo wohnst du?</div><div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div></div>
+      <div class="vision-cell"><div class="vc-label">💼 Was machst du beruflich?</div><div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div></div>
+      <div class="vision-cell"><div class="vc-label">👥 Wer ist um dich herum?</div><div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div></div>
+      <div class="vision-cell"><div class="vc-label">😊 Was macht dich dann glücklich?</div><div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div></div>
     </div>
   </div>
 
-  <!-- Übung 4 -->
+  <!-- Übung 4: Hindernisse + Lösungen -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">4</div>
-      <div class="uebung-titel">Hindernisse & Ressourcen</div>
+      <div class="uebung-titel">Hindernisse voraussehen – und Wege drumherum finden</div>
     </div>
-
-    <div class="zwei-spalten">
-      <div class="box" style="border-color:#EF4444;background:#FEF2F2;">
-        <div class="box-label" style="color:#EF4444;">🚧 Was könnte mich aufhalten?</div>
+    <div class="uebung-beschreibung">Jeder Weg hat Hürden. Wer sie kennt, ist vorbereitet.</div>
+    <div class="obstacle-row">
+      <div class="obstacle-box" style="background:#FEF2F2;border:1.5px solid #FECACA;">
+        <div style="font-size:11px;font-weight:700;color:#DC2626;margin-bottom:4px;">🚧 Mögliche Hindernisse</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div class="box" style="border-color:#10B981;background:#F0FDF4;">
-        <div class="box-label" style="color:#10B981;">💡 Was hilft mir / unterstützt mich?</div>
+      <div class="obstacle-box" style="background:#F0FDF4;border:1.5px solid #86EFAC;">
+        <div style="font-size:11px;font-weight:700;color:#16A34A;margin-bottom:4px;">💡 Wie ich damit umgehen kann</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Reflexion -->
+  <!-- Übung 5: Nächste Schritte -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Meine nächsten 3 Schritte – konkret und machbar</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:6px;">
+      <div style="background:#ECFEFF;border:1.5px solid #67E8F9;border-radius:8px;padding:9px;display:flex;align-items:center;gap:10px;">
+        <div style="font-size:18px;font-weight:800;color:#0891B2;flex-shrink:0;">1</div>
+        <div style="flex:1;"><div class="schreiblinien"><div class="schreiblinie"></div></div></div>
+        <div style="font-size:10px;color:#0891B2;flex-shrink:0;">bis: ___________</div>
+      </div>
+      <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:8px;padding:9px;display:flex;align-items:center;gap:10px;">
+        <div style="font-size:18px;font-weight:800;color:#0891B2;flex-shrink:0;">2</div>
+        <div style="flex:1;"><div class="schreiblinien"><div class="schreiblinie"></div></div></div>
+        <div style="font-size:10px;color:#0891B2;flex-shrink:0;">bis: ___________</div>
+      </div>
+      <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:8px;padding:9px;display:flex;align-items:center;gap:10px;">
+        <div style="font-size:18px;font-weight:800;color:#0891B2;flex-shrink:0;">3</div>
+        <div style="flex:1;"><div class="schreiblinien"><div class="schreiblinie"></div></div></div>
+        <div style="font-size:10px;color:#0891B2;flex-shrink:0;">bis: ___________</div>
+      </div>
+    </div>
+  </div>
+
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Reflexion</div>
-    <div style="font-size:12px;margin-bottom:6px;">Was macht mir heute schon Spaß an dem was ich tue (Schule, Freizeit, Arbeit)?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:4px;">Wer in meinem Umfeld hat einen Beruf der mich interessiert? Könnte ich die Person fragen?</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div></div>
-  </div>
-
-  <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:10px;font-size:11px;margin-bottom:14px;">
-    <strong>📞 Berufsorientierung in Luxemburg:</strong><br>
-    <strong>ADEM Jugend:</strong> adem.lu · <strong>Maison de l'Orientation:</strong> guichet.lu · <strong>Croix-Rouge Jugendberatung:</strong> jeunesses.lu
+    <div class="reflexion-titel">💬 Mein nächster Schritt</div>
+    <p>Was tue ich konkret <strong>diese Woche</strong>, um meiner Zukunft einen kleinen Schritt näherzukommen?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fachhinweis">
-    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
-    Berufsorientierung mit dem Holland-Modell (RIASEC) oder MBTI als strukturierte Unterstützung. Stärkenbasierte Beratung verhindert Schuldbewusstsein wegen vergangener Misserfolge.
-    <strong>Wichtig:</strong> Zukunftsangst ist bei Jugendlichen in herausfordernden Lebenslagen besonders stark. Kurzfristige Erreichbarkeit (1-Wochen-Ziele) statt überwältigender Langfristplanung.
+    <div class="fachhinweis-titel">🎓 Hinweis für Bezugspersonen</div>
+    Stärkenbasierte Beratung nach Holland-Modell (RIASEC) oder Ikigai vermeidet Beschämung wegen vergangener Misserfolge. Zukunftsangst ist bei Jugendlichen in herausfordernden Lebenslagen besonders ausgeprägt – kurzfristige Ziele (diese Woche) vor Langfristplanung setzen. <strong>Berufsorientierung in Luxembourg:</strong> ADEM Jugend (adem.lu), Maison de l'Orientation (guichet.lu), Croix-Rouge Jugendberatung (jeunesses.lu). Ab 15 Jahren dürfen Jugendliche in den Schulferien arbeiten (Code du Travail, Art. L. 342-1). Praktika und Schnuppertage aktiv begleiten.
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Zukunftsplanung · Seite 2</span>
+    <span>Zukunft &amp; Beruf · Seite 2</span>
   </div>
 </div>
 

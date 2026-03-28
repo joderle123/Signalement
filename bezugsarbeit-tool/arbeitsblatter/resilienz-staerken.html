@@ -2,278 +2,260 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Resilienz & Stärken – CDSE Arbeitsblatt</title>
-  <link rel="stylesheet" href="arbeitsblatt.css">
+  <title>Arbeitsblatt – Resilienz & Stärken</title>
+  <link rel="stylesheet" href="../css/arbeitsblatt.css">
+  <style>
+    :root { --farbe: #F59E0B; --farbe-hell: #FFFBEB; }
+    .strength-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin:8px 0; }
+    .strength-card { border:2px solid #D1D5DB; border-radius:10px; padding:7px 6px; text-align:center; background:#F9FAFB; cursor:pointer; }
+    .strength-card .sc-emoji { font-size:17px; }
+    .strength-card .sc-name { font-size:9.5px; font-weight:700; color:#374151; margin-top:3px; display:block; }
+    .pillar-row { display:grid; grid-template-columns:110px 1fr 85px; gap:8px; align-items:center; margin-bottom:6px; }
+    .pillar-label { font-size:11px; font-weight:700; }
+    .pillar-scale { display:flex; gap:4px; }
+    .pillar-box { flex:1; height:18px; border:2px solid var(--farbe); border-radius:4px; background:white; }
+    .pillar-desc { font-size:9.5px; color:#6B7280; }
+    .reframe-card { border:2px solid var(--farbe); border-radius:10px; padding:10px; margin-bottom:8px; background:var(--farbe-hell); }
+    .rc-arrow { text-align:center; font-size:18px; padding:4px 0; color:var(--farbe); }
+    .toolkit-item { display:grid; grid-template-columns:28px 1fr; gap:8px; align-items:start; margin-bottom:6px; }
+    .toolkit-nr { background:var(--farbe); color:white; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+    .story-box { background:linear-gradient(135deg,#FFFBEB,#FEF3C7); border:2px solid #F59E0B; border-radius:12px; padding:12px; }
+    .story-step { display:grid; grid-template-columns:24px 1fr; gap:8px; margin-bottom:6px; }
+    .story-dot { background:#F59E0B; color:white; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; flex-shrink:0; margin-top:2px; }
+    .wusstest { background:#FFFBEB; border-left:4px solid #F59E0B; border-radius:0 8px 8px 0; padding:8px 10px; margin:8px 0; font-size:10.5px; }
+    .wusstest strong { color:#92400E; }
+  </style>
 </head>
 <body>
 
-<!-- ═══════════ SEITE 1 ═══════════ -->
-<div class="seite">
-  <div class="druck-leiste">
-    <button onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
-    <a href="index.html">← Zur Übersicht</a>
-  </div>
+<div class="druck-leiste">
+  <a class="btn-zurueck" href="../index.html">← Zurück zur App</a>
+  <button class="btn-drucken" onclick="window.print()">🖨️ Drucken / PDF</button>
+</div>
 
+<!-- ===== SEITE 1 ===== -->
+<div class="seite">
   <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Resilienz & Stärken</div>
-      <div class="kopf-untertitel">Was mich stark macht – und wie ich Schwierigkeiten überstehe</div>
+    <div class="kopfzeile-links">
+      <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
+      <div class="ab-titel">Du bist stärker als du denkst</div>
+      <div class="ab-untertitel">Resilienz & Stärken · Kategorie: Persönlichkeit & Wachstum</div>
     </div>
-    <div class="cdse-logo">CDSE</div>
+    <div class="kopfzeile-icon">💪</div>
   </div>
 
   <div class="schuelerinfo">
-    <div class="info-feld"><label>Name</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Datum</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Bezugsperson</label><div class="info-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Name</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Datum</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Mit</div><div class="info-feld-linie"></div></div>
   </div>
 
-  <!-- Infobox -->
   <div class="infobox">
-    <div class="infobox-titel">Was ist Resilienz?</div>
-    <p>Resilienz ist die Fähigkeit, nach schwierigen Erlebnissen <strong>wieder aufzustehen</strong> – nicht weil man unverwundbar ist, sondern weil man Ressourcen und Strategien hat. <strong>Resilienz ist keine Eigenschaft, mit der man geboren wird – sie kann gelernt und gestärkt werden.</strong></p>
-    <p style="margin-top:6px;">Stell dir vor: Du bist ein Baum im Sturm. Resilienz bedeutet, du biegst dich – aber du brichst nicht.</p>
+    <div class="infobox-titel">💡 Resilienz – was ist das eigentlich?</div>
+    <p>Resilienz ist nicht, keine Probleme zu haben. Es ist die Fähigkeit, nach einem Sturm <strong>wieder aufzustehen</strong> – mit den Ressourcen, die du hast. Du bist wie ein Bambus: biegst dich im Sturm, brichst aber nicht.</p>
+    <p>🧠 <em><strong>Wusstest du?</strong> Resilienz ist kein Persönlichkeitsmerkmal, mit dem man geboren wird – das Gehirn kann Resilienz buchstäblich trainieren, ähnlich wie einen Muskel (Neuroplastizität). Jede schwierige Situation, die du überlebst, macht dein Gehirn buchstäblich widerstandsfähiger.</em></p>
   </div>
 
-  <!-- Übung 1: Meine Stärken-Inventur -->
+  <!-- Übung 1: Meine Resilienz-Geschichte -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 1</div>
-    <div class="uebung-titel">Meine Stärken – ehrlich hinschauen</div>
-    <p style="font-size:12px;margin-bottom:10px;">Markiere alle Stärken, die du hast – auch wenn du sie gerade nicht deutlich siehst. Frag auch jemanden, dem du vertraust!</p>
-    <div class="drei-spalten">
-      <div>
-        <p style="font-weight:700;font-size:11px;margin-bottom:6px;">💪 Persönliche Stärken</p>
-        <label class="check-item"><input type="checkbox"> Durchhaltevermögen</label>
-        <label class="check-item"><input type="checkbox"> Kreativität</label>
-        <label class="check-item"><input type="checkbox"> Humor</label>
-        <label class="check-item"><input type="checkbox"> Ehrlichkeit</label>
-        <label class="check-item"><input type="checkbox"> Mut</label>
-        <label class="check-item"><input type="checkbox"> Neugier</label>
-        <label class="check-item"><input type="checkbox"> Geduld</label>
-        <label class="check-item"><input type="checkbox"> Zuverlässigkeit</label>
-      </div>
-      <div>
-        <p style="font-weight:700;font-size:11px;margin-bottom:6px;">🤝 Soziale Stärken</p>
-        <label class="check-item"><input type="checkbox"> Empathie / Mitgefühl</label>
-        <label class="check-item"><input type="checkbox"> Hilfsbereitschaft</label>
-        <label class="check-item"><input type="checkbox"> Loyalität</label>
-        <label class="check-item"><input type="checkbox"> Zuhören können</label>
-        <label class="check-item"><input type="checkbox"> Teamfähigkeit</label>
-        <label class="check-item"><input type="checkbox"> Direktheit</label>
-        <label class="check-item"><input type="checkbox"> Humor in Gruppen</label>
-        <label class="check-item"><input type="checkbox"> Für andere eintreten</label>
-      </div>
-      <div>
-        <p style="font-weight:700;font-size:11px;margin-bottom:6px;">🧠 Denkstärken</p>
-        <label class="check-item"><input type="checkbox"> Problemlösen</label>
-        <label class="check-item"><input type="checkbox"> Praktisches Denken</label>
-        <label class="check-item"><input type="checkbox"> Gutes Gedächtnis</label>
-        <label class="check-item"><input type="checkbox"> Schnelles Lernen</label>
-        <label class="check-item"><input type="checkbox"> Kreative Ideen</label>
-        <label class="check-item"><input type="checkbox"> Gutes Gespür für Menschen</label>
-        <label class="check-item"><input type="checkbox"> Organisieren können</label>
-        <label class="check-item"><input type="checkbox"> Beobachtungsgabe</label>
-      </div>
+    <div class="uebung-header">
+      <div class="uebung-nr">1</div>
+      <div class="uebung-titel">Meine Resilienz-Story – ich habe schon Schwieriges überlebt</div>
     </div>
-    <p style="font-size:12px;font-weight:700;margin-top:10px;margin-bottom:4px;">Meine 3 wichtigsten Stärken, die mir schon durch schwierige Zeiten geholfen haben:</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-      <div><div style="font-size:11px;font-weight:700;text-align:center;margin-bottom:4px;">1.</div><div class="schreiblinien" data-lines="2"></div></div>
-      <div><div style="font-size:11px;font-weight:700;text-align:center;margin-bottom:4px;">2.</div><div class="schreiblinien" data-lines="2"></div></div>
-      <div><div style="font-size:11px;font-weight:700;text-align:center;margin-bottom:4px;">3.</div><div class="schreiblinien" data-lines="2"></div></div>
-    </div>
-  </div>
+    <div class="uebung-beschreibung">Denk an eine schwierige Zeit, die du überstanden hast. Kleines oder großes Ereignis – alles gilt. <em>Du bist nicht allein damit.</em></div>
 
-  <!-- Übung 2: Ich habe schon Schwieriges überstanden -->
-  <div class="uebung">
-    <div class="uebung-nr">Übung 2</div>
-    <div class="uebung-titel">Beweis: Ich habe schon Schwieriges überlebt</div>
-    <p style="font-size:12px;margin-bottom:10px;">Denk an eine schwierige Zeit in deinem Leben, die du überstanden hast. Was hat dir damals geholfen?</p>
-    <div class="zwei-spalten">
-      <div>
-        <div class="box">
-          <p style="font-size:12px;font-weight:700;margin-bottom:4px;">Die schwierige Situation war:</p>
-          <div class="schreiblinien" data-lines="3"></div>
-          <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Was ich damals an mir gezeigt habe:</p>
-          <div class="schreiblinien" data-lines="2"></div>
+    <div class="story-box">
+      <div class="story-step">
+        <div class="story-dot">1</div>
+        <div>
+          <div style="font-size:10.5px; font-weight:700; color:#92400E; margin-bottom:3px;">Die schwierige Sache war:</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
         </div>
       </div>
-      <div>
-        <div class="box">
-          <p style="font-size:12px;font-weight:700;margin-bottom:4px;">Was mir geholfen hat:</p>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Eine vertraute Person</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Meine eigene Stärke</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Sport / Bewegung / Natur</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Kreativität / Musik / Schreiben</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Zeit & Abstand</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Glaube / Spiritualität</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Professionelle Hilfe</label>
-          <p style="font-size:11px;font-weight:700;margin-top:6px;margin-bottom:4px;">Sonstiges:</p>
-          <div class="schreiblinien" data-lines="2"></div>
+      <div class="story-step">
+        <div class="story-dot">2</div>
+        <div>
+          <div style="font-size:10.5px; font-weight:700; color:#92400E; margin-bottom:3px;">Was mir damals geholfen hat (Personen, Dinge, innere Stärken):</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="story-dot">3</div>
+        <div>
+          <div style="font-size:10.5px; font-weight:700; color:#92400E; margin-bottom:3px;">Was ich dabei über mich gelernt habe:</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div></div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="fachhinweis">
-    <strong>Fachlicher Hinweis (Bezugsperson):</strong> Das Resilienzmodell betont Schutzfaktoren (Emmys Werner, Rutter): individuelle Ressourcen, familiäre Unterstützung und soziales Netzwerk. In der Arbeit mit Jugendlichen nach belastenden Biografien: Stärken aktiv benennen und spiegeln, nicht nur Probleme explorieren. „Posting positives" – regelmäßig kleine Fortschritte dokumentieren – stärkt die Selbstwirksamkeitsüberzeugung (Bandura).
+  <!-- Übung 2: Stärken-Finder -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">2</div>
+      <div class="uebung-titel">Stärken-Finder – kreise 5 ein, die sich wie DU anfühlen</div>
+    </div>
+    <div class="uebung-beschreibung">24 Charakterstärken (nach dem VIA-Modell). Kreise die Karten ein, die zu dir passen – egal ob du sie gerade siehst oder nicht.</div>
+
+    <div class="strength-grid">
+      <div class="strength-card"><span class="sc-emoji">🎨</span><span class="sc-name">Kreativität</span></div>
+      <div class="strength-card"><span class="sc-emoji">🔍</span><span class="sc-name">Neugier</span></div>
+      <div class="strength-card"><span class="sc-emoji">🧩</span><span class="sc-name">Urteilsvermögen</span></div>
+      <div class="strength-card"><span class="sc-emoji">📚</span><span class="sc-name">Lernfreude</span></div>
+      <div class="strength-card"><span class="sc-emoji">🦉</span><span class="sc-name">Weisheit</span></div>
+      <div class="strength-card"><span class="sc-emoji">🦁</span><span class="sc-name">Mut</span></div>
+      <div class="strength-card"><span class="sc-emoji">🏋️</span><span class="sc-name">Durchhaltevermögen</span></div>
+      <div class="strength-card"><span class="sc-emoji">💯</span><span class="sc-name">Ehrlichkeit</span></div>
+      <div class="strength-card"><span class="sc-emoji">⚡</span><span class="sc-name">Energie & Vitalität</span></div>
+      <div class="strength-card"><span class="sc-emoji">💝</span><span class="sc-name">Fürsorge</span></div>
+      <div class="strength-card"><span class="sc-emoji">🤝</span><span class="sc-name">Hilfsbereitschaft</span></div>
+      <div class="strength-card"><span class="sc-emoji">🫂</span><span class="sc-name">Soziale Intelligenz</span></div>
+      <div class="strength-card"><span class="sc-emoji">👥</span><span class="sc-name">Teamwork</span></div>
+      <div class="strength-card"><span class="sc-emoji">⚖️</span><span class="sc-name">Fairness</span></div>
+      <div class="strength-card"><span class="sc-emoji">🌟</span><span class="sc-name">Führung</span></div>
+      <div class="strength-card"><span class="sc-emoji">🕊️</span><span class="sc-name">Vergebung</span></div>
+      <div class="strength-card"><span class="sc-emoji">🙏</span><span class="sc-name">Bescheidenheit</span></div>
+      <div class="strength-card"><span class="sc-emoji">🎯</span><span class="sc-name">Besonnenheit</span></div>
+      <div class="strength-card"><span class="sc-emoji">🔒</span><span class="sc-name">Selbstregulation</span></div>
+      <div class="strength-card"><span class="sc-emoji">✨</span><span class="sc-name">Schönheitssinn</span></div>
+      <div class="strength-card"><span class="sc-emoji">🙌</span><span class="sc-name">Dankbarkeit</span></div>
+      <div class="strength-card"><span class="sc-emoji">🌈</span><span class="sc-name">Hoffnung</span></div>
+      <div class="strength-card"><span class="sc-emoji">😄</span><span class="sc-name">Humor</span></div>
+      <div class="strength-card"><span class="sc-emoji">🔥</span><span class="sc-name">Sinnhaftigkeit</span></div>
+    </div>
+
+    <div style="font-size:11px; margin-top:6px;">Meine 5 wichtigsten Stärken: _____________, _____________, _____________, _____________, _____________</div>
   </div>
 
   <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Resilienz & Stärken – Seite 1 von 2</span>
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Resilienz & Stärken · Seite 1</span>
   </div>
 </div>
 
-<!-- ═══════════ SEITE 2 ═══════════ -->
+<!-- ===== SEITE 2 ===== -->
 <div class="seite">
 
-  <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Resilienz & Stärken</div>
-      <div class="kopf-untertitel">Meine Ressourcen & mein persönlicher Resilienzplan</div>
+  <!-- Übung 3: Resilienzsäulen -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">3</div>
+      <div class="uebung-titel">Meine 7 Resilienzsäulen – male die Balken ein (1–5 Kästchen)</div>
     </div>
-    <div class="cdse-logo">CDSE</div>
+    <div class="uebung-beschreibung">Wie stark ist jede Säule bei dir gerade? Male von links nach rechts, so viele Kästchen wie du möchtest.</div>
+
+    <div class="pillar-row">
+      <div class="pillar-label">🤝 Beziehungen</div>
+      <div class="pillar-scale">
+        <div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div>
+      </div>
+      <div class="pillar-desc">Habe Vertraute, auf die ich zählen kann</div>
+    </div>
+    <div class="pillar-row">
+      <div class="pillar-label">🎯 Sinn & Ziele</div>
+      <div class="pillar-scale">
+        <div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div>
+      </div>
+      <div class="pillar-desc">Weiß warum ich aufstehe</div>
+    </div>
+    <div class="pillar-row">
+      <div class="pillar-label">🛠️ Coping-Strategien</div>
+      <div class="pillar-scale">
+        <div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div>
+      </div>
+      <div class="pillar-desc">Weiß, wie ich mit Stress umgehe</div>
+    </div>
+    <div class="pillar-row">
+      <div class="pillar-label">💭 Emotionen</div>
+      <div class="pillar-scale">
+        <div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div>
+      </div>
+      <div class="pillar-desc">Erkenne und reguliere meine Gefühle</div>
+    </div>
+    <div class="pillar-row">
+      <div class="pillar-label">💪 Körper</div>
+      <div class="pillar-scale">
+        <div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div>
+      </div>
+      <div class="pillar-desc">Schlaf, Bewegung, Ernährung okay</div>
+    </div>
+    <div class="pillar-row">
+      <div class="pillar-label">🧠 Mindset</div>
+      <div class="pillar-scale">
+        <div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div>
+      </div>
+      <div class="pillar-desc">Glaube, dass es besser werden kann</div>
+    </div>
+    <div class="pillar-row">
+      <div class="pillar-label">🆘 Hilfe holen</div>
+      <div class="pillar-scale">
+        <div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div><div class="pillar-box"></div>
+      </div>
+      <div class="pillar-desc">Kann um Hilfe bitten, wenn nötig</div>
+    </div>
+
+    <div class="wusstest">
+      <strong>🧠 Wusstest du?</strong> Studien zeigen: Die stärkste einzelne Resilienzsäule ist eine einzige vertrauensvolle Beziehung. Selbst wenn alle anderen Faktoren fehlen – eine Person, die wirklich da ist, ändert alles.
+    </div>
   </div>
 
-  <!-- Übung 3: Die 7 Resilienzfaktoren -->
+  <!-- Übung 4: Obstacle Reframe -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 3</div>
-    <div class="uebung-titel">7 Säulen der Resilienz – wie stabil bin ich?</div>
-    <p style="font-size:12px;margin-bottom:10px;">Schätze jede Säule ein (1 = sehr schwach, 5 = sehr stark) und male die Balken ein:</p>
-    <div style="display:grid;gap:6px;">
-      <!-- Säulen -->
-      <div style="display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:8px;">
-        <div style="font-size:11px;font-weight:700;">Optimismus</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;background:#E8F5E9;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;background:#C8E6C9;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;background:#A5D6A7;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;background:#81C784;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;background:#66BB6A;"></div>
+    <div class="uebung-header">
+      <div class="uebung-nr">4</div>
+      <div class="uebung-titel">Challenge → Growth: Hindernisse umdeuten</div>
+    </div>
+    <div class="uebung-beschreibung">Denk an eine aktuelle Herausforderung. Was kannst du daraus lernen? Was bringt dich das weiter?</div>
+
+    <div class="reframe-card">
+      <div style="font-size:10.5px; font-weight:700; color:#92400E; margin-bottom:4px;">😤 Meine aktuelle Herausforderung:</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div></div>
+      <div class="rc-arrow">⬇️ Reframe</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+        <div style="background:white; border-radius:8px; padding:7px; border:1.5px solid #F59E0B;">
+          <div style="font-size:10px; font-weight:700; color:#92400E; margin-bottom:3px;">💡 Was ich dabei lernen kann:</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
         </div>
-        <div style="font-size:10px;color:var(--muted);">Glaube, dass es besser wird</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:8px;">
-        <div style="font-size:11px;font-weight:700;">Akzeptanz</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
+        <div style="background:white; border-radius:8px; padding:7px; border:1.5px solid #F59E0B;">
+          <div style="font-size:10px; font-weight:700; color:#92400E; margin-bottom:3px;">🌱 Wie mich das stärker macht:</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
         </div>
-        <div style="font-size:10px;color:var(--muted);">Was nicht änderbar ist, loslassen</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:8px;">
-        <div style="font-size:11px;font-weight:700;">Lösungsorientierung</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-        </div>
-        <div style="font-size:10px;color:var(--muted);">Fokus auf das Machbare</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:8px;">
-        <div style="font-size:11px;font-weight:700;">Soziales Netzwerk</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-        </div>
-        <div style="font-size:10px;color:var(--muted);">Vertrauenspersonen haben</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:8px;">
-        <div style="font-size:11px;font-weight:700;">Verantwortung</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-        </div>
-        <div style="font-size:10px;color:var(--muted);">Ich gestalte mein Leben aktiv</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:8px;">
-        <div style="font-size:11px;font-weight:700;">Zukunftsorientierung</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-        </div>
-        <div style="font-size:10px;color:var(--muted);">Ziele & Träume haben</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:8px;">
-        <div style="font-size:11px;font-weight:700;">Selbstfürsorge</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-          <div style="height:16px;border:1px solid var(--border);border-radius:3px;"></div>
-        </div>
-        <div style="font-size:10px;color:var(--muted);">Gut für mich sorgen</div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:6px;">↑ Male die Kästchen von links nach rechts ein (1–5) je nachdem wie stark diese Säule bei dir ist</p>
-    <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Meine stärkste Säule &amp; meine schwächste Säule:</p>
-    <div class="schreiblinien" data-lines="1"></div>
   </div>
 
-  <!-- Übung 4: Resilienzplan -->
+  <!-- Übung 5: Bounce-Back Toolkit -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 4</div>
-    <div class="uebung-titel">Mein persönlicher Resilienzplan</div>
-    <div class="drei-spalten">
-      <div class="box">
-        <div style="font-weight:700;margin-bottom:6px;color:#2C5F8A;">🌟 Meine Ressourcen</div>
-        <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Menschen, Orte, Aktivitäten, die mir Kraft geben</p>
-        <div class="schreiblinien" data-lines="4"></div>
-      </div>
-      <div class="box">
-        <div style="font-weight:700;margin-bottom:6px;color:#2C5F8A;">🛡️ Wenn es schwer wird</div>
-        <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Was tue ich zuerst, wenn ich merke, dass ich abstürze?</p>
-        <div class="schreiblinien" data-lines="4"></div>
-      </div>
-      <div class="box">
-        <div style="font-weight:700;margin-bottom:6px;color:#2C5F8A;">📞 Meine Notfallkontakte</div>
-        <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Wer hilft mir, wenn ich alleine nicht weiterkomme?</p>
-        <div class="schreiblinien" data-lines="4"></div>
-      </div>
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Mein persönliches Bounce-Back Toolkit</div>
     </div>
+    <div class="uebung-beschreibung">5 Strategien, die mir helfen, wenn es mich umhaut. Schreib sie auf – und dann weißt du, wo du anfangen kannst.</div>
+
+    <div class="toolkit-item"><div class="toolkit-nr">1</div><div style="font-size:11px;">Wenn ich mich schlecht fühle, tue ich zuerst: <div class="schreiblinien"><div class="schreiblinie"></div></div></div></div>
+    <div class="toolkit-item"><div class="toolkit-nr">2</div><div style="font-size:11px;">Die Person, die ich anrufen oder schreiben kann: <div class="schreiblinien"><div class="schreiblinie"></div></div></div></div>
+    <div class="toolkit-item"><div class="toolkit-nr">3</div><div style="font-size:11px;">Der Ort, an dem ich mich besser fühle: <div class="schreiblinien"><div class="schreiblinie"></div></div></div></div>
+    <div class="toolkit-item"><div class="toolkit-nr">4</div><div style="font-size:11px;">Die Aktivität, die mich erdet oder ablenkt: <div class="schreiblinien"><div class="schreiblinie"></div></div></div></div>
+    <div class="toolkit-item"><div class="toolkit-nr">5</div><div style="font-size:11px;">Ein Satz, den ich mir sage: <div class="schreiblinien"><div class="schreiblinie"></div></div></div></div>
   </div>
 
   <!-- Reflexion -->
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Meine Reflexion</div>
-    <div class="reflexion-fragen">
-      <div class="reflexion-frage">
-        <p>„Ich bin stärker, als ich denke" – was in meinem Leben beweist das?</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-      <div class="reflexion-frage">
-        <p>Welche Säule meiner Resilienz möchte ich in den nächsten Wochen stärken – und wie konkret?</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-    </div>
+    <div class="reflexion-titel">💬 Reflexion</div>
+    <p>Schreib dir selbst einen Brief-Satz: "Ich bin stolz auf mich, weil ich schon..."</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+  </div>
+
+  <div class="fachhinweis">
+    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
+    <strong>ICD-10 Bezug:</strong> Ressourcenorientierung ist komplementär zur Diagnosearbeit und besonders relevant bei F43.x (Anpassungsstörungen), F32-F33 (Depression) und F40-F42 (Angst/Zwang). Das 7-Säulen-Modell basiert auf Reivich & Shatté (2002); die Stärkenidentifikation folgt dem VIA Classification of Character Strengths (Peterson & Seligman, 2004), wissenschaftlich validiert. <strong>Schutzfaktorenforschung</strong> (Emmy Werner, Kauai-Studie): Mindestens eine stabile Bezugsperson ist der stärkste Einzelfaktor. Bei Jugendlichen im CDSE-Kontext: Stärken explizit benennen und spiegeln, bevor Problemexploration erfolgt. "Posting positives" (Bandura, Selbstwirksamkeit) täglich in Sitzungen einbauen.
   </div>
 
   <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Resilienz & Stärken – Seite 2 von 2</span>
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Resilienz & Stärken · Seite 2</span>
   </div>
 </div>
 
-<script>
-document.querySelectorAll('.schreiblinien[data-lines]').forEach(el => {
-  const n = parseInt(el.dataset.lines) || 3;
-  el.innerHTML = Array(n).fill('<div class="schreiblinie"></div>').join('');
-});
-</script>
 </body>
 </html>

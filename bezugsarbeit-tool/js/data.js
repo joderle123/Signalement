@@ -1846,4 +1846,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'wohnsituation': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit instabiler Wohnsituation, häufigen Umzügen oder beengten Verhältnissen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wo lebe ich – und wie fühlt sich das an?',
+        dauer: '60 Min',
+        ziel: 'Eigene Wohnsituation beschreiben und emotional einordnen',
+        psychoedukation: {
+          titel: 'Wohnen als Grundbedürfnis',
+          inhalt: 'Ein stabiles Zuhause ist eines der wichtigsten Grundbedürfnisse. Es geht nicht nur um einen Platz zum Schlafen, sondern um Sicherheit, Rückzugsmöglichkeit und ein Gefühl von Zugehörigkeit. Wenn die Wohnsituation unsicher oder belastend ist, wirkt sich das auf fast alle Lebensbereiche aus.'
+        },
+        interventionen: [
+          {
+            titel: 'Mein Zuhause beschreiben',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Der Schüler beschreibt oder zeichnet sein Zuhause: Wo schläfst du? Hast du einen eigenen Platz? Wo kannst du dich zurückziehen? Was gefällt dir, was belastet dich?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sicherheits-Skala',
+            beschreibung: 'Wie sicher und stabil fühlt sich deine Wohnsituation an (1–10)? Was bräuchte es, damit die Zahl höher wäre?',
+            dauer: '10 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Mein Lieblingsplatz',
+          beschreibung: 'Finde diese Woche einen Ort (zu Hause oder woanders), der sich gut anfühlt, und schreibe auf, warum er dir gut tut.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was bedeutet „Zuhause" für dich?',
+          'Hattest du schon mal ein Zuhause, wo du dich wirklich sicher gefühlt hast?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Umzüge und Veränderungen verarbeiten',
+        dauer: '60 Min',
+        ziel: 'Auswirkungen von Umzügen und Instabilität auf das eigene Leben erkennen',
+        psychoedukation: {
+          titel: 'Was Umzüge mit uns machen',
+          inhalt: 'Häufige Umzüge bedeuten: neue Schule, neue Nachbarschaft, neue Freunde finden. Das kostet enorm viel Energie. Viele Kinder entwickeln dabei Strategien – manche ziehen sich zurück, andere werden besonders anpassungsfähig. Beide Reaktionen sind verständlich. Wichtig ist, die eigene Reaktion zu kennen.'
+        },
+        interventionen: [
+          {
+            titel: 'Umzugs-Zeitlinie',
+            ansatz: 'Narrativ',
+            beschreibung: 'Alle Wohnorte/Umzüge der bisherigen Kindheit auf einer Zeitlinie eintragen. Zu jedem Ort: Was war gut? Was war schlimm? Was hast du dabei gelernt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Was ich immer dabei habe',
+            beschreibung: 'Was nimmst du bei jedem Umzug mit – nicht materiell, sondern als Person? Welche Stärken hast du durch die Veränderungen entwickelt?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Erinnerungsgegenstand',
+          beschreibung: 'Such einen Gegenstand, der dir ein Gefühl von Kontinuität gibt – etwas, das immer bei dir ist, egal wo du wohnst.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hat dich durch alle Veränderungen hindurch begleitet?',
+          'Was würdest du dir für eine stabile Wohnsituation wünschen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Stabilität aufbauen – trotz äußerer Unsicherheit',
+        dauer: '60 Min',
+        ziel: 'Innere Stabilität und externe Ressourcen stärken',
+        psychoedukation: {
+          titel: 'Innere Heimat finden',
+          inhalt: 'Wenn die äußere Situation nicht stabil ist, können innere Ressourcen und verlässliche Beziehungen ein „inneres Zuhause" bieten. Das können Rituale, vertraute Menschen, Interessen oder Orte sein, die sich sicher anfühlen – auch wenn man gerade keine feste Wohnadresse hat.'
+        },
+        interventionen: [
+          {
+            titel: 'Stabilitätsanker identifizieren',
+            ansatz: 'Ressourcenorientiert / Lösungsfokussiert',
+            beschreibung: 'Gemeinsam erarbeiten: Welche Menschen, Orte, Aktivitäten geben dir ein Gefühl von Stabilität? Wie kannst du diese stärker in deinen Alltag einbinden?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Mein stabiler Alltag',
+            beschreibung: 'Entwirf einen Tagesablauf, der dir trotz unsicherer Wohnsituation Struktur gibt: feste Zeiten fürs Schlafen, Essen, Schule, Erholung.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ein Ritual einführen',
+          beschreibung: 'Führe diese Woche ein kleines tägliches Ritual ein (z.B. morgens 5 Min Musik hören, abends aufschreiben was gut war).',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Was gibt dir am meisten Halt in deinem Leben?',
+          'Welche Ressource möchtest du weiter stärken?'
+        ]
+      }
+    ]
+  },
+
 };

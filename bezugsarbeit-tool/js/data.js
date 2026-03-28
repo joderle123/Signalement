@@ -9154,4 +9154,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'trauma': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit traumatischen Erfahrungen (stabilisierungsphase)',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was passiert bei Trauma? – Verstehen',
+        dauer: '60 Min',
+        ziel: 'Trauma-Reaktionen normalisieren und verstehen',
+        psychoedukation: {
+          titel: 'Trauma und das Gehirn',
+          inhalt: 'Traumatische Erfahrungen hinterlassen Spuren im Nervensystem. Das Gehirn reagiert mit Kampf, Flucht oder Erstarrung. Flashbacks, Albträume, Schreckhaftigkeit oder emotionale Taubheit sind normale Reaktionen auf abnormale Ereignisse – keine Zeichen von Schwäche.'
+        },
+        interventionen: [
+          {
+            titel: 'Trauma-Psychoedukation interaktiv',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Erklärung des Ampel-Modells: Grün (sicher), Gelb (aktiviert), Rot (überwältigt). Wo befinde ich mich? Was sind meine typischen Signale in jeder Zone?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Körper-Scanning',
+            beschreibung: 'Langsamer Körper-Scan: Wo spüre ich gerade Anspannung, Enge, Wärme? Ohne Bewertung – nur beobachten.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ampel-Tagebuch',
+          beschreibung: 'Notiere diese Woche täglich, in welcher Ampelzone du dich befunden hast. Was hat die Zone ausgelöst?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hat sich in deinem Körper und Verhalten verändert seit dem Erlebnis?',
+          'Was hilft dir, dich sicherer zu fühlen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Stabilisierung und Sicherheit',
+        dauer: '60 Min',
+        ziel: 'Stabilisierungstechniken erlernen und anwenden',
+        psychoedukation: {
+          titel: 'Stabilisierung vor Verarbeitung',
+          inhalt: 'Trauma-Therapie beginnt immer mit Stabilisierung. Das bedeutet: sicherer Ort, Körper beruhigen, Alltag strukturieren. Erst wenn jemand stabil genug ist, können traumatische Inhalte bearbeitet werden. Stabilisierung ist kein Umweg – sie ist der erste notwendige Schritt.'
+        },
+        interventionen: [
+          {
+            titel: 'Ressourcen-Aktivierung',
+            ansatz: 'EMDR-informiert',
+            beschreibung: 'Positive Ressource aktivieren: Erinnerung an einen Moment, in dem ich mich sicher und stark gefühlt habe. Details ausmalen, Körpergefühl spüren. Diese Ressource als Anker verankern.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Atem-Beruhigung',
+            beschreibung: 'Verlängerte Ausatmung: 4 Sekunden einatmen, 6 Sekunden ausatmen. Parasympathikus aktivieren, Nervensystem beruhigen.',
+            dauer: '10 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stabilisierungsroutine',
+          beschreibung: 'Wähle eine Stabilisierungsübung (Atem, Grounding, sicherer Ort) und übe sie täglich 5 Minuten.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welche Übung hat sich am hilfreichsten angefühlt?',
+          'Wann wirst du die Übung im Alltag nutzen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Trigger erkennen und umgehen',
+        dauer: '60 Min',
+        ziel: 'Traumatische Auslöser kennen und Umgang entwickeln',
+        psychoedukation: {
+          titel: 'Was sind Trigger?',
+          inhalt: 'Trigger sind Reize (Geräusche, Gerüche, Situationen, Worte), die an das Trauma erinnern und starke Reaktionen auslösen. Das Gehirn verwechselt Vergangenheit mit Gegenwart. Das ist normal – und es gibt Strategien damit umzugehen.'
+        },
+        interventionen: [
+          {
+            titel: 'Trigger-Landkarte',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Welche Situationen, Orte, Personen, Gefühle, Geräusche oder Gerüche lösen starke Reaktionen aus? Gemeinsam eine Trigger-Karte erstellen – ohne die Trigger zu aktivieren.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'STOP-Technik',
+            beschreibung: 'Bei Trigger: Stop (innehalten) / Take a breath (atmen) / Observe (beobachten was passiert) / Proceed (weitermachen mit Bewusstsein). Üben mit fiktivem Szenario.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Trigger-Protokoll',
+          beschreibung: 'Notiere diese Woche, wenn du getriggert wirst: Was war der Auslöser? Was habe ich getan? Was hat geholfen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Trigger sind am schwierigsten für dich?',
+          'Was hilft dir, wieder in die Gegenwart zu kommen?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Weiterleben – Zukunft gestalten',
+        dauer: '60 Min',
+        ziel: 'Positive Zukunftsperspektive trotz traumatischer Vergangenheit entwickeln',
+        psychoedukation: {
+          titel: 'Trauma und Identität',
+          inhalt: 'Traumatische Erfahrungen prägen – aber sie definieren nicht, wer wir sind. Viele Überlebende berichten von persönlichem Wachstum ("posttraumatisches Wachstum"): mehr Dankbarkeit, tiefere Beziehungen, neue Prioritäten. Das Ziel ist: das Trauma integrieren – nicht vergessen.'
+        },
+        interventionen: [
+          {
+            titel: 'Lebensgeschichte neu schreiben',
+            ansatz: 'Narrativ',
+            beschreibung: 'Meine Geschichte: Was ist passiert (kurz). Was habe ich überlebt. Was das über mich aussagt. Wie ich jetzt weiterleben möchte. Fokus auf Stärke und Handlungsfähigkeit.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief an mein jüngeres Ich',
+            beschreibung: 'Schreibe einen Brief an dich selbst zum Zeitpunkt des Traumas: Was würdest du dir sagen? Was wüsstest du heute, was du damals nicht wusstest?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ein kleiner Schritt vorwärts',
+          beschreibung: 'Wähle eine Sache, die du diese Woche tun möchtest – die zum Leben, nicht zum Überleben gehört.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wer bist du jenseits deines Traumas?',
+          'Was möchtest du in deinem Leben trotz allem noch erleben?'
+        ]
+      }
+    ]
+  },
+
 };

@@ -10331,4 +10331,175 @@ const THEMA_MODULE = {
     ]
   },
 
+  'impulskontrolle': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche, die impulsiv handeln oder Schwierigkeiten mit Verhaltenssteuerung haben',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Warum handle ich manchmal so schnell?',
+        dauer: '60 Min',
+        ziel: 'Impulsives Verhalten verstehen, ohne sich dafür zu verurteilen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe (2–4)',
+        hinweis_paedagoge: 'Kein Moralisieren – viele Jugendliche mit Impulskontrollschwierigkeiten kennen das Muster, sind aber nicht in der Lage, es einfach zu ändern. Ziel ist zuerst Verständnis, dann Strategien. Ressourcen betonen: Energie, Spontaneität, Direktheit sind Stärken.',
+        psychoedukation: {
+          titel: 'Das Gehirn hat ein Gaspedal und eine Bremse',
+          inhalt: 'Impulsives Verhalten entsteht, wenn das "Gaspedal" (limbisches System, Emotionen) schneller reagiert als die "Bremse" (präfrontaler Kortex, rationales Denken). Das ist kein Zeichen von Böswilligkeit – der präfrontale Kortex ist bei Jugendlichen noch in Entwicklung. Strategien helfen, die Bremse zu stärken.'
+        },
+        interventionen: [
+          {
+            titel: 'Impuls-Analyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Beschreibe eine Situation, in der du impulsiv gehandelt hast. Was ist passiert? Was hast du gespürt? (Körper, Gedanken) Was hast du getan? Was waren die Folgen? Kein Urteil – nur verstehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Körpersignale kennen',
+            beschreibung: 'Wie fühlt sich Impulsivität im Körper an, bevor sie "explodiert"? (z.B. Wärme im Gesicht, angespannte Schultern, enge Brust) Lerne die Frühwarnsignale deines Körpers.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Impulsmuster in der Gruppe erkennen',
+          beschreibung: 'Gruppe teilt anonymisiert (auf Karten) typische Situationen, in denen Impulse schwer zu kontrollieren sind. Gemeinsam: Was haben diese Situationen gemeinsam? (Stress, Ungerechtigkeit, Überraschung?)'
+        },
+        hausaufgabe: {
+          titel: 'Impuls-Tagebuch',
+          beschreibung: 'Notiere diese Woche, wann ein starker Impuls auftaucht. Was war der Auslöser? Was hast du gespürt? Was hast du getan?',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'In welchen Situationen verlierst du am schnellsten die Kontrolle?',
+          'Was passiert in deinem Körper, bevor du impulsiv handelst?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Die Pause zwischen Reiz und Reaktion',
+        dauer: '60 Min',
+        ziel: 'Die "Pause-Technik" erlernen und üben',
+        materialien: ['Timer', 'Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: '"Stopp-Techniken" wirken nur, wenn sie vorher geübt werden – nicht in der Hitze des Moments. Regelmäßiges Üben in ruhigen Situationen ist entscheidend. Betonen: Es geht nicht darum, Emotionen zu unterdrücken, sondern kurz zu verlangsamen.',
+        psychoedukation: {
+          titel: 'Die 6-Sekunden-Regel',
+          inhalt: 'Neurowissenschaften zeigen: Wenn man 6 Sekunden wartet, bevor man reagiert, hat der präfrontale Kortex Zeit, sich zu schalten. Diese 6 Sekunden können alles verändern. Die Technik: wahrnehmen – pausieren – wählen.'
+        },
+        interventionen: [
+          {
+            titel: 'STOPP-Technik einüben',
+            ansatz: 'DBT-informiert',
+            beschreibung: 'S = Stop (Körper einfrieren) / T = Take a breath (tief atmen) / O = Observe (Was passiert gerade?) / P = Proceed (bewusst wählen, was ich tue). Anhand einer konkreten Situation durchspielen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Box-Atmung',
+            beschreibung: '4 Sekunden einatmen → 4 halten → 4 ausatmen → 4 halten. 3 Runden. Diese Technik aktiviert das parasympathische Nervensystem und bremst Impulsivität.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Pause-Signal entwickeln',
+          beschreibung: 'Gruppe entwickelt ein gemeinsames Signal (Handzeichen, Wort), mit dem man einander helfen kann, kurz zu pausieren – ohne zu beschämen. Einigung auf Signal und Bedeutung.'
+        },
+        hausaufgabe: {
+          titel: 'STOPP täglich üben',
+          beschreibung: 'Übe die STOPP-Technik jeden Tag in einer normalen, nicht stressigen Situation (z.B. bevor du auf eine Nachricht antwortest). So wird sie verfügbar, wenn du sie wirklich brauchst.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Wie schwer ist es, in einem aufgeregten Moment innezuhalten?',
+          'Was hilft dir am besten, kurz zu pausieren?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Konsequenzen denken – vorher statt nachher',
+        dauer: '60 Min',
+        ziel: 'Konsequenzen vor dem Handeln antizipieren und in Entscheidungen einbeziehen',
+        materialien: ['Papier', 'Stifte', 'optionale Fallkarten'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe',
+        hinweis_paedagoge: 'Fallbeispiele verwenden, die den Jugendlichen nahestehen (nicht zu abstrakt). Keine moralisierende Haltung: "Ich sage dir, was richtig ist." Stattdessen: "Was denkst du, was passieren wird?"',
+        psychoedukation: {
+          titel: 'Zukunft denken lernen',
+          inhalt: 'Impulsives Handeln ist oft "gegenwartszentriert" – man denkt an den Moment, nicht an die Folgen. Das Gehirn kann trainiert werden, kurzfristige und langfristige Konsequenzen abzuwägen. Mit der Zeit wird das automatischer.'
+        },
+        interventionen: [
+          {
+            titel: 'Konsequenzen-Baum',
+            beschreibung: 'Für eine Impulssituation: Was sind die möglichen Reaktionen? Was passiert kurz-, mittel- und langfristig bei jeder Option? Einen Entscheidungsbaum zeichnen und gemeinsam auswerten.',
+            ansatz: 'Kognitiv-behavioural',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '24-Stunden-Test',
+            beschreibung: 'Bevor du reagierst (auf eine Nachricht, einen Streit, eine Einladung): Wie wirst du in 24 Stunden über diese Entscheidung denken? Was würde dein zukünftiges Ich dir raten?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Fallbeispiele diskutieren',
+          beschreibung: 'Gruppe diskutiert realistische Fallbeispiele: "Was würdest du tun? Was könnten die Folgen sein?" Mehrere Perspektiven einbeziehen (meine, die der anderen Person, die der Schule).'
+        },
+        hausaufgabe: {
+          titel: 'Entscheidung bewusst treffen',
+          beschreibung: 'Triff diese Woche eine Entscheidung bewusst – überlege vorher kurz die Folgen. Was hast du entschieden? Was wäre impulsiv gewesen?',
+          dauer: '10 Min Reflexion'
+        },
+        reflexion: [
+          'Wann hast du eine impulsive Handlung hinterher bereut?',
+          'Was hilft dir, vorher an Konsequenzen zu denken?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Verantwortung und Neuanfang',
+        dauer: '60 Min',
+        ziel: 'Mit Konsequenzen eigener Impulse konstruktiv umgehen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Wichtig: Verantwortung übernehmen ohne Selbstverurteilung. Viele Jugendliche pendeln zwischen "es ist mir egal" und "ich bin ein schlechter Mensch". Weder noch – sondern: Fehler machen, korrigieren, weitermachen.',
+        psychoedukation: {
+          titel: 'Verantwortung ist kein Selbstangriff',
+          inhalt: 'Verantwortung für Fehler zu übernehmen bedeutet nicht, sich selbst fertigzumachen. Es bedeutet: ich erkenne an, was ich getan habe, ich repariere es wo möglich, und ich lerne daraus. Das ist Stärke, keine Schwäche.'
+        },
+        interventionen: [
+          {
+            titel: 'Wiedergutmachung planen',
+            ansatz: 'Restorative',
+            beschreibung: 'Gibt es eine Situation, in der du durch impulsives Handeln jemanden verletzt oder etwas beschädigt hast? Was könnte Wiedergutmachung aussehen? Was ist realistisch? Gemeinsam einen kleinen Schritt planen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief an mich selbst',
+            beschreibung: 'Schreibe dir selbst einen Brief über eine Situation, in der du impulsiv gehandelt hast: Was ist passiert, was nimmst du daraus mit, was machst du beim nächsten Mal anders?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Stärken aus Impulsivität',
+          beschreibung: 'Impulsivität hat auch Stärken: Spontaneität, Direktheit, Energie, Mut. Gruppe sammelt Situationen, in denen Impulsivität hilfreich war. Wie kann man diese Energie gut einsetzen?'
+        },
+        hausaufgabe: {
+          titel: 'Einen Schritt wiedergutmachen',
+          beschreibung: 'Unternimm diese Woche einen kleinen konkreten Schritt zur Wiedergutmachung oder Veränderung.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul für dein Verhalten mit?',
+          'Welche Stärken bringt deine Energie und Direktheit mit sich?'
+        ]
+      }
+    ]
+  },
+
 };

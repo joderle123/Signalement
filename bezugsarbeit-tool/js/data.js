@@ -4549,4 +4549,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'alkohol': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit riskantem Alkoholkonsum, Neugier oder familiärem Alkoholproblem',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Alkohol – was er wirklich macht',
+        dauer: '60 Min',
+        ziel: 'Faktenbasiertes Wissen über Alkohol; eigenes Konsumverhalten einschätzen',
+        psychoedukation: {
+          titel: 'Alkohol – Mythen und Fakten',
+          inhalt: 'Alkohol ist eine psychoaktive Substanz, die das Gehirn direkt beeinflusst. Er dämpft Hemmungen, verlangsamt Reaktionen und beeinträchtigt das Urteilsvermögen. Das Jugendhirn ist bis ca. 25 Jahre im Aufbau – Alkohol schadet in dieser Phase nachweislich mehr als im Erwachsenenleben. „Soziales Trinken" ist kulturell normalisiert – das macht es nicht harmlos.'
+        },
+        interventionen: [
+          {
+            titel: 'Eigenes Konsumverhalten analysieren',
+            ansatz: 'Motivational Interviewing',
+            beschreibung: 'Ohne Vorwurf: Wie viel, wie oft, in welchen Situationen? Was bringt der Alkohol dir? Was kostet er? Gemeinsam eine ehrliche Bilanz ziehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Vor- und Nachteile abwägen',
+            beschreibung: 'Liste die Vorteile deines Konsums auf – und die Nachteile. Was überwiegt ehrlich?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Konsumprotokoll',
+          beschreibung: 'Führe diese Woche ein ehrliches Protokoll: Wann, wie viel, in welcher Situation, wie war danach.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'In welchen Situationen trinkst du – und warum gerade dann?',
+          'Was wäre, wenn du es nicht tätest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Warum ich trinke – Motive verstehen',
+        dauer: '60 Min',
+        ziel: 'Hinter den Konsum liegende Bedürfnisse erkennen',
+        psychoedukation: {
+          titel: 'Funktionaler Konsum',
+          inhalt: 'Alkohol wird oft als Lösung für etwas anderes eingesetzt: Hemmungen überwinden, Schmerz dämpfen, dazugehören, Langeweile bekämpfen. Das funktioniert kurzfristig – aber nicht nachhaltig. Wenn man versteht, welches Bedürfnis dahintersteckt, findet man bessere Wege, es zu erfüllen.'
+        },
+        interventionen: [
+          {
+            titel: 'Motiv-Analyse',
+            ansatz: 'Motivational Interviewing',
+            beschreibung: 'Warum trinkst du? Gemeinsam die tiefer liegenden Motive herausarbeiten: Angst, Einsamkeit, Neugier, sozialer Druck, Entspannung. Für jedes Motiv: Gibt es einen gesünderen Weg, dieses Bedürfnis zu erfüllen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Alternativen entwickeln',
+            beschreibung: 'Wähle das wichtigste Motiv. Brainstorme 5 alternative Wege, dieses Bedürfnis ohne Alkohol zu erfüllen.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Alternative ausprobieren',
+          beschreibung: 'Wenn du diese Woche in einer Situation bist, in der du normalerweise trinken würdest – probiere eine Alternative.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was steckt wirklich hinter deinem Konsum?',
+          'Was brauchst du eigentlich?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Risiken kennen – Grenzen setzen',
+        dauer: '60 Min',
+        ziel: 'Persönliche Grenzen für den Konsum entwickeln',
+        psychoedukation: {
+          titel: 'Risikokonsum erkennen',
+          inhalt: 'Zeichen, dass Alkohol problematisch wird: Konsum alleine, um Gefühle zu dämpfen; Kontrollverlust über die Menge; Konsequenzen (Schule, Beziehungen) werden ignoriert; Gedanken an Alkohol nehmen zu. Diese Zeichen ernst nehmen ist keine Schwäche – es ist klug.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliche Grenzen definieren',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was sind deine persönlichen Grenzen beim Alkoholkonsum? In welchen Situationen sagst du Nein? Gemeinsam konkrete, realistische Grenzen formulieren.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ablehnungsstrategien üben',
+            beschreibung: 'Rollenspiel: Jemand bietet dir Alkohol an – du möchtest ablehnen. Verschiedene Formulierungen üben: direkt, humorvoll, ohne Erklärung.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Grenzen einhalten',
+          beschreibung: 'Wende diese Woche deine selbstdefinierten Grenzen in einer konkreten Situation an.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Welche Grenze ist die wichtigste für dich?',
+          'Wann fällt es besonders schwer, diese Grenze einzuhalten?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Veränderung – wenn nötig',
+        dauer: '60 Min',
+        ziel: 'Motivation zur Veränderung stärken; Unterstützungsmöglichkeiten kennen',
+        psychoedukation: {
+          titel: 'Veränderung ist ein Prozess',
+          inhalt: 'Wer seinen Konsum reduzieren oder beenden möchte, braucht keinen Willensakt – sondern einen Plan, Unterstützung und Geduld. Rückschritte sind Teil des Prozesses. Professionelle Hilfe zu suchen ist kein Scheitern – es ist der klügste Schritt.'
+        },
+        interventionen: [
+          {
+            titel: 'Veränderungsplan',
+            ansatz: 'Motivational Interviewing / Lösungsfokussiert',
+            beschreibung: 'Möchtest du etwas ändern? Was genau? Welche konkreten Schritte sind realistisch? Welche Unterstützung brauchst du? Welche Hindernisse könnten auftauchen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Hilfsangebote kennenlernen',
+            beschreibung: 'Welche Anlaufstellen gibt es? (Suchtberatung, Schulpsychologie, Jugendberatung). Schreibe eine konkrete Kontaktmöglichkeit auf.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt gehen',
+          beschreibung: 'Setze diese Woche einen konkreten ersten Schritt aus deinem Veränderungsplan um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen Schritt möchtest du als nächstes gehen?'
+        ]
+      }
+    ]
+  },
+
 };

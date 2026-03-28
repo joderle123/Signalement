@@ -9045,4 +9045,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'krisenintervention': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche in akuten oder post-akuten Krisensituationen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist eine Krise? – Verstehen und Stabilisieren',
+        dauer: '60 Min',
+        ziel: 'Die aktuelle Krise einordnen und erste Stabilisierung erreichen',
+        psychoedukation: {
+          titel: 'Krisen sind vorübergehend',
+          inhalt: 'Eine Krise ist ein vorübergehender Zustand intensiver emotionaler Belastung, der die normalen Bewältigungsmechanismen überfordert. Krisen sind schmerzhaft – aber sie gehen vorbei. Jede Krise enthält auch die Möglichkeit zur Veränderung.'
+        },
+        interventionen: [
+          {
+            titel: 'Krisenlandkarte',
+            ansatz: 'Stabilisierend',
+            beschreibung: 'Was ist passiert? Wer ist betroffen? Was hat sich verändert? Gemeinsam die Krise strukturieren, um Chaos zu reduzieren und einen klaren Überblick zu gewinnen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '5-4-3-2-1 Grounding',
+            beschreibung: '5 Dinge sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken. Diese Übung aktiviert die Sinne und hilft, im Hier und Jetzt zu bleiben.',
+            dauer: '10 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Sicherheitsliste',
+          beschreibung: 'Erstelle eine Liste mit 3 Dingen, die dir Sicherheit geben (Personen, Orte, Tätigkeiten). Halte sie griffbereit.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was brauchst du gerade am dringendsten?',
+          'Wer oder was gibt dir in dieser Krise Halt?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Ressourcen aktivieren',
+        dauer: '60 Min',
+        ziel: 'Persönliche und soziale Ressourcen zur Krisenbewältigung aktivieren',
+        psychoedukation: {
+          titel: 'Ressourcen in der Krise',
+          inhalt: 'In einer Krise vergessen wir oft, was uns normalerweise hilft. Ressourcen können sein: Personen, Tätigkeiten, innere Stärken, Überzeugungen, Spiritualität. Sie zu kennen und zu aktivieren ist ein zentraler Teil der Krisenbewältigung.'
+        },
+        interventionen: [
+          {
+            titel: 'Ressourcen-Inventar',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was hat mir früher in schwierigen Situationen geholfen? Welche Menschen kann ich anrufen? Was gibt mir Kraft? Gemeinsam eine konkrete Ressourcen-Liste erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sichere Ort Imagination',
+            beschreibung: 'Stelle dir einen sicheren, geborgenen Ort vor (real oder imaginär). Beschreibe ihn in Detail: Wie sieht er aus? Was fühlst du dort? Nutze ihn als inneren Rückzugsort.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Notfallkoffer',
+          beschreibung: 'Erstelle einen persönlichen "Notfallkoffer" (Liste oder Box): Was hilft mir in sehr schwierigen Momenten? Musik, Foto, Kontakt, Übung...',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Ressource hat dich bisher am meisten getragen?',
+          'Was fehlte dir in dieser Krise am meisten?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Krise als Wendepunkt',
+        dauer: '60 Min',
+        ziel: 'Lernen aus der Krise und Rückfallprävention planen',
+        psychoedukation: {
+          titel: 'Nach der Krise',
+          inhalt: 'Krisen hinterlassen Spuren – und können Wachstumspunkte sein. Wichtig ist, nach einer Krise zu reflektieren: Was hat sie ausgelöst? Was hat geholfen? Wie kann ich mich besser schützen? Präventionsplanung ist kein Zeichen von Schwäche, sondern von Stärke.'
+        },
+        interventionen: [
+          {
+            titel: 'Krisenanalyse und Lernpunkte',
+            ansatz: 'Kognitiv-reflektiv',
+            beschreibung: 'Rückblick auf die Krise: Was hat sie ausgelöst? Was hat geholfen, was nicht? Was würde ich beim nächsten Mal anders machen? Persönlichen Krisenplan erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Krisenplan schreiben',
+            beschreibung: 'Schreibe einen persönlichen Krisenplan: Frühwarnzeichen / Was mir hilft / Wen ich anrufe / Was ich nicht tue / Notfallnummern.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Krisenplan sichern',
+          beschreibung: 'Speichere deinen Krisenplan als Foto auf dem Handy oder hinterlege ihn bei einer Vertrauensperson.',
+          dauer: '5 Min'
+        },
+        reflexion: [
+          'Was hast du in dieser Krise über dich gelernt?',
+          'Was möchtest du in Zukunft anders machen?'
+        ]
+      }
+    ]
+  },
+
 };

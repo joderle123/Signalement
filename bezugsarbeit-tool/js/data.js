@@ -11145,4 +11145,175 @@ const THEMA_MODULE = {
     ]
   },
 
+  'stimmungsextreme': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit extremen oder schnell wechselnden Stimmungsschwankungen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Stimmungen verstehen',
+        dauer: '60 Min',
+        ziel: 'Eigene Stimmungsmuster erkennen und dokumentieren',
+        materialien: ['Stimmungskalender-Vorlage (A4)', 'Farbstifte'],
+        gruppenformat: 'Einzelgespräch (bevorzugt)',
+        hinweis_paedagoge: 'Bei Verdacht auf bipolares Muster (wochenlange Hochphasen mit wenig Schlafbedarf, Hochgefühl, Risikobereitschaft ODER wochenlange Tiefphasen) unbedingt Fachperson einbeziehen. Dieses Modul ist für schwankende, intensive Stimmungen – keine klinische Bipolar-Therapie.',
+        psychoedukation: {
+          titel: 'Stimmungen haben Rhythmen',
+          inhalt: 'Stimmungen schwanken – das ist normal. Bei manchen Menschen sind die Schwankungen intensiver oder wechseln schneller. Stimmungen werden beeinflusst durch Schlaf, Essen, Aktivität, soziale Kontakte, Jahreszeit und Stress. Das Verständnis dieser Faktoren ist der erste Schritt zur Steuerung.'
+        },
+        interventionen: [
+          {
+            titel: 'Stimmungstracking',
+            ansatz: 'Selbstbeobachtung',
+            beschreibung: 'Einführung in Stimmungskalender: Jeden Tag die Stimmung auf einer Skala eintragen (1–10) und mit Farbe markieren. Zusätzlich: Schlaf, Energie, besondere Ereignisse. Gemeinsam letzten Monat rekonstruieren.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Stimmungs-Meteorologie',
+            beschreibung: 'Vergleiche deine Stimmungen mit Wetter: Welche Wettertypen gibt es bei dir? (Sonnig, bewölkt, Gewitter, Nebel?) Zeichne sie. Was kennzeichnet jedes "Wetter"?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Stimmungsrad gemeinsam',
+          beschreibung: 'Gruppe erstellt gemeinsam ein Stimmungsrad mit verschiedenen Zuständen. Jede/r benennt die 3 häufigsten eigenen Stimmungszustände anonym. Was haben viele gemeinsam?'
+        },
+        hausaufgabe: {
+          titel: 'Stimmungskalender führen',
+          beschreibung: 'Führe eine Woche lang täglich deinen Stimmungskalender (Skala + Farbe + Kurznotiz). Für die nächste Sitzung mitbringen.',
+          dauer: '3 Min täglich'
+        },
+        reflexion: [
+          'Welche Stimmungszustände kennst du an dir?',
+          'Was löst bei dir die stärksten Stimmungsschwankungen aus?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Hochphasen – Energie nutzen und schützen',
+        dauer: '60 Min',
+        ziel: 'Hochphasen erkennen, positiv nutzen und impulsive Risiken minimieren',
+        materialien: ['Stimmungskalender (aus Sitzung 1)', 'Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Hochphasen (erhöhte Energie, wenig Schlafbedarf, Risikobereitschaft, Grandiosität) können sehr positiv erlebt werden – deshalb werden sie oft nicht als Problem gesehen. Trotzdem: Konsequenzen von Hochphasen besprechen (Schulden, Konflikte, Schlafmangel).',
+        psychoedukation: {
+          titel: 'Hochphasen: Stärke und Risiko',
+          inhalt: 'Hochphasen bringen Energie, Kreativität, Mut – das ist wertvoll. Das Risiko: man überschätzt sich, schläft wenig, trifft impulsive Entscheidungen. Die Kunst ist: die Energie nutzen, ohne die Bremse ganz loszulassen.'
+        },
+        interventionen: [
+          {
+            titel: 'Frühwarnsignale der Hochphase',
+            ansatz: 'Selbstregulation',
+            beschreibung: 'Wie erkenne ich, dass eine Hochphase beginnt? (Schlaf kürzer, Gedanken rasen, mehr Pläne, mehr Ausgaben, Risikobereitschaft?) Was sind meine persönlichen Frühwarnsignale?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Bremsregeln für Hochphasen',
+            beschreibung: 'Entwickle 3 persönliche "Bremsregeln" für Hochphasen: z.B. "In Hochphasen entscheide ich nichts über 50€", "In Hochphasen sage ich keine spontanen Zusagen", "Ich schlafe mindestens 7h".',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Energie gut einsetzen',
+          beschreibung: 'Gruppe sammelt: Was kann man in einer Hochphase gut tun? (Sport, kreative Projekte, aufräumen) Was sollte man vermeiden? (Große Entscheidungen, Konflikte, Impulskäufe)'
+        },
+        hausaufgabe: {
+          titel: 'Bremsregeln aufschreiben',
+          beschreibung: 'Schreibe deine 3 Bremsregeln auf und speichere sie auf dem Handy – für Hochphasen, wenn du sie am meisten brauchst (aber vielleicht am wenigsten beachten möchtest).',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was genießt du an deinen Hochphasen?',
+          'Was möchtest du in Hochphasen besser kontrollieren?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Tiefphasen – durchhalten und stabilisieren',
+        dauer: '60 Min',
+        ziel: 'Tiefphasen erkennen und Überlebensstrategien entwickeln',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Tiefphasen können sehr dunkel sein. Aktiv nach Suizidgedanken fragen (direkt, klar). Wenn ja: sofort Sicherheitsplan aktivieren und Fachperson einbeziehen. Dieses Modul ist für mittelstarke Tiefs – nicht für schwere depressive Episoden.',
+        psychoedukation: {
+          titel: 'Tiefphasen sind vorübergehend',
+          inhalt: 'In einer Tiefphase fühlt es sich an, als wäre es immer so gewesen und immer so sein wird. Das ist eine Illusion der Tiefphase – nicht die Realität. Das Wichtigste in einer Tiefphase ist: nicht große Entscheidungen treffen, Routine halten, Verbindung zu Menschen.'
+        },
+        interventionen: [
+          {
+            titel: 'Frühwarnsignale der Tiefphase und Notfallplan',
+            ansatz: 'Stabilisierend',
+            beschreibung: 'Wie erkenne ich, dass eine Tiefphase beginnt? (Rückzug, Erschöpfung, Hoffnungslosigkeit, schlechter Schlaf?) Notfallplan erstellen: Was tue ich in den ersten 24h einer Tiefphase?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Minimale Verhaltensaktivierung',
+            beschreibung: 'In Tiefphasen hilft: Sehr kleine Aktivitäten, die Energie bringen. Nicht "alles schaffen", sondern: 10 Minuten rausgehen, 1 Person anschreiben, 1 Aufgabe. Entwickle eine persönliche Liste.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Tiefphasen überleben – gemeinsame Strategien',
+          beschreibung: 'Gruppe teilt anonym: Was hat mir in einem Tief geholfen? Gemeinsam eine "Tief-Überleben-Toolbox" erstellen.'
+        },
+        hausaufgabe: {
+          titel: 'Tief-Überleben-Karte',
+          beschreibung: 'Erstelle eine kleine Karte (Handy oder Papier) mit deinen Top-3-Strategien für Tiefphasen. Griffbereit halten.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Woran merkst du, dass eine Tiefphase beginnt?',
+          'Was hat dir bisher geholfen, durch Tiefphasen zu kommen?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Stabilität aufbauen – Anker im Alltag',
+        dauer: '60 Min',
+        ziel: 'Tagesstruktur und Routinen als Stabilisierungsfaktor nutzen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Regelmäßigkeit (Schlaf, Essen, Bewegung, soziale Kontakte) ist der wichtigste Stabilisierungsfaktor bei Stimmungsschwankungen. Kein perfekter Tagesplan – sondern realistische Anker. Weniger ist mehr.',
+        psychoedukation: {
+          titel: 'Routine als Stimmungsanker',
+          inhalt: 'Stimmungsschwankungen sind empfindlich für Unregelmäßigkeit: unregelmäßiger Schlaf, Mahlzeiten auslassen, soziale Isolation. Regelmäßige Routinen wirken wie Anker – sie halten die Stimmung stabiler, auch wenn kein Wundermittel.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Stabilitätsplan',
+            ansatz: 'Verhaltensaktivierung',
+            beschreibung: 'Entwickle 3–5 tägliche "Anker-Routinen": feste Schlafzeit, ein Mahlzeitritual, eine körperliche Aktivität, ein sozialer Kontakt. Realistisch und kleinschrittig.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meinen Stimmungskalender auswerten',
+            beschreibung: 'Schaue auf deinen Stimmungskalender: Gibt es Muster? (Schlechter nach wenig Schlaf? Besser nach Sport? Schlechter bei Isolation?) Was sagt das über deine Anker?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gemeinsame Stabilitäts-Challenge',
+          beschreibung: 'Gruppe wählt gemeinsam eine Routine, die alle eine Woche lang versuchen (z.B. täglich 10 Min draußen, feste Schlafenszeit). Beim nächsten Treffen Erfahrungen teilen.'
+        },
+        hausaufgabe: {
+          titel: 'Stabilitätsplan umsetzen',
+          beschreibung: 'Versuche eine Woche lang deine Anker-Routinen. Notiere täglich kurz, was du gemacht hast und wie sich die Stimmung entwickelt hat.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welche Routine hat die größte Wirkung auf deine Stimmung?',
+          'Was nimmst du aus diesem Modul mit?'
+        ]
+      }
+    ]
+  },
+
 };

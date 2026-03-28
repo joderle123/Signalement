@@ -8357,4 +8357,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'werte-moral': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche, die eigene Werte und moralische Orientierung entwickeln möchten',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist mir wichtig? – Werte entdecken',
+        dauer: '60 Min',
+        ziel: 'Eigene Werte benennen und ihre Herkunft verstehen',
+        psychoedukation: {
+          titel: 'Was sind Werte?',
+          inhalt: 'Werte sind innere Leitprinzipien, die unser Handeln und Urteilen leiten – z.B. Ehrlichkeit, Loyalität, Freiheit. Sie entstehen durch Familie, Kultur, Erfahrungen. Wer seine Werte kennt, trifft Entscheidungen leichter und lebt authentischer.'
+        },
+        interventionen: [
+          {
+            titel: 'Werte-Kartenspiel',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Aus einer Sammlung von 30 Werte-Karten (z.B. Freiheit, Sicherheit, Familie, Abenteuer) wählt der Jugendliche seine Top 5. Anschließend Begründung und Vergleich.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Werte-Stammbaum',
+            beschreibung: 'Welche Werte haben dir wichtige Menschen in deinem Leben mitgegeben? Zeichne einen Stammbaum deiner Werte.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Werte im Alltag beobachten',
+          beschreibung: 'Achte diese Woche darauf, wann du einen deiner Werte lebst – und wann du dich gezwungen siehst, gegen ihn zu handeln.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher Wert ist dir am wichtigsten? Warum?',
+          'Gibt es Werte, die dir aufgezwungen wurden und die du nicht teilst?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Moralische Dilemmata – Entscheidungen treffen',
+        dauer: '60 Min',
+        ziel: 'Eigene moralische Urteilsfähigkeit stärken',
+        psychoedukation: {
+          titel: 'Moralische Entwicklung',
+          inhalt: 'Moral entwickelt sich – von "was belohnt wird" über "was Regeln sagen" bis hin zu "was ich für richtig halte". Dilemmata helfen, die eigene Moral zu verstehen: Gibt es ein eindeutiges Richtig und Falsch?'
+        },
+        interventionen: [
+          {
+            titel: 'Dilemma-Diskussion',
+            ansatz: 'Sokratisch',
+            beschreibung: 'Bearbeitung eines Dilemmas (z.B. "Ein Freund hat gestohlen – sagst du es?"). Fragen: Was würdest du tun? Was wäre richtig? Was wären die Konsequenzen? Gibt es einen Unterschied?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Pro-Contra-Tabelle',
+            beschreibung: 'Erstelle für das Dilemma eine Pro-Contra-Tabelle aus verschiedenen Perspektiven (meiner, der Betroffenen, der Gesellschaft).',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eigenes Dilemma',
+          beschreibung: 'Beschreibe eine Situation aus deinem Leben, in der du eine schwierige moralische Entscheidung getroffen hast. Was hat dir dabei geholfen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann handelst du nach deinen Werten, wann dagegen?',
+          'Was macht eine Entscheidung für dich "moralisch richtig"?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Werte in Konflikten und Beziehungen',
+        dauer: '60 Min',
+        ziel: 'Werte in sozialen Situationen vertreten und Kompromisse finden',
+        psychoedukation: {
+          titel: 'Wertekonflikte',
+          inhalt: 'Manchmal kollidieren unsere Werte mit denen anderer – oder unsere eigenen Werte widersprechen sich (z.B. Loyalität vs. Ehrlichkeit). Wer das erkennt, kann konstruktiver mit Konflikten umgehen.'
+        },
+        interventionen: [
+          {
+            titel: 'Werte-Konflikt-Analyse',
+            ansatz: 'Systemisch',
+            beschreibung: 'Beschreibe einen aktuellen Konflikt. Welche Werte stehen dahinter (bei dir? beim anderen)? Wo gibt es Überschneidungen, wo Unterschiede? Was wäre ein Kompromiss?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Werte-Ranking',
+            beschreibung: 'Wenn zwei deiner Werte in Konflikt geraten – welcher hat Vorrang? Erstelle eine persönliche Hierarchie deiner Top-5-Werte.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Werte kommunizieren',
+          beschreibung: 'Sprich diese Woche mit jemandem über einen Wert, der dir wichtig ist. Wie reagiert die Person? Was lernst du daraus?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie verteidigst du deine Werte, ohne andere zu verurteilen?',
+          'Was nimmst du aus diesem Modul für dein Leben mit?'
+        ]
+      }
+    ]
+  },
+
 };

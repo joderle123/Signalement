@@ -2568,4 +2568,153 @@ const THEMA_MODULE = {
     ]
   },
 
+  'emotionsregulation': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit impulsivem Verhalten, emotionaler Überflutung oder Schwierigkeiten im Umgang mit starken Gefühlen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Mein Gefühlssystem verstehen',
+        dauer: '60 Min',
+        ziel: 'Eigene Regulationsstrategien und -muster kennenlernen',
+        psychoedukation: {
+          titel: 'Das Gehirn und Emotionen',
+          inhalt: 'Starke Gefühle entstehen im emotionalen Teil des Gehirns (Amygdala) – schnell, automatisch, ohne Kontrolle. Der denkende Teil (Präfrontaler Kortex) kann bremsen und lenken – aber erst wenn die Emotion etwas abgeklungen ist. Deshalb hilft es, zuerst zu beruhigen und dann zu denken.'
+        },
+        interventionen: [
+          {
+            titel: 'Trigger-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Was bringt dich aus dem Gleichgewicht? Gemeinsam die typischen Auslöser für starke Emotionen identifizieren: Situationen, Personen, Gedanken, Tageszeiten. Muster erkennen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Bisherige Strategien inventarisieren',
+            beschreibung: 'Was tust du bisher, wenn du wütend/ängstlich/überwältigt bist? Sortiere: Was hilft kurzfristig, aber schadet langfristig? Was hilft wirklich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Trigger-Tagebuch',
+          beschreibung: 'Diese Woche: Wann fühlst du dich emotional überwältigt? Situation, Gefühl, Intensität (1–10) notieren.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Welche Situation bringt dich am häufigsten aus der Ruhe?',
+          'Was hast du bisher getan – und hat es geholfen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Beruhigungsstrategien – akut',
+        dauer: '60 Min',
+        ziel: 'Konkrete Techniken zur akuten Emotionsregulation erlernen und üben',
+        psychoedukation: {
+          titel: 'Erste Hilfe für starke Gefühle',
+          inhalt: 'Wenn Gefühle überfluten, hilft nichts Rationales. Zuerst braucht der Körper Beruhigung. Bewährte Methoden: tiefes Atmen aktiviert den Parasympathikus; körperliche Bewegung baut Stresshormone ab; Grounding (5-4-3-2-1) unterbricht den Gedankenstrudel.'
+        },
+        interventionen: [
+          {
+            titel: 'Atemübung Box-Breathing',
+            ansatz: 'Körperorientiert',
+            beschreibung: '4 Sekunden einatmen, 4 halten, 4 ausatmen, 4 halten. Dreimal wiederholen. Gemeinsam üben, Wirkung besprechen. Diese Technik ist überall und jederzeit anwendbar.',
+            dauer: '15 Min'
+          },
+          {
+            titel: '5-4-3-2-1 Grounding',
+            ansatz: 'Achtsamkeitsbasiert',
+            beschreibung: '5 Dinge sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken. Gemeinsam durchführen und danach besprechen: Was hat diese Übung ausgelöst? Wann könnte sie helfen?',
+            dauer: '15 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Persönlichen Notfallplan erstellen',
+            beschreibung: 'Eine Karte mit 3 Strategien, die ich sofort einsetzen kann, wenn ich überflute: Atemübung, Grounding, eine Vertrauensperson anrufen.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Strategie ausprobieren',
+          beschreibung: 'Wende diese Woche mindestens einmal eine der Techniken an – auch wenn die Emotion nicht stark ist. Üben, solange es ruhig ist.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Technik hat sich am besten angefühlt?',
+          'Wann wäre sie im Alltag besonders nützlich?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gedanken und Gefühle auseinanderhalten',
+        dauer: '60 Min',
+        ziel: 'Kognitive Umstrukturierung als mittelfristige Regulationsstrategie',
+        psychoedukation: {
+          titel: 'Gedanken sind keine Fakten',
+          inhalt: 'Was wir denken, beeinflusst stark, was wir fühlen. „Niemand mag mich" erzeugt andere Gefühle als „Die anderen sind gerade beschäftigt". Gedanken können automatisch und verzerrend sein – sie zu erkennen und zu hinterfragen ist eine erlernbare Fähigkeit.'
+        },
+        interventionen: [
+          {
+            titel: 'ABC-Schema',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'A = Auslöser (Situation), B = Bewertung (Gedanke), C = Consequence (Gefühl). Anhand eines konkreten Beispiels durcharbeiten. Zeigen: Wenn B sich ändert, ändert sich auch C.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gedanken-Gegenbeweis',
+            beschreibung: 'Nimm einen negativen automatischen Gedanken. Sammle 3 Gegenbeweise. Formuliere eine ausgewogene Alternative.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gedanken beobachten',
+          beschreibung: 'Notiere diese Woche zweimal: Situation → automatischer Gedanke → Gefühl. Welches Muster erkennst du?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher automatische Gedanke taucht bei dir besonders häufig auf?',
+          'Was wäre ein realistischerer Gedanke?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Langfristige Stabilität aufbauen',
+        dauer: '60 Min',
+        ziel: 'Regulationskompetenz in den Alltag integrieren',
+        psychoedukation: {
+          titel: 'Emotionale Fitness',
+          inhalt: 'Emotionsregulation ist wie ein Muskel – er wächst durch regelmäßiges Training. Schlaf, Bewegung, soziale Kontakte und Selbstfürsorge sind die Grundlage. Darauf aufbauend helfen Achtsamkeit, kognitive Strategien und verlässliche Routinen.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Regulationsplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen individuellen Plan erstellen: Was sind meine Frühwarnzeichen? Was tue ich bei Intensität 3, 6, 9 (von 10)? Welche Person kann ich einbeziehen? Dieser Plan wird schriftlich festgehalten.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wohlgefühl-Routine',
+            beschreibung: 'Entwirf eine tägliche 10-Minuten-Routine, die deine emotionale Stabilität stärkt: Bewegung, Atemübung, Dankbarkeits-Notiz o.ä.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Regulationsplan testen',
+          beschreibung: 'Wende den Plan in der nächsten Woche aktiv an. Notiere: Was hat geholfen? Was muss angepasst werden?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat sich in diesem Modul für dich verändert?',
+          'Was nimmst du als wichtigste Strategie mit?'
+        ]
+      }
+    ]
+  },
+
 };

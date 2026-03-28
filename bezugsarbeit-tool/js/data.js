@@ -99,6 +99,18 @@ const ARBEITSBLÄTTER = {
   'polizei-justiz':        [{ titel: 'Polizei, Justiz & Bürgerrechte',            datei: 'polizei-justiz.html' }],
   'buergerrechte':         [{ titel: 'Polizei, Justiz & Bürgerrechte',            datei: 'polizei-justiz.html' }],
   'spiritualitaet':        [{ titel: 'Spiritualität, Religion & Sinn',            datei: 'spiritualitaet.html' }],
+  // Neue Themen (Screening-Lücken + Komorbiditäten)
+  'konzentration-aufmerksamkeit': [{ titel: 'Konzentration & Aufmerksamkeit',            datei: 'konzentration-aufmerksamkeit.html' }],
+  'soziale-wahrnehmung':     [{ titel: 'Soziale Wahrnehmung & Kommunikationsstil',       datei: 'soziale-wahrnehmung.html' }],
+  'impulskontrolle':         [{ titel: 'Impulskontrolle & Verhalten',                    datei: 'impulskontrolle.html' }],
+  'essverhalten':            [{ titel: 'Essverhalten & Körperbeziehung',                 datei: 'essverhalten.html' }],
+  'einsamkeit':              [{ titel: 'Einsamkeit & Sozialer Rückzug',                  datei: 'einsamkeit.html' }],
+  'angstanfaelle':           [{ titel: 'Angstanfälle & Panik',                           datei: 'angstanfaelle.html' }],
+  'wiederkehrende-gedanken': [{ titel: 'Wiederkehrende Gedanken & Zwänge',               datei: 'wiederkehrende-gedanken.html' }],
+  'stimmungsextreme':        [{ titel: 'Extreme Stimmungsschwankungen',                  datei: 'stimmungsextreme.html' }],
+  'dissoziative-erfahrungen':[{ titel: 'Dissoziative Erfahrungen & Erdung',              datei: 'dissoziative-erfahrungen.html' }],
+  'wahrnehmungsveraenderungen': [{ titel: 'Wahrnehmungsveränderungen & Gedankenklarheit', datei: 'wahrnehmungsveraenderungen.html' }],
+  'koerperbeschwerden':      [{ titel: 'Körperliche Beschwerden & Stress',               datei: 'koerperbeschwerden.html' }],
 };
 
 // ============================================================

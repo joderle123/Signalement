@@ -10673,4 +10673,134 @@ const THEMA_MODULE = {
     ]
   },
 
+  'einsamkeit': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche, die sich einsam, isoliert oder unverstanden fühlen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Einsamkeit verstehen – ein unsichtbares Gefühl',
+        dauer: '60 Min',
+        ziel: 'Einsamkeit als Erfahrung normalisieren und eigenes Erleben beschreiben',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe (max. 4)',
+        hinweis_paedagoge: 'Einsamkeit ist oft mit Scham verbunden – "Wer keine Freunde hat, ist selbst schuld." Diese Botschaft aktiv entkräften. Unterschied zwischen Alleinsein (Wahl) und Einsamkeit (ungewollt) klären. Gruppe: Normalisierung ist besonders wirkungsvoll, wenn jede/r teilt.',
+        psychoedukation: {
+          titel: 'Einsamkeit ist nicht Alleinsein',
+          inhalt: 'Einsamkeit ist das Gefühl, nicht wirklich verbunden zu sein – auch wenn man von Menschen umgeben ist. Sie ist weit verbreitet: viele Jugendliche fühlen sich einsam, sprechen aber nicht darüber. Einsamkeit ist ein Signal: ich brauche tiefere Verbindung.'
+        },
+        interventionen: [
+          {
+            titel: 'Einsamkeits-Portrait',
+            ansatz: 'Narrativ',
+            beschreibung: 'Beschreibe deine Einsamkeit: Wann tritt sie auf? Wie fühlt sie sich an? Wie lange hält sie an? Gibt es Momente, in denen sie weniger stark ist? Was macht den Unterschied?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Verbindungs-Kontinuum',
+            beschreibung: 'Zeichne eine Linie von "totaler Einsamkeit" bis "tiefer Verbindung". Wo befindest du dich gerade? Wo möchtest du sein? Was liegt dazwischen?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Einsamkeit in Zahlen',
+          beschreibung: 'Gruppe schätzt anonym: Wie viele Menschen in unserer Klasse/Schule fühlen sich einsam? Gemeinsam: Die Zahlen sind meist viel höher als erwartet. Was bedeutet das?'
+        },
+        hausaufgabe: {
+          titel: 'Einsamkeits-Momente beobachten',
+          beschreibung: 'Notiere diese Woche, wann die Einsamkeit am stärksten ist. Was geht ihr voraus? Was folgt ihr?',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Wann hast du dich das letzte Mal wirklich verbunden gefühlt?',
+          'Was hindert dich daran, Verbindung zu suchen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Verbindung wagen – Hürden überwinden',
+        dauer: '60 Min',
+        ziel: 'Hindernisse bei der Verbindungssuche erkennen und schrittweise überwinden',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe',
+        hinweis_paedagoge: 'Viele einsame Jugendliche haben negative Sozialerfahrungen (Ablehnung, Mobbing) gemacht. Sehr vorsichtig mit "Geh einfach auf andere zu!" – das minimiert das Problem. Stattdessen: kleine, sichere Schritte. Selbstwirksamkeit stärken.',
+        psychoedukation: {
+          titel: 'Einsamkeit wird zur Falle',
+          inhalt: 'Einsamkeit führt oft zu Rückzug – und Rückzug verstärkt Einsamkeit. Das ist ein Teufelskreis. Dazu kommt: nach Ablehnung erwartet man weitere Ablehnung. Das Gehirn überschätzt soziale Risiken. Kleine, sichere Schritte durchbrechen diesen Kreislauf.'
+        },
+        interventionen: [
+          {
+            titel: 'Verbindungshindernisse',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was hindert dich daran, Kontakte zu knüpfen? (Angst vor Ablehnung, nicht wissen wie, schlechte Erfahrungen, Erschöpfung?) Für jedes Hindernis: Was wäre ein kleiner sicherer Schritt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Minimal-Verbindungen',
+            beschreibung: 'Verbindung muss nicht tief sein – auch kleine Momente zählen: jemanden anlächeln, nach dem Weg fragen, einen Kommentar schreiben. Welche Mini-Verbindungen könnte ich diese Woche versuchen?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gegenseitige Einladung',
+          beschreibung: 'Gruppe plant gemeinsam eine kleine gemeinsame Aktivität (Pause zusammen, nach Hause gehen, kurzes Gespräch). Einfach anfangen, niedrige Hürde.'
+        },
+        hausaufgabe: {
+          titel: 'Eine Mini-Verbindung',
+          beschreibung: 'Versuche diese Woche täglich eine Mini-Verbindung (auch sehr klein). Was ist passiert? Wie hast du dich danach gefühlt?',
+          dauer: '5 Min täglich Reflexion'
+        },
+        reflexion: [
+          'Was ist dein größter Rückzugsmoment?',
+          'Welche Mini-Verbindung traust du dir zu?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Verbindung mit mir selbst',
+        dauer: '60 Min',
+        ziel: 'Innere Ressourcen und Selbstverbindung als Gegenpol zur Einsamkeit stärken',
+        materialien: ['Papier', 'Stifte', 'optional: Musik'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Selbstverbindung ist kein Ersatz für soziale Verbindung – aber sie hilft, die Einsamkeit weniger unerträglich zu machen und gibt Stabilität während der Verbindungsaufbau-Phase. Kreative Ausdrucksformen anbieten.',
+        psychoedukation: {
+          titel: 'Verbindung beginnt innen',
+          inhalt: 'Wer eine gute Beziehung zu sich selbst hat, trägt weniger Einsamkeit. Selbstverbindung bedeutet: die eigenen Gefühle kennen, sich selbst Gesellschaft leisten können, Interessen und Tätigkeiten haben, die Freude machen – unabhängig von anderen.'
+        },
+        interventionen: [
+          {
+            titel: 'Selbst-Verbindungs-Ritual',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was sind Tätigkeiten, bei denen du dich mit dir selbst verbunden fühlst? (Musik, Schreiben, Sport, Natur, Kreativität?) Wie oft tust du diese Dinge? Entwickle ein kleines tägliches Selbstverbindungs-Ritual.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief an mich',
+            beschreibung: 'Schreibe dir selbst einen Brief mit dem Mitgefühl, das du einem guten Freund geben würdest, der einsam ist. Was würdest du dir sagen?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gemeinsam allein sein',
+          beschreibung: 'Gruppe verbringt 10 Minuten still nebeneinander mit einer eigenen Tätigkeit (zeichnen, schreiben, lesen). Danach: Wie war es, allein zu sein – aber in Gesellschaft?'
+        },
+        hausaufgabe: {
+          titel: 'Selbstverbindungs-Ritual',
+          beschreibung: 'Führe dein Selbstverbindungs-Ritual diese Woche täglich durch. Was verändert sich?',
+          dauer: '10 Min täglich'
+        },
+        reflexion: [
+          'Wann fühlst du dich bei dir selbst "zu Hause"?',
+          'Was nimmst du aus diesem Modul mit?'
+        ]
+      }
+    ]
+  },
+
 };

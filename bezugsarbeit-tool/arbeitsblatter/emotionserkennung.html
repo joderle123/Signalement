@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Arbeitsblatt – Emotionserkennung</title>
+  <link rel="stylesheet" href="../css/arbeitsblatt.css">
+  <style>
+    :root { --farbe: #7B5EA7; --farbe-hell: #F5F0FA; }
+  </style>
+</head>
+<body>
+
+<div class="druck-leiste">
+  <a class="btn-zurueck" href="../index.html">← Zurück zur App</a>
+  <button class="btn-drucken" onclick="window.print()">🖨️ Drucken / PDF</button>
+</div>
+
+<!-- ===== SEITE 1 ===== -->
+<div class="seite">
+  <div class="kopfzeile">
+    <div class="kopfzeile-links">
+      <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
+      <div class="ab-titel">Meine Gefühle kennenlernen</div>
+      <div class="ab-untertitel">Emotionserkennung · Kategorie: Emotionen & Wohlbefinden</div>
+    </div>
+    <div class="kopfzeile-icon">💙</div>
+  </div>
+
+  <div class="schuelerinfo">
+    <div class="info-feld">
+      <div class="info-feld-label">Name</div>
+      <div class="info-feld-linie"></div>
+    </div>
+    <div class="info-feld">
+      <div class="info-feld-label">Datum</div>
+      <div class="info-feld-linie"></div>
+    </div>
+    <div class="info-feld">
+      <div class="info-feld-label">Mit</div>
+      <div class="info-feld-linie"></div>
+    </div>
+  </div>
+
+  <div class="infobox">
+    <div class="infobox-titel">💡 Was sind Emotionen?</div>
+    <p>Emotionen sind natürliche Reaktionen deines Körpers und deines Geistes auf Situationen, Menschen oder Gedanken. Jede Emotion – auch unangenehme – hat eine Funktion und will uns etwas sagen.</p>
+    <p>Es gibt <strong>8 Grundemotionen</strong> nach Robert Plutchik: Freude, Vertrauen, Angst, Überraschung, Trauer, Ekel, Wut und Erwartung. Alle anderen Gefühle entstehen aus Mischungen davon.</p>
+  </div>
+
+  <!-- Übung 1 -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">1</div>
+      <div class="uebung-titel">Das Gefühls-Raster – Wie geht es mir heute?</div>
+    </div>
+    <div class="uebung-beschreibung">
+      Lies die Gefühle unten durch. Kreuze an, welche du <strong>heute</strong> kennst oder gespürt hast.
+    </div>
+    <div class="karten-grid">
+      <div class="karte-mini"><div class="karte-mini-emoji">😊</div><div class="karte-mini-label">Freude</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😔</div><div class="karte-mini-label">Trauer</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😡</div><div class="karte-mini-label">Wut</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😰</div><div class="karte-mini-label">Angst</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😮</div><div class="karte-mini-label">Überraschung</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">🤢</div><div class="karte-mini-label">Ekel</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">🤗</div><div class="karte-mini-label">Zuneigung</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😴</div><div class="karte-mini-label">Erschöpfung</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😟</div><div class="karte-mini-label">Sorge</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😳</div><div class="karte-mini-label">Scham</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">😒</div><div class="karte-mini-label">Langeweile</div><div class="karte-mini-linie"></div></div>
+      <div class="karte-mini"><div class="karte-mini-emoji">🥰</div><div class="karte-mini-label">Stolz</div><div class="karte-mini-linie"></div></div>
+    </div>
+    <p style="font-size:11px;color:var(--grau);">Mein stärkstes Gefühl gerade: ______________________________________ Stärke (1–10): ______</p>
+  </div>
+
+  <!-- Übung 2 -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">2</div>
+      <div class="uebung-titel">Wo spüre ich das in meinem Körper?</div>
+    </div>
+    <div class="uebung-beschreibung">
+      Verschiedene Emotionen machen sich an verschiedenen Körperstellen bemerkbar. Zeichne Pfeile oder male Bereiche in die Silhouette und beschreibe was du dort spürst.
+    </div>
+
+    <div class="koerper-bereich">
+      <!-- SVG Körperumriss -->
+      <div class="koerper-silhouette">
+        <svg viewBox="0 0 80 200" width="90" height="200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Kopf -->
+          <ellipse cx="40" cy="22" rx="16" ry="18" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+          <!-- Hals -->
+          <rect x="34" y="38" width="12" height="10" rx="2" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+          <!-- Körper -->
+          <rect x="22" y="48" width="36" height="55" rx="6" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+          <!-- Linker Arm -->
+          <path d="M22 52 Q10 70 12 100" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Rechter Arm -->
+          <path d="M58 52 Q70 70 68 100" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Linke Hand -->
+          <ellipse cx="12" cy="103" rx="5" ry="4" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+          <!-- Rechte Hand -->
+          <ellipse cx="68" cy="103" rx="5" ry="4" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+          <!-- Linkes Bein -->
+          <path d="M30 103 Q26 140 24 175" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Rechtes Bein -->
+          <path d="M50 103 Q54 140 56 175" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Linker Fuß -->
+          <ellipse cx="22" cy="177" rx="7" ry="4" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+          <!-- Rechter Fuß -->
+          <ellipse cx="58" cy="177" rx="7" ry="4" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <div class="koerper-legende">
+        <p style="font-size:11px;color:var(--grau);margin-bottom:10px;">Beschreibe was du in deinem Körper spürst wenn du …</p>
+        <div style="display:grid;grid-template-columns:1fr;gap:6px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#7B5EA7;margin-bottom:3px;">😡 … wütend bist</div>
+            <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#3B82F6;margin-bottom:3px;">😰 … Angst hast</div>
+            <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#6B7280;margin-bottom:3px;">😔 … traurig bist</div>
+            <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#F59E0B;margin-bottom:3px;">😊 … glücklich bist</div>
+            <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Emotionserkennung · Seite 1</span>
+  </div>
+</div>
+
+<!-- ===== SEITE 2 ===== -->
+<div class="seite">
+
+  <!-- Übung 3 -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">3</div>
+      <div class="uebung-titel">Die S–G–F–V Kette (Situation – Gedanke – Gefühl – Verhalten)</div>
+    </div>
+    <div class="uebung-beschreibung">
+      Unsere Gefühle entstehen nicht einfach aus einer Situation – sondern durch die <strong>Gedanken</strong> die wir über die Situation haben. Fülle die Kette für eine Situation aus, die dich kürzlich aufgewühlt hat.
+    </div>
+
+    <div style="display:flex;align-items:stretch;gap:0;margin-bottom:14px;">
+      <div style="flex:1;border:1.5px solid var(--border);border-radius:8px 0 0 8px;padding:10px;min-height:90px;">
+        <div style="font-size:10px;font-weight:700;color:var(--farbe);text-transform:uppercase;margin-bottom:6px;">📍 Situation</div>
+        <div style="font-size:11px;color:var(--grau);margin-bottom:6px;">Was ist passiert? Wo, wann, mit wem?</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+      <div style="width:24px;background:var(--farbe-hell);display:flex;align-items:center;justify-content:center;font-size:16px;">→</div>
+      <div style="flex:1;border:1.5px solid var(--border);border-top:0;border-bottom:0;padding:10px;min-height:90px;">
+        <div style="font-size:10px;font-weight:700;color:#3B82F6;text-transform:uppercase;margin-bottom:6px;">💭 Gedanke</div>
+        <div style="font-size:11px;color:var(--grau);margin-bottom:6px;">Was hast du gedacht?</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+      <div style="width:24px;background:var(--farbe-hell);display:flex;align-items:center;justify-content:center;font-size:16px;">→</div>
+      <div style="flex:1;border:1.5px solid var(--border);border-radius:0;padding:10px;min-height:90px;">
+        <div style="font-size:10px;font-weight:700;color:#EF4444;text-transform:uppercase;margin-bottom:6px;">💙 Gefühl</div>
+        <div style="font-size:11px;color:var(--grau);margin-bottom:6px;">Was hast du gefühlt? Wie stark (1–10)?</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+      <div style="width:24px;background:var(--farbe-hell);display:flex;align-items:center;justify-content:center;font-size:16px;">→</div>
+      <div style="flex:1;border:1.5px solid var(--border);border-radius:0 8px 8px 0;padding:10px;min-height:90px;">
+        <div style="font-size:10px;font-weight:700;color:#10B981;text-transform:uppercase;margin-bottom:6px;">⚡ Verhalten</div>
+        <div style="font-size:11px;color:var(--grau);margin-bottom:6px;">Was hast du getan/gesagt?</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+    </div>
+
+    <div class="infobox" style="margin-top:8px;">
+      <div class="infobox-titel">🔄 Überleg mal…</div>
+      <p>Hätte ein anderer Gedanke über dieselbe Situation ein anderes Gefühl ausgelöst? Zum Beispiel: Wenn jemand zu spät kommt und du denkst <em>"Er respektiert mich nicht"</em> → Wut. Wenn du denkst <em>"Vielleicht ist etwas passiert"</em> → Sorge. Gleiche Situation, anderer Gedanke, anderes Gefühl!</p>
+    </div>
+  </div>
+
+  <hr class="trennlinie">
+
+  <!-- Übung 4 -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">4</div>
+      <div class="uebung-titel">Mein Gefühls-Tagebuch der Woche</div>
+    </div>
+    <div class="uebung-beschreibung">
+      Trage jeden Abend ein: Was war das stärkste Gefühl des Tages? Wie stark? Was hat es ausgelöst?
+    </div>
+
+    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+      <thead>
+        <tr style="background:var(--farbe-hell);">
+          <th style="padding:7px;text-align:left;border:1px solid var(--border);width:60px;">Tag</th>
+          <th style="padding:7px;text-align:left;border:1px solid var(--border);">Stärkstes Gefühl</th>
+          <th style="padding:7px;text-align:center;border:1px solid var(--border);width:60px;">Stärke<br>(1–10)</th>
+          <th style="padding:7px;text-align:left;border:1px solid var(--border);">Was hat es ausgelöst?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:7px;border:1px solid var(--border);">Mo</td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);text-align:center;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
+        <tr><td style="padding:7px;border:1px solid var(--border);">Di</td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);text-align:center;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
+        <tr><td style="padding:7px;border:1px solid var(--border);">Mi</td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);text-align:center;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
+        <tr><td style="padding:7px;border:1px solid var(--border);">Do</td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);text-align:center;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
+        <tr><td style="padding:7px;border:1px solid var(--border);">Fr</td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);text-align:center;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
+        <tr><td style="padding:7px;border:1px solid var(--border);">Sa</td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);text-align:center;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
+        <tr><td style="padding:7px;border:1px solid var(--border);">So</td><td style="padding:7px;border:1px solid var(--border);"></td><td style="padding:7px;border:1px solid var(--border);text-align:center;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="trennlinie">
+
+  <!-- Reflexion -->
+  <div class="reflexion">
+    <div class="reflexion-titel">💬 Reflexion mit dem Erzieher / der Erzieherin</div>
+    <p style="font-size:11px;color:#92400E;margin-bottom:8px;">Beantworte diese Fragen gemeinsam oder danach:</p>
+    <div style="font-size:12px;margin-bottom:6px;">1. Welches Gefühl fällt dir am schwersten zu benennen? Warum?</div>
+    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <div style="font-size:12px;margin-bottom:6px;">2. Gibt es Gefühle die du lieber versteckst? Welche und warum?</div>
+    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <div style="font-size:12px;margin-bottom:6px;">3. Wer darf deine Gefühle sehen? Bei wem fühlst du dich sicher?</div>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+  </div>
+
+  <div class="fachhinweis">
+    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
+    Das Benennen von Emotionen (Affect Labeling) reduziert nachweislich die emotionale Aktivierung im Gehirn (Amygdala-Dämpfung durch präfrontalen Kortex). Regelmäßiges Emotions-Tagebuch führen erhöht die Alexithymie-Kompetenz und fördert die Mentalisierungsfähigkeit.
+    <br><strong>Mögliche therapeutische Intervention:</strong> Validierungstechniken nach DBT: "Es macht Sinn, dass du dich so fühlst, weil…"
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Emotionserkennung · Seite 2</span>
+  </div>
+</div>
+
+<!-- ===== SEITE 3 ===== -->
+<div class="seite">
+
+  <!-- Übung 5 -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Das Emotions-Rad – Gefühle präzise benennen</div>
+    </div>
+    <div class="uebung-beschreibung">
+      Je genauer wir unsere Gefühle benennen können, desto besser können wir sie regulieren. Übe mit dem Rad: Von innen (Grundemotion) nach außen (differenziertes Gefühl).
+    </div>
+
+    <!-- Simplified emotion wheel as text grid -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+      <div style="border:1.5px solid #FCA5A5;border-radius:8px;padding:8px;background:#FEF2F2;">
+        <div style="font-size:12px;font-weight:700;color:#DC2626;margin-bottom:4px;">😡 Wut</div>
+        <div style="font-size:10px;color:var(--grau);line-height:1.7;">wütend · gereizt · frustriert · enttäuscht · eifersüchtig · neidisch · aggressiv</div>
+      </div>
+      <div style="border:1.5px solid #93C5FD;border-radius:8px;padding:8px;background:#EFF6FF;">
+        <div style="font-size:12px;font-weight:700;color:#2563EB;margin-bottom:4px;">😰 Angst</div>
+        <div style="font-size:10px;color:var(--grau);line-height:1.7;">ängstlich · nervös · besorgt · unsicher · überfordert · schüchtern · panisch</div>
+      </div>
+      <div style="border:1.5px solid #6EE7B7;border-radius:8px;padding:8px;background:#ECFDF5;">
+        <div style="font-size:12px;font-weight:700;color:#059669;margin-bottom:4px;">😊 Freude</div>
+        <div style="font-size:10px;color:var(--grau);line-height:1.7;">glücklich · dankbar · aufgeregt · stolz · zufrieden · verliebt · begeistert</div>
+      </div>
+      <div style="border:1.5px solid #C4B5FD;border-radius:8px;padding:8px;background:#F5F3FF;">
+        <div style="font-size:12px;font-weight:700;color:#7C3AED;margin-bottom:4px;">😔 Trauer</div>
+        <div style="font-size:10px;color:var(--grau);line-height:1.7;">traurig · einsam · schuldig · verlegen · beschämt · verletzt · hoffnungslos</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Übung: Wähle eine Situation aus dieser Woche und benenne das Gefühl so präzise wie möglich:</div>
+    <div style="display:grid;grid-template-columns:100px 1fr;gap:6px;font-size:11px;border:1.5px solid var(--border);border-radius:8px;padding:10px;">
+      <div style="font-weight:600;">Situation:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
+      <div style="font-weight:600;">Grundgefühl:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
+      <div style="font-weight:600;">Präziser:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
+      <div style="font-weight:600;">Noch genauer:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
+    </div>
+  </div>
+
+  <hr class="trennlinie">
+
+  <!-- Übung 6 -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">6</div>
+      <div class="uebung-titel">Gemischte Gefühle – Es darf kompliziert sein</div>
+    </div>
+    <div class="uebung-beschreibung">
+      Wir können mehrere Gefühle gleichzeitig haben – auch widersprüchliche. Das ist normal. Denke an eine Situation, in der du gemischte Gefühle hattest.
+    </div>
+
+    <div style="border:1.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;">
+      <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Situation: _______________________________________________</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div style="border:1.5px solid var(--border);border-radius:6px;padding:8px;text-align:center;">
+          <div style="font-size:18px;margin-bottom:4px;">😊</div>
+          <div style="font-size:11px;font-weight:600;color:var(--farbe);">Gefühl 1</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div></div>
+        </div>
+        <div style="border:1.5px solid var(--border);border-radius:6px;padding:8px;text-align:center;">
+          <div style="font-size:18px;margin-bottom:4px;">😟</div>
+          <div style="font-size:11px;font-weight:600;color:var(--farbe);">Gefühl 2</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div></div>
+        </div>
+        <div style="border:1.5px solid var(--border);border-radius:6px;padding:8px;text-align:center;">
+          <div style="font-size:18px;margin-bottom:4px;">😐</div>
+          <div style="font-size:11px;font-weight:600;color:var(--farbe);">Gefühl 3</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;">Wie ist es dir mit diesen gemischten Gefühlen umgegangen?</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    </div>
+  </div>
+
+  <div class="reflexion">
+    <div class="reflexion-titel">💬 Was nehme ich aus diesem Arbeitsblatt mit?</div>
+    <div class="schreiblinien" style="margin-top:8px;"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Emotionserkennung · Seite 3</span>
+  </div>
+</div>
+
+</body>
+</html>

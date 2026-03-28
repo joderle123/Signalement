@@ -2098,4 +2098,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'soziales-netzwerk': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit sozialer Isolation, dünnen Netzwerken oder mangelnder Unterstützung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wer ist für mich da?',
+        dauer: '60 Min',
+        ziel: 'Eigenes soziales Netzwerk sichtbar machen und einschätzen',
+        psychoedukation: {
+          titel: 'Soziale Unterstützung als Schutzfaktor',
+          inhalt: 'Menschen, die auf verlässliche Beziehungen zurückgreifen können, sind widerstandsfähiger gegen Stress, Krisen und psychische Belastungen. Soziale Unterstützung ist einer der stärksten Schutzfaktoren überhaupt. Dabei geht es nicht um die Anzahl der Kontakte, sondern um deren Qualität.'
+        },
+        interventionen: [
+          {
+            titel: 'Netzwerkkarte zeichnen',
+            ansatz: 'Systemisch / Ressourcenorientiert',
+            beschreibung: 'Der Schüler zeichnet sich selbst in der Mitte und ordnet Personen in konzentrischen Kreisen an: sehr nah, mittel, am Rand. Für jeden Kreis besprechen: Wer ist dort? Auf wen kannst du zählen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Unterstützungsarten erkennen',
+            beschreibung: 'Unterscheide: Wer gibt dir emotionale Unterstützung (zuhören)? Praktische Hilfe? Rat? Spaß und Ablenkung? Kann eine Person alles – oder braucht es mehrere?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Netzwerk-Check',
+          beschreibung: 'Schreibe auf: An wen würdest du dich wenden, wenn… (a) du traurig bist, (b) du Hilfe brauchst, (c) du feiern möchtest?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie zufrieden bist du mit deinem sozialen Netzwerk?',
+          'Gibt es Lücken – jemanden, den du vermisst oder gerne hättest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Verbindungen stärken und neue knüpfen',
+        dauer: '60 Min',
+        ziel: 'Bestehende Beziehungen vertiefen und neue aufbauen',
+        psychoedukation: {
+          titel: 'Wie Freundschaften entstehen und wachsen',
+          inhalt: 'Freundschaften brauchen drei Dinge: Nähe (regelmäßigen Kontakt), Offenheit (sich zeigen wie man ist) und gegenseitiges Vertrauen. Neue Verbindungen entstehen nicht über Nacht – aber regelmäßige kleine Schritte haben großen Effekt.'
+        },
+        interventionen: [
+          {
+            titel: 'Beziehungsbarrieren analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Was hindert dich, engere Verbindungen zu anderen aufzubauen? (z.B. Angst, abgelehnt zu werden; schlechte Erfahrungen; Misstrauen). Gemeinsam überlegen: Wie realistisch sind diese Befürchtungen? Was wäre ein kleiner sicherer Schritt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Netzwerk erweitern – Ideen sammeln',
+            beschreibung: 'Wo könnte ich neue Menschen kennenlernen? (Verein, AG, Nachbarschaft, Online-Community, Jugendgruppe…) Notiere 3 konkrete Möglichkeiten.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Kleiner Kontakt',
+          beschreibung: 'Diese Woche: eine Person ansprechen, der du bisher kaum begegnet bist – im Schulbus, im Verein, in der Klasse.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hält dich davon ab, auf andere zuzugehen?',
+          'Was wäre der kleinste mögliche erste Schritt?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Umgang mit Einsamkeit',
+        dauer: '60 Min',
+        ziel: 'Einsamkeit aushalten und aktiv gegen Isolation vorgehen',
+        psychoedukation: {
+          titel: 'Einsamkeit verstehen',
+          inhalt: 'Einsamkeit ist nicht dasselbe wie allein sein. Man kann in einer Gruppe sein und sich einsam fühlen – oder allein sein und sich vollständig fühlen. Chronische Einsamkeit ist ein ernstes Signal, das Handeln erfordert. Sie entsteht oft durch eine Lücke zwischen gewünschten und tatsächlichen sozialen Kontakten.'
+        },
+        interventionen: [
+          {
+            titel: 'Einsamkeits-Gedanken hinterfragen',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Typische Gedanken bei Einsamkeit: „Niemand mag mich." „Ich bin anders." „Es hat keinen Sinn, es zu versuchen." Gemeinsam diese Gedanken untersuchen: Sind sie wahr? Was spricht dagegen? Was würde ein Freund dir sagen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Aktivitäten, die gut tun',
+            beschreibung: 'Was kannst du tun, wenn du dich einsam fühlst und niemanden erreichst? Liste 5 Aktivitäten auf, die dir Kraft geben.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Aktiver Schritt',
+          beschreibung: 'Unternimm diese Woche einen aktiven Schritt gegen Isolation: ein Gespräch führen, einer Gruppe beitreten oder jemandem schreiben.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen Schritt möchtest du in den nächsten Wochen gehen?'
+        ]
+      }
+    ]
+  },
+
 };

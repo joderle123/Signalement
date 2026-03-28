@@ -2207,4 +2207,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'genogramm': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler, die ihre Familiengeschichte verstehen und Muster erkennen wollen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Familiengeschichte kartieren',
+        dauer: '60 Min',
+        ziel: 'Ein Genogramm über drei Generationen erstellen',
+        psychoedukation: {
+          titel: 'Was ist ein Genogramm?',
+          inhalt: 'Ein Genogramm ist ein erweiterter Familienstammbaum. Es zeigt nicht nur, wer zu wem gehört, sondern auch Beziehungsqualitäten, Trennungen, Verluste und Wiederholungsmuster. Indem wir die Familiengeschichte über mehrere Generationen betrachten, können wir verstehen, warum bestimmte Themen in unserer Familie immer wieder auftauchen.'
+        },
+        interventionen: [
+          {
+            titel: 'Genogramm zeichnen',
+            ansatz: 'Systemisch',
+            beschreibung: 'Gemeinsam das Genogramm über drei Generationen erstellen: Großeltern, Eltern, Geschwister, eigene Person. Symbole für Ehen, Trennungen, Todesfälle einzeichnen. Beziehungslinien (eng, konfliktreich, abgebrochen) ergänzen.',
+            dauer: '35 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Erstes Staunen',
+            beschreibung: 'Was fällt dir beim Betrachten deines Genogramms auf? Was überrascht dich? Was war dir vorher nicht bewusst?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Familiengeschichte erkunden',
+          beschreibung: 'Frage ein Familienmitglied nach einer Geschichte oder Person aus der Familiengeschichte, die du noch nicht kennst.',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was hast du beim Zeichnen gefühlt?',
+          'Gibt es jemanden in deiner Familiengeschichte, den du gerne besser kennen würdest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Muster und Wiederholungen entdecken',
+        dauer: '60 Min',
+        ziel: 'Transgenerationale Muster erkennen und verstehen',
+        psychoedukation: {
+          titel: 'Transgenerationale Weitergabe',
+          inhalt: 'Manche Themen wiederholen sich in Familien über Generationen: frühe Trennungen, bestimmte Berufe, Suchtmuster, psychische Erkrankungen oder besondere Stärken. Diese Muster werden oft unbewusst weitergegeben – durch Erziehung, Vorbilder oder ungelöste Trauer. Sie zu kennen, ist der erste Schritt, um selbst zu entscheiden, welche Muster man fortführen und welche man verändern möchte.'
+        },
+        interventionen: [
+          {
+            titel: 'Muster-Analyse',
+            ansatz: 'Systemisch / Narrativ',
+            beschreibung: 'Gemeinsam das Genogramm auf Muster untersuchen: Gibt es Themen, die sich wiederholen? (z.B. frühe Todesfälle, Trennungen, Berufe, Erkrankungen). Was wird in deiner Familie oft erzählt? Was wird verschwiegen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Familiengeschichten sammeln',
+            beschreibung: 'Schreibe zwei Familiengeschichten auf, die immer wieder erzählt werden. Was sagen sie über Werte und Prioritäten in deiner Familie aus?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Muster reflektieren',
+          beschreibung: 'Welches Muster aus deiner Familie erkennst du in dir selbst wieder? Schreibe einen kurzen Gedanken dazu.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welches Muster aus deiner Familie möchtest du weiterführen?',
+          'Welches möchtest du verändern?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Mein eigener Weg',
+        dauer: '60 Min',
+        ziel: 'Eigenverantwortliche Entscheidungen für die eigene Zukunft treffen',
+        psychoedukation: {
+          titel: 'Familiengeschichte ≠ eigene Geschichte',
+          inhalt: 'Die Familiengeschichte erklärt vieles – aber sie bestimmt nicht, was aus dir wird. Du hast die Möglichkeit, bewusst zu wählen, welche Werte und Muster du übernehmen und welche du hinter dir lassen möchtest. Diese Entscheidung ist ein Akt der Eigenverantwortung.'
+        },
+        interventionen: [
+          {
+            titel: 'Eigene Geschichte schreiben',
+            ansatz: 'Narrativ / Ressourcenorientiert',
+            beschreibung: 'Der Schüler formuliert: „Ich komme aus einer Familie, die… Ich habe dabei gelernt… Für mein eigenes Leben möchte ich…" Das ist kein Abschied von der Familie, sondern die bewusste Entscheidung für den eigenen Weg.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ressourcen aus der Familiengeschichte',
+            beschreibung: 'Welche Stärken, Talente oder Werte hat dir deine Familie mitgegeben? Liste drei davon auf und beschreibe, wie du sie nutzen kannst.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Brief an die nächste Generation',
+          beschreibung: 'Schreibe einen kurzen Brief an deine künftigen Kinder: Was möchtest du ihnen mitgeben? Was soll bei dir enden?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie möchtest du deine eigene Geschichte gestalten?'
+        ]
+      }
+    ]
+  },
+
 };

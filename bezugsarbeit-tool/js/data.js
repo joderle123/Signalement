@@ -1594,4 +1594,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'eltern-kind-beziehung': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit Bindungsproblemen, Konflikten oder eingeschränkter Kommunikation mit Eltern',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie ist meine Beziehung zu meinen Eltern?',
+        dauer: '60 Min',
+        ziel: 'Aktuelle Beziehungsqualität realistisch einschätzen',
+        psychoedukation: {
+          titel: 'Bindung und Beziehung',
+          inhalt: 'Die Beziehung zu den eigenen Eltern ist die erste und prägendste Beziehung im Leben. Bindungserfahrungen – ob sicher, ängstlich oder vermeidend – beeinflussen, wie wir später Vertrauen, Nähe und Konflikte erleben. Bindungsmuster lassen sich aber verändern.'
+        },
+        interventionen: [
+          {
+            titel: 'Beziehungsbarometer',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Der Schüler bewertet die Beziehung zu Mutter und Vater (oder relevanten Bezugspersonen) auf einer Skala 1–10: Nähe, Vertrauen, Kommunikation, Konflikt. Ergebnisse besprechen: Was fällt auf? Was überrascht?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Drei Erinnerungen',
+            beschreibung: 'Nenne je eine positive, eine neutrale und eine schwierige Erinnerung mit einem Elternteil. Was sagen diese Erinnerungen über die Beziehung aus?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beziehungs-Tagebuch',
+          beschreibung: 'Diese Woche täglich einen Satz aufschreiben: „Heute mit Mama/Papa war…"',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was wünschst du dir von deinen Eltern, das du bisher nicht hattest?',
+          'Was glaubst du, was sich deine Eltern von dir wünschen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Konflikte mit Eltern verstehen',
+        dauer: '60 Min',
+        ziel: 'Wiederkehrende Konfliktmuster erkennen und analysieren',
+        psychoedukation: {
+          titel: 'Warum streiten Eltern und Kinder?',
+          inhalt: 'Konflikte zwischen Eltern und Jugendlichen sind normal – sie gehören zur Entwicklung der Eigenständigkeit. Häufige Themen: Freiheit vs. Schutz, Kontrolle vs. Vertrauen, unterschiedliche Werte. Konflikte können auch Chancen sein, die Beziehung neu auszuhandeln.'
+        },
+        interventionen: [
+          {
+            titel: 'Konfliktanalyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Einen typischen Streit mit den Eltern durchgehen: Auslöser → Reaktion (eigene + elterliche) → Eskalation → Ende. Was steckt hinter dem Streit? Welches Bedürfnis hat jede Seite? Wie könnte es anders laufen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Perspektivwechsel',
+            beschreibung: 'Beschreibe den letzten Streit aus der Sicht deiner Eltern. Was haben sie gefühlt, gedacht, gewollt?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Streit-Stopp-Karte',
+          beschreibung: 'Schreibe einen Satz auf, den du beim nächsten Konflikt sagen kannst, um eine Pause einzulegen (z.B.: „Ich brauche kurz Zeit zum Nachdenken.").',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welches Bedürfnis steckt meistens hinter deinen Konflikten mit den Eltern?',
+          'Was könnte dein Anteil an der Eskalation sein?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Kommunikation verbessern',
+        dauer: '60 Min',
+        ziel: 'Konkrete Kommunikationsstrategien erproben',
+        psychoedukation: {
+          titel: 'Ich-Botschaften und aktives Zuhören',
+          inhalt: 'Viele Gespräche eskalieren durch Vorwürfe (\"Du machst immer…\"). Ich-Botschaften beschreiben die eigene Wirkung ohne Anklage: „Ich fühle mich verletzt, wenn…" Aktives Zuhören bedeutet, wirklich zu verstehen, was der andere meint – nicht nur auf eine Pause zu warten.'
+        },
+        interventionen: [
+          {
+            titel: 'Gesprächstraining',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Rollenspiel: Ein schwieriges Gespräch mit einem Elternteil üben. Erst mit der bisherigen Strategie, dann mit Ich-Botschaften und aktivem Zuhören. Feedback geben: Was war anders? Was war schwer?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ich-Botschaften formulieren',
+            beschreibung: 'Wandle 3 typische Vorwürfe in Ich-Botschaften um: „Du hörst mir nie zu." → „Ich wünsche mir, dass du mir zuhörst, wenn ich dir etwas Wichtiges erzähle."',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Echtes Gespräch',
+          beschreibung: 'Führe diese Woche bewusst ein Gespräch mit einem Elternteil, in dem du mindestens eine Ich-Botschaft verwendest.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war bei dem Gespräch anders als sonst?',
+          'Was möchtest du weiter üben?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Eine neue Beziehung gestalten',
+        dauer: '60 Min',
+        ziel: 'Wünsche und Grenzen in der Elternbeziehung klar formulieren',
+        psychoedukation: {
+          titel: 'Beziehungen aktiv mitgestalten',
+          inhalt: 'Auch wenn Eltern sich nicht ändern, kann ich verändern, wie ich auf sie reagiere. Ich kann klarmachen, was ich brauche, Grenzen setzen und Nähe gezielt suchen. Das gibt mir Handlungsfähigkeit – egal wie die Eltern reagieren.'
+        },
+        interventionen: [
+          {
+            titel: 'Wünsche-Brief',
+            ansatz: 'Narrativ / Emotionsfokussiert',
+            beschreibung: 'Der Schüler schreibt einen Brief an seine Eltern – der nicht abgeschickt werden muss. Was wünschst du dir? Was tut dir weh? Was möchtest du ihnen sagen, was du bisher nicht gesagt hast?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Grenzen definieren',
+            beschreibung: 'Schreibe auf: Was ist für mich in dieser Beziehung okay – und was nicht? Wie kann ich diese Grenzen klar und freundlich kommunizieren?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Positive Geste',
+          beschreibung: 'Tue diese Woche eine kleine Geste, die die Beziehung zu einem Elternteil stärkt – unabhängig davon, wie sie reagieren.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen einen Schritt möchtest du in den nächsten zwei Wochen gehen?'
+        ]
+      }
+    ]
+  },
+
 };

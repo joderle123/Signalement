@@ -6361,4 +6361,549 @@ const THEMA_MODULE = {
     ]
   },
 
+  'sport-bewegung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Bewegungsmangel, negativer Körpererfahrung durch Sport oder übermäßigem Sport als Kompensation',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Bewegung und ich',
+        dauer: '60 Min',
+        ziel: 'Eigene Beziehung zur Bewegung erkunden; Potenzial von Sport für Wohlbefinden verstehen',
+        psychoedukation: {
+          titel: 'Bewegung als Medizin',
+          inhalt: 'Regelmäßige Bewegung ist eine der wirksamsten Maßnahmen für psychisches Wohlbefinden. Sie reduziert Stress, Angst und depressive Symptome, verbessert Schlaf und Selbstwert. Nicht Leistung ist das Ziel – sondern Bewegung, die sich gut anfühlt.'
+        },
+        interventionen: [
+          {
+            titel: 'Bewegungsbiografie',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Welche Erfahrungen hast du mit Sport und Bewegung gemacht? Positive und negative. Was hat dir Spaß gemacht? Was war schlimm? Was bist du gerne – oder nicht gerne – gemacht?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Bewegungsformen sammeln',
+            beschreibung: 'Liste alle Formen von Bewegung auf, die du dir vorstellen könntest – von Tanzen bis Spazierengehen. Welche reizt dich?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Bewegungsprotokoll',
+          beschreibung: 'Führe diese Woche ein kurzes Protokoll: Wann hast du dich bewegt? Wie hat es sich angefühlt?',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was verbindest du mit Sport – positiv und negativ?',
+          'Wann hast du dich zuletzt nach Bewegung gut gefühlt?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Bewegung in den Alltag bringen',
+        dauer: '60 Min',
+        ziel: 'Konkrete Bewegungsgewohnheiten entwickeln; Hindernisse überwinden',
+        psychoedukation: {
+          titel: 'Bewegung braucht keine Gym-Mitgliedschaft',
+          inhalt: 'Schon 30 Minuten moderate Bewegung täglich zeigen nachweisliche Wirkung. Das muss kein Sport sein: Zu Fuß gehen, Treppensteigen, Tanzen in der Küche, Radfahren. Entscheidend ist Regelmäßigkeit, nicht Intensität.'
+        },
+        interventionen: [
+          {
+            titel: 'Bewegungsplan erstellen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was ist realistisch umsetzbar? Welche Bewegungsform passt zu deinem Alltag? Einen konkreten Plan mit mindestens 3 Bewegungseinheiten pro Woche erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Hindernisse analysieren',
+            beschreibung: 'Was hindert dich, dich mehr zu bewegen? Für jedes Hindernis eine Lösung entwickeln.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Plan umsetzen',
+          beschreibung: 'Setze deinen Bewegungsplan diese Woche um. Notiere, wie es sich anfühlt.',
+          dauer: 'nach Plan'
+        },
+        reflexion: [
+          'Was macht Bewegung leichter für dich?',
+          'Was würde dich langfristig motivieren?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Körper und Geist verbinden',
+        dauer: '60 Min',
+        ziel: 'Körperwahrnehmung stärken; Bewegung als Selbstfürsorge begreifen',
+        psychoedukation: {
+          titel: 'Körper und Geist sind eins',
+          inhalt: 'Was wir mit unserem Körper tun, beeinflusst unser Denken und Fühlen – und umgekehrt. Bewegung ist eine Form der Körperpflege und Selbstfürsorge. Wer gut auf seinen Körper achtet, behandelt sich selbst mit Respekt.'
+        },
+        interventionen: [
+          {
+            titel: 'Körperwahrnehmungs-Übung',
+            ansatz: 'Achtsamkeitsbasiert / Körperorientiert',
+            beschreibung: 'Kurze achtsame Bewegungseinheit: Langsam gehen, jeden Schritt spüren, Atemrhythmus wahrnehmen. Danach besprechen: Was hast du bemerkt?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Bewegung als Stimmungsregulation',
+            beschreibung: 'Was passiert mit deiner Stimmung nach Bewegung? Teste es: Vor einer Aktivität Stimmung bewerten (1–10), danach noch mal. Was veränder sich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Bewegung als Selbstfürsorge',
+          beschreibung: 'Plane diese Woche Bewegung bewusst als Selbstfürsorge-Aktivität ein – nicht als Pflicht.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche Bewegungsform möchtest du dauerhaft beibehalten?'
+        ]
+      }
+    ]
+  },
+
+  'sexualitaet': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Fragen zu Pubertät, Sexualität, Verhütung oder sexueller Identität',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Körper, Pubertät und Veränderung',
+        dauer: '60 Min',
+        ziel: 'Körperliche Veränderungen in der Pubertät verstehen und normalisieren',
+        psychoedukation: {
+          titel: 'Was in der Pubertät passiert',
+          inhalt: 'Pubertät ist eine intensive körperliche und emotionale Entwicklungsphase. Hormone verändern Körper, Stimmungen und soziale Bedürfnisse. Alle Menschen entwickeln sich unterschiedlich schnell. Vergleiche mit anderen sind sinnlos – der eigene Rhythmus ist normal.'
+        },
+        interventionen: [
+          {
+            titel: 'Fragen und Unsicherheiten klären',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Raum für Fragen geben: Was beschäftigt dich rund um Körper, Pubertät und Sexualität? Ehrlich und sachlich beantworten. Mythen aufklären.',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Was ich weiß – was ich nicht weiß',
+            beschreibung: 'Schreibe anonym auf, was du über Sexualität sicher weißt – und was du dir nicht sicher bist. Gemeinsam klären.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Zuverlässige Informationsquellen',
+          beschreibung: 'Suche eine zuverlässige Informationsquelle zum Thema (z.B. Bundeszentrale für gesundheitliche Aufklärung).',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Frage beschäftigt dich am meisten?',
+          'Mit wem könntest du über dieses Thema sprechen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Sexualität, Grenzen und Konsens',
+        dauer: '60 Min',
+        ziel: 'Konsens, Grenzen und Selbstbestimmung in sexuellen Kontexten verstehen',
+        psychoedukation: {
+          titel: 'Konsens ist klar und enthusiastisch',
+          inhalt: 'Konsens bedeutet: beide sagen aktiv Ja – klar, frei und ohne Druck. Kein Nein zu hören ist kein Ja. Unsicherheit ist kein Ja. Alkohol verhindert Konsens. Eigene Grenzen kennen und kommunizieren ist ein Recht – und eine Pflicht gegenüber anderen.'
+        },
+        interventionen: [
+          {
+            titel: 'Grenzen und Konsens besprechen',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Was bedeutet Konsens konkret? Was sind meine Grenzen? Wie kommuniziere ich sie? Rollenspiele für Grenzkommunikation – altersgerecht und respektvoll.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Grenzen formulieren',
+            beschreibung: 'Formuliere 3 Sätze, die du in einer Situation sagen kannst, in der deine Grenzen überschritten werden.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Reflexion',
+          beschreibung: 'Denke über folgende Frage nach: Was sind meine persönlichen Grenzen – und wie kann ich sie klar kommunizieren?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann ist es schwer, Grenzen zu setzen?',
+          'Was hilft dir, bei deinen Grenzen zu bleiben?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Sexuelle Identität und Vielfalt',
+        dauer: '60 Min',
+        ziel: 'Sexuelle und geschlechtliche Vielfalt verstehen; eigene Identität explorieren',
+        psychoedukation: {
+          titel: 'Sexuelle Identität ist vielfältig',
+          inhalt: 'Sexuelle Orientierung und geschlechtliche Identität sind ein Spektrum – nicht schwarz-weiß. Heterosexualität, Homosexualität, Bisexualität, Asexualität, Trans- und Nicht-binäre Identitäten sind alle normale Varianten menschlicher Vielfalt. Identität kann sich im Laufe des Lebens entwickeln und verändern.'
+        },
+        interventionen: [
+          {
+            titel: 'Identitäts-Exploration',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Raum geben für Fragen zur eigenen Identität: Was weiß ich? Was bin ich unsicher? Was fühlt sich stimmig an? Ohne Druck zur Entscheidung.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Unterstützende Ressourcen kennen',
+            beschreibung: 'Welche Beratungsangebote oder Gemeinschaften gibt es für LGBTQ+ Jugendliche? (z.B. Jugendberatung, Online-Communities).',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Vertrauensperson finden',
+          beschreibung: 'Überlege: Mit wem könntest du über Fragen zur eigenen Identität sprechen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du noch herausfinden oder erkunden?'
+        ]
+      }
+    ]
+  },
+
+  'koerperbild': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit negativem Körperbild, Körperscham oder Selbstwahrnehmungsproblemen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie sehe ich meinen Körper?',
+        dauer: '60 Min',
+        ziel: 'Eigenes Körperbild reflektieren; Einflüsse auf Körperzufriedenheit verstehen',
+        psychoedukation: {
+          titel: 'Körperbild entsteht im Kopf',
+          inhalt: 'Körperbild ist nicht dasselbe wie Aussehen. Es ist, wie wir unseren Körper wahrnehmen und bewerten – beeinflusst durch Medien, Kommentare, kulturelle Normen und persönliche Erfahrungen. Negative Körperbilder sind weit verbreitet – besonders unter Jugendlichen und besonders bei Mädchen.'
+        },
+        interventionen: [
+          {
+            titel: 'Körperbild-Interview',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wie zufrieden bist du mit deinem Körper? Was magst du? Was störst du? Woher kommen diese Gedanken? Wann begann das? Ohne Bewertung – nur Verstehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Medien-Analyse',
+            beschreibung: 'Sammle 5 Körperideale aus Medien oder Social Media. Wie realistisch sind sie? Was wird versteckt oder bearbeitet?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Body-Talk-Beobachtung',
+          beschreibung: 'Beobachte diese Woche, was du dir über deinen Körper sagst – innerlich. Notiere die häufigsten Gedanken.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was ist der häufigste negative Gedanke über deinen Körper?',
+          'Woher kommt dieser Gedanke?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Körperscham überwinden',
+        dauer: '60 Min',
+        ziel: 'Körperscham normalisieren; Selbstmitgefühl gegenüber dem eigenen Körper entwickeln',
+        psychoedukation: {
+          titel: 'Kein Körper ist fehlerfrei',
+          inhalt: 'Körperscham entsteht, wenn wir glauben, unsere Körper entsprechen nicht dem, was sie „sollten". Kein Körper ist perfekt – auch nicht die Körper, die wir in Medien sehen. Selbstmitgefühl für den eigenen Körper ist keine Selbstgefälligkeit – es ist psychische Gesundheit.'
+        },
+        interventionen: [
+          {
+            titel: 'Selbstmitgefühl üben',
+            ansatz: 'Achtsamkeitsbasiert',
+            beschreibung: 'Schreibe einen Brief an deinen Körper – so mitfühlend wie du einem guten Freund schreiben würdest. Was hat dein Körper geleistet? Was trägt er täglich für dich?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Was mein Körper kann',
+            beschreibung: 'Liste 10 Dinge auf, die dein Körper kann oder für dich tut. Fokus: Funktion, nicht Aussehen.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Körper-Dankbarkeit',
+          beschreibung: 'Notiere täglich eine Sache, für die du deinem Körper dankbar bist.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was hat sich verändert, wenn du deinen Körper aus der Funktion statt aus dem Aussehen betrachtest?',
+          'Was würdest du deinem besten Freund sagen, wenn er so über seinen Körper denkt?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gesundes Körperbild entwickeln',
+        dauer: '60 Min',
+        ziel: 'Langfristig neutrales bis positives Körperbild aufbauen',
+        psychoedukation: {
+          titel: 'Body Neutrality vs. Body Positivity',
+          inhalt: 'Body Positivity (meinen Körper lieben) ist für viele zu weit gegriffen. Body Neutrality ist realistischer: Den Körper weder lieben noch hassen – ihn als Werkzeug sehen, das trägt und lebt. Das ist ein ausreichendes Ziel.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Körperbild-Plan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was beeinflusst dein Körperbild negativ? (Social Media, Vergleiche, Kommentare). Was können wir verändern? Gemeinsam konkrete Schritte entwickeln.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Social-Media-Diät',
+            beschreibung: 'Bestelle alle Accounts ab, die dein Körperbild verschlechtern. Füge Accounts hinzu, die Körpervielfalt zeigen.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Körperbild-Pflege',
+          beschreibung: 'Diese Woche: Tue jeden Tag eine Sache, die gut für die Beziehung zu deinem Körper ist.',
+          dauer: 'täglich 10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie möchtest du in Zukunft über deinen Körper denken?'
+        ]
+      }
+    ]
+  },
+
+  'mentale-gesundheit': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler zur allgemeinen psychischen Stärkung oder mit ersten Zeichen psychischer Belastung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist mentale Gesundheit?',
+        dauer: '60 Min',
+        ziel: 'Mentale Gesundheit verstehen; eigene Stärken und Belastungen einschätzen',
+        psychoedukation: {
+          titel: 'Mentale Gesundheit – nicht nur keine Krankheit',
+          inhalt: 'Mentale Gesundheit ist mehr als das Fehlen von Erkrankungen. Sie umfasst: Wohlbefinden, die Fähigkeit, Stress zu bewältigen, produktiv zu sein und Beziehungen zu gestalten. Wie körperliche Gesundheit braucht sie Pflege – täglich.'
+        },
+        interventionen: [
+          {
+            titel: 'Mentaler Gesundheits-Check',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wie geht es mir aktuell in den Bereichen: Stimmung, Energie, Schlaf, Beziehungen, Schule, Freude? Was ist gut? Was belastet mich?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schutzfaktoren identifizieren',
+            beschreibung: 'Was stärkt deine mentale Gesundheit? Liste alle Faktoren auf: Personen, Aktivitäten, Gewohnheiten, Werte.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Wohlbefinden-Tagebuch',
+          beschreibung: 'Führe diese Woche täglich einen kurzen Wohlbefinden-Check: Stimmung (1–10), was war gut, was war schwierig.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was stärkt deine mentale Gesundheit am meisten?',
+          'Was belastet sie gerade?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Selbstfürsorge als Praxis',
+        dauer: '60 Min',
+        ziel: 'Konkrete Selbstfürsorge-Strategien entwickeln und verankern',
+        psychoedukation: {
+          titel: 'Selbstfürsorge ist keine Eitelkeit',
+          inhalt: 'Selbstfürsorge bedeutet, die eigenen Grundbedürfnisse zu kennen und zu erfüllen: Schlaf, Ernährung, Bewegung, soziale Verbindung, Erholung, Sinn. Wer nicht für sich sorgt, kann langfristig auch nicht für andere da sein.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliche Selbstfürsorge-Strategie',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen konkreten Selbstfürsorge-Plan entwickeln: Was tue ich täglich, wöchentlich, monatlich für meine mentale Gesundheit?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Selbstfürsorge-Menü',
+            beschreibung: 'Erstelle ein persönliches Selbstfürsorge-Menü: Kleine Dinge (5 Min), mittlere Dinge (30 Min), große Dinge (Stunden). Für jeden Bedarf etwas dabei.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Selbstfürsorge-Woche',
+          beschreibung: 'Setze täglich mindestens eine Selbstfürsorge-Aktivität aus deinem Menü um.',
+          dauer: 'täglich 10–30 Min'
+        },
+        reflexion: [
+          'Was ist für dich die wichtigste Form der Selbstfürsorge?',
+          'Was hält dich oft davon ab?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Hilfe suchen – wann und wie',
+        dauer: '60 Min',
+        ziel: 'Stigma rund um psychische Hilfe abbauen; Anlaufstellen kennen',
+        psychoedukation: {
+          titel: 'Hilfe suchen ist Stärke',
+          inhalt: 'Bei körperlichen Beschwerden geht man zum Arzt. Bei psychischen Belastungen ist das genauso sinnvoll – aber gesellschaftlich noch immer mit Stigma belastet. Professionelle Hilfe zu suchen ist mutig und klug, nicht schwach.'
+        },
+        interventionen: [
+          {
+            titel: 'Hilfsangebote kennenlernen',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Welche Unterstützung gibt es? (Schulpsychologischer Dienst, Jugendberatung, Therapeuten, Krisentelefon). Wie läuft ein erstes Gespräch ab? Was kann man erwarten?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Signale kennen',
+            beschreibung: 'Liste Zeichen auf, die anzeigen, dass professionelle Hilfe sinnvoll wäre. Wann würdest du dir selbst raten, Hilfe zu suchen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ressourcen notieren',
+          beschreibung: 'Schreibe dir 2–3 Anlaufstellen auf, die du kontaktieren könntest, wenn du Unterstützung brauchst.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was wäre der erste Schritt, wenn du professionelle Hilfe suchen würdest?'
+        ]
+      }
+    ]
+  },
+
+  'chronische-erkrankung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit chronischen körperlichen Erkrankungen oder Behinderungen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Mit einer Erkrankung leben',
+        dauer: '60 Min',
+        ziel: 'Eigene Erkrankung und deren Auswirkungen verstehen und benennen',
+        psychoedukation: {
+          titel: 'Chronisch krank sein – was das bedeutet',
+          inhalt: 'Eine chronische Erkrankung ist nicht etwas, das man hat und dann vergisst. Sie verändert den Alltag, die Zukunftspläne, das Körperbild und manchmal die sozialen Beziehungen. Das anzuerkennen – ohne sich davon definieren zu lassen – ist die zentrale Aufgabe.'
+        },
+        interventionen: [
+          {
+            titel: 'Erkrankungs-Erzählung',
+            ansatz: 'Narrativ',
+            beschreibung: 'Erzähle deine Geschichte mit der Erkrankung: Wann begann es? Was hat sich verändert? Was ist geblieben? Raum geben für alle Gefühle – Wut, Trauer, Anpassung.',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ich bin mehr als meine Erkrankung',
+            beschreibung: 'Schreibe 10 Dinge auf, die dich als Person ausmachen – unabhängig von deiner Erkrankung.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Belastungen dokumentieren',
+          beschreibung: 'Notiere diese Woche, welche Bereiche deines Lebens die Erkrankung am meisten beeinflusst.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was ist das Schwierigste an deiner Erkrankung für dich?',
+          'Gibt es etwas, das durch die Erkrankung stärker geworden ist?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Umgang mit Einschränkungen',
+        dauer: '60 Min',
+        ziel: 'Coping-Strategien für erkrankungsbedingte Einschränkungen entwickeln',
+        psychoedukation: {
+          titel: 'Coping – mit Grenzen leben',
+          inhalt: 'Coping bedeutet, mit den Anforderungen einer Erkrankung umzugehen. Es gibt problemfokussiertes Coping (praktische Lösungen), emotionsfokussiertes Coping (Gefühle regulieren) und sinnfokussiertes Coping (Bedeutung finden). Alle drei sind wichtig.'
+        },
+        interventionen: [
+          {
+            titel: 'Coping-Strategien entwickeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche Einschränkungen macht die Erkrankung am meisten zu schaffen? Für jede: Was hilft praktisch? Was hilft emotional? Was gibt Sinn?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ressourcen trotz Erkrankung',
+            beschreibung: 'Was kannst du trotz der Erkrankung gut? Was hast du durch sie gelernt? Welche Stärken hast du entwickelt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Strategie anwenden',
+          beschreibung: 'Setze diese Woche eine Coping-Strategie bewusst ein.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hilft dir am meisten im Umgang mit den Einschränkungen?',
+          'Was möchtest du weiter stärken?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Zukunft trotz Erkrankung planen',
+        dauer: '60 Min',
+        ziel: 'Realistische Zukunftsperspektive mit und trotz Erkrankung entwickeln',
+        psychoedukation: {
+          titel: 'Die Erkrankung gehört dazu – aber sie bestimmt nicht alles',
+          inhalt: 'Chronische Erkrankungen erfordern manchmal, Pläne anzupassen – aber sie verhindern selten alles. Viele Menschen mit chronischen Erkrankungen führen erfüllte, aktive Leben. Der Schlüssel: Realismus + Kreativität + Unterstützung.'
+        },
+        interventionen: [
+          {
+            titel: 'Zukunftsbild anpassen',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wie sieht eine gute Zukunft aus – mit der Erkrankung? Welche Anpassungen braucht es? Was bleibt möglich? Gemeinsam eine realistische, positive Perspektive entwickeln.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Unterstützungsnetz aktivieren',
+            beschreibung: 'Wer unterstützt mich bei meiner Erkrankung? (Familie, Ärzte, Selbsthilfegruppen, Schulberater). Was brauche ich mehr Unterstützung bei?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Unterstützung suchen',
+          beschreibung: 'Wende dich diese Woche an eine Person oder Stelle für mehr Unterstützung.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was ist dein wichtigster nächster Schritt?'
+        ]
+      }
+    ]
+  },
+
 };

@@ -8684,4 +8684,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'spiritualitaet': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche, die Sinn, Glaube und innere Orientierung erkunden möchten',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was bedeutet Spiritualität für mich?',
+        dauer: '60 Min',
+        ziel: 'Eigenes Verständnis von Spiritualität, Glaube und Sinn entwickeln',
+        psychoedukation: {
+          titel: 'Spiritualität ist vielfältig',
+          inhalt: 'Spiritualität ist nicht dasselbe wie Religion, obwohl sie sich überschneiden können. Sie umfasst das Suchen nach Sinn, Transzendenz, innerer Stille, Verbundenheit oder Werten jenseits des Alltags. Jeder Mensch entwickelt seine eigene Spiritualität.'
+        },
+        interventionen: [
+          {
+            titel: 'Spiritualitäts-Landkarte',
+            ansatz: 'Reflektiv',
+            beschreibung: 'Was gehört zu meiner Spiritualität? (Religion, Natur, Meditation, Musik, Verbundenheit?) Erstelle eine visuelle Karte deiner spirituellen Welt.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Momente der Stille',
+            beschreibung: 'Erinnere dich an einen Moment, der sich "heilig", besonders oder tiefgründig angefühlt hat. Was war das? Was hat er ausgelöst?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stille-Erfahrung',
+          beschreibung: 'Nimm dir diese Woche 10 Minuten für Stille (Natur, Meditation, Gebet oder einfach sein). Was erlebst du dabei?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Glaubst du an etwas, das größer ist als du selbst?',
+          'Was gibt dir im Leben Halt und Orientierung?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Glaube, Zweifel und Fragen',
+        dauer: '60 Min',
+        ziel: 'Mit Glaubensfragen und Zweifeln konstruktiv umgehen',
+        psychoedukation: {
+          titel: 'Zweifel als Teil des Glaubens',
+          inhalt: 'Zweifel gehören zur spirituellen Entwicklung. Viele religiöse und philosophische Traditionen sehen Fragen als Zeichen von Wachstum. Es gibt keine Pflicht zu Gewissheit. Wichtig ist, ehrlich mit den eigenen Fragen umzugehen.'
+        },
+        interventionen: [
+          {
+            titel: 'Glaubensfragen erforschen',
+            ansatz: 'Sokratisch',
+            beschreibung: 'Was glaubst du? Was zweifelst du? Was weißt du nicht? Strukturierte Reflexion in drei Spalten: Mein Glaube / Meine Zweifel / Meine offenen Fragen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief an das Universum',
+            beschreibung: 'Schreibe einen Brief an Gott, das Universum oder das Leben selbst – mit deinen Fragen, Hoffnungen und Zweifeln.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Spirituelle Ressource',
+          beschreibung: 'Suche ein Gebet, ein Zitat, eine Musik oder ein Ritual, das dir Kraft gibt. Bring es zur nächsten Sitzung.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie gehst du mit Fragen um, die keine Antwort haben?',
+          'Was stärkt deinen Glauben oder dein Vertrauen ins Leben?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Spiritualität als Ressource im Alltag',
+        dauer: '60 Min',
+        ziel: 'Spiritualität als Kraftquelle im Alltag nutzen',
+        psychoedukation: {
+          titel: 'Spiritualität und psychische Gesundheit',
+          inhalt: 'Forschungen zeigen: Spiritualität und Religiosität können psychische Resilienz stärken – durch Sinngebung, Gemeinschaft, Rituale und Hoffnung. Das gilt unabhängig davon, welcher Tradition jemand angehört.'
+        },
+        interventionen: [
+          {
+            titel: 'Rituale entwickeln',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Welche kleinen täglichen Rituale geben mir Halt? (Morgengebet, Dankbarkeitsmoment, Naturspaziergang...) Entwickle ein persönliches Ritual für schwierige Tage.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Dankbarkeits-Meditation',
+            beschreibung: 'Kurze Dankbarkeitsmeditation: 5 Dinge, für die du heute dankbar bist. Spüre das Gefühl der Dankbarkeit im Körper.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ritual praktizieren',
+          beschreibung: 'Führe das entwickelte Ritual diese Woche täglich durch. Was verändert sich?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie hilft dir Spiritualität in schwierigen Zeiten?',
+          'Was möchtest du an spiritueller Praxis in deinen Alltag integrieren?'
+        ]
+      }
+    ]
+  },
+
 };

@@ -8575,4 +8575,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'geschlechtsidentitaet': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche, die ihre Geschlechtsidentität erkunden oder klären möchten',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Geschlecht verstehen – mehr als Biologie',
+        dauer: '60 Min',
+        ziel: 'Unterschied zwischen biologischem Geschlecht, Geschlechtsidentität und Geschlechtsausdruck verstehen',
+        psychoedukation: {
+          titel: 'Geschlecht ist vielfältig',
+          inhalt: 'Biologisches Geschlecht (Sex), Geschlechtsidentität (inneres Erleben) und Geschlechtsausdruck (wie man sich zeigt) sind drei verschiedene Dimensionen. Geschlecht ist ein Spektrum – nicht nur "männlich" oder "weiblich". Das Verständnis davon wächst weltweit.'
+        },
+        interventionen: [
+          {
+            titel: 'Spektrum-Reflexion',
+            ansatz: 'Aufklärend',
+            beschreibung: 'Visuelles Modell der drei Dimensionen (Biologisches Geschlecht / Identität / Ausdruck). Jugendliche markieren auf jedem Spektrum, wo sie sich verorten – ohne Bewertung, mit Offenheit.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wörter und Gefühle',
+            beschreibung: 'Welche Wörter beschreiben dein Erleben von Geschlecht? (z.B. Frau, Mann, non-binär, queer, keines davon...) Wie fühlt sich jedes Wort an?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beobachtung im Alltag',
+          beschreibung: 'Achte diese Woche darauf, wie Geschlechterrollen in deinem Alltag sichtbar werden (Werbung, Schule, Familie). Was fällt dir auf?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was bedeutet Geschlecht für dich persönlich?',
+          'Welche Fragen hast du zu deiner eigenen Geschlechtsidentität?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Meine Geschlechtsidentität – Erkundung',
+        dauer: '60 Min',
+        ziel: 'Die eigene Geschlechtsidentität erkunden und ausdrücken',
+        psychoedukation: {
+          titel: 'Identitätsentwicklung und Geschlecht',
+          inhalt: 'Die Auseinandersetzung mit der eigenen Geschlechtsidentität ist ein normaler Teil der Adoleszenz. Manche Jugendliche erleben eine klare Identität, andere brauchen Zeit zur Erkundung. Beides ist in Ordnung. Es gibt keine Pflicht zur Entscheidung.'
+        },
+        interventionen: [
+          {
+            titel: 'Identitäts-Collage',
+            ansatz: 'Kreativ-expressiv',
+            beschreibung: 'Erstelle eine Collage oder Zeichnung: Wie möchtest du dich zeigen? Was fühlt sich authentisch an? Kleidung, Farben, Symbole, Wörter – alles erlaubt.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ich bin... (Satzanfänge)',
+            beschreibung: 'Vollende 10 Sätze, die mit "Als Mädchen/Junge/Person bin ich..." oder "Ich fühle mich, wenn..." beginnen. Ohne Zensur.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Vorbild suchen',
+          beschreibung: 'Suche eine Person (real oder aus Medien), die deine Geschlechtsidentität auf positive Weise verkörpert. Was bewunderst du an ihr/ihm/ihnen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was fühlst du, wenn du an deine Geschlechtsidentität denkst?',
+          'Wann fühlst du dich in deiner Identität wohl, wann nicht?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Identität und soziales Umfeld',
+        dauer: '60 Min',
+        ziel: 'Umgang mit sozialen Erwartungen und Unterstützung finden',
+        psychoedukation: {
+          titel: 'Coming-out und soziale Reaktionen',
+          inhalt: 'Ein Coming-out – falls gewünscht – ist ein persönlicher Prozess ohne Zeitdruck. Nicht jeder muss sich "outen". Wichtig ist: sichere Vertrauenspersonen zu haben, die Unterstützung bieten. Diskriminierung ist nicht deine Schuld.'
+        },
+        interventionen: [
+          {
+            titel: 'Unterstützungsnetz kartieren',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wer in meinem Umfeld kennt und akzeptiert meine Identität? Wer noch nicht? Wer wäre eine sichere Person zum Reden? Erstelle eine Karte deines Unterstützungsnetzes.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Antworten vorbereiten',
+            beschreibung: 'Was sage ich, wenn jemand eine verletzende Frage stellt? Entwickle 2–3 Antworten, mit denen du dich sicher fühlst.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ressourcen erkunden',
+          beschreibung: 'Recherchiere eine Anlaufstelle (z.B. LSBT+ Beratungsstelle in Luxemburg), die dir bei Fragen helfen könnte.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was brauchst du, um dich sicher und akzeptiert zu fühlen?',
+          'Wer ist die Person, der du am meisten vertraust?'
+        ]
+      }
+    ]
+  },
+
 };

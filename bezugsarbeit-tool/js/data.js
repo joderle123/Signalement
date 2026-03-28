@@ -8902,4 +8902,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'lebenssinn': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche, die nach Sinn und Lebensrichtung suchen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was gibt meinem Leben Sinn?',
+        dauer: '60 Min',
+        ziel: 'Persönliche Sinnquellen entdecken und benennen',
+        psychoedukation: {
+          titel: 'Sinn als psychologisches Grundbedürfnis',
+          inhalt: 'Viktor Frankl und andere Psychologen zeigen: Menschen brauchen Sinn, um psychisch gesund zu bleiben. Sinn kann kommen aus Beziehungen, Leistung, Werten, Erfahrungen oder Leiden. Er ist individuell – nicht jeder findet ihn am gleichen Ort.'
+        },
+        interventionen: [
+          {
+            titel: 'Sinnquellen-Karte',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Welche Tätigkeiten, Beziehungen oder Momente geben dir das Gefühl, dass dein Leben bedeutungsvoll ist? Erstelle eine Karte deiner persönlichen Sinnquellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Flow-Momente',
+            beschreibung: 'Wann bist du völlig vertieft in eine Tätigkeit – vergisst Zeit und Raum? Was sagt das über deine Stärken und Werte aus?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Sinn-Tagebuch',
+          beschreibung: 'Notiere diese Woche abends eine Sache, die sich heute bedeutungsvoll angefühlt hat – auch kleine Dinge zählen.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann hast du zuletzt das Gefühl gehabt, dass dein Leben Sinn hat?',
+          'Was wäre sinnlos, wenn du es nicht tätest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Lebensziele und Visionen',
+        dauer: '60 Min',
+        ziel: 'Eigene Lebensziele und -visionen entwickeln',
+        psychoedukation: {
+          titel: 'Ziele und Sinn',
+          inhalt: 'Lebensziele geben Richtung und Motivation. Wichtig ist der Unterschied: Ziele, die aus Werten kommen ("Ich will anderen helfen"), tragen nachhaltiger als Ziele, die aus Druck entstehen ("Ich soll Arzt werden"). Eigene Ziele fühlen sich anders an als aufgezwungene.'
+        },
+        interventionen: [
+          {
+            titel: 'Lebensrad',
+            ansatz: 'Coaching',
+            beschreibung: 'Das Lebensrad: 8 Lebensbereiche (Familie, Freundschaft, Gesundheit, Schule/Arbeit, Hobbies, Spiritualität, Finanzen, persönliches Wachstum). Wie zufrieden bin ich in jedem Bereich? Was möchte ich entwickeln?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '5-Jahres-Brief',
+            beschreibung: 'Schreibe dir selbst einen Brief aus der Zukunft (in 5 Jahren): Was hat sich erfüllt? Was bist du jetzt? Was war das Wichtigste?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ein Ziel, ein Schritt',
+          beschreibung: 'Wähle ein Lebensziel aus dem Lebensrad. Was ist der kleinstmögliche erste Schritt dorthin? Tue ihn diese Woche.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Ziele kommen wirklich von dir – welche von anderen?',
+          'Was würdest du bereuen, wenn du es nie versucht hättest?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Sinn in schwierigen Zeiten',
+        dauer: '60 Min',
+        ziel: 'Sinn auch in Leid und Herausforderungen finden',
+        psychoedukation: {
+          titel: 'Posttraumatisches Wachstum',
+          inhalt: 'Viele Menschen finden gerade durch schwierige Erfahrungen tieferen Sinn. Das nennt man posttraumatisches Wachstum. Sinn bedeutet nicht, dass alles gut ist – sondern dass man einen Rahmen hat, der Schwieriges erträglich macht.'
+        },
+        interventionen: [
+          {
+            titel: 'Sinn in der Krise',
+            ansatz: 'Logotherapeutisch',
+            beschreibung: 'Beschreibe eine schwierige Erfahrung. Was hast du daraus gelernt? Was hat sie dir gegeben (auch wenn du sie nicht wolltest)? Wo liegt ein möglicher Sinn?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Resilienz-Anker',
+            beschreibung: 'Was hat dir in deiner schwierigsten Zeit Halt gegeben? Eine Person, ein Glaube, ein Ziel? Benenne deinen persönlichen Resilienz-Anker.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Dankbarkeit für Schwieriges',
+          beschreibung: 'Schreibe über eine schwierige Erfahrung, für die du – mit Abstand – irgendwie dankbar bist. Was hat sie dir gegeben?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Glaubst du, dass schwierige Erfahrungen Sinn haben können?',
+          'Was gibt dir Kraft, wenn das Leben keinen Sinn zu machen scheint?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Mein Lebensauftrag',
+        dauer: '60 Min',
+        ziel: 'Ein persönliches Leitbild und Lebensauftrag formulieren',
+        psychoedukation: {
+          titel: 'Ikigai – Sinn des Lebens',
+          inhalt: 'Das japanische Konzept "Ikigai" beschreibt den Sinn als Schnittmenge von: Was ich liebe / Was ich gut kann / Was die Welt braucht / Womit ich meinen Lebensunterhalt verdienen kann. Diese Schnittmenge zu finden gibt tiefe Erfüllung.'
+        },
+        interventionen: [
+          {
+            titel: 'Ikigai-Diagramm',
+            ansatz: 'Werteorientiert',
+            beschreibung: 'Erstelle ein persönliches Ikigai-Diagramm: 4 Kreise, die sich überschneiden. In jeden Kreis Antworten auf die vier Ikigai-Fragen. Was liegt in der Mitte?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Persönliches Mission-Statement',
+            beschreibung: 'Formuliere in 1–2 Sätzen deinen persönlichen Lebensauftrag: "Ich bin hier, um..."',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Auftrag leben',
+          beschreibung: 'Wie kannst du diese Woche eine kleine Handlung tun, die deinem Lebensauftrag entspricht?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was ist dein Beitrag zur Welt?',
+          'Was möchtest du nach dir hinterlassen?'
+        ]
+      }
+    ]
+  },
+
 };

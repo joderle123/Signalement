@@ -5380,4 +5380,222 @@ const THEMA_MODULE = {
     ]
   },
 
+  'schulisches-engagement': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Motivationsproblemen, häufigen Fehlzeiten oder geringer schulischer Beteiligung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Warum gehe ich – oder warum nicht – zur Schule?',
+        dauer: '60 Min',
+        ziel: 'Eigene Einstellung zur Schule und Hindernisse verstehen',
+        psychoedukation: {
+          titel: 'Schule und Selbstwirksamkeit',
+          inhalt: 'Schulisches Engagement hängt stark davon ab, ob man das Gefühl hat, dass eigene Anstrengung etwas bewirkt. Wer wiederholt gescheitert ist oder sich ungesehen fühlt, zieht sich zurück. Das Wiederentdecken kleiner Erfolge ist der erste Schritt zur Neuorientierung.'
+        },
+        interventionen: [
+          {
+            titel: 'Schulmotivations-Interview',
+            ansatz: 'Motivational Interviewing',
+            beschreibung: 'Was läuft in der Schule gut? Was ist schwierig? Was bräuchte es, damit Schule sich anders anfühlt? Keine Bewertung – echtes Zuhören und gemeinsames Verstehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schulische Stärken finden',
+            beschreibung: 'Was kannst du in der Schule gut – auch wenn es klein ist? Liste 5 Dinge auf, auf die du stolz sein kannst.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beobachtungsauftrag',
+          beschreibung: 'Beobachte diese Woche: Wann in der Schule fühlst du dich am wenigsten schlecht? Was ist in diesen Momenten anders?',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was war mal gut an der Schule – auch wenn es lange her ist?',
+          'Was müsste sich ändern, damit du lieber zur Schule gehst?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Hindernisse für den Schulbesuch',
+        dauer: '60 Min',
+        ziel: 'Konkrete Barrieren für Fehlzeiten oder Passivität identifizieren und angehen',
+        psychoedukation: {
+          titel: 'Schulvermeidung hat Gründe',
+          inhalt: 'Fehlzeiten entstehen selten aus reiner Faulheit. Häufige Ursachen: Angst (soziale Angst, Prüfungsangst), Mobbing, familiäre Belastungen, unerkannte Lernprobleme, psychische Erkrankungen. Diese Ursachen zu kennen ist der erste Schritt zur Lösung.'
+        },
+        interventionen: [
+          {
+            titel: 'Barrieren-Analyse',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was hindert dich konkret, regelmäßig zur Schule zu gehen oder mitzumachen? Für jedes Hindernis: Was wäre ein erster kleiner Schritt, der es leichter macht?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schrittplan entwickeln',
+            beschreibung: 'Entwickle einen Stufenplan: Was ist der kleinste mögliche erste Schritt? Was ist der nächste? Nicht perfekt – aber machbar.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt umsetzen',
+          beschreibung: 'Setze diese Woche den ersten Schritt deines Plans um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war das Schwierigste am ersten Schritt?',
+          'Was hat geholfen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Schule als Ressource nutzen',
+        dauer: '60 Min',
+        ziel: 'Schule als Ort für persönliche Entwicklung neu entdecken',
+        psychoedukation: {
+          titel: 'Schule und Lebenschancen',
+          inhalt: 'Schule ist kein Selbstzweck – sie eröffnet Türen: für Berufsfelder, soziale Kontakte, Fähigkeiten und Selbstvertrauen. Wer die Verbindung zwischen Schule und seinen eigenen Zielen erkennt, findet leichter Motivation.'
+        },
+        interventionen: [
+          {
+            titel: 'Verbindung zu Zielen herstellen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was sind deine Ziele für die Zukunft? Welche schulischen Schritte führen dahin? Wie könnte Schule dir helfen, diese Ziele zu erreichen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Unterstützungspersonen in der Schule',
+            beschreibung: 'Wer in der Schule könnte dir helfen – Lehrer, Schulberater, Mitschüler? Wen könntest du ansprechen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Unterstützung aktivieren',
+          beschreibung: 'Wende dich diese Woche an eine Person in der Schule, die dir helfen kann.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen Schritt möchtest du als nächstes gehen?'
+        ]
+      }
+    ]
+  },
+
+  'lernstrategien': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit schlechter Lernorganisation, Prokrastination oder ineffektivem Lernen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie lerne ich – und wie lerne ich besser?',
+        dauer: '60 Min',
+        ziel: 'Eigene Lernstärken und -schwächen erkennen; effektive Methoden kennenlernen',
+        psychoedukation: {
+          titel: 'Wie das Gehirn lernt',
+          inhalt: 'Lernen ist kein passives Aufnehmen – es ist aktives Verarbeiten. Das Gehirn speichert besser, wenn man Stoff erklärt, anwendet und in Abständen wiederholt. Passives Lesen oder Abschreiben ist ineffizient. Effektives Lernen braucht Pausen, Schlaf und Aktivierung – nicht Menge.'
+        },
+        interventionen: [
+          {
+            titel: 'Lerntypanalyse',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was funktioniert für dich beim Lernen? (Visuell, auditiv, kinästhetisch). Wann und wo lernst du am besten? Was stört? Eigenes Lernprofil erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Effektive Methoden ausprobieren',
+            beschreibung: 'Lerne 10 Minuten lang einen Stoff mit der Methode des Erklärens: Erkläre dir selbst laut, als ob du jemand anderem erklärst. Wie war es?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Lernprotokoll',
+          beschreibung: 'Diese Woche: Notiere täglich, wie lange und wie du gelernt hast – und wie effektiv es war.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was funktioniert bei dir am besten?',
+          'Was sabotiert dein Lernen am häufigsten?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Prokrastination überwinden',
+        dauer: '60 Min',
+        ziel: 'Ursachen von Aufschieberitis verstehen; konkrete Strategien entwickeln',
+        psychoedukation: {
+          titel: 'Prokrastination ist kein Charakterfehler',
+          inhalt: 'Prokrastination entsteht oft aus Angst vor Versagen, Überforderung oder fehlender Selbstwirksamkeit – nicht aus Faulheit. Das Gehirn sucht kurzfristige Erleichterung, auch wenn langfristig der Stress steigt. Strategien: Aufgaben verkleinern, Anfangen ohne fertig werden zu müssen, Belohnungen planen.'
+        },
+        interventionen: [
+          {
+            titel: 'Prokrastinations-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Welche Aufgaben schiebst du am liebsten auf? Was steckt dahinter: Angst, Überforderung, Desinteresse? Für jede: Was wäre der kleinste mögliche erste Schritt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '2-Minuten-Regel',
+            beschreibung: 'Alles, was weniger als 2 Minuten dauert: sofort erledigen. Alles andere: in 10-Minuten-Blöcke aufteilen. Probiere es jetzt mit einer konkreten Aufgabe.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eine aufgeschobene Aufgabe erledigen',
+          beschreibung: 'Wähle diese Woche eine Aufgabe, die du lange aufgeschoben hast. Starte mit 10 Minuten.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hat dir beim Starten geholfen?',
+          'Was war das Schwierigste?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Lernroutinen aufbauen',
+        dauer: '60 Min',
+        ziel: 'Nachhaltige Lerngewohnheiten entwickeln und verankern',
+        psychoedukation: {
+          titel: 'Gewohnheiten brauchen Wiederholung',
+          inhalt: 'Gute Lerngewohnheiten entstehen nicht durch Willenskraft – sondern durch Struktur und Wiederholung. Die Cue-Routine-Reward-Schleife: Ein Auslöser (Cue) aktiviert eine Routine, die durch eine Belohnung verstärkt wird. Wenn man das bewusst gestaltet, werden gute Gewohnheiten automatisch.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Lernplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen realistischen Wochenplan mit festen Lernzeiten erstellen. Nicht perfekt – aber konsistent. Cue und Belohnung definieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Lernumgebung optimieren',
+            beschreibung: 'Was braucht dein idealer Lernplatz? Ruhe, Ordnung, bestimmte Musik? Gestalte ihn so.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Lernplan eine Woche testen',
+          beschreibung: 'Teste deinen Plan eine Woche. Was klappt? Was muss angepasst werden?',
+          dauer: 'täglich 30–60 Min Lernzeit'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche eine Lerngewohnheit möchtest du dauerhaft aufbauen?'
+        ]
+      }
+    ]
+  },
+
 };

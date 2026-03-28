@@ -3003,4 +3003,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'trauer-verlust': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler nach Verlusten (Tod, Trennung, Umzug, Freundschaft) oder mit unverarbeitetem Schmerz',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ich verloren habe',
+        dauer: '60 Min',
+        ziel: 'Den Verlust benennen und emotional ankommen',
+        psychoedukation: {
+          titel: 'Trauer – kein Fehler, sondern Liebe',
+          inhalt: 'Trauer ist die natürliche Reaktion auf Verlust. Nicht nur der Tod eines Menschen kann Trauer auslösen – auch der Verlust einer Freundschaft, eines Zuhause, einer Gewohnheit oder einer Kindheit. Trauer zu fühlen bedeutet, dass das Verlorene wichtig war. Es gibt kein Richtig oder Falsch beim Trauern.'
+        },
+        interventionen: [
+          {
+            titel: 'Verlust in Worte fassen',
+            ansatz: 'Narrativ / Emotionsfokussiert',
+            beschreibung: 'Der Schüler erzählt oder schreibt, was verloren gegangen ist. Was war diese Person/Sache für dich? Was bedeutet das Fehlen? Nur zuhören, nicht bewerten.',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Erinnerungskasten',
+            beschreibung: 'Was möchtest du von dem Verlorenen behalten? Schreibe 5 Erinnerungen oder Eigenschaften auf.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Brief schreiben',
+          beschreibung: 'Schreibe einen Brief an die verlorene Person/das Verlorene – was du noch sagen wolltest.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was fehlt dir am meisten?',
+          'Gibt es etwas, das du nie sagen oder tun konntest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Trauerphasen verstehen',
+        dauer: '60 Min',
+        ziel: 'Eigene Trauerprozesse einordnen; Normalisierung von Trauergefühlen',
+        psychoedukation: {
+          titel: 'Trauer hat viele Gesichter',
+          inhalt: 'Trauer verläuft nicht in festen Phasen – sie kommt in Wellen. Manchmal fühlt man Schmerz, manchmal Taubheit, manchmal Wut, manchmal sogar Erleichterung. All das ist normal. Trauer drängt sich manchmal zu unerwarteten Momenten auf – und das ist okay.'
+        },
+        interventionen: [
+          {
+            titel: 'Trauerwellen-Karte',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Gemeinsam auf einer Zeitlinie: Wann war die Trauer besonders stark? Wann ruhiger? Was hat geholfen? Was hat es schwerer gemacht?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Trauer-Auslöser erkennen',
+            beschreibung: 'Was löst die Trauer besonders aus? (Orte, Lieder, Jahrestage, Gerüche…). Wähle einen aus und beschreibe, was er in dir auslöst.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Rituale zum Erinnern',
+          beschreibung: 'Überlege ein kleines Ritual, das dir hilft, die Verbindung zum Verlorenen aufrechtzuerhalten (z.B. ein Foto aufstellen, an einem bestimmten Ort sein).',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann taucht die Trauer am unerwartetsten auf?',
+          'Was hilft dir, in diesen Momenten bei dir zu bleiben?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Mit dem Schmerz umgehen',
+        dauer: '60 Min',
+        ziel: 'Selbstfürsorge in der Trauer; Schmerz halten ohne zu erstarren',
+        psychoedukation: {
+          titel: 'Trauer halten – nicht bekämpfen',
+          inhalt: 'Trauer vergeht schneller, wenn wir ihr Raum geben – und langsamer, wenn wir sie vermeiden. Gleichzeitig darf Trauer nicht das gesamte Leben ausfüllen. Es hilft, Zeitfenster fürs Trauern zu haben – und dann bewusst wieder ins Leben zurückzukehren.'
+        },
+        interventionen: [
+          {
+            titel: 'Duale Aufmerksamkeit',
+            ansatz: 'Ressourcenorientiert / EMDR-nah',
+            beschreibung: 'Gleichzeitig auf den Schmerz schauen UND auf etwas Stabiles im Hier und Jetzt. Übung: Verlust im Bewusstsein halten, dabei einen sicheren Ort oder eine gute Erinnerung beschreiben.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Selbstfürsorge-Plan',
+            beschreibung: 'Was tut dir in dieser Trauerphase gut? Erstelle eine Liste mit 5 konkreten Selbstfürsorge-Aktivitäten für diese Woche.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Trauer-Fenster',
+          beschreibung: 'Setze dir täglich 10 Minuten, in denen du bewusst trauerst – und danach eine Aktivität, die dich ins Jetzt zurückbringt.',
+          dauer: 'täglich 10 Min'
+        },
+        reflexion: [
+          'Was hilft dir, trotz der Trauer im Leben zu bleiben?',
+          'Was gibt dir Kraft?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Weiterleben – nicht vergessen',
+        dauer: '60 Min',
+        ziel: 'Integration des Verlustes; Zukunftsperspektive entwickeln',
+        psychoedukation: {
+          titel: 'Trauer endet nicht – sie verändert sich',
+          inhalt: 'Trauer endet nicht mit dem Vergessen – sie verändert sich. Das Ziel ist nicht, den Verlust hinter sich zu lassen, sondern ihn in das eigene Leben zu integrieren. Das Verlorene bekommt einen Platz im Herzen, ohne das Leben zu beherrschen.'
+        },
+        interventionen: [
+          {
+            titel: 'Innerer Platz für den Verlust',
+            ansatz: 'Narrativ / Emotionsfokussiert',
+            beschreibung: 'Gemeinsam überlegen: Welchen Platz soll das Verlorene in deinem Leben einnehmen? Wie möchtest du erinnern – ohne darin steckenzubleiben?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief aus der Zukunft',
+            beschreibung: 'Stell dir vor, du bist 5 Jahre älter. Wie schreibst du über diesen Verlust? Was hat er dich gelehrt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ein Zeichen setzen',
+          beschreibung: 'Tue diese Woche etwas, das du dem Verlorenen widmest – ein kleines Ritual, eine Geste, eine Erinnerung.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat dieser Verlust dich über dich selbst gelehrt?',
+          'Was nimmst du aus diesem Modul mit?'
+        ]
+      }
+    ]
+  },
+
 };

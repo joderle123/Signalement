@@ -8466,4 +8466,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'kulturelle-identitaet': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche mit Migrationshintergrund oder bikultureller Biographie',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Herkunft – Schatz und Bürde',
+        dauer: '60 Min',
+        ziel: 'Kulturelle Herkunft als Teil der Identität reflektieren',
+        psychoedukation: {
+          titel: 'Kulturelle Identität',
+          inhalt: 'Kulturelle Identität umfasst Sprache, Traditionen, Werte und Zugehörigkeiten, die uns durch Herkunft geprägt haben. Bei bikulturell aufgewachsenen Jugendlichen entstehen oft zwei oder mehr Identitätsanteile, die manchmal in Spannung stehen.'
+        },
+        interventionen: [
+          {
+            titel: 'Kulturelle Landkarte',
+            ansatz: 'Narrativ',
+            beschreibung: 'Erstelle eine Karte deiner kulturellen Identität: Woher komme ich? Welche Sprachen spreche ich? Welche Traditionen kenne ich? Was übernehme ich, was lehne ich ab?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Stolz und Herausforderung',
+            beschreibung: 'Nenne 3 Dinge aus deiner Herkunftskultur, auf die du stolz bist – und eine Sache, die dich herausfordert.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Interview mit Familie',
+          beschreibung: 'Frage ein Familienmitglied: Was bedeutet unsere Kultur/Herkunft für dich? Was soll ich davon weitergeben?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was bedeutet "Herkunft" für dich?',
+          'Wann bist du auf deine Herkunft stolz, wann fühlt sie sich wie Last an?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Zwischen den Welten – Bikulturelle Identität',
+        dauer: '60 Min',
+        ziel: 'Herausforderungen und Chancen bikultureller Identität erkennen',
+        psychoedukation: {
+          titel: 'Bikulturalität',
+          inhalt: 'Zwischen zwei Kulturen zu leben kann bereichernd sein – aber auch belasten: Welchen Erwartungen soll ich gerecht werden? "Bin ich X oder Y genug?" Diese Fragen sind normal. Das Ziel ist nicht, sich zu entscheiden, sondern beide Anteile zu integrieren.'
+        },
+        interventionen: [
+          {
+            titel: 'Zwei-Welten-Analyse',
+            ansatz: 'Systemisch',
+            beschreibung: 'Welche Regeln, Werte und Erwartungen gibt es in Kultur A und Kultur B? Wo überschneiden sie sich, wo widersprechen sie sich? Was machst du mit dem Widerspruch?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ich bin beides',
+            beschreibung: 'Schreibe 5 Sätze, die mit "Ich bin X, und ich bin auch Y" beginnen – beides integriert ohne Wertung.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Code-Switching beobachten',
+          beschreibung: 'Wechsle ich je nach Umfeld, wie ich spreche oder mich verhalte? Beobachte das diese Woche. Was löst das in dir aus?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann fühlst du dich "zerrissen"? Wann "bereichert"?',
+          'Was hilft dir, in beiden Welten zu Hause zu sein?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Meine eigene Identität gestalten',
+        dauer: '60 Min',
+        ziel: 'Eine eigene, integrierte kulturelle Identität entwickeln',
+        psychoedukation: {
+          titel: 'Identitätssynthese',
+          inhalt: 'Eine gesunde bikulturelle Identität bedeutet: Ich wähle, was ich aus verschiedenen Kulturen übernehme. Ich lasse mich nicht definieren – ich definiere mich selbst. Das ist ein aktiver, lebenslanger Prozess.'
+        },
+        interventionen: [
+          {
+            titel: 'Identitäts-Manifest',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Schreibe ein persönliches Identitäts-Manifest: Wer bin ich? Was nehme ich aus welcher Kultur? Was lehne ich ab? Was erfinde ich neu? Kein Richtig oder Falsch.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Zukunftsvision Identität',
+            beschreibung: 'Wie möchte ich in 10 Jahren auf meine kulturelle Identität zurückblicken? Was soll Teil von mir sein?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Identitätsobjekt',
+          beschreibung: 'Suche ein Objekt, das deine kulturelle Identität symbolisiert. Bringe es zur nächsten Sitzung mit oder beschreibe es.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was macht deine kulturelle Identität einzigartig?',
+          'Was möchtest du an deine Kinder weitergeben?'
+        ]
+      }
+    ]
+  },
+
 };

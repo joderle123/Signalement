@@ -4079,4 +4079,474 @@ const THEMA_MODULE = {
     ]
   },
 
+  'grenzen-setzen': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Schwierigkeiten, Nein zu sagen, eigene Grenzen zu kennen oder durchzusetzen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was sind meine Grenzen?',
+        dauer: '60 Min',
+        ziel: 'Eigene körperliche, emotionale und soziale Grenzen erkennen',
+        psychoedukation: {
+          titel: 'Grenzen schützen',
+          inhalt: 'Grenzen sind keine Mauern – sie sind Markierungen dessen, was für uns okay ist und was nicht. Wer keine Grenzen hat, erschöpft sich, wird ausgenutzt oder verliert sich selbst. Grenzen zu setzen ist kein Egoismus – es ist Selbstfürsorge und eine Voraussetzung für gesunde Beziehungen.'
+        },
+        interventionen: [
+          {
+            titel: 'Grenzen-Inventur',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Körperliche Grenzen (Berührung, Raum), emotionale Grenzen (Themen, die mir zu nah gehen), soziale Grenzen (Zeit, Energie, Erwartungen). Welche Grenzen werden bei dir häufig überschritten? Wie reagierst du?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ja/Nein sortieren',
+            beschreibung: 'Liste 10 Situationen auf und markiere: Wann sage ich ja, obwohl ich nein meine? Wann fühlt sich ein Ja gut an?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Grenzverletzungen beobachten',
+          beschreibung: 'Beobachte diese Woche, wann deine Grenzen überschritten werden. Notiere: Situation, deine Reaktion, wie du dich dabei gefühlt hast.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Warum fällt es dir schwer, Grenzen zu setzen?',
+          'Was passiert mit dir, wenn deine Grenzen ständig überschritten werden?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Nein sagen – klar und respektvoll',
+        dauer: '60 Min',
+        ziel: 'Grenzen klar kommunizieren ohne Schuldgefühle',
+        psychoedukation: {
+          titel: 'Nein ist ein vollständiger Satz',
+          inhalt: 'Viele Menschen können nicht Nein sagen, weil sie Ablehnung, Konflikt oder Schuldgefühle fürchten. Ein Nein muss nicht erklärt oder entschuldigt werden. Ein klar kommuniziertes Nein respektiert beide Seiten – und stärkt langfristig die Beziehung.'
+        },
+        interventionen: [
+          {
+            titel: 'Nein-sagen üben',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Rollenspiele: In verschiedenen Situationen (Freund bittet um Gefallen, Druck in der Gruppe, unangemessene Anfrage) klar und respektvoll Nein sagen. Feedback: War das Nein klar? Wie hat es sich angefühlt?',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Nein-Formulierungen sammeln',
+            beschreibung: 'Formuliere 5 verschiedene Arten, Nein zu sagen – von weich bis klar. Welche passen zu dir?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Einmal Nein sagen',
+          beschreibung: 'Sage diese Woche in einer Situation Nein, in der du normalerweise Ja sagst. Notiere: Wie war es?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie hat sich die andere Person auf dein Nein reagiert?',
+          'Wie hast du dich danach gefühlt?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Grenzen dauerhaft halten',
+        dauer: '60 Min',
+        ziel: 'Grenzen auch unter Druck aufrechterhalten; Selbstfürsorge als Grenzschutz',
+        psychoedukation: {
+          titel: 'Grenzen unter Druck',
+          inhalt: 'Es gibt Menschen, die Grenzen nicht respektieren – durch Betteln, Schuldgefühle erzeugen oder Druck. Eine Grenze ist erst dann eine Grenze, wenn sie auch unter Druck standhält. Das erfordert Übung und die Überzeugung: Meine Grenze ist berechtigt.'
+        },
+        interventionen: [
+          {
+            titel: 'Grenze unter Druck halten',
+            ansatz: 'Verhaltenstherapeutisch',
+            beschreibung: 'Rollenspiel: Die andere Seite setzt Grenzen unter Druck (bettelt, Schuldgefühle, Wut). Üben, bei der Grenze zu bleiben ohne zu eskalieren. Techniken: Grenze wiederholen, ruhig bleiben, Gespräch beenden.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Mein Selbstfürsorge-Plan',
+            beschreibung: 'Was tue ich für mich, damit meine Grenzen nicht täglich verletze werden? (Raum brauchen, Nein-Übung, Beziehungen pflegen, die mich respektieren)',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Selbstfürsorge stärken',
+          beschreibung: 'Führe diese Woche eine Selbstfürsorge-Aktivität durch, die deine Grenzen stärkt.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche Grenze möchtest du als erstes konsequenter setzen?'
+        ]
+      }
+    ]
+  },
+
+  'mobbing': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler als Betroffene, Zeugen oder Täter von Mobbing/Cybermobbing',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist Mobbing – und was nicht?',
+        dauer: '60 Min',
+        ziel: 'Mobbing von Konflikten unterscheiden; Dynamik verstehen',
+        psychoedukation: {
+          titel: 'Mobbing definieren',
+          inhalt: 'Mobbing ist kein einmaliger Streit. Es ist systematische, wiederholte Ausgrenzung, Demütigung oder Aggression gegen eine Person, die sich nicht wirksam wehren kann. Das Machtungleichgewicht ist entscheidend. Cybermobbing hat dieselbe Dynamik – mit dem Unterschied, dass es 24/7 stattfindet und ein breites Publikum hat.'
+        },
+        interventionen: [
+          {
+            titel: 'Meine Situation einordnen',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Gemeinsam herausarbeiten: Ist das, was der Schüler erlebt, Mobbing? Wie lange? Wie intensiv? Wer ist beteiligt? Was wurde bisher getan? Keine Bagatellisierung und keine Dramatisierung.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Rollen im Mobbing',
+            beschreibung: 'Erkläre die Rollen: Täter, Opfer, Verstärker, Zuschauer, Verteidiger. Wer bist du in der Situation? Was kannst du als Zuschauer tun?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Situation dokumentieren',
+          beschreibung: 'Schreibe auf, was passiert ist: Datum, Was, Wer, Zeugen. Das ist wichtig, falls du dich melden möchtest.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie lange geht das schon so?',
+          'Hast du bisher mit jemandem darüber gesprochen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Auswirkungen und Gefühle',
+        dauer: '60 Min',
+        ziel: 'Emotionale Wunden durch Mobbing benennen und ernst nehmen',
+        psychoedukation: {
+          titel: 'Was Mobbing macht',
+          inhalt: 'Mobbing hinterlässt Spuren: Angst, Scham, Selbstzweifel, sozialer Rückzug, Schlaf- und Konzentrationsprobleme. Das sind normale Reaktionen auf eine abnormale Situation. Es ist nicht deine Schuld – weder dein Charakter noch dein Aussehen rechtfertigen Mobbing. Niemand verdient es.'
+        },
+        interventionen: [
+          {
+            titel: 'Auswirkungen benennen',
+            ansatz: 'Emotionsfokussiert',
+            beschreibung: 'Wie hat das Mobbing dich verändert? Was tust du jetzt, was du früher nicht getan hast? Was vermeidest du? Gemeinsam die Folgen benennen und normalisieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief an den Täter',
+            beschreibung: 'Schreibe alles auf, was du dem Täter sagen möchtest – der Brief wird nicht abgeschickt. Was hat er/sie dir angetan? Wie hat es sich angefühlt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Vertraute Person einweihen',
+          beschreibung: 'Erzähle diese Woche einer Vertrauensperson von der Situation – Familie, Lehrer, Schulberater.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war das Schlimmste an der Situation?',
+          'Was hält dich davon ab, um Hilfe zu bitten?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Strategien und Schutz',
+        dauer: '60 Min',
+        ziel: 'Konkrete Schutzstrategien entwickeln; Unterstützungsnetz aktivieren',
+        psychoedukation: {
+          titel: 'Was hilft – und was nicht',
+          inhalt: 'Nicht hilfreiche Strategien: ignorieren (wenn es schon lange dauert), konfrontieren ohne Plan, Rache. Hilfreiche Strategien: klare Grenzen zeigen (ohne emotional zu reagieren), Verbündete suchen, Erwachsene einbeziehen, Beweise sichern, sichere Orte aufsuchen.'
+        },
+        interventionen: [
+          {
+            titel: 'Schutzplan entwickeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen konkreten Schutzplan: Welche sicheren Orte gibt es? Wen kann ich einbeziehen? Wie reagiere ich, wenn die Situation passiert? Was sind die nächsten Schritte?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Reaktion üben',
+            beschreibung: 'Rollenspiel: Wie reagiere ich auf eine Mobbinghandlung? Ziel: ruhig, klar, ohne Eskalation. Zum Beispiel: weggehen, ignorieren mit erhobenem Kopf, kurz und direkt zurückkommunizieren.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Unterstützung aktivieren',
+          beschreibung: 'Wende dich diese Woche an eine Vertrauensperson oder Institution (z.B. Schulberater, Eltern, Beratungsstelle).',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Welche Strategie fühlt sich am machbarsten an?',
+          'Wer kann dir helfen?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Selbstwert nach Mobbing wieder aufbauen',
+        dauer: '60 Min',
+        ziel: 'Beschädigtes Selbstbild reparieren; Resilienz stärken',
+        psychoedukation: {
+          titel: 'Du bist mehr als das, was andere über dich sagen',
+          inhalt: 'Mobbing hinterlässt oft falsche Überzeugungen: „Ich bin es nicht wert, dazuzugehören." Das sind Lügen des Mobbings. Dein Wert als Mensch hängt nicht davon ab, was deine Täter sagen. Selbstwert nach Mobbing neu aufzubauen braucht Zeit – aber es ist möglich.'
+        },
+        interventionen: [
+          {
+            titel: 'Mobbingnarrative hinterfragen',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Welche Botschaften hat das Mobbing in dir hinterlassen? (z.B. „Ich bin komisch", „Niemand mag mich"). Für jede: Wie wahr ist das? Was beweist das Gegenteil?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Stärken-Liste nach Mobbing',
+            beschreibung: 'Was hat dir geholfen, die Situation so lange zu überstehen? Welche Stärken hast du dabei entwickelt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Positive Verbindungen suchen',
+          beschreibung: 'Verbringe diese Woche Zeit mit Menschen, bei denen du dich wohl und angenommen fühlst.',
+          dauer: '60 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie möchtest du in einem Jahr auf diese Zeit zurückblicken?'
+        ]
+      }
+    ]
+  },
+
+  'gruppendynamik': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Peer-Pressure-Problemen, Schwierigkeiten bei Gruppenrollen oder sozialer Anpassung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie funktionieren Gruppen?',
+        dauer: '60 Min',
+        ziel: 'Gruppendynamik und Peer-Pressure verstehen',
+        psychoedukation: {
+          titel: 'Gruppen und Rollen',
+          inhalt: 'In jeder Gruppe entstehen automatisch Rollen: Anführer, Mitläufer, Außenseiter, Vermittler, Clown. Diese Rollen werden oft unbewusst zugewiesen und aufrechterhalten. Peer-Pressure ist der Druck, sich anzupassen – auch gegen die eigenen Werte. Er ist stärker in der Adoleszenz als in jedem anderen Lebensabschnitt.'
+        },
+        interventionen: [
+          {
+            titel: 'Gruppenrollen-Analyse',
+            ansatz: 'Systemisch',
+            beschreibung: 'Welche Rolle nimmst du in deiner Gruppe ein? Wurde sie dir zugewiesen? Magst du sie? Was würde passieren, wenn du sie verändern würdest?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Peer-Pressure-Situationen sammeln',
+            beschreibung: 'Nenne 3 Situationen, in denen du Druck gespürt hast, dich anzupassen. Was hast du getan? Was hättest du lieber getan?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gruppenbeobachtung',
+          beschreibung: 'Beobachte diese Woche eine Gruppe (Klasse, Freundeskreis): Welche Rollen erkennst du? Welche ungeschriebenen Regeln gibt es?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Rolle in der Gruppe entspricht dir wirklich?',
+          'Wann passt du dich an – und wann bleibst du du selbst?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Peer-Pressure widerstehen',
+        dauer: '60 Min',
+        ziel: 'Eigene Werte stärken; Strategien zum Umgang mit Gruppendruck entwickeln',
+        psychoedukation: {
+          titel: 'Warum Peer-Pressure so stark ist',
+          inhalt: 'Das Gehirn Jugendlicher reagiert stärker auf Gruppenbewertungen als das Gehirn von Erwachsenen. Dazugehören ist ein biologisches Grundbedürfnis. Gegen den Gruppenstrom zu schwimmen braucht mehr Mut als für Erwachsene. Aber: Wer einmal gelernt hat, bei sich zu bleiben, gewinnt Selbstachtung und echte Freundschaften.'
+        },
+        interventionen: [
+          {
+            titel: 'Eigene Werte klären',
+            ansatz: 'Wertebasiert',
+            beschreibung: 'Was sind meine wichtigsten Werte? Wofür stehe ich? Gemeinsam herausarbeiten und prüfen: In welchen Situationen habe ich gegen meine Werte gehandelt – wegen Gruppendruck?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ablehnung üben',
+            beschreibung: 'Rollenspiele: Druck in der Gruppe – und dabei bei sich bleiben. Verschiedene Formulierungen üben: humorvoll ablehnen, klar ablehnen, Thema wechseln.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Bei sich bleiben',
+          beschreibung: 'Entscheide diese Woche einmal bewusst gegen den Gruppendruck. Was war das Ergebnis?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher deiner Werte ist dir am wichtigsten?',
+          'Was verlierst du, wenn du immer nachgibst?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Echte Zugehörigkeit finden',
+        dauer: '60 Min',
+        ziel: 'Authentische Zugehörigkeit statt erzwungener Anpassung',
+        psychoedukation: {
+          titel: 'Dazugehören ohne sich zu verlieren',
+          inhalt: 'Es gibt einen Unterschied zwischen Zugehörigkeit und Anpassung. Echte Zugehörigkeit bedeutet: Du wirst so akzeptiert, wie du bist. Erzwungene Anpassung bedeutet: Du passt dich an, um nicht ausgeschlossen zu werden. Gruppen, die dich nur mögen, wenn du jemand anderes bist, sind keine echte Heimat.'
+        },
+        interventionen: [
+          {
+            titel: 'Gruppe vs. echte Freundschaft',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wer in deinem Freundes- oder Klassenkreis akzeptiert dich so, wie du wirklich bist? Wer setzt dich unter Druck? Gemeinsam überlegen: Wo investierst du deine Zeit – und wo solltest du es mehr tun?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Authentizitäts-Momente',
+            beschreibung: 'Beschreibe eine Situation, in der du vollständig du selbst warst. Wie hat sich das angefühlt? Was war anders?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Echte Verbindung suchen',
+          beschreibung: 'Verbringe diese Woche Zeit mit jemandem, bei dem du dich nicht verstellen musst.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Mit wem bist du am authentischsten du selbst?'
+        ]
+      }
+    ]
+  },
+
+  'empathie': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Schwierigkeiten beim Perspektivenwechsel, eingeschränkter sozialer Wahrnehmung oder fehlender Empathie',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist Empathie?',
+        dauer: '60 Min',
+        ziel: 'Empathie von Mitgefühl und Projektion unterscheiden; eigene Empathiefähigkeit einschätzen',
+        psychoedukation: {
+          titel: 'Empathie – sich hineinversetzen ohne zu verlieren',
+          inhalt: 'Empathie bedeutet, die Welt durch die Augen eines anderen zu sehen – ohne dabei die eigene Perspektive aufzugeben. Es gibt kognitive Empathie (ich verstehe, was du denkst) und emotionale Empathie (ich fühle, was du fühlst). Empathie ist erlernbar und stärkt alle sozialen Beziehungen.'
+        },
+        interventionen: [
+          {
+            titel: 'Empathie-Übung mit Figuren',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Eine kurze Geschichte oder Szene aus verschiedenen Perspektiven betrachten: Was denkt Person A? Was fühlt sie? Was braucht sie? Dann: Was denkt/fühlt/braucht Person B?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Perspektivenwechsel im Alltag',
+            beschreibung: 'Denke an einen Konflikt der letzten Zeit. Beschreibe ihn aus der Sicht der anderen Person. Was könnte sie gefühlt, gedacht, gebraucht haben?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Täglicher Perspektivenwechsel',
+          beschreibung: 'Wähle täglich eine Person aus deinem Umfeld und stelle dir vor: Wie war ihr Tag? Was hat sie beschäftigt?',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Wann fällt dir Empathie leicht – und wann schwer?',
+          'Gibt es Menschen, für die du weniger Empathie empfindest? Warum?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Zuhören und verstehen',
+        dauer: '60 Min',
+        ziel: 'Empathisches Zuhören als aktive Praxis entwickeln',
+        psychoedukation: {
+          titel: 'Empathisches Zuhören ist mehr als Zuhören',
+          inhalt: 'Empathisch zuhören bedeutet: Nicht sofort Ratschläge geben, nicht das Gespräch auf sich lenken, nicht beurteilen. Sondern: wirklich verstehen wollen, Gefühle spiegeln, nachfragen. Die meisten Menschen wollen nicht Lösungen – sie wollen sich verstanden fühlen.'
+        },
+        interventionen: [
+          {
+            titel: 'Empathie-Antworten üben',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Jemand erzählt etwas Schwieriges. Üben: Was ist eine empathische Antwort? Was ist eine nicht-empathische Antwort? Unterschied erleben: Rat geben vs. verstehen wollen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühle benennen ohne zu urteilen',
+            beschreibung: 'Übe, Gefühle anderer zu benennen ohne zu bewerten: „Es klingt, als wärst du wirklich erschöpft." – Nicht: „Du solltest mal einen Gang runterschalten."',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Empathisches Gespräch',
+          beschreibung: 'Führe diese Woche ein Gespräch, in dem du bewusst empathisch zuhörst. Was war das Ergebnis?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat sich verändert, wenn du wirklich empathisch zugehört hast?',
+          'Was war schwierig daran?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Empathie in schwierigen Beziehungen',
+        dauer: '60 Min',
+        ziel: 'Empathie auch für Menschen einüben, mit denen man Konflikte hat',
+        psychoedukation: {
+          titel: 'Empathie bedeutet nicht, alles zu akzeptieren',
+          inhalt: 'Empathie zu zeigen bedeutet nicht, das Verhalten einer Person gutzuheißen. Man kann jemanden verstehen und trotzdem Grenzen setzen. In Konflikten hilft Empathie, die Eskalation zu verhindern und Lösungen zu finden – nicht weil man nachgibt, sondern weil man versteht.'
+        },
+        interventionen: [
+          {
+            titel: 'Empathie für den Täter',
+            ansatz: 'Narrativ / Systemisch',
+            beschreibung: 'Wähle jemanden, mit dem du Schwierigkeiten hast. Versuche, dessen Perspektive zu verstehen: Was könnte seine/ihre Geschichte sein? Was braucht er/sie vielleicht? Das bedeutet nicht, das Verhalten zu entschuldigen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Empathie als Werkzeug',
+            beschreibung: 'Welchen Konflikt könntest du durch mehr Empathie für die andere Seite lösen oder mildern? Was wäre ein konkreter Schritt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Empathie in Aktion',
+          beschreibung: 'Zeige diese Woche jemandem gegenüber, mit dem du Spannungen hast, ein echtes Zeichen von Empathie. Was passiert?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie hat sich deine Sichtweise durch die Empathie-Übungen verändert?'
+        ]
+      }
+    ]
+  },
+
 };

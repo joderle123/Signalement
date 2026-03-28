@@ -3541,4 +3541,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'freundschaften': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Schwierigkeiten beim Aufbau oder Erhalt von Freundschaften',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist Freundschaft?',
+        dauer: '60 Min',
+        ziel: 'Eigene Vorstellungen von Freundschaft klären; aktuelle Freundschaften einschätzen',
+        psychoedukation: {
+          titel: 'Was eine Freundschaft ausmacht',
+          inhalt: 'Echte Freundschaft basiert auf Gegenseitigkeit, Vertrauen und Respekt. Sie entwickelt sich langsam durch gemeinsame Erlebnisse und geteilte Verletzlichkeit. Nicht jeder Bekannte ist ein Freund – und das ist okay. Wenige tiefe Freundschaften sind wertvoller als viele oberflächliche Kontakte.'
+        },
+        interventionen: [
+          {
+            titel: 'Freundschafts-Analyse',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Aktuelle Freundschaften auf einer Karte: Wer ist wirklich nah? Was schätze ich an dieser Person? Ist die Freundschaft ausgeglichen? Was würde ich mir mehr wünschen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ideale Freundschaft beschreiben',
+            beschreibung: 'Was sind die 5 wichtigsten Eigenschaften eines guten Freundes? Vergleiche: Habe ich selbst diese Eigenschaften?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Freundschaft stärken',
+          beschreibung: 'Tue diese Woche etwas Konkretes für eine bestehende Freundschaft: eine Nachricht schicken, Zeit einplanen, Interesse zeigen.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Wer ist gerade dein wichtigster Freund/deine wichtigste Freundin?',
+          'Was schätzt du an dieser Person besonders?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Neue Freundschaften knüpfen',
+        dauer: '60 Min',
+        ziel: 'Hemmnisse beim Kennenlernen erkennen; konkrete Gesprächsstrategien üben',
+        psychoedukation: {
+          titel: 'Wie Freundschaften entstehen',
+          inhalt: 'Freundschaften entstehen durch drei Faktoren: Nähe (regelmäßiger Kontakt), Offenheit (sich zeigen) und positive Erlebnisse. Das Schwierigste ist der erste Schritt. Aber: Fast jeder Mensch freut sich, wenn jemand echtes Interesse zeigt.'
+        },
+        interventionen: [
+          {
+            titel: 'Gesprächs-Einstieg üben',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Rollenspiel: Wie starte ich ein Gespräch mit jemandem, den ich noch nicht gut kenne? Üben: Offene Fragen stellen, echtes Interesse zeigen, etwas von sich erzählen. Feedback geben.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Kontaktmöglichkeiten brainstormen',
+            beschreibung: 'Wo könnte ich neue Menschen kennenlernen, die meine Interessen teilen? Liste 5 konkrete Möglichkeiten auf.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Erster Schritt',
+          beschreibung: 'Diese Woche: Sprich jemanden an, den du interessant findest, aber noch nicht gut kennst.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was macht es schwer, auf neue Menschen zuzugehen?',
+          'Was hat dich bei bestehenden Freundschaften anfangs überwunden?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Freundschaften pflegen und Konflikte überleben',
+        dauer: '60 Min',
+        ziel: 'Freundschaften aktiv pflegen; Konflikte als normale Phase verstehen',
+        psychoedukation: {
+          titel: 'Freundschaft ist aktive Arbeit',
+          inhalt: 'Freundschaften wachsen nicht von allein – sie brauchen Zeit, Aufmerksamkeit und manchmal auch Konflikt. Konflikte in Freundschaften sind normal und können die Beziehung sogar stärken, wenn sie konstruktiv gelöst werden. Freundschaft bedeutet auch: ehrlich sein, auch wenn es unbequem ist.'
+        },
+        interventionen: [
+          {
+            titel: 'Freundschaftskonflikt analysieren',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Einen aktuellen oder vergangenen Konflikt mit einem Freund durchgehen: Was ist passiert? Wie wurde es gelöst – oder nicht? Was hätte geholfen? Was lernst du daraus?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Freundschaftspflege-Rituale',
+            beschreibung: 'Welche regelmäßigen Dinge könntest du tun, um wichtige Freundschaften zu pflegen? Erstelle einen konkreten kleinen Plan.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Freundschaftspflege umsetzen',
+          beschreibung: 'Setze diese Woche einen Punkt deines Plans um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du in deinen Freundschaften anders machen?'
+        ]
+      }
+    ]
+  },
+
 };

@@ -337,10 +337,11 @@ function renderArbeitsblaetter(themaId) {
   const blaetter = ARBEITSBLÄTTER[themaId] || [];
   const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
   const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
+  const modul = typeof THEMA_MODULE !== 'undefined' ? (THEMA_MODULE[themaId] || null) : null;
 
-  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0) return '';
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul) return '';
 
-  const hasModul = aktivitaeten.length > 0 || interventionen.length > 0;
+  const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0;
 
   return `
     <div style="margin-bottom:20px;">
@@ -374,12 +375,104 @@ function renderArbeitsblaetter(themaId) {
 
       ${hasModul ? `
       <div id="pt-tm-${themaId}" class="panel-tab-content" style="display:none;">
-        ${renderTherapiemodul(aktivitaeten, interventionen)}
+        ${modul ? renderTherapiemodul(modul, themaId) : renderTherapiemodul_legacy(aktivitaeten, interventionen)}
       </div>` : ''}
     </div>`;
 }
 
-function renderTherapiemodul(aktivitaeten, interventionen) {
+function renderTherapiemodul(modul, themaId) {
+  const sitzungFarben = ['#7C3AED','#0369A1','#166534','#92400E','#B91C1C','#0F766E'];
+
+  let html = `<div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+    <strong>Therapiemodul (Ebene 2)</strong> · ${modul.dauer}<br>
+    <span style="opacity:0.75;">${modul.zielgruppe || 'Für Schüler, bei denen dieses Thema ein zentraler Arbeitsbereich ist.'}</span>
+  </div>`;
+
+  modul.sitzungen.forEach((s, idx) => {
+    const farbe = sitzungFarben[idx % sitzungFarben.length];
+    const sid = `sitz-${themaId}-${s.nr}`;
+    html += `
+    <div style="border:1.5px solid ${farbe}22;border-radius:8px;margin-bottom:10px;overflow:hidden;">
+      <div onclick="toggleSitzung('${sid}')" style="cursor:pointer;background:${farbe}11;padding:10px 12px;display:flex;align-items:center;gap:8px;user-select:none;">
+        <span style="min-width:24px;height:24px;border-radius:50%;background:${farbe};color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">${s.nr}</span>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:12px;color:${farbe};">${s.titel}</div>
+          <div style="font-size:10px;color:#6B7280;margin-top:1px;">⏱ ${s.dauer} · ${s.ziel}</div>
+        </div>
+        <span id="${sid}-arrow" style="color:${farbe};font-size:14px;transition:transform 0.2s;">▼</span>
+      </div>
+      <div id="${sid}" style="display:none;padding:12px;">`;
+
+    if (s.psychoedukation) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">📚 Psychoedukation</div>
+        <div style="background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;padding:10px 12px;">
+          <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:4px;">${s.psychoedukation.titel}</div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${s.psychoedukation.inhalt}</div>
+        </div>
+      </div>`;
+    }
+
+    if (s.interventionen && s.interventionen.length > 0) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🧠 Interventionen</div>
+        ${s.interventionen.map(i => `
+        <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:12px;color:#0369A1;margin-bottom:2px;">${i.titel}</div>
+          <div style="font-size:10px;color:#0369A1;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${i.beschreibung}</div>
+        </div>`).join('')}
+      </div>`;
+    }
+
+    if (s.uebungen && s.uebungen.length > 0) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🎯 Übungen</div>
+        ${s.uebungen.map(u => `
+        <div style="background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:2px;">${u.titel} <span style="font-weight:400;opacity:0.7;">(${u.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${u.beschreibung}</div>
+        </div>`).join('')}
+      </div>`;
+    }
+
+    if (s.hausaufgabe) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">📝 Hausaufgabe</div>
+        <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:6px;padding:10px 12px;">
+          <div style="font-weight:600;font-size:12px;color:#92400E;margin-bottom:2px;">${s.hausaufgabe.titel} <span style="font-weight:400;opacity:0.7;">(${s.hausaufgabe.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${s.hausaufgabe.beschreibung}</div>
+        </div>
+      </div>`;
+    }
+
+    if (s.reflexion && s.reflexion.length > 0) {
+      html += `<div>
+        <div style="font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">💭 Reflexion</div>
+        <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;font-size:12px;color:#374151;">
+          <ul style="margin:0;padding-left:16px;line-height:1.9;">
+            ${s.reflexion.map(f => `<li>${f}</li>`).join('')}
+          </ul>
+        </div>
+      </div>`;
+    }
+
+    html += `</div></div>`;
+  });
+
+  return html;
+}
+
+function toggleSitzung(sid) {
+  const el = document.getElementById(sid);
+  const arrow = document.getElementById(sid + '-arrow');
+  if (!el) return;
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
   const psychoedukativ = interventionen.filter(i =>
     i.ansatz && i.ansatz.toLowerCase().includes('psychoeduk')
   );

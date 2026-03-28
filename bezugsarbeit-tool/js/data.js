@@ -2860,4 +2860,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'wut-aggression': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit Impulskontrollproblemen, aggressivem Verhalten oder Wutausbrüchen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wut verstehen – nicht bekämpfen',
+        dauer: '60 Min',
+        ziel: 'Wut als legitimes Gefühl anerkennen; Ursachen und Körpersignale kennen',
+        psychoedukation: {
+          titel: 'Was Wut uns sagen will',
+          inhalt: 'Wut entsteht, wenn eine Grenze überschritten oder ein Bedürfnis verletzt wird. Sie ist ein natürliches, wichtiges Gefühl. Das Problem ist nicht die Wut selbst – sondern wie sie ausgedrückt wird. Wut wegzudrücken ist genauso schädlich wie unkontrolliert explodieren.'
+        },
+        interventionen: [
+          {
+            titel: 'Wut-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Einen konkreten Wutausbruch der letzten Zeit analysieren: Was war der Auslöser? Welche Gedanken kamen? Körpersignale? Reaktion? Konsequenzen? Gemeinsam die Kette verstehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wut-Frühwarnsystem',
+            beschreibung: 'Welche körperlichen Zeichen signalisieren dir, dass Wut aufsteigt? (z.B. heiße Ohren, Anspannung, Herzrasen). Liste deine persönlichen Frühwarnsignale auf.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Wut-Tagebuch',
+          beschreibung: 'Diese Woche: Wenn Wut auftaucht, kurz notieren: Auslöser → Intensität (1–10) → was ich getan habe.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Welche Situation löst bei dir am häufigsten Wut aus?',
+          'Was steckt hinter dieser Wut – welches Bedürfnis oder welche Grenze?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Im heißen Moment – Impulse bremsen',
+        dauer: '60 Min',
+        ziel: 'Konkrete Techniken zur Impulskontrolle in Echtzeit',
+        psychoedukation: {
+          titel: 'Die 6-Sekunden-Regel',
+          inhalt: 'Ein Impuls dauert ca. 6 Sekunden. Wenn du in dieser Zeit nichts tust, beginnt der rationale Teil des Gehirns wieder zu arbeiten. Diese 6 Sekunden Pause zu schaffen – z.B. durch Atmen, rausgehen, Hände unter kaltes Wasser – ist das Ziel der Impulskontrolle.'
+        },
+        interventionen: [
+          {
+            titel: 'Pausen-Signalwort',
+            ansatz: 'Verhaltenstherapeutisch',
+            beschreibung: 'Der Schüler wählt ein persönliches Stopp-Signal (Wort, Geste, mentales Bild), das er im Moment der aufsteigenden Wut einsetzt. Üben: zuerst im ruhigen Zustand, dann in leicht aufgewühlten Situationen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Abtank-Strategien',
+            beschreibung: 'Sammle 5 Dinge, die du tun kannst, wenn Wut aufsteigt (vor dem Ausbruch): Sport, rausgehen, tiefatmen, Kissen, kalt Wasser. Schreibe sie auf eine Karte.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Pausen-Technik einsetzen',
+          beschreibung: 'Setze diese Woche das Stopp-Signal mindestens einmal bewusst ein – und halte danach inne.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann fällt es dir besonders schwer, innezuhalten?',
+          'Was hilft dir, in einem heißen Moment die Kontrolle zu behalten?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Wut konstruktiv ausdrücken',
+        dauer: '60 Min',
+        ziel: 'Assertive Kommunikation von Ärger und Grenzen üben',
+        psychoedukation: {
+          titel: 'Ärger ausdrücken – ohne zu verletzen',
+          inhalt: 'Es ist möglich, Wut und Ärger klar auszudrücken, ohne anzugreifen. Der Unterschied liegt in der Sprache: „Du bist immer so gemein" vs. „Ich werde wütend, wenn du meine Sachen nimmst ohne zu fragen." Ersteres greift an – letzteres kommuniziert ein Bedürfnis.'
+        },
+        interventionen: [
+          {
+            titel: 'Ich-Botschaften bei Wut',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Üben, Ärger in Ich-Botschaften auszudrücken: „Ich werde wütend, wenn _____, weil _____, ich brauche _____." Rollenspiel mit typischen Wutsituationen. Feedback: Was war anders? Was hat sich besser angefühlt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Grenzen setzen',
+            beschreibung: 'Formuliere für 3 typische Grenzüberschreitungen einen klaren, respektvollen Satz, der deine Grenze ausdrückt.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Assertiver Ausdruck üben',
+          beschreibung: 'Versuche diese Woche, in einer Situation, die dich ärgert, eine Ich-Botschaft zu verwenden statt zu schweigen oder zu explodieren.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war schwierig beim Formulieren von Ich-Botschaften?',
+          'Wie hat die andere Person reagiert?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Langfristig ruhiger – Prävention',
+        dauer: '60 Min',
+        ziel: 'Allgemeines Stresslevel senken; präventive Selbstfürsorge aufbauen',
+        psychoedukation: {
+          titel: 'Das Stresspegel-Fass',
+          inhalt: 'Wutausbrüche entstehen oft nicht nur durch den direkten Auslöser – sondern weil das Stresspegel-Fass bereits voll ist. Schlafmangel, Hunger, anhäufende Konflikte füllen das Fass. Prävention bedeutet, das Fass regelmäßig zu leeren: durch Schlaf, Bewegung, Erholung, positive Erlebnisse.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Deeskalationsplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen konkreten Plan entwickeln: Was tue ich, wenn Anzeichen von Wut kommen? Was tue ich täglich, um das Fass nicht überlaufen zu lassen? Wer kann mir helfen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wohlgefühl-Aktivitäten',
+            beschreibung: 'Liste 5 Dinge auf, die dein Stresslevel regelmäßig senken. Plane eine davon für diese Woche konkret ein.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Deeskalationsplan anwenden',
+          beschreibung: 'Halte dich diese Woche an deinen Plan. Schreibe auf, was geklappt hat und was nicht.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was hat sich in deinem Umgang mit Wut verändert?'
+        ]
+      }
+    ]
+  },
+
 };

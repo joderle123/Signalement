@@ -2,249 +2,206 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Tabak & E-Zigarette – CDSE Arbeitsblatt</title>
-  <link rel="stylesheet" href="arbeitsblatt.css">
+  <title>Arbeitsblatt – Tabak & Nikotin</title>
+  <link rel="stylesheet" href="../css/arbeitsblatt.css">
+  <style>
+    :root { --farbe: #78716C; --farbe-hell: #FAFAF9; }
+  </style>
 </head>
 <body>
 
-<!-- ═══════════ SEITE 1 ═══════════ -->
-<div class="seite">
-  <div class="druck-leiste">
-    <button onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
-    <a href="index.html">← Zur Übersicht</a>
-  </div>
+<div class="druck-leiste">
+  <a class="btn-zurueck" href="../index.html">← Zurück zur App</a>
+  <button class="btn-drucken" onclick="window.print()">🖨️ Drucken / PDF</button>
+</div>
 
+<!-- ===== SEITE 1 ===== -->
+<div class="seite">
   <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Tabak & E-Zigarette</div>
-      <div class="kopf-untertitel">Fakten, Motive & mein ehrlicher Blick auf meinen Konsum</div>
+    <div class="kopfzeile-links">
+      <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
+      <div class="ab-titel">Tabak & Nikotin – Die Falle verstehen</div>
+      <div class="ab-untertitel">Konsum & Risikoverhalten · Kategorie: Konsum</div>
     </div>
-    <div class="cdse-logo">CDSE</div>
+    <div class="kopfzeile-icon">🚬</div>
   </div>
 
   <div class="schuelerinfo">
-    <div class="info-feld"><label>Name</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Datum</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Bezugsperson</label><div class="info-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Name</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Datum</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Mit</div><div class="info-feld-linie"></div></div>
   </div>
 
-  <!-- Wissens-Quiz -->
+  <div class="infobox">
+    <div class="infobox-titel">💡 Du bist nicht schwach – Nikotin ist einfach brutal clever</div>
+    <p>Nikotin ist eines der am stärksten süchtig machenden Stoffe der Welt – und Tabakkonzerne wissen das. Vapes und Puff Bars enthalten oft mehr Nikotin als eine Zigarette. Wer das System versteht, kann es durchschauen.</p>
+    <p>🧠 <em>Wusstest du? Nikotin erreicht das Gehirn in nur 7–10 Sekunden – schneller als die meisten anderen Substanzen. Das macht es so effektiv als „Belohnung" – und so schwer loszulassen.</em></p>
+  </div>
+
+  <!-- Übung 1: Meine Rauch-Timeline -->
   <div class="uebung">
-    <div class="uebung-nr">Wissens-Check</div>
-    <div class="uebung-titel">Stimmt das – oder ist das ein Mythos?</div>
-    <p style="font-size:12px;margin-bottom:10px;">Kreuze an, was du glaubst – und vergleiche danach mit den Fakten:</p>
-    <div style="display:grid;gap:6px;">
-      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
-        <div>„E-Zigaretten / Vapes sind harmloser als Zigaretten"</div>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q1" value="wahr"> Stimmt</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q1" value="falsch"> Stimmt nicht</label>
+    <div class="uebung-header">
+      <div class="uebung-nr">1</div>
+      <div class="uebung-titel">Meine Tabak-Timeline – Wie hat es angefangen?</div>
+    </div>
+    <div class="uebung-beschreibung">Fülle die Stationen aus – so viel oder wenig du möchtest.</div>
+    <div style="display:flex;align-items:flex-start;gap:0;margin-bottom:10px;">
+      <div style="flex:1;background:#FAFAF9;border:1.5px solid #D6D3D1;border-radius:10px 0 0 10px;padding:9px;">
+        <div style="font-size:10px;font-weight:700;color:#78716C;margin-bottom:4px;">🌱 Erster Kontakt</div>
+        <div style="font-size:10px;color:#4B5563;margin-bottom:4px;">Wie alt? Warum? Wo?</div>
+        <div style="border-bottom:1px dashed #D1D5DB;height:15px;margin-bottom:4px;"></div>
+        <div style="border-bottom:1px dashed #D1D5DB;height:15px;"></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
-        <div>„Nikotin macht nicht wirklich abhängig"</div>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q2" value="wahr"> Stimmt</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q2" value="falsch"> Stimmt nicht</label>
+      <div style="width:4px;background:#D6D3D1;align-self:stretch;"></div>
+      <div style="flex:1;background:#FAFAF9;border:1.5px solid #D6D3D1;border-left:0;border-right:0;padding:9px;">
+        <div style="font-size:10px;font-weight:700;color:#78716C;margin-bottom:4px;">🔄 Was sich verändert hat</div>
+        <div style="font-size:10px;color:#4B5563;margin-bottom:4px;">Häufigkeit, Menge, Situation</div>
+        <div style="border-bottom:1px dashed #D1D5DB;height:15px;margin-bottom:4px;"></div>
+        <div style="border-bottom:1px dashed #D1D5DB;height:15px;"></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
-        <div>„Einige Hundert Zigaretten kosten im Jahr mehrere Hundert Euro"</div>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q3" value="wahr"> Stimmt</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q3" value="falsch"> Stimmt nicht</label>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
-        <div>„Passivrauchen schadet anderen Menschen"</div>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q4" value="wahr"> Stimmt</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q4" value="falsch"> Stimmt nicht</label>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:12px;background:#F8F9FA;padding:6px 10px;border-radius:4px;">
-        <div>„Jugendliche Raucher hören meist vor dem 25. Lebensjahr auf"</div>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q5" value="wahr"> Stimmt</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:11px;"><input type="radio" name="q5" value="falsch"> Stimmt nicht</label>
+      <div style="width:4px;background:#D6D3D1;align-self:stretch;"></div>
+      <div style="flex:1;background:#FAFAF9;border:1.5px solid #D6D3D1;border-radius:0 10px 10px 0;padding:9px;">
+        <div style="font-size:10px;font-weight:700;color:#78716C;margin-bottom:4px;">📍 Heute</div>
+        <div style="font-size:10px;color:#4B5563;margin-bottom:4px;">Wie oft? Was genau?</div>
+        <div style="border-bottom:1px dashed #D1D5DB;height:15px;margin-bottom:4px;"></div>
+        <div style="border-bottom:1px dashed #D1D5DB;height:15px;"></div>
       </div>
     </div>
-    <div class="box" style="margin-top:8px;font-size:11px;border-top:3px solid #27AE60;">
-      <div style="font-weight:700;color:#27AE60;margin-bottom:6px;">✅ Auflösung:</div>
-      <div style="display:grid;gap:4px;">
-        <div><strong>1. Stimmt nicht.</strong> E-Zigaretten/Vapes enthalten Nikotin und Schadstoffe – sie sind nicht harmlos. Langzeitfolgen für Lungen und Herz-Kreislauf sind belegt.</div>
-        <div><strong>2. Stimmt nicht.</strong> Nikotin ist hochgradig abhängigkeitserzeugend – oft bereits nach wenigen Wochen regelmäßigen Rauchens.</div>
-        <div><strong>3. Stimmt.</strong> Wer täglich raucht, gibt in Luxemburg oft 1.500–2.500 € pro Jahr für Tabak aus.</div>
-        <div><strong>4. Stimmt.</strong> Passivrauchen erhöht das Risiko für Krebs, Herzkrankheiten und Atemwegserkrankungen bei anderen.</div>
-        <div><strong>5. Stimmt nicht.</strong> Die Mehrheit bleibt Raucher – nur etwa 1 von 3 schafft es dauerhaft aufzuhören.</div>
+    <div style="display:flex;gap:8px;align-items:center;font-size:11px;margin-top:4px;">
+      <div style="flex:1;background:#FAFAF9;border:1px solid #D6D3D1;border-radius:8px;padding:7px;">
+        💶 Monatliche Kosten ca.: <span style="border-bottom:1px dashed #D1D5DB;display:inline-block;width:60px;margin-left:4px;"></span> € → im Jahr: <span style="border-bottom:1px dashed #D1D5DB;display:inline-block;width:60px;margin-left:4px;"></span> €
       </div>
     </div>
   </div>
 
-  <!-- Übung 1: Mein Konsum-Protokoll -->
+  <!-- Übung 2: Die Nikotinfalle visualisiert -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 1</div>
-    <div class="uebung-titel">Mein Konsum – ehrlich hinschauen</div>
-    <div class="zwei-spalten">
-      <div>
-        <div class="box">
-          <p style="font-size:12px;font-weight:700;margin-bottom:8px;">Ich rauche / vape:</p>
-          <label class="check-item"><input type="checkbox"> Gar nicht</label>
-          <label class="check-item"><input type="checkbox"> Gelegentlich (mit Freunden / auf Partys)</label>
-          <label class="check-item"><input type="checkbox"> Mehrmals pro Woche</label>
-          <label class="check-item"><input type="checkbox"> Täglich</label>
-          <label class="check-item"><input type="checkbox"> Mehrmals täglich</label>
-          <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Was ich konsumiere:</p>
-          <label class="check-item"><input type="checkbox"> Klassische Zigaretten</label>
-          <label class="check-item"><input type="checkbox"> E-Zigarette / Vape / Puff Bar</label>
-          <label class="check-item"><input type="checkbox"> Tabak zum Drehen</label>
-          <label class="check-item"><input type="checkbox"> Wasserpfeife / Shisha</label>
-          <label class="check-item"><input type="checkbox"> Nikotinbeutel / Snus</label>
-        </div>
-      </div>
-      <div>
-        <div class="box">
-          <p style="font-size:12px;font-weight:700;margin-bottom:6px;">Seit wann? Wie viel pro Tag (ca.)?</p>
-          <div class="schreiblinien" data-lines="2"></div>
-          <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Monatliche Kosten (schätzen):</p>
-          <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
-            <div style="width:80px;border-bottom:1px solid var(--border);"></div>
-            <span style="font-size:12px;">€ / Monat</span>
-          </div>
-          <p style="font-size:12px;font-weight:700;margin-bottom:4px;">Im Jahr wären das:</p>
-          <div style="display:flex;align-items:center;gap:4px;">
-            <div style="width:80px;border-bottom:2px solid #E74C3C;"></div>
-            <span style="font-size:12px;">€ / Jahr</span>
-          </div>
-        </div>
-      </div>
+    <div class="uebung-header">
+      <div class="uebung-nr">2</div>
+      <div class="uebung-titel">Die Nikotin-Falle – Zeichne den Kreislauf nach</div>
+    </div>
+    <div class="uebung-beschreibung">So funktioniert Abhängigkeit. Verfolge den Pfeil – und erkennst du dich wieder?</div>
+    <div style="display:flex;align-items:center;justify-content:space-around;margin-bottom:8px;padding:6px 0;">
+      <div style="background:#FEF2F2;border:2px solid #FCA5A5;border-radius:50%;width:70px;height:70px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:700;color:#DC2626;">😣 Craving steigt</div>
+      <div style="font-size:20px;color:#78716C;">→</div>
+      <div style="background:#FAFAF9;border:2px solid #D6D3D1;border-radius:50%;width:70px;height:70px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:700;color:#78716C;">🚬 Rauchen / Vapen</div>
+      <div style="font-size:20px;color:#78716C;">→</div>
+      <div style="background:#ECFDF5;border:2px solid #86EFAC;border-radius:50%;width:70px;height:70px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:700;color:#059669;">😌 Kurze Erleichterung</div>
+      <div style="font-size:20px;color:#78716C;">→</div>
+      <div style="background:#FEF2F2;border:2px solid #FCA5A5;border-radius:50%;width:70px;height:70px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:700;color:#DC2626;">😣 Craving steigt wieder</div>
+    </div>
+    <div style="background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:8px;padding:7px;font-size:10px;">
+      🧠 <strong>Wusstest du?</strong> Die „Erleichterung" nach dem Rauchen ist nicht echte Entspannung – es ist nur das Stillen des Entzugs. Raucher fühlen sich ohne Nikotin schlechter als Nichtraucher, nicht besser mit.
     </div>
   </div>
 
-  <div class="fachhinweis">
-    <strong>Fachlicher Hinweis (Bezugsperson):</strong> Nikotinkonsum bei Jugendlichen ist oft mit Stress, sozialer Zugehörigkeit oder Gewohnheit verknüpft. Motivierende Gesprächsführung (Miller & Rollnick): keine direkte Konfrontation, sondern Ambivalenzexploration. Luxemburger Ausstiegshilfe: <em>Tabaktelefon</em> 27 55 33 12 (kostenlos), <em>CHL Stop-Tabac</em>, <em>Fondation Cancer</em> 45 30 331. E-Zigaretten/Vapes enthalten laut WHO-Berichten 2023/24 teils höhere Nikotinkonzentrationen als klassische Zigaretten.
+  <!-- Übung 3: Trigger-Bubbles -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">3</div>
+      <div class="uebung-titel">Meine Trigger – Wann zünde ich mir eine an? Kreise ein</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+      <div style="background:var(--farbe-hell);border:2px solid #A8A29E;border-radius:10px;padding:8px;font-size:11px;text-align:center;">☕ <strong>Kaffee/Morgen</strong><br><span style="font-size:9px;color:#4B5563;">Routinemäßig</span></div>
+      <div style="background:#FAFAF9;border:2px solid #A8A29E;border-radius:10px;padding:8px;font-size:11px;text-align:center;">😤 <strong>Stress</strong><br><span style="font-size:9px;color:#4B5563;">Nach Schule/Streit</span></div>
+      <div style="background:var(--farbe-hell);border:2px solid #A8A29E;border-radius:10px;padding:8px;font-size:11px;text-align:center;">👥 <strong>Sozial</strong><br><span style="font-size:9px;color:#4B5563;">Mit Freunden raus</span></div>
+      <div style="background:#FAFAF9;border:2px solid #A8A29E;border-radius:10px;padding:8px;font-size:11px;text-align:center;">🍺 <strong>Alkohol</strong><br><span style="font-size:9px;color:#4B5563;">Party / Feiern</span></div>
+      <div style="background:var(--farbe-hell);border:2px solid #A8A29E;border-radius:10px;padding:8px;font-size:11px;text-align:center;">😑 <strong>Langeweile</strong><br><span style="font-size:9px;color:#4B5563;">Nichts zu tun</span></div>
+      <div style="background:#FAFAF9;border:2px solid #A8A29E;border-radius:10px;padding:8px;font-size:11px;text-align:center;">😔 <strong>Emotionen</strong><br><span style="font-size:9px;color:#4B5563;">Traurig / allein</span></div>
+    </div>
   </div>
 
   <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Tabak & E-Zigarette – Seite 1 von 2</span>
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Tabak & Nikotin · Seite 1</span>
   </div>
 </div>
 
-<!-- ═══════════ SEITE 2 ═══════════ -->
+<!-- ===== SEITE 2 ===== -->
 <div class="seite">
 
-  <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Tabak & E-Zigarette</div>
-      <div class="kopf-untertitel">Warum ich rauche – und was ich mir wünsche</div>
-    </div>
-    <div class="cdse-logo">CDSE</div>
-  </div>
-
-  <!-- Übung 2: Motive -->
+  <!-- Übung 4: 4D-Technik -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 2</div>
-    <div class="uebung-titel">Warum rauche / vape ich? – Meine Motive</div>
-    <p style="font-size:12px;margin-bottom:8px;">Hinter jedem Konsum stecken Gründe. Was trifft auf dich zu?</p>
-    <div class="zwei-spalten">
-      <div>
-        <label class="check-item"><input type="checkbox"> Es beruhigt mich / baut Stress ab</label>
-        <label class="check-item"><input type="checkbox"> Alle in meiner Clique machen es</label>
-        <label class="check-item"><input type="checkbox"> Es gibt mir etwas zu tun (Hände beschäftigt)</label>
-        <label class="check-item"><input type="checkbox"> Es hilft mir in sozialen Situationen (weniger schüchtern)</label>
-        <label class="check-item"><input type="checkbox"> Es ist einfach zur Gewohnheit geworden</label>
-        <label class="check-item"><input type="checkbox"> Ich war neugierig / wollte es ausprobieren</label>
-      </div>
-      <div>
-        <label class="check-item"><input type="checkbox"> Es fühlt sich „cool" oder erwachsen an</label>
-        <label class="check-item"><input type="checkbox"> Ich vertreibe Langeweile damit</label>
-        <label class="check-item"><input type="checkbox"> Es macht mir wirklich Spaß / schmeckt mir</label>
-        <label class="check-item"><input type="checkbox"> Ich weiß eigentlich nicht warum</label>
-        <label class="check-item"><input type="checkbox"> Ich kann ohne es nicht mehr gut schlafen / entspannen</label>
-        <label class="check-item"><input type="checkbox"> Anderes: <div style="display:inline-block;width:80px;border-bottom:1px solid var(--border);vertical-align:bottom;"></div></label>
-      </div>
+    <div class="uebung-header">
+      <div class="uebung-nr">4</div>
+      <div class="uebung-titel">Die 4D-Technik – Wenn der Drang kommt</div>
     </div>
-    <p style="font-size:12px;font-weight:700;margin-top:10px;margin-bottom:4px;">Was bringt mir das Rauchen / Vapen wirklich – und was kostet es mich?</p>
-    <div class="zwei-spalten">
-      <div>
-        <p style="font-size:11px;font-weight:700;color:#27AE60;margin-bottom:4px;">+ Vorteile (wie ich sie erlebe):</p>
-        <div class="schreiblinien" data-lines="3"></div>
+    <div class="uebung-beschreibung">Ein Craving dauert meist nur 3–5 Minuten. Diese 4 Strategien helfen, es zu überbrücken:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div style="background:#EEF2FF;border:2px solid #A5B4FC;border-radius:10px;padding:10px;">
+        <div style="font-size:14px;margin-bottom:4px;">⏳</div>
+        <div style="font-size:12px;font-weight:700;color:#4338CA;margin-bottom:3px;">DELAY – Aufschieben</div>
+        <div style="font-size:10px;color:#4B5563;">„Ich warte noch 5 Minuten." Der Drang vergeht von selbst.</div>
+        <div style="font-size:10px;margin-top:5px;color:#6366F1;">Mein Delay-Trick: <span style="border-bottom:1px dashed #D1D5DB;display:inline-block;width:80px;"></span></div>
       </div>
-      <div>
-        <p style="font-size:11px;font-weight:700;color:#E74C3C;margin-bottom:4px;">− Nachteile / Kosten:</p>
-        <div class="schreiblinien" data-lines="3"></div>
+      <div style="background:#F0FDF4;border:2px solid #86EFAC;border-radius:10px;padding:10px;">
+        <div style="font-size:14px;margin-bottom:4px;">🎮</div>
+        <div style="font-size:12px;font-weight:700;color:#059669;margin-bottom:3px;">DISTRACT – Ablenken</div>
+        <div style="font-size:10px;color:#4B5563;">Sofort etwas anderes tun – Musik, Spaziergang, Spiel.</div>
+        <div style="font-size:10px;margin-top:5px;color:#059669;">Meine Ablenkung: <span style="border-bottom:1px dashed #D1D5DB;display:inline-block;width:80px;"></span></div>
+      </div>
+      <div style="background:#ECFDF5;border:2px solid #6EE7B7;border-radius:10px;padding:10px;">
+        <div style="font-size:14px;margin-bottom:4px;">🌬️</div>
+        <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:3px;">DEEP BREATHE – Atmen</div>
+        <div style="font-size:10px;color:#4B5563;">4 Sekunden ein, 4 halten, 6 aus. Dreimal wiederholen.</div>
+        <div style="font-size:10px;margin-top:5px;color:#065F46;">Das fühlt sich an: <span style="border-bottom:1px dashed #D1D5DB;display:inline-block;width:80px;"></span></div>
+      </div>
+      <div style="background:#EFF6FF;border:2px solid #93C5FD;border-radius:10px;padding:10px;">
+        <div style="font-size:14px;margin-bottom:4px;">💧</div>
+        <div style="font-size:12px;font-weight:700;color:#1D4ED8;margin-bottom:3px;">DRINK WATER – Trinken</div>
+        <div style="font-size:10px;color:#4B5563;">Kaltes Wasser stillt den Mundreiz – wirklich!</div>
+        <div style="font-size:10px;margin-top:5px;color:#1D4ED8;">Ich könnte stattdessen: <span style="border-bottom:1px dashed #D1D5DB;display:inline-block;width:70px;"></span></div>
       </div>
     </div>
   </div>
 
-  <!-- Übung 3: Ausstieg / Veränderung -->
+  <!-- Übung 5: Mein Ausstiegsplan -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 3</div>
-    <div class="uebung-titel">Meine Haltung zu meinem Konsum</div>
-    <p style="font-size:12px;margin-bottom:8px;">Wo stehe ich gerade?</p>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
-      <div class="box" style="text-align:center;">
-        <div style="font-size:20px;">😐</div>
-        <div style="font-size:11px;font-weight:700;margin:4px 0;">Kein Problem</div>
-        <div style="font-size:10px;color:var(--muted);">Ich sehe keinen Grund etwas zu ändern</div>
-        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
-      </div>
-      <div class="box" style="text-align:center;">
-        <div style="font-size:20px;">🤔</div>
-        <div style="font-size:11px;font-weight:700;margin:4px 0;">Nachdenklich</div>
-        <div style="font-size:10px;color:var(--muted);">Ich denke manchmal daran, es zu reduzieren</div>
-        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
-      </div>
-      <div class="box" style="text-align:center;">
-        <div style="font-size:20px;">💪</div>
-        <div style="font-size:11px;font-weight:700;margin:4px 0;">Bereit</div>
-        <div style="font-size:10px;color:var(--muted);">Ich möchte wirklich weniger oder aufhören</div>
-        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
-      </div>
-      <div class="box" style="text-align:center;">
-        <div style="font-size:20px;">🚭</div>
-        <div style="font-size:11px;font-weight:700;margin:4px 0;">Bereits dabei</div>
-        <div style="font-size:10px;color:var(--muted);">Ich habe schon versucht aufzuhören / reduziert</div>
-        <label style="font-size:10px;margin-top:6px;display:block;"><input type="radio" name="haltung"> Trifft zu</label>
-      </div>
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Mein Quit-Plan – Falls ich aufhören oder reduzieren möchte</div>
     </div>
-
-    <div class="box" style="margin-top:4px;">
-      <div style="font-weight:700;margin-bottom:8px;color:#2C5F8A;">Falls ich aufhören / reduzieren möchte – mein Plan:</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div>
-          <p style="font-size:11px;font-weight:700;margin-bottom:4px;">Mein Zieldatum:</p>
-          <div class="schreiblinien" data-lines="1"></div>
-          <p style="font-size:11px;font-weight:700;margin-top:6px;margin-bottom:4px;">Was ich stattdessen tue, wenn der Drang kommt:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-        </div>
-        <div>
-          <p style="font-size:11px;font-weight:700;margin-bottom:4px;">Wer unterstützt mich dabei:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-          <div style="font-size:10px;background:#E8F5E9;padding:6px;border-radius:4px;margin-top:8px;">📞 <strong>Tabaktelefon Luxemburg:</strong> 27 55 33 12 (kostenlos)<br>🌐 <strong>Fondation Cancer:</strong> stopmyrauchen.lu</div>
-        </div>
+    <div style="background:#FAFAF9;border:1.5px solid #D6D3D1;border-radius:10px;padding:10px;font-size:11px;margin-bottom:8px;">
+      <strong>Wichtig:</strong> Nur du entscheidest. Dieser Plan ist für dich – nicht für jemand anderen.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:8px;font-size:11px;">
+        🗓️ <strong>Mein Zieldatum (oder: „Ich möchte reduzieren auf _____ pro Tag"):</strong>
+        <div style="border-bottom:1px dashed #D1D5DB;margin-top:5px;height:16px;"></div>
+      </div>
+      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:8px;font-size:11px;">
+        🎯 <strong>Meine Strategie (4D / Nikotinersatz / Kalt / Schritt für Schritt):</strong>
+        <div style="border-bottom:1px dashed #D1D5DB;margin-top:5px;height:16px;"></div>
+      </div>
+      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:8px;font-size:11px;">
+        🤝 <strong>Meine Unterstützungsperson:</strong>
+        <div style="border-bottom:1px dashed #D1D5DB;margin-top:5px;height:16px;"></div>
+      </div>
+      <div style="background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:8px;padding:8px;font-size:10px;">
+        📞 <strong>Tabaktelefon Luxemburg: 27 55 33 12</strong> (kostenlos) · Fondation Cancer: <strong>stopmyrauchen.lu</strong>
       </div>
     </div>
   </div>
 
   <!-- Reflexion -->
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Meine Reflexion</div>
-    <div class="reflexion-fragen">
-      <div class="reflexion-frage">
-        <p>Was hat mich an diesem Blatt am meisten zum Nachdenken gebracht?</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-      <div class="reflexion-frage">
-        <p>Was würde ich mir für meinen Konsum in 1 Jahr wünschen?</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-    </div>
+    <div class="reflexion-titel">💬 Reflexion</div>
+    <p style="font-size:11px;margin-bottom:5px;">Was würde sich in meinem Leben konkret verbessern, wenn ich nicht mehr rauchte oder vapen würde?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <p style="font-size:11px;margin-top:8px;margin-bottom:5px;">Was würde ich nach einem Jahr Abstinenz mit dem gesparten Geld machen?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div></div>
+  </div>
+
+  <div class="fachhinweis">
+    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
+    <strong>ICD-10:</strong> F17.0 (akute Intoxikation), F17.1 (schädlicher Gebrauch), F17.2 (Abhängigkeit). Nikotinabhängigkeit bei Jugendlichen entwickelt sich schnell (oft nach wenigen Wochen regulären Konsums). <strong>Vapes/Puff Bars:</strong> Laut WHO-Berichten 2023/24 teils höhere Nikotinkonzentrationen als klassische Zigaretten; Langzeitpulmonale Effekte dokumentiert. <strong>Motivational Interviewing:</strong> Bereitschaftsskala (0–10) nutzen; ambivalente Aussagen ernst nehmen. Fageström-Test für Nikotinabhängigkeit (FTND) zur Einschätzung. Nikotinersatztherapie (Pflaster, Kaugummi) ist bei Jugendlichen ab 12 J. zugelassen. <strong>Tabaktelefon Luxemburg:</strong> 27 55 33 12 · CHL Stop-Tabac · Fondation Cancer. Trigger-Analyse wichtig: soziale Funktion oft dominierend.
   </div>
 
   <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Tabak & E-Zigarette – Seite 2 von 2</span>
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Tabak & Nikotin · Seite 2</span>
   </div>
 </div>
 
-<script>
-document.querySelectorAll('.schreiblinien[data-lines]').forEach(el => {
-  const n = parseInt(el.dataset.lines) || 3;
-  el.innerHTML = Array(n).fill('<div class="schreiblinie"></div>').join('');
-});
-</script>
 </body>
 </html>

@@ -2,227 +2,204 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Kommunikation & Grenzen setzen – CDSE Arbeitsblatt</title>
-  <link rel="stylesheet" href="arbeitsblatt.css">
+  <title>Arbeitsblatt – Kommunikation &amp; Grenzen</title>
+  <link rel="stylesheet" href="../css/arbeitsblatt.css">
+  <style>
+    :root { --farbe: #0891B2; --farbe-hell: #ECFEFF; }
+    .koerper-map { width:120px; height:180px; position:relative; margin:0 auto 8px; background:#F8FAFC; border:1.5px solid #A5F3FC; border-radius:60px 60px 40px 40px; }
+    .map-label { position:absolute; font-size:9px; color:var(--farbe); font-weight:700; }
+    .stil-karte { border-radius:10px; padding:10px; border-top:3px solid; margin-bottom:6px; }
+    .stilgrid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
+    .assertiv-szene { border:1.5px solid #A5F3FC; border-radius:10px; padding:9px; margin-bottom:7px; }
+    .nein-skript { background:var(--farbe-hell); border:1.5px solid #A5F3FC; border-radius:10px; padding:9px; margin-bottom:7px; }
+    .kommunikation-bubble { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+    .kom-item { background:var(--farbe-hell); border:1.5px solid #A5F3FC; border-radius:10px; padding:7px 9px; font-size:11px; cursor:default; }
+    .kom-item:hover { background:#CFFAFE; }
+    .grenzen-plan { border:1.5px solid #A5F3FC; border-radius:10px; padding:10px; background:#F8FAFC; }
+  </style>
 </head>
 <body>
 
-<!-- ═══════════ SEITE 1 ═══════════ -->
-<div class="seite">
-  <div class="druck-leiste">
-    <button onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
-    <a href="index.html">← Zur Übersicht</a>
-  </div>
+<div class="druck-leiste">
+  <a class="btn-zurueck" href="../index.html">← Zurück zur App</a>
+  <button class="btn-drucken" onclick="window.print()">🖨️ Drucken / PDF</button>
+</div>
 
+<!-- ===== SEITE 1 ===== -->
+<div class="seite">
   <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Kommunikation & Grenzen setzen</div>
-      <div class="kopf-untertitel">Klar sprechen, zuhören – und eigene Grenzen kennen & vertreten</div>
+    <div class="kopfzeile-links">
+      <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
+      <div class="ab-titel">Sagen was ich meine – und wissen was mich nervt</div>
+      <div class="ab-untertitel">Kommunikation &amp; Grenzen · Kategorie: Soziale Kompetenzen</div>
     </div>
-    <div class="cdse-logo">CDSE</div>
+    <div class="kopfzeile-icon">🗣️</div>
   </div>
 
   <div class="schuelerinfo">
-    <div class="info-feld"><label>Name</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Datum</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Bezugsperson</label><div class="info-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Name</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Datum</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Mit</div><div class="info-feld-linie"></div></div>
   </div>
 
-  <!-- Übung 1: Kommunikationsstile -->
+  <div class="infobox">
+    <div class="infobox-titel">🗣️ Nein sagen ist keine Gemeinheit – es ist Selbstrespekt.</div>
+    <p>Kommunikation ist mehr als Worte – es ist Körpersprache, Tonfall, was man <em>nicht</em> sagt. Grenzen zu kennen und klar auszudrücken schützt nicht nur dich, sondern macht Beziehungen ehrlicher. <strong>Das ist keine Arroganz – das ist Gesundheit.</strong></p>
+    <p>🧠 <em>Wusstest du? Menschen die nie "Nein" sagen können, haben ein deutlich höheres Risiko für chronischen Stress, Burnout und Depressionen. Eigene Grenzen zu kennen ist eine Schutzfaktor – keine Schwäche.</em></p>
+  </div>
+
+  <!-- Übung 1 – Body Map für Grenzen -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 1</div>
-    <div class="uebung-titel">Drei Kommunikationsstile – welcher bin ich?</div>
-    <p style="margin-bottom:10px;">Lies die Beschreibungen. Markiere, welchen Stil du am häufigsten zeigst, und in welchen Situationen:</p>
-    <div class="drei-spalten">
-      <div class="box" style="border-top:3px solid #E74C3C;">
-        <div style="font-weight:700;color:#E74C3C;margin-bottom:4px;">😡 Aggressiv</div>
-        <p style="font-size:11px;line-height:1.5;">Laut werden, Beschimpfen, über andere hinwegreden, Drohungen. Die eigenen Bedürfnisse werden auf Kosten anderer durchgesetzt.</p>
-        <p style="font-size:11px;font-weight:700;margin-top:8px;">Wirkung auf andere:</p>
-        <p style="font-size:11px;color:var(--muted);">Angst, Rückzug, Gegenangriff</p>
-        <p style="font-size:11px;font-weight:700;margin-top:6px;">Ich zeige das bei:</p>
-        <div class="schreiblinien" data-lines="2"></div>
+    <div class="uebung-header">
+      <div class="uebung-nr">1</div>
+      <div class="uebung-titel">Meine Körperkarte – wo fühle ich "zu viel"? 🗺️</div>
+    </div>
+    <div class="uebung-beschreibung">Wenn eine Grenze überschritten wird – wo spürst du das im Körper? Markiere mit einem X oder Farbe auf der Körperskizze, und beschreibe das Gefühl daneben.</div>
+    <div style="display:grid;grid-template-columns:140px 1fr;gap:12px;margin-bottom:10px;">
+      <div>
+        <div class="koerper-map">
+          <!-- Simplified body silhouette using CSS -->
+          <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:28px;height:28px;border:1.5px solid #A5F3FC;border-radius:50%;background:#CFFAFE;"></div>
+          <div class="map-label" style="top:5px;left:50%;transform:translateX(-50%);">Kopf</div>
+          <div class="map-label" style="top:40px;left:4px;">Schulter</div>
+          <div class="map-label" style="top:60px;left:32px;">Brust</div>
+          <div class="map-label" style="top:90px;left:32px;">Bauch</div>
+          <div class="map-label" style="top:125px;left:24px;">Beine</div>
+        </div>
+        <div style="font-size:9px;color:#6B7280;text-align:center;">← markiere mit X oder zeichne</div>
       </div>
-      <div class="box" style="border-top:3px solid #F39C12;">
-        <div style="font-weight:700;color:#F39C12;margin-bottom:4px;">🙈 Passiv / Unterwürfig</div>
-        <p style="font-size:11px;line-height:1.5;">Schweigen, immer Ja sagen, Bedürfnisse verstecken, Konflikte um jeden Preis vermeiden. Andere kommen zuerst.</p>
-        <p style="font-size:11px;font-weight:700;margin-top:8px;">Wirkung auf mich:</p>
-        <p style="font-size:11px;color:var(--muted);">Frust, Erschöpfung, Gefühl ausgenutzt zu werden</p>
-        <p style="font-size:11px;font-weight:700;margin-top:6px;">Ich zeige das bei:</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-      <div class="box" style="border-top:3px solid #27AE60;">
-        <div style="font-weight:700;color:#27AE60;margin-bottom:4px;">✅ Assertiv / Klar</div>
-        <p style="font-size:11px;line-height:1.5;">Direkt und respektvoll sprechen, eigene Meinung sagen, Nein sagen ohne Schuldgefühl, aktiv zuhören.</p>
-        <p style="font-size:11px;font-weight:700;margin-top:8px;">Wirkung auf Beziehungen:</p>
-        <p style="font-size:11px;color:var(--muted);">Respekt, Vertrauen, echte Verbindung</p>
-        <p style="font-size:11px;font-weight:700;margin-top:6px;">Das fällt mir leicht, wenn:</p>
-        <div class="schreiblinien" data-lines="2"></div>
+      <div>
+        <div style="font-size:11px;font-weight:700;margin-bottom:6px;color:var(--farbe);">Was ich dort spüre wenn's "zu viel" ist:</div>
+        <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">z.B. Enge in der Brust, Bauchgrummeln, Verspannung</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+        <div style="font-size:11px;font-weight:700;margin-top:6px;margin-bottom:4px;">In welchen Situationen passiert das?</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Übung 2: Ich-Botschaften -->
+  <!-- Übung 2 – Assertivitäts-Spektrum -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 2</div>
-    <div class="uebung-titel">Ich-Botschaften formulieren</div>
-    <div class="infobox" style="margin-bottom:12px;">
-      <div class="infobox-titel">Formel der Ich-Botschaft (GFK nach Rosenberg)</div>
-      <p>„Wenn du <span style="background:#FFF3B0;padding:1px 4px;border-radius:3px;"><em>[konkrete Handlung]</em></span> …  fühle ich mich <span style="background:#B5EAD7;padding:1px 4px;border-radius:3px;"><em>[Gefühl]</em></span> …  weil ich <span style="background:#C7CEEA;padding:1px 4px;border-radius:3px;"><em>[Bedürfnis]</em></span> brauche … und ich wünsche mir <span style="background:#FFDAC1;padding:1px 4px;border-radius:3px;"><em>[konkreter Wunsch]</em></span>."</p>
+    <div class="uebung-header">
+      <div class="uebung-nr">2</div>
+      <div class="uebung-titel">Das Kommunikations-Spektrum – passiv, assertiv oder aggressiv? 📊</div>
     </div>
-    <p style="font-size:12px;margin-bottom:10px;">Wandle diese Du-Botschaften in Ich-Botschaften um:</p>
-    <div style="display:grid;gap:10px;">
-      <div class="box">
-        <p style="font-size:12px;color:#E74C3C;font-weight:700;margin-bottom:4px;">Du-Botschaft: „Du hörst mir nie zu!"</p>
-        <p style="font-size:11px;font-weight:600;margin-bottom:4px;">Meine Ich-Botschaft:</p>
-        <div class="schreiblinien" data-lines="2"></div>
+    <div class="uebung-beschreibung">Lies 3 Szenarien und schätze ein: welcher Stil wird gezeigt? Schreibe <strong>P</strong> (passiv), <strong>A</strong> (assertiv) oder <strong>AG</strong> (aggressiv) daneben.</div>
+    <div class="stilgrid">
+      <div class="stil-karte" style="border-color:#EF4444;background:#FEF2F2;">
+        <div style="font-size:11px;font-weight:700;color:#DC2626;margin-bottom:4px;">😡 Aggressiv</div>
+        <div style="font-size:10px;color:#374151;line-height:1.5;">Laut werden, Beschimpfen, über andere hinweggehen, drohen</div>
+        <div style="font-size:10px;color:#6B7280;margin-top:4px;">Wirkung: Angst, Rückzug, Gegenangriff</div>
       </div>
-      <div class="box">
-        <p style="font-size:12px;color:#E74C3C;font-weight:700;margin-bottom:4px;">Du-Botschaft: „Du machst immer alles kaputt!"</p>
-        <p style="font-size:11px;font-weight:600;margin-bottom:4px;">Meine Ich-Botschaft:</p>
-        <div class="schreiblinien" data-lines="2"></div>
+      <div class="stil-karte" style="border-color:#D97706;background:#FFFBEB;">
+        <div style="font-size:11px;font-weight:700;color:#D97706;margin-bottom:4px;">🙈 Passiv</div>
+        <div style="font-size:10px;color:#374151;line-height:1.5;">Immer Ja sagen, schweigen, Bedürfnisse verstecken</div>
+        <div style="font-size:10px;color:#6B7280;margin-top:4px;">Wirkung: Frust, Erschöpfung, sich ausgenutzt fühlen</div>
       </div>
-      <div class="box">
-        <p style="font-size:12px;color:#E74C3C;font-weight:700;margin-bottom:4px;">Eine eigene Situation aus meinem Leben:</p>
-        <div class="schreiblinien" data-lines="2"></div>
-        <p style="font-size:11px;font-weight:600;margin-top:6px;margin-bottom:4px;">Meine Ich-Botschaft dazu:</p>
-        <div class="schreiblinien" data-lines="2"></div>
+      <div class="stil-karte" style="border-color:#059669;background:#ECFDF5;">
+        <div style="font-size:11px;font-weight:700;color:#059669;margin-bottom:4px;">✅ Assertiv</div>
+        <div style="font-size:10px;color:#374151;line-height:1.5;">Direkt und respektvoll, Meinung sagen, Nein ohne Schuldgefühl</div>
+        <div style="font-size:10px;color:#6B7280;margin-top:4px;">Wirkung: Respekt, Vertrauen, echte Verbindung</div>
       </div>
     </div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      <div class="assertiv-szene">
+        <div style="font-size:11px;color:#374151;margin-bottom:4px;">"Ich will das nicht! Hör einfach auf damit, du nervst mich so was von!!!"</div>
+        <div style="font-size:11px;">Stil: <span style="border:1px solid #A5F3FC;border-radius:4px;padding:1px 12px;">P / A / AG</span> &nbsp; Warum: <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:180px;">&nbsp;</span></div>
+      </div>
+      <div class="assertiv-szene">
+        <div style="font-size:11px;color:#374151;margin-bottom:4px;">"Na ja… ist doch ok… wenn du meinst…" (sagt Ja, obwohl er/sie Nein meint)</div>
+        <div style="font-size:11px;">Stil: <span style="border:1px solid #A5F3FC;border-radius:4px;padding:1px 12px;">P / A / AG</span> &nbsp; Warum: <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:180px;">&nbsp;</span></div>
+      </div>
+      <div class="assertiv-szene">
+        <div style="font-size:11px;color:#374151;margin-bottom:4px;">"Das ist nichts für mich – danke dass du gefragt hast. Ich bleibe aber dabei."</div>
+        <div style="font-size:11px;">Stil: <span style="border:1px solid #A5F3FC;border-radius:4px;padding:1px 12px;">P / A / AG</span> &nbsp; Warum: <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:180px;">&nbsp;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fusszeile">
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Kommunikation &amp; Grenzen · Seite 1</span>
+  </div>
+</div>
+
+<!-- ===== SEITE 2 ===== -->
+<div class="seite">
+
+  <!-- Übung 3 – Nein sagen üben -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">3</div>
+      <div class="uebung-titel">"Nein" sagen üben – 3 Skripte für 3 Situationen 🚦</div>
+    </div>
+    <div class="uebung-beschreibung">Vervollständige die Antworten für jede Situation. Kurz, erklärt oder einfühlsam – du entscheidest.</div>
+    <div class="nein-skript">
+      <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">🟡 Kurzes Nein (keine lange Erklärung nötig)</div>
+      <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">Situation: Jemand fragt ob du etwas machst, das du nicht willst.</div>
+      <div style="font-size:11px;">Antwort: "Nein, das mache ich <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:200px;">&nbsp;</span>"</div>
+    </div>
+    <div class="nein-skript">
+      <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">🔵 Erklärendes Nein (mit Begründung)</div>
+      <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">Situation: Jemand drängt dich immer wieder zu etwas.</div>
+      <div style="font-size:11px;">"Ich mache das nicht, weil <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:180px;">&nbsp;</span>. Ich hoffe du respektierst das."</div>
+    </div>
+    <div class="nein-skript">
+      <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">🟢 Einfühlsames Nein (mit Verständnis)</div>
+      <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">Situation: Ein Freund/eine Freundin braucht etwas das du gerade nicht geben kannst.</div>
+      <div style="font-size:11px;">"Ich verstehe dass du <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:120px;">&nbsp;</span> brauchst. Gerade kann ich das nicht geben, weil <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:100px;">&nbsp;</span>."</div>
+    </div>
+  </div>
+
+  <!-- Übung 4 – Kommunikationsstil-Bubbles -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">4</div>
+      <div class="uebung-titel">Mein Kommunikationsstil – kreise ein was auf dich zutrifft! 🎯</div>
+    </div>
+    <div class="kommunikation-bubble">
+      <div class="kom-item">🤫 Ich teile wenig über mich mit</div>
+      <div class="kom-item">💬 Ich rede gern und offen</div>
+      <div class="kom-item">👂 Ich höre mehr zu als ich rede</div>
+      <div class="kom-item">🎭 Ich passe mich an je nach Person</div>
+      <div class="kom-item">⚡ Ich sage schnell was mich stört</div>
+      <div class="kom-item">🐌 Ich brauche Zeit um mich zu öffnen</div>
+      <div class="kom-item">🌊 Konflikte überwältigen mich</div>
+      <div class="kom-item">🪨 Ich bleibe ruhig im Konflikt</div>
+    </div>
+    <div style="font-size:11px;">Was ich an meinem Stil gerne ändern würde: <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:250px;">&nbsp;</span></div>
+  </div>
+
+  <!-- Übung 5 – Grenzenverletzungs-Plan -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Mein Grenz-Schutzplan – was mache ich wenn meine Grenzen verletzt werden? 🛡️</div>
+    </div>
+    <div class="grenzen-plan">
+      <div style="font-size:11px;margin-bottom:6px;"><strong>1. Ich bemerke es, weil ich im Körper spüre:</strong> <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:230px;">&nbsp;</span></div>
+      <div style="font-size:11px;margin-bottom:6px;"><strong>2. Ich sage klar:</strong> "Das ist für mich nicht ok, weil <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:190px;">&nbsp;</span>"</div>
+      <div style="font-size:11px;margin-bottom:6px;"><strong>3. Wenn die Person es nicht respektiert, mache ich:</strong> <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:200px;">&nbsp;</span></div>
+      <div style="font-size:11px;"><strong>4. Meine Vertrauensperson die mir dabei helfen kann:</strong> <span style="border-bottom:1px dashed #A5F3FC;display:inline-block;width:190px;">&nbsp;</span></div>
+    </div>
+  </div>
+
+  <div class="reflexion">
+    <div class="reflexion-titel">💬 Reflexion</div>
+    <p>In welcher Situation fällt es dir am schwersten deine Grenzen zu sagen? Was passiert in dir wenn du Nein sagst – oder wenn du es nicht tust?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fachhinweis">
-    <strong>Fachlicher Hinweis (Bezugsperson):</strong> Gewaltfreie Kommunikation (Rosenberg) und assertives Training (aus der KVT) sind evidenzbasierte Ansätze zur Verbesserung sozialer Kompetenz. Beim Rollenspiel die drei Stile einüben und spiegeln, was die Körpersprache kommuniziert. Gerade Jugendliche mit traumatischen Erfahrungen zeigen oft Extrempositionen (hyper-aggressiv oder total passiv) – das explorieren ohne Bewertung.
+    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
+    <strong>ICD-10:</strong> Grenzverletzungen und mangelnde Assertivität als Komorbiditätsfaktor bei F60 (Persönlichkeitsstörungen), F40-F41 (Angststörungen), F32-F33 (Depression). <strong>Gewaltfreie Kommunikation (GFK)</strong> nach Rosenberg: 4-Schritte-Modell (Beobachtung, Gefühl, Bedürfnis, Bitte). Body-Map = somatisches Bewusstsein, relevant für Trauma-Arbeit (somatische Therapie, Peter Levine / Bessel van der Kolk). Passiver Kommunikationsstil als häufiges Muster nach Vernachlässigungs- oder Missbrauchserfahrungen – Kontrolle durch Passivität (Selbstschutz). <strong>Assertivitätstraining</strong> aus der KVT (Wolpe): evidenzbasiert bei sozialen Phobien und mangelndem Selbstwert. <strong>DBT:</strong> DEAR MAN (Describe, Express, Assert, Reinforce, Mindful, Appear confident, Negotiate) als strukturierter Assertivitäts-Skill. Beim Rollenspiel immer auch Körpersprache und Tonfall beachten (Mehrabian-Effekt).
   </div>
 
   <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Kommunikation & Grenzen setzen – Seite 1 von 2</span>
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Kommunikation &amp; Grenzen · Seite 2</span>
   </div>
 </div>
 
-<!-- ═══════════ SEITE 2 ═══════════ -->
-<div class="seite">
-
-  <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Kommunikation & Grenzen setzen</div>
-      <div class="kopf-untertitel">Meine Grenzen kennen, setzen & verteidigen</div>
-    </div>
-    <div class="cdse-logo">CDSE</div>
-  </div>
-
-  <!-- Übung 3: Grenzen erkennen -->
-  <div class="uebung">
-    <div class="uebung-nr">Übung 3</div>
-    <div class="uebung-titel">Meine Grenzen kennen</div>
-    <p style="font-size:12px;margin-bottom:10px;">Grenzen können in verschiedenen Bereichen liegen. Trage ein, wo deine persönlichen Grenzen sind:</p>
-    <div class="zwei-spalten">
-      <div>
-        <div class="box" style="margin-bottom:10px;">
-          <div style="font-weight:700;margin-bottom:6px;color:#2C5F8A;">🖐️ Körperliche Grenzen</div>
-          <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Berührungen, Nähe, Privatsphäre des Körpers</p>
-          <p style="font-size:11px;">Das ist okay für mich:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-          <p style="font-size:11px;margin-top:6px;">Das ist NICHT okay:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-        </div>
-        <div class="box">
-          <div style="font-weight:700;margin-bottom:6px;color:#2C5F8A;">📱 Digitale Grenzen</div>
-          <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Fotos, Nachrichten, Erreichbarkeit</p>
-          <p style="font-size:11px;">Das möchte ich nicht:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-        </div>
-      </div>
-      <div>
-        <div class="box" style="margin-bottom:10px;">
-          <div style="font-weight:700;margin-bottom:6px;color:#2C5F8A;">💬 Emotionale Grenzen</div>
-          <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Gefühle, Würde, Respekt</p>
-          <p style="font-size:11px;">Ich fühle mich verletzt, wenn:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-          <p style="font-size:11px;margin-top:6px;">Ich brauche von anderen:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-        </div>
-        <div class="box">
-          <div style="font-weight:700;margin-bottom:6px;color:#2C5F8A;">⏰ Zeitliche Grenzen</div>
-          <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">Erreichbarkeit, Zeit für mich</p>
-          <p style="font-size:11px;">Ich brauche Zeit für mich, wenn:</p>
-          <div class="schreiblinien" data-lines="2"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Übung 4: Nein sagen -->
-  <div class="uebung">
-    <div class="uebung-nr">Übung 4</div>
-    <div class="uebung-titel">Nein sagen – mit Übungsbeispiele</div>
-    <p style="font-size:12px;margin-bottom:10px;">Übe verschiedene Arten, Nein zu sagen. Wähle für jede Situation die passende Antwort:</p>
-    <div style="display:grid;gap:8px;">
-      <div class="box">
-        <p style="font-size:12px;font-weight:700;color:#8E44AD;margin-bottom:6px;">Situation: Jemand will, dass du etwas machst, was du nicht willst (z.B. eine Zigarette rauchen)</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-          <div>
-            <p style="font-size:11px;font-weight:600;margin-bottom:4px;">Sanftes Nein:</p>
-            <div class="schreiblinien" data-lines="2"></div>
-          </div>
-          <div>
-            <p style="font-size:11px;font-weight:600;margin-bottom:4px;">Klares Nein (wenn beharrt wird):</p>
-            <div class="schreiblinien" data-lines="2"></div>
-          </div>
-        </div>
-      </div>
-      <div class="box">
-        <p style="font-size:12px;font-weight:700;color:#8E44AD;margin-bottom:6px;">Situation: Jemand schreibt dir nachts immer Nachrichten und erwartet sofortige Antwort</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-          <div>
-            <p style="font-size:11px;font-weight:600;margin-bottom:4px;">Meine Grenze erklären:</p>
-            <div class="schreiblinien" data-lines="2"></div>
-          </div>
-          <div>
-            <p style="font-size:11px;font-weight:600;margin-bottom:4px;">Was ich konkret ändere:</p>
-            <div class="schreiblinien" data-lines="2"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="infobox" style="margin-top:10px;">
-      <div class="infobox-titel">3-Schritte-Technik: Grenzen setzen</div>
-      <p><strong>1. Benennen:</strong> „Ich merke gerade, dass meine Grenze überschritten wird, wenn …"<br>
-      <strong>2. Mitteilen:</strong> „Das ist für mich nicht okay, weil …"<br>
-      <strong>3. Wunsch äußern:</strong> „Ich wünsche mir, dass du … [konkrete Verhaltensänderung]"</p>
-    </div>
-  </div>
-
-  <!-- Reflexion -->
-  <div class="reflexion">
-    <div class="reflexion-titel">💬 Meine Reflexion</div>
-    <div class="reflexion-fragen">
-      <div class="reflexion-frage">
-        <p>In welcher Situation fällt es mir am schwersten, meine Grenzen zu vertreten? Warum?</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-      <div class="reflexion-frage">
-        <p>Was passiert in mir (Gedanken, Gefühle), wenn ich Nein sage? Was befürchte ich?</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-      <div class="reflexion-frage">
-        <p>Eine Situation, in der ich nächste Woche klarer kommunizieren möchte:</p>
-        <div class="schreiblinien" data-lines="2"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Kommunikation & Grenzen setzen – Seite 2 von 2</span>
-  </div>
-</div>
-
-<script>
-document.querySelectorAll('.schreiblinien[data-lines]').forEach(el => {
-  const n = parseInt(el.dataset.lines) || 3;
-  el.innerHTML = Array(n).fill('<div class="schreiblinie"></div>').join('');
-});
-</script>
 </body>
 </html>

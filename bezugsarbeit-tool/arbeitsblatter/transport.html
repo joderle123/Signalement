@@ -2,10 +2,19 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Arbeitsblatt – Transport &amp; Mobilität</title>
+  <title>Arbeitsblatt – Mobilität &amp; Transport in Luxemburg</title>
   <link rel="stylesheet" href="../css/arbeitsblatt.css">
   <style>
-    :root { --farbe: #8E44AD; --farbe-hell: #F5F0FA; }
+    :root { --farbe: #0891B2; --farbe-hell: #ECFEFF; }
+    .transport-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
+    .transport-card { border-radius:10px; padding:10px; text-align:center; border:2px solid transparent; }
+    .transport-card .tc-icon { font-size:24px; margin-bottom:4px; }
+    .transport-card .tc-name { font-size:11px; font-weight:700; margin-bottom:5px; }
+    .transport-card .tc-check { font-size:10px; color:#6B7280; }
+    .journey-card { background:#ECFEFF; border:1.5px solid #67E8F9; border-radius:8px; padding:10px; margin-bottom:7px; }
+    .journey-title { font-size:11px; font-weight:700; color:#0891B2; margin-bottom:6px; }
+    .journey-row { display:grid; grid-template-columns:80px 1fr; gap:4px; align-items:center; font-size:10px; margin-bottom:4px; }
+    .emergency-row { display:flex; gap:8px; align-items:center; background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:11px; }
   </style>
 </head>
 <body>
@@ -20,8 +29,8 @@
   <div class="kopfzeile">
     <div class="kopfzeile-links">
       <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
-      <div class="ab-titel">Transport &amp; Mobilität</div>
-      <div class="ab-untertitel">Alltag &amp; Mobilität · Arbeitsblatt Ebene 1</div>
+      <div class="ab-titel">Von A nach B – Mobilität in Luxembourg</div>
+      <div class="ab-untertitel">Mobilität &amp; Transport · Kategorie: Alltag &amp; Leben</div>
     </div>
     <div class="kopfzeile-icon">🚌</div>
   </div>
@@ -33,182 +42,173 @@
   </div>
 
   <div class="infobox">
-    <div class="infobox-titel">💡 Mobilität = Selbstständigkeit</div>
-    <p>Sich selbstständig fortbewegen zu können ist ein wichtiger Schritt zu mehr Unabhängigkeit. In Luxembourg ist der <strong>öffentliche Transport für Schüler und alle unter 20 Jahren kostenlos</strong> (Modu 2.0 Reform seit 2020).</p>
-    <p>Wer weiß, wie er von A nach B kommt, kann mehr selbst entscheiden – wann er wohin geht, wen er trifft, was er macht.</p>
+    <div class="infobox-titel">💡 Mobilität = Freiheit. Und die ist in Luxembourg (fast) gratis.</div>
+    <p>Sich selbst fortbewegen zu können heißt: selbst entscheiden, wohin du gehst und wen du triffst. In Luxembourg ist das öffentliche Transportnetz für alle Menschen unter 20 Jahren und für Schüler aller Altersgruppen <strong>vollständig kostenlos</strong> – das nennt sich "Gratëisbus".</p>
+    <p>🧠 <em>Wusstest du? Luxembourg war 2020 das erste Land der Welt, das den öffentlichen Nahverkehr für alle Einwohner kostenlos gemacht hat – nicht nur für Jugendliche!</em></p>
   </div>
 
-  <!-- Übung 1 -->
+  <!-- Übung 1: Meine Mobilitäts-Optionen -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">1</div>
-      <div class="uebung-titel">Meine Mobilitätssituation heute</div>
+      <div class="uebung-titel">Meine Mobilitäts-Optionen – Was nutze ich / was könnte ich nutzen?</div>
     </div>
-    <div class="uebung-beschreibung">
-      Schaue dir an, wie du dich derzeit fortbewegst und welche Transportmittel du nutzt.
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-      <div style="background:#F5F0FA;border:1.5px solid #C084FC;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">🚌 Öffentlicher Transport</div>
-        <div style="font-size:10px;color:#374151;margin-bottom:4px;">Busse / Züge die ich kenne:</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-        <div style="font-size:10px;color:#374151;margin-top:4px;">Habe ich die Moovit / CFL App?</div>
-        <label style="font-size:10px;display:flex;align-items:center;gap:6px;margin-top:4px;"><input type="checkbox" style="width:12px;height:12px;"> Ja</label>
-        <label style="font-size:10px;display:flex;align-items:center;gap:6px;"><input type="checkbox" style="width:12px;height:12px;"> Nein – möchte sie herunterladen</label>
+    <div class="uebung-beschreibung">Kreise ein: G = nutze ich gerne / K = kenne ich / N = noch nicht ausprobiert</div>
+    <div class="transport-grid">
+      <div class="transport-card" style="background:#ECFEFF;border-color:#67E8F9;">
+        <div class="tc-icon">🚌</div>
+        <div class="tc-name">Bus</div>
+        <div class="tc-check">G · K · N</div>
       </div>
-      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:#16A34A;margin-bottom:6px;">🚲 Fahrrad / Roller / zu Fuß</div>
-        <div style="font-size:10px;color:#374151;margin-bottom:4px;">Nutze ich aktiv?</div>
-        <label style="font-size:10px;display:flex;align-items:center;gap:6px;margin-top:4px;"><input type="checkbox" style="width:12px;height:12px;"> Ja, regelmäßig</label>
-        <label style="font-size:10px;display:flex;align-items:center;gap:6px;"><input type="checkbox" style="width:12px;height:12px;"> Gelegentlich</label>
-        <label style="font-size:10px;display:flex;align-items:center;gap:6px;"><input type="checkbox" style="width:12px;height:12px;"> Nein</label>
-        <div style="font-size:10px;margin-top:4px;color:#374151;">Warum nicht / Hindernisse:</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div></div>
+      <div class="transport-card" style="background:#F0FDF4;border-color:#86EFAC;">
+        <div class="tc-icon">🚂</div>
+        <div class="tc-name">Zug (CFL)</div>
+        <div class="tc-check">G · K · N</div>
       </div>
-    </div>
-
-    <div style="background:#F9FAFB;border-radius:8px;padding:8px 12px;font-size:11px;">
-      <strong>🚗 Auf wen bin ich angewiesen für Transport?</strong>
-      <div class="schreiblinien" style="margin-top:4px;"><div class="schreiblinie"></div></div>
+      <div class="transport-card" style="background:#FEF3C7;border-color:#FDE68A;">
+        <div class="tc-icon">🚲</div>
+        <div class="tc-name">Fahrrad</div>
+        <div class="tc-check">G · K · N</div>
+      </div>
+      <div class="transport-card" style="background:#F5F3FF;border-color:#C4B5FD;">
+        <div class="tc-icon">🛴</div>
+        <div class="tc-name">E-Scooter / Vëlofit</div>
+        <div class="tc-check">G · K · N</div>
+      </div>
+      <div class="transport-card" style="background:#FEF2F2;border-color:#FECACA;">
+        <div class="tc-icon">🚗</div>
+        <div class="tc-name">Mitfahren (Familie/Freunde)</div>
+        <div class="tc-check">G · K · N</div>
+      </div>
+      <div class="transport-card" style="background:#F9FAFB;border-color:#E5E7EB;">
+        <div class="tc-icon">🚶</div>
+        <div class="tc-name">Zu Fuß</div>
+        <div class="tc-check">G · K · N</div>
+      </div>
     </div>
   </div>
 
-  <!-- Übung 2 -->
+  <!-- Übung 2: Gratëisbus Fakten -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">2</div>
-      <div class="uebung-titel">Wichtige Strecken die ich kenne (oder lernen möchte)</div>
+      <div class="uebung-titel">Gratëisbus – Was du wissen musst</div>
     </div>
-    <div class="uebung-beschreibung">
-      Trage die wichtigsten Wege in deinem Alltag ein. Wer die Route kennt, kommt selbstständig ans Ziel.
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div style="background:#ECFEFF;border:1.5px solid #67E8F9;border-radius:8px;padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:#0891B2;margin-bottom:6px;">✅ Das ist kostenlos für dich</div>
+        <div style="font-size:10px;color:#374151;line-height:1.9;">
+          🚌 Alle Busse in Luxembourg<br>
+          🚂 Alle CFL-Züge (national)<br>
+          🚃 RGTR Regionalbusse<br>
+          🌙 Nachtbusse (Nightbird)<br>
+          🎫 Kein Ticket nötig unter 20 J.
+        </div>
+      </div>
+      <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:8px;padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:#0369A1;margin-bottom:6px;">📱 Nützliche Apps</div>
+        <div style="font-size:10px;color:#374151;line-height:1.9;">
+          📍 <strong>mobiliteit.lu</strong> – Fahrplanauskunft<br>
+          🚂 <strong>CFL App</strong> – Züge &amp; Verbindungen<br>
+          📍 <strong>Moovit</strong> – Echtzeit-Navigation<br>
+          🚲 <strong>Vëlofit App</strong> – Leihfahrräder<br>
+          📍 <strong>Google Maps</strong> – Routenplanung
+        </div>
+      </div>
     </div>
-
-    <div style="overflow-x:auto;">
-      <table style="width:100%;border-collapse:collapse;font-size:11px;">
-        <thead>
-          <tr style="background:var(--farbe);color:white;">
-            <th style="padding:6px 8px;text-align:left;border-radius:6px 0 0 0;">Von</th>
-            <th style="padding:6px 8px;text-align:left;">Nach</th>
-            <th style="padding:6px 8px;text-align:left;">Wie (Bus/Zug/Rad)</th>
-            <th style="padding:6px 8px;text-align:left;border-radius:0 6px 0 0;">Ich kenne diese Route?</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #E5E7EB;">
-            <td style="padding:7px 8px;">Zuhause</td>
-            <td style="padding:7px 8px;">CDSE / Schule</td>
-            <td style="padding:7px 8px;"><div style="border-bottom:1px dashed #D1D5DB;height:16px;"></div></td>
-            <td style="padding:7px 8px;"><label style="display:flex;align-items:center;gap:4px;"><input type="checkbox"> Ja</label></td>
-          </tr>
-          <tr style="border-bottom:1px solid #E5E7EB;background:#F9FAFB;">
-            <td style="padding:7px 8px;">Zuhause</td>
-            <td style="padding:7px 8px;">Arzt / Apotheke</td>
-            <td style="padding:7px 8px;"><div style="border-bottom:1px dashed #D1D5DB;height:16px;"></div></td>
-            <td style="padding:7px 8px;"><label style="display:flex;align-items:center;gap:4px;"><input type="checkbox"> Ja</label></td>
-          </tr>
-          <tr style="border-bottom:1px solid #E5E7EB;">
-            <td style="padding:7px 8px;"><div style="border-bottom:1px dashed #D1D5DB;height:16px;"></div></td>
-            <td style="padding:7px 8px;"><div style="border-bottom:1px dashed #D1D5DB;height:16px;"></div></td>
-            <td style="padding:7px 8px;"><div style="border-bottom:1px dashed #D1D5DB;height:16px;"></div></td>
-            <td style="padding:7px 8px;"><label style="display:flex;align-items:center;gap:4px;"><input type="checkbox"> Ja</label></td>
-          </tr>
-        </tbody>
-      </table>
+    <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:8px;padding:8px 12px;font-size:10px;">
+      <strong>Habe ich die mobiliteit.lu App auf meinem Handy?</strong> &nbsp; ☐ Ja &nbsp; ☐ Nein – laden wir heute noch runter!
     </div>
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Transport &amp; Mobilität · Seite 1</span>
+    <span>Mobilität &amp; Transport · Seite 1</span>
   </div>
 </div>
 
 <!-- ===== SEITE 2 ===== -->
 <div class="seite">
 
-  <!-- Übung 3 -->
+  <!-- Übung 3: Reiseplaner -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">3</div>
-      <div class="uebung-titel">Kosten und Alternativen kennen</div>
+      <div class="uebung-titel">Reiseplaner-Training – Wie komme ich dorthin?</div>
     </div>
-    <div class="uebung-beschreibung">
-      Wer die Kosten kennt, kann besser planen. Auch bei fehlendem Geld gibt es Alternativen.
+    <div class="uebung-beschreibung">Schau nach mit der App oder Mobiliteit.lu. Plane diese 3 Verbindungen:</div>
+    <div class="journey-card">
+      <div class="journey-title">🏠 Von meiner Adresse → CDSE / Schule</div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Linie / Route:</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Fahrzeit:</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Kosten:</div><div style="background:#DCFCE7;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;color:#16A34A;width:fit-content;">Kostenlos 🎉</div></div>
     </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-      <div style="background:#F5F0FA;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">💶 Transport-Kosten in Luxembourg</div>
-        <ul style="font-size:10px;padding-left:14px;margin:0;line-height:1.9;">
-          <li>Bus &amp; Zug unter 20 J.: <strong>kostenlos</strong></li>
-          <li>Régime général: ab €2 pro Fahrt</li>
-          <li>Vëlofit (Fahrradverleih): ab €1/Stunde</li>
-          <li>Taxi: ca. €15–30 in der Stadt</li>
-        </ul>
-      </div>
-      <div style="background:#F0FDF4;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:#16A34A;margin-bottom:6px;">🔁 Alternativen bei Problemen</div>
-        <ul style="font-size:10px;padding-left:14px;margin:0;line-height:1.9;">
-          <li>Mitfahren mit Freunden / Familie anfragen</li>
-          <li>Carpooling-Apps nutzen</li>
-          <li>Termin telefonisch verlegen</li>
-          <li>Bezugsperson um Hilfe bitten</li>
-        </ul>
-      </div>
+    <div class="journey-card">
+      <div class="journey-title">🏥 Von meiner Adresse → Arzt / Apotheke</div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Linie / Route:</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Fahrzeit:</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Abfahrt ca.:</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
     </div>
-
-    <div style="background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:8px;padding:10px;font-size:11px;">
-      <strong>📱 Nützliche Apps in Luxembourg:</strong> CFL App · Mobiliteit.lu · Moovit · Waze (für Mitfahrgelegenheiten)
+    <div class="journey-card">
+      <div class="journey-title">🎯 Mein Lieblingsziel in Luxembourg</div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Wohin?</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Linie / Route:</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
+      <div class="journey-row"><div style="color:#0891B2;font-weight:600;">Fahrzeit:</div><div style="border-bottom:1px solid #BAE6FD;height:16px;"></div></div>
     </div>
   </div>
 
-  <!-- Übung 4 -->
+  <!-- Übung 4: Mobilitätsbarrieren -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">4</div>
-      <div class="uebung-titel">Mein Ziel: Mobiler werden – Führerschein und Zukunft</div>
+      <div class="uebung-titel">Wenn ich nicht hinkomme – Barrieren &amp; Lösungen</div>
     </div>
-    <div class="uebung-beschreibung">
-      Was sind deine Mobilitätsziele? Fahren lernen erfordert Planung – fang früh damit an nachzudenken.
+    <div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:8px;padding:9px;margin-bottom:8px;">
+      <div style="font-size:11px;font-weight:700;margin-bottom:4px;">🚧 Situationen wo ich Probleme mit dem Transport hatte:</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      <div style="font-size:11px;font-weight:700;margin-top:6px;margin-bottom:4px;">💡 Was mir in solchen Situationen helfen könnte:</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
     </div>
+  </div>
 
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:#F5F0FA;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">🚗 Möchtest du Autofahren lernen?</div>
-        <div style="display:flex;gap:16px;font-size:11px;margin-bottom:4px;">
-          <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox"> Ja, sobald ich kann</label>
-          <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox"> Vielleicht später</label>
-          <label style="display:flex;align-items:center;gap:4px;"><input type="checkbox"> Nein</label>
-        </div>
-        <div style="font-size:10px;color:#374151;">Was brauche ich dafür? (Kosten ca. €1.000–2.000 in Luxembourg)</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div></div>
-      </div>
-      <div style="background:#F9FAFB;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;margin-bottom:4px;">🎯 Mein erstes Mobilitätsziel (in den nächsten 3 Monaten):</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
+  <!-- Übung 5: Notfallplan -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Mein Notfall-Transport-Plan</div>
+    </div>
+    <div class="uebung-beschreibung">Wer kann mich fahren, wenn nichts anderes klappt?</div>
+    <div class="emergency-row">
+      <div style="font-size:16px;">1️⃣</div>
+      <div style="flex:1;"><span style="font-size:10px;color:#6B7280;">Name:</span><div style="border-bottom:1px solid #BAE6FD;height:16px;width:120px;display:inline-block;"></div></div>
+      <div style="flex:1;"><span style="font-size:10px;color:#6B7280;">Nummer:</span><div style="border-bottom:1px solid #BAE6FD;height:16px;width:100px;display:inline-block;"></div></div>
+    </div>
+    <div class="emergency-row">
+      <div style="font-size:16px;">2️⃣</div>
+      <div style="flex:1;"><span style="font-size:10px;color:#6B7280;">Name:</span><div style="border-bottom:1px solid #BAE6FD;height:16px;width:120px;display:inline-block;"></div></div>
+      <div style="flex:1;"><span style="font-size:10px;color:#6B7280;">Nummer:</span><div style="border-bottom:1px solid #BAE6FD;height:16px;width:100px;display:inline-block;"></div></div>
+    </div>
+    <div class="emergency-row">
+      <div style="font-size:16px;">3️⃣</div>
+      <div style="flex:1;"><span style="font-size:10px;color:#6B7280;">Name:</span><div style="border-bottom:1px solid #BAE6FD;height:16px;width:120px;display:inline-block;"></div></div>
+      <div style="flex:1;"><span style="font-size:10px;color:#6B7280;">Nummer:</span><div style="border-bottom:1px solid #BAE6FD;height:16px;width:100px;display:inline-block;"></div></div>
     </div>
   </div>
 
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Reflexion</div>
-    <div style="font-size:12px;margin-bottom:6px;">1. In welchen Situationen fühlst du dich am stärksten eingeschränkt durch fehlende Mobilität?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:4px;">2. Was wäre möglich wenn du dich freier fortbewegen könntest?</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div></div>
+    <div class="reflexion-titel">💬 Mein nächster Schritt</div>
+    <p>Welche Route oder Verbindung lerne ich <strong>diese Woche</strong> kennen – auf eigene Faust?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fachhinweis">
-    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
-    Mobilität ist eine Schlüsselkompetenz für soziale Teilhabe und Verselbstständigung. Jugendliche ohne Führerschein oder Kenntnisse des ÖPNV sind in Luxembourg (mit seiner Kleinstadtstruktur) stark eingeschränkt.
-    <strong>Praxis-Tipp:</strong> Gemeinsame "Erkundungsfahrten" mit dem öffentlichen Transport als niedrigschwelliges Training. Die CFL-App und Mobiliteit.lu sind sehr übersichtlich.
-    <strong>Förderung:</strong> Führerschein-Darlehen und -Förderungen gibt es über SCAS und einige Gemeinden in Luxembourg. Bezugspersonen können bei der Antragstellung helfen.
+    <div class="fachhinweis-titel">🎓 Hinweis für Bezugspersonen</div>
+    Mobilität ist eine Schlüsselkompetenz für soziale Teilhabe und Verselbstständigung. In Luxembourg (mit seiner dezentralen Kleinstadtstruktur) sind Jugendliche ohne Transportkompetenz stark eingeschränkt. <strong>Gratëisbus:</strong> Seit März 2020 kostenlos für alle (Modu 2.0 Reform) – Schüler und Jugendliche unter 20 Jahren ohnehin schon davor. Praktische Tipp: Gemeinsame Erkundungsfahrten mit ÖPNV als niedrigschwelliges Training. <strong>Führerschein-Förderung:</strong> SCAS und einige Gemeinden bieten Führerscheindarlehen für Jugendliche in Ausbildung. Vëlofit Leihfahrräder ab 1 €/Std. in vielen Gemeinden verfügbar. CFL-App und mobiliteit.lu sind übersichtlich und für Jugendliche geeignet.
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Transport &amp; Mobilität · Seite 2</span>
+    <span>Mobilität &amp; Transport · Seite 2</span>
   </div>
 </div>
 

@@ -5,7 +5,14 @@
   <title>Arbeitsblatt – Leben mit chronischer Erkrankung</title>
   <link rel="stylesheet" href="../css/arbeitsblatt.css">
   <style>
-    :root { --farbe: #16A085; --farbe-hell: #F0FDF4; }
+    :root { --farbe: #0F766E; --farbe-hell: #F0FDFA; }
+    .bubble-grid { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:10px; }
+    .bubble { border:2px solid var(--farbe); border-radius:20px; padding:5px 11px; font-size:11px; font-weight:600; background:var(--farbe-hell); cursor:default; }
+    .spoon-row { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:6px; }
+    .spoon { font-size:18px; cursor:default; }
+    .script-box { background:#F0FDFA; border:1.5px solid #99F6E4; border-radius:8px; padding:10px; margin-bottom:8px; }
+    .script-situation { font-size:11px; font-weight:700; color:#0F766E; margin-bottom:4px; }
+    .script-text { font-size:10px; color:#374151; font-style:italic; line-height:1.7; }
   </style>
 </head>
 <body>
@@ -20,10 +27,10 @@
   <div class="kopfzeile">
     <div class="kopfzeile-links">
       <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
-      <div class="ab-titel">Leben mit chronischer Erkrankung</div>
-      <div class="ab-untertitel">Gesundheit &amp; Körper · Arbeitsblatt Ebene 1</div>
+      <div class="ab-titel">Mein Körper, mein Alltag, meine Stärke</div>
+      <div class="ab-untertitel">Leben mit chronischer Erkrankung · Kategorie: Gesundheit</div>
     </div>
-    <div class="kopfzeile-icon">💪</div>
+    <div class="kopfzeile-icon">💊</div>
   </div>
 
   <div class="schuelerinfo">
@@ -33,62 +40,60 @@
   </div>
 
   <div class="infobox">
-    <div class="infobox-titel">💡 Du bist mehr als deine Erkrankung</div>
-    <p>Eine chronische Erkrankung zu haben bedeutet, mit etwas zu leben, das nicht schnell wieder verschwindet. Das kann frustrierend, anstrengend und unfair wirken – und all diese Gefühle sind berechtigt.</p>
-    <p>Gleichzeitig haben viele Menschen mit chronischen Erkrankungen <strong>besondere Stärken entwickelt</strong>: Durchhaltevermögen, Selbstwahrnehmung und Empathie. Deine Erkrankung ist ein Teil von dir – aber nicht alles.</p>
+    <div class="infobox-titel">💡 Du bist mehr als deine Diagnose.</div>
+    <p>Eine chronische Erkrankung macht deinen Alltag komplizierter – das ist real, und es ist okay, das manchmal scheiße zu finden. Gleichzeitig kennen viele Jugendliche mit chronischen Erkrankungen ihre eigenen Grenzen und Stärken besser als andere. Das ist echtes Wissen.</p>
+    <p>🧠 <em>Wusstest du? Etwa 20 % aller Jugendlichen in Europa leben mit einer chronischen Erkrankung – du bist also bei Weitem nicht allein damit.</em></p>
   </div>
 
-  <!-- Übung 1 -->
+  <!-- Übung 1: In meinen Worten -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">1</div>
-      <div class="uebung-titel">Meine Erkrankung – In meinen eigenen Worten</div>
+      <div class="uebung-titel">Meine Erkrankung – in meinen eigenen Worten</div>
     </div>
-    <div class="uebung-beschreibung">
-      Erkläre deine Erkrankung so, wie du sie verstehst und erlebst. Es gibt keine richtigen oder falschen Antworten.
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:#F9FAFB;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">📋 Was habe ich? (so wie ich es erklären würde)</div>
+    <div class="uebung-beschreibung">Erkläre es so, wie du es selbst erlebst. Kein medizinisches Fachvokabular nötig.</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px;">
+      <div style="background:#F0FDFA;border:1.5px solid #99F6E4;border-radius:8px;padding:9px;">
+        <div style="font-size:11px;font-weight:700;color:#0F766E;margin-bottom:4px;">📋 Was ich habe – so würde ich es erklären:</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div style="background:#F9FAFB;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:#374151;margin-bottom:4px;">💊 Was ich dafür tue / nehme:</div>
+      <div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:8px;padding:9px;">
+        <div style="font-size:11px;font-weight:700;color:#374151;margin-bottom:4px;">🙈 Was andere nicht sehen, aber was mich trotzdem belastet:</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div style="background:#F9FAFB;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:#374151;margin-bottom:4px;">❓ Was ich noch nicht ganz verstehe oder wissen möchte:</div>
+      <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:8px;padding:9px;">
+        <div style="font-size:11px;font-weight:700;color:#92400E;margin-bottom:4px;">❓ Was ich über meine Erkrankung noch nicht ganz verstehe:</div>
         <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Übung 2 -->
+  <!-- Übung 2: Spoon Theory -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">2</div>
-      <div class="uebung-titel">Wie die Erkrankung meinen Alltag beeinflusst</div>
+      <div class="uebung-titel">Meine Energie-Löffel – Die Spoon Theory</div>
     </div>
-    <div class="uebung-beschreibung">
-      Manche Bereiche des Alltags sind von einer chronischen Erkrankung mehr betroffen als andere.
-    </div>
-
-    <div class="drei-spalten">
-      <div class="box" style="border-color:var(--farbe);background:var(--farbe-hell);">
-        <div class="box-label" style="color:var(--farbe);">🏫 Schule</div>
-        <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">Was wird schwieriger / brauche ich Unterstützung?</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div class="box" style="border-color:#3B82F6;background:#EFF6FF;">
-        <div class="box-label" style="color:#3B82F6;">🤝 Freunde &amp; Freizeit</div>
-        <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">Was läuft anders als bei anderen?</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div class="box" style="border-color:#F59E0B;background:#FFFBEB;">
-        <div class="box-label" style="color:#D97706;">🏡 Zuhause</div>
-        <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">Was brauche ich zuhause?</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <div class="uebung-beschreibung">Stell dir vor, du hast jeden Tag eine bestimmte Anzahl Löffel Energie. Jede Aktivität kostet Löffel. Wie viele hast du heute – und wie teilst du sie auf?</div>
+    <div style="background:#F0FDFA;border:1.5px solid #99F6E4;border-radius:8px;padding:10px;margin-bottom:8px;">
+      <div style="font-size:11px;font-weight:700;color:#0F766E;margin-bottom:6px;">🥄 Meine heutigen Löffel (kreis die Zahl ein): &nbsp;&nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6 &nbsp; 7 &nbsp; 8 &nbsp; 9 &nbsp; 10</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;">
+        <div>
+          <div style="font-size:10px;font-weight:700;margin-bottom:4px;">Aktivität → kostet Löffel:</div>
+          <div style="font-size:10px;color:#374151;line-height:2;">
+            Schule (ganzer Tag): 🥄🥄🥄<br>
+            Sport: 🥄🥄<br>
+            Sozialer Kontakt: 🥄<br>
+            Medikamente/Arzt: 🥄<br>
+            Schmerzen aushalten: 🥄🥄
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;margin-bottom:4px;">Meine Prioritäten heute:</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+          <div style="font-size:10px;margin-top:6px;color:#0F766E;">Was lasse ich heute weg, um Energie zu sparen?</div>
+          <div class="schreiblinien"><div class="schreiblinie"></div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -102,84 +107,80 @@
 <!-- ===== SEITE 2 ===== -->
 <div class="seite">
 
-  <!-- Übung 3 -->
+  <!-- Übung 3: Schulanpassungen -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">3</div>
-      <div class="uebung-titel">Was mir hilft – Meine Coping-Strategien</div>
+      <div class="uebung-titel">Was ich in der Schule brauche – meine Anpassungen</div>
     </div>
-    <div class="uebung-beschreibung">
-      Mit einer chronischen Erkrankung zu leben erfordert eigene Strategien. Schreibe auf, was dir persönlich hilft.
+    <div class="uebung-beschreibung">Du hast das Recht auf schulische Anpassungen. Kreise ein, was du brauchst:</div>
+    <div class="bubble-grid">
+      <div class="bubble">⏳ Mehr Zeit bei Prüfungen</div>
+      <div class="bubble">🤫 Ruhiger Prüfungsraum</div>
+      <div class="bubble">😴 Ruhepausen im Schulalltag</div>
+      <div class="bubble">🕗 Flexibler Schulbeginn</div>
+      <div class="bubble">💊 Medikamente in der Schule nehmen</div>
+      <div class="bubble">🏃 Schulsport angepasst</div>
+      <div class="bubble">📝 Unterlagen vorab erhalten</div>
+      <div class="bubble">🏠 Hausaufgaben bei Fehlzeiten</div>
     </div>
-
-    <div class="zwei-spalten" style="margin-bottom:10px;">
-      <div class="box" style="border-color:var(--farbe);background:var(--farbe-hell);">
-        <div class="box-label" style="color:var(--farbe);">✅ Das hilft mir an schlechten Tagen:</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        </div>
-      </div>
-      <div class="box" style="border-color:#E67E22;background:#FFF7ED;">
-        <div class="box-label" style="color:#E67E22;">⚠️ Das macht es schlimmer:</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        </div>
-      </div>
-    </div>
-
-    <div style="background:#F9FAFB;border-radius:8px;padding:10px;font-size:11px;">
-      <strong>💡 Ideen für Coping-Strategien:</strong>
-      <ul style="padding-left:16px;margin-top:4px;line-height:1.7;">
-        <li>Regelmäßiger Schlafrhythmus und Pausen einplanen</li>
-        <li>Sport und Bewegung (angepasst an die Erkrankung)</li>
-        <li>Offen mit vertrauten Menschen reden</li>
-        <li>Symptome und Trigger in einem Tagebuch notieren</li>
-      </ul>
-    </div>
+    <div style="font-size:11px;margin-bottom:4px;font-weight:600;">Was ich zusätzlich brauche:</div>
+    <div class="schreiblinien"><div class="schreiblinie"></div></div>
   </div>
 
-  <!-- Übung 4 -->
+  <!-- Übung 4: Gesprächsskripte -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">4</div>
-      <div class="uebung-titel">Was andere über meine Erkrankung wissen sollten</div>
+      <div class="uebung-titel">Was ich sagen kann – Skripte für schwierige Gespräche</div>
     </div>
-    <div class="uebung-beschreibung">
-      Du entscheidest, was du mit anderen teilst. Manchmal ist es hilfreich, bestimmten Personen wichtige Informationen zu geben.
+    <div class="uebung-beschreibung">Es ist nicht einfach, über die eigene Erkrankung zu reden. Diese Sätze können helfen – passe sie an, wie es zu dir passt.</div>
+    <div class="script-box">
+      <div class="script-situation">👩‍🏫 Mit einem Lehrer / einer Lehrerin:</div>
+      <div class="script-text">"Ich habe eine chronische Erkrankung und bräuchte für Prüfungen mehr Zeit / einen ruhigen Raum. Könnte ich das mit Ihnen besprechen?"</div>
     </div>
+    <div class="script-box">
+      <div class="script-situation">👫 Mit Freunden:</div>
+      <div class="script-text">"Ich habe manchmal Tage, an denen ich nicht viel Energie habe. Das hat nichts mit euch zu tun – ich sage euch Bescheid wenn es mir nicht gut geht."</div>
+    </div>
+    <div class="script-box">
+      <div class="script-situation">👨‍👩‍👧 Mit einem Elternteil / Bezugsperson:</div>
+      <div class="script-text">"Ich fühle mich heute besonders schlapp. Ich brauche heute ____________, damit es mir besser geht."</div>
+    </div>
+  </div>
 
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">👩‍🏫 Was meine Lehrer wissen sollten:</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:8px;padding:10px;">
-        <div style="font-size:11px;font-weight:700;color:#3B82F6;margin-bottom:4px;">🤝 Was meine Freunde wissen sollten:</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
+  <!-- Übung 5: Selbst-Advocacy -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Mein Selbst-Advocacy-Toolkit – Für mich eintreten</div>
     </div>
-
-    <div style="background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:8px;padding:10px;font-size:11px;">
-      <strong>🔒 Mein Recht:</strong> Du musst niemandem alles erklären. Du entscheidest selbst, was du teilst und was privat bleibt. Schulen in Luxembourg sind verpflichtet, bei Bedarf Nachteilsausgleich zu gewähren.
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="background:#F0FDFA;border:1.5px solid #99F6E4;border-radius:8px;padding:9px;">
+        <div style="font-size:11px;font-weight:700;color:#0F766E;margin-bottom:5px;">✅ Meine Rechte – ich darf:</div>
+        <div style="font-size:10px;color:#374151;line-height:2;">
+          ✔ Anpassungen beantragen (MENJE)<br>
+          ✔ Meinen Arzt selbst wählen<br>
+          ✔ Nein zu Aktivitäten sagen die mich belasten<br>
+          ✔ Vertraulich mit Fachleuten reden
+        </div>
+      </div>
+      <div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:8px;padding:9px;">
+        <div style="font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;">💪 Was mir Selbstvertrauen gibt:</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
     </div>
   </div>
 
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Reflexion</div>
-    <div style="font-size:12px;margin-bottom:6px;">1. Was ist eine Stärke die du durch deine Erkrankung entwickelt hast?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:4px;">2. Was wünschst du dir von deinem Umfeld im Umgang mit deiner Erkrankung?</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div></div>
+    <div class="reflexion-titel">💬 Mein nächster Schritt</div>
+    <p>Welche <strong>eine Sache</strong> möchte ich diese Woche konkret angehen – für mich, meine Gesundheit oder meine Schulsituation?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fachhinweis">
-    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
-    Jugendliche mit chronischen Erkrankungen (Diabetes, Epilepsie, Asthma, CED, etc.) haben ein erhöhtes Risiko für psychische Komorbidität. Krankheitsakzeptanz ist ein Prozess, der Zeit braucht.
-    <strong>Schulische Anpassungen:</strong> In Luxembourg können Schüler mit chronischen Erkrankungen einen Nachteilsausgleich (aménagements raisonnables) beim MENJE beantragen.
-    <strong>Ressourcen:</strong> Centre de Référencement in spezialisierten Zentren (CHL, Rehazenter); Selbsthilfegruppen für Jugendliche und Familien.
-    <strong>Wichtig:</strong> Selbstwirksamkeit und Autonomie bei der Krankheitsbewältigung stärken – nicht überbehüten.
+    <div class="fachhinweis-titel">🎓 Hinweis für Bezugspersonen</div>
+    Jugendliche mit chronischen Erkrankungen (Diabetes, Epilepsie, Asthma, Morbus Crohn, CFS u.a.) tragen ein erhöhtes Risiko für psychische Komorbidität; Krankheitsakzeptanz ist ein Prozess. <strong>Schulische Anpassungen:</strong> In Luxembourg können Schüler mit chronischen Erkrankungen beim MENJE einen Nachteilsausgleich (aménagements raisonnables) beantragen – Bezugspersonen können diesen Prozess aktiv begleiten. <strong>Ressourcen:</strong> CHL Pédiatrie, Rehazenter, Selbsthilfegruppen über info-handicap.lu. <strong>Spoon Theory</strong> (Christine Miserandino, 2003) ist ein bewährtes psychoedukatives Werkzeug zur Visualisierung begrenzter Energie – auch für Jugendliche gut verständlich. Selbstwirksamkeit stärken, nicht überbehüten.
   </div>
 
   <div class="fusszeile">

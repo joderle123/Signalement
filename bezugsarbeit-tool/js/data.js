@@ -6906,4 +6906,331 @@ const THEMA_MODULE = {
     ]
   },
 
+  'transport': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit eingeschränkter Mobilität, fehlenden Kenntnissen über öffentliche Verkehrsmittel oder Unabhängigkeitszielen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie komme ich von A nach B?',
+        dauer: '60 Min',
+        ziel: 'Aktuelle Mobilitätssituation einschätzen; Möglichkeiten kennenlernen',
+        psychoedukation: {
+          titel: 'Mobilität ist Selbstständigkeit',
+          inhalt: 'Wer sich selbstständig fortbewegen kann, ist unabhängiger – in Schule, Freizeit, Beruf. Öffentliche Verkehrsmittel, Fahrrad und perspektivisch der Führerschein sind Schlüssel zur Teilhabe. Das lässt sich erlernen.'
+        },
+        interventionen: [
+          {
+            titel: 'Mobilitätsprofil erstellen',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wie kommst du aktuell zur Schule, zu Freunden, zu Aktivitäten? Was ist schwierig? Was schränkt dich ein? Gemeinsam die Mobilitätssituation analysieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Öffentlichen Verkehr erkunden',
+            beschreibung: 'Welche Linien oder Apps kannst du nutzen? Gemeinsam einen einfachen Weg planen.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Neuen Weg ausprobieren',
+          beschreibung: 'Fahre diese Woche einen Weg mit öffentlichen Verkehrsmitteln, den du noch nie selbst gefahren bist.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was macht dich in Bezug auf Mobilität unsicher?',
+          'Was wäre, wenn du dich freier bewegen könntest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Selbstständig unterwegs sein',
+        dauer: '60 Min',
+        ziel: 'Mobilität als Unabhängigkeit erleben; konkrete Schritte zur Erweiterung',
+        psychoedukation: {
+          titel: 'Schritt für Schritt zur Unabhängigkeit',
+          inhalt: 'Mobilität aufzubauen geht schrittweise: erst bekannte Strecken, dann neue. Fehler gehören dazu – sich verfahren ist lehrreich, nicht gefährlich. Hilfsmittel wie Apps, Fahrpläne und Notfallnummern geben Sicherheit.'
+        },
+        interventionen: [
+          {
+            titel: 'Mobilitätsziele setzen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was sind deine Mobilitätsziele? (Allein zur Schule, Freunde besuchen, Einkaufen). Gemeinsam einen Stufenplan entwickeln.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Notfallplan erstellen',
+            beschreibung: 'Was tue ich, wenn ich mich verfahre? Welche Nummern habe ich? Gemeinsam einen einfachen Notfallplan erstellen.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Mobilitätsziel umsetzen',
+          beschreibung: 'Setze diese Woche einen Schritt deines Mobilitätsplans um.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was hat dich beim selbstständigen Unterwegssein überrascht?',
+          'Was möchtest du als nächstes ausprobieren?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Führerschein und langfristige Mobilität',
+        dauer: '60 Min',
+        ziel: 'Langfristige Mobilitätsperspektiven entwickeln; Führerschein als Ziel planen',
+        psychoedukation: {
+          titel: 'Führerschein als Meilenstein',
+          inhalt: 'Der Führerschein öffnet neue Möglichkeiten für Arbeit, Freizeit und Selbstständigkeit. Er erfordert Vorbereitung, Zeit und Geld – lässt sich aber systematisch angehen.'
+        },
+        interventionen: [
+          {
+            titel: 'Langfristiger Mobilitätsplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche Mobilitätsziele hast du langfristig? Führerschein, Fahrrad, E-Scooter? Welche Schritte sind nötig? Wann, womit?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Führerschein-Recherche',
+            beschreibung: 'Was kostet der Führerschein? Was sind die Voraussetzungen? Was ist der nächste Schritt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt planen',
+          beschreibung: 'Definiere einen konkreten ersten Schritt auf dem Weg zu deinem Mobilitätsziel.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was wäre möglich, wenn du dich freier bewegen könntest?'
+        ]
+      }
+    ]
+  },
+
+  'finanzen': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit schlechtem Umgang mit Geld, Schulden oder fehlendem Finanzwissen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Geld verstehen – Einnahmen und Ausgaben',
+        dauer: '60 Min',
+        ziel: 'Eigene Finanzsituation verstehen; Einnahmen und Ausgaben kennen',
+        psychoedukation: {
+          titel: 'Geld ist ein Werkzeug',
+          inhalt: 'Geld selbst ist neutral – der Umgang damit entscheidet. Wer mehr ausgibt als er einnimmt, gerät in Schulden. Wer einen Überblick hat, kann Entscheidungen treffen. Finanzbildung ist eine Lebenskompetenz, die in der Schule kaum gelehrt wird – aber entscheidend für Selbstständigkeit ist.'
+        },
+        interventionen: [
+          {
+            titel: 'Finanzprofil erstellen',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Wie viel Geld kommt rein (Taschengeld, Job)? Wo geht es hin? Gibt es Schulden? Gemeinsam ein ehrliches Bild der Finanzsituation erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ausgaben-Tracking',
+            beschreibung: 'Schätze: Wofür gibst du dein Geld aus? Welche Ausgaben überraschen dich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ausgabenprotokoll',
+          beschreibung: 'Führe diese Woche ein ehrliches Ausgabenprotokoll: Jeden Kauf notieren.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was überrascht dich an deinen Ausgaben?',
+          'Wofür gibst du Geld aus, das dir nicht wirklich wichtig ist?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Haushaltsplan und Sparen',
+        dauer: '60 Min',
+        ziel: 'Einfachen Haushaltsplan erstellen; Spartipps kennen und anwenden',
+        psychoedukation: {
+          titel: 'Budget-Regel 50/30/20',
+          inhalt: '50% für Notwendiges (Essen, Transport), 30% für Freizeit und Wünsche, 20% sparen. Das ist eine einfache Grundregel, die sich anpassen lässt. Wer auch nur 10% spart, baut langfristig Sicherheit auf.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlichen Haushaltsplan erstellen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Mit den eigenen Zahlen einen Haushaltsplan erstellen: Einnahmen, fixe Ausgaben, variable Ausgaben, Sparbetrag. Ist es realistisch? Was kann optimiert werden?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Spartipps bewerten',
+            beschreibung: 'Liste 5 konkrete Möglichkeiten auf, diese Woche weniger auszugeben – ohne zu verzichten.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Haushaltsplan anwenden',
+          beschreibung: 'Wende deinen Haushaltsplan diese Woche an. Was klappt, was nicht?',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was fällt dir beim Sparen am schwersten?',
+          'Was motiviert dich, für etwas Bestimmtes zu sparen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Schulden vermeiden und Zukunft planen',
+        dauer: '60 Min',
+        ziel: 'Schulden-Risiken kennen; langfristige finanzielle Ziele entwickeln',
+        psychoedukation: {
+          titel: 'Schulden – wie sie entstehen und was man tun kann',
+          inhalt: 'Schulden entstehen oft durch Impulskäufe, Abonnements, Ratenkäufe oder Notsituationen. Wer Schulden hat, sollte sie nicht ignorieren, sondern aktiv angehen: Gläubiger kontaktieren, Beratung suchen, Prioritäten setzen. In Luxemburg gibt es kostenlose Schuldnerberatung.'
+        },
+        interventionen: [
+          {
+            titel: 'Finanzielle Ziele setzen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was möchtest du dir langfristig leisten? Führerschein, eigene Wohnung, Urlaub? Gemeinsam überlegen: Wie viel, wie lange sparen? Was ist realistisch?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sparziel konkretisieren',
+            beschreibung: 'Wähle ein konkretes Sparziel. Wie lange musst du sparen? Was musst du dafür anpassen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Spar-Start',
+          beschreibung: 'Lege diese Woche zum ersten Mal einen kleinen Betrag beiseite – für dein Sparziel.',
+          dauer: '5 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was wird sich ändern, wenn du deinen Umgang mit Geld verbesserst?'
+        ]
+      }
+    ]
+  },
+
+  'haushalt': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit fehlenden Alltagskompetenzen oder in Vorbereitung auf selbstständiges Wohnen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was kann ich – was muss ich noch lernen?',
+        dauer: '60 Min',
+        ziel: 'Eigene Haushaltskompetenzen einschätzen; Lücken identifizieren',
+        psychoedukation: {
+          titel: 'Haushaltsführung als Lebenskompetenz',
+          inhalt: 'Wer selbstständig wohnen will, braucht praktische Fähigkeiten: Kochen, Putzen, Wäsche waschen, Einkaufen, Rechnungen bezahlen. Diese Fähigkeiten werden meist nicht gelehrt – sie müssen aktiv erlernt werden. Es ist nie zu früh anzufangen.'
+        },
+        interventionen: [
+          {
+            titel: 'Haushaltskompetenz-Inventur',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Gemeinsam durchgehen: Was kann ich schon? (Kochen, Putzen, Waschen, Einkaufen, Bügeln). Was fehlt noch? Prioritäten setzen: Was ist am wichtigsten zu lernen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wochenmenü planen',
+            beschreibung: 'Plane 5 einfache Mahlzeiten für eine Woche: Was brauchst du? Was kostet es? Schreibe eine Einkaufsliste.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eine Mahlzeit selbst kochen',
+          beschreibung: 'Koche diese Woche eine Mahlzeit komplett selbst.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was kannst du bereits gut?',
+          'Was wäre das Wichtigste zu lernen für deine Selbstständigkeit?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Putzen, Waschen, Ordnung halten',
+        dauer: '60 Min',
+        ziel: 'Grundlegende Reinigungsroutinen entwickeln',
+        psychoedukation: {
+          titel: 'Warum Ordnung Energie spart',
+          inhalt: 'Ein aufgeräumtes, sauberes Zuhause reduziert Stress und verbessert die Konzentration. Routine hilft: Wenn Putzen zum festen Bestandteil des Alltags wird, kostet es weniger mentale Energie als sporadisches Großreinemachen.'
+        },
+        interventionen: [
+          {
+            titel: 'Putzplan entwickeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche Aufgaben fallen wöchentlich, monatlich an? Gemeinsam einen realistischen Putzplan erstellen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wäsche-Tutorial',
+            beschreibung: 'Was bedeuten Wäschesymbole? Was kann zusammen gewaschen werden? Kurze Übung mit Wäschekunde.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Hausaufgabe: Aufräumen',
+          beschreibung: 'Räume diese Woche bewusst deinen eigenen Bereich auf – nach Plan.',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was fällt dir bei der Haushaltsführung am schwersten?',
+          'Was würde dir den Alltag erleichtern?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Selbstständig wohnen vorbereiten',
+        dauer: '60 Min',
+        ziel: 'Gesamtbild der Selbstständigkeit entwickeln; nächste Schritte planen',
+        psychoedukation: {
+          titel: 'Selbstständig wohnen – was noch dazugehört',
+          inhalt: 'Neben Kochen und Putzen gehören zum selbstständigen Wohnen: Rechnungen bezahlen, Verträge verstehen, Reparaturen melden, Behördengänge erledigen. Sich vorzubereiten, bevor man auszieht, macht den Übergang leichter.'
+        },
+        interventionen: [
+          {
+            titel: 'Selbstständigkeitsplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was fehlt noch bis zur Selbstständigkeit? Gemeinsam einen Lernplan für die wichtigsten fehlenden Kompetenzen erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Budget für eine Wohnung',
+            beschreibung: 'Berechne grob, was eine eigene Wohnung kosten würde: Miete, Nebenkosten, Lebensmittel, Transport. Was fehlt noch?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Skill trainieren',
+          beschreibung: 'Lerne diese Woche eine neue Haushaltsfähigkeit – koche etwas Neues, repariere etwas, wasche alleine.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche Kompetenz möchtest du als nächstes entwickeln?'
+        ]
+      }
+    ]
+  },
+
 };

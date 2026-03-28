@@ -9726,4 +9726,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'resilienz': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche, die ihre Widerstandskraft stärken möchten',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist Resilienz?',
+        dauer: '60 Min',
+        ziel: 'Resilienz verstehen und eigene Resilienzfaktoren entdecken',
+        psychoedukation: {
+          titel: 'Resilienz ist lernbar',
+          inhalt: 'Resilienz ist die Fähigkeit, nach schwierigen Erfahrungen wieder aufzustehen – wie ein Gummiband, das sich zurückformt. Sie ist keine angeborene Eigenschaft, sondern erlernbar. Resilienz entsteht durch: enge Beziehungen, Selbstwirksamkeit, Sinnorientierung und Copingstrategien.'
+        },
+        interventionen: [
+          {
+            titel: 'Resilienz-Anker identifizieren',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was hat dir in vergangenen schwierigen Zeiten geholfen? Welche Ressourcen hast du genutzt? Gemeinsam eine persönliche Resilienz-Landkarte erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ich habe überlebt',
+            beschreibung: 'Denke an eine schwierige Zeit, die du überstanden hast. Was hat dir dabei geholfen? Was sagt das über deine Stärken aus?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stärken-Radar',
+          beschreibung: 'Frage zwei Personen, die dich kennen: Was siehst du als meine größte Stärke? Wie reagierst du auf die Antworten?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat dich bisher stark gemacht?',
+          'Welche deiner Stärken nimmst du noch nicht wahr?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Denkmuster und Resilienz',
+        dauer: '60 Min',
+        ziel: 'Resiliente Denkmuster entwickeln',
+        psychoedukation: {
+          titel: 'Wie wir denken, beeinflusst wie wir fühlen',
+          inhalt: 'Resiliente Menschen interpretieren Rückschläge anders: nicht als persönliches Versagen ("Ich bin ein Versager"), sondern als vorübergehende Situation ("Das ist gerade schwierig"). Diese Denkweise nennt man Attribution – und sie ist veränderbar.'
+        },
+        interventionen: [
+          {
+            titel: 'Gedanken umformulieren',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Stelle einem negativen, starren Gedanken einen flexibleren, realistischeren gegenüber. Nicht "positiv denken", sondern realistischer denken. Üben mit konkreten Beispielen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Was kann ich beeinflussen?',
+            beschreibung: 'Trenne die Situation in: Was liegt in meiner Kontrolle? Was nicht? Fokussiere Energie auf das, was du beeinflussen kannst.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gedanken-Protokoll',
+          beschreibung: 'Notiere diese Woche, wenn ein negativer Gedanke auftaucht. Formuliere ihn realistischer um.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Gedankenmuster hindern dich an Resilienz?',
+          'Wann denkst du am resilientesten?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Beziehungen als Schutzfaktor',
+        dauer: '60 Min',
+        ziel: 'Schützende Beziehungen erkennen und stärken',
+        psychoedukation: {
+          titel: 'Verbundenheit schützt',
+          inhalt: 'Einer der wichtigsten Resilienzfaktoren ist: mindestens eine stabile, vertrauensvolle Beziehung zu haben. Soziale Unterstützung puffert Stress ab und gibt Halt. Diese Beziehungen können aktiv gepflegt werden.'
+        },
+        interventionen: [
+          {
+            titel: 'Beziehungs-Inventar',
+            ansatz: 'Systemisch',
+            beschreibung: 'Wer steht mir bei, wenn es mir schlecht geht? Wer glaubt an mich? Wer hört zu? Gemeinsam schützende Beziehungen kartieren und Lücken identifizieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Dankbarkeit ausdrücken',
+            beschreibung: 'Denke an eine Person, die für dich da war. Was möchtest du ihr sagen? (Brief schreiben oder Nachricht überlegen)',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Verbindung stärken',
+          beschreibung: 'Nimm diese Woche Kontakt zu einer wichtigen Bezugsperson auf – auch wenn es nur eine Nachricht ist.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wem kannst du wirklich vertrauen?',
+          'Was hindert dich daran, Unterstützung anzunehmen?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Resilienz im Alltag verankern',
+        dauer: '60 Min',
+        ziel: 'Resiliente Gewohnheiten und Routinen entwickeln',
+        psychoedukation: {
+          titel: 'Resilienz täglich üben',
+          inhalt: 'Resilienz ist kein einmaliger Akt – sie wird durch tägliche Gewohnheiten gestärkt: Schlaf, Bewegung, Verbindung, Sinn, Dankbarkeit. Kleine Routinen bauen langfristige Widerstandskraft auf.'
+        },
+        interventionen: [
+          {
+            titel: 'Resilienz-Routine entwickeln',
+            ansatz: 'Verhaltensaktivierung',
+            beschreibung: 'Welche täglichen Gewohnheiten stärken meine Resilienz? Gemeinsam eine realistische Routinen-Liste erstellen: morgens, abends, wöchentlich.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Dankbarkeits-Übung',
+            beschreibung: 'Nenne 3 Dinge, für die du heute dankbar bist. Auch kleine Dinge zählen. Was verändert sich, wenn du das täglich tust?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Resilienz-Routine 7 Tage',
+          beschreibung: 'Führe deine Resilienz-Routine eine Woche durch. Was verändert sich? Was bleibt?',
+          dauer: '10 Min täglich'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie willst du deine Resilienz langfristig stärken?'
+        ]
+      }
+    ]
+  },
+
 };

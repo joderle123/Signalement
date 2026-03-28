@@ -6143,4 +6143,222 @@ const THEMA_MODULE = {
     ]
   },
 
+  'schlaf': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Schlafproblemen, schlechter Schlafroutine oder Erschöpfung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Schlaf verstehen – warum er so wichtig ist',
+        dauer: '60 Min',
+        ziel: 'Bedeutung von Schlaf für Körper und Geist verstehen',
+        psychoedukation: {
+          titel: 'Was im Schlaf passiert',
+          inhalt: 'Im Schlaf regeneriert sich der Körper, das Gehirn verarbeitet Erlebnisse und festigt Erinnerungen. Jugendliche brauchen 8–10 Stunden Schlaf. Schlafmangel beeinträchtigt Konzentration, Stimmung, Impulskontrolle und Immunsystem. Chronischer Schlafmangel erhöht das Risiko für Depressionen und Angststörungen.'
+        },
+        interventionen: [
+          {
+            titel: 'Schlafprotokoll auswerten',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Wie viele Stunden schläfst du? Wann gehst du ins Bett, wann stehst du auf? Wie fühlst du dich morgens? Gibt es Einschlaf- oder Durchschlafprobleme? Gemeinsam das aktuelle Schlafsystem analysieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schlafqualitäts-Einschätzung',
+            beschreibung: 'Bewerte deinen Schlaf der letzten 7 Tage auf einer Skala 1–10. Was hat die Unterschiede verursacht?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Schlafprotokoll führen',
+          beschreibung: 'Führe eine Woche lang täglich ein Schlafprotokoll: Einschlafzeit, Aufwachzeit, Schlafqualität (1–10), Stimmung morgens.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Wie viel Schlaf brauchst du, um dich gut zu fühlen?',
+          'Was raubt dir am meisten Schlaf?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Schlafhygiene verbessern',
+        dauer: '60 Min',
+        ziel: 'Konkrete Maßnahmen für bessere Schlafqualität',
+        psychoedukation: {
+          titel: 'Schlafhygiene – die Grundregeln',
+          inhalt: 'Gute Schlafhygiene: feste Schlafenszeiten (auch am Wochenende), kein Bildschirm 30–60 Min vor dem Schlafen (Blaulicht hemmt Melatonin), kühles und dunkles Zimmer, kein Koffein nach 14 Uhr. Das Bett nur zum Schlafen nutzen – nicht zum Lernen oder Serien schauen.'
+        },
+        interventionen: [
+          {
+            titel: 'Schlafbeeinflussende Faktoren identifizieren',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was in deiner aktuellen Routine stört deinen Schlaf? Bildschirm, Lärm, spätes Essen, unregelmäßige Zeiten, Stress? Für jeden Faktor: Was könnte verändert werden?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Abendroutine entwerfen',
+            beschreibung: 'Entwickle eine 30-minütige Abendroutine, die deinen Körper auf Schlaf vorbereitet.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Abendroutine testen',
+          beschreibung: 'Teste deine Abendroutine diese Woche. Was verändert sich an deinem Schlaf?',
+          dauer: 'täglich 30 Min'
+        },
+        reflexion: [
+          'Was ist der größte Störfaktor deines Schlafs?',
+          'Was wäre dein realistischster erster Schritt?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Einschlafprobleme und Grübeln',
+        dauer: '60 Min',
+        ziel: 'Konkrete Techniken gegen Einschlafprobleme und nächtliches Grübeln',
+        psychoedukation: {
+          titel: 'Das Grübel-Paradox',
+          inhalt: 'Wer schlafen will, aber grübelt, kämpft gegen das Gehirn. Aktive Entspannung (Atemübungen, Körperscan, Gedanken aufschreiben) ist effektiver als „einfach nicht denken". Paradoxe Intention: Wer sich erlaubt, wach zu bleiben, schläft oft schneller ein.'
+        },
+        interventionen: [
+          {
+            titel: 'Einschlaf-Toolbox',
+            ansatz: 'Körperorientiert / Kognitiv-behavioral',
+            beschreibung: 'Verschiedene Techniken üben und bewerten: Körperscan, 4-7-8-Atmung, Gedanken aufschreiben vor dem Schlafen, mentales Bildkino. Welche passt zu diesem Schüler?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sorgen-Notizbuch',
+            beschreibung: 'Schreibe 30 Min vor dem Schlafen alle Gedanken und Sorgen auf – damit das Gehirn weiß: Es ist gespeichert, ich muss jetzt nicht daran denken.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Einschlaf-Technik anwenden',
+          beschreibung: 'Wende diese Woche täglich eine Einschlaf-Technik an.',
+          dauer: 'täglich 10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche Veränderung möchtest du dauerhaft beibehalten?'
+        ]
+      }
+    ]
+  },
+
+  'ernaehrung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit auffälligem Essverhalten, schlechten Ernährungsgewohnheiten oder erstem Verdacht auf Essstörung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie esse ich – und wie fühle ich mich dabei?',
+        dauer: '60 Min',
+        ziel: 'Eigenes Essverhalten reflektieren; Zusammenhang zwischen Essen und Gefühlen verstehen',
+        psychoedukation: {
+          titel: 'Essen ist mehr als Ernährung',
+          inhalt: 'Essen stillt nicht nur Hunger – es reguliert Gefühle, gibt Kontrolle, verbindet sozial oder dient als Belohnung und Trost. Das ist normal. Problematisch wird es, wenn Essen das wichtigste Werkzeug zur Emotionsregulation wird oder das Verhältnis zum eigenen Körper leidet.'
+        },
+        interventionen: [
+          {
+            titel: 'Essverhalten-Interview',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was isst du normalerweise? Wann, wie viel, in welchen Situationen? Gibt es Essen, das du meidest? Essen, das du nicht stoppen kannst? Wie fühlst du dich beim Essen – während und danach?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Hunger-Sättigungs-Skala',
+            beschreibung: 'Bewerte vor und nach einer Mahlzeit deinen Hunger (1 = ausgehungert, 10 = übervoll). Was bemerkst du?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Esstagebuch',
+          beschreibung: 'Führe 3 Tage lang ein Esstagebuch: Was, wann, wie viel – und welche Gefühle vorher und danach.',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Wie beschreibst du deine Beziehung zum Essen?',
+          'Gibt es Situationen, in denen du anders isst als du möchtest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Emotionales Essen erkennen',
+        dauer: '60 Min',
+        ziel: 'Emotionales Essen von körperlichem Hunger unterscheiden',
+        psychoedukation: {
+          titel: 'Hunger vs. emotionaler Hunger',
+          inhalt: 'Körperlicher Hunger kommt langsam, wird durch Essen befriedigt und hält an. Emotionaler Hunger kommt plötzlich, ist auf bestimmte Lebensmittel gerichtet und wird von Schuldgefühlen begleitet. Beides zu unterscheiden ist der erste Schritt zu einer gesünderen Essbeziehung.'
+        },
+        interventionen: [
+          {
+            titel: 'Trigger-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'In welchen emotionalen Zuständen isst du anders als geplant? (Stress, Langeweile, Trauer, Feiern). Was löst das Essen aus? Was würde helfen, dieses Bedürfnis anders zu erfüllen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Alternativen entwickeln',
+            beschreibung: 'Für deine 3 häufigsten emotionalen Hunger-Auslöser: Was könntest du stattdessen tun?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Pause vor dem Essen',
+          beschreibung: 'Mache diese Woche vor jeder Mahlzeit eine 2-Minuten-Pause und frage dich: Bin ich wirklich hungrig – oder brauche ich gerade etwas anderes?',
+          dauer: 'täglich 2 Min'
+        },
+        reflexion: [
+          'In welchen Situationen isst du emotional?',
+          'Was brauchst du in diesen Situationen wirklich?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gesunde Beziehung zum Essen aufbauen',
+        dauer: '60 Min',
+        ziel: 'Intuitive Ernährung; Körpersignale vertrauen lernen',
+        psychoedukation: {
+          titel: 'Kein Essen ist verboten',
+          inhalt: 'Restriktive Essregeln (verbotene Lebensmittel, Kalorienzählen) führen langfristig oft zu mehr Problemen als sie lösen. Intuitive Ernährung bedeutet: auf Körpersignale hören, alle Lebensmittel erlauben, Genuss ohne Schuldgefühle. Das ist kein Freifahrtschein – sondern eine gesündere Grundhaltung.'
+        },
+        interventionen: [
+          {
+            titel: 'Körpersignale spüren',
+            ansatz: 'Achtsamkeitsbasiert',
+            beschreibung: 'Bewusstes Essen üben: Langsam essen, alle Sinne einsetzen, stoppen wenn satt. Gemeinsam besprechen: Was verändert sich, wenn man bewusster isst?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Eine Mahlzeit bewusst genießen',
+            beschreibung: 'Iss eine Mahlzeit komplett ohne Ablenkung (kein Handy, kein TV). Was fällt auf?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Täglich eine achtsame Mahlzeit',
+          beschreibung: 'Diese Woche: Mindestens eine Mahlzeit täglich bewusst und ohne Ablenkung essen.',
+          dauer: 'täglich 15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie möchtest du in Zukunft mit Essen umgehen?'
+        ]
+      }
+    ]
+  },
+
 };

@@ -2316,4 +2316,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'pflegefamilie': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler in Pflege- oder Heimunterbringung; Verarbeitung von Übergängen und Bindungsbrüchen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Geschichte – wo komme ich her?',
+        dauer: '60 Min',
+        ziel: 'Eigene Biografie in die Hand nehmen und kohärent erzählen können',
+        psychoedukation: {
+          titel: 'Was Fremdunterbringung bedeutet',
+          inhalt: 'In einer Pflege- oder Heimfamilie zu leben bedeutet, dass die eigene Herkunftsfamilie nicht in der Lage war, für dich zu sorgen – nicht weil du etwas falsch gemacht hast, sondern weil Erwachsene Verantwortung für dich übernommen haben. Es ist normal, dabei gemischte Gefühle zu haben: Dankbarkeit, Trauer, Wut, Verwirrung – oft gleichzeitig.'
+        },
+        interventionen: [
+          {
+            titel: 'Lebenszeitleiste',
+            ansatz: 'Narrativ / Biographisch',
+            beschreibung: 'Der Schüler zeichnet eine Zeitlinie seines Lebens mit wichtigen Stationen: Geburt, Umzüge, Unterbringungen, Wechsel. Zu jedem Punkt: Was war das? Wie alt warst du? Was hast du damals gefühlt?',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meine Geschichte in drei Sätzen',
+            beschreibung: 'Formuliere drei Sätze, die deine Geschichte auf den Punkt bringen – nicht für andere, sondern für dich selbst.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Wichtige Gegenstände',
+          beschreibung: 'Bring nächste Woche einen Gegenstand mit (oder ein Foto davon), der für deine Geschichte wichtig ist.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie fühlt es sich an, über deine Geschichte zu sprechen?',
+          'Gibt es Teile davon, über die du noch nie gesprochen hast?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Zwischen zwei Familien',
+        dauer: '60 Min',
+        ziel: 'Loyalitätskonflikte und gemischte Gefühle zu Herkunfts- und Pflegefamilie bearbeiten',
+        psychoedukation: {
+          titel: 'Zwei Familien, ein Kind',
+          inhalt: 'In einer Pflegefamilie zu leben, bedeutet nicht, die Herkunftsfamilie zu vergessen oder zu verleugnen. Beides kann gleichzeitig wahr sein: dass du deine Herkunftsfamilie liebst und vermisst – und dass du auch deine Pflegefamilie liebst. Das ist kein Verrat. Loyalitätskonflikte sind normal und zeigen, wie viel dir an Menschen liegt.'
+        },
+        interventionen: [
+          {
+            titel: 'Zwei-Familien-Karte',
+            ansatz: 'Systemisch',
+            beschreibung: 'Zwei Kreise: Herkunftsfamilie und Pflegefamilie. Was verbindet dich mit jeder? Was ist schwierig? Was vermisst du? Was schätzt du? Gemeinsam besprechen: Wie kannst du zu beiden einen guten Umgang finden?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gefühle sortieren',
+            beschreibung: 'Schreibe für jede Familie 3 Gefühle auf, die du hast, wenn du an sie denkst. Was fällt auf?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Brief (nicht abschicken)',
+          beschreibung: 'Schreibe einen Brief an jemanden aus deiner Herkunftsfamilie – was du sagen würdest, wenn du könntest.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was vermisst du an deiner Herkunftsfamilie am meisten?',
+          'Was gibt dir deine Pflegefamilie, das du vorher nicht hattest?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Sicherheit und Vertrauen aufbauen',
+        dauer: '60 Min',
+        ziel: 'Bindungsfähigkeit und Vertrauen in die Pflegebeziehung stärken',
+        psychoedukation: {
+          titel: 'Bindung nach Brüchen',
+          inhalt: 'Wer früh erfahren hat, dass Erwachsene nicht verlässlich sind, lernt, sich zu schützen – durch Distanz, Kontrolle oder Anpassung. Das war einmal sinnvoll. In einer sicheren Umgebung kann Vertrauen aber neu gelernt werden. Es braucht Zeit und es ist okay, wenn es langsam geht.'
+        },
+        interventionen: [
+          {
+            titel: 'Vertrauens-Skala',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Wie viel Vertrauen hast du zu deiner Pflegefamilie (1–10)? Was würde es brauchen, damit die Zahl höher wird? Was tust du bereits, um Vertrauen aufzubauen? Was kannst du tun?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sicherheitssignale',
+            beschreibung: 'Woran merkst du, dass jemand wirklich für dich da ist? Liste 5 konkrete Zeichen auf.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Kleiner Vertrauensschritt',
+          beschreibung: 'Tue diese Woche etwas, das Vertrauen zeigt oder aufbaut – mit jemandem aus deiner Pflegefamilie.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was macht es schwer, Vertrauen aufzubauen?',
+          'Was passiert, wenn du es trotzdem versuchst?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Zukunft gestalten – trotz allem',
+        dauer: '60 Min',
+        ziel: 'Eigene Zukunftsperspektive entwickeln und Ressourcen aktivieren',
+        psychoedukation: {
+          titel: 'Resilienz trotz schwieriger Geschichte',
+          inhalt: 'Viele Menschen, die schwierige Kindheiten in Pflege oder Heim verbracht haben, führen als Erwachsene erfüllte Leben. Was ihnen hilft: mindestens eine verlässliche Bezugsperson, das Gefühl, das eigene Leben gestalten zu können, und die Fähigkeit, Sinn in der eigenen Geschichte zu finden. Alle diese Dinge lassen sich stärken.'
+        },
+        interventionen: [
+          {
+            titel: 'Zukunftsbild entwickeln',
+            ansatz: 'Ressourcenorientiert / Lösungsfokussiert',
+            beschreibung: 'Wie stellst du dir dein Leben mit 25 vor? Wo lebst du? Was machst du? Mit wem bist du zusammen? Was ist dir wichtig? Dieses Bild als Ziel formulieren und fragen: Was brauchst du dafür? Was hast du bereits?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meine Stärken aus der Geschichte',
+            beschreibung: 'Was hast du durch deine schwierige Geschichte gelernt? Welche Fähigkeiten hast du entwickelt, die andere nicht haben?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Einen Schritt planen',
+          beschreibung: 'Was ist ein konkreter Schritt, den du in den nächsten zwei Wochen tun kannst, um deiner Zukunftsvision näherzukommen?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du nie vergessen?'
+        ]
+      }
+    ]
+  },
+
 };

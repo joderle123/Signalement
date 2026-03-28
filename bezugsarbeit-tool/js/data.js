@@ -845,6 +845,10 @@ const THEMEN_KATEGORIEN = [
       { id: 'emotionserkennung', titel: 'Emotionserkennung', beschreibung: 'Gefühle benennen, Körpersignale verstehen' },
       { id: 'emotionsregulation', titel: 'Emotionsregulation', beschreibung: 'Strategien zur Gefühlssteuerung' },
       { id: 'stress-angst', titel: 'Stress & Angst', beschreibung: 'Stressoren erkennen, Angstbewältigung' },
+      { id: 'angstanfaelle', titel: 'Angstanfälle & Panik', beschreibung: 'Körperliche Angstreaktionen, Panikattacken, Bewältigung' },
+      { id: 'wiederkehrende-gedanken', titel: 'Wiederkehrende Gedanken & Zwänge', beschreibung: 'Aufdringliche Gedanken, Rituale, kognitive Flexibilität' },
+      { id: 'stimmungsextreme', titel: 'Extreme Stimmungsschwankungen', beschreibung: 'Hochphasen, Tiefphasen, Stabilisierungsstrategien' },
+      { id: 'impulskontrolle', titel: 'Impulskontrolle & Verhalten', beschreibung: 'Impulsives Handeln, Innehalten, konstruktive Alternativen' },
       { id: 'wut-aggression', titel: 'Wut & Aggression', beschreibung: 'Wutmanagement, konstruktiver Ausdruck' },
       { id: 'trauer-verlust', titel: 'Trauer & Verlust', beschreibung: 'Trauerprozesse, Abschiede, Verlusterfahrungen' },
       { id: 'selbstwertgefuehl', titel: 'Selbstwertgefühl', beschreibung: 'Selbstbild, Stärken erkennen, Kritik umgehen' },
@@ -859,6 +863,8 @@ const THEMEN_KATEGORIEN = [
     farbe: '#27AE60',
     themen: [
       { id: 'freundschaften', titel: 'Freundschaften', beschreibung: 'Freundschaften aufbauen & pflegen' },
+      { id: 'einsamkeit', titel: 'Einsamkeit & Sozialer Rückzug', beschreibung: 'Einsamkeitsgefühle, Rückzug, Verbindung suchen' },
+      { id: 'soziale-wahrnehmung', titel: 'Soziale Wahrnehmung & Kommunikationsstil', beschreibung: 'Soziale Signale lesen, eigene Kommunikationsmuster verstehen' },
       { id: 'konfliktmanagement', titel: 'Konfliktmanagement', beschreibung: 'Konflikte lösen, Mediation' },
       { id: 'kommunikation', titel: 'Kommunikation', beschreibung: 'Aktives Zuhören, gewaltfreie Kommunikation' },
       { id: 'romantische-beziehungen', titel: 'Romantische Beziehungen', beschreibung: 'Liebe, Partnerschaft, Trennung' },
@@ -890,6 +896,7 @@ const THEMEN_KATEGORIEN = [
     farbe: '#2980B9',
     themen: [
       { id: 'schulisches-engagement', titel: 'Schulisches Engagement', beschreibung: 'Motivation, Anwesenheit, Beteiligung' },
+      { id: 'konzentration-aufmerksamkeit', titel: 'Konzentration & Aufmerksamkeit', beschreibung: 'Fokus halten, Organisation, Arbeitsstrategien bei Ablenkbarkeit' },
       { id: 'lernstrategien', titel: 'Lernstrategien', beschreibung: 'Arbeitsorganisation, Lernmethoden' },
       { id: 'schulkonflikt', titel: 'Schulkonflikte', beschreibung: 'Konflikte mit Lehrern / Mitschülern' },
       { id: 'berufsorientierung', titel: 'Berufsorientierung', beschreibung: 'Interessen erkunden, Berufsfelder, Praktika' },
@@ -905,7 +912,9 @@ const THEMEN_KATEGORIEN = [
     farbe: '#16A085',
     themen: [
       { id: 'schlaf', titel: 'Schlaf & Erholung', beschreibung: 'Schlafroutine, Schlafqualität, Chronotyp' },
-      { id: 'ernaehrung', titel: 'Ernährung', beschreibung: 'Essgewohnheiten, Essstörungen, Körperbild' },
+      { id: 'ernaehrung', titel: 'Ernährung', beschreibung: 'Essgewohnheiten, Körperbild' },
+      { id: 'essverhalten', titel: 'Essverhalten & Körperbeziehung', beschreibung: 'Gestörtes Essverhalten, Körperakzeptanz, gesunde Nahrungsbeziehung' },
+      { id: 'koerperbeschwerden', titel: 'Körperliche Beschwerden & Stress', beschreibung: 'Psychosomatische Symptome, Stresssignale des Körpers, Entspannung' },
       { id: 'sport-bewegung', titel: 'Sport & Bewegung', beschreibung: 'Sportgewohnheiten, Körperwahrnehmung' },
       { id: 'sexualitaet', titel: 'Sexualität & Körper', beschreibung: 'Pubertät, Aufklärung, Verhütung, Identität' },
       { id: 'koerperbild', titel: 'Körperbild & Aussehen', beschreibung: 'Selbstwahrnehmung, Körperzufriedenheit' },
@@ -964,6 +973,8 @@ const THEMEN_KATEGORIEN = [
     themen: [
       { id: 'krisenintervention', titel: 'Krisenintervention', beschreibung: 'Akute Krisen erkennen und stabilisieren' },
       { id: 'trauma', titel: 'Trauma & Traumaverarbeitung', beschreibung: 'Traumafolgen, Stabilisierungstechniken' },
+      { id: 'dissoziative-erfahrungen', titel: 'Dissoziative Erfahrungen', beschreibung: 'Entfremdungsgefühle, Erdung, Gegenwart spüren' },
+      { id: 'wahrnehmungsveraenderungen', titel: 'Wahrnehmungsveränderungen & Gedankenklarheit', beschreibung: 'Ungewöhnliche Erfahrungen einordnen, Stabilität und Orientierung finden' },
       { id: 'suizidpraevention', titel: 'Suizidprävention', beschreibung: 'Risikoerkennung, Sicherheitsplanung, Ressourcen' },
       { id: 'selbstverletzung', titel: 'Selbstverletzung', beschreibung: 'NSSI, Ursachen, Alternativstrategien' },
       { id: 'gewalt', titel: 'Gewalt & Missbrauch', beschreibung: 'Häusliche Gewalt, sexueller Missbrauch, Schutz' },

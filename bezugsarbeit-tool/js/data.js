@@ -7560,4 +7560,658 @@ const THEMA_MODULE = {
     ]
   },
 
+  'jugendrecht': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Wissenslücken über ihre Rechte und Pflichten als Jugendliche in Luxemburg',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Rechte als Jugendliche/r',
+        dauer: '60 Min',
+        ziel: 'Grundlegende Jugendrechte kennen und verstehen',
+        psychoedukation: {
+          titel: 'Rechte geben Handlungsspielraum',
+          inhalt: 'Jugendliche in Luxemburg haben konkrete Rechte: auf Bildung, Schutz, Gesundheit, Privatsphäre, freie Meinungsäußerung. Diese Rechte sind nicht abstrakt – sie gelten im Alltag. Wer seine Rechte kennt, kann sie einfordern.'
+        },
+        interventionen: [
+          {
+            titel: 'Rechte-Quiz',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Mit praktischen Alltagsbeispielen: Was darf ich ab wann? (Arztbesuch alleine, Konto, Ausgang, Arbeiten). Gemeinsam die wichtigsten Altersunterschiede klären.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Rechte in meinem Alltag',
+            beschreibung: 'In welchen Situationen spielen deine Rechte eine Rolle – in der Schule, zu Hause, mit der Polizei?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Rechte-Recherche',
+          beschreibung: 'Recherchiere ein konkretes Recht, das dich interessiert.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Welches Recht überrascht dich am meisten?',
+          'In welcher Situation hättest du dein Recht gerne gewusst?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Pflichten und Konsequenzen',
+        dauer: '60 Min',
+        ziel: 'Rechtliche Pflichten kennen; Konsequenzen von Regelbrüchen verstehen',
+        psychoedukation: {
+          titel: 'Rechte haben Pflichten',
+          inhalt: 'Mit Rechten kommen Pflichten: Schulpflicht, Respekt vor dem Eigentum anderer, kein Schaden an Dritten. Bei Verstößen gibt es Konsequenzen – abhängig vom Alter. Das Jugendgericht in Luxemburg handelt anders als das Erwachsenengericht, aber auch es hat Konsequenzen.'
+        },
+        interventionen: [
+          {
+            titel: 'Fallbeispiele besprechen',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Konkrete Szenarien besprechen: Was passiert wenn… (Ladendiebstahl, Schlägerei, Cybermobbing)? Welche rechtlichen Konsequenzen drohen? Was sind die Alternativen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Konsequenzen einschätzen',
+            beschreibung: 'Für 3 Szenarien: Was wären die kurzfristigen und langfristigen Konsequenzen – rechtlich und persönlich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eigene Situation prüfen',
+          beschreibung: 'Gibt es in deinem Umfeld etwas, das rechtlich problematisch sein könnte? Was könntest du tun?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was überrascht dich an den rechtlichen Konsequenzen?',
+          'Wie beeinflusst das dein Verhalten?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Recht in der Praxis',
+        dauer: '60 Min',
+        ziel: 'Anlaufstellen kennen; Rechte aktiv einfordern können',
+        psychoedukation: {
+          titel: 'Hilfe ist ein Recht',
+          inhalt: 'Wer seine Rechte kennt und verletzt sieht, kann handeln: Behörden kontaktieren, Beratung suchen, Anzeige erstatten. Das ist kein Petzen – das ist Selbstschutz und gesellschaftliche Verantwortung.'
+        },
+        interventionen: [
+          {
+            titel: 'Anlaufstellen kennenlernen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche Anlaufstellen gibt es in Luxemburg? (Ombudsmann, SCAS, Maison des jeunes, Polizei, OPJ). Für welches Problem welche Stelle?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Szenario-Training',
+            beschreibung: 'Für ein konkretes Problem: An wen wendest du dich? Was sagst du? Durchspielen.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Anlaufstellen notieren',
+          beschreibung: 'Schreibe dir 2–3 Anlaufstellen auf, die für dich relevant sein könnten.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'In welcher Situation wäre dieses Wissen nützlich?'
+        ]
+      }
+    ]
+  },
+
+  'jugendschutz': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler in schutzrelevanten Situationen oder zur allgemeinen Prävention',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was mich schützt',
+        dauer: '60 Min',
+        ziel: 'Jugendschutzgesetze und Schutzrechte kennen',
+        psychoedukation: {
+          titel: 'Jugendschutz in Luxemburg',
+          inhalt: 'Jugendschutz bedeutet: Der Staat hat eine Verantwortung, Kinder und Jugendliche vor Schaden zu schützen. Dazu gehören: Altersgrenzen für Alkohol, Tabak, Nacht, Arbeit – aber auch Schutz vor Gewalt, Vernachlässigung und Ausbeutung. Diese Schutzrechte gelten auch gegenüber Eltern.'
+        },
+        interventionen: [
+          {
+            titel: 'Schutzrechte erkunden',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Was schützt mich in Luxemburg? Gemeinsam die wichtigsten Schutzrechte und Altersgrenzen besprechen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schutzrechte im Alltag',
+            beschreibung: 'In welchen Situationen hätte ich einen Anspruch auf Schutz gehabt oder habe ich ihn?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Situation einschätzen',
+          beschreibung: 'Gibt es in deinem Umfeld etwas, das gegen Jugendschutz verstößt?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was überrascht dich an den Schutzrechten?',
+          'Hast du dich jemals ungeschützt gefühlt?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Wenn etwas nicht stimmt',
+        dauer: '60 Min',
+        ziel: 'Grenzverletzungen und Schutzrelevanz erkennen; Hilfe suchen',
+        psychoedukation: {
+          titel: 'Wenn Grenzen überschritten werden',
+          inhalt: 'Nicht alles, was passiert, ist okay – auch nicht von Eltern oder Erwachsenen. Körperliche, psychische oder sexuelle Gewalt durch Erwachsene ist illegal und kein Familienproblem, das alleine gelöst werden muss. Es gibt Anlaufstellen, die vertraulich helfen.'
+        },
+        interventionen: [
+          {
+            titel: 'Grenzverletzungen benennen',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Was sind Zeichen dafür, dass etwas nicht stimmt? Wann ist professionelle Hilfe wichtig? Ohne Druck – Raum für eigene Erfahrungen lassen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Anlaufstellen kennen',
+            beschreibung: 'Welche Stellen helfen in Luxemburg bei Schutzrelevanz? (OPJ, SCAS, Krisentelefon). Nummern notieren.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Vertrauensperson',
+          beschreibung: 'Überlege: An wen könntest du dich wenden, wenn etwas nicht stimmt?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Gibt es etwas, das dich in deiner Situation besorgt?',
+          'Was wäre nötig, damit du Hilfe holen würdest?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Meldepflicht und Verantwortung',
+        dauer: '60 Min',
+        ziel: 'Meldepflicht und gesellschaftliche Verantwortung verstehen',
+        psychoedukation: {
+          titel: 'Verantwortung für andere',
+          inhalt: 'In Luxemburg haben bestimmte Berufsgruppen Meldepflicht bei Kindsgefährdung. Aber auch als Privatperson kann und sollte man handeln, wenn jemand in Gefahr ist. Wegsehen ist keine neutrale Option.'
+        },
+        interventionen: [
+          {
+            titel: 'Was würde ich tun?',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Szenarien besprechen: Mein Freund zeigt Zeichen von Vernachlässigung – was tue ich? Ich sehe wie ein Erwachsener ein Kind misshandelt – was tue ich?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Handlungsplan erstellen',
+            beschreibung: 'Für ein konkretes Szenario: Was genau tue ich? An wen wende ich mich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Verantwortung üben',
+          beschreibung: 'Zeige diese Woche Verantwortung für jemanden in deinem Umfeld – auch in kleinen Dingen.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was würdest du anders machen, wenn du wüsstest, was du heute weißt?'
+        ]
+      }
+    ]
+  },
+
+  'soziale-dienste': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler, die Unterstützungsangebote nicht kennen oder nicht nutzen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wer kann mir helfen?',
+        dauer: '60 Min',
+        ziel: 'Soziale Dienste und Beratungsangebote in Luxemburg kennen',
+        psychoedukation: {
+          titel: 'Hilfe annehmen ist Stärke',
+          inhalt: 'Es gibt viele Unterstützungsangebote – aber viele Jugendliche nutzen sie nicht, weil sie sie nicht kennen, Angst vor Konsequenzen haben oder glauben, stark sein zu müssen. Hilfe suchen ist keine Schwäche. Es ist der klügste Schritt.'
+        },
+        interventionen: [
+          {
+            titel: 'Hilfsnetzwerk kartieren',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Welche Dienste gibt es in Luxemburg? (SCAS, OPJ, Kanner-Jugendtelefon, Maison des jeunes, Jugendberatung, Schulpsychologin). Für welches Problem welche Stelle?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Mein persönliches Hilfsnetz',
+            beschreibung: 'Trage in eine Netzwerkkarte ein: Welche professionellen und persönlichen Unterstützungsquellen habe ich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eine Stelle recherchieren',
+          beschreibung: 'Recherchiere eine Beratungsstelle, die für dich oder dein Umfeld relevant sein könnte.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Welche dieser Stellen war dir bisher nicht bekannt?',
+          'Für welches Thema wärst du am ehesten bereit, Hilfe zu suchen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Hilfe in Anspruch nehmen',
+        dauer: '60 Min',
+        ziel: 'Hemmschwellen gegenüber professioneller Hilfe abbauen',
+        psychoedukation: {
+          titel: 'Wie ein erstes Gespräch abläuft',
+          inhalt: 'Viele wissen nicht, was sie bei einer Beratungsstelle erwartet. Typisch: Ein erstes vertrauliches Gespräch, keine Verpflichtungen, Schweigepflicht (mit Ausnahmen). Man muss nicht alles sofort erzählen – es reicht, anzufangen.'
+        },
+        interventionen: [
+          {
+            titel: 'Erstkontakt vorbereiten',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was würdest du einer Beratungsstelle sagen? Was ist das Wichtigste? Rollenspiel: Wie ein erstes Gespräch beginnen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Barrieren benennen',
+            beschreibung: 'Was hält dich oder andere davon ab, Hilfe zu suchen? Wie realistisch sind diese Bedenken?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Kontakt wagen',
+          beschreibung: 'Wenn du magst: Kontaktiere diese Woche eine Beratungsstelle – per Chat oder Telefon.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was macht es schwer, Hilfe zu suchen?',
+          'Was wäre nötig, damit du den Schritt wagst?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Für andere da sein',
+        dauer: '60 Min',
+        ziel: 'Anderen helfen, professionelle Unterstützung zu finden',
+        psychoedukation: {
+          titel: 'Aktive Unterstützung durch Peers',
+          inhalt: 'Jugendliche suchen Hilfe am häufigsten bei Freunden. Wer gut informiert ist, kann andere weiterleiten – ohne selbst Therapeut spielen zu müssen. Das nennt sich aktive Unterstützung: Ich höre zu, ich leite weiter, ich bleibe dabei.'
+        },
+        interventionen: [
+          {
+            titel: 'Peer-Unterstützung üben',
+            ansatz: 'Kommunikationstraining',
+            beschreibung: 'Rollenspiel: Freund braucht Hilfe. Wie leite ich ihn weiter, ohne ihn zu überfordern oder alleinzulassen? Üben und Feedback geben.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Weiterleitungs-Karte',
+            beschreibung: 'Erstelle eine Karte mit den wichtigsten Anlaufstellen – die du Freunden zeigen kannst.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Informationen teilen',
+          beschreibung: 'Teile diese Woche eine wichtige Information über ein Hilfsangebot mit jemandem in deinem Umfeld.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche Anlaufstelle wäre für dich am wichtigsten?'
+        ]
+      }
+    ]
+  },
+
+  'polizei-justiz': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Kontakten zum Strafrecht oder zur Prävention',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Polizei und meine Rechte',
+        dauer: '60 Min',
+        ziel: 'Rechte und Pflichten bei Polizeikontakten kennen',
+        psychoedukation: {
+          titel: 'Polizei – Rechte kennen',
+          inhalt: 'Bei einem Polizeikontakt: Du hast das Recht zu schweigen. Du musst dich ausweisen. Du darfst keinen aggressiven Widerstand leisten. Du hast Recht auf einen Anwalt. Kooperativ zu bleiben schützt dich – auch wenn du dich ungerecht behandelt fühlst.'
+        },
+        interventionen: [
+          {
+            titel: 'Polizeikontakt-Szenarien',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Typische Szenarien besprechen: Kontrolle auf der Straße, Verdacht, Festnahme. Was darf die Polizei? Was darfst du? Was solltest du tun?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Rollenspiel Polizeikontakt',
+            beschreibung: 'Übe, ruhig und respektvoll zu bleiben, deine Rechte zu kennen und keinen Fehler zu machen.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Rechte notieren',
+          beschreibung: 'Schreibe deine 5 wichtigsten Rechte bei einem Polizeikontakt auf.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hättest du bisher falsch gemacht?',
+          'Was ist dir am wichtigsten zu wissen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Das Jugendgericht in Luxemburg',
+        dauer: '60 Min',
+        ziel: 'Jugendstrafrechtssystem verstehen; Konsequenzen von Straftaten kennen',
+        psychoedukation: {
+          titel: 'Jugendstrafrecht in Luxemburg',
+          inhalt: 'Jugendliche unter 18 werden in Luxemburg nach dem Jugendschutzgesetz behandelt. Das Ziel ist Erziehung, nicht Bestrafung. Aber: Auch das Jugendgericht hat Konsequenzen – Auflagen, Sozialstunden, Heimunterbringung oder sogar Jugendgefängnis bei schweren Fällen.'
+        },
+        interventionen: [
+          {
+            titel: 'Verfahren verstehen',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Was passiert, wenn ein Jugendlicher straffällig wird? Welche Verfahrensschritte gibt es? Wer ist beteiligt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Folgen einschätzen',
+            beschreibung: 'Für 3 Straftaten: Was wären die möglichen Konsequenzen – kurzfristig, langfristig?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Reflexion',
+          beschreibung: 'Gibt es in deinem Umfeld oder deiner Vergangenheit etwas, das vor Gericht hätte enden können?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was überrascht dich am Jugendstrafrecht?',
+          'Was verändert das an deiner Einschätzung?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Bürgerrechte und demokratische Teilhabe',
+        dauer: '60 Min',
+        ziel: 'Demokratische Grundrechte kennen; politische Teilhabe als Recht und Chance verstehen',
+        psychoedukation: {
+          titel: 'Demokratie braucht Teilnahme',
+          inhalt: 'Bürgerrechte sind nicht nur Schutzrechte – sie sind auch Teilhaberechte: Meinungsfreiheit, Versammlungsfreiheit, Wahlrecht. Jugendliche können ab 16 wählen (in Luxemburg Gemeinderatswahlen). Wer nicht wählt oder sich nicht engagiert, überlässt anderen die Entscheidung.'
+        },
+        interventionen: [
+          {
+            titel: 'Bürgerrechte erkunden',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Welche Grundrechte haben Jugendliche in Luxemburg? Wie können sie sich politisch einbringen? Welche Möglichkeiten gibt es?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gesellschaftliches Engagement planen',
+            beschreibung: 'Was interessiert dich politisch oder gesellschaftlich? Wie könntest du dich einbringen?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Politisches Thema erkunden',
+          beschreibung: 'Recherchiere diese Woche ein politisches Thema, das dich betrifft.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du in deiner Gesellschaft verändern?'
+        ]
+      }
+    ]
+  },
+
+  'buergerrechte': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit wenig demokratischem Bewusstsein oder Interesse an gesellschaftlicher Teilhabe',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was sind Bürgerrechte?',
+        dauer: '60 Min',
+        ziel: 'Grundlegende Bürgerrechte in Luxemburg kennen',
+        psychoedukation: {
+          titel: 'Rechte, die uns alle schützen',
+          inhalt: 'Bürgerrechte schützen uns vor staatlichen Übergriffen und ermöglichen Teilhabe: Meinungsfreiheit, Versammlungsfreiheit, Religionsfreiheit, Gleichheit vor dem Gesetz. Diese Rechte wurden erkämpft – sie sind kein Selbstläufer. Wer sie nicht kennt, kann sie nicht verteidigen.'
+        },
+        interventionen: [
+          {
+            titel: 'Bürgerrechte-Inventur',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Welche Bürgerrechte gibt es in Luxemburg? Welche wurden in deinem Leben schon relevant? Gemeinsam erkunden.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Rechte im Alltag',
+            beschreibung: 'In welchen Situationen nutzt du täglich Bürgerrechte, ohne es zu merken?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Recht vertiefen',
+          beschreibung: 'Recherchiere ein Bürgerrecht, das dir besonders wichtig ist.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Welches Recht ist dir am wichtigsten?',
+          'Gibt es ein Recht, das du gerne hättest, aber nicht hast?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Demokratie – wie sie funktioniert',
+        dauer: '60 Min',
+        ziel: 'Demokratische Grundprinzipien verstehen; politisches System Luxemburgs kennen',
+        psychoedukation: {
+          titel: 'Demokratie ist kein Selbstläufer',
+          inhalt: 'Demokratie basiert auf Teilhabe, freier Presse, unabhängiger Justiz und dem Recht auf Opposition. Ohne aktive Bürger degeneriert Demokratie. Jugendliche unterschätzen oft ihren Einfluss – aber Geschichte zeigt: Junge Menschen haben Gesellschaften verändert.'
+        },
+        interventionen: [
+          {
+            titel: 'Politisches System erkunden',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Wie funktioniert die Demokratie in Luxemburg? Welche Institutionen gibt es? Wie werden Entscheidungen getroffen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Mein politisches Anliegen',
+            beschreibung: 'Was möchtest du in deiner Gesellschaft verändern? An wen könntest du dich wenden?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Aktuelle Politik verfolgen',
+          beschreibung: 'Verfolge diese Woche eine politische Entwicklung in Luxemburg.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was interessiert dich an Politik?',
+          'Was interessiert dich gar nicht – und warum?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Aktiv teilhaben',
+        dauer: '60 Min',
+        ziel: 'Möglichkeiten politischer und gesellschaftlicher Teilhabe kennen und nutzen',
+        psychoedukation: {
+          titel: 'Möglichkeiten zur Teilhabe',
+          inhalt: 'Teilhabe ist mehr als wählen: Petitionen unterschreiben, demonstrieren, Leserbriefe schreiben, in Jugendräten aktiv sein, Organisationen unterstützen. Auch online gibt es Möglichkeiten – wenn man sie bewusst nutzt.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Teilhabeplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was liegt mir am Herzen? Wie kann ich mich einbringen? Welche Möglichkeit ist realistisch für mich jetzt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ersten Schritt wählen',
+            beschreibung: 'Wähle eine konkrete Möglichkeit zur Teilhabe und plane den ersten Schritt.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Teilhabe ausprobieren',
+          beschreibung: 'Setze diese Woche einen ersten Schritt zur gesellschaftlichen Teilhabe um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du in deiner Gesellschaft verändern?'
+        ]
+      }
+    ]
+  },
+
+  'diskriminierung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Diskriminierungserfahrungen oder zur Sensibilisierung für alle',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was ist Diskriminierung?',
+        dauer: '60 Min',
+        ziel: 'Diskriminierung erkennen und benennen; eigene Erfahrungen einordnen',
+        psychoedukation: {
+          titel: 'Diskriminierung definieren',
+          inhalt: 'Diskriminierung bedeutet: Menschen werden wegen eines Merkmals (Hautfarbe, Herkunft, Geschlecht, Religion, Behinderung, sexuelle Orientierung) ungleich behandelt. Sie kann direkt sein (offene Beleidigung) oder indirekt (Strukturen, die bestimmte Gruppen benachteiligen).'
+        },
+        interventionen: [
+          {
+            titel: 'Diskriminierungserfahrungen erkunden',
+            ansatz: 'Narrativ',
+            beschreibung: 'Hast du selbst Diskriminierung erlebt – oder beobachtet? Was ist passiert? Wie hat es sich angefühlt? Raum geben ohne zu bagatellisieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Formen der Diskriminierung kennen',
+            beschreibung: 'Benenne für 5 Diskriminierungsformen konkrete Beispiele aus dem Alltag von Jugendlichen.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beobachtungsauftrag',
+          beschreibung: 'Beobachte diese Woche, wann und wo Diskriminierung auftaucht – in deinem Umfeld oder in Medien.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Welche Form von Diskriminierung betrifft dich persönlich?',
+          'Was macht es schwer, über Diskriminierung zu sprechen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Auswirkungen und eigene Reaktionen',
+        dauer: '60 Min',
+        ziel: 'Auswirkungen von Diskriminierung auf Betroffene verstehen; eigene Reaktionen reflektieren',
+        psychoedukation: {
+          titel: 'Was Diskriminierung macht',
+          inhalt: 'Diskriminierung hinterlässt Spuren: Misstrauen, Rückzug, Scham, Wut, vermindertes Selbstwertgefühl. Diese Reaktionen sind normal. Gleichzeitig muss niemand Diskriminierung akzeptieren oder sich daran gewöhnen.'
+        },
+        interventionen: [
+          {
+            titel: 'Auswirkungen benennen',
+            ansatz: 'Emotionsfokussiert',
+            beschreibung: 'Was hat die Diskriminierungserfahrung in dir ausgelöst? Wie hat sie dich verändert? Was trägst du noch mit dir?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Reaktionsmöglichkeiten',
+            beschreibung: 'Was sind mögliche Reaktionen auf Diskriminierung? Welche fühlen sich richtig an? Welche schützen mich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ressourcen aktivieren',
+          beschreibung: 'Schreibe auf: Was hilft dir, trotz Diskriminierungserfahrungen stark zu bleiben?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hilft dir am meisten, mit Diskriminierung umzugehen?',
+          'Was wünschst du dir von anderen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gegenstrategien und Allyship',
+        dauer: '60 Min',
+        ziel: 'Handlungsmöglichkeiten gegen Diskriminierung kennen; Allyship verstehen',
+        psychoedukation: {
+          titel: 'Was ich tun kann',
+          inhalt: 'Gegen Diskriminierung kann man vorgehen: Vorfälle melden (Polizei, Antidiskriminierungsstellen), Solidarität zeigen, eigene Vorurteile reflektieren. Allyship bedeutet: als nicht-Betroffener für Betroffene einzustehen – nicht für sie sprechen, sondern Raum geben und unterstützen.'
+        },
+        interventionen: [
+          {
+            titel: 'Gegenstrategien entwickeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Für eine konkrete Diskriminierungssituation: Was könnte ich tun? Als Betroffene/r? Als Zeuge? Gemeinsam Strategien entwickeln.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Anlaufstellen kennen',
+            beschreibung: 'Welche Antidiskriminierungsstellen gibt es in Luxemburg? Wie kann ich Vorfälle melden?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Allyship zeigen',
+          beschreibung: 'Zeige diese Woche Solidarität mit jemandem, der Diskriminierung erlebt.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du gegen Diskriminierung tun?'
+        ]
+      }
+    ]
+  },
+
 };

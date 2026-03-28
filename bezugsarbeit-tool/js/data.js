@@ -3146,4 +3146,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'selbstwertgefuehl': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit negativem Selbstbild, Selbstzweifeln oder geringem Selbstwertgefühl',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie sehe ich mich selbst?',
+        dauer: '60 Min',
+        ziel: 'Eigenes Selbstbild explorieren und kritisch hinterfragen',
+        psychoedukation: {
+          titel: 'Selbstwert – was ist das?',
+          inhalt: 'Selbstwert ist das Gefühl, grundsätzlich gut genug zu sein – nicht perfekt, aber wertvoll. Selbstwert entsteht durch Erfahrungen, Beziehungen und Rückmeldungen. Er ist nicht fest – er kann gestärkt werden. Niedriger Selbstwert entsteht oft durch negative Botschaften, die wir irgendwann für wahr gehalten haben.'
+        },
+        interventionen: [
+          {
+            titel: 'Selbstbild-Inventur',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Der Schüler beschreibt sich selbst: Was denke ich über mich? Was denken andere über mich? Woher kommen diese Überzeugungen? Gemeinsam analysieren: Welche Botschaften hat er/sie über sich internalisiert?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Innerer Kritiker vs. innerer Freund',
+            beschreibung: 'Schreibe auf, was dein innerer Kritiker über dich sagt. Dann: Was würde ein guter Freund über dich sagen?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stärken-Tagebuch beginnen',
+          beschreibung: 'Schreibe täglich eine Sache auf, die du gut gemacht hast oder auf die du stolz sein kannst – egal wie klein.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Woher kommen deine negativen Überzeugungen über dich selbst?',
+          'Sind diese Überzeugungen wirklich wahr?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Meine Stärken entdecken',
+        dauer: '60 Min',
+        ziel: 'Eigene Ressourcen und Stärken bewusst wahrnehmen',
+        psychoedukation: {
+          titel: 'Stärken – nicht Perfektion',
+          inhalt: 'Selbstwert wächst nicht durch Perfektion, sondern durch das Erleben von Kompetenz. Es geht nicht darum, der Beste zu sein – sondern darum, zu erkennen, was man kann und wer man ist. Jeder Mensch hat Stärken – auch wenn sie manchmal vergraben sind.'
+        },
+        interventionen: [
+          {
+            titel: 'Stärken-Interview',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Fragen: Was kannst du gut? Wann bist du in deinem Element? Was sagen andere über deine Stärken? Was hast du trotz Schwierigkeiten geschafft? Gemeinsam eine persönliche Stärkenliste erarbeiten.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meisterleistungen sammeln',
+            beschreibung: 'Liste 5 Dinge auf, auf die du stolz bist – aus deinem bisherigen Leben. Kleines zählt genauso wie Großes.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stärken einsetzen',
+          beschreibung: 'Setze diese Woche bewusst eine deiner Stärken ein – in der Schule, zu Hause oder mit Freunden.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war überraschend an deiner Stärkenliste?',
+          'Welche Stärke möchtest du weiter ausbauen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Negative Selbstüberzeugungen verändern',
+        dauer: '60 Min',
+        ziel: 'Automatische negative Gedanken über sich selbst identifizieren und umformulieren',
+        psychoedukation: {
+          titel: 'Selbstabwertende Gedanken erkennen',
+          inhalt: 'Niedriger Selbstwert wird durch automatische negative Gedanken aufrechterhalten: „Ich bin nicht gut genug", „Ich schaffe das sowieso nicht", „Die anderen sind besser." Diese Gedanken fühlen sich wahr an – sind es aber oft nicht. Sie lassen sich hinterfragen und verändern.'
+        },
+        interventionen: [
+          {
+            titel: 'Gedanken-Umstrukturierung',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Die häufigsten selbstabwertenden Gedanken identifizieren. Für jeden: Welche Beweise gibt es dafür? Welche dagegen? Wie würde eine realistischere Version lauten?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Selbstmitgefühl üben',
+            beschreibung: 'Schreibe dir selbst einen Brief, so mitfühlend wie du ihn einem guten Freund in derselben Situation schreiben würdest.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Kritischen Gedanken begegnen',
+          beschreibung: 'Wenn ein negativer Gedanke über dich kommt, schreibe ihn auf und formuliere eine freundlichere, realistischere Alternative.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher negative Gedanke ist der hartnäckigste?',
+          'Was würdest du einem Freund sagen, der so über sich denkt?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Selbstwert im Alltag stärken',
+        dauer: '60 Min',
+        ziel: 'Langfristige Strategien zur Selbstwert-Pflege entwickeln',
+        psychoedukation: {
+          titel: 'Selbstwert braucht Pflege',
+          inhalt: 'Selbstwert ist kein Zustand, den man einmal erreicht – er wird täglich gepflegt. Durch Selbstfürsorge, gesunde Grenzen, ehrliche Selbstreflexion und Beziehungen, in denen man sich wohl fühlt. Wer sich selbst gut behandelt, sendet sich selbst die Botschaft: Ich bin es wert.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliche Selbstwert-Praxis',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam entwickeln: Welche täglichen oder wöchentlichen Praktiken stärken deinen Selbstwert? (z.B. Stärken-Tagebuch fortführen, nein sagen üben, Vergleiche vermeiden, Zeit mit unterstützenden Menschen verbringen)',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '30-Tage-Stärken-Plan',
+            beschreibung: 'Entwirf einen 30-Tage-Plan mit einer täglichen kleinen Aktion, die dein Selbstwertgefühl stärkt.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Erste Woche des Plans',
+          beschreibung: 'Setze die erste Woche deines Plans um und beobachte, was sich verändert.',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie möchtest du in einem Jahr über dich denken?'
+        ]
+      }
+    ]
+  },
+
 };

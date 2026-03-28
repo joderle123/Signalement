@@ -7233,4 +7233,331 @@ const THEMA_MODULE = {
     ]
   },
 
+  'freizeit': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Freizeitarmut, fehlenden Hobbys oder unausgeglichener Zeitgestaltung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was tu ich mit meiner Zeit?',
+        dauer: '60 Min',
+        ziel: 'Aktuelle Freizeitgestaltung reflektieren; Balance einschätzen',
+        psychoedukation: {
+          titel: 'Freizeit ist keine Leerlaufzeit',
+          inhalt: 'Freizeit ist nicht einfach „keine Schule". Sie ist Zeit für Erholung, Kreativität, soziale Verbindung und persönliche Entwicklung. Wer Freizeit sinnvoll gestaltet, kommt erholter in die Schule und hat ein höheres Wohlbefinden.'
+        },
+        interventionen: [
+          {
+            titel: 'Freizeitprofil erstellen',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wie verbringst du deine Freizeit? Was macht dir Freude? Was ist passive Beschäftigung (TV, Handy)? Was ist aktiv? Ist es ausgewogen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Aktivitäten-Rad',
+            beschreibung: 'Zeichne ein Rad mit den Bereichen: Sport, Kreativität, Soziales, Natur, Lernen, Entspannung. Wie viel Zeit verbringst du in jedem? Was fehlt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Freizeitprotokoll',
+          beschreibung: 'Protokolliere diese Woche, wie du deine Freizeit verbringst – ehrlich und detailliert.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was machst du in deiner Freizeit, das dir wirklich gut tut?',
+          'Was raubt dir Energie, ohne dir etwas zurückzugeben?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Hobbys entdecken und entwickeln',
+        dauer: '60 Min',
+        ziel: 'Neue Interessen erkunden; ein Hobby konkret aufbauen',
+        psychoedukation: {
+          titel: 'Hobbys als Anker',
+          inhalt: 'Hobbys geben Stabilität, Identität und Freude. Wer ein Hobby hat, hat einen Bereich, in dem er kompetent ist und sich selbst gehört. Das stärkt Selbstwert und Resilienz.'
+        },
+        interventionen: [
+          {
+            titel: 'Interessens-Erkundung',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was hat dich als Kind fasziniert? Was würdest du gerne können? Was interessiert dich, obwohl du es noch nie ausprobiert hast? Gemeinsam Ideen sammeln und eine ausprobieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Hobby-Aktionsplan',
+            beschreibung: 'Wähle ein Hobby, das du ausprobieren möchtest. Was brauchst du dazu? Was ist der erste Schritt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Hobby ausprobieren',
+          beschreibung: 'Probiere diese Woche dein ausgewähltes Hobby zum ersten Mal aus.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was macht ein Hobby zu einem guten Hobby für dich?',
+          'Was möchtest du regelmäßig tun?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Freizeit bewusst gestalten',
+        dauer: '60 Min',
+        ziel: 'Ausgewogene Freizeitgestaltung planen; Bildschirmzeit und Aktivzeit balancieren',
+        psychoedukation: {
+          titel: 'Balance zwischen Erholung und Aktivität',
+          inhalt: 'Erholung ist wichtig – aber echte Erholung durch Bewegung, Natur, Kreativität oder soziale Kontakte regeneriert besser als passives Scrollen. Wer seine Freizeit aktiv gestaltet, profitiert mehr davon.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Freizeitplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen ausgewogenen Wochenplan entwickeln: Wann ist Zeit für Hobbys, soziale Kontakte, Bewegung, Erholung? Realistisch und mit Spaß.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Offline-Stunden einplanen',
+            beschreibung: 'Plane täglich mindestens eine Stunde offline und aktiv. Was wirst du tun?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Plan leben',
+          beschreibung: 'Lebe deinen Freizeitplan diese Woche. Was klappt, was nicht?',
+          dauer: 'täglich nach Plan'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du an deiner Freizeitgestaltung dauerhaft ändern?'
+        ]
+      }
+    ]
+  },
+
+  'mediennutzung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit unkritischem Medienkonsum, Fake-News-Anfälligkeit oder digitalem Überkonsum',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Medien verstehen – wer macht was und warum?',
+        dauer: '60 Min',
+        ziel: 'Medienkompetenz aufbauen; Interessen hinter Medieninhalten verstehen',
+        psychoedukation: {
+          titel: 'Medien sind nicht neutral',
+          inhalt: 'Jedes Medium hat Interessen: Klicks, Werbeeinnahmen, politische Einflussnahme. Algorithmen zeigen uns, was uns länger auf der Plattform hält – nicht was wahr oder wichtig ist. Medienkompetenz bedeutet, diese Mechanismen zu kennen und kritisch zu fragen: Wer macht das, warum, für wen?'
+        },
+        interventionen: [
+          {
+            titel: 'Medienanalyse',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Ein konkretes Medienbeispiel gemeinsam analysieren: Wer hat das gemacht? Welches Interesse steckt dahinter? Was fehlt in der Berichterstattung? Was ist Fakt, was Meinung?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Informationsquellen bewerten',
+            beschreibung: 'Bewerte 3 Quellen, die du regelmäßig nutzt: Wie glaubwürdig sind sie? Was weißt du über ihre Interessen?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Fake-News-Check',
+          beschreibung: 'Prüfe diese Woche einmal eine Schlagzeile oder Meldung auf ihre Richtigkeit (z.B. mit Faktencheck-Websites).',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Welchen Medien vertraust du – und warum?',
+          'Was lässt dich an einer Meldung zweifeln?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Fake News erkennen und einordnen',
+        dauer: '60 Min',
+        ziel: 'Fake News, Desinformation und Manipulation erkennen',
+        psychoedukation: {
+          titel: 'Wie Desinformation funktioniert',
+          inhalt: 'Fake News verbreiten sich schneller als Richtigstellungen – weil sie emotional aufwühlen. Typische Merkmale: reißerische Überschriften, fehlende Quellen, unbekannte Seiten, emotionale Sprache. Wer zweimal hinschaut, erkennt viele Falschinformationen.'
+        },
+        interventionen: [
+          {
+            titel: 'Faktencheck-Training',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Mehrere Meldungen gemeinsam prüfen: Wer hat das publiziert? Gibt es andere Quellen? Was sagen Faktencheck-Seiten? Übung im kritischen Lesen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'SIFT-Methode',
+            beschreibung: 'Stop (nicht sofort teilen), Investigate (Quelle prüfen), Find (andere Quellen), Trace (Original finden). Methode mit einem Beispiel üben.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'SIFT anwenden',
+          beschreibung: 'Wende die SIFT-Methode diese Woche auf mindestens eine Meldung an.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat dich beim Faktencheck überrascht?',
+          'Welche Quellen vertraust du jetzt weniger?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gesunder Medienkonsum',
+        dauer: '60 Min',
+        ziel: 'Bewussten und ausgewogenen Medienkonsum entwickeln',
+        psychoedukation: {
+          titel: 'Digital Detox und Mediendiät',
+          inhalt: 'Guter Medienkonsum bedeutet: aktiv wählen statt passiv konsumieren, Qualität über Quantität, Offline-Zeiten einhalten. Eine bewusste „Mediendiät" – wie eine Ernährungsdiät – hilft, Konsum zu reduzieren ohne zu verzichten.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliche Medienregeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam 5 konkrete, realistische Regeln entwickeln für einen bewussten Medienkonsum.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Medienfreie Zeit planen',
+            beschreibung: 'Wähle täglich 2 Stunden, die du offline verbringst. Was tust du stattdessen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Medienregeln testen',
+          beschreibung: 'Teste deine Regeln diese Woche. Was klappt, was ist zu schwierig?',
+          dauer: 'täglich'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche Medienregel möchtest du dauerhaft beibehalten?'
+        ]
+      }
+    ]
+  },
+
+  'ehrenamt': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler auf der Suche nach Sinn und Engagement oder zur Stärkung sozialer Teilhabe',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was kann ich für andere tun?',
+        dauer: '60 Min',
+        ziel: 'Eigene Werte und Stärken im Kontext von Engagement erkunden',
+        psychoedukation: {
+          titel: 'Ehrenamt stärkt beide Seiten',
+          inhalt: 'Freiwilliges Engagement gibt anderen etwas – und einem selbst auch: Sinn, soziale Kontakte, Kompetenzentwicklung, Selbstwert. Studien zeigen: Wer anderen hilft, ist glücklicher. Engagement muss nicht groß sein – auch kleine Beiträge zählen.'
+        },
+        interventionen: [
+          {
+            titel: 'Werte-Stärken-Profil',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was sind dir wichtig? (Umwelt, Tiere, Kinder, Ältere, Sport, Kultur). Was kannst du gut? Gemeinsam mögliche Engagementfelder herausarbeiten.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Engagement-Ideen sammeln',
+            beschreibung: 'Brainstorme 10 Möglichkeiten, wie du dich engagieren könntest – von klein (Nachbarshilfe) bis groß (Verein).',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Recherche',
+          beschreibung: 'Recherchiere eine konkrete Möglichkeit des Engagements in deiner Nähe.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Wofür würdest du dich einsetzen, auch ohne Bezahlung?',
+          'Was gibt dir das Gefühl, etwas Sinnvolles zu tun?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Engagement ausprobieren',
+        dauer: '60 Min',
+        ziel: 'Konkrete Engagementmöglichkeit auswählen und planen',
+        psychoedukation: {
+          titel: 'Einfach anfangen',
+          inhalt: 'Engagement muss nicht perfekt sein. Man kann klein anfangen: einmalig helfen, eine Aktion mitmachen, einen Verein besuchen. Der erste Schritt ist oft der schwerste.'
+        },
+        interventionen: [
+          {
+            titel: 'Engagementplan erstellen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche Möglichkeit des Engagements möchtest du ausprobieren? Was sind die nächsten Schritte? Wen musst du kontaktieren? Gemeinsam einen konkreten Plan machen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Erste Kontaktaufnahme üben',
+            beschreibung: 'Schreibe eine kurze Anfrage-E-Mail oder bereite ein Telefonat vor.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Kontakt aufnehmen',
+          beschreibung: 'Nimm diese Woche Kontakt zu einer Engagementmöglichkeit auf.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was fühlt sich richtig für dich an?',
+          'Was hält dich noch zurück?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Sinn durch Beitrag',
+        dauer: '60 Min',
+        ziel: 'Engagementerfahrung reflektieren; Ehrenamt als langfristige Ressource verankern',
+        psychoedukation: {
+          titel: 'Engagement und Sinn',
+          inhalt: 'Menschen, die das Gefühl haben, etwas beigetragen zu haben, berichten von mehr Lebenszufriedenheit und weniger Stress. Ehrenamtliches Engagement ist eine der verlässlichsten Quellen von Sinn – unabhängig von Schule, Familie oder Freunden.'
+        },
+        interventionen: [
+          {
+            titel: 'Erste Erfahrung reflektieren',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wenn die erste Engagementerfahrung gemacht wurde: Was war gut? Was überraschend? Was war schwierig? Wie möchtest du weitermachen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sinn-Quellen kartieren',
+            beschreibung: 'Was gibt dir Sinn – durch Engagement, Beziehungen, Kreativität, Glaube? Wie kannst du mehr davon in deinen Alltag bringen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Engagement fortführen',
+          beschreibung: 'Plane, wie du dein Engagement in den nächsten Wochen weiterführen kannst.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was gibt dir in deinem Leben am meisten Sinn?'
+        ]
+      }
+    ]
+  },
+
 };

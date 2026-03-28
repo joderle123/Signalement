@@ -8793,4 +8793,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'zugehoerigkeit': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche, die Zugehörigkeit vermissen oder Ausgrenzung erleben',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wo gehöre ich dazu?',
+        dauer: '60 Min',
+        ziel: 'Eigene Zugehörigkeitsgefühle und -bedürfnisse erkennen',
+        psychoedukation: {
+          titel: 'Zugehörigkeit als Grundbedürfnis',
+          inhalt: 'Das Bedürfnis nach Zugehörigkeit ist ein grundlegendes menschliches Bedürfnis. Fehlende Zugehörigkeit kann Einsamkeit, Schmerz und Rückzug auslösen. Zugehörigkeit bedeutet: sich gesehen, angenommen und Teil von etwas zu fühlen.'
+        },
+        interventionen: [
+          {
+            titel: 'Zugehörigkeits-Kreise',
+            ansatz: 'Systemisch',
+            beschreibung: 'Zeichne konzentrische Kreise: Ich in der Mitte, dann Gruppen/Menschen, zu denen ich gehöre (Familie, Freunde, Schule, Verein...). Wie stark fühle ich mich wo zugehörig? Farbkodierung: stark/mittel/schwach.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Zugehörigkeits-Momente',
+            beschreibung: 'Erinnere dich an 3 Momente, in denen du dich wirklich zugehörig gefühlt hast. Was hat diese Momente ermöglicht?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Beobachtung: Wann fühle ich mich dazu?',
+          beschreibung: 'Notiere diese Woche Situationen, in denen du Zugehörigkeit gespürt hast – und Situationen, in denen du sie vermisst hast.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was brauche ich, um mich zugehörig zu fühlen?',
+          'Gibt es Orte oder Gruppen, wo du dich nie ganz dazugehörig fühlst?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Ausgrenzung und Einsamkeit',
+        dauer: '60 Min',
+        ziel: 'Ausgrenzungserfahrungen verarbeiten und Ressourcen stärken',
+        psychoedukation: {
+          titel: 'Soziale Ausgrenzung',
+          inhalt: 'Soziale Ausgrenzung – ob durch Mobbing, Ignorieren oder Anderssein – tut körperlich weh. Das ist wissenschaftlich belegt. Wer ausgeschlossen wird, reagiert oft mit Rückzug oder Überanpassung. Beides ist verständlich – aber es gibt andere Wege.'
+        },
+        interventionen: [
+          {
+            titel: 'Ausgrenzungs-Analyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Beschreibe eine Ausgrenzungssituation. Was ist passiert? Was habe ich gedacht/gefühlt? Was habe ich getan? Was hätte ich gebraucht? Gemeinsam alternative Reaktionen entwickeln.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Selbstmitgefühl bei Einsamkeit',
+            beschreibung: 'Schreibe dir in einem Brief, was du einem Freund sagen würdest, der sich genauso einsam fühlt wie du gerade.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Verbindung suchen',
+          beschreibung: 'Nimm diese Woche bewusst Kontakt zu jemandem auf, dem du dich verbunden fühlst – auch wenn es nur eine Nachricht ist.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wie reagierst du, wenn du dich ausgeschlossen fühlst?',
+          'Was hilft dir, nicht in Isolation zu versinken?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Zugehörigkeit aktiv gestalten',
+        dauer: '60 Min',
+        ziel: 'Neue Zugehörigkeiten aufbauen und Verbindungen stärken',
+        psychoedukation: {
+          titel: 'Zugehörigkeit gestalten',
+          inhalt: 'Zugehörigkeit passiert selten von allein – sie entsteht durch Engagement, Verletzlichkeit und gemeinsame Erfahrungen. Wer aktiv Verbindungen sucht, hat mehr Chancen, diese zu finden. Auch online-Gemeinschaften können echte Zugehörigkeit schaffen.'
+        },
+        interventionen: [
+          {
+            titel: 'Zugehörigkeits-Aktionsplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Wo möchte ich mehr Zugehörigkeit erleben? Was kann ich konkret tun? (Verein beitreten, Gespräch suchen, Gruppe gründen...) Konkrete nächste Schritte formulieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meine Gemeinschaft',
+            beschreibung: 'Beschreibe die Gemeinschaft, die du dir wünschst. Was teilt sie? Welche Werte hat sie? Wo könntest du sie finden?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Erster Schritt',
+          beschreibung: 'Setze diese Woche einen konkreten ersten Schritt, um eine neue Verbindung oder Zugehörigkeit zu stärken.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was hindert dich daran, Zugehörigkeit zu suchen?',
+          'Was nimmst du aus diesem Modul mit?'
+        ]
+      }
+    ]
+  },
+
 };

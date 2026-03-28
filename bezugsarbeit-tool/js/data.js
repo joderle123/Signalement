@@ -1041,7 +1041,7 @@ const SCREENING_DOMAINS = [
       'Hat Konzentrationsschwierigkeiten oder Entscheidungsprobleme',
       'Zieht sich von Freunden und Familie zurück',
     ],
-    worksheets: ['depressive-stimmungen', 'selbstwertgefuehl', 'resilienz-staerken'],
+    worksheets: ['depressive-stimmungen.html', 'selbstwertgefuehl.html', 'emotionsregulation.html', 'resilienz-staerken.html', 'stimmungsextreme.html'],
   },
   {
     id: 'angst-generalisiert',
@@ -1056,7 +1056,7 @@ const SCREENING_DOMAINS = [
       'Hat körperliche Anzeichen (Zittern, Schwitzen, Herzklopfen)',
       'Schläft schlecht wegen Sorgen',
     ],
-    worksheets: ['stress-angst', 'emotionsregulation'],
+    worksheets: ['stress-angst.html', 'emotionsregulation.html', 'angstanfaelle.html', 'wiederkehrende-gedanken.html'],
   },
   {
     id: 'angst-sozial',
@@ -1071,7 +1071,7 @@ const SCREENING_DOMAINS = [
       'Errötet, zittert oder schwitzt stark in sozialen Situationen',
       'Spricht kaum in der Gruppe, obwohl er/sie etwas zu sagen hätte',
     ],
-    worksheets: ['stress-angst', 'kommunikation-grenzen', 'selbstwertgefuehl'],
+    worksheets: ['stress-angst.html', 'kommunikation-grenzen.html', 'selbstwertgefuehl.html', 'einsamkeit.html', 'soziale-wahrnehmung.html'],
   },
   {
     id: 'trauma',
@@ -1086,7 +1086,7 @@ const SCREENING_DOMAINS = [
       'Zeigt übermäßige Schreckreaktionen oder ist hypervigilant',
       'Hat Schlafprobleme oder Alpträume in Zusammenhang mit dem Ereignis',
     ],
-    worksheets: ['krisenplan', 'stress-angst', 'resilienz-staerken'],
+    worksheets: ['krisenplan.html', 'trauma-stabilisierung.html', 'dissoziative-erfahrungen.html', 'stress-angst.html', 'resilienz-staerken.html'],
   },
   {
     id: 'adhs',
@@ -1102,7 +1102,7 @@ const SCREENING_DOMAINS = [
       'Ist motorisch unruhig, kann schlecht stillsitzen',
       'Wechselt häufig Aktivitäten, ohne eine zu beenden',
     ],
-    worksheets: ['lernstrategien-schule', 'motivation', 'stress-angst'],
+    worksheets: ['konzentration-aufmerksamkeit.html', 'impulskontrolle.html', 'lernstrategien-schule.html', 'motivation.html', 'stress-angst.html'],
   },
   {
     id: 'conduct',
@@ -1117,7 +1117,7 @@ const SCREENING_DOMAINS = [
       'Lügt, stiehlt oder täuscht andere',
       'Zerstört absichtlich Eigentum anderer',
     ],
-    worksheets: ['wut-aggression', 'kommunikation-grenzen', 'mobbing-cybermobbing'],
+    worksheets: ['wut-aggression.html', 'impulskontrolle.html', 'kommunikation-grenzen.html', 'mobbing-cybermobbing.html'],
   },
   {
     id: 'selbstverletzung',
@@ -1132,7 +1132,7 @@ const SCREENING_DOMAINS = [
       'Hat Gedanken, nicht mehr leben zu wollen',
       'Hat konkrete Pläne, sich das Leben zu nehmen',
     ],
-    worksheets: ['krisenplan', 'selbstverletzung', 'depressive-stimmungen'],
+    worksheets: ['krisenplan.html', 'selbstverletzung.html', 'depressive-stimmungen.html', 'emotionsregulation.html'],
     alertItems: [2, 3], // 0-indexed — bei Score > 1 → Alarmbanner
   },
   {
@@ -1148,7 +1148,7 @@ const SCREENING_DOMAINS = [
       'Isst unkontrolliert große Mengen (Essanfälle)',
       'Kompensiert durch Erbrechen, Abführmittel oder übermäßigen Sport',
     ],
-    worksheets: ['selbstwertgefuehl', 'stress-angst', 'emotionserkennung'],
+    worksheets: ['essverhalten.html', 'selbstwertgefuehl.html', 'koerperbild-sexualitaet.html', 'stress-angst.html', 'emotionserkennung.html'],
   },
   {
     id: 'substanz',
@@ -1163,7 +1163,7 @@ const SCREENING_DOMAINS = [
       'Benutzt Substanzen, um negative Gefühle zu regulieren',
       'Hat Schwierigkeiten, den Konsum zu kontrollieren oder zu reduzieren',
     ],
-    worksheets: ['konsum-cannabis', 'konsum-alkohol', 'stress-angst'],
+    worksheets: ['konsum-cannabis.html', 'konsum-alkohol.html', 'stress-angst.html', 'emotionsregulation.html'],
   },
   {
     id: 'schlaf',
@@ -1178,7 +1178,7 @@ const SCREENING_DOMAINS = [
       'Hat einen stark verschobenen Schlaf-Wach-Rhythmus',
       'Die Schlafprobleme beeinträchtigen Schule und Alltag erheblich',
     ],
-    worksheets: ['schlaf-gesundheit', 'stress-angst'],
+    worksheets: ['schlaf-gesundheit.html', 'stress-angst.html', 'koerperbeschwerden.html'],
   },
   {
     id: 'psychose',
@@ -1192,7 +1192,8 @@ const SCREENING_DOMAINS = [
       'Hat ungewöhnliche oder bizarre Überzeugungen (Verfolgung, besondere Mission)',
       'Zeigt deutlich veränderte oder flache Emotionen',
     ],
-    worksheets: ['krisenplan'],
+    worksheets: ['krisenplan.html', 'wahrnehmungsveraenderungen.html', 'dissoziative-erfahrungen.html'],
+    alertItems: [0, 1, 2],
   },
   {
     id: 'autismus',
@@ -1207,7 +1208,7 @@ const SCREENING_DOMAINS = [
       'Besteht auf strikten Routinen, reagiert stark auf Veränderungen',
       'Hat sensorische Über- oder Unterempfindlichkeiten',
     ],
-    worksheets: ['kommunikation-grenzen', 'emotionserkennung', 'stress-angst'],
+    worksheets: ['soziale-wahrnehmung.html', 'kommunikation-grenzen.html', 'emotionserkennung.html', 'konzentration-aufmerksamkeit.html', 'stress-angst.html'],
   },
   {
     id: 'trennungsangst',
@@ -1221,7 +1222,7 @@ const SCREENING_DOMAINS = [
       'Weigert sich, alleine zu sein oder ohne Bezugspersonen zur Schule zu gehen',
       'Hat körperliche Beschwerden (Bauchschmerzen, Kopfschmerzen) vor Trennungen',
     ],
-    worksheets: ['stress-angst', 'familie', 'resilienz-staerken'],
+    worksheets: ['stress-angst.html', 'koerperbeschwerden.html', 'familie.html', 'resilienz-staerken.html'],
   },
   {
     id: 'mobbing',
@@ -1235,7 +1236,7 @@ const SCREENING_DOMAINS = [
       'Erlebt Cybermobbing (Nachrichten, Bilder, Gruppen)',
       'Hat Angst vor bestimmten Schüler/innen oder Situationen in der Schule',
     ],
-    worksheets: ['mobbing-cybermobbing', 'kommunikation-grenzen', 'selbstwertgefuehl'],
+    worksheets: ['mobbing-cybermobbing.html', 'kommunikation-grenzen.html', 'selbstwertgefuehl.html', 'einsamkeit.html'],
   },
   {
     id: 'familie',
@@ -1250,7 +1251,7 @@ const SCREENING_DOMAINS = [
       'Lebt in sehr instabilen oder wechselnden Wohnverhältnissen',
       'Hat keinen oder kaum Kontakt zu einem Elternteil',
     ],
-    worksheets: ['familie', 'resilienz-staerken', 'krisenplan'],
+    worksheets: ['familie.html', 'resilienz-staerken.html', 'krisenplan.html', 'trauma-stabilisierung.html'],
   },
   {
     id: 'diskriminierung',
@@ -1264,7 +1265,7 @@ const SCREENING_DOMAINS = [
       'Hat Schwierigkeiten mit der eigenen kulturellen oder religiösen Identität',
       'Fühlt sich in der Gesellschaft oder Schule nicht zugehörig',
     ],
-    worksheets: ['diskriminierung', 'identitaet', 'selbstwertgefuehl'],
+    worksheets: ['diskriminierung.html', 'identitaet.html', 'selbstwertgefuehl.html'],
   },
   {
     id: 'soziale-isolation',
@@ -1279,7 +1280,67 @@ const SCREENING_DOMAINS = [
       'Fühlt sich einsam und unverstanden',
       'Zieht sich aus sozialen Aktivitäten zurück',
     ],
-    worksheets: ['freundschaft-konflikte', 'kommunikation-grenzen', 'selbstwertgefuehl'],
+    worksheets: ['einsamkeit.html', 'freundschaft-konflikte.html', 'soziales-netzwerk.html', 'kommunikation-grenzen.html', 'selbstwertgefuehl.html'],
+  },
+  {
+    id: 'zwang',
+    label: 'Zwänge / Wiederkehrende Gedanken',
+    icd: 'F42',
+    farbe: '#0891B2',
+    icon: '🔄',
+    cutoff: 5,
+    items: [
+      'Hat wiederkehrende, aufdringliche Gedanken die sich nicht abstellen lassen',
+      'Führt Handlungen/Rituale wiederholt aus um Angst zu reduzieren',
+      'Verbringt mehr als 1 Stunde täglich mit Zwangsgedanken oder -handlungen',
+      'Die Zwänge beeinträchtigen Schule, Familie oder Freundschaften',
+    ],
+    worksheets: ['wiederkehrende-gedanken.html', 'stress-angst.html', 'emotionsregulation.html'],
+  },
+  {
+    id: 'stimmungsextreme',
+    label: 'Extreme Stimmungsschwankungen',
+    icd: 'F31/F34',
+    farbe: '#7C3AED',
+    icon: '🌊',
+    cutoff: 5,
+    items: [
+      'Hat ausgeprägte Hochphasen (überdreht, kaum Schlaf nötig, viele Ideen)',
+      'Wechselt schnell zwischen Hochgefühl und tiefer Depression',
+      'Trifft impulsive Entscheidungen in Hochphasen (Geld, Beziehungen)',
+      'Die Stimmungsschwankungen sind stärker als bei anderen Gleichaltrigen',
+    ],
+    worksheets: ['stimmungsextreme.html', 'depressive-stimmungen.html', 'emotionsregulation.html', 'schlaf-gesundheit.html'],
+  },
+  {
+    id: 'psychosomatik',
+    label: 'Psychosomatische Beschwerden',
+    icd: 'F45/F54',
+    farbe: '#0F766E',
+    icon: '🫀',
+    cutoff: 5,
+    items: [
+      'Hat häufig körperliche Beschwerden ohne medizinische Ursache (Bauch, Kopf)',
+      'Die körperlichen Beschwerden treten besonders in Stresssituationen auf',
+      'Vermeidet Schule oder Aktivitäten wegen körperlicher Beschwerden',
+      'Körperliche Untersuchungen ergaben keinen Befund',
+    ],
+    worksheets: ['koerperbeschwerden.html', 'stress-angst.html', 'emotionsregulation.html', 'schlaf-gesundheit.html'],
+  },
+  {
+    id: 'dissoziation',
+    label: 'Dissoziative Erfahrungen',
+    icd: 'F44/F48.1',
+    farbe: '#7E22CE',
+    icon: '🌫️',
+    cutoff: 4,
+    items: [
+      'Fühlt sich manchmal unwirklich oder wie hinter Glas',
+      'Erlebt Phasen wo er/sie sich von außen beobachtet',
+      'Hat Zeitlücken oder kann sich nicht erinnern was zwischendurch passiert ist',
+      'Bekannte Orte oder Menschen fühlen sich fremd an',
+    ],
+    worksheets: ['dissoziative-erfahrungen.html', 'trauma-stabilisierung.html', 'krisenplan.html', 'stress-angst.html'],
   },
   {
     id: 'resilienz',
@@ -1295,7 +1356,7 @@ const SCREENING_DOMAINS = [
       'Kann über Probleme sprechen und Hilfe annehmen',
       'Zeigt Durchhaltevermögen bei Schwierigkeiten',
     ],
-    worksheets: ['resilienz-staerken', 'identitaet'],
+    worksheets: ['resilienz-staerken.html', 'identitaet.html', 'mentale-gesundheit.html'],
   },
 ];
 

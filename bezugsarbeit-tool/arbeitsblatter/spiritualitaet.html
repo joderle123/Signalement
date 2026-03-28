@@ -2,10 +2,22 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Arbeitsblatt – Spiritualität, Religion & Sinn</title>
+  <title>Arbeitsblatt – Spiritualität &amp; Sinn</title>
   <link rel="stylesheet" href="../css/arbeitsblatt.css">
   <style>
-    :root { --farbe: #F39C12; --farbe-hell: #FFFBEB; }
+    :root { --farbe: #7C3AED; --farbe-hell: #F5F3FF; }
+    .bubble-grid { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:10px; }
+    .bubble { border:2px solid #C4B5FD; border-radius:20px; padding:5px 11px; font-size:11px; font-weight:600; background:#F5F3FF; cursor:default; }
+    .star-row { display:flex; align-items:center; gap:10px; margin-bottom:7px; }
+    .star-label { width:150px; flex-shrink:0; font-size:11px; }
+    .star-scale { display:flex; gap:6px; align-items:center; }
+    .star-icon { font-size:16px; cursor:default; }
+    .ritual-row { display:flex; gap:8px; align-items:center; margin-bottom:6px; }
+    .ritual-bubble { border:2px solid #C4B5FD; border-radius:16px; padding:4px 10px; font-size:11px; background:#F5F3FF; font-weight:600; flex-shrink:0; }
+    .question-box { background:#F5F3FF; border:1.5px dashed #A78BFA; border-radius:8px; padding:10px; margin-bottom:7px; }
+    .question-prompt { font-size:12px; font-weight:700; color:#7C3AED; margin-bottom:5px; }
+    .larger-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-bottom:8px; }
+    .larger-box { background:#FAF5FF; border:1.5px solid #C4B5FD; border-radius:8px; padding:9px; text-align:center; }
   </style>
 </head>
 <body>
@@ -20,8 +32,8 @@
   <div class="kopfzeile">
     <div class="kopfzeile-links">
       <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
-      <div class="ab-titel">Spiritualität, Religion & Sinn</div>
-      <div class="ab-untertitel">Identität & Werte · Arbeitsblatt Ebene 1</div>
+      <div class="ab-titel">Was meinem Leben Bedeutung gibt</div>
+      <div class="ab-untertitel">Spiritualität &amp; Sinn · Kategorie: Identität &amp; Werte</div>
     </div>
     <div class="kopfzeile-icon">✨</div>
   </div>
@@ -33,185 +45,144 @@
   </div>
 
   <div class="infobox">
-    <div class="infobox-titel">💡 Was gibt deinem Leben Bedeutung?</div>
-    <p>Spiritualität und Religion sind sehr persönliche Bereiche. Jeder Mensch hat seine eigene Art, Sinn zu finden – durch Glaube, Natur, Kunst, Gemeinschaft oder ganz andere Dinge.</p>
-    <p>Dieses Blatt hat keine richtigen oder falschen Antworten. Es geht darum, <strong>deine eigene innere Welt besser zu verstehen</strong>.</p>
+    <div class="infobox-titel">💡 Sinn finden hat nichts mit Religion zu tun – aber kann damit zu tun haben.</div>
+    <p>Menschen finden Bedeutung auf sehr unterschiedliche Wege: Glaube, Natur, Gemeinschaft, Kunst, Wissen, Liebe. Dieses Blatt hat keine richtigen oder falschen Antworten. Es geht darum, deine eigene innere Welt besser zu kennen.</p>
+    <p>🧠 <em>Wusstest du? Forscher haben herausgefunden, dass ein Sinngefühl das Leben verlängert – unabhängig von Reichtum, Gesundheit oder sozialem Status. Sinn ist also buchstäblich lebenswichtig.</em></p>
   </div>
 
-  <!-- Übung 1 -->
+  <!-- Übung 1: Sinnquellen -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">1</div>
-      <div class="uebung-titel">Was ich glaube – meine persönliche Überzeugung</div>
+      <div class="uebung-titel">Was gibt meinem Leben Sinn? – Kreise ein, was auf dich zutrifft</div>
     </div>
-    <div class="uebung-beschreibung">
-      Keine richtigen oder falschen Antworten. Kreuze an was zu dir passt oder schreibe deine eigenen Worte.
+    <div class="uebung-beschreibung">Kreise alles ein, was sich für dich wahr anfühlt – auch mehrere Dinge gleichzeitig.</div>
+    <div class="bubble-grid">
+      <div class="bubble">💞 Beziehungen &amp; Freundschaft</div>
+      <div class="bubble">🏆 Etwas erreichen</div>
+      <div class="bubble">🌿 Natur &amp; Schönheit</div>
+      <div class="bubble">🎨 Kreativität &amp; Ausdruck</div>
+      <div class="bubble">🙏 Glaube &amp; Spiritualität</div>
+      <div class="bubble">🌍 Anderen helfen</div>
+      <div class="bubble">😄 Freude &amp; Genuss</div>
+      <div class="bubble">📚 Wachsen &amp; Lernen</div>
+      <div class="bubble">🕊️ Erinnerung hinterlassen</div>
+      <div class="bubble">✨ Schönheit erleben</div>
     </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-      <div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--farbe);margin-bottom:6px;">Was gibt mir Kraft?</div>
-        <div style="font-size:11px;line-height:2.2;color:#374151;">
-          □ Gebet / Glaube<br>
-          □ Natur / Stille<br>
-          □ Musik oder Kunst<br>
-          □ Gemeinschaft / Familie<br>
-          □ Sport / Bewegung<br>
-          □ Meditation / Achtsamkeit<br>
-          □ Anderes: _______________
-        </div>
-      </div>
-      <div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--farbe);margin-bottom:6px;">Mein Verhältnis zu Religion:</div>
-        <div style="font-size:11px;line-height:2.2;color:#374151;">
-          □ Ich bin religiös gläubig<br>
-          □ Ich bin spirituell aber nicht religiös<br>
-          □ Ich bin agnostisch (unsicher)<br>
-          □ Ich glaube nicht an Gott/höhere Macht<br>
-          □ Ich habe noch keine Meinung<br>
-          □ Anderes: _______________
-        </div>
-      </div>
-    </div>
-
-    <div style="font-size:11px;font-weight:600;margin-bottom:4px;">Wenn ich an meine spirituelle/religiöse Überzeugung denke, dann fühle ich:</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <div style="font-size:11px;font-weight:600;margin-bottom:3px;">Das gibt mir gerade am meisten Sinn:</div>
+    <div class="schreiblinien"><div class="schreiblinie"></div></div>
   </div>
 
-  <!-- Übung 2 -->
+  <!-- Übung 2: Werte-Konstellation -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">2</div>
-      <div class="uebung-titel">Rituale & Praktiken die mir wichtig sind</div>
+      <div class="uebung-titel">Meine Werte-Konstellation – Wie viele Sterne bekommt jeder Wert?</div>
     </div>
-    <div class="uebung-beschreibung">
-      Rituale geben Halt und Struktur. Sie können religiös, kulturell oder ganz persönlich sein.
-    </div>
-
-    <table style="width:100%;font-size:11px;">
-      <thead>
-        <tr>
-          <th style="width:40%;">Ritual / Praxis</th>
-          <th style="width:30%;">Wann / Wie oft?</th>
-          <th style="width:30%;">Was bedeutet es mir?</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="height:28px;"></td><td></td><td></td></tr>
-        <tr><td style="height:28px;"></td><td></td><td></td></tr>
-        <tr><td style="height:28px;"></td><td></td><td></td></tr>
-        <tr><td style="height:28px;"></td><td></td><td></td></tr>
-      </tbody>
-    </table>
+    <div class="uebung-beschreibung">Bewerte jeden Wert: Wie wichtig ist er dir gerade? (1 Stern = kaum / 5 Sterne = sehr)</div>
+    <div class="star-row"><div class="star-label">🤝 Gerechtigkeit</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
+    <div class="star-row"><div class="star-label">❤️ Liebe &amp; Zugehörigkeit</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
+    <div class="star-row"><div class="star-label">🕊️ Freiheit</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
+    <div class="star-row"><div class="star-label">💡 Wissen &amp; Wahrheit</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
+    <div class="star-row"><div class="star-label">🌍 Verantwortung</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
+    <div class="star-row"><div class="star-label">✨ Schönheit &amp; Kreativität</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
+    <div class="star-row"><div class="star-label">💪 Mut &amp; Authentizität</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
+    <div class="star-row"><div class="star-label">🤗 Mitgefühl</div><div class="star-scale"><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span><span class="star-icon">☆</span></div></div>
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Spiritualität, Religion & Sinn · Seite 1</span>
+    <span>Spiritualität &amp; Sinn · Seite 1</span>
   </div>
 </div>
 
 <!-- ===== SEITE 2 ===== -->
 <div class="seite">
 
-  <!-- Übung 3 -->
+  <!-- Übung 3: Existenzielle Fragen -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">3</div>
-      <div class="uebung-titel">Was gibt meinem Leben Sinn?</div>
+      <div class="uebung-titel">Fragen, die ich mit mir trage</div>
     </div>
-    <div class="uebung-beschreibung">
-      Sinn finden wir in verschiedenen Bereichen des Lebens. Bewerte jeden Bereich: Wie viel Sinn gibt er dir aktuell?
+    <div class="uebung-beschreibung">Es gibt Fragen, auf die es keine fertigen Antworten gibt. Trotzdem hilft es, sie zu benennen.</div>
+    <div class="question-box">
+      <div class="question-prompt">❓ Eine Frage, die mich beschäftigt:</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
     </div>
-
-    <div style="font-size:10px;color:var(--grau);margin-bottom:8px;">Skala: 0 = gar keinen Sinn · 5 = sehr viel Sinn</div>
-
-    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
-      <div style="display:flex;align-items:center;gap:10px;font-size:11px;">
-        <div style="width:140px;flex-shrink:0;">👨‍👩‍👦 Familie & Beziehungen</div>
-        <div class="skala" style="flex:1;margin:0;">
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">0</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">1</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">2</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">3</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">4</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">5</div></div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;font-size:11px;">
-        <div style="width:140px;flex-shrink:0;">🎨 Kreativität / Hobbys</div>
-        <div class="skala" style="flex:1;margin:0;">
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">0</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">1</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">2</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">3</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">4</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">5</div></div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;font-size:11px;">
-        <div style="width:140px;flex-shrink:0;">🙏 Glaube / Spiritualität</div>
-        <div class="skala" style="flex:1;margin:0;">
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">0</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">1</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">2</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">3</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">4</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">5</div></div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;font-size:11px;">
-        <div style="width:140px;flex-shrink:0;">🌍 Anderen helfen / Beitrag</div>
-        <div class="skala" style="flex:1;margin:0;">
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">0</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">1</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">2</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">3</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">4</div></div>
-          <div class="skala-punkt"><div class="skala-kreis"></div><div class="skala-label">5</div></div>
-        </div>
-      </div>
+    <div class="question-box">
+      <div class="question-prompt">🌙 Eine Frage über mein Leben, die ich noch nicht beantworten kann:</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
     </div>
-
-    <div style="font-size:11px;font-weight:600;margin-bottom:4px;">Der Bereich der mir gerade am meisten Sinn gibt:</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div></div>
+    <div class="question-box">
+      <div class="question-prompt">💬 Eine Frage, die ich gerne mit jemandem besprechen würde:</div>
+      <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    </div>
   </div>
 
-  <!-- Übung 4 -->
+  <!-- Übung 4: Meine Rituale -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">4</div>
-      <div class="uebung-titel">Respekt für verschiedene Überzeugungen</div>
+      <div class="uebung-titel">Meine Rituale der Reflexion – Was mache ich schon?</div>
     </div>
+    <div class="uebung-beschreibung">Kreise ein, was du machst – oder unterstreiche, was du ausprobieren möchtest.</div>
+    <div class="bubble-grid">
+      <div class="bubble">🧘 Meditation</div>
+      <div class="bubble">🙏 Gebet</div>
+      <div class="bubble">✍️ Tagebuch schreiben</div>
+      <div class="bubble">🌲 In der Natur sein</div>
+      <div class="bubble">🎵 Musik hören / machen</div>
+      <div class="bubble">🕯️ Stille aushalten</div>
+      <div class="bubble">🏃 Laufen / Bewegung</div>
+      <div class="bubble">🎨 Kreativ sein</div>
+      <div class="bubble">💬 Tiefe Gespräche</div>
+      <div class="bubble">📖 Philosophie / Bücher</div>
+    </div>
+    <div style="font-size:11px;font-weight:600;margin-bottom:3px;">Was ich gerne neu ausprobieren würde:</div>
+    <div class="schreiblinien"><div class="schreiblinie"></div></div>
+  </div>
 
-    <div class="zwei-spalten">
-      <div class="box" style="border-color:var(--farbe);background:var(--farbe-hell);">
-        <div class="box-label" style="color:var(--farbe);">Was ich an anderen Religionen/Überzeugungen respektiere:</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+  <!-- Übung 5: Etwas Größeres -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Mit etwas Größerem verbunden sein – 3 Wege die mir authentisch sind</div>
+    </div>
+    <div class="uebung-beschreibung">Manche fühlen sich durch Glaube, andere durch die Natur, andere durch eine Gemeinschaft verbunden. Was stimmt für dich?</div>
+    <div class="larger-row">
+      <div class="larger-box">
+        <div style="font-size:16px;margin-bottom:4px;">🌊</div>
+        <div style="font-size:10px;font-weight:700;color:#7C3AED;margin-bottom:4px;">Weg 1</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div class="box" style="border-color:#7B5EA7;background:#F5F0FA;">
-        <div class="box-label" style="color:#7B5EA7;">Was ich mir von anderen wünsche bezüglich meiner Überzeugungen:</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      <div class="larger-box">
+        <div style="font-size:16px;margin-bottom:4px;">🌟</div>
+        <div style="font-size:10px;font-weight:700;color:#7C3AED;margin-bottom:4px;">Weg 2</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+      <div class="larger-box">
+        <div style="font-size:16px;margin-bottom:4px;">🔥</div>
+        <div style="font-size:10px;font-weight:700;color:#7C3AED;margin-bottom:4px;">Weg 3</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
     </div>
   </div>
 
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Reflexion</div>
-    <div style="font-size:12px;margin-bottom:6px;">1. Was glaubst du: Wozu bist du auf der Welt? Was ist dein persönlicher Beitrag?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:4px;">2. Wann hast du zuletzt etwas gespürt, das größer war als du selbst?</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div></div>
+    <div class="reflexion-titel">💬 Mein nächster Schritt</div>
+    <p>Welche Frage oder welches Ritual möchte ich diese Woche weiter erkunden?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fachhinweis">
-    <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
-    Spiritualität und Religion sind wichtige Schutzfaktoren für psychische Gesundheit (Pargament, 2011). <strong>Kulturelle Sensibilität</strong> ist entscheidend: In Luxemburgs multikulturellen Schulen treffen viele Glaubenstraditionen aufeinander. Das Arbeitsblatt ist bewusst offen formuliert und konfessionsunabhängig. <strong>Bei religiösen Konflikten</strong> (z. B. Konflikt zwischen Elternwerten und eigener Identität): achtsam explorieren ohne zu werten. Sinnlosigkeit als psychiatrisches Symptom ernst nehmen (Suizidalitätsassessment).
+    <div class="fachhinweis-titel">🎓 Hinweis für Bezugspersonen</div>
+    Spiritualität und Sinnerleben sind bedeutsame Schutzfaktoren für psychische Gesundheit (Pargament, 2011; Frankl). Das Arbeitsblatt ist bewusst konfessionsunabhängig und offen formuliert – für religiöse wie nichtreligiöse Jugendliche. <strong>In Luxembourg</strong> treffen in Schulen viele Glaubensrichtungen und Kulturen aufeinander – kulturelle Sensibilität ist entscheidend. Bei religiösen Konflikten (z.B. Spannung zwischen Elternwerten und eigener Identität): achtsam explorieren ohne zu werten. <strong>Klinischer Hinweis:</strong> Anhaltende Sinnlosigkeit oder Perspektivlosigkeit können Zeichen einer Depression oder Suizidalität sein und müssen klinisch ernst genommen werden. Das Erleben von Schönheit, Verbindung und Sinn ist nachweislich protektiv – dieses zu fördern ist legitime pädagogische Arbeit.
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Spiritualität, Religion & Sinn · Seite 2</span>
+    <span>Spiritualität &amp; Sinn · Seite 2</span>
   </div>
 </div>
 

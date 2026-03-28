@@ -1481,3 +1481,117 @@ const DB = {
     localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
   },
 };
+
+// ─── Sitzungsbasierte Therapiemodule (Ebene 2) ────────────────────────────────
+const THEMA_MODULE = {
+
+  'familienzusammensetzung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit komplexen Familienverhältnissen oder Orientierungsbedarf',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Familie – ein Überblick',
+        dauer: '60 Min',
+        ziel: 'Eigene Familienkonstellation klar beschreiben und einordnen können',
+        psychoedukation: {
+          titel: 'Was ist eine Familie?',
+          inhalt: 'Familien gibt es in vielen Formen: Kernfamilien, Patchworkfamilien, Alleinerziehende, Großfamilien, gleichgeschlechtliche Eltern. Keine Form ist „falscher" als eine andere. Entscheidend ist, wer für dich da ist und Verantwortung übernimmt.'
+        },
+        interventionen: [
+          {
+            titel: 'Familienbild zeichnen',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Der Schüler zeichnet oder schreibt, wer zu seiner Familie gehört – ohne Vorgabe. Anschließend gemeinsam besprechen: Wer fehlt? Wer war überraschend dabei? Was fühlt sich richtig an?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Familienmitglieder vorstellen',
+            beschreibung: 'Jedes Familienmitglied kurz in drei Worten beschreiben: Wer ist diese Person für mich? Was verbindet uns? Was trennt uns?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Familien-Steckbrief',
+          beschreibung: 'Ein kurzes Blatt: „Meine Familie besteht aus…" – mit Namen, Rollen und einem Satz pro Person.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'War es einfach oder schwer, deine Familie zu beschreiben? Warum?',
+          'Gibt es jemanden, den du dazuzählen würdest, obwohl er/sie nicht biologisch verwandt ist?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Rollen und Regeln in meiner Familie',
+        dauer: '60 Min',
+        ziel: 'Familienrollen und -regeln bewusst wahrnehmen und hinterfragen',
+        psychoedukation: {
+          titel: 'Rollen in Familien',
+          inhalt: 'In jeder Familie gibt es unausgesprochene Rollen: der Vermittler, der Starke, das Sorgenkind, der Unsichtbare. Diese Rollen entstehen oft unbewusst und können einengen. Sie zu erkennen ist der erste Schritt, um selbst zu entscheiden, wer man sein möchte.'
+        },
+        interventionen: [
+          {
+            titel: 'Rollenlandkarte',
+            ansatz: 'Systemisch',
+            beschreibung: 'Welche Rolle(n) nimmst du in deiner Familie ein? Welche wurden dir zugeschrieben? Macht diese Rolle dir das Leben leichter oder schwerer? Gemeinsam erarbeiten, ob und wie sich Rollen verändern lassen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Familienregeln sammeln',
+            beschreibung: 'Schreibe 5 Regeln auf, die in deiner Familie gelten – auch unausgesprochene. Markiere: Welche findest du sinnvoll? Welche belasten dich?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eine Woche beobachten',
+          beschreibung: 'Beobachte diese Woche, wann du in deiner „Familienrolle" bist – und wann du einfach du selbst sein kannst.',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Welche Rolle möchtest du in deiner Familie einnehmen?',
+          'Gibt es Regeln, die du gerne ändern würdest? Was bräuchte es dafür?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Stärken und Ressourcen meiner Familie',
+        dauer: '60 Min',
+        ziel: 'Familienressourcen aktivieren und als Stütze im Alltag nutzen',
+        psychoedukation: {
+          titel: 'Familiäre Schutzfaktoren',
+          inhalt: 'Selbst in schwierigen Familienverhältnissen gibt es meistens Ressourcen: eine verlässliche Person, gemeinsame Rituale, geteilte Werte oder positive Erinnerungen. Diese Schutzfaktoren zu erkennen und zu stärken ist eine wichtige Grundlage für Resilienz.'
+        },
+        interventionen: [
+          {
+            titel: 'Ressourcenkarte Familie',
+            ansatz: 'Ressourcenorientiert / Lösungsfokussiert',
+            beschreibung: 'Gemeinsam erarbeiten: Was läuft in deiner Familie gut? Wer unterstützt dich? Welche positiven Momente gibt es? Diese Ressourcen auf einer Karte festhalten und als Anker nutzen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief an meine Familie',
+            beschreibung: 'Schreibe einen kurzen Brief (der nicht abgeschickt werden muss): Was schätzt du an deiner Familie? Was wünschst du dir von ihr?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Positiver Moment',
+          beschreibung: 'Tue diese Woche bewusst etwas, das eine positive Verbindung in deiner Familie stärkt – egal wie klein.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie möchtest du deine Familiensituation in einem Jahr beschreiben?'
+        ]
+      }
+    ]
+  },
+
+};

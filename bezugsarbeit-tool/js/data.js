@@ -9880,6 +9880,177 @@ const THEMA_MODULE = {
     ]
   },
 
+  'konzentration-aufmerksamkeit': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche mit Konzentrations- und Organisationsschwierigkeiten',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie funktioniert meine Aufmerksamkeit?',
+        dauer: '60 Min',
+        ziel: 'Eigene Aufmerksamkeitsmuster erkennen und verstehen',
+        materialien: ['Papier A4', 'Stifte (verschiedene Farben)', 'Stoppuhr / Handy'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe (2–4)',
+        hinweis_paedagoge: 'Kein Druck entstehen lassen – viele Jugendliche mit Konzentrationsschwierigkeiten haben Scham. Den Fokus auf Stärken und Strategien legen, nicht auf Defizite. Gruppe: Austausch normalisieren ("anderen geht es auch so").',
+        psychoedukation: {
+          titel: 'Aufmerksamkeit ist kein Schalter',
+          inhalt: 'Aufmerksamkeit ist keine Fähigkeit, die man einfach "an" oder "aus" machen kann. Sie wird beeinflusst durch Interesse, Schlaf, Stress, Emotionen und die Umgebung. Manche Menschen haben ein Gehirn, das lebhafter und aktiver sucht – das bringt Stärken mit sich, erfordert aber passende Strategien.'
+        },
+        interventionen: [
+          {
+            titel: 'Aufmerksamkeits-Landkarte',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Erstelle eine persönliche "Karte": Wann kann ich mich gut konzentrieren? (Thema, Tageszeit, Umgebung, Aktivität) Wann gelingt es kaum? Was macht den Unterschied? Suche nach Mustern, nicht nach Fehlern.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '5-Minuten-Fokus-Test',
+            beschreibung: 'Setze eine Stoppuhr auf 5 Minuten. Lies oder schreibe etwas. Mache einen Strich auf einem Blatt, jedes Mal wenn deine Gedanken abschweifen. Kein Urteil – nur beobachten. Was fällt dir auf?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gruppenrunde: "Wann kann ich mich konzentrieren?"',
+          beschreibung: 'Jede/r nennt eine Situation, in der sie sich gut konzentrieren konnten (z.B. beim Zocken, beim Basteln, beim Sport). Gemeinsam analysieren: Was machen diese Situationen aus? (Interesse, Bewegung, klares Ziel, sofortiges Feedback?)'
+        },
+        hausaufgabe: {
+          titel: 'Aufmerksamkeits-Protokoll',
+          beschreibung: 'Notiere diese Woche jeden Tag: Wann war meine Konzentration am besten? Was hat geholfen? (Musik, kurze Pausen, Bewegung, bestimmte Umgebung?)',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'In welchen Situationen gelingt mir Konzentration am besten?',
+          'Was stört meine Aufmerksamkeit am meisten?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Organisation und Struktur als Werkzeug',
+        dauer: '60 Min',
+        ziel: 'Konkrete Organisationsstrategien entwickeln und erproben',
+        materialien: ['Papier oder Notizbuch', 'Stifte', 'Whiteboard / Flipchart (Gruppe)', 'Post-its'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe',
+        hinweis_paedagoge: 'Wichtig: keine "Ideallösung" vorgeben. Jede/r findet ihre eigene Methode. Manche brauchen visuell (Mindmap), andere schriftlich (Liste), andere mündlich (jemanden fragen). Alle Methoden sind gleich gut, wenn sie funktionieren.',
+        psychoedukation: {
+          titel: 'Struktur entlastet das Gehirn',
+          inhalt: 'Das Gehirn verbraucht enorm viel Energie dafür, offene Aufgaben im Gedächtnis zu behalten ("Was muss ich noch tun?"). Wenn diese Informationen auf Papier oder Handy ausgelagert werden, wird Kapazität frei für das eigentliche Denken. Struktur ist kein Zeichen von Schwäche – sondern ein kluges Werkzeug.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliches Organisationssystem entwickeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was sind deine größten Organisationsprobleme? (Vergessen, zu viele Dinge auf einmal, kein Anfangen?) Gemeinsam 2–3 konkrete Strategien auswählen und anpassen: To-do-Liste, Kalender, Erinnerungen, "Nur eine Sache"-Regel.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brain Dump',
+            beschreibung: 'Stelle einen Timer auf 3 Minuten. Schreibe alles auf, was du gerade im Kopf hast (Aufgaben, Sorgen, Ideen) – ohne zu sortieren. Danach: Was ist wirklich wichtig? Top 3 markieren.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Organisations-Tricks-Tauschbörse',
+          beschreibung: 'Jede/r teilt einen Trick, der ihr/ihm bei der Organisation hilft (auch kleine Dinge: Alarm stellen, Hausaufgabenheft, Handy weglegen...). Gemeinsam eine "Klassen-Strategie-Liste" erstellen.'
+        },
+        hausaufgabe: {
+          titel: 'Eine Strategie eine Woche testen',
+          beschreibung: 'Wähle eine Organisations-Strategie aus der Sitzung und teste sie 5 Tage. Was ändert sich? Was funktioniert, was nicht?',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Was hat dich bisher bei Organisation am meisten blockiert?',
+          'Welche Strategie möchtest du ausprobieren?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Mit Ablenkungen umgehen',
+        dauer: '60 Min',
+        ziel: 'Strategien gegen Ablenkung entwickeln und eigene Trigger kennen',
+        materialien: ['Papier', 'Stifte', 'Handy (zum Analysieren der Nutzung)'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe',
+        hinweis_paedagoge: 'Das Thema Handy/Social Media kann emotional sein. Nicht als "böse Ablenkung" darstellen, sondern als etwas, das bewusst gesteuert werden kann. Autonomie betonen: "Du entscheidest, wann du es nutzt."',
+        psychoedukation: {
+          titel: 'Ablenkung als Überlebensstrategie',
+          inhalt: 'Das Gehirn sucht aktiv nach Neuem – das ist evolutionär sinnvoll. Ablenkungen (besonders durch Bildschirme) treffen genau diese Suche. Das ist kein Versagen – sondern ein Gehirn, das seinen Job tut. Die Aufgabe ist, dem Gehirn zu helfen, was wirklich wichtig ist.'
+        },
+        interventionen: [
+          {
+            titel: 'Ablenkungsanalyse',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Was lenkt mich ab? (Handy, Geräusche, Gedanken, Menschen, Hunger?) Für jede Ablenkung: Kann ich sie entfernen? Reduzieren? Zeitlich verschieben? Gemeinsam realistische Pläne entwickeln.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Handy-Pause-Übung',
+            beschreibung: 'Handy 15 Minuten umgedreht weglegen. Danach: Wie oft wolltest du es nehmen? Was hat geholfen, es nicht zu nehmen? Was hast du in der Zeit geschafft?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Ablenkungsfallen-Karte erstellen',
+          beschreibung: 'Gruppe erstellt gemeinsam eine visuelle Karte der häufigsten Ablenkungen im Schulalltag und entwickelt Strategien dagegen. Ergebnis: ein "Ablenkungsschutz-Poster" für die Klasse.'
+        },
+        hausaufgabe: {
+          titel: 'Lernumgebung gestalten',
+          beschreibung: 'Richte einen Lernplatz ein (zu Hause oder Schule), der Ablenkungen minimiert. Was entfernst du? Was behältst du? Mache ein Foto deines Lernplatzes.',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was ist deine größte Ablenkungsfalle?',
+          'Was hilft dir, fokussiert zu bleiben?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Pausen, Energie und Eigenrhythmus',
+        dauer: '60 Min',
+        ziel: 'Eigenen Energiehaushalt und Pausen als Werkzeug nutzen',
+        materialien: ['Papier', 'Stifte', 'optional: Timer'],
+        gruppenformat: 'Einzelgespräch oder Gruppe',
+        hinweis_paedagoge: 'Viele Jugendliche unterschätzen die Wirkung von Pausen. Bewusstmachen: Pausen sind produktiv, kein Aufgeben. Pomodoro-Technik kann helfen, aber nicht für alle – individuelle Anpassung wichtig.',
+        psychoedukation: {
+          titel: 'Das Gehirn braucht Pausen',
+          inhalt: 'Konzentration ist endlich – das Gehirn ermüdet. Strategische Pausen (z.B. alle 25 Min eine 5-Min-Pause) verbessern die Gesamtleistung mehr als durchgängiges Arbeiten. Bewegungspausen aktivieren das Gehirn besonders effektiv.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönlicher Energieplan',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wann bist du am konzentriertesten? (Morgen, Nachmittag, Abend?) Wann brauchst du Pausen? Gemeinsam einen Tagesplan entwickeln, der den eigenen Rhythmus respektiert.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Pomodoro ausprobieren',
+            beschreibung: '25 Minuten konzentriert arbeiten (Timer), dann 5 Minuten echte Pause (aufstehen, trinken, atmen – kein Handy). Wie fühlt sich das an? Was hat sich verändert?',
+            dauer: '30 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Pause gestalten lernen',
+          beschreibung: 'Gruppe überlegt gemeinsam: Was ist eine "gute" Pause? (Handy scrollen vs. kurz spazieren, atmen, essen...) Gemeinsam 5 Pausen-Ideen sammeln, die wirklich erholen.'
+        },
+        hausaufgabe: {
+          titel: 'Energieplan eine Woche testen',
+          beschreibung: 'Teste deinen persönlichen Energieplan (inklusive Pausen) eine Woche lang. Was hat sich bei der Konzentration verändert?',
+          dauer: '5 Min täglich Reflexion'
+        },
+        reflexion: [
+          'Wann ist dein Energielevel am höchsten?',
+          'Was nimmst du aus diesem Modul mit für deinen Schulalltag?'
+        ]
+      }
+    ]
+  },
+
   'trennungsangst': {
     dauer: '3 Sitzungen · ca. 3 Std.',
     zielgruppe: 'Jugendliche mit Trennungsangst oder Angst vor dem Verlassenwerden',

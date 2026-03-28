@@ -5598,4 +5598,549 @@ const THEMA_MODULE = {
     ]
   },
 
+  'schulkonflikt': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Konflikten mit Lehrern oder Mitschülern, Disziplinproblemen oder Schulausschluss-Risiko',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Konflikte in der Schule verstehen',
+        dauer: '60 Min',
+        ziel: 'Wiederkehrende Konfliktsituationen analysieren; eigenen Anteil erkennen',
+        psychoedukation: {
+          titel: 'Konflikte in der Schule – normal oder eskalierend?',
+          inhalt: 'Konflikte mit Lehrern oder Mitschülern sind normal. Problematisch wird es, wenn sie sich wiederholen, eskalieren oder zu Konsequenzen führen (Verweis, Schulwechsel). Hinter Schulkonflikten stecken oft tiefere Themen: mangelndes Gefühl von Respekt, Ungerechtigkeit, Überforderung oder Machtlosigkeit.'
+        },
+        interventionen: [
+          {
+            titel: 'Konfliktkarte Schule',
+            ansatz: 'Systemisch',
+            beschreibung: 'Mit wem gibt es Konflikte? Wie häufig? Was ist typischerweise der Auslöser? Was eskaliert? Was wäre das Muster? Gemeinsam eine ehrliche Karte der Schulkonflikte erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Eigener Anteil',
+            beschreibung: 'Wähle einen konkreten Konflikt. Was war dein Anteil – auch wenn der andere „mehr Schuld" hatte? Was hättest du anders tun können?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Konfliktbeobachtung',
+          beschreibung: 'Beobachte diese Woche einen Schulkonflikt (eigener oder fremder): Was hat ihn ausgelöst? Was hat ihn verschärft?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher Konflikt belastet dich in der Schule am meisten?',
+          'Was steckt wirklich dahinter?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Umgang mit Autorität',
+        dauer: '60 Min',
+        ziel: 'Eigenes Verhältnis zu Autoritätspersonen reflektieren; konstruktive Alternativen entwickeln',
+        psychoedukation: {
+          titel: 'Lehrer sind auch Menschen',
+          inhalt: 'Konflikte mit Lehrern entstehen oft aus gegenseitigen Missverständnissen: Der Lehrer interpretiert Verhalten als Respektlosigkeit – der Schüler fühlt sich ungerecht behandelt. Beide Seiten haben Bedürfnisse. Wer lernt, seine Bedürfnisse zu kommunizieren statt zu provozieren, gewinnt mehr Spielraum.'
+        },
+        interventionen: [
+          {
+            titel: 'Perspektivenwechsel Lehrer',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Einen Konflikt mit einem Lehrer aus dessen Sicht beschreiben: Was hat er/sie wahrgenommen? Was könnte er/sie gedacht haben? Was braucht er/sie? Dann: Was kannst du anders machen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Gesprächsstrategie vorbereiten',
+            beschreibung: 'Bereite ein Gespräch mit einem Lehrer vor, mit dem du Konflikte hast: Was möchtest du sagen? Wie bleibst du ruhig?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gespräch führen',
+          beschreibung: 'Führe diese Woche ein ruhiges Gespräch mit dem betreffenden Lehrer.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was war überraschend, als du die Perspektive des Lehrers eingenommen hast?',
+          'Was möchtest du beim nächsten Mal anders machen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Deeskalation und Neustart',
+        dauer: '60 Min',
+        ziel: 'Konkrete Deeskalationsstrategien; beschädigte Beziehungen reparieren',
+        psychoedukation: {
+          titel: 'Neustart ist möglich',
+          inhalt: 'Selbst in beschädigten Lehrerbeziehungen ist ein Neustart möglich. Was hilft: Verantwortung für den eigenen Anteil übernehmen (nicht für alles), ein ehrliches Gespräch, konsequentes Verhalten ändern. Beziehungsreparatur ist aktive Arbeit.'
+        },
+        interventionen: [
+          {
+            titel: 'Beziehungsreparatur planen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Wie kannst du die beschädigte Beziehung reparieren? Was wäre ein konkreter erster Schritt? Was musst du ändern – und was nicht?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Deeskalations-Karte erstellen',
+            beschreibung: 'Was tue ich, wenn ein Konflikt in der Schule eskaliert? 3 konkrete Strategien aufschreiben.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Neustart umsetzen',
+          beschreibung: 'Setze diese Woche einen konkreten Neustartschritt um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was möchtest du in deinen Schulbeziehungen ändern?'
+        ]
+      }
+    ]
+  },
+
+  'berufsorientierung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler ohne klare berufliche Orientierung oder mit unrealistischen/fehlenden Berufsvorstellungen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wer bin ich – was interessiert mich?',
+        dauer: '60 Min',
+        ziel: 'Eigene Interessen, Stärken und Werte im Kontext Beruf entdecken',
+        psychoedukation: {
+          titel: 'Berufswahl beginnt mit Selbstkenntnis',
+          inhalt: 'Die beste Berufswahl kommt nicht aus einem Berufsfeld-Test – sondern aus Selbstkenntnis. Wer bin ich? Was kann ich gut? Was macht mir Freude? Was ist mir wichtig? Diese Fragen zu beantworten ist die Grundlage jeder guten Berufsentscheidung.'
+        },
+        interventionen: [
+          {
+            titel: 'Stärken-Interessen-Werte-Profil',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Gemeinsam ein Profil erstellen: Was sind meine Stärken? Was sind meine Interessen (auch außerhalb der Schule)? Was sind meine Werte (Kreativität, Sicherheit, Helfen, Technik)? Welche Berufsfelder könnten passen?',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Berufsfelder erkunden',
+            beschreibung: 'Wähle 3 Berufsfelder, die zu deinem Profil passen könnten. Was wusstest du schon? Was überrascht dich?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Erkunden',
+          beschreibung: 'Recherchiere diese Woche ein konkretes Berufsbild, das dich interessiert.',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was überrascht dich an deinem eigenen Profil?',
+          'Was wäre ein Beruf, den du dir nicht zugetraut hättest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Berufe erkunden und ausprobieren',
+        dauer: '60 Min',
+        ziel: 'Konkrete Berufsfelder kennenlernen; Informationsquellen und Praktikum planen',
+        psychoedukation: {
+          titel: 'Ausprobieren schlägt Theorisieren',
+          inhalt: 'Kein Berufsfeld-Test ersetzt die eigene Erfahrung. Praktika, Informationsgespräche, Schnuppertage – wer ausprobiert, weiß mehr als wer nur nachdenkt. Und: Die erste Entscheidung muss nicht die endgültige sein.'
+        },
+        interventionen: [
+          {
+            titel: 'Erkunderplan erstellen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche Berufsfelder möchte ich erkunden? Welche Informationsquellen gibt es? Praktikum, BIZ, Informationsgespräch mit Berufstätigen – gemeinsam einen konkreten Erkundeplan erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Berufs-Interview vorbereiten',
+            beschreibung: 'Formuliere 5 Fragen, die du jemandem stellen würdest, der in deinem Wunschberuf arbeitet.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Erkunden umsetzen',
+          beschreibung: 'Setze einen Schritt des Erkundeplans um: Recherche, Informationsgespräch oder Praktikumsanfrage.',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was hat dich bei der Recherche überrascht?',
+          'Hat sich dein Bild eines Berufs verändert?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Berufsplan entwickeln',
+        dauer: '60 Min',
+        ziel: 'Konkreten nächsten Schritt für die Berufsorientierung planen',
+        psychoedukation: {
+          titel: 'Der Weg zum Beruf',
+          inhalt: 'Hinter jedem Beruf steht ein Weg: Schulabschluss, Ausbildung, Studium, Praktika, Weiterbildung. Diesen Weg zu kennen, macht ihn weniger beängstigend. Man muss nicht alles wissen – man muss nur den nächsten Schritt kennen.'
+        },
+        interventionen: [
+          {
+            titel: 'Berufswegsplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Wähle einen oder zwei Berufswünsche. Welche Schritte sind nötig? Was kann jetzt schon vorbereitet werden? Gemeinsam einen realistischen Zeitplan erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Nächste Schritte definieren',
+            beschreibung: 'Was sind die 3 nächsten konkreten Schritte auf deinem Berufsweg? Mit Datum.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt umsetzen',
+          beschreibung: 'Setze diese Woche den ersten Schritt deines Plans um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was ist dein wichtigster nächster Schritt?'
+        ]
+      }
+    ]
+  },
+
+  'zukunftsplanung': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler ohne klare Lebensziele, mit Orientierungslosigkeit oder überwältigenden Zukunftsvorstellungen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Meine Träume und Wünsche',
+        dauer: '60 Min',
+        ziel: 'Eigene Zukunftsvorstellungen und Werte explorieren',
+        psychoedukation: {
+          titel: 'Träume als Kompass',
+          inhalt: 'Träume und Wünsche sind keine kindliche Spielerei – sie geben Orientierung. Wer weiß, was ihm wichtig ist und was er anstrebt, trifft bessere Entscheidungen. Es geht nicht darum, alles sofort zu planen – sondern eine Richtung zu haben.'
+        },
+        interventionen: [
+          {
+            titel: 'Zukunftsvision entwickeln',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Stelle dir vor, du bist 30 Jahre alt und dein Leben läuft gut. Wo wohnst du? Was machst du? Mit wem bist du zusammen? Was ist dir wichtig? Diese Vision beschreiben oder zeichnen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Lebensbereiche gewichten',
+            beschreibung: 'Bewerte, wie wichtig dir folgende Bereiche in deiner Zukunft sind (1–10): Beruf, Familie, Freundschaft, Gesundheit, Freiheit, Kreativität, Geld, Abenteuer, Sicherheit.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Traum-Collage',
+          beschreibung: 'Erstelle eine Collage (physisch oder digital) deiner Zukunftsvision.',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was in deiner Zukunftsvision überrascht dich selbst?',
+          'Was davon ist bisher noch weit entfernt?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Ziele setzen und planen',
+        dauer: '60 Min',
+        ziel: 'Träume in konkrete Ziele und Schritte übersetzen',
+        psychoedukation: {
+          titel: 'Ziele SMART formulieren',
+          inhalt: 'Ein Traum wird zum Ziel, wenn er konkret, messbar, erreichbar, relevant und zeitgebunden ist (SMART). „Ich möchte erfolgreich sein" ist kein Ziel. „Ich mache bis Ende des Schuljahres einen Praktikumsplatz im Bereich X" ist eins.'
+        },
+        interventionen: [
+          {
+            titel: 'SMART-Ziel formulieren',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Aus der Zukunftsvision ein oder zwei konkrete SMART-Ziele für das nächste Jahr ableiten. Gemeinsam auf Konkretheit und Realismus prüfen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Rückwärtsplanung',
+            beschreibung: 'Starte beim Ziel und plane rückwärts: Was muss 6 Monate vorher passieren? 3 Monate? 1 Monat? Jetzt?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt gehen',
+          beschreibung: 'Setze diese Woche den ersten Schritt deines Plans um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was ist überraschend realistisch – und was doch weiter weg als gedacht?',
+          'Was motiviert dich am meisten?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Hindernisse und Resilienz',
+        dauer: '60 Min',
+        ziel: 'Realistisch mit Rückschlägen umgehen; Resilienz für die Zielverfolgung stärken',
+        psychoedukation: {
+          titel: 'Kein Weg ist gerade',
+          inhalt: 'Kein Lebensplan verläuft genau wie geplant. Rückschläge, Umwege und veränderte Pläne sind Teil des Lebens – keine Zeichen des Scheiterns. Wer gelernt hat, mit Hindernissen umzugehen, kommt weiter als wer glaubt, alles muss glatt laufen.'
+        },
+        interventionen: [
+          {
+            titel: 'Hindernisse antizipieren',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche Hindernisse könnten auf dem Weg zu deinen Zielen auftauchen? Für jedes: Was ist dein Plan B? Wer kann helfen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief aus der Zukunft',
+            beschreibung: 'Schreibe einen Brief vom zukünftigen dir – der den Weg bis dorthin schon gegangen ist. Was sagst du deinem jetzigen Ich?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Plan weiterführen',
+          beschreibung: 'Führe deinen Plan diese Woche weiter. Was läuft? Was muss angepasst werden?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was ist dein größter Traum für dein Leben?'
+        ]
+      }
+    ]
+  },
+
+  'motivation': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Antriebslosigkeit, Gleichgültigkeit oder Motivationsproblemen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Warum tu ich – oder tu ich nicht?',
+        dauer: '60 Min',
+        ziel: 'Motivation und Antriebslosigkeit verstehen; eigene Motivationsquellen erkunden',
+        psychoedukation: {
+          titel: 'Intrinsische vs. extrinsische Motivation',
+          inhalt: 'Extrinsische Motivation (Noten, Lob, Druck) hält selten an. Intrinsische Motivation (Neugier, Freude, Sinn) ist nachhaltiger. Antriebslosigkeit entsteht oft, wenn keine Verbindung zwischen Tätigkeit und eigenem Sinn besteht.'
+        },
+        interventionen: [
+          {
+            titel: 'Motivationsquellen finden',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Wann warst du zuletzt wirklich motiviert – in irgendeinem Bereich? Was war anders? Was hat dir Energie gegeben? Gemeinsam Muster herausarbeiten.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Energiespender und Energieräuber',
+            beschreibung: 'Liste 5 Dinge auf, die dir Energie geben – und 5, die sie rauben. Was überwiegt in deinem Alltag?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Energie-Protokoll',
+          beschreibung: 'Notiere diese Woche täglich: Wann hattest du Energie und Antrieb? Was war gerade los?',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Wann warst du zuletzt wirklich motiviert?',
+          'Was fehlte dir in letzter Zeit?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Antriebslosigkeit als Signal',
+        dauer: '60 Min',
+        ziel: 'Antriebslosigkeit als Information nutzen; Ursachen angehen',
+        psychoedukation: {
+          titel: 'Antriebslosigkeit hat Gründe',
+          inhalt: 'Anhaltende Antriebslosigkeit kann ein Signal für Überforderung, Unterforderung, unerfüllte Bedürfnisse oder psychische Belastungen sein. Sie wegzudrücken hilft nicht. Sie ernst zu nehmen und die Ursache anzugehen ist der produktivere Weg.'
+        },
+        interventionen: [
+          {
+            titel: 'Ursachen-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Was steckt hinter der Antriebslosigkeit? Angst, Sinnlosigkeit, Erschöpfung, Unsicherheit, Ärger? Gemeinsam herausarbeiten und angehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Kleine Erfolge sammeln',
+            beschreibung: 'Erledige eine kleine, konkrete Aufgabe jetzt sofort. Wie fühlt sich das an?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Täglich eine kleine Sache tun',
+          beschreibung: 'Erledige täglich eine kleine Aufgabe, die du bisher vermieden hast. Notiere, wie es sich anfühlt.',
+          dauer: 'täglich 10 Min'
+        },
+        reflexion: [
+          'Was steckt wirklich hinter deiner Antriebslosigkeit?',
+          'Was wäre, wenn du damit einen Arzt oder Berater aufsuchst?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Sinn finden und Motivation aufbauen',
+        dauer: '60 Min',
+        ziel: 'Sinn und Bedeutung als Motivationsgrundlage stärken',
+        psychoedukation: {
+          titel: 'Sinn als stärkste Motivationsquelle',
+          inhalt: 'Menschen, die einen Sinn in dem sehen, was sie tun, sind ausdauernder, resilienter und zufriedener. Sinn entsteht durch: Verbindung zu eigenen Werten, Beitrag zu etwas Größerem, Kompetenzerleben und Beziehungen. Diese Quellen sind aktiv stärkbar.'
+        },
+        interventionen: [
+          {
+            titel: 'Sinnquellen entwickeln',
+            ansatz: 'Wertebasiert',
+            beschreibung: 'Was gibt deinem Leben Sinn? Woraus ziehst du Energie und Bedeutung? Wie kannst du mehr davon in deinen Alltag bringen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Motivations-Ritual',
+            beschreibung: 'Entwickle ein kurzes tägliches Ritual, das dir Energie gibt und an deinen Sinn erinnert (z.B. Morgenroutine mit Zielfrage: „Warum tu ich das heute?").',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ritual testen',
+          beschreibung: 'Teste dein Ritual diese Woche täglich. Was verändert sich?',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was gibt dir wirklich Antrieb?'
+        ]
+      }
+    ]
+  },
+
+  'prüfungsangst': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Prüfungsangst, Blackouts oder starkem Leistungsdruck',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Prüfungsangst verstehen',
+        dauer: '60 Min',
+        ziel: 'Prüfungsangst normalisieren; eigene Angstsymptome einordnen',
+        psychoedukation: {
+          titel: 'Leistungsangst – woher sie kommt',
+          inhalt: 'Prüfungsangst ist eine Form der Leistungsangst. Sie entsteht, wenn die Bewertungssituation als bedrohlich erlebt wird – oft weil Selbstwert und Leistung gleichgesetzt werden: „Wenn ich versage, bin ich ein Versager." Diese Gleichsetzung ist das Problem, nicht die Prüfung.'
+        },
+        interventionen: [
+          {
+            titel: 'Angstsymptome kartieren',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Was passiert vor, während und nach Prüfungen? (körperlich, gedanklich, verhaltensmäßig). Gemeinsam das persönliche Angstprofil erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Hilfreiche vs. hinderliche Angst',
+            beschreibung: 'Leichte Angst schärft die Aufmerksamkeit. Starke Angst blockiert. Auf einer Skala: Wo bist du bei Prüfungen typischerweise?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Angsttagebuch',
+          beschreibung: 'Vor der nächsten Prüfungssituation: Gedanken und Körpersignale notieren.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann hat Prüfungsangst dich das erste Mal wirklich gestört?',
+          'Was passiert in dem Moment, wenn die Angst besonders stark wird?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Angstgedanken verändern',
+        dauer: '60 Min',
+        ziel: 'Katastrophen-Denken stoppen; realistischere Bewertungen entwickeln',
+        psychoedukation: {
+          titel: 'Gedanken erzeugen Angst',
+          inhalt: 'Prüfungsangst wird durch Gedanken verstärkt: „Ich werde versagen", „Alle werden mich auslachen", „Das ist das Ende." Diese Gedanken sind selten realistisch. Sie zu hinterfragen – ohne sie zu ignorieren – reduziert die Angst.'
+        },
+        interventionen: [
+          {
+            titel: 'Katastrophen-Gedanken untersuchen',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Die häufigsten Prüfungsgedanken identifizieren. Für jeden: Wie wahrscheinlich ist das wirklich? Was wäre das Schlimmste – und könntest du damit umgehen? Was ist eine realistischere Version?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Realistische Selbstinstruktionen',
+            beschreibung: 'Formuliere 3 Sätze, die du dir vor und während der Prüfung sagen kannst (z.B. „Ich habe gelernt. Ich tue mein Bestes. Das reicht.").',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Selbstinstruktionen üben',
+          beschreibung: 'Trainiere die Selbstinstruktionen täglich – nicht nur vor Prüfungen, sondern auch in normalen Situationen.',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Welcher Gedanke verschlimmert deine Prüfungsangst am meisten?',
+          'Was ist eine realistischere Alternative?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Vorbereitung und Beruhigung',
+        dauer: '60 Min',
+        ziel: 'Konkrete Strategien für Prüfungsvorbereitung und akute Angst',
+        psychoedukation: {
+          titel: 'Vorbereitung schlägt Angst',
+          inhalt: 'Die beste Strategie gegen Prüfungsangst ist gute Vorbereitung – kombiniert mit Entspannungstechniken für den akuten Moment. Überlernen kurz vor der Prüfung hilft nicht. Was hilft: rechtzeitig anfangen, Schlaf, eine Entspannungstechnik einüben.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliches Prüfungsritual',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam ein Ritual für Prüfungstage entwickeln: Abend vorher, Morgen, direkt vor der Prüfung. Was gibt Sicherheit? Was reduziert Stress?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Entspannungstechnik üben',
+            beschreibung: 'Übe Box-Breathing oder progressive Muskelentspannung für den Moment kurz vor der Prüfung.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ritual testen',
+          beschreibung: 'Teste dein Prüfungsritual bei der nächsten Prüfung oder Leistungssituation.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was verändert sich, wenn du dich gut vorbereitest?'
+        ]
+      }
+    ]
+  },
+
 };

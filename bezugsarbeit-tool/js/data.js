@@ -9869,4 +9869,113 @@ const THEMA_MODULE = {
     ]
   },
 
+  'trennungsangst': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche mit Trennungsangst oder Angst vor dem Verlassenwerden',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Trennungsangst verstehen',
+        dauer: '60 Min',
+        ziel: 'Trennungsangst als Muster erkennen und einordnen',
+        psychoedukation: {
+          titel: 'Was ist Trennungsangst?',
+          inhalt: 'Trennungsangst ist die intensive Furcht vor dem Verlust nahestehender Personen. Sie entsteht oft durch frühe unsichere Bindungserfahrungen. Typische Muster: klammern, Eifersucht, ständige Kontrolle, Panik bei Abwesenheit. Das ist keine "Schwäche" – sondern ein erlerntes Schutzmuster.'
+        },
+        interventionen: [
+          {
+            titel: 'Bindungsmuster reflektieren',
+            ansatz: 'Bindungstheoretisch',
+            beschreibung: 'Wie war es als Kind, wenn Bezugspersonen weg waren? Was habe ich damals gefühlt? Wie hat das mein heutiges Verhalten in Beziehungen geprägt?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Angst-Thermometer',
+            beschreibung: 'In welchen Trennungssituationen ist die Angst am stärksten? Erstelle eine Skala von 1–10 mit konkreten Situationen.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Trennungsangst-Protokoll',
+          beschreibung: 'Notiere diese Woche, wann die Trennungsangst auftaucht. Was löst sie aus? Was passiert in deinem Körper?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'In welchen Beziehungen ist deine Trennungsangst am stärksten?',
+          'Was befürchtest du genau, wenn jemand geht?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Sicherheit in sich selbst entwickeln',
+        dauer: '60 Min',
+        ziel: 'Innere Sicherheit als Alternative zu Beziehungsangst stärken',
+        psychoedukation: {
+          titel: 'Innere sichere Basis',
+          inhalt: 'Trennungsangst hängt oft damit zusammen, dass die eigene Sicherheit ausschließlich in anderen gesucht wird. Das Ziel ist: eine innere sichere Basis entwickeln – das Vertrauen, dass man auch allein okay ist. Das ersetzt keine Beziehungen, macht sie aber entspannter.'
+        },
+        interventionen: [
+          {
+            titel: 'Selbstwirksamkeit stärken',
+            ansatz: 'Kognitiv-behavioural',
+            beschreibung: 'Was kann ich alleine? Was habe ich alleine geschafft? Welche Fähigkeiten habe ich, die unabhängig von anderen existieren? Ressourcen-Inventar erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Innerer Begleiter',
+            beschreibung: 'Stelle dir eine innere Begleitfigur vor – weise, stark, liebevoll. Was sagt sie dir, wenn du Angst hast, verlassen zu werden?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eine Stunde allein',
+          beschreibung: 'Verbringe bewusst eine Stunde allein – ohne Ablenkung durch Handy. Was erlebst du dabei?',
+          dauer: '60 Min'
+        },
+        reflexion: [
+          'Wie fühlt es sich an, allein zu sein?',
+          'Was hilft dir, dich auch ohne andere sicher zu fühlen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gesunde Bindungen gestalten',
+        dauer: '60 Min',
+        ziel: 'Sicheres Bindungsverhalten in Beziehungen entwickeln',
+        psychoedukation: {
+          titel: 'Sichere Bindung',
+          inhalt: 'Sichere Bindung bedeutet: ich vertraue darauf, dass jemand zurückkommt. Ich kann Nähe zulassen und Distanz aushalten. Das ist erlernbar – durch neue Erfahrungen in Beziehungen. Auch Erwachsene können ihre Bindungsmuster verändern.'
+        },
+        interventionen: [
+          {
+            titel: 'Bindungsangst in Beziehungen',
+            ansatz: 'Systemisch',
+            beschreibung: 'Wie zeigt sich meine Trennungsangst in aktuellen Beziehungen? Was tun ich, wenn ich Angst bekomme? (Klammern, Rückzug, Kontrolle?) Was würde ich mir wünschen, anders zu tun?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Bedürfnisse direkt äußern',
+            beschreibung: 'Statt Kontrolle oder Klammern: Was brauche ich wirklich? Formuliere 3 Sätze, die ein Bedürfnis direkt und klar ausdrücken.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Bedürfnis kommunizieren',
+          beschreibung: 'Teile einer Vertrauensperson diese Woche ein Bedürfnis mit, das mit Nähe oder Sicherheit zu tun hat. Wie reagiert sie?',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was möchtest du in deinen Beziehungen verändern?',
+          'Was nimmst du aus diesem Modul mit?'
+        ]
+      }
+    ]
+  },
+
 };

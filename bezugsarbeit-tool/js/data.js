@@ -4835,4 +4835,549 @@ const THEMA_MODULE = {
     ]
   },
 
+  'tabak-ezigarette': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Tabak- oder E-Zigaretten-Konsum oder Ausstiegswunsch',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Nikotin – mehr als Gewohnheit',
+        dauer: '60 Min',
+        ziel: 'Nikotinabhängigkeit und eigenes Rauchverhalten verstehen',
+        psychoedukation: {
+          titel: 'Wie Nikotin süchtig macht',
+          inhalt: 'Nikotin ist eine der am stärksten suchtmachenden Substanzen. Es setzt Dopamin frei und erzeugt schnell körperliche Abhängigkeit. E-Zigaretten werden oft als „harmlos" vermarktet – enthalten aber Nikotin und andere Chemikalien. Jugendliche werden schneller abhängig als Erwachsene.'
+        },
+        interventionen: [
+          {
+            titel: 'Rauchprofil erstellen',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Wie viel, wann, in welchen Situationen? Was löst den Griff zur Zigarette aus? Stress, Langeweile, soziale Situationen? Gemeinsam ein ehrliches Profil erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Kosten-Nutzen-Analyse',
+            beschreibung: 'Was kostet dich das Rauchen – finanziell, gesundheitlich, sozial? Was bringt es dir? Ehrliche Bilanz.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Rauchertagebuch',
+          beschreibung: 'Eine Woche lang notieren: Wann, wie viele, in welcher Situation, was war vorher.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Wann greifst du am häufigsten zur Zigarette?',
+          'Was würde sich ändern, wenn du aufhören würdest?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Ausstiegsmotivation stärken',
+        dauer: '60 Min',
+        ziel: 'Persönliche Gründe für den Ausstieg herausarbeiten; Ambivalenz überwinden',
+        psychoedukation: {
+          titel: 'Warum Aufhören schwer ist',
+          inhalt: 'Aufhören zu rauchen hat zwei Seiten: körperliche Entzugssymptome (Unruhe, Reizbarkeit, Konzentrationsprobleme – dauern ca. 2–4 Wochen) und psychische Gewohnheit (Rituale, Pausen, Hände beschäftigen). Beide lassen sich mit Strategien überwinden.'
+        },
+        interventionen: [
+          {
+            titel: 'Motivationskompass',
+            ansatz: 'Motivational Interviewing',
+            beschreibung: 'Was wären die wichtigsten Gründe, aufzuhören? Gesundheit, Geld, Sport, Geruch, Vorbild sein? Diese Gründe konkret und persönlich formulieren – nicht abstrakt.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Zukunftsvision',
+            beschreibung: 'Stelle dir vor, du rauchst seit einem Jahr nicht mehr. Was ist besser? Was hast du gewonnen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Motivationskarte schreiben',
+          beschreibung: 'Schreibe deine 3 wichtigsten Ausstiegsgründe auf eine Karte – die du griffbereit hast.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was ist dein persönlichster Grund aufzuhören?',
+          'Was hält dich noch davon ab?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Ausstiegsplan und Strategien',
+        dauer: '60 Min',
+        ziel: 'Konkreten Ausstiegsplan erstellen; Alternativen für Auslöser entwickeln',
+        psychoedukation: {
+          titel: 'Ausstieg strukturieren',
+          inhalt: 'Erfolgreiches Aufhören braucht drei Dinge: einen konkreten Ausstiegstermin, Alternativen für die häufigsten Auslöser, und Unterstützung. Viele schaffen es beim dritten oder vierten Versuch – Rückfälle sind normal.'
+        },
+        interventionen: [
+          {
+            titel: 'Ausstiegsplan erstellen',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam: Ausstiegsdatum festlegen, Strategien für die wichtigsten Auslöser, Umgang mit Entzugssymptomen, Wer unterstützt mich? Hilfsangebote besprechen (Rauchtelefon, Apps, Nikotinersatz).',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Alternativen für Auslöser',
+            beschreibung: 'Für deine 3 häufigsten Auslöser: Was tue ich stattdessen? (z.B. bei Stress → Atemübung; bei Pause → Tee trinken; bei Langeweile → kurz rausgehen)',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Plan umsetzen',
+          beschreibung: 'Starte deinen Ausstiegsplan – oder reduziere zumindest um 50% diese Woche.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Wie zuversichtlich bist du auf einer Skala von 1–10?'
+        ]
+      }
+    ]
+  },
+
+  'gaming': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit exzessivem Gaming, Schlaf-/Schulproblemen durch Gaming oder Kontrollverlust',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Gaming – Hobby oder Sucht?',
+        dauer: '60 Min',
+        ziel: 'Eigenes Spielverhalten ehrlich einschätzen',
+        psychoedukation: {
+          titel: 'Wenn Gaming zum Problem wird',
+          inhalt: 'Gaming ist nicht per se problematisch. Problematisch wird es, wenn: wichtige Lebensbereiche (Schule, Schlaf, Beziehungen) leiden, das Spielen nicht mehr gestoppt werden kann, Entzug zu Gereiztheit oder Angst führt oder Gaming als einzige Möglichkeit gilt, sich gut zu fühlen. Das nennt sich Gaming Disorder (WHO-anerkannte Diagnose).'
+        },
+        interventionen: [
+          {
+            titel: 'Gaming-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Wie viele Stunden pro Tag/Woche? Wann – nachts, statt Hausaufgaben, statt sozialer Kontakte? Was passiert, wenn du nicht spielen kannst? Gemeinsam die Auswirkungen auf alle Lebensbereiche einschätzen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Lebensbereiche-Check',
+            beschreibung: 'Bewerte auf einer Skala 1–10: Schule, Schlaf, Freundschaften, Familie, Körper. Was hat sich durch Gaming verändert?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gaming-Protokoll',
+          beschreibung: 'Eine Woche lang ehrlich aufschreiben: Spielstunden pro Tag, was darunter leidet, wie du dich dabei fühlst.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was gibt dir Gaming, das du anderswo nicht findest?',
+          'Was verlierst du durch das übermäßige Spielen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Bedürfnisse hinter dem Gaming',
+        dauer: '60 Min',
+        ziel: 'Psychologische Bedürfnisse, die Gaming erfüllt, verstehen und Alternativen entwickeln',
+        psychoedukation: {
+          titel: 'Warum Gaming so anziehend ist',
+          inhalt: 'Games erfüllen grundlegende psychologische Bedürfnisse: Kompetenz (Fortschritt, Level-ups), Zugehörigkeit (Online-Gemeinschaften), Kontrolle (in der Spielwelt bin ich erfolgreich). Wenn diese Bedürfnisse im realen Leben unerfüllt sind, wird Gaming umso attraktiver.'
+        },
+        interventionen: [
+          {
+            titel: 'Bedürfnis-Analyse',
+            ansatz: 'Motivational Interviewing',
+            beschreibung: 'Welches Bedürfnis erfüllt Gaming für dich am stärksten? Kompetenz, Zugehörigkeit, Kontrolle, Eskapismus? Wie könnte dieses Bedürfnis im Alltag besser erfüllt werden?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Reale Alternativen brainstormen',
+            beschreibung: 'Finde für dein wichtigstes Bedürfnis 3 reale Alternativen. Was wäre machbar?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Alternative ausprobieren',
+          beschreibung: 'Ersetze diese Woche einmal eine Gaming-Einheit durch eine reale Alternative.',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was hat die Alternative dir gegeben?',
+          'Was gefehlt im Vergleich zum Gaming?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Grenzen setzen und Balance finden',
+        dauer: '60 Min',
+        ziel: 'Konkrete Kontrollstrategien entwickeln; gesunde Balance herstellen',
+        psychoedukation: {
+          titel: 'Kontrolliertes Gaming lernen',
+          inhalt: 'Das Ziel ist meist nicht totales Aufhören, sondern eine gesunde Balance. Strategien dafür: feste Zeiten statt unbegrenzt, Gaming nie auf Kosten von Schlaf oder Schule, andere Aktivitäten aktiv einplanen.'
+        },
+        interventionen: [
+          {
+            titel: 'Gaming-Balance-Plan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen realistischen Plan entwickeln: Maximale Spielzeit pro Tag, welche Zeiten sind tabu (nach 22 Uhr, vor Hausaufgaben), welche Aktivitäten werden aufgebaut.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wochenplan erstellen',
+            beschreibung: 'Erstelle einen Wochenplan, der Gaming, Schule, Schlaf, Sport und soziale Kontakte ausbalanciert.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Plan durchhalten',
+          beschreibung: 'Halte dich diese Woche an deinen Plan. Notiere am Ende: Was hat geklappt, was nicht?',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was ist dein wichtigster Schritt zur Balance?'
+        ]
+      }
+    ]
+  },
+
+  'social-media': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Social-Media-Übernutzung, Vergleichsproblematik, FOMO oder Cybermobbing-Erfahrungen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Social Media – Fluch und Segen',
+        dauer: '60 Min',
+        ziel: 'Eigenes Nutzungsverhalten einschätzen; Mechanismen der Plattformen verstehen',
+        psychoedukation: {
+          titel: 'Wie Social Media das Gehirn manipuliert',
+          inhalt: 'Social-Media-Plattformen sind designed, um maximale Aufmerksamkeit zu erzeugen: unendlicher Scroll, variable Belohnungen (Likes), FOMO. Das Gehirn schüttet bei Likes Dopamin aus – und verlangt nach mehr. Das ist keine Schwäche – es ist das Design.'
+        },
+        interventionen: [
+          {
+            titel: 'Nutzungsanalyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Wie viele Stunden pro Tag? Welche Plattformen? Wie fühlst du dich danach – besser oder schlechter? Was löst das Öffnen der App aus?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Social-Media-Audit',
+            beschreibung: 'Gehe deine Accounts durch: Welche Accounts machen dir Freude? Welche machen dich unruhig oder traurig? Was kannst du entweder abbestellen oder mehr sehen?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Bildschirmzeit messen',
+          beschreibung: 'Schau dir diese Woche deine tägliche Bildschirmzeit pro App an und notiere es.',
+          dauer: 'täglich 2 Min'
+        },
+        reflexion: [
+          'Wie fühlst du dich typischerweise nach einer langen Social-Media-Session?',
+          'Welche App macht dich am unzufriedensten?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Vergleiche und FOMO verstehen',
+        dauer: '60 Min',
+        ziel: 'Sozialen Vergleich und Fear of Missing Out (FOMO) erkennen und relativieren',
+        psychoedukation: {
+          titel: 'Instagram-Leben vs. echtes Leben',
+          inhalt: 'Was auf Social Media gezeigt wird, ist eine Highlights-Sammlung – keine Realität. Trotzdem vergleichen wir unser Innenleben mit dem Außenleben anderer. Das macht uns unzufriedener. FOMO (Fear of Missing Out) entsteht durch das Gefühl, dass alle anderen mehr Spaß haben – was eine Illusion ist.'
+        },
+        interventionen: [
+          {
+            titel: 'Vergleichs-Falle erkennen',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Welche Accounts oder Inhalte lösen Neid, Unzufriedenheit oder FOMO aus? Gemeinsam hinterfragen: Was sehen wir wirklich? Was wird versteckt? Was wäre das echte Bild?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Mein echtes Highlights-Reel',
+            beschreibung: 'Was wäre in deinem Leben, wenn du nur deine echten guten Momente zeigen würdest – auch die kleinen? Schreibe 5 auf.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Digital Detox',
+          beschreibung: 'Lege einen Tag oder Abend diese Woche ohne Social Media ein. Was passiert? Was vermisst du – und was nicht?',
+          dauer: 'ein ganzer Abend'
+        },
+        reflexion: [
+          'Wessen Leben auf Social Media machst du dich unglücklich?',
+          'Was wäre, wenn du diesen Account nicht mehr folgst?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gesunde digitale Gewohnheiten entwickeln',
+        dauer: '60 Min',
+        ziel: 'Konkrete Strategien für einen bewussteren Umgang mit Social Media',
+        psychoedukation: {
+          titel: 'Digital Wellbeing',
+          inhalt: 'Es geht nicht darum, Social Media aufzugeben – sondern es bewusst und selektiv zu nutzen. Strategien: Benachrichtigungen abschalten, feste Offline-Zeiten, Apps nach Wohlbefinden kuratieren, Social Media nicht als erstes und letztes des Tages.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliche Digital-Regeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam 5 konkrete persönliche Regeln entwickeln, die realistisch und umsetzbar sind (z.B. kein Handy im Bett, 30 Min Limit pro Tag für TikTok).',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Offline-Aktivitäten stärken',
+            beschreibung: 'Was tätest du mit der Zeit, die du täglich für Social Media aufwendest? Erstelle eine Liste von 5 Alternativen.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Regeln eine Woche testen',
+          beschreibung: 'Teste deine 5 Regeln eine Woche lang. Was klappt, was ist zu streng, was zu locker?',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welche Regel möchtest du dauerhaft beibehalten?'
+        ]
+      }
+    ]
+  },
+
+  'gluecksspiel': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit Wett- oder Glücksspielverhalten, Loot-Box-Problematik oder Spielschulden',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie Glücksspiel funktioniert',
+        dauer: '60 Min',
+        ziel: 'Mechanismen von Glücksspiel und Manipulation verstehen',
+        psychoedukation: {
+          titel: 'Das Haus gewinnt immer',
+          inhalt: 'Glücksspiel ist darauf ausgelegt, Geld zu nehmen – nicht zu geben. Variable Belohnungen (manchmal gewinnen, oft verlieren) sind die stärkste bekannte Form der Konditionierung. Fast-Wins (knapp daneben) sind bewusst eingebaut, um weiterzuspielen. Wetten und Loot Boxes folgen denselben Prinzipien.'
+        },
+        interventionen: [
+          {
+            titel: 'Spielverhalten analysieren',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Was spielst du? Wie viel Geld und Zeit? Was passiert, wenn du verlierst – spielst du mehr, um den Verlust auszugleichen? Gemeinsam die echten Kosten berechnen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Echte Kosten berechnen',
+            beschreibung: 'Berechne, wie viel du in den letzten 3 Monaten für Glücksspiel, Wetten oder Loot Boxes ausgegeben hast. Was hättest du damit kaufen können?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Protokoll führen',
+          beschreibung: 'Protokolliere diese Woche: Wie oft, wie lange, wie viel Geld.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was erwartest du jedes Mal, wenn du spielst?',
+          'Was passiert tatsächlich?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Motive und Kontrolle',
+        dauer: '60 Min',
+        ziel: 'Auslöser und Motive verstehen; Kontrollverlust erkennen',
+        psychoedukation: {
+          titel: 'Wenn das Spielen die Kontrolle übernimmt',
+          inhalt: 'Zeichen für problematisches Glücksspiel: Weiterspielen trotz Verlusten, Lügen über den Konsum, mit gestohlenen oder geborgten Geld spielen, Schule und Beziehungen leiden, gedankliche Fixierung auf das nächste Spiel.'
+        },
+        interventionen: [
+          {
+            titel: 'Auslöser-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Wann spielst du? Langeweile, Stress, nach Verlusten, mit Freunden? Für jeden Auslöser: Was wäre eine Alternative?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Stop-Strategien',
+            beschreibung: 'Formuliere 3 konkrete Strategien, um das Spielen zu stoppen, wenn du merkst, dass du die Kontrolle verlierst.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stop-Strategie anwenden',
+          beschreibung: 'Wende diese Woche eine Stop-Strategie an, wenn der Drang zum Spielen kommt.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann verlierst du die Kontrolle am ehesten?',
+          'Was hilft dir, aufzuhören?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Ausstieg und Unterstützung',
+        dauer: '60 Min',
+        ziel: 'Konkrete Schritte zur Reduktion oder zum Ausstieg',
+        psychoedukation: {
+          titel: 'Spielsucht ist behandelbar',
+          inhalt: 'Spielsucht ist eine anerkannte psychische Erkrankung – und sie ist behandelbar. Professionelle Hilfe zu suchen ist kein Zeichen von Schwäche. Hilfsangebote: Suchtberatungsstellen, Selbsthilfegruppen, Online-Beratung. Erste Schritte: Zugang zum Spielen einschränken, Schulden transparent machen, Unterstützung aktivieren.'
+        },
+        interventionen: [
+          {
+            titel: 'Ausstiegsplan',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was ist der erste Schritt? Apps löschen, Kreditkarte weggeben, jemandem vertrauen, Beratungsstelle aufsuchen? Gemeinsam konkrete Schritte formulieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Hilfsangebote kennen',
+            beschreibung: 'Recherchiere eine konkrete Anlaufstelle (Jugendberatung, Suchtberatung). Schreibe Kontaktdaten auf.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt gehen',
+          beschreibung: 'Setze diese Woche einen konkreten ersten Schritt um.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen ersten Schritt gehst du?'
+        ]
+      }
+    ]
+  },
+
+  'selbstmedikation': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit missbräuchlichem Medikamentenkonsum (Schlafmittel, Schmerzmittel, ADHS-Medikamente)',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Medikamente – was ich darüber wissen muss',
+        dauer: '60 Min',
+        ziel: 'Grundwissen über Medikamentenmissbrauch; eigenes Verhalten einschätzen',
+        psychoedukation: {
+          titel: 'Wenn Medikamente zum Problem werden',
+          inhalt: 'Medikamente, die verschrieben oder freiverkäuflich erhältlich sind, können missbraucht werden: zur Stimmungsaufhellung, zum Schlafen oder Wachbleiben, zur Leistungssteigerung. Was legal ist, ist nicht automatisch ungefährlich. Abhängigkeit kann auch ohne illegale Substanzen entstehen.'
+        },
+        interventionen: [
+          {
+            titel: 'Ehrliche Nutzungsanalyse',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Was nimmst du, wann, wie oft? Wurden diese Medikamente verschrieben? Nimmst du mehr als vorgeschrieben? Warum? Ohne Vorwurf – mit dem Ziel, die Situation zu verstehen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Risiko einschätzen',
+            beschreibung: 'Für jedes Medikament: Was sind die Risiken bei Missbrauch? Was passiert langfristig? Recherchiere gemeinsam.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ehrliches Protokoll',
+          beschreibung: 'Diese Woche: Jede Einnahme notieren, die nicht strikt nach Anweisung war.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was erhoffst du dir von den Medikamenten?',
+          'Was würde ohne sie passieren?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Was ich wirklich brauche',
+        dauer: '60 Min',
+        ziel: 'Bedürfnisse hinter der Selbstmedikation erkennen; gesündere Strategien entwickeln',
+        psychoedukation: {
+          titel: 'Selbstmedikation als Symptom',
+          inhalt: 'Selbstmedikation ist oft ein Zeichen dafür, dass etwas anderes nicht stimmt: unbehandelte Angst, Schlafstörungen, Schmerzen, ADHS oder Depressionen. Die eigentliche Ursache zu behandeln – durch professionelle Hilfe – ist nachhaltiger als Selbstmedikation.'
+        },
+        interventionen: [
+          {
+            titel: 'Grundproblem identifizieren',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was versuchst du mit den Medikamenten zu lösen? Schlaf, Schmerz, Angst, Konzentration, Stimmung? Welche professionelle Unterstützung könnte das Grundproblem angehen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Alternative Strategien',
+            beschreibung: 'Was könntest du statt der Selbstmedikation tun? Für Schlaf, Schmerz oder Stress alternative Strategien erarbeiten.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Alternative ausprobieren',
+          beschreibung: 'Versuche diese Woche einmal eine Alternative statt der Selbstmedikation.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was ist das eigentliche Problem, das du lösen möchtest?',
+          'Wer könnte dir dabei helfen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Hilfe suchen und Veränderung planen',
+        dauer: '60 Min',
+        ziel: 'Professionelle Unterstützung aktivieren; konkreten Veränderungsplan erstellen',
+        psychoedukation: {
+          titel: 'Wenn Selbsthilfe nicht reicht',
+          inhalt: 'Medikamentenmissbrauch erfordert oft professionelle Unterstützung – vom Arzt, Schulpsychologen oder einer Beratungsstelle. Das ist keine Schwäche. Je früher man Hilfe sucht, desto leichter die Veränderung.'
+        },
+        interventionen: [
+          {
+            titel: 'Veränderungsplan mit Unterstützung',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was möchtest du ändern? Welche professionelle Unterstützung brauchst du? Welche Schritte sind realistisch? Gemeinsam konkret planen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Arztgespräch vorbereiten',
+            beschreibung: 'Wenn ein Arztbesuch sinnvoll ist: Was möchtest du sagen? Notiere die wichtigsten Punkte.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt gehen',
+          beschreibung: 'Einen konkreten ersten Schritt aus dem Plan umsetzen.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen Schritt möchtest du als nächstes gehen?'
+        ]
+      }
+    ]
+  },
+
 };

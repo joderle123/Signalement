@@ -399,9 +399,30 @@ function renderTherapiemodul(modul, themaId) {
           <div style="font-weight:700;font-size:12px;color:${farbe};">${s.titel}</div>
           <div style="font-size:10px;color:#6B7280;margin-top:1px;">⏱ ${s.dauer} · ${s.ziel}</div>
         </div>
+        <button onclick="event.stopPropagation();printSitzung('${themaId}',${s.nr})"
+          style="border:1px solid ${farbe}44;background:#fff;color:${farbe};border-radius:5px;padding:3px 8px;font-size:10px;cursor:pointer;white-space:nowrap;">🖨️ Drucken</button>
         <span id="${sid}-arrow" style="color:${farbe};font-size:14px;transition:transform 0.2s;">▼</span>
       </div>
       <div id="${sid}" style="display:none;padding:12px;">`;
+
+    // Pädagogische Felder (nur wenn vorhanden)
+    if (s.materialien || s.gruppenformat) {
+      html += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">`;
+      if (s.gruppenformat) {
+        html += `<span style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:5px;padding:3px 8px;font-size:10px;color:#0369A1;">👥 ${s.gruppenformat}</span>`;
+      }
+      if (s.materialien) {
+        html += `<span style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:5px;padding:3px 8px;font-size:10px;color:#166534;">📋 ${s.materialien.join(', ')}</span>`;
+      }
+      html += `</div>`;
+    }
+
+    if (s.hinweis_paedagoge) {
+      html += `<div style="margin-bottom:12px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:6px;padding:10px 12px;">
+        <div style="font-size:10px;font-weight:700;color:#C2410C;margin-bottom:4px;">💡 Hinweis für Pädagogen</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">${s.hinweis_paedagoge}</div>
+      </div>`;
+    }
 
     if (s.psychoedukation) {
       html += `<div style="margin-bottom:12px;">
@@ -433,6 +454,16 @@ function renderTherapiemodul(modul, themaId) {
           <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:2px;">${u.titel} <span style="font-weight:400;opacity:0.7;">(${u.dauer})</span></div>
           <div style="font-size:12px;color:#374151;line-height:1.6;">${u.beschreibung}</div>
         </div>`).join('')}
+      </div>`;
+    }
+
+    if (s.gruppenvariation) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#0F766E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">👥 Gruppenvariation</div>
+        <div style="background:#F0FDFA;border:1.5px solid #99F6E4;border-radius:6px;padding:10px 12px;">
+          <div style="font-weight:600;font-size:12px;color:#0F766E;margin-bottom:4px;">${s.gruppenvariation.titel}</div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${s.gruppenvariation.beschreibung}</div>
+        </div>
       </div>`;
     }
 
@@ -470,6 +501,149 @@ function toggleSitzung(sid) {
   const open = el.style.display !== 'none';
   el.style.display = open ? 'none' : 'block';
   if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function printSitzung(themaId, nr) {
+  const modul = typeof THEMA_MODULE !== 'undefined' ? THEMA_MODULE[themaId] : null;
+  if (!modul) return;
+  const sitzung = modul.sitzungen.find(s => s.nr === nr);
+  if (!sitzung) return;
+
+  // Thema-Titel aus THEMEN_KATEGORIEN suchen
+  let themaLabel = themaId;
+  if (typeof THEMEN_KATEGORIEN !== 'undefined') {
+    for (const kat of THEMEN_KATEGORIEN) {
+      const t = kat.themen.find(th => th.id === themaId);
+      if (t) { themaLabel = t.titel; break; }
+    }
+  }
+
+  const html = generatePrintSheetHTML(themaLabel, modul, sitzung);
+  const win = window.open('', '_blank');
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 600);
+}
+
+function generatePrintSheetHTML(themaLabel, modul, s) {
+  const escHtml = str => String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const field = (label, content) => content ? `
+    <div class="section">
+      <div class="section-label">${escHtml(label)}</div>
+      <div class="section-body">${escHtml(content)}</div>
+    </div>` : '';
+  const writeLine = (n=2) => '<div class="write-lines">' + Array(n).fill('<div class="line"></div>').join('') + '</div>';
+
+  return `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>${escHtml(themaLabel)} – Sitzung ${s.nr}</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #222; margin: 0; padding: 0; }
+  .page { max-width: 210mm; margin: 0 auto; padding: 16mm 18mm 16mm 18mm; }
+  h1 { font-size: 15pt; color: #1e3a5f; border-bottom: 2pt solid #1e3a5f; padding-bottom: 5pt; margin: 0 0 4pt 0; }
+  .meta { font-size: 9pt; color: #555; margin-bottom: 14pt; }
+  .badge { display: inline-block; border: 1pt solid #aaa; border-radius: 4pt; padding: 2pt 7pt; font-size: 8.5pt; margin-right: 5pt; margin-bottom: 4pt; }
+  .badge.group { border-color: #0369a1; color: #0369a1; }
+  .badge.mat { border-color: #166534; color: #166534; }
+  .section { margin-bottom: 12pt; }
+  .section-label { font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5pt; color: #444; margin-bottom: 4pt; border-left: 3pt solid #1e3a5f; padding-left: 5pt; }
+  .section-body { font-size: 10.5pt; line-height: 1.6; color: #333; background: #f7f7f7; border: 1pt solid #ddd; border-radius: 4pt; padding: 8pt 10pt; }
+  .hint-box { background: #fff8f0; border: 1.5pt solid #f59e0b; border-radius: 4pt; padding: 8pt 10pt; margin-bottom: 12pt; font-size: 10pt; }
+  .hint-label { font-weight: bold; color: #b45309; font-size: 9pt; margin-bottom: 3pt; }
+  .item { border: 1pt solid #ccc; border-radius: 4pt; padding: 7pt 10pt; margin-bottom: 6pt; background: #fff; }
+  .item-title { font-weight: bold; font-size: 10.5pt; margin-bottom: 3pt; }
+  .item-sub { font-size: 8.5pt; color: #666; margin-bottom: 4pt; }
+  .item-body { font-size: 10.5pt; line-height: 1.6; }
+  .write-lines { margin-top: 4pt; }
+  .line { border-bottom: 1pt solid #bbb; height: 18pt; margin-bottom: 2pt; }
+  .reflexion-q { margin-bottom: 8pt; }
+  .reflexion-q strong { font-size: 10.5pt; }
+  .group-box { background: #f0fdfa; border: 1.5pt solid #6ee7b7; border-radius: 4pt; padding: 8pt 10pt; margin-bottom: 12pt; }
+  .group-label { font-weight: bold; color: #0f766e; font-size: 9pt; margin-bottom: 3pt; }
+  .footer { margin-top: 18pt; border-top: 1pt solid #ccc; padding-top: 6pt; font-size: 8pt; color: #999; display: flex; justify-content: space-between; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 12mm 16mm; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>${escHtml(themaLabel)} – Sitzung ${s.nr}: ${escHtml(s.titel)}</h1>
+  <div class="meta">
+    ⏱ ${escHtml(s.dauer)} &nbsp;·&nbsp; 🎯 ${escHtml(s.ziel)}
+    ${modul.zielgruppe ? `&nbsp;·&nbsp; 👤 ${escHtml(modul.zielgruppe)}` : ''}
+  </div>
+
+  ${s.gruppenformat ? `<span class="badge group">👥 ${escHtml(s.gruppenformat)}</span>` : ''}
+  ${s.materialien ? s.materialien.map(m => `<span class="badge mat">📋 ${escHtml(m)}</span>`).join('') : ''}
+
+  ${s.hinweis_paedagoge ? `<div class="hint-box"><div class="hint-label">💡 Hinweis für Pädagogen</div>${escHtml(s.hinweis_paedagoge)}</div>` : ''}
+
+  ${s.psychoedukation ? `
+  <div class="section">
+    <div class="section-label">📚 Psychoedukation: ${escHtml(s.psychoedukation.titel)}</div>
+    <div class="section-body">${escHtml(s.psychoedukation.inhalt)}</div>
+  </div>` : ''}
+
+  ${s.interventionen && s.interventionen.length > 0 ? `
+  <div class="section">
+    <div class="section-label">🧠 Interventionen</div>
+    ${s.interventionen.map(i => `
+    <div class="item">
+      <div class="item-title">${escHtml(i.titel)}</div>
+      <div class="item-sub">📌 ${escHtml(i.ansatz)} · ⏱ ${escHtml(i.dauer)}</div>
+      <div class="item-body">${escHtml(i.beschreibung)}</div>
+      ${writeLine(2)}
+    </div>`).join('')}
+  </div>` : ''}
+
+  ${s.uebungen && s.uebungen.length > 0 ? `
+  <div class="section">
+    <div class="section-label">🎯 Übungen</div>
+    ${s.uebungen.map(u => `
+    <div class="item">
+      <div class="item-title">${escHtml(u.titel)} <span style="font-weight:normal;font-size:9pt;">(${escHtml(u.dauer)})</span></div>
+      <div class="item-body">${escHtml(u.beschreibung)}</div>
+      ${writeLine(3)}
+    </div>`).join('')}
+  </div>` : ''}
+
+  ${s.gruppenvariation ? `
+  <div class="group-box">
+    <div class="group-label">👥 Gruppenvariation: ${escHtml(s.gruppenvariation.titel)}</div>
+    ${escHtml(s.gruppenvariation.beschreibung)}
+  </div>` : ''}
+
+  ${s.hausaufgabe ? `
+  <div class="section">
+    <div class="section-label">📝 Hausaufgabe: ${escHtml(s.hausaufgabe.titel)} (${escHtml(s.hausaufgabe.dauer)})</div>
+    <div class="section-body">${escHtml(s.hausaufgabe.beschreibung)}</div>
+    ${writeLine(3)}
+  </div>` : ''}
+
+  ${s.reflexion && s.reflexion.length > 0 ? `
+  <div class="section">
+    <div class="section-label">💭 Reflexionsfragen</div>
+    ${s.reflexion.map(q => `
+    <div class="reflexion-q">
+      <strong>${escHtml(q)}</strong>
+      ${writeLine(2)}
+    </div>`).join('')}
+  </div>` : ''}
+
+  <div class="footer">
+    <span>CDSE Bezugsarbeit-Tool · Sitzungsarbeitsblatt</span>
+    <span>Sitzung ${s.nr} von ${modul.sitzungen.length} · ${escHtml(modul.dauer)}</span>
+  </div>
+</div>
+</body>
+</html>`;
 }
 
 function renderTherapiemodul_legacy(aktivitaeten, interventionen) {

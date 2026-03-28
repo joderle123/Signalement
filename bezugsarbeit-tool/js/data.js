@@ -3650,4 +3650,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'konfliktmanagement': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit häufigen Konflikten, eskalierende Streitigkeiten oder fehlenden Deeskalationsstrategien',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Konflikte verstehen',
+        dauer: '60 Min',
+        ziel: 'Konflikte als normale Erscheinung einordnen; eigene Konfliktstile kennenlernen',
+        psychoedukation: {
+          titel: 'Konflikte sind unvermeidbar',
+          inhalt: 'Überall, wo Menschen unterschiedliche Bedürfnisse, Werte oder Interessen haben, entstehen Konflikte. Das ist normal. Problematisch wird es, wenn Konflikte eskalieren, vermieden werden oder immer nach demselben destruktiven Muster laufen. Die gute Nachricht: Konflikte lassen sich lösen lernen.'
+        },
+        interventionen: [
+          {
+            titel: 'Eigener Konfliktstil',
+            ansatz: 'Systemisch',
+            beschreibung: 'Welcher Konfliktstil bin ich? (Kämpfer, Flüchter, Nachgeber, Problemlöser). Anhand eines konkreten Konflikts herausarbeiten: Was tue ich typischerweise? Was sind die Konsequenzen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Konflikt-Zeitlinie',
+            beschreibung: 'Zeichne einen typischen Konflikt: Auslöser → Eskalation → Höhepunkt → Ergebnis. Wo hättest du eingreifen können?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Konflikt beobachten',
+          beschreibung: 'Beobachte diese Woche einen Konflikt (eigener oder fremder) und notiere: Auslöser, Reaktionen, Ergebnis.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher Konfliktstil ist deiner? Was sind die Vor- und Nachteile?',
+          'Was würdest du gerne anders machen?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Deeskalieren in heißen Momenten',
+        dauer: '60 Min',
+        ziel: 'Konkrete Deeskalationstechniken für akute Konfliktsituationen',
+        psychoedukation: {
+          titel: 'Im heißen Moment klug handeln',
+          inhalt: 'Wenn Emotionen hochkochen, ist rationales Denken eingeschränkt. Deeskalation bedeutet: erst die Temperatur senken, dann das Problem lösen. Wer deeskaliert, verliert nicht – er gewinnt die Möglichkeit, das Problem wirklich zu lösen.'
+        },
+        interventionen: [
+          {
+            titel: 'Deeskalations-Toolbox',
+            ansatz: 'Verhaltenstherapeutisch',
+            beschreibung: 'Techniken erarbeiten und üben: Pause einlegen, Tempo rausnehmen, Ton senken, aktiv zuhören, gemeinsame Interessen benennen. Rollenspiel: ein eskalierende Situation deeskalieren.',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Deeskalations-Sätze formulieren',
+            beschreibung: 'Formuliere 3 Sätze, die du in einem Konflikt sagen kannst, um die Temperatur zu senken (z.B. „Ich möchte das wirklich lösen. Können wir kurz pausieren?").',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Deeskalation ausprobieren',
+          beschreibung: 'Setze in einem Konflikt dieser Woche eine Deeskalationstechnik bewusst ein.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Was war schwierig am Deeskalieren?',
+          'Was hat funktioniert?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Interessen statt Positionen',
+        dauer: '60 Min',
+        ziel: 'Hinter Positionen liegende Bedürfnisse erkennen; Win-Win-Lösungen entwickeln',
+        psychoedukation: {
+          titel: 'Das Eisberg-Modell des Konflikts',
+          inhalt: 'Sichtbar ist im Konflikt die Position: „Ich will X!" Darunter liegen Interessen und Bedürfnisse: Warum will ich X? Was brauche ich wirklich? Wenn beide Seiten ihre tiefer liegenden Bedürfnisse kennen, lassen sich oft Lösungen finden, die beide zufriedenstellen.'
+        },
+        interventionen: [
+          {
+            titel: 'Positions-Interessen-Analyse',
+            ansatz: 'Systemisch / Lösungsfokussiert',
+            beschreibung: 'Anhand eines konkreten Konflikts: Was ist meine Position? Was ist mein dahinterliegendes Bedürfnis? Was könnte das dahinterliegende Bedürfnis der anderen Seite sein? Welche Lösung würde beide Bedürfnisse erfüllen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Lösungsoptionen brainstormen',
+            beschreibung: 'Für einen aktuellen Konflikt: Sammle 5 mögliche Lösungen, ohne sie zu bewerten. Dann wähle die beste aus.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Lösung umsetzen',
+          beschreibung: 'Versuche diese Woche in einem Konflikt, hinter die Position der anderen Person zu schauen und ein Gespräch über Bedürfnisse zu führen.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was war überraschend, wenn du hinter die Position geschaut hast?',
+          'Hat sich die Lösung verändert, wenn du die Bedürfnisse siehst?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Langfristig konfliktfähig werden',
+        dauer: '60 Min',
+        ziel: 'Konfliktlösung als Kompetenz verankern; Umgang mit ungelösten Konflikten',
+        psychoedukation: {
+          titel: 'Nicht jeder Konflikt lässt sich lösen',
+          inhalt: 'Manchmal ist eine vollständige Lösung nicht möglich – weil die andere Seite nicht will, weil die Positionen zu weit auseinander liegen, oder weil es Zeit braucht. Dann geht es darum, mit dem Konflikt umzugehen, ohne ihn zu vergiften. Auch das ist eine Kompetenz.'
+        },
+        interventionen: [
+          {
+            titel: 'Persönliches Konflikt-Protokoll',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Gemeinsam einen persönlichen Konfliktplan erstellen: Was sind meine Stärken und Schwächen im Konflikt? Welche Techniken helfen mir am meisten? Wann brauche ich Unterstützung?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ungelöste Konflikte einordnen',
+            beschreibung: 'Gibt es Konflikte, die du gerne lösen würdest, aber nicht kannst? Was kannst du kontrollieren? Was nicht? Wie kannst du damit leben?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Konfliktplan anwenden',
+          beschreibung: 'Wende in dieser Woche deinen persönlichen Konfliktplan an und reflektiere, was gut funktioniert hat.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat sich in diesem Modul in deinem Umgang mit Konflikten verändert?',
+          'Was nimmst du als wichtigste Erkenntnis mit?'
+        ]
+      }
+    ]
+  },
+
 };

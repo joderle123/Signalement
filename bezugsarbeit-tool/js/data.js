@@ -10051,6 +10051,177 @@ const THEMA_MODULE = {
     ]
   },
 
+  'soziale-wahrnehmung': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Jugendliche, die soziale Situationen als anstrengend oder schwer lesbar erleben',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Soziale Signale – was Menschen kommunizieren',
+        dauer: '60 Min',
+        ziel: 'Verstehen, wie nonverbale Kommunikation funktioniert und was sie bedeutet',
+        materialien: ['Bildkarten mit Gesichtsausdrücken', 'Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe (2–5)',
+        hinweis_paedagoge: 'Neutral und wertfrei arbeiten – "soziale Wahrnehmung" ist ein Spektrum, nicht eine Fähigkeit, die man hat oder nicht hat. Viele Jugendliche sind sehr sensitiv, andere lesen Signale anders. Beides ist okay. Ziel: Bewusstsein, nicht Anpassung um jeden Preis.',
+        psychoedukation: {
+          titel: 'Kommunikation ist mehr als Worte',
+          inhalt: 'Etwa 70–90% der Kommunikation geschieht nonverbal: Mimik, Körperhaltung, Tonfall, Blickkontakt, Distanz. Manche Menschen lesen diese Signale intuitiv, andere müssen sie bewusst lernen. Das ist kein Vor- oder Nachteil – es ist einfach unterschiedlich.'
+        },
+        interventionen: [
+          {
+            titel: 'Mimik-Analyse',
+            ansatz: 'Lernbasiert',
+            beschreibung: 'Bildkarten mit Gesichtsausdrücken: Welches Gefühl zeigt das Gesicht? Was sagen die Augen? Was der Mund? Gemeinsam besprechen: Gibt es Eindeutige? Welche sind mehrdeutig? Warum?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Körpersprache beobachten',
+            beschreibung: 'In einem kurzen Video (ohne Ton) eine Person beobachten: Was kommuniziert sie mit Körper und Mimik? Dann mit Ton ansehen: Stimmte meine Einschätzung?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Pantomime-Spiel',
+          beschreibung: 'Eine Person zeigt ein Gefühl mit Körper und Mimik (ohne Worte), die anderen raten. Anschließend besprechen: Was waren die Hinweise? Wo lagen Missverständnisse?'
+        },
+        hausaufgabe: {
+          titel: 'Signale beobachten',
+          beschreibung: 'Beobachte diese Woche in einer Gruppe (Klasse, Familie) die nonverbale Kommunikation. Was fällt dir auf? Notiere eine Beobachtung.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welche sozialen Signale sind für dich leicht zu lesen, welche schwierig?',
+          'Wann hast du soziale Signale missverstanden? Was ist dabei passiert?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Gespräche führen – Struktur und Rhythmus',
+        dauer: '60 Min',
+        ziel: 'Gesprächsstrukturen verstehen und eigene Kommunikationsmuster reflektieren',
+        materialien: ['Papier', 'Stifte', 'optionale Rollenkarten'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe',
+        hinweis_paedagoge: 'Rollenspiele können für manche sehr herausfordernd sein. Immer freiwillig – nie Druck. Alternativ: Szenarien beschreiben oder schriftlich bearbeiten. Viele Jugendliche haben mehr Kompetenz als sie zeigen – Selbstwirksamkeit stärken.',
+        psychoedukation: {
+          titel: 'Gespräche haben unsichtbare Regeln',
+          inhalt: 'Gespräche folgen oft ungeschriebenen Regeln: abwechseln, Pausen lassen, Themen wechseln, auf Reaktionen eingehen. Diese Regeln werden meist intuitiv gelernt. Wer sie nicht intuitiv kennt, kann sie explizit lernen – und das ist genauso gut.'
+        },
+        interventionen: [
+          {
+            titel: 'Gesprächs-Analyse',
+            ansatz: 'Lernbasiert',
+            beschreibung: 'Ein kurzes Gespräch in Szene setzen oder Video zeigen. Gemeinsam analysieren: Wer spricht wann? Wie signalisiert man, dass man dran ist? Was passiert, wenn jemand zu lange spricht? Wo gibt es Missverständnisse?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Aktives Zuhören üben',
+            beschreibung: 'Eine Person erzählt 2 Minuten etwas (Erlebnis, Hobby). Die andere hört zu ohne zu unterbrechen, stellt danach 2 Fragen. Wechsel. Wie fühlt sich echtes Zuhören an?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gesprächsregeln-Plakat',
+          beschreibung: 'Gruppe entwickelt gemeinsam eine Liste von Gesprächsregeln, die fair und klar sind. Was würde jedem helfen, sich in einem Gespräch wohl zu fühlen?'
+        },
+        hausaufgabe: {
+          titel: 'Ein Gespräch bewusst führen',
+          beschreibung: 'Führe diese Woche ein bewusstes Gespräch: Beachte Reihenfolge, stelle mindestens eine Frage, höre aktiv zu. Was fällt dir auf?',
+          dauer: '10 Min Reflexion'
+        },
+        reflexion: [
+          'Was macht Gespräche für dich anstrengend?',
+          'Was würde dir helfen, entspannter kommunizieren zu können?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Eigene Kommunikationsweise kennen und wertschätzen',
+        dauer: '60 Min',
+        ziel: 'Eigenen Kommunikationsstil verstehen und als Stärke sehen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe',
+        hinweis_paedagoge: 'Wichtig: Anderssein ist kein Fehler. Manche Jugendliche kommunizieren sehr direkt, sehr detailliert oder sehr analytisch – das sind Stärken in vielen Kontexten. Ziel ist nicht Anpassung, sondern Verständnis beider Seiten.',
+        psychoedukation: {
+          titel: 'Jeder Kommunikationsstil hat Stärken',
+          inhalt: 'Es gibt keinen "richtigen" Kommunikationsstil. Direkte Menschen vermeiden Missverständnisse. Sehr detaillierte Kommunikation ist präzise. Ruhige Kommunikation kann beruhigend sein. Der Schlüssel ist: den eigenen Stil kennen und anderen erklären können.'
+        },
+        interventionen: [
+          {
+            titel: 'Kommunikationsprofil',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Erstelle ein persönliches Kommunikationsprofil: Wie spreche ich? (direkt/indirekt, kurz/ausführlich, sachlich/emotional) Was ist meine Stärke? Was führt manchmal zu Missverständnissen? Wie kann ich das erklären?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Meinen Stil erklären',
+            beschreibung: 'Formuliere 2–3 Sätze, mit denen du deinen Kommunikationsstil einem neuen Menschen erklären könntest: "Ich kommuniziere am liebsten..." oder "Es hilft mir, wenn..."',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Kommunikationsstile-Galerie',
+          beschreibung: 'Jede/r erstellt eine kurze "Visitenkarte" mit ihrem Kommunikationsstil (Stärken, was sie sich wünschen, was ihnen schwerfällt). Gegenseitig vorstellen – Verständnis fördern.'
+        },
+        hausaufgabe: {
+          titel: 'Stärke zeigen',
+          beschreibung: 'Nutze diese Woche bewusst eine Kommunikationsstärke von dir. Wann? In welcher Situation? Was ist passiert?',
+          dauer: '10 Min Reflexion'
+        },
+        reflexion: [
+          'Was ist deine größte Kommunikationsstärke?',
+          'Was würdest du dir von anderen wünschen, damit Kommunikation leichter ist?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Soziale Situationen meistern',
+        dauer: '60 Min',
+        ziel: 'Strategien für herausfordernde soziale Situationen entwickeln',
+        materialien: ['Rollenkarten', 'Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch oder Kleingruppe',
+        hinweis_paedagoge: 'Konkrete Situationen aus dem Alltag der Jugendlichen nehmen (Pause, Gruppenarbeit, Konflikt, neue Gruppe). Keine abstrakten Szenarien. Den Fokus auf "Was könnte helfen?" legen – nicht auf "Was hast du falsch gemacht?"',
+        psychoedukation: {
+          titel: 'Soziale Strategien sind erlernbar',
+          inhalt: 'Viele Menschen entwickeln Strategien, um soziale Situationen zu meistern: sich vorbereiten, Pausen einbauen, vertraute Personen dabei haben, klare Strukturen bevorzugen. Das ist keine Schwäche – es ist kluge Selbstkenntnis.'
+        },
+        interventionen: [
+          {
+            titel: 'Strategie-Toolbox entwickeln',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Welche sozialen Situationen sind am schwierigsten? (Kleine Gruppen, große Gruppen, Konflikte, unbekannte Menschen?) Für jede Situation: Was hilft mir? Was macht es schlimmer? Gemeinsam eine persönliche Strategie-Toolbox erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Situation vorbereiten',
+            beschreibung: 'Wähle eine soziale Situation, die du schwierig findest. Bereite sie vor: Was könnte passieren? Was sage ich? Wie reagiere ich, wenn...? Kurzes Rollenspiel oder Gedankenexperiment.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Gruppenplan für schwierige Situationen',
+          beschreibung: 'Gruppe entwickelt gemeinsam Strategien für konkrete Schulalltagssituationen: neue Gruppenarbeit, Streit in der Klasse, Pausengestaltung. Ergebnis: Gruppenstrategieplan.'
+        },
+        hausaufgabe: {
+          titel: 'Eine Strategie anwenden',
+          beschreibung: 'Teste diese Woche eine neue Strategie in einer sozialen Situation. Was hat geholfen? Was würdest du beim nächsten Mal ändern?',
+          dauer: '10 Min Reflexion'
+        },
+        reflexion: [
+          'Welche soziale Situation möchtest du meistern?',
+          'Was nimmst du aus diesem Modul mit?'
+        ]
+      }
+    ]
+  },
+
   'trennungsangst': {
     dauer: '3 Sitzungen · ca. 3 Std.',
     zielgruppe: 'Jugendliche mit Trennungsangst oder Angst vor dem Verlassenwerden',

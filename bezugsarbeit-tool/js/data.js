@@ -2717,4 +2717,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'stress-angst': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit Stresssymptomen, Prüfungsangst, sozialer Angst oder allgemeiner Anspannung',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Stress und Angst verstehen',
+        dauer: '60 Min',
+        ziel: 'Physiologie von Stress und Angst verstehen; eigene Stressoren identifizieren',
+        psychoedukation: {
+          titel: 'Kampf, Flucht, Erstarren – das Stresssystem',
+          inhalt: 'Stress und Angst sind biologische Alarmsignale: Herzrasen, Schwitzen, Muskelanspannung – der Körper bereitet sich auf Gefahr vor. Das war in der Steinzeit sinnvoll. Heute lösen soziale Situationen, Prüfungen oder Konflikte dieselbe Reaktion aus. Das Gehirn unterscheidet nicht zwischen echtem Tiger und sozialem Druck.'
+        },
+        interventionen: [
+          {
+            titel: 'Stress-Thermometer',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Auf einer Skala 1–10: Wie gestresst bist du gerade? Was sind deine typischen Stressoren? Welche körperlichen Signale hast du bei Stress? Gemeinsam eine persönliche Stresskarte erstellen.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Körperscan',
+            beschreibung: 'Schließe die Augen, gehe durch deinen Körper von Kopf bis Fuß: Wo spürst du Anspannung? Enge? Unruhe?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stress-Tagebuch',
+          beschreibung: 'Notiere diese Woche täglich: Was hat Stress ausgelöst? Wie stark (1–10)? Was habe ich gemacht?',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was sind deine stärksten Stressoren im Moment?',
+          'Wie reagiert dein Körper typischerweise auf Stress?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Angst analysieren',
+        dauer: '60 Min',
+        ziel: 'Angstmuster verstehen; zwischen hilfreicher und hinderlicher Angst unterscheiden',
+        psychoedukation: {
+          titel: 'Angst als Signal – nicht als Feind',
+          inhalt: 'Nicht alle Angst ist schlecht. Leichte Angst vor einer Prüfung schärft die Aufmerksamkeit. Problematisch wird Angst, wenn sie vermieden wird – denn Vermeidung verstärkt die Angst langfristig. Der Ausweg führt durch die Angst hindurch, nicht um sie herum.'
+        },
+        interventionen: [
+          {
+            titel: 'Angst-Analyse',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Eine konkrete Angstsituation durchgehen: Was genau passiert? Was befürchtest du? Wie wahrscheinlich ist das wirklich? Was wäre das Schlimmste – und könntest du damit umgehen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Angst-Skala erstellen',
+            beschreibung: 'Liste Situationen auf, die Angst auslösen, von leicht (1) bis sehr stark (10). Das ist die Basis für eine spätere schrittweise Konfrontation.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Vermeidungscheck',
+          beschreibung: 'Was vermeidest du wegen Angst? Notiere 3 Situationen, die du seit Kurzem meidest.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welche Situation löst bei dir die stärkste Angst aus?',
+          'Was verlierst du, weil du diese Situation vermeidest?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Strategien gegen Stress und Angst',
+        dauer: '60 Min',
+        ziel: 'Konkrete Techniken erlernen: Entspannung, Atemübungen, kognitive Umstrukturierung',
+        psychoedukation: {
+          titel: 'Der Parasympathikus als Gegenspieler',
+          inhalt: 'Das Gegenteil von Stress ist nicht Nichts-Tun, sondern aktive Entspannung. Der Parasympathikus – unser Ruhesystem – lässt sich gezielt aktivieren: durch langsames Ausatmen, progressive Muskelentspannung oder Achtsamkeit.'
+        },
+        interventionen: [
+          {
+            titel: 'Progressive Muskelentspannung (Kurzform)',
+            ansatz: 'Körperorientiert',
+            beschreibung: 'Wichtige Muskelgruppen anspannen (5 Sek.) und loslassen (10 Sek.): Hände, Arme, Schultern, Gesicht, Bauch, Beine. Danach besprechen: Was hat sich verändert?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sorgen-Stopp-Technik',
+            beschreibung: '1. Sorge aufschreiben. 2. Fragen: Kann ich etwas daran ändern? 3a. Ja → konkreten Schritt planen. 3b. Nein → bewusst loslassen und ablenken.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Entspannungsroutine',
+          beschreibung: 'Führe diese Woche täglich 5 Minuten Entspannung durch (Atemübung oder Muskelentspannung).',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Welche Technik hat am besten gewirkt?',
+          'Wann im Alltag könntest du sie einsetzen?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Schrittweise Angstbewältigung',
+        dauer: '60 Min',
+        ziel: 'Angstvermeidung reduzieren; Schritt-für-Schritt-Konfrontation planen',
+        psychoedukation: {
+          titel: 'Exposition – durch die Angst hindurch',
+          inhalt: 'Angst nimmt ab, wenn man in der Situation bleibt, ohne zu flüchten. Der Körper gewöhnt sich. Das nennt sich Habituation. Es muss nicht sofort mit der größten Angst beginnen – man startet mit einer kleinen Stufe und arbeitet sich langsam hoch.'
+        },
+        interventionen: [
+          {
+            titel: 'Angstleiter erstellen',
+            ansatz: 'Verhaltenstherapeutisch',
+            beschreibung: 'Die Angst-Skala aus Sitzung 2 nutzen und eine konkrete Stufenleiter entwickeln: Schritt 1 (leichteste Situation) bis Schritt 5 (herausfordernde Situation). Den ersten Schritt konkret planen: Wann? Wo? Mit wem?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Erster Schritt der Angstleiter',
+            beschreibung: 'Den ersten geplanten Schritt in der Sitzung imaginär durchgehen: Wie geht es dir dabei? Was passiert? Was kannst du tun?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Ersten Schritt gehen',
+          beschreibung: 'Führe diese Woche den ersten Schritt der Angstleiter durch. Danach aufschreiben: Was war vorher, während und danach?',
+          dauer: '20 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen nächsten Schritt auf der Angstleiter möchtest du gehen?'
+        ]
+      }
+    ]
+  },
+
 };

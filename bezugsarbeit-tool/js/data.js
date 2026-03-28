@@ -11316,4 +11316,264 @@ const THEMA_MODULE = {
     ]
   },
 
+  'dissoziative-erfahrungen': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche mit Entfremdungsgefühlen, Depersonalisation oder dissoziativen Zuständen',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wenn man sich selbst fremd wird',
+        dauer: '60 Min',
+        ziel: 'Dissoziative Erfahrungen verstehen und einordnen können',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch (ausschließlich)',
+        hinweis_paedagoge: 'Dissoziative Erfahrungen sind oft mit Trauma verknüpft. Nie Details des Traumas abfragen. Immer mit Stabilisierung beginnen. Bei schwerer Dissoziation (Gedächtnislücken, multiple Zustände): sofortige Fachvermittlung. Dieses Modul ist für leichte bis mittlere Entfremdungsgefühle.',
+        psychoedukation: {
+          titel: 'Dissoziation als Schutzreaktion',
+          inhalt: 'Dissoziation ist das Gefühl, sich selbst oder die Welt fremd zu sehen – wie von Glas getrennt, wie im Film, nicht ganz real. Das ist eine Schutzreaktion des Gehirns auf überwältigende Erfahrungen. Es ist kein Zeichen von Wahnsinn – es ist ein Schutzmechanismus, der einmal hilfreich war.'
+        },
+        interventionen: [
+          {
+            titel: 'Erfahrung benennen',
+            ansatz: 'Stabilisierend',
+            beschreibung: 'Wie erlebe ich Dissoziation? (Körper fühlt sich fremd an / Welt wirkt unwirklich / Gedächtnislücken / wie im Autopilot?) Was löst es aus? Wie lange dauert es? Benennen und validieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: '5-Sinne-Grounding',
+            beschreibung: 'Bei dissoziativen Zuständen sofort: 5 Dinge sehen (laut benennen), Füße auf dem Boden spüren, etwas Starkes riechen (Pfefferminz, Zitrone), kaltes Wasser auf Handgelenke, laute Musik hören. Jetzt in Ruhe üben.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Nicht geeignet für Gruppe',
+          beschreibung: 'Dieses Thema ist zu sensibel für Gruppenformate. Ausschließlich im Einzelgespräch bearbeiten.'
+        },
+        hausaufgabe: {
+          titel: 'Grounding-Notfallkarte',
+          beschreibung: 'Erstelle eine Karte mit deinen Top-3-Grounding-Techniken. Immer dabei haben.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Wann erlebst du dissoziative Zustände am häufigsten?',
+          'Was hat dir bisher geholfen, wieder "zurückzukommen"?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Im Körper ankommen',
+        dauer: '60 Min',
+        ziel: 'Körperbasierte Grounding-Techniken erlernen und festigen',
+        materialien: ['Matte oder Stuhl', 'Eiswürfel oder Kältespray (optional)', 'Pfefferminzöl (optional)'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Körperorientierte Arbeit vorsichtig angehen – manche Körperteile können durch Trauma besetzt sein. Immer fragen: "Ist das okay für dich?" Keine Berührungen ohne explizite Erlaubnis. Fokus auf externe Sinne (was ich sehe, höre) vor internen (was ich im Körper fühle).',
+        psychoedukation: {
+          titel: 'Körper als Anker',
+          inhalt: 'Bei Dissoziation verliert man die Verbindung zum Körper. Der Körper ist paradoxerweise gleichzeitig die Ursache der Dissoziation (bei traumatischen Erinnerungen) und das Werkzeug gegen sie. Sensationen (Kälte, Druck, Bewegung) bringen das Gehirn in die Gegenwart zurück.'
+        },
+        interventionen: [
+          {
+            titel: 'Progressive Körperkontakt-Übungen',
+            ansatz: 'Körperorientiert',
+            beschreibung: 'Schrittweise: Füße auf den Boden drücken → Hände auf Oberschenkel legen und Druck spüren → Schultern kreisen → Gesicht mit Händen bedecken → Atemrhythmus spüren. Jede Stufe nur, wenn sie sicher fühlt.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Temperatur-Grounding',
+            beschreibung: 'Kaltes Wasser auf Handgelenke, Eiswürfel halten (kurz), oder warme Tasse halten. Sensorische Stärke bringt das Gehirn in die Gegenwart. Was fühlt sich am wirksamsten an?',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Nicht für Gruppe',
+          beschreibung: 'Körperbezogene Arbeit ausschließlich im Einzelsetting.'
+        },
+        hausaufgabe: {
+          titel: 'Täglich 5 Min Körperkontakt',
+          beschreibung: 'Übe täglich 5 Minuten bewussten Körperkontakt (Füße spüren, Hände auf Oberschenkel, Atemwahrnehmung). Notiere, wie es sich anfühlt.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Welche Körpersensation hilft dir am meisten, "da zu sein"?',
+          'Gibt es Körperstellen, die sich sicher anfühlen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Sicherheit und Zukunft',
+        dauer: '60 Min',
+        ziel: 'Langfristige Stabilität aufbauen und Ressourcen festigen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Abschluss-Sitzung – Ressourcen und Fortschritte würdigen. Sicherheitsplan aktualisieren. Weitervermittlung klar besprechen: Dissoziation bei Trauma braucht oft Fachbegleitung – dieses Modul ist ein erster Schritt.',
+        psychoedukation: {
+          titel: 'Dissoziation kann weniger werden',
+          inhalt: 'Mit Stabilisierung, sicherer Umgebung und passender Unterstützung können dissoziative Erfahrungen abnehmen. Der Körper lernt langsam: Es ist sicher, hier zu sein. Das braucht Zeit – aber es ist möglich.'
+        },
+        interventionen: [
+          {
+            titel: 'Ressourcen-Inventar',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was hat geholfen in den letzten Wochen? (Grounding-Techniken, Vertrauenspersonen, Orte, Aktivitäten?) Gemeinsam eine persönliche Ressourcen-Schatzkiste zusammenstellen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Sicherer Ort (Imagination)',
+            beschreibung: 'Stelle dir einen sicheren, ruhigen Ort vor (real oder imaginär). Alle Details: Was siehst du? Hörst du? Riechst du? Wie fühlst du dich dort? Diesen Ort in der Dissoziation aufrufen.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Nicht für Gruppe',
+          beschreibung: 'Ausschließlich Einzelsetting für dieses Thema.'
+        },
+        hausaufgabe: {
+          titel: 'Sicherer-Ort-Ritual',
+          beschreibung: 'Besuche deinen sicheren Ort täglich 5 Minuten in der Imagination. Mache es zur Routine.',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Was hat sich in diesem Modul für dich verändert?',
+          'Welche nächsten Schritte brauchst du?'
+        ]
+      }
+    ]
+  },
+
+  'wahrnehmungsveraenderungen': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Jugendliche mit ungewöhnlichen Wahrnehmungen oder Denkmustern (Früherkennungskontext)',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wenn die Wahrnehmung sich verändert',
+        dauer: '60 Min',
+        ziel: 'Ungewöhnliche Wahrnehmungen sicher besprechen und einordnen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Ausschließlich Einzelgespräch',
+        hinweis_paedagoge: 'KRITISCH: Dieses Modul ist ausschließlich für Einzelgespräche mit geschultem Fachpersonal. Bei konkreten Hinweisen auf Psychose (Stimmen, Verfolgungsgedanken, Realitätsverlust): sofortige Fachvermittlung (Psychiater, Krisentelefon). Dieses Modul dient der Orientierung und Gesprächseröffnung – nicht als Therapieersatz. NIEMALS alleine mit diesem Thema arbeiten ohne Supervision.',
+        psychoedukation: {
+          titel: 'Ungewöhnliche Wahrnehmungen – kein Tabu',
+          inhalt: 'Manche Menschen erleben Dinge, die andere nicht sehen oder hören. Das kann viele Ursachen haben: Stress, Schlafmangel, Trauma, Substanzkonsum oder andere Faktoren. Es ist wichtig, darüber zu sprechen – ohne Scham und ohne Angst vor Verurteilung. Viele Betroffene brauchen Unterstützung, die wirksam helfen kann.'
+        },
+        interventionen: [
+          {
+            titel: 'Offenes Gespräch',
+            ansatz: 'Nicht-direktiv / Motivational',
+            beschreibung: 'Was erlebst du? Wann begann es? Wie oft passiert es? Wie reagiert dein Umfeld? Was hast du bisher versucht? Kein Bewerten, kein Diagnostizieren – nur zuhören und verstehen.',
+            dauer: '30 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Orientierungsübung',
+            beschreibung: 'Wenn Wahrnehmungen auftreten: Schau aktiv umher – was ist wirklich da? Beschreibe laut, was du siehst und hörst (5-4-3-2-1). Das hilft, zwischen inneren und äußeren Erfahrungen zu unterscheiden.',
+            dauer: '10 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Ausschließlich Einzelsetting',
+          beschreibung: 'Dieses Thema ist ausnahmslos für Einzelgespräche – keine Ausnahmen.'
+        },
+        hausaufgabe: {
+          titel: 'Wahrnehmungs-Tagebuch',
+          beschreibung: 'Notiere, wenn ungewöhnliche Wahrnehmungen auftreten: Wann? Was war davor? Wie lange? Was hat geholfen? Für die nächste Sitzung mitbringen.',
+          dauer: '5 Min bei Auftreten'
+        },
+        reflexion: [
+          'Was ist bisher am schwersten zu erzählen gewesen?',
+          'Was brauchst du gerade am meisten?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Stress, Schlaf und Wahrnehmung',
+        dauer: '60 Min',
+        ziel: 'Zusammenhang zwischen Belastung und Wahrnehmungsveränderungen verstehen',
+        materialien: ['Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Viele ungewöhnliche Wahrnehmungen bei Jugendlichen hängen mit extremem Schlafmangel, Substanzkonsum oder Traumareaktionen zusammen. Diese Faktoren ansprechen und reduzieren ist oft das Wirksamste. Keine Fehlersuche – Entlastung und Ressourcenaufbau.',
+        psychoedukation: {
+          titel: 'Das Gehirn unter Stress',
+          inhalt: 'Bei extremem Schlafmangel, starkem Stress oder Substanzkonsum kann das Gehirn "Fehler" produzieren – Wahrnehmungen, die andere nicht teilen. Das ist physiologisch erklärbar. Oft hilft: Schlaf verbessern, Stress reduzieren, keine Stimulantien. Die Wahrnehmungen können dann abnehmen.'
+        },
+        interventionen: [
+          {
+            titel: 'Belastungsanalyse',
+            ansatz: 'Salutogenetisch',
+            beschreibung: 'Was belastet dich gerade am stärksten? (Schlaf, Schule, Familie, Substanzkonsum, soziale Probleme?) Welche Belastungen sind am ehesten veränderbar? Fokus auf das, was ich tun kann.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Schlafhygiene-Plan',
+            beschreibung: 'Entwickle einen realistischen Schlafhygiene-Plan: feste Zeiten, kein Bildschirm vor dem Schlafen, ruhige Umgebung. Schlaf ist oft der wirksamste erste Schritt.',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Ausschließlich Einzelsetting',
+          beschreibung: 'Keine Gruppenarbeit bei diesem Thema.'
+        },
+        hausaufgabe: {
+          titel: 'Schlaf und Wahrnehmung beobachten',
+          beschreibung: 'Notiere diese Woche: Wie viel Schlaf? Wie waren danach die Wahrnehmungen? Gibt es einen Zusammenhang?',
+          dauer: '5 Min täglich'
+        },
+        reflexion: [
+          'Gibt es Zeiten, in denen die Wahrnehmungen besser sind? Was ist dann anders?',
+          'Welche Belastung würdest du am liebsten als erstes angehen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Hilfe suchen und annehmen',
+        dauer: '60 Min',
+        ziel: 'Bereitschaft zur Fachunterstützung fördern und konkrete Hilfe organisieren',
+        materialien: ['Ressourcen-Liste (Fachstellen in Luxemburg)', 'Papier', 'Stifte'],
+        gruppenformat: 'Einzelgespräch',
+        hinweis_paedagoge: 'Diese Sitzung hat zum Ziel, den Weg in professionelle Unterstützung zu ebnen. Klar und direkt, aber ohne Druck. Motivierende Gesprächsführung: Eigenentscheidung stärken. Kontakte zu Fachstellen konkret vorbereiten (Nummer suchen, Termin planen).',
+        psychoedukation: {
+          titel: 'Hilfe suchen ist mutig',
+          inhalt: 'Es braucht Mut, über Wahrnehmungsveränderungen zu sprechen – und noch mehr Mut, professionelle Hilfe zu suchen. Es gibt Fachleute, die wirklich helfen können. Früh Hilfe zu holen ist immer besser als zu warten. Es ist ein Zeichen von Stärke, nicht von Schwäche.'
+        },
+        interventionen: [
+          {
+            titel: 'Nächster Schritt zur Fachunterstützung',
+            ansatz: 'Motivierend',
+            beschreibung: 'Gemeinsam: Welche Fachperson wäre die richtige? (Hausarzt, Kinder- und Jugendpsychiater, Krisentelefon?) Was hindert dich daran, diesen Schritt zu machen? Wie kann ich helfen (Begleitung, Terminvorbereitung)?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Ressourcen-Liste durchgehen',
+            beschreibung: 'Gemeinsam relevante Anlaufstellen in Luxemburg suchen und die Nummern speichern. Planen: Wann, mit wem, wie geht der nächste Schritt?',
+            dauer: '15 Min'
+          }
+        ],
+        gruppenvariation: {
+          titel: 'Ausschließlich Einzelsetting',
+          beschreibung: 'Keine Gruppenarbeit.'
+        },
+        hausaufgabe: {
+          titel: 'Fachtermin vereinbaren',
+          beschreibung: 'Unternimm diese Woche einen konkreten Schritt in Richtung Fachunterstützung. Wenn nötig, begleite ich dich dabei.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was ist dein nächster konkreter Schritt?',
+          'Was brauchst du, um diesen Schritt zu gehen?'
+        ]
+      }
+    ]
+  },
+
 };

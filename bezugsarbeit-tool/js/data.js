@@ -4692,4 +4692,147 @@ const THEMA_MODULE = {
     ]
   },
 
+  'cannabis': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit Cannabiskonsum oder -interesse; auch bei anderen illegalen Substanzen anwendbar',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Cannabis – was stimmt, was nicht?',
+        dauer: '60 Min',
+        ziel: 'Faktenbasiertes Wissen; Mythen über Cannabis entkräften',
+        psychoedukation: {
+          titel: 'Was Cannabis wirklich macht',
+          inhalt: 'Cannabis gilt als „weich" und „harmlos" – das stimmt nicht vollständig. THC (der psychoaktive Wirkstoff) verändert Gedächtnis, Konzentration und Stimmung. Bei regelmäßigem Konsum im Jugendalter steigt das Risiko für psychische Erkrankungen (u.a. Psychosen), Gedächtnisprobleme und Motivationseinbußen deutlich. Das Gehirn reagiert auf Cannabis empfindlicher als das Erwachsenengehirn.'
+        },
+        interventionen: [
+          {
+            titel: 'Mythen und Fakten sortieren',
+            ansatz: 'Psychoedukativ',
+            beschreibung: 'Häufige Aussagen über Cannabis gemeinsam prüfen: „Cannabis macht nicht abhängig" (falsch), „Cannabis ist natürlich, also sicher" (falsch), „Cannabis hilft bei Angst" (kurzfristig manchmal, langfristig riskant). Ehrlicher Austausch ohne Moralisieren.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Persönliche Bilanz',
+            beschreibung: 'Was bringt dir Cannabis? Was kostet es dich? (Schule, Geld, Stimmung, Beziehungen, Pläne).',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Konsumprotokoll',
+          beschreibung: 'Wenn du Konsumierst: Führe diese Woche ein ehrliches Protokoll. Wenn nicht: Notiere, wann du daran gedacht hast und warum.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Was glaubst du selbst über Cannabis – und was hast du heute dazugelernt?',
+          'Inwiefern beeinflusst dein Konsum deinen Alltag?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Motive und Bedürfnisse',
+        dauer: '60 Min',
+        ziel: 'Hinter den Konsum liegende Bedürfnisse herausarbeiten',
+        psychoedukation: {
+          titel: 'Selbstmedikation mit Cannabis',
+          inhalt: 'Viele Jugendliche nutzen Cannabis zur Selbstmedikation: gegen Angst, Schlafprobleme, sozialen Druck, ADHS-Symptome oder Schmerzen. Das ist verständlich – aber problematisch, weil Cannabis die Ursachen nicht löst und die Toleranz schnell steigt.'
+        },
+        interventionen: [
+          {
+            titel: 'Selbstmedikations-Analyse',
+            ansatz: 'Motivational Interviewing',
+            beschreibung: 'Wann und warum konsumierst du genau? Was spürst du vorher, was danach? Welches Bedürfnis erfüllt der Konsum? Für jedes Bedürfnis: Was wäre eine gesündere Alternative?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Alternative Copingstrategien',
+            beschreibung: 'Wähle das wichtigste Motiv. Brainstorme 5 Alternativen. Bewerte: Welche wäre realistisch umsetzbar?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Alternative testen',
+          beschreibung: 'Teste diese Woche eine Alternative für eine Situation, in der du normalerweise konsumieren würdest.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was brauchst du wirklich – und was gibt dir Cannabis stattdessen?',
+          'Was verlierst du durch den Konsum?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Risiken und Abhängigkeit erkennen',
+        dauer: '60 Min',
+        ziel: 'Abhängigkeitspotenzial einschätzen; Warnsignale kennen',
+        psychoedukation: {
+          titel: 'Cannabis-Abhängigkeit ist real',
+          inhalt: 'Ca. 10% der Konsumenten entwickeln eine Abhängigkeit – bei Tagesbenutzern steigt die Rate auf ca. 25%. Zeichen: Konsum zur Normalisierung des Alltags nötig, Gereiztheit/Schlafprobleme ohne Cannabis, Konsum trotz negativer Konsequenzen, gedankliche Fixierung.'
+        },
+        interventionen: [
+          {
+            titel: 'Abhängigkeits-Check',
+            ansatz: 'Psychoedukativ / Lösungsfokussiert',
+            beschreibung: 'Gemeinsam die Zeichen einer Abhängigkeit prüfen: Trifft etwas davon zu? Ohne Vorwurf – mit dem Ziel, die Situation realistisch einzuschätzen.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Konsum-Pause planen',
+            beschreibung: 'Bist du bereit, eine kurze Pause zu machen – z.B. 3 Tage? Was würde das für dich bedeuten? Was wäre schwierig?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Pause versuchen',
+          beschreibung: 'Versuche diese Woche eine kurze Pause (1–3 Tage). Was passiert? Was fällt auf?',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was sagen dir die Zeichen?',
+          'Was würde eine Veränderung für dein Leben bedeuten?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Veränderungspfad entwickeln',
+        dauer: '60 Min',
+        ziel: 'Konkrete Schritte zur Reduktion oder zum Ausstieg; Unterstützung aktivieren',
+        psychoedukation: {
+          titel: 'Ausstieg braucht einen Plan',
+          inhalt: 'Eine Veränderung beim Substanzkonsum ist selten ein einmaliger Entschluss. Sie erfordert: Verstehen der eigenen Motive, Aufbau alternativer Strategien, Unterstützung und Umgang mit Rückfällen. Rückfall bedeutet nicht Versagen – er ist Teil des Prozesses.'
+        },
+        interventionen: [
+          {
+            titel: 'Veränderungsplan konkretisieren',
+            ansatz: 'Lösungsfokussiert',
+            beschreibung: 'Was möchtest du ändern? Konsum reduzieren, kontrollieren, beenden? Welche Schritte sind realistisch? Welche Hindernisse kennst du schon? Wer kann unterstützen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Unterstützungsnetz kartieren',
+            beschreibung: 'Wer in deinem Umfeld unterstützt deine Veränderung? Wer könnte sie erschweren? Wie gehst du mit letzterem um?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Schritt umsetzen',
+          beschreibung: 'Setze diese Woche den ersten konkreten Schritt deines Plans um. Notiere, wie es war.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Welchen ersten Schritt gehst du?'
+        ]
+      }
+    ]
+  },
+
 };

@@ -3289,4 +3289,256 @@ const THEMA_MODULE = {
     ]
   },
 
+  'depressive-stimmungen': {
+    dauer: '4 Sitzungen · ca. 4 Std.',
+    zielgruppe: 'Schüler mit anhaltend gedrückter Stimmung, Rückzug oder Antriebslosigkeit (keine klinische Diagnose vorausgesetzt)',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Wie fühlt sich diese Schwere an?',
+        dauer: '60 Min',
+        ziel: 'Depressive Stimmungen benennen und explorieren ohne Pathologisierung',
+        psychoedukation: {
+          titel: 'Trübsinn, Schwere, Leere – was passiert da?',
+          inhalt: 'Depressive Stimmungen sind mehr als „schlechte Laune". Sie können sich anfühlen wie eine graue Wolke, innere Leere, Erschöpfung oder das Gefühl, alles ist sinnlos. Das ist real – keine Einbildung, keine Schwäche. Und: Es gibt einen Ausweg.'
+        },
+        interventionen: [
+          {
+            titel: 'Stimmungstagebuch der letzten Woche',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Gemeinsam die Stimmung der letzten 7 Tage auf einer Skala (1=sehr schlecht, 10=sehr gut) eintragen. Muster erkennen: Wann war es besser, wann schlechter? Was war an guten Tagen anders?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Die Schwere beschreiben',
+            beschreibung: 'Wenn deine depressive Stimmung ein Wetter, ein Bild oder ein Objekt wäre – was wäre es? Zeichne oder schreibe es.',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Stimmungs-Check',
+          beschreibung: 'Trage jeden Abend deine Stimmung (1–10) in eine Tabelle ein und notiere ein Ereignis oder Gedanken des Tages.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Seit wann fühlst du dich so?',
+          'Gibt es Momente, in denen es etwas leichter ist?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Der Teufelskreis der Depression',
+        dauer: '60 Min',
+        ziel: 'Verhaltens- und Gedankenmuster verstehen, die Stimmung aufrechterhalten',
+        psychoedukation: {
+          titel: 'Rückzug verstärkt Schwere',
+          inhalt: 'Depressive Stimmung führt zu Rückzug → Rückzug führt zu weniger positiven Erlebnissen → weniger Erlebnisse verstärken die Schwere. Dieser Teufelskreis hält sich selbst aufrecht. Der Ausweg: kleine Aktivitäten, auch wenn man sich nicht danach fühlt – denn Motivation kommt oft erst nach der Handlung, nicht davor.'
+        },
+        interventionen: [
+          {
+            titel: 'Teufelskreis zeichnen',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Gemeinsam den persönlichen Teufelskreis des Schülers visualisieren: Schwere → Gedanken → Verhalten → Konsequenz → mehr Schwere. Wo könnte man eingreifen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Angenehme Aktivitäten identifizieren',
+            beschreibung: 'Liste 10 Aktivitäten auf, die dir früher Freude gemacht haben oder die du dir vorstellen könntest. Sortiere nach Aufwand (gering bis hoch).',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Eine Aktivität pro Tag',
+          beschreibung: 'Plane für jeden Tag der Woche eine kleine Aktivität aus deiner Liste ein – auch wenn du keine Lust hast. Notiere danach: Wie war es?',
+          dauer: 'täglich 15 Min'
+        },
+        reflexion: [
+          'Welche Aktivitäten haben dir am meisten geholfen?',
+          'Was hält dich davon ab, aktiver zu sein?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Gedanken, die schwer machen',
+        dauer: '60 Min',
+        ziel: 'Negative Denkmuster erkennen und herausfordern',
+        psychoedukation: {
+          titel: 'Depressives Denken',
+          inhalt: 'Depressive Stimmung geht oft mit typischen Denkverzerrungen einher: alles schwarz sehen, Positives nicht wahrnehmen, sich selbst die Schuld geben, die Zukunft hoffnungslos sehen. Diese Gedanken fühlen sich wahr an – aber sie sind gefärbt durch die Stimmung, nicht durch die Realität.'
+        },
+        interventionen: [
+          {
+            titel: 'Gedanken-Check',
+            ansatz: 'Kognitiv-behavioral',
+            beschreibung: 'Häufige depressive Gedanken identifizieren und für jeden prüfen: Wie wahr ist das wirklich? Was spricht dagegen? Was würde jemand, der mich mag, dazu sagen?',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Positives-Dinge-Logbuch',
+            beschreibung: 'Finde täglich 3 kleine Dinge, die nicht schlecht waren – egal wie winzig. Schreibe sie auf.',
+            dauer: 'täglich 5 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Gedankenprotokoll',
+          beschreibung: 'Wenn ein schwerer Gedanke kommt: aufschreiben, Intensität (1–10), Gegenbeweis notieren.',
+          dauer: '10 Min'
+        },
+        reflexion: [
+          'Welcher Gedanke belastet dich am meisten?',
+          'Was wäre, wenn dieser Gedanke nur halb so wahr wäre?'
+        ]
+      },
+      {
+        nr: 4,
+        titel: 'Licht finden – Perspektive und Ressourcen',
+        dauer: '60 Min',
+        ziel: 'Ressourcen und Hoffnung aktivieren; Unterstützungssystem stärken',
+        psychoedukation: {
+          titel: 'Hoffnung ist erlernbar',
+          inhalt: 'Auch in schwerer Stimmung gibt es Momente, die etwas heller sind. Diese zu erkennen und zu stärken ist aktive Arbeit – keine Verdrängung. Unterstützung suchen ist kein Zeichen von Schwäche, sondern von Weisheit.'
+        },
+        interventionen: [
+          {
+            titel: 'Ressourcen aktivieren',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Gemeinsam: Was hat dir in der Vergangenheit geholfen, dunkle Phasen zu überstehen? Welche Menschen, Orte, Aktivitäten geben dir Kraft? Wie kannst du diese stärker einsetzen?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Brief in die Zukunft',
+            beschreibung: 'Schreibe einen Brief an dich selbst in einem Jahr: Was wünschst du dir? Was soll sich verändert haben?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Unterstützungsnetz aktivieren',
+          beschreibung: 'Wende dich diese Woche an eine Person, der du vertraust – nicht um Probleme zu lösen, sondern einfach um Kontakt zu haben.',
+          dauer: '15 Min'
+        },
+        reflexion: [
+          'Was hat dir in diesem Modul geholfen?',
+          'An wen kannst du dich wenden, wenn es wieder schwerer wird?'
+        ]
+      }
+    ]
+  },
+
+  'freude-wohlbefinden': {
+    dauer: '3 Sitzungen · ca. 3 Std.',
+    zielgruppe: 'Schüler mit wenig Freudeerlebnissen, flachem Alltag oder als präventiver Abschluss anderer Module',
+    sitzungen: [
+      {
+        nr: 1,
+        titel: 'Was macht mich glücklich?',
+        dauer: '60 Min',
+        ziel: 'Persönliche Quellen von Freude und Wohlbefinden erkunden',
+        psychoedukation: {
+          titel: 'Positive Emotionen – mehr als nur Spaß',
+          inhalt: 'Positive Emotionen erweitern unseren Horizont: Sie machen kreativer, verbinden uns mit anderen und stärken die Resilienz. Freude, Dankbarkeit, Neugier und Begeisterung sind trainierbar – nicht Glücksache. Wer regelmäßig positive Erlebnisse wahrnimmt und genießt, hat langfristig mehr Wohlbefinden.'
+        },
+        interventionen: [
+          {
+            titel: 'Freuden-Inventur',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Was macht dir Freude? Wo bist du in deinem Element? Was vergisst du dabei die Zeit? Gemeinsam eine Liste erstellen: Aktivitäten, Menschen, Orte, Sinneseindrücke.',
+            dauer: '25 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Peak-Erlebnisse erinnern',
+            beschreibung: 'Beschreibe einen Moment, in dem du dich wirklich lebendig oder glücklich gefühlt hast. Was war daran besonders?',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Freuden-Tagebuch',
+          beschreibung: 'Notiere täglich eine Sache, die dir Freude bereitet hat – egal wie klein.',
+          dauer: 'täglich 3 Min'
+        },
+        reflexion: [
+          'Wann hast du zuletzt echte Freude empfunden?',
+          'Was steht dir im Weg, öfter Freude zu erleben?'
+        ]
+      },
+      {
+        nr: 2,
+        titel: 'Freude aktiv gestalten',
+        dauer: '60 Min',
+        ziel: 'Flow-Erlebnisse fördern; positive Aktivitäten bewusst einplanen',
+        psychoedukation: {
+          titel: 'Flow – im Strom sein',
+          inhalt: 'Flow ist der Zustand, wenn man vollkommen in einer Tätigkeit aufgeht – weder gelangweilt noch überfordert. Flow entsteht, wenn Fähigkeiten und Herausforderung ausgewogen sind. Solche Aktivitäten regelmäßig zu haben ist eine der verlässlichsten Quellen von Wohlbefinden.'
+        },
+        interventionen: [
+          {
+            titel: 'Flow-Aktivitäten identifizieren',
+            ansatz: 'Ressourcenorientiert',
+            beschreibung: 'Welche Aktivitäten bringen dich in einen Flow-Zustand? Gemeinsam überlegen, wie diese Aktivitäten in den Alltag integriert werden können.',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Wochenplan mit Freude',
+            beschreibung: 'Erstelle einen Wochenplan und plane bewusst mindestens eine Freude-Aktivität pro Tag ein.',
+            dauer: '20 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: 'Freude-Aktivität durchführen',
+          beschreibung: 'Führe eine geplante Freude-Aktivität durch und beobachte: Wie geht es dir vorher, während und danach?',
+          dauer: '30 Min'
+        },
+        reflexion: [
+          'Was hat dich überrascht beim bewussten Erleben von Freude?',
+          'Was hindert dich, öfter solche Aktivitäten zu machen?'
+        ]
+      },
+      {
+        nr: 3,
+        titel: 'Dankbarkeit und Genuss',
+        dauer: '60 Min',
+        ziel: 'Dankbarkeit und Genussfähigkeit als Wohlbefindens-Ressourcen stärken',
+        psychoedukation: {
+          titel: 'Dankbarkeit verändert das Gehirn',
+          inhalt: 'Regelmäßige Dankbarkeit – bewusst wahrnehmen, was gut ist – stärkt positive neuronale Verbindungen. Dabei geht es nicht um erzwungene Positivität, sondern um ehrliche Aufmerksamkeit für das, was da ist. Selbst in schwierigen Zeiten gibt es Dinge, die real und gut sind.'
+        },
+        interventionen: [
+          {
+            titel: 'Dankbarkeits-Praxis',
+            ansatz: 'Achtsamkeitsbasiert',
+            beschreibung: 'Täglich 3 konkrete, spezifische Dinge aufschreiben, für die man dankbar ist – mit Begründung. Gemeinsam üben und besprechen: Was war überraschend? Was hat sich verändert?',
+            dauer: '20 Min'
+          }
+        ],
+        uebungen: [
+          {
+            titel: 'Genuss-Übung',
+            beschreibung: 'Führe eine Genuss-Übung durch: Iss etwas Leckeres sehr langsam und bewusst. Alle Sinne einsetzen. Nachher: Was hast du wahrgenommen?',
+            dauer: '15 Min'
+          }
+        ],
+        hausaufgabe: {
+          titel: '7-Tage-Dankbarkeit',
+          beschreibung: 'Führe eine Woche lang täglich dein Dankbarkeits-Tagebuch. Was verändert sich?',
+          dauer: 'täglich 5 Min'
+        },
+        reflexion: [
+          'Was nimmst du aus diesem Modul mit?',
+          'Was ist deine verlässlichste Quelle von Freude und Wohlbefinden?'
+        ]
+      }
+    ]
+  },
+
 };

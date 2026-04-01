@@ -2,10 +2,23 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Arbeitsblatt – Motivation & Antrieb</title>
+  <title>Arbeitsblatt – Motivation &amp; Antrieb</title>
   <link rel="stylesheet" href="../css/arbeitsblatt.css">
   <style>
-    :root { --farbe: #D97706; --farbe-hell: #FFFBEB; }
+    :root { --farbe: #7C3AED; --farbe-hell: #F5F3FF; }
+    .sort-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+    .karte { background:var(--farbe-hell); border:1.5px solid #C4B5FD; border-radius:10px; padding:8px 10px; font-size:11px; cursor:default; }
+    .karte:hover { background:#EDE9FE; }
+    .energie-spalten { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+    .energie-box { border-radius:10px; padding:10px; }
+    .mikro-schritt { display:flex; align-items:center; gap:10px; background:#FAFAFA; border:1px solid #E5E7EB; border-radius:8px; padding:7px 10px; margin-bottom:6px; }
+    .mikro-nr { background:var(--farbe); color:white; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+    .warum-leiter { display:flex; flex-direction:column; gap:0; }
+    .warum-stufe { border:1.5px solid #C4B5FD; border-radius:8px; padding:7px 12px; font-size:11px; background:var(--farbe-hell); margin-bottom:2px; }
+    .warum-pfeil { text-align:center; font-size:14px; color:var(--farbe); margin:0; line-height:1; }
+    .belohnung-karte { border:1.5px solid #C4B5FD; border-radius:10px; padding:9px; font-size:11px; background:white; }
+    .emoji-meter { display:flex; gap:4px; margin:6px 0; }
+    .emoji-meter span { flex:1; text-align:center; font-size:18px; cursor:default; }
   </style>
 </head>
 <body>
@@ -20,10 +33,10 @@
   <div class="kopfzeile">
     <div class="kopfzeile-links">
       <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
-      <div class="ab-titel">Motivation & Antrieb – Was bewegt mich?</div>
-      <div class="ab-untertitel">Schule & Zukunft · Kategorie: Motivation</div>
+      <div class="ab-titel">Ich will – aber irgendwie auch nicht?</div>
+      <div class="ab-untertitel">Motivation &amp; Antrieb · Kategorie: Motivation &amp; Zukunft</div>
     </div>
-    <div class="kopfzeile-icon">🔥</div>
+    <div class="kopfzeile-icon">🚀</div>
   </div>
 
   <div class="schuelerinfo">
@@ -33,184 +46,139 @@
   </div>
 
   <div class="infobox">
-    <div class="infobox-titel">💡 Was ist Motivation?</div>
-    <p>Motivation ist die innere Kraft, die uns antreibt, etwas zu tun. Es gibt zwei Arten: <strong>Extrinsische Motivation</strong> kommt von außen (Noten, Lob, Druck). <strong>Intrinsische Motivation</strong> kommt von innen (Neugier, Freude, Sinn). Intrinsische Motivation ist langfristig viel stärker.</p>
-    <p>Motivationslosigkeit ist kein Charakterfehler – sie ist oft ein Signal, dass etwas nicht stimmt: falsche Ziele, zu viel Druck, Erschöpfung oder fehlender Sinn.</p>
+    <div class="infobox-titel">💡 Motivationslos? Das ist kein Charakterfehler.</div>
+    <p>Keine Lust auf irgendetwas – das kennen fast alle Teenager phasenweise. <strong>Das ist normal und macht Sinn.</strong> Motivation kommt in zwei Arten: von außen (Noten, Lob, Druck) oder von innen (echte Neugier, Sinn, Freude). Die innere Motivation ist langfristig die viel stärkere.</p>
+    <p>🧠 <em>Wusstest du? Dein Gehirn baut seinen Belohnungsschaltkreis gerade komplett um. Das Dopaminsystem ist in der Pubertät besonders sensibel für kurzfristige Belohnungen – das erklärt, warum Social Media so viel attraktiver wirkt als Hausaufgaben.</em></p>
   </div>
 
-  <!-- Übung 1 -->
+  <!-- Übung 1 – Motivations-Detektiv -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">1</div>
-      <div class="uebung-titel">Mein Motivations-Check – Was läuft, was nicht?</div>
+      <div class="uebung-titel">Motivations-Detektiv: Innen oder außen? Kreise ein! 🔍</div>
     </div>
-    <div class="uebung-beschreibung">
-      Bewerte deine aktuelle Motivation in verschiedenen Bereichen (1 = kaum motiviert, 10 = sehr motiviert):
+    <div class="uebung-beschreibung">Sortiere jede Karte: Schreibe <strong>I</strong> (Innere Motivation) oder <strong>A</strong> (Äußere Motivation) daneben. Was fühlt sich echter an?</div>
+    <div class="sort-grid">
+      <div class="karte">🏆 Gute Note bekommen wollen <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
+      <div class="karte">🎨 Malen weil es mich entspannt <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
+      <div class="karte">😤 Lernen damit Eltern zufrieden sind <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
+      <div class="karte">🎵 Gitarre spielen weil ich es liebe <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
+      <div class="karte">💰 Sport treiben für Körperbild / Status <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
+      <div class="karte">🔬 Chemie spannend finden weil "warum?" <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
+      <div class="karte">👥 Helfen weil ich dazu gezwungen werde <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
+      <div class="karte">🌍 Umweltschutz weil es mir wichtig ist <span style="border:1px solid #C4B5FD;border-radius:4px;padding:1px 8px;margin-left:6px;font-size:10px;">I / A</span></div>
     </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-      <div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="font-size:11px;font-weight:600;width:130px;">Schule / Lernen</div>
-          <div style="flex:1;height:10px;background:var(--farbe-hell);border:1px solid var(--border);border-radius:5px;position:relative;">
-            <div style="font-size:9px;display:flex;justify-content:space-between;margin-top:13px;color:var(--grau);">
-              <span>1</span><span>5</span><span>10</span>
-            </div>
-          </div>
-          <div style="font-size:11px;width:20px;text-align:center;border-bottom:1px solid #000;">__</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="font-size:11px;font-weight:600;width:130px;">Sport / Bewegung</div>
-          <div style="flex:1;height:10px;background:var(--farbe-hell);border:1px solid var(--border);border-radius:5px;"></div>
-          <div style="font-size:11px;width:20px;text-align:center;border-bottom:1px solid #000;">__</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="font-size:11px;font-weight:600;width:130px;">Hobbys / Interessen</div>
-          <div style="flex:1;height:10px;background:var(--farbe-hell);border:1px solid var(--border);border-radius:5px;"></div>
-          <div style="font-size:11px;width:20px;text-align:center;border-bottom:1px solid #000;">__</div>
-        </div>
-      </div>
-      <div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="font-size:11px;font-weight:600;width:130px;">Freunde / Soziales</div>
-          <div style="flex:1;height:10px;background:var(--farbe-hell);border:1px solid var(--border);border-radius:5px;"></div>
-          <div style="font-size:11px;width:20px;text-align:center;border-bottom:1px solid #000;">__</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="font-size:11px;font-weight:600;width:130px;">Zukunft / Ziele</div>
-          <div style="flex:1;height:10px;background:var(--farbe-hell);border:1px solid var(--border);border-radius:5px;"></div>
-          <div style="font-size:11px;width:20px;text-align:center;border-bottom:1px solid #000;">__</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="font-size:11px;font-weight:600;width:130px;">Alltag / Routinen</div>
-          <div style="flex:1;height:10px;background:var(--farbe-hell);border:1px solid var(--border);border-radius:5px;"></div>
-          <div style="font-size:11px;width:20px;text-align:center;border-bottom:1px solid #000;">__</div>
-        </div>
-      </div>
-    </div>
-    <p style="font-size:11px;color:var(--grau);">In welchem Bereich fehlt dir die Motivation am meisten? Was glaubst du, warum? _______________________________________________</p>
+    <div style="font-size:11px;color:#6B7280;">Was motiviert dich gerade am meisten – und kommt das von innen oder außen? <span style="border-bottom:1px dashed #C4B5FD;display:inline-block;width:180px;">&nbsp;</span></div>
   </div>
 
-  <!-- Übung 2 -->
+  <!-- Übung 2 – Energiemeter -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">2</div>
-      <div class="uebung-titel">Was begeistert mich? – Meine intrinsischen Motivatoren</div>
+      <div class="uebung-titel">Energiemeter: Was lädt mich auf – was laugt mich aus? ⚡🪫</div>
     </div>
-    <div class="uebung-beschreibung">
-      Denke an Momente, in denen du wirklich in etwas aufgegangen bist (Flow). Was hast du da gemacht?
+    <div class="uebung-beschreibung">Energie ist wie ein Akku. Schreibe in jede Spalte mindestens 4 Dinge.</div>
+    <div class="energie-spalten">
+      <div class="energie-box" style="background:#F0FDF4;border:1.5px solid #86EFAC;">
+        <div style="font-size:12px;font-weight:700;color:#059669;margin-bottom:6px;">🔋 Das lädt mich auf</div>
+        <div style="font-size:10px;color:#6B7280;margin-bottom:6px;">z.B. Musik, Natur, bestimmte Menschen, Sport…</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
+      <div class="energie-box" style="background:#FEF2F2;border:1.5px solid #FCA5A5;">
+        <div style="font-size:12px;font-weight:700;color:#DC2626;margin-bottom:6px;">🪫 Das saugt meine Energie</div>
+        <div style="font-size:10px;color:#6B7280;margin-bottom:6px;">z.B. Streit, Langeweile, zu viel Handy, Druck…</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+      </div>
     </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
-        <div style="font-size:20px;margin-bottom:4px;">🎯</div>
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">Letzter Flow-Moment</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
-        <div style="font-size:20px;margin-bottom:4px;">⭐</div>
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">Dabei war ich gut in …</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
-      <div style="border:1.5px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
-        <div style="font-size:20px;margin-bottom:4px;">💡</div>
-        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:6px;">Das macht mir Sinn, weil …</div>
-        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-      </div>
+    <div style="font-size:11px;margin-bottom:4px;">Mein Energie-Level heute:</div>
+    <div class="emoji-meter">
+      <span title="total leer">🪫</span><span title="wenig">😞</span><span title="so lala">😑</span><span title="mittel">🙂</span><span title="gut">😄</span><span title="voller Akku">⚡</span>
     </div>
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Motivation & Antrieb · Seite 1</span>
+    <span>Motivation &amp; Antrieb · Seite 1</span>
   </div>
 </div>
 
 <!-- ===== SEITE 2 ===== -->
 <div class="seite">
 
-  <!-- Übung 3 -->
+  <!-- Übung 3 – Mikro-Schritte -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">3</div>
-      <div class="uebung-titel">SMART-Ziele – Kleine Schritte, große Wirkung</div>
+      <div class="uebung-titel">Die Mikro-Schritt-Methode – ein großes Ziel, 5 winzige Schritte 🐜</div>
     </div>
-    <div class="uebung-beschreibung">
-      Vague Ziele wie "ich will besser in der Schule werden" erzeugen keine Motivation. SMART-Ziele schon:
+    <div class="uebung-beschreibung">Große Ziele lähmen – kleine Schritte aktivieren. Denke dir ein Ziel das du eigentlich willst, und zerlege es in 5 Mini-Schritte, die du heute oder diese Woche schaffen kannst.</div>
+    <div style="background:var(--farbe-hell);border:1.5px solid #C4B5FD;border-radius:8px;padding:8px 12px;margin-bottom:10px;">
+      <span style="font-size:11px;font-weight:700;color:var(--farbe);">🎯 Mein Ziel: </span><span style="border-bottom:1.5px solid #C4B5FD;display:inline-block;width:280px;">&nbsp;</span>
     </div>
-
-    <div class="infobox" style="margin-bottom:10px;">
-      <div class="infobox-titel">🎯 Was ist ein SMART-Ziel?</div>
-      <p><strong>S</strong>pezifisch · <strong>M</strong>essbar · <strong>A</strong>ttraktiv (wichtig für mich) · <strong>R</strong>ealistisch · <strong>T</strong>erminiert (bis wann?)</p>
-    </div>
-
-    <div style="border:1.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;">
-      <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:8px;">Mein SMART-Ziel:</div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:6px;font-size:11px;">
-        <div style="font-weight:600;">Spezifisch:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
-        <div style="font-weight:600;">Messbar:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
-        <div style="font-weight:600;">Attraktiv:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
-        <div style="font-weight:600;">Realistisch:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
-        <div style="font-weight:600;">Bis wann:</div><div class="schreiblinien"><div class="schreiblinie"></div></div>
-      </div>
-    </div>
-
-    <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Meine ersten 3 konkreten Schritte (diese Woche):</div>
-    <div style="display:grid;grid-template-columns:1fr;gap:6px;">
-      <div style="display:flex;gap:8px;align-items:center;"><div style="background:var(--farbe);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</div><div class="schreiblinien" style="flex:1;"><div class="schreiblinie"></div></div></div>
-      <div style="display:flex;gap:8px;align-items:center;"><div style="background:var(--farbe);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</div><div class="schreiblinien" style="flex:1;"><div class="schreiblinie"></div></div></div>
-      <div style="display:flex;gap:8px;align-items:center;"><div style="background:var(--farbe);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</div><div class="schreiblinien" style="flex:1;"><div class="schreiblinie"></div></div></div>
-    </div>
+    <div class="mikro-schritt"><div class="mikro-nr">1</div><div style="font-size:10px;color:#6B7280;width:90px;">heute möglich:</div><div style="flex:1;border-bottom:1px dashed #C4B5FD;height:16px;"></div></div>
+    <div class="mikro-schritt"><div class="mikro-nr">2</div><div style="font-size:10px;color:#6B7280;width:90px;">diese Woche:</div><div style="flex:1;border-bottom:1px dashed #C4B5FD;height:16px;"></div></div>
+    <div class="mikro-schritt"><div class="mikro-nr">3</div><div style="font-size:10px;color:#6B7280;width:90px;">nächste Woche:</div><div style="flex:1;border-bottom:1px dashed #C4B5FD;height:16px;"></div></div>
+    <div class="mikro-schritt"><div class="mikro-nr">4</div><div style="font-size:10px;color:#6B7280;width:90px;">diesen Monat:</div><div style="flex:1;border-bottom:1px dashed #C4B5FD;height:16px;"></div></div>
+    <div class="mikro-schritt"><div class="mikro-nr">5</div><div style="font-size:10px;color:#6B7280;width:90px;">Meilenstein:</div><div style="flex:1;border-bottom:1px dashed #C4B5FD;height:16px;"></div></div>
   </div>
 
-  <hr class="trennlinie">
-
-  <!-- Übung 4 -->
+  <!-- Übung 4 – Warum-Leiter -->
   <div class="uebung">
     <div class="uebung-header">
       <div class="uebung-nr">4</div>
-      <div class="uebung-titel">Motivations-Killer erkennen und überwinden</div>
+      <div class="uebung-titel">Die Warum-Leiter – finde deinen tiefsten Antrieb 🪜</div>
     </div>
-    <div class="uebung-beschreibung">
-      Was hält dich davon ab, loszulegen? Füge für jeden Killer eine Gegenstrategie ein.
+    <div class="uebung-beschreibung">Frage dich 3× "Warum?" – so findest du den echten Kern deiner Motivation (ACT: Werteklärung).</div>
+    <div class="warum-leiter">
+      <div class="warum-stufe">Ich will: <span style="border-bottom:1px dashed #C4B5FD;display:inline-block;width:230px;">&nbsp;</span></div>
+      <div class="warum-pfeil">⬇ Warum?</div>
+      <div class="warum-stufe">Weil: <span style="border-bottom:1px dashed #C4B5FD;display:inline-block;width:260px;">&nbsp;</span></div>
+      <div class="warum-pfeil">⬇ Und warum ist das wichtig?</div>
+      <div class="warum-stufe">Weil mir eigentlich wichtig ist: <span style="border-bottom:1px dashed #C4B5FD;display:inline-block;width:190px;">&nbsp;</span></div>
+      <div class="warum-pfeil">⬇ Und was sagt das über deine Werte?</div>
+      <div class="warum-stufe" style="background:#EDE9FE;border-color:var(--farbe);">Mein Kernwert hinter diesem Ziel: <span style="border-bottom:1.5px solid var(--farbe);display:inline-block;width:160px;">&nbsp;</span></div>
     </div>
-
-    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-      <thead>
-        <tr style="background:var(--farbe-hell);">
-          <th style="padding:7px;text-align:left;border:1px solid var(--border);">Motivations-Killer (Meine Hindernisse)</th>
-          <th style="padding:7px;text-align:left;border:1px solid var(--border);">Meine Gegenstrategie</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding:7px;border:1px solid var(--border);height:30px;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);height:30px;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:7px;border:1px solid var(--border);height:30px;"></td><td style="padding:7px;border:1px solid var(--border);"></td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:11px;color:var(--grau);margin-top:6px;">💡 Typische Killer: Perfektionismus, Angst vor Misserfolg, zu große Ziele, Prokrastination, fehlender Sinn, Erschöpfung.</p>
   </div>
 
-  <!-- Reflexion -->
+  <!-- Übung 5 – Belohnungsplan -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Mein persönliches Belohnungs-System 🎁</div>
+    </div>
+    <div class="uebung-beschreibung">Design dein eigenes Belohnungssystem – dein Gehirn liebt Dopamin! Kleine Erfolge = kleine Belohnungen. Keine Süßigkeiten als einzige Idee, bitte kreativ sein.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="belohnung-karte">
+        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">🟢 Kleine Aufgabe erledigt</div>
+        <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">z.B. 30 Min gelernt, Zimmer aufgeräumt</div>
+        <div style="border-bottom:1px dashed #C4B5FD;height:16px;margin-bottom:4px;"></div>
+        <div style="font-size:10px;font-weight:700;">Meine Belohnung:</div>
+        <div style="border-bottom:1px dashed #C4B5FD;height:16px;"></div>
+      </div>
+      <div class="belohnung-karte">
+        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">🔵 Großes Ziel erreicht</div>
+        <div style="font-size:10px;color:#6B7280;margin-bottom:4px;">z.B. Prüfung bestanden, Woche durchgehalten</div>
+        <div style="border-bottom:1px dashed #C4B5FD;height:16px;margin-bottom:4px;"></div>
+        <div style="font-size:10px;font-weight:700;">Meine Belohnung:</div>
+        <div style="border-bottom:1px dashed #C4B5FD;height:16px;"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="reflexion">
-    <div class="reflexion-titel">💬 Reflexion mit dem Erzieher / der Erzieherin</div>
-    <p style="font-size:11px;color:#92400E;margin-bottom:8px;">Beantworte diese Fragen gemeinsam:</p>
-    <div style="font-size:12px;margin-bottom:6px;">1. Gibt es etwas, das du dir erlauben würdest zu tun, wenn du keine Angst vor dem Urteil anderer hättest?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:6px;">2. Was würde passieren, wenn du einen kleinen Schritt machst – ohne sicher zu wissen ob er perfekt ist?</div>
-    <div class="schreiblinien" style="margin-bottom:10px;"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-    <div style="font-size:12px;margin-bottom:6px;">3. Wer in deinem Leben ist motiviert? Was kannst du von dieser Person lernen?</div>
-    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+    <div class="reflexion-titel">💬 Reflexion</div>
+    <p>Was würde sich verändern, wenn du wüsstest, dass Fehler okay sind – und kein Beweis dafür, dass du versagst?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fachhinweis">
     <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
-    Nach der Selbstbestimmungstheorie (Deci & Ryan) brauchen Menschen drei psychologische Grundbedürfnisse für intrinsische Motivation: <strong>Autonomie</strong> (ich entscheide selbst), <strong>Kompetenz</strong> (ich kann es) und <strong>Verbundenheit</strong> (es ist bedeutsam). Motivationslosigkeit oft = eines dieser Bedürfnisse ist frustriert. Behavioral Activation, SMART-Ziele und Werteklärung sind nachweislich wirksame Ansätze.
+    <strong>ICD-10:</strong> Motivationsmangel als Symptom bei F32/F33 (Depression), F90 (ADHS), F43.2 (Anpassungsstörung). <strong>Theorie:</strong> Selbstbestimmungstheorie (Deci &amp; Ryan) – psychologische Grundbedürfnisse Autonomie, Kompetenz, Verbundenheit. Werteklärung = ACT-Kernprozess (Acceptance and Commitment Therapy, Hayes). Behavioral Activation (aus CBT) als wirksame Intervention bei Antriebs- und Motivationsmangel. <strong>Mikro-Schritte:</strong> Konsistent mit KVT-Graduierungsansatz – "Keine Angst vor dem ersten Schritt". <strong>Achtung:</strong> Anhedonie (fehlende Freude an allem) als mögliches Depressionssymptom abklären. Belohnungssystem als motivierende Technik, nicht als Konditionierungsinstrument einsetzen.
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Motivation & Antrieb · Seite 2</span>
+    <span>Motivation &amp; Antrieb · Seite 2</span>
   </div>
 </div>
 

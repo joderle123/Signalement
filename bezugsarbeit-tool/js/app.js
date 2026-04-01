@@ -337,18 +337,29 @@ function renderArbeitsblaetter(themaId) {
   const blaetter = ARBEITSBLÄTTER[themaId] || [];
   const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
   const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
+  const modul = typeof THEMA_MODULE !== 'undefined' ? (THEMA_MODULE[themaId] || null) : null;
 
-  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0) return '';
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul) return '';
+
+  const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0;
 
   return `
     <div style="margin-bottom:20px;">
       <div class="panel-tabs" id="panel-tabs-${themaId}">
-        <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">📋 Blätter</button>
-        <button class="panel-tab" onclick="switchPanelTab('${themaId}','akt')">🎯 Aktivitäten</button>
-        <button class="panel-tab" onclick="switchPanelTab('${themaId}','int')">🧠 Interventionen</button>
+        <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">
+          📋 Arbeitsblatt
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 1 · Einstieg</span>
+        </button>
+        ${hasModul ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','tm')">
+          🏥 Therapiemodul
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 2 · Vertiefung</span>
+        </button>` : ''}
       </div>
 
       <div id="pt-ab-${themaId}" class="panel-tab-content">
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#1D4ED8;">
+          Einstieg in das Thema · 1 Sitzung · Direkt ausfüllbar
+        </div>
         ${blaetter.length === 0
           ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Kein Arbeitsblatt verfügbar</p>'
           : blaetter.map(b => `
@@ -362,38 +373,365 @@ function renderArbeitsblaetter(themaId) {
           </a>`).join('')}
       </div>
 
-      <div id="pt-akt-${themaId}" class="panel-tab-content" style="display:none;">
-        ${aktivitaeten.length === 0
-          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Aktivitäten hinterlegt</p>'
-          : aktivitaeten.map(a => `
-          <div style="padding:10px 12px;margin-bottom:8px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;">
-            <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:4px;">🎯 ${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
-            <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
-          </div>`).join('')}
-      </div>
-
-      <div id="pt-int-${themaId}" class="panel-tab-content" style="display:none;">
-        ${interventionen.length === 0
-          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Interventionen hinterlegt</p>'
-          : interventionen.map(i => `
-          <div style="padding:10px 12px;margin-bottom:8px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
-            <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">🧠 ${i.titel}</div>
-            <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
-            <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
-            <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
-          </div>`).join('')}
-      </div>
+      ${hasModul ? `
+      <div id="pt-tm-${themaId}" class="panel-tab-content" style="display:none;">
+        ${modul ? renderTherapiemodul(modul, themaId) : renderTherapiemodul_legacy(aktivitaeten, interventionen)}
+      </div>` : ''}
     </div>`;
 }
 
+function renderTherapiemodul(modul, themaId) {
+  const sitzungFarben = ['#7C3AED','#0369A1','#166534','#92400E','#B91C1C','#0F766E'];
+
+  let html = `<div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+    <strong>Therapiemodul (Ebene 2)</strong> · ${modul.dauer}<br>
+    <span style="opacity:0.75;">${modul.zielgruppe || 'Für Schüler, bei denen dieses Thema ein zentraler Arbeitsbereich ist.'}</span>
+  </div>`;
+
+  modul.sitzungen.forEach((s, idx) => {
+    const farbe = sitzungFarben[idx % sitzungFarben.length];
+    const sid = `sitz-${themaId}-${s.nr}`;
+    html += `
+    <div style="border:1.5px solid ${farbe}22;border-radius:8px;margin-bottom:10px;overflow:hidden;">
+      <div onclick="toggleSitzung('${sid}')" style="cursor:pointer;background:${farbe}11;padding:10px 12px;display:flex;align-items:center;gap:8px;user-select:none;">
+        <span style="min-width:24px;height:24px;border-radius:50%;background:${farbe};color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">${s.nr}</span>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:12px;color:${farbe};">${s.titel}</div>
+          <div style="font-size:10px;color:#6B7280;margin-top:1px;">⏱ ${s.dauer} · ${s.ziel}</div>
+        </div>
+        <button onclick="event.stopPropagation();printSitzung('${themaId}',${s.nr})"
+          style="border:1px solid ${farbe}44;background:#fff;color:${farbe};border-radius:5px;padding:3px 8px;font-size:10px;cursor:pointer;white-space:nowrap;">🖨️ Drucken</button>
+        <span id="${sid}-arrow" style="color:${farbe};font-size:14px;transition:transform 0.2s;">▼</span>
+      </div>
+      <div id="${sid}" style="display:none;padding:12px;">`;
+
+    // Pädagogische Felder (nur wenn vorhanden)
+    if (s.materialien || s.gruppenformat) {
+      html += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">`;
+      if (s.gruppenformat) {
+        html += `<span style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:5px;padding:3px 8px;font-size:10px;color:#0369A1;">👥 ${s.gruppenformat}</span>`;
+      }
+      if (s.materialien) {
+        html += `<span style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:5px;padding:3px 8px;font-size:10px;color:#166534;">📋 ${s.materialien.join(', ')}</span>`;
+      }
+      html += `</div>`;
+    }
+
+    if (s.hinweis_paedagoge) {
+      html += `<div style="margin-bottom:12px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:6px;padding:10px 12px;">
+        <div style="font-size:10px;font-weight:700;color:#C2410C;margin-bottom:4px;">💡 Hinweis für Pädagogen</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">${s.hinweis_paedagoge}</div>
+      </div>`;
+    }
+
+    if (s.psychoedukation) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">📚 Psychoedukation</div>
+        <div style="background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;padding:10px 12px;">
+          <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:4px;">${s.psychoedukation.titel}</div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${s.psychoedukation.inhalt}</div>
+        </div>
+      </div>`;
+    }
+
+    if (s.interventionen && s.interventionen.length > 0) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🧠 Interventionen</div>
+        ${s.interventionen.map(i => `
+        <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:12px;color:#0369A1;margin-bottom:2px;">${i.titel}</div>
+          <div style="font-size:10px;color:#0369A1;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${i.beschreibung}</div>
+        </div>`).join('')}
+      </div>`;
+    }
+
+    if (s.uebungen && s.uebungen.length > 0) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🎯 Übungen</div>
+        ${s.uebungen.map(u => `
+        <div style="background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:2px;">${u.titel} <span style="font-weight:400;opacity:0.7;">(${u.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${u.beschreibung}</div>
+        </div>`).join('')}
+      </div>`;
+    }
+
+    if (s.gruppenvariation) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#0F766E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">👥 Gruppenvariation</div>
+        <div style="background:#F0FDFA;border:1.5px solid #99F6E4;border-radius:6px;padding:10px 12px;">
+          <div style="font-weight:600;font-size:12px;color:#0F766E;margin-bottom:4px;">${s.gruppenvariation.titel}</div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${s.gruppenvariation.beschreibung}</div>
+        </div>
+      </div>`;
+    }
+
+    if (s.hausaufgabe) {
+      html += `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">📝 Hausaufgabe</div>
+        <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:6px;padding:10px 12px;">
+          <div style="font-weight:600;font-size:12px;color:#92400E;margin-bottom:2px;">${s.hausaufgabe.titel} <span style="font-weight:400;opacity:0.7;">(${s.hausaufgabe.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;line-height:1.6;">${s.hausaufgabe.beschreibung}</div>
+        </div>
+      </div>`;
+    }
+
+    if (s.reflexion && s.reflexion.length > 0) {
+      html += `<div>
+        <div style="font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">💭 Reflexion</div>
+        <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;font-size:12px;color:#374151;">
+          <ul style="margin:0;padding-left:16px;line-height:1.9;">
+            ${s.reflexion.map(f => `<li>${f}</li>`).join('')}
+          </ul>
+        </div>
+      </div>`;
+    }
+
+    html += `</div></div>`;
+  });
+
+  return html;
+}
+
+function toggleSitzung(sid) {
+  const el = document.getElementById(sid);
+  const arrow = document.getElementById(sid + '-arrow');
+  if (!el) return;
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function printSitzung(themaId, nr) {
+  const modul = typeof THEMA_MODULE !== 'undefined' ? THEMA_MODULE[themaId] : null;
+  if (!modul) return;
+  const sitzung = modul.sitzungen.find(s => s.nr === nr);
+  if (!sitzung) return;
+
+  // Thema-Titel aus THEMEN_KATEGORIEN suchen
+  let themaLabel = themaId;
+  if (typeof THEMEN_KATEGORIEN !== 'undefined') {
+    for (const kat of THEMEN_KATEGORIEN) {
+      const t = kat.themen.find(th => th.id === themaId);
+      if (t) { themaLabel = t.titel; break; }
+    }
+  }
+
+  const html = generatePrintSheetHTML(themaLabel, modul, sitzung);
+  const win = window.open('', '_blank');
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 600);
+}
+
+function generatePrintSheetHTML(themaLabel, modul, s) {
+  const escHtml = str => String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const field = (label, content) => content ? `
+    <div class="section">
+      <div class="section-label">${escHtml(label)}</div>
+      <div class="section-body">${escHtml(content)}</div>
+    </div>` : '';
+  const writeLine = (n=2) => '<div class="write-lines">' + Array(n).fill('<div class="line"></div>').join('') + '</div>';
+
+  return `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>${escHtml(themaLabel)} – Sitzung ${s.nr}</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #222; margin: 0; padding: 0; }
+  .page { max-width: 210mm; margin: 0 auto; padding: 16mm 18mm 16mm 18mm; }
+  h1 { font-size: 15pt; color: #1e3a5f; border-bottom: 2pt solid #1e3a5f; padding-bottom: 5pt; margin: 0 0 4pt 0; }
+  .meta { font-size: 9pt; color: #555; margin-bottom: 14pt; }
+  .badge { display: inline-block; border: 1pt solid #aaa; border-radius: 4pt; padding: 2pt 7pt; font-size: 8.5pt; margin-right: 5pt; margin-bottom: 4pt; }
+  .badge.group { border-color: #0369a1; color: #0369a1; }
+  .badge.mat { border-color: #166534; color: #166534; }
+  .section { margin-bottom: 12pt; }
+  .section-label { font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5pt; color: #444; margin-bottom: 4pt; border-left: 3pt solid #1e3a5f; padding-left: 5pt; }
+  .section-body { font-size: 10.5pt; line-height: 1.6; color: #333; background: #f7f7f7; border: 1pt solid #ddd; border-radius: 4pt; padding: 8pt 10pt; }
+  .hint-box { background: #fff8f0; border: 1.5pt solid #f59e0b; border-radius: 4pt; padding: 8pt 10pt; margin-bottom: 12pt; font-size: 10pt; }
+  .hint-label { font-weight: bold; color: #b45309; font-size: 9pt; margin-bottom: 3pt; }
+  .item { border: 1pt solid #ccc; border-radius: 4pt; padding: 7pt 10pt; margin-bottom: 6pt; background: #fff; }
+  .item-title { font-weight: bold; font-size: 10.5pt; margin-bottom: 3pt; }
+  .item-sub { font-size: 8.5pt; color: #666; margin-bottom: 4pt; }
+  .item-body { font-size: 10.5pt; line-height: 1.6; }
+  .write-lines { margin-top: 4pt; }
+  .line { border-bottom: 1pt solid #bbb; height: 18pt; margin-bottom: 2pt; }
+  .reflexion-q { margin-bottom: 8pt; }
+  .reflexion-q strong { font-size: 10.5pt; }
+  .group-box { background: #f0fdfa; border: 1.5pt solid #6ee7b7; border-radius: 4pt; padding: 8pt 10pt; margin-bottom: 12pt; }
+  .group-label { font-weight: bold; color: #0f766e; font-size: 9pt; margin-bottom: 3pt; }
+  .footer { margin-top: 18pt; border-top: 1pt solid #ccc; padding-top: 6pt; font-size: 8pt; color: #999; display: flex; justify-content: space-between; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 12mm 16mm; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>${escHtml(themaLabel)} – Sitzung ${s.nr}: ${escHtml(s.titel)}</h1>
+  <div class="meta">
+    ⏱ ${escHtml(s.dauer)} &nbsp;·&nbsp; 🎯 ${escHtml(s.ziel)}
+    ${modul.zielgruppe ? `&nbsp;·&nbsp; 👤 ${escHtml(modul.zielgruppe)}` : ''}
+  </div>
+
+  ${s.gruppenformat ? `<span class="badge group">👥 ${escHtml(s.gruppenformat)}</span>` : ''}
+  ${s.materialien ? s.materialien.map(m => `<span class="badge mat">📋 ${escHtml(m)}</span>`).join('') : ''}
+
+  ${s.hinweis_paedagoge ? `<div class="hint-box"><div class="hint-label">💡 Hinweis für Pädagogen</div>${escHtml(s.hinweis_paedagoge)}</div>` : ''}
+
+  ${s.psychoedukation ? `
+  <div class="section">
+    <div class="section-label">📚 Psychoedukation: ${escHtml(s.psychoedukation.titel)}</div>
+    <div class="section-body">${escHtml(s.psychoedukation.inhalt)}</div>
+  </div>` : ''}
+
+  ${s.interventionen && s.interventionen.length > 0 ? `
+  <div class="section">
+    <div class="section-label">🧠 Interventionen</div>
+    ${s.interventionen.map(i => `
+    <div class="item">
+      <div class="item-title">${escHtml(i.titel)}</div>
+      <div class="item-sub">📌 ${escHtml(i.ansatz)} · ⏱ ${escHtml(i.dauer)}</div>
+      <div class="item-body">${escHtml(i.beschreibung)}</div>
+      ${writeLine(2)}
+    </div>`).join('')}
+  </div>` : ''}
+
+  ${s.uebungen && s.uebungen.length > 0 ? `
+  <div class="section">
+    <div class="section-label">🎯 Übungen</div>
+    ${s.uebungen.map(u => `
+    <div class="item">
+      <div class="item-title">${escHtml(u.titel)} <span style="font-weight:normal;font-size:9pt;">(${escHtml(u.dauer)})</span></div>
+      <div class="item-body">${escHtml(u.beschreibung)}</div>
+      ${writeLine(3)}
+    </div>`).join('')}
+  </div>` : ''}
+
+  ${s.gruppenvariation ? `
+  <div class="group-box">
+    <div class="group-label">👥 Gruppenvariation: ${escHtml(s.gruppenvariation.titel)}</div>
+    ${escHtml(s.gruppenvariation.beschreibung)}
+  </div>` : ''}
+
+  ${s.hausaufgabe ? `
+  <div class="section">
+    <div class="section-label">📝 Hausaufgabe: ${escHtml(s.hausaufgabe.titel)} (${escHtml(s.hausaufgabe.dauer)})</div>
+    <div class="section-body">${escHtml(s.hausaufgabe.beschreibung)}</div>
+    ${writeLine(3)}
+  </div>` : ''}
+
+  ${s.reflexion && s.reflexion.length > 0 ? `
+  <div class="section">
+    <div class="section-label">💭 Reflexionsfragen</div>
+    ${s.reflexion.map(q => `
+    <div class="reflexion-q">
+      <strong>${escHtml(q)}</strong>
+      ${writeLine(2)}
+    </div>`).join('')}
+  </div>` : ''}
+
+  <div class="footer">
+    <span>CDSE Bezugsarbeit-Tool · Sitzungsarbeitsblatt</span>
+    <span>Sitzung ${s.nr} von ${modul.sitzungen.length} · ${escHtml(modul.dauer)}</span>
+  </div>
+</div>
+</body>
+</html>`;
+}
+
+function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
+  const psychoedukativ = interventionen.filter(i =>
+    i.ansatz && i.ansatz.toLowerCase().includes('psychoeduk')
+  );
+  const therapeutisch = interventionen.filter(i =>
+    !i.ansatz || !i.ansatz.toLowerCase().includes('psychoeduk')
+  );
+  const hausaufgaben = aktivitaeten.filter(a => a.dauer && a.dauer.toLowerCase().includes('täglich'));
+  const uebungen = aktivitaeten.filter(a => !a.dauer || !a.dauer.toLowerCase().includes('täglich'));
+
+  let html = `<div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+    <strong>Therapiemodul (Ebene 2)</strong> · Vollständige Behandlungseinheit · 2–8 Stunden<br>
+    <span style="opacity:0.75;">Für Schüler, bei denen dieses Thema ein zentraler Arbeitsbereich ist.</span>
+  </div>`;
+
+  if (psychoedukativ.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">📚 Psychoedukation</div>
+      ${psychoedukativ.map(i => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">${i.titel}</div>
+          <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
+          <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  if (therapeutisch.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🧠 Interventionen</div>
+      ${therapeutisch.map(i => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">${i.titel}</div>
+          <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
+          <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  if (uebungen.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🎯 Übungen</div>
+      ${uebungen.map(a => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:4px;">${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  if (hausaufgaben.length > 0) {
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">📝 Hausaufgaben</div>
+      ${hausaufgaben.map(a => `
+        <div style="padding:10px 12px;margin-bottom:6px;background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#92400E;margin-bottom:4px;">${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
+          <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  html += `<div style="margin-bottom:8px;">
+    <div style="font-size:11px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">💭 Reflexion</div>
+    <div style="padding:10px 12px;background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;font-size:12px;color:#374151;">
+      <ul style="margin:0;padding-left:16px;line-height:1.9;">
+        <li>Was war für dich in diesem Modul besonders wichtig?</li>
+        <li>Was hat sich seit Beginn der Arbeit an diesem Thema verändert?</li>
+        <li>Welche Strategien möchtest du im Alltag weiter einsetzen?</li>
+        <li>Was würdest du dir noch wünschen oder brauchen?</li>
+      </ul>
+    </div>
+  </div>`;
+
+  return html;
+}
+
 function switchPanelTab(themaId, tab) {
-  ['ab','akt','int'].forEach(t => {
+  ['ab','tm'].forEach(t => {
     const el = document.getElementById(`pt-${t}-${themaId}`);
     if (el) el.style.display = t === tab ? 'block' : 'none';
   });
   const tabs = document.getElementById(`panel-tabs-${themaId}`);
   if (tabs) tabs.querySelectorAll('.panel-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', ['ab','akt','int'][i] === tab);
+    btn.classList.toggle('active', ['ab','tm'][i] === tab);
   });
 }
 

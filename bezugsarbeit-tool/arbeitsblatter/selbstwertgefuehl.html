@@ -5,7 +5,12 @@
   <title>Arbeitsblatt – Selbstwertgefühl</title>
   <link rel="stylesheet" href="../css/arbeitsblatt.css">
   <style>
-    :root { --farbe: #D97706; --farbe-hell: #FFFBEB; }
+    :root { --farbe: #F59E0B; --farbe-hell: #FFFBEB; }
+    .bubble-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+    .bubble { background:var(--farbe-hell); border:1.5px solid #FDE68A; border-radius:8px; padding:8px 10px; font-size:11px; }
+    .star { display:inline-block; width:52px; height:52px; background:var(--farbe-hell); border:1.5px solid #FDE68A; border-radius:50%; text-align:center; line-height:52px; font-size:11px; margin:3px; }
+    .speech-bubble-red { background:#FEF2F2; border:1.5px solid #FCA5A5; border-radius:8px; padding:8px; font-size:11px; position:relative; }
+    .speech-bubble-green { background:#F0FDF4; border:1.5px solid #6EE7B7; border-radius:8px; padding:8px; font-size:11px; position:relative; }
   </style>
 </head>
 <body>
@@ -15,15 +20,15 @@
   <button class="btn-drucken" onclick="window.print()">🖨️ Drucken / PDF</button>
 </div>
 
-<!-- ===== SEITE 1 ===== -->
+<!-- SEITE 1 -->
 <div class="seite">
   <div class="kopfzeile">
     <div class="kopfzeile-links">
       <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
-      <div class="ab-titel">Mein Selbstwertgefühl stärken</div>
-      <div class="ab-untertitel">Selbstwert & Selbstbild · Kategorie: Emotionen & Wohlbefinden</div>
+      <div class="ab-titel">Du bist mehr als das, was andere über dich denken</div>
+      <div class="ab-untertitel">Selbstwertgefühl · Kategorie: Emotionen &amp; Wohlbefinden</div>
     </div>
-    <div class="kopfzeile-icon">🌟</div>
+    <div class="kopfzeile-icon">⭐</div>
   </div>
 
   <div class="schuelerinfo">
@@ -33,89 +38,57 @@
   </div>
 
   <div class="infobox">
-    <div class="infobox-titel">💡 Was ist Selbstwertgefühl?</div>
-    <p>Selbstwertgefühl bedeutet, wie sehr du dich selbst schätzt, akzeptierst und für wertvoll hältst – <strong>unabhängig</strong> von Noten, Aussehen oder dem was andere über dich denken. Es ist kein fester Wert, sondern etwas das du aufbauen und stärken kannst.</p>
-    <p>Niedriges Selbstwertgefühl entsteht oft durch negative Erfahrungen, Kritik oder Vergleiche. Aber: Was gelernt wurde, kann auch verändert werden.</p>
+    <div class="infobox-titel">⭐ Selbstwert ≠ Selbstlob. Selbstwert = innere Stärke.</div>
+    <p>Selbstwertgefühl heißt nicht, dass du alles toll findest was du tust. Es heißt: Du weißt, dass du es wert bist, da zu sein – <strong>unabhängig von Noten, Aussehen oder Likes</strong>. Das lässt sich aufbauen. Wirklich.</p>
+    <p>🧠 <em>Wusstest du? Selbstkritik aktiviert dieselben Gehirnbereiche wie körperlicher Schmerz. Selbstmitgefühl (Neff, 2003) hat in Studien stärkere Effekte auf psychische Gesundheit als Selbstlob oder positives Denken.</em></p>
   </div>
 
   <!-- Übung 1 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">1</div>
-      <div class="uebung-titel">Das bin ich – Meine Stärken entdecken</div>
-    </div>
-    <div class="uebung-beschreibung">
-      Viele Menschen kennen ihre Schwächen besser als ihre Stärken. Fülle alle Felder aus – und wenn du nicht weißt was du eintragen sollst, frag jemanden dem du vertraust!
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-      <div class="box" style="border-color:var(--farbe);background:var(--farbe-hell);">
-        <div class="box-label" style="color:var(--farbe);">💪 Das kann ich gut</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        </div>
+    <div class="uebung-header"><div class="uebung-nr">1</div><div class="uebung-titel">Innerer Kritiker vs. innerer Freund – Speech Bubbles</div></div>
+    <div class="uebung-beschreibung">Schreibe in die rote Sprechblase was dein innerer Kritiker sagt. In die grüne, was ein guter Freund dir entgegnen würde:</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+      <!-- Row 1 - example given -->
+      <div style="display:grid;grid-template-columns:1fr 28px 1fr;gap:6px;align-items:center;">
+        <div class="speech-bubble-red">😤 <em>"Ich bin sowieso nicht gut genug."</em></div>
+        <div style="text-align:center;font-size:16px;">→</div>
+        <div class="speech-bubble-green">🤗 <div style="border-bottom:1px dashed #6EE7B7;height:18px;margin-top:4px;"></div></div>
       </div>
-      <div class="box" style="border-color:#3B82F6;background:#EFF6FF;">
-        <div class="box-label" style="color:#3B82F6;">❤️ Das mag ich an mir</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        </div>
+      <!-- Row 2 - blank -->
+      <div style="display:grid;grid-template-columns:1fr 28px 1fr;gap:6px;align-items:center;">
+        <div class="speech-bubble-red">😤 <div style="border-bottom:1px dashed #FCA5A5;height:18px;margin-top:4px;"></div></div>
+        <div style="text-align:center;font-size:16px;">→</div>
+        <div class="speech-bubble-green">🤗 <div style="border-bottom:1px dashed #6EE7B7;height:18px;margin-top:4px;"></div></div>
       </div>
-      <div class="box" style="border-color:#10B981;background:#F0FDF4;">
-        <div class="box-label" style="color:#10B981;">🏆 Worauf ich stolz bin</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        </div>
-      </div>
-      <div class="box" style="border-color:#8B5CF6;background:#F5F3FF;">
-        <div class="box-label" style="color:#8B5CF6;">✨ Menschen die mich mögen / wertschätzen</div>
-        <div class="schreiblinien">
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-          <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        </div>
+      <!-- Row 3 - blank -->
+      <div style="display:grid;grid-template-columns:1fr 28px 1fr;gap:6px;align-items:center;">
+        <div class="speech-bubble-red">😤 <div style="border-bottom:1px dashed #FCA5A5;height:18px;margin-top:4px;"></div></div>
+        <div style="text-align:center;font-size:16px;">→</div>
+        <div class="speech-bubble-green">🤗 <div style="border-bottom:1px dashed #6EE7B7;height:18px;margin-top:4px;"></div></div>
       </div>
     </div>
+    <p style="font-size:11px;color:var(--grau);">Das macht Sinn. Wir sind oft viel härter zu uns selbst als zu unseren Freunden.</p>
   </div>
 
   <!-- Übung 2 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">2</div>
-      <div class="uebung-titel">Mein innerer Kritiker vs. mein innerer Freund</div>
+    <div class="uebung-header"><div class="uebung-nr">2</div><div class="uebung-titel">Stärke-Sterne – Fülle alle 10 aus!</div></div>
+    <div class="uebung-beschreibung">Schreibe in jeden Stern eine Stärke von dir. Frag jemanden dem du vertraust wenn du nicht weißt was du reinschreiben sollst – andere sehen oft mehr als wir selbst.</div>
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;">
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+        <div style="width:72px;height:72px;background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:6px;">⭐<br>_______</div>
+      </div>
     </div>
-    <div class="uebung-beschreibung">
-      Wir reden oft sehr hart mit uns selbst – härter als wir es mit einem Freund tun würden. Übe einen mitfühlenderen Umgang mit dir selbst.
-    </div>
-
-    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-      <thead>
-        <tr>
-          <th style="padding:8px;border:1px solid var(--border);background:#FEF2F2;color:#EF4444;text-align:left;">😤 Mein innerer Kritiker sagt…</th>
-          <th style="padding:8px;border:1px solid var(--border);background:#F0FDF4;color:#10B981;text-align:left;">🤗 Mein innerer Freund würde sagen…</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="padding:7px;border:1px solid var(--border);font-style:italic;color:#6B7280;">„Ich bin sowieso nicht gut genug."</td>
-          <td style="padding:7px;border:1px solid var(--border);"><div class="schreiblinien"><div class="schreiblinie"></div></div></td>
-        </tr>
-        <tr>
-          <td style="padding:7px;border:1px solid var(--border);height:32px;"></td>
-          <td style="padding:7px;border:1px solid var(--border);"></td>
-        </tr>
-        <tr>
-          <td style="padding:7px;border:1px solid var(--border);height:32px;"></td>
-          <td style="padding:7px;border:1px solid var(--border);"></td>
-        </tr>
-        <tr>
-          <td style="padding:7px;border:1px solid var(--border);height:32px;"></td>
-          <td style="padding:7px;border:1px solid var(--border);"></td>
-        </tr>
-      </tbody>
-    </table>
+    <p style="font-size:11px;color:var(--grau);">Ideen: kreativ · hilfsbereit · ausdauernd · mutig · einfühlsam · ehrlich · lustig · zuverlässig · neugierig · loyal…</p>
   </div>
 
   <div class="fusszeile">
@@ -124,180 +97,91 @@
   </div>
 </div>
 
-<!-- ===== SEITE 2 ===== -->
+<!-- SEITE 2 -->
 <div class="seite">
 
   <!-- Übung 3 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">3</div>
-      <div class="uebung-titel">Das Selbstwert-Barometer</div>
-    </div>
-    <div class="uebung-beschreibung">
-      Wie stark ist dein Selbstwertgefühl in verschiedenen Bereichen? Zeichne einen Balken ein (0 = gar nicht, 10 = sehr stark).
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:160px;font-size:11px;">In der Schule/Lernen</div>
-        <div style="flex:1;height:18px;background:#F3F4F6;border-radius:9px;position:relative;border:1px solid var(--border);overflow:hidden;">
-          <div style="height:100%;background:linear-gradient(to right, var(--farbe), #FBBF24);width:0%;border-radius:9px;"></div>
+    <div class="uebung-header"><div class="uebung-nr">3</div><div class="uebung-titel">Beweise sammeln – Gegenargumente gegen Selbstkritik</div></div>
+    <div class="uebung-beschreibung">Wenn der innere Kritiker sagt "Ich bin [negativ]" – was sind Gegenbeweise? KVT-Technik: Gedanken sind keine Fakten.</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;">
+      <div style="border:1.5px solid #FDE68A;border-radius:8px;padding:10px;background:var(--farbe-hell);">
+        <div style="font-size:11px;margin-bottom:6px;">😤 Mein negativer Gedanke: <em>"Ich bin ___________________________"</em></div>
+        <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:4px;">🔍 3 Gegenbeweise aus meinem echten Leben:</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:grid;grid-template-columns:20px 1fr;gap:6px;align-items:center;font-size:11px;"><span>1.</span><div style="border-bottom:1px dashed var(--border);height:16px;"></div></div>
+          <div style="display:grid;grid-template-columns:20px 1fr;gap:6px;align-items:center;font-size:11px;"><span>2.</span><div style="border-bottom:1px dashed var(--border);height:16px;"></div></div>
+          <div style="display:grid;grid-template-columns:20px 1fr;gap:6px;align-items:center;font-size:11px;"><span>3.</span><div style="border-bottom:1px dashed var(--border);height:16px;"></div></div>
         </div>
-        <div style="width:30px;text-align:right;font-size:11px;color:var(--grau);">___/10</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:160px;font-size:11px;">Mit Freunden / sozial</div>
-        <div style="flex:1;height:18px;background:#F3F4F6;border-radius:9px;border:1px solid var(--border);"></div>
-        <div style="width:30px;text-align:right;font-size:11px;color:var(--grau);">___/10</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:160px;font-size:11px;">Körper / Aussehen</div>
-        <div style="flex:1;height:18px;background:#F3F4F6;border-radius:9px;border:1px solid var(--border);"></div>
-        <div style="width:30px;text-align:right;font-size:11px;color:var(--grau);">___/10</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:160px;font-size:11px;">In der Familie</div>
-        <div style="flex:1;height:18px;background:#F3F4F6;border-radius:9px;border:1px solid var(--border);"></div>
-        <div style="width:30px;text-align:right;font-size:11px;color:var(--grau);">___/10</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:160px;font-size:11px;">Allgemein / als Person</div>
-        <div style="flex:1;height:18px;background:#F3F4F6;border-radius:9px;border:1px solid var(--border);"></div>
-        <div style="width:30px;text-align:right;font-size:11px;color:var(--grau);">___/10</div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--grau);">In welchem Bereich möchtest du dein Selbstwertgefühl am meisten stärken? ___________________________</p>
   </div>
 
   <!-- Übung 4 -->
   <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">4</div>
-      <div class="uebung-titel">Tägliche Selbstwert-Übungen</div>
+    <div class="uebung-header"><div class="uebung-nr">4</div><div class="uebung-titel">Wertekompass – Was ist dir wichtig?</div></div>
+    <div class="uebung-beschreibung">Kreise deine Top-3-Werte ein und rate Wichtigkeit (1–5 ★). ACT: Werte geben Orientierung wenn Selbstwert schwankt.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">🤝 Loyalität<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">💡 Kreativität<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">💪 Mut<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">❤️ Mitgefühl<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">📚 Lernen<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">🎯 Ehrlichkeit<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">🌍 Gerechtigkeit<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
+      <div style="background:var(--farbe-hell);border:1.5px solid #FDE68A;border-radius:8px;padding:7px;text-align:center;font-size:11px;">🎨 Freiheit<br><span style="font-size:10px;color:var(--grau);">___★</span></div>
     </div>
-    <div class="uebung-beschreibung">
-      Kleine tägliche Gewohnheiten die dein Selbstwertgefühl aufbauen. Kreuze an, was du ausprobieren möchtest.
-    </div>
+    <p style="font-size:11px;color:var(--grau);">Meine Top-3-Werte: <span style="border-bottom:1px dashed var(--border);display:inline-block;width:260px;"></span></p>
+  </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div style="padding:8px 10px;background:#F9FAFB;border-radius:6px;font-size:11px;">☐ Jeden Abend 3 Dinge aufschreiben die heute gut waren</div>
-      <div style="padding:8px 10px;background:#F9FAFB;border-radius:6px;font-size:11px;">☐ Jeden Morgen einen positiven Satz zu mir selbst sagen</div>
-      <div style="padding:8px 10px;background:#F9FAFB;border-radius:6px;font-size:11px;">☐ Eine Sache tun die mir gut tut</div>
-      <div style="padding:8px 10px;background:#F9FAFB;border-radius:6px;font-size:11px;">☐ Einen Erfolg des Tages feiern (auch kleinen!)</div>
-      <div style="padding:8px 10px;background:#F9FAFB;border-radius:6px;font-size:11px;">☐ Vergleiche mit anderen bewusst stoppen</div>
-      <div style="padding:8px 10px;background:#F9FAFB;border-radius:6px;font-size:11px;">☐ Jemandem danken oder ein Kompliment machen</div>
+  <!-- Übung 5 -->
+  <div class="uebung">
+    <div class="uebung-header"><div class="uebung-nr">5</div><div class="uebung-titel">7-Tage-Selbstpflege-Check – Eine Woche lang</div></div>
+    <div class="uebung-beschreibung">Kreise jeden Tag an, was du getan hast. Klein zählt genauso wie groß:</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:10px;">
+        <thead>
+          <tr style="background:var(--farbe-hell);">
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:left;min-width:110px;">Selbstpflege</th>
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:center;width:34px;">Mo</th>
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:center;width:34px;">Di</th>
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:center;width:34px;">Mi</th>
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:center;width:34px;">Do</th>
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:center;width:34px;">Fr</th>
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:center;width:34px;">Sa</th>
+            <th style="padding:6px;border:1px solid #FDE68A;text-align:center;width:34px;">So</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:5px;border:1px solid #FDE68A;">🛌 Genug geschlafen</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td></tr>
+          <tr><td style="padding:5px;border:1px solid #FDE68A;">🍎 Etwas Gesundes gegessen</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td></tr>
+          <tr><td style="padding:5px;border:1px solid #FDE68A;">🚶 Bewegt (Spazier/Sport)</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td></tr>
+          <tr><td style="padding:5px;border:1px solid #FDE68A;">💬 Mit jemandem gesprochen</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td></tr>
+          <tr><td style="padding:5px;border:1px solid #FDE68A;">🎨 Etwas Kreatives gemacht</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td></tr>
+          <tr><td style="padding:5px;border:1px solid #FDE68A;">⭐ Stolz auf mich gewesen</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td></tr>
+          <tr><td style="padding:5px;border:1px solid #FDE68A;">😊 Nett zu mir selbst gewesen</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td><td style="padding:5px;border:1px solid #FDE68A;text-align:center;">○</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- Mein Brief an mich -->
-  <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">5</div>
-      <div class="uebung-titel">Ein Brief an mich – von meinem zukünftigen Ich</div>
-    </div>
-    <div class="uebung-beschreibung">
-      Stell dir vor, du bist in 5 Jahren. Du hast viel gelernt und bist gewachsen. Was würdest du dir <em>heute</em> sagen wollen?
-    </div>
-    <div style="border:1.5px dashed var(--border);border-radius:8px;padding:12px;background:#FFFBEB;">
-      <div style="font-size:11px;color:var(--grau);margin-bottom:8px;">Liebe(r) _______________,</div>
-      <div class="schreiblinien">
-        <div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div>
-        <div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div>
-      </div>
-      <div style="margin-top:10px;font-size:11px;color:var(--grau);text-align:right;">Dein(e) zukünftige(r) _______________</div>
-    </div>
+  <div class="reflexion">
+    <div class="reflexion-titel">💬 Reflexion</div>
+    <p>Was hast du diese Woche über dich gelernt? Was überrascht dich?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
   </div>
 
   <div class="fachhinweis">
     <div class="fachhinweis-titel">🎓 Fachlicher Hinweis für Bezugspersonen</div>
-    Selbstmitgefühl (Self-Compassion nach Kristin Neff) ist ein effektiver Ansatz zur Selbstwertstärkung – wirksamer als reines Selbstlob.
-    <strong>Interventionen:</strong> Kognitive Umstrukturierung negativer Selbstgespräche, Stärken-basierte Gesprächsführung, Lösungsfokussierte Therapie (SFBT).
-    Achtung: Bei stark negativem Selbstbild (Selbsthass) immer auf depressive Symptome und Suizidalität screenen.
+    <strong>ICD-10:</strong> F60.7 (Abhängige Persönlichkeitsstörung), F34.1 (Dysthymie), F93 (emotionale Störungen des Kindesalters) – Selbstwertproblematik häufig komorbid mit Depression und Angststörungen.<br>
+    <strong>Methoden:</strong> Innerer Kritiker/Freund = CFT (Compassion-Focused Therapy, Gilbert). Beweise-Sammeln = KVT nach Beck. Werte-Kompass = ACT-Wertearbeit (Hayes). Self-compassion nach Neff: 3 Komponenten (Achtsamkeit, gemeinsame Menschlichkeit, Selbstfreundlichkeit) – überlegener Effekt gegenüber reinem Selbstlob.<br>
+    <strong>Cave:</strong> Bei stark negativem Selbstbild (Selbsthass, Selbstverachtung): Depressionsscreening (PHQ-A) + Suizidalitätseinschätzung. Stärkenbasierte Sprache in Beziehung voraussetzen.<br>
+    <strong>Nächste Schritte:</strong> Stärken-Interview (VIA), Gruppenangebote zur Selbstwertförderung.
   </div>
 
   <div class="fusszeile">
     <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
     <span>Selbstwertgefühl · Seite 2</span>
-  </div>
-</div>
-
-<!-- ===== SEITE 3 ===== -->
-<div class="seite">
-
-  <!-- Übung 5 -->
-  <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">5</div>
-      <div class="uebung-titel">Mein Selbstmitgefühl stärken – Sei dein eigener bester Freund</div>
-    </div>
-    <div class="uebung-beschreibung">
-      Selbstmitgefühl (Self-Compassion nach Kristin Neff) ist die Fähigkeit, sich selbst gegenüber so freundlich zu sein wie einem guten Freund. Es hat drei Komponenten:
-    </div>
-
-    <div class="infobox" style="margin-bottom:12px;">
-      <div class="infobox-titel">🌟 Die 3 Komponenten des Selbstmitgefühls</div>
-      <p><strong>1. Achtsamkeit:</strong> Schmerz wahrnehmen, ohne ihn zu verdrängen oder zu dramatisieren.<br>
-      <strong>2. Gemeinsame Menschlichkeit:</strong> Leiden ist Teil des Menschseins – ich bin nicht allein.<br>
-      <strong>3. Freundlichkeit:</strong> Sich selbst mit Wärme und Verständnis begegnen statt mit Kritik.</p>
-    </div>
-
-    <div style="border:1.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;">
-      <div style="font-size:11px;font-weight:700;color:var(--farbe);margin-bottom:8px;">✍️ Die Brief-Übung</div>
-      <p style="font-size:11px;color:var(--grau);margin-bottom:8px;">Denke an eine Situation, in der du dich schlecht oder als Versager/in gefühlt hast. Schreibe dir selbst einen Brief, so wie du ihn einem guten Freund schreiben würdest, der das Gleiche erlebt hat:</p>
-      <div class="schreiblinien">
-        <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        <div class="schreiblinie"></div><div class="schreiblinie"></div>
-        <div class="schreiblinie"></div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="trennlinie">
-
-  <!-- Übung 6 -->
-  <div class="uebung">
-    <div class="uebung-header">
-      <div class="uebung-nr">6</div>
-      <div class="uebung-titel">Mein Selbstwert-Tagebuch – 21-Tage-Challenge</div>
-    </div>
-    <div class="uebung-beschreibung">
-      Täglich eine Sache aufschreiben, auf die du stolz bist oder die du gut gemacht hast – auch Kleinigkeiten zählen! Nach 21 Tagen entsteht ein Bild deiner Stärken.
-    </div>
-
-    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-      <thead>
-        <tr style="background:var(--farbe-hell);">
-          <th style="padding:6px;text-align:center;border:1px solid var(--border);width:35px;">Tag</th>
-          <th style="padding:6px;text-align:left;border:1px solid var(--border);">Heute war ich stolz auf …</th>
-          <th style="padding:6px;text-align:center;border:1px solid var(--border);width:35px;">Tag</th>
-          <th style="padding:6px;text-align:left;border:1px solid var(--border);">Heute war ich stolz auf …</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">1</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">12</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">2</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">13</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">3</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">14</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">4</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">15</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">5</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">16</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">6</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">17</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">7</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">18</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">8</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">19</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">9</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">20</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">10</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">21</td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-        <tr><td style="padding:5px;border:1px solid var(--border);text-align:center;font-weight:600;">11</td><td style="padding:5px;border:1px solid var(--border);height:22px;"></td><td style="padding:5px;border:1px solid var(--border);"></td><td style="padding:5px;border:1px solid var(--border);"></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="reflexion">
-    <div class="reflexion-titel">💬 Was nehme ich aus diesem Arbeitsblatt mit?</div>
-    <div class="schreiblinien" style="margin-top:8px;"><div class="schreiblinie"></div><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
-  </div>
-
-  <div class="fusszeile">
-    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
-    <span>Selbstwertgefühl · Seite 3</span>
   </div>
 </div>
 

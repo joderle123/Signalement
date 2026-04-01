@@ -2,271 +2,218 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Finanzen & Geld – CDSE Arbeitsblatt</title>
-  <link rel="stylesheet" href="arbeitsblatt.css">
+  <title>Arbeitsblatt – Geld &amp; Finanzen</title>
+  <link rel="stylesheet" href="../css/arbeitsblatt.css">
+  <style>
+    :root { --farbe: #16A34A; --farbe-hell: #F0FDF4; }
+    .money-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+    .money-box { border-radius:8px; padding:10px; }
+    .money-row { display:grid; grid-template-columns:1fr 60px; gap:4px; align-items:center; margin-bottom:5px; font-size:11px; }
+    .money-amount { display:flex; align-items:center; gap:3px; }
+    .money-line { flex:1; border-bottom:1px solid #D1FAE5; height:1px; }
+    .sort-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+    .sort-box { border-radius:8px; padding:10px; min-height:70px; }
+    .item-tag { display:inline-block; background:white; border:1.5px solid #D1D5DB; border-radius:12px; padding:3px 8px; font-size:10px; margin:2px; }
+    .savings-calc { background:#F0FDF4; border:1.5px solid #86EFAC; border-radius:8px; padding:10px; margin-bottom:8px; }
+    .savings-row { display:flex; align-items:center; gap:8px; font-size:11px; margin-bottom:6px; }
+    .savings-line { flex:1; border-bottom:1px solid #86EFAC; }
+    .interest-visual { display:flex; gap:6px; align-items:flex-end; margin-bottom:8px; }
+    .interest-bar { border-radius:4px 4px 0 0; display:flex; align-items:flex-end; justify-content:center; font-size:9px; font-weight:700; color:white; padding-bottom:2px; }
+  </style>
 </head>
 <body>
 
-<!-- ═══════════ SEITE 1 ═══════════ -->
-<div class="seite">
-  <div class="druck-leiste">
-    <button onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
-    <a href="index.html">← Zur Übersicht</a>
-  </div>
+<div class="druck-leiste">
+  <a class="btn-zurueck" href="../index.html">← Zurück zur App</a>
+  <button class="btn-drucken" onclick="window.print()">🖨️ Drucken / PDF</button>
+</div>
 
+<!-- ===== SEITE 1 ===== -->
+<div class="seite">
   <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Finanzen & Geld</div>
-      <div class="kopf-untertitel">Was kommt rein, was geht raus – und wie ich den Überblick behalte</div>
+    <div class="kopfzeile-links">
+      <div class="schule-label">CDSE Luxembourg · Bezugsarbeit</div>
+      <div class="ab-titel">Geld verstehen – Geld gestalten</div>
+      <div class="ab-untertitel">Geld &amp; Finanzen · Kategorie: Alltag &amp; Leben</div>
     </div>
-    <div class="cdse-logo">CDSE</div>
+    <div class="kopfzeile-icon">💰</div>
   </div>
 
   <div class="schuelerinfo">
-    <div class="info-feld"><label>Name</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Datum</label><div class="info-linie"></div></div>
-    <div class="info-feld"><label>Bezugsperson</label><div class="info-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Name</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Datum</div><div class="info-feld-linie"></div></div>
+    <div class="info-feld"><div class="info-feld-label">Mit</div><div class="info-feld-linie"></div></div>
   </div>
 
-  <!-- Infobox -->
   <div class="infobox">
-    <div class="infobox-titel">Warum Geld wichtig ist – auch mit 16</div>
-    <p>Geld ist nicht alles – aber ohne Überblick über die eigenen Finanzen entsteht schnell Stress: Schulden, Druck von Freunden, das Gefühl zu kurz zu kommen. <strong>Finanzielle Grundkenntnisse sind ein Lebens-Werkzeug.</strong> In Luxemburg gilt: Wer unter 18 ist, haftet grundsätzlich nicht für Schulden – aber manche Verträge (Handyvertrag, Ratenkauf) können Eltern trotzdem betreffen.</p>
+    <div class="infobox-titel">💡 Geld ist ein Werkzeug – und du kannst es bedienen lernen.</div>
+    <p>Wer weiß, was reinkommt und rausgeht, hat deutlich weniger Stress. Finanzielle Grundkenntnisse sind kein Luxus – sie sind eine Schutzressource. Und: Es gibt keine dummen Fragen zu Geld.</p>
+    <p>🧠 <em>Wusstest du? Unter 18-Jährige in Luxembourg können kein Bankkonto auf eigenen Namen eröffnen – aber viele Banken bieten Jugendkonten mit Zustimmung der Erziehungsberechtigten ab 12 Jahren an.</em></p>
   </div>
 
-  <!-- Übung 1: Einnahmen & Ausgaben -->
+  <!-- Übung 1: Meine Monatskarte -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 1</div>
-    <div class="uebung-titel">Mein persönliches Budget – Einnahmen & Ausgaben</div>
-    <p style="font-size:12px;margin-bottom:10px;">Trag ein, was du diesen Monat <strong>hast</strong> und <strong>ausgibst</strong>. Schätz, wenn du es nicht genau weißt:</p>
-
-    <div class="zwei-spalten">
-      <div>
-        <div class="box" style="border-top:3px solid #27AE60;">
-          <div style="font-weight:700;color:#27AE60;margin-bottom:8px;">💚 Einnahmen (pro Monat)</div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Taschengeld / Unterhalt</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Nebenjob / Studentenjob</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Geschenke / Gelegentliches</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Sonstiges: <div style="display:inline-block;width:60px;border-bottom:1px solid var(--border);vertical-align:bottom;"></div></div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-top:8px;padding-top:6px;border-top:2px solid #27AE60;">
-            <div style="font-size:12px;font-weight:700;">GESAMT Einnahmen</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:2px solid #27AE60;"></div><span style="font-size:11px;">€</span></div>
-          </div>
-        </div>
+    <div class="uebung-header">
+      <div class="uebung-nr">1</div>
+      <div class="uebung-titel">Meine monatliche Geldkarte – Was kommt rein, was geht raus?</div>
+    </div>
+    <div class="uebung-beschreibung">Schätze, wenn du die genauen Zahlen nicht kennst. Das Ausfüllen ist schon der erste Schritt.</div>
+    <div class="money-grid">
+      <div class="money-box" style="background:#F0FDF4;border:1.5px solid #86EFAC;">
+        <div style="font-size:12px;font-weight:700;color:#16A34A;margin-bottom:8px;">💚 Einnahmen (monatlich)</div>
+        <div class="money-row"><div>Taschengeld / Unterhalt</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Nebenjob</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Geschenke / Gelegentliches</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Sonstiges:</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div style="border-top:2px solid #16A34A;padding-top:6px;margin-top:4px;" class="money-row"><div style="font-weight:700;">GESAMT</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
       </div>
-      <div>
-        <div class="box" style="border-top:3px solid #E74C3C;">
-          <div style="font-weight:700;color:#E74C3C;margin-bottom:8px;">❤️ Ausgaben (pro Monat)</div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Handy (Abo / Prepaid)</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Transport (Bus / Bahn / Sprit)</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Essen / Trinken außer Haus</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Freizeit / Ausgehen / Sport</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Kleidung / Mode</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Streaming / Spiele / Apps</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-bottom:4px;">
-            <div style="font-size:11px;">Sonstiges: <div style="display:inline-block;width:50px;border-bottom:1px solid var(--border);vertical-align:bottom;"></div></div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;margin-top:8px;padding-top:6px;border-top:2px solid #E74C3C;">
-            <div style="font-size:12px;font-weight:700;">GESAMT Ausgaben</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:50px;border-bottom:2px solid #E74C3C;"></div><span style="font-size:11px;">€</span></div>
-          </div>
-        </div>
+      <div class="money-box" style="background:#FEF2F2;border:1.5px solid #FECACA;">
+        <div style="font-size:12px;font-weight:700;color:#DC2626;margin-bottom:8px;">❤️ Ausgaben (monatlich)</div>
+        <div class="money-row"><div>Handy / Daten</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Essen außer Haus</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Freizeit / Ausgehen</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Kleidung</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Streaming / Apps</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div class="money-row"><div>Sonstiges:</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
+        <div style="border-top:2px solid #DC2626;padding-top:6px;margin-top:4px;" class="money-row"><div style="font-weight:700;">GESAMT</div><div class="money-amount"><div class="money-line"></div><span style="font-size:10px;">€</span></div></div>
       </div>
     </div>
-
-    <div class="box" style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
-      <div>
-        <div style="font-size:11px;color:var(--muted);">Einnahmen</div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:3px;"><div style="width:70px;border-bottom:2px solid #27AE60;"></div><span style="font-size:11px;">€</span></div>
-      </div>
-      <div>
-        <div style="font-size:11px;color:var(--muted);">− Ausgaben</div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:3px;"><div style="width:70px;border-bottom:2px solid #E74C3C;"></div><span style="font-size:11px;">€</span></div>
-      </div>
-      <div>
-        <div style="font-size:12px;font-weight:700;">= Bilanz</div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:3px;"><div style="width:70px;border-bottom:2px solid #2C5F8A;"></div><span style="font-size:11px;">€</span></div>
-      </div>
+    <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:8px;padding:8px;display:flex;gap:12px;align-items:center;font-size:11px;">
+      <span>💚 Einnahmen: _____€</span>
+      <span>—</span>
+      <span>❤️ Ausgaben: _____€</span>
+      <span>=</span>
+      <span style="font-weight:700;">Bilanz: _____€</span>
     </div>
-
-    <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Was überrascht dich an deiner Bilanz? Wo gibst du mehr aus als gedacht?</p>
-    <div class="schreiblinien" data-lines="2"></div>
   </div>
 
-  <!-- Übung 2: Bedarf vs. Wunsch -->
+  <!-- Übung 2: Brauchen vs. Wollen -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 2</div>
-    <div class="uebung-titel">Bedarf oder Wunsch? – Was brauche ich wirklich?</div>
-    <p style="font-size:12px;margin-bottom:8px;">Sortiere die folgenden Ausgaben in die Felder – oder ergänze eigene. Manches ist Grauzone!</p>
-    <div class="zwei-spalten">
-      <div class="box" style="border-top:3px solid #2C5F8A;">
-        <div style="font-weight:700;color:#2C5F8A;margin-bottom:6px;">✅ Ich brauche das wirklich (Bedarf)</div>
-        <div style="min-height:60px;"></div>
-        <p style="font-size:10px;color:var(--muted);">z.B. Essen, Transport zur Schule, Schulbedarf</p>
+    <div class="uebung-header">
+      <div class="uebung-nr">2</div>
+      <div class="uebung-titel">Brauchen oder Wollen? – Sortiere die Karten</div>
+    </div>
+    <div class="uebung-beschreibung">Schreibe diese 10 Dinge in die richtige Box – oder in die Grauzone. Manches ist beides!</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
+      <span class="item-tag">🍕 Essen außer Haus</span>
+      <span class="item-tag">🚌 Bus zur Schule</span>
+      <span class="item-tag">👟 Teure Sneakers</span>
+      <span class="item-tag">💊 Medikamente</span>
+      <span class="item-tag">🎮 Neues Spiel</span>
+      <span class="item-tag">📚 Schulhefte</span>
+      <span class="item-tag">☕ Kaffee täglich</span>
+      <span class="item-tag">🎁 Geschenk für Freund</span>
+      <span class="item-tag">🧥 Winterjacke</span>
+      <span class="item-tag">💇 Haarschnitt</span>
+    </div>
+    <div class="sort-grid">
+      <div class="sort-box" style="background:#F0FDF4;border:1.5px solid #86EFAC;">
+        <div style="font-size:11px;font-weight:700;color:#16A34A;margin-bottom:5px;">✅ Ich brauche das wirklich</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
-      <div class="box" style="border-top:3px solid #D97706;">
-        <div style="font-weight:700;color:#D97706;margin-bottom:6px;">🛒 Das will ich (Wunsch)</div>
-        <div style="min-height:60px;"></div>
-        <p style="font-size:10px;color:var(--muted);">z.B. neues Handy, teure Sneakers, Konzertticket</p>
+      <div class="sort-box" style="background:#FFFBEB;border:1.5px solid #FDE68A;">
+        <div style="font-size:11px;font-weight:700;color:#D97706;margin-bottom:5px;">⭐ Das will ich (Wunsch)</div>
+        <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:4px;">Karten zum Ausschneiden & Sortieren – oder direkt reinschreiben</p>
-  </div>
-
-  <div class="fachhinweis">
-    <strong>Fachlicher Hinweis (Bezugsperson):</strong> Finanzielle Schwierigkeiten bei Jugendlichen sind oft verknüpft mit Suchtverhalten, sozialer Ausgrenzung oder familiären Belastungen. Schulden im Jugendalter können langfristige Folgen haben. In Luxemburg: Schuldnerberatung über <em>Caritas Crédit Conseil</em> (247 86 868), <em>Croix-Rouge Conseil budget</em>. Unter 18-Jährige benötigen für Verträge i.d.R. Einwilligung der Erziehungsberechtigten.
   </div>
 
   <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Finanzen & Geld – Seite 1 von 2</span>
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Geld &amp; Finanzen · Seite 1</span>
   </div>
 </div>
 
-<!-- ═══════════ SEITE 2 ═══════════ -->
+<!-- ===== SEITE 2 ===== -->
 <div class="seite">
-
-  <div class="kopfzeile">
-    <div>
-      <div class="kopf-titel">Finanzen & Geld</div>
-      <div class="kopf-untertitel">Sparen, Schulden & mein Finanzplan</div>
-    </div>
-    <div class="cdse-logo">CDSE</div>
-  </div>
 
   <!-- Übung 3: Sparziel -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 3</div>
-    <div class="uebung-titel">Mein Sparziel – SMART formuliert</div>
-    <div class="zwei-spalten">
-      <div>
-        <div class="box">
-          <div style="font-weight:700;margin-bottom:8px;color:#2C5F8A;">Was ich mir sparen möchte:</div>
-          <div class="schreiblinien" data-lines="2"></div>
-          <div style="margin-top:10px;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;">
-            <div style="font-size:11px;">Preis / Betrag:</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:60px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="margin-top:6px;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;">
-            <div style="font-size:11px;">Ich spare monatlich:</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:60px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">€</span></div>
-          </div>
-          <div style="margin-top:6px;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;">
-            <div style="font-size:11px;">Ich erreiche mein Ziel in:</div>
-            <div style="display:flex;align-items:center;gap:3px;"><div style="width:60px;border-bottom:1px solid var(--border);"></div><span style="font-size:11px;">Monaten</span></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="box">
-          <div style="font-weight:700;margin-bottom:8px;color:#27AE60;">Mein Spar-Thermometer</div>
-          <div style="display:flex;gap:6px;align-items:flex-end;">
-            <div style="width:30px;height:120px;border:2px solid var(--border);border-radius:4px;position:relative;overflow:hidden;">
-              <div style="position:absolute;bottom:0;width:100%;background:#E3F2FD;height:100%;"></div>
-            </div>
-            <div style="font-size:10px;color:var(--muted);">Male den Fortschritt<br>immer weiter aus!<br><br>100% = Ziel<br>erreicht!</div>
-          </div>
-          <div style="margin-top:6px;font-size:11px;color:var(--muted);">Gespart: <div style="display:inline-block;width:50px;border-bottom:1px solid var(--border);"></div> € von <div style="display:inline-block;width:50px;border-bottom:1px solid var(--border);"></div> €</div>
-        </div>
-      </div>
+    <div class="uebung-header">
+      <div class="uebung-nr">3</div>
+      <div class="uebung-titel">Mein Sparziel – Von Traum zu Plan</div>
+    </div>
+    <div class="savings-calc">
+      <div style="font-size:12px;font-weight:700;color:#16A34A;margin-bottom:8px;">🎯 Ich spare für:</div>
+      <div class="savings-row"><div style="width:120px;flex-shrink:0;">Was genau?</div><div class="savings-line"></div></div>
+      <div class="savings-row"><div style="width:120px;flex-shrink:0;">Gesamtkosten?</div><div class="savings-line"></div><span style="font-size:10px;flex-shrink:0;">€</span></div>
+      <div class="savings-row"><div style="width:120px;flex-shrink:0;">Ich spare monatlich:</div><div class="savings-line"></div><span style="font-size:10px;flex-shrink:0;">€</span></div>
+      <div class="savings-row"><div style="width:120px;flex-shrink:0;">Ich brauche dafür:</div><div class="savings-line"></div><span style="font-size:10px;flex-shrink:0;">Monate</span></div>
+      <div style="font-size:10px;color:#6B7280;margin-top:4px;">Rechnung: Gesamtkosten ÷ Monatliches Sparen = Anzahl Monate</div>
+    </div>
+    <div style="background:#ECFDF5;border-radius:8px;padding:8px 12px;font-size:11px;">
+      <strong>💡 Spar-Trick:</strong> Lege deinen Sparbetrag direkt am Monatsanfang beiseite – nicht was übrig bleibt.
     </div>
   </div>
 
-  <!-- Übung 4: Schulden & Falle -->
+  <!-- Übung 4: Schulden-Falle verstehen -->
   <div class="uebung">
-    <div class="uebung-nr">Übung 4</div>
-    <div class="uebung-titel">Schulden-Falle – Wie entsteht sie und wie komme ich raus?</div>
-    <div class="zwei-spalten">
-      <div>
-        <div class="box" style="border-top:3px solid #E74C3C;">
-          <div style="font-weight:700;color:#E74C3C;margin-bottom:6px;">⚠️ Wie Schulden entstehen</div>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Ich leihe Freunden Geld (und kriege es nicht zurück)</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Ich kaufe auf Raten, ohne nachzurechnen</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Online-Einkäufe / Mikrotransaktionen</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Ich zahle Rechnungen zu spät (Mahngebühren!)</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Ich habe mehr ausgegeben als ich hatte</label>
-          <label class="check-item" style="font-size:11px;"><input type="checkbox"> Glücksspiel / Wetten (auch online)</label>
-          <p style="font-size:12px;font-weight:700;margin-top:8px;margin-bottom:4px;">Was trifft auf mich zu / was kenne ich?</p>
-          <div class="schreiblinien" data-lines="2"></div>
+    <div class="uebung-header">
+      <div class="uebung-nr">4</div>
+      <div class="uebung-titel">Die Kredit-Falle verstehen – Warum 100 € schnell 130 € werden</div>
+    </div>
+    <div class="uebung-beschreibung">Wer auf Kredit kauft oder zu spät zahlt, zahlt mehr als den eigentlichen Preis.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div style="background:#FEF2F2;border:1.5px solid #FECACA;border-radius:8px;padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:#DC2626;margin-bottom:6px;">⚠️ Beispielrechnung: Ratenkauf</div>
+        <div style="font-size:10px;color:#374151;line-height:1.8;">
+          Artikel: 100 €<br>
+          Zinsen: 20 % pro Jahr<br>
+          Nach 1 Jahr: <strong>120 €</strong><br>
+          Nach 2 Jahren: <strong>144 €</strong><br>
+          Nach 3 Jahren: <strong>173 €</strong>
         </div>
+        <div style="font-size:10px;color:#DC2626;margin-top:6px;font-weight:700;">Du zahlst fast doppelt so viel!</div>
       </div>
-      <div>
-        <div class="box" style="border-top:3px solid #27AE60;">
-          <div style="font-weight:700;color:#27AE60;margin-bottom:6px;">✅ So komme ich aus Schulden raus</div>
-          <div style="font-size:11px;margin-bottom:4px;"><strong>Schritt 1:</strong> Alle Schulden aufschreiben (wer, wie viel, seit wann?)</div>
-          <div style="display:grid;grid-template-columns:1fr auto auto;gap:4px;font-size:10px;font-weight:700;padding-bottom:4px;border-bottom:1px solid var(--border);">
-            <div>An wen schulde ich etwas?</div><div>Betrag</div><div>Bis wann?</div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr auto auto;gap:4px;margin-top:4px;">
-            <div style="border-bottom:1px solid var(--border);height:20px;"></div><div style="border-bottom:1px solid var(--border);width:40px;"></div><div style="border-bottom:1px solid var(--border);width:50px;"></div>
-            <div style="border-bottom:1px solid var(--border);height:20px;"></div><div style="border-bottom:1px solid var(--border);width:40px;"></div><div style="border-bottom:1px solid var(--border);width:50px;"></div>
-            <div style="border-bottom:1px solid var(--border);height:20px;"></div><div style="border-bottom:1px solid var(--border);width:40px;"></div><div style="border-bottom:1px solid var(--border);width:50px;"></div>
-          </div>
-          <div style="font-size:11px;margin-top:8px;margin-bottom:4px;"><strong>Schritt 2:</strong> Priorität setzen – kleinste Schulden zuerst bezahlen</div>
-          <div style="font-size:11px;margin-bottom:4px;"><strong>Schritt 3:</strong> Bei größeren Schulden: Beratung suchen!</div>
-          <div style="font-size:10px;background:#E8F5E9;padding:6px;border-radius:4px;margin-top:4px;">📞 <strong>Caritas Crédit Conseil:</strong> 247 86 868<br>📞 <strong>Croix-Rouge Conseil budget:</strong> kostenlos</div>
+      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:#16A34A;margin-bottom:6px;">✅ Meine Schulden-Liste (falls nötig)</div>
+        <div style="display:grid;grid-template-columns:1fr auto auto;gap:4px;font-size:9px;font-weight:700;border-bottom:1px solid #D1FAE5;padding-bottom:3px;">
+          <div>An wen?</div><div>Betrag</div><div>Bis wann?</div>
         </div>
+        <div style="display:grid;grid-template-columns:1fr auto auto;gap:4px;margin-top:4px;">
+          <div style="border-bottom:1px solid #D1FAE5;height:20px;"></div><div style="border-bottom:1px solid #D1FAE5;width:35px;"></div><div style="border-bottom:1px solid #D1FAE5;width:45px;"></div>
+          <div style="border-bottom:1px solid #D1FAE5;height:20px;"></div><div style="border-bottom:1px solid #D1FAE5;width:35px;"></div><div style="border-bottom:1px solid #D1FAE5;width:45px;"></div>
+          <div style="border-bottom:1px solid #D1FAE5;height:20px;"></div><div style="border-bottom:1px solid #D1FAE5;width:35px;"></div><div style="border-bottom:1px solid #D1FAE5;width:45px;"></div>
+        </div>
+        <div style="font-size:10px;color:#16A34A;margin-top:8px;">📞 Hilfe: Caritas Crédit Conseil: <strong>247 86 868</strong></div>
       </div>
     </div>
   </div>
 
-  <!-- Reflexion -->
-  <div class="reflexion">
-    <div class="reflexion-titel">💬 Meine Reflexion</div>
-    <div class="reflexion-fragen">
-      <div class="reflexion-frage">
-        <p>Was habe ich über meine Ausgaben gelernt – und was möchte ich ändern?</p>
-        <div class="schreiblinien" data-lines="2"></div>
+  <!-- Übung 5: Finanzrechte -->
+  <div class="uebung">
+    <div class="uebung-header">
+      <div class="uebung-nr">5</div>
+      <div class="uebung-titel">Meine Finanzrechte als Minderjährige/r in Luxembourg</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:8px;font-size:10px;">
+        <div style="font-weight:700;color:#16A34A;margin-bottom:4px;">✅ Das darf ich</div>
+        <div style="line-height:1.9;">Jugendkonto mit Zustimmung der Eltern<br>Eigenes Geld ausgeben und sparen<br>Ab 15 J. in Ferien arbeiten</div>
       </div>
-      <div class="reflexion-frage">
-        <p>Habe ich aktuell finanzielle Sorgen, über die ich mit jemandem reden möchte?</p>
-        <div class="schreiblinien" data-lines="2"></div>
+      <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:8px;padding:8px;font-size:10px;">
+        <div style="font-weight:700;color:#D97706;margin-bottom:4px;">⚠️ Das braucht Zustimmung der Eltern</div>
+        <div style="line-height:1.9;">Verträge abschließen (Handy, Abo)<br>Kredite aufnehmen<br>Ratenkäufe tätigen</div>
       </div>
     </div>
+  </div>
+
+  <div class="reflexion">
+    <div class="reflexion-titel">💬 Mein nächster Schritt</div>
+    <p>Was ist <strong>eine Sache</strong> an meinen Finanzen, die ich diese Woche angehe oder verstehen will?</p>
+    <div class="schreiblinien"><div class="schreiblinie"></div><div class="schreiblinie"></div></div>
+  </div>
+
+  <div class="fachhinweis">
+    <div class="fachhinweis-titel">🎓 Hinweis für Bezugspersonen</div>
+    Finanzielle Schwierigkeiten bei Jugendlichen sind oft mit Suchtverhalten, sozialer Ausgrenzung oder familiären Belastungen verknüpft. Schulden im Jugendalter können langfristige Folgen haben. <strong>Luxembourg spezifisch:</strong> Unter 18-Jährige haften grundsätzlich nicht für Verträge ohne Einwilligung der Erziehungsberechtigten (Code Civil, Art. 389). Jugendkonten bei Luxemburger Banken (BCEE, BGL, Raiffeisen) ab 12 Jahren möglich. <strong>Beratungsangebote:</strong> Caritas Crédit Conseil (247 86 868), Croix-Rouge Conseil budget (kostenlos), Finanzbildung über guichet.lu. Bei Glücksspiel-Problematik: Croix-Rouge SOS Spielsucht (40 14 014).
   </div>
 
   <div class="fusszeile">
-    <span>CDSE – Centre pour le Développement Social et Éducatif</span>
-    <span>Finanzen & Geld – Seite 2 von 2</span>
+    <span>CDSE Luxembourg · Bezugsarbeit Tool</span>
+    <span>Geld &amp; Finanzen · Seite 2</span>
   </div>
 </div>
 
-<script>
-document.querySelectorAll('.schreiblinien[data-lines]').forEach(el => {
-  const n = parseInt(el.dataset.lines) || 3;
-  el.innerHTML = Array(n).fill('<div class="schreiblinie"></div>').join('');
-});
-</script>
 </body>
 </html>

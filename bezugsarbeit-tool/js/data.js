@@ -114,6 +114,119 @@ const ARBEITSBLÄTTER = {
 };
 
 // ============================================================
+// Zuordnung: Thema-ID → Fachkraft-Anleitung(en)
+// ============================================================
+const FACHKRAFT_MODULE = {
+  // Familie & Soziales Umfeld
+  'familienzusammensetzung': [{ titel: 'Familienkonflikte & Familiendynamiken', datei: 'familie.html' }],
+  'eltern-kind-beziehung':   [{ titel: 'Familienkonflikte & Familiendynamiken', datei: 'familie.html' }],
+  'geschwister':             [{ titel: 'Familienkonflikte & Familiendynamiken', datei: 'familie.html' }],
+  'wohnsituation':           [{ titel: 'Familienkonflikte & Familiendynamiken', datei: 'familie.html' }],
+  'trennung-scheidung':      [{ titel: 'Familienkonflikte & Familiendynamiken', datei: 'familie.html' }],
+  'soziales-netzwerk':       [{ titel: 'Soziales Netzwerk & Einsamkeit',       datei: 'soziales-netzwerk.html' }],
+  'genogramm':               [{ titel: 'Familienkonflikte & Familiendynamiken', datei: 'familie.html' }],
+  'pflegefamilie':           [{ titel: 'Pflegefamilie & Heimunterbringung',    datei: 'pflegefamilie.html' }],
+
+  // Emotionen & Wohlbefinden
+  'emotionserkennung':       [{ titel: 'Emotionserkennung & Wohlbefinden',     datei: 'emotionserkennung.html' }],
+  'emotionsregulation':      [{ titel: 'Emotionsregulation',                   datei: 'emotionsregulation.html' }],
+  'stress-angst':            [{ titel: 'Stress & Angst',                       datei: 'stress-angst.html' }],
+  'angstanfaelle':           [{ titel: 'Angstanfälle & Panik',                datei: 'angstanfaelle.html' }],
+  'wiederkehrende-gedanken': [{ titel: 'Wiederkehrende Gedanken & Zwänge',     datei: 'wiederkehrende-gedanken.html' }],
+  'stimmungsextreme':        [{ titel: 'Stimmungsextreme',                     datei: 'stimmungsextreme.html' }],
+  'impulskontrolle':         [{ titel: 'Impulskontrolle',                      datei: 'impulskontrolle.html' }],
+  'wut-aggression':          [{ titel: 'Wut & Aggression',                     datei: 'wut-aggression.html' }],
+  'trauer-verlust':          [{ titel: 'Trauer & Verlust',                     datei: 'trauer-verlust.html' }],
+  'selbstwertgefuehl':       [{ titel: 'Selbstwertgefühl',                    datei: 'selbstwertgefuehl.html' }],
+  'depressive-stimmungen':   [{ titel: 'Depressive Stimmungen',               datei: 'depressive-stimmungen.html' }],
+  'freude-wohlbefinden':     [{ titel: 'Emotionserkennung & Wohlbefinden',     datei: 'emotionserkennung.html' }],
+
+  // Soziale Kompetenzen
+  'freundschaften':          [{ titel: 'Freundschaft & Peers',                 datei: 'freundschaft.html' }],
+  'einsamkeit':              [{ titel: 'Einsamkeit',                           datei: 'einsamkeit.html' }],
+  'soziale-wahrnehmung':     [{ titel: 'Soziale Wahrnehmung',                 datei: 'soziale-wahrnehmung.html' }],
+  'konfliktmanagement':      [{ titel: 'Kommunikation & Gesprächsführung',    datei: 'kommunikation.html' }],
+  'kommunikation':           [{ titel: 'Kommunikation & Gesprächsführung',    datei: 'kommunikation.html' }],
+  'romantische-beziehungen': [{ titel: 'Romantische Beziehungen',             datei: 'romantische-beziehungen.html' }],
+  'grenzen-setzen':          [{ titel: 'Kommunikation & Gesprächsführung',    datei: 'kommunikation.html' }],
+  'mobbing':                 [{ titel: 'Mobbing & Cybermobbing',               datei: 'mobbing.html' }],
+  'gruppendynamik':          [{ titel: 'Gruppendynamik & Peer-Einfluss',      datei: 'gruppendynamik.html' }],
+  'empathie':                [{ titel: 'Empathie & Perspektivenübernahme',    datei: 'empathie.html' }],
+
+  // Konsum & Risikoverhalten
+  'alkohol':                 [{ titel: 'Alkohol & Riskanter Konsum',           datei: 'alkohol.html' }],
+  'cannabis':                [{ titel: 'Cannabis & Cannabiskonsum',            datei: 'cannabis.html' }],
+  'tabak-ezigarette':        [{ titel: 'Tabak & Nikotinkonsum',               datei: 'konsum-tabak.html' }],
+  'gaming':                  [{ titel: 'Soziale Medien & Gaming',              datei: 'soziale-medien-gaming.html' }],
+  'social-media':            [{ titel: 'Soziale Medien & Gaming',              datei: 'soziale-medien-gaming.html' }],
+  'gluecksspiel':            [{ titel: 'Glücksspiel',                          datei: 'gluecksspiel.html' }],
+  'selbstmedikation':        [{ titel: 'Cannabis & Cannabiskonsum',            datei: 'cannabis.html' }],
+
+  // Schule & Zukunft
+  'schulisches-engagement':  [{ titel: 'Motivation & Antrieb',                datei: 'motivation.html' }],
+  'konzentration-aufmerksamkeit': [{ titel: 'Konzentration & Aufmerksamkeit', datei: 'konzentration-aufmerksamkeit.html' },
+                                   { titel: 'ADHS',                           datei: 'adhs.html' }],
+  'lernstrategien':          [{ titel: 'Lernstrategien & Lernschwierigkeiten', datei: 'lernstrategien.html' }],
+  'schulkonflikt':           [{ titel: 'Schulkonflikte & Disziplinprobleme',  datei: 'schulkonflikt.html' }],
+  'berufsorientierung':      [{ titel: 'Zukunftsplanung & Berufsorientierung', datei: 'zukunftsplanung.html' }],
+  'zukunftsplanung':         [{ titel: 'Zukunftsplanung & Berufsorientierung', datei: 'zukunftsplanung.html' }],
+  'motivation':              [{ titel: 'Motivation & Antrieb',                datei: 'motivation.html' }],
+  'prüfungsangst':           [{ titel: 'Prüfungsangst',                       datei: 'pruefungsangst.html' }],
+
+  // Gesundheit & Körper
+  'schlaf':                  [{ titel: 'Schlafprobleme',                       datei: 'schlaf.html' }],
+  'ernaehrung':              [{ titel: 'Essverhalten & Essstörungen',          datei: 'essverhalten.html' }],
+  'essverhalten':            [{ titel: 'Essverhalten & Essstörungen',          datei: 'essverhalten.html' }],
+  'koerperbeschwerden':      [{ titel: 'Körperbeschwerden',                    datei: 'koerperbeschwerden.html' }],
+  'sport-bewegung':          [{ titel: 'Schlafprobleme',                       datei: 'schlaf.html' }],
+  'sexualitaet':             [{ titel: 'Körperbild & Sexualität',             datei: 'koerperbild-sexualitaet.html' }],
+  'koerperbild':             [{ titel: 'Körperbild & Sexualität',             datei: 'koerperbild-sexualitaet.html' }],
+  'mentale-gesundheit':      [{ titel: 'Mentale Gesundheit & Psychoedukation', datei: 'mentale-gesundheit.html' }],
+  'chronische-erkrankung':   [{ titel: 'Chronische Erkrankung & Behinderung', datei: 'chronische-erkrankung.html' }],
+
+  // Alltag & Mobilität
+  'transport':               [{ titel: 'Transport & Mobilität',               datei: 'transport.html' }],
+  'finanzen':                [{ titel: 'Finanzen & Schulden',                  datei: 'finanzen.html' }],
+  'haushalt':                [{ titel: 'Haushalt & Selbstversorgung',          datei: 'haushalt.html' }],
+  'freizeit':                [{ titel: 'Freizeit & Hobbys',                    datei: 'freizeit.html' }],
+  'mediennutzung':           [{ titel: 'Soziale Medien & Gaming',              datei: 'soziale-medien-gaming.html' }],
+  'ehrenamt':                [{ titel: 'Ehrenamt & Engagement',                datei: 'ehrenamt.html' }],
+
+  // Recht & Gesellschaft
+  'jugendrecht':             [{ titel: 'Jugendrecht & Rechtsfragen',           datei: 'jugendrecht.html' }],
+  'jugendschutz':            [{ titel: 'Jugendrecht & Rechtsfragen',           datei: 'jugendrecht.html' }],
+  'soziale-dienste':         [{ titel: 'Soziale Dienste & Hilfesysteme',       datei: 'soziale-dienste.html' }],
+  'polizei-justiz':          [{ titel: 'Polizei, Justiz & Bürgerrechte',     datei: 'polizei-justiz.html' }],
+  'buergerrechte':           [{ titel: 'Polizei, Justiz & Bürgerrechte',     datei: 'polizei-justiz.html' }],
+  'diskriminierung':         [{ titel: 'Diskriminierung & Vorurteile',        datei: 'diskriminierung.html' }],
+
+  // Identität & Werte
+  'selbstbild':              [{ titel: 'Identitätsentwicklung',               datei: 'identitaet.html' }],
+  'werte-moral':             [{ titel: 'Identitätsentwicklung',               datei: 'identitaet.html' }],
+  'kulturelle-identitaet':   [{ titel: 'Identitätsentwicklung',               datei: 'identitaet.html' }],
+  'geschlechtsidentitaet':   [{ titel: 'Körperbild & Sexualität',            datei: 'koerperbild-sexualitaet.html' }],
+  'spiritualitaet':          [{ titel: 'Spiritualität & Religiosität',        datei: 'spiritualitaet.html' }],
+  'zugehoerigkeit':          [{ titel: 'Identitätsentwicklung',               datei: 'identitaet.html' }],
+  'lebenssinn':              [{ titel: 'Resilienz stärken & Lebenssinn',      datei: 'resilienz-staerken.html' }],
+
+  // Krisen & Trauma
+  'krisenintervention':      [{ titel: 'Krisenintervention',                   datei: 'krisenintervention.html' },
+                              { titel: 'Krisenplan & Suizidprävention',       datei: 'krisenplan.html' }],
+  'trauma':                  [{ titel: 'Trauma & Traumaverarbeitung',          datei: 'trauma.html' },
+                              { titel: 'Trauma & Stabilisierung',             datei: 'trauma-stabilisierung.html' }],
+  'dissoziative-erfahrungen':[{ titel: 'Dissoziative Erfahrungen',            datei: 'dissoziative-erfahrungen.html' }],
+  'wahrnehmungsveraenderungen': [{ titel: 'Wahrnehmungsveränderungen',        datei: 'wahrnehmungsveraenderungen.html' },
+                                 { titel: 'Psychose & Psychotische Symptome', datei: 'psychose.html' }],
+  'suizidpraevention':       [{ titel: 'Suizidprävention',                    datei: 'suizidpraevention.html' },
+                              { titel: 'Krisenplan & Suizidprävention',       datei: 'krisenplan.html' }],
+  'selbstverletzung':        [{ titel: 'Selbstverletzung',                     datei: 'selbstverletzung.html' }],
+  'gewalt':                  [{ titel: 'Gewalt & Schutz',                      datei: 'gewalt-schutz.html' }],
+  'resilienz':               [{ titel: 'Resilienz & Stressbewältigung',       datei: 'resilienz.html' },
+                              { titel: 'Resilienz stärken & Lebenssinn',      datei: 'resilienz-staerken.html' }],
+  'trennungsangst':          [{ titel: 'Trauma & Stabilisierung',             datei: 'trauma-stabilisierung.html' }],
+};
+
+// ============================================================
 // Aktivitäten & Interventionen pro Thema
 // ============================================================
 const THEMA_AKTIVITÄTEN = {

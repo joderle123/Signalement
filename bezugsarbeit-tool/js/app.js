@@ -338,10 +338,12 @@ function renderArbeitsblaetter(themaId) {
   const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
   const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
   const modul = typeof THEMA_MODULE !== 'undefined' ? (THEMA_MODULE[themaId] || null) : null;
+  const fachkraft = typeof FACHKRAFT_MODULE !== 'undefined' ? (FACHKRAFT_MODULE[themaId] || []) : [];
 
-  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul) return '';
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul && fachkraft.length === 0) return '';
 
   const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0;
+  const hasFachkraft = fachkraft.length > 0;
 
   return `
     <div style="margin-bottom:20px;">
@@ -353,6 +355,10 @@ function renderArbeitsblaetter(themaId) {
         ${hasModul ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','tm')">
           🏥 Therapiemodul
           <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 2 · Vertiefung</span>
+        </button>` : ''}
+        ${hasFachkraft ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','fk')">
+          🧑‍⚕️ Fachkraft-Anleitung
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 3 · Klinisch</span>
         </button>` : ''}
       </div>
 
@@ -376,6 +382,23 @@ function renderArbeitsblaetter(themaId) {
       ${hasModul ? `
       <div id="pt-tm-${themaId}" class="panel-tab-content" style="display:none;">
         ${modul ? renderTherapiemodul(modul, themaId) : renderTherapiemodul_legacy(aktivitaeten, interventionen)}
+      </div>` : ''}
+
+      ${hasFachkraft ? `
+      <div id="pt-fk-${themaId}" class="panel-tab-content" style="display:none;">
+        <div style="background:#FDF2F8;border:1.5px solid #FBCFE8;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#9D174D;line-height:1.5;">
+          <strong>Fachkraft-Anleitung (Ebene 3)</strong> · Klinisches Hintergrundwissen<br>
+          <span style="opacity:0.75;">Ätiologie, Diagnostik, evidenzbasierte Methoden, Netzwerk & Ressourcen für Fachkräfte.</span>
+        </div>
+        ${fachkraft.map(f => `
+        <a href="fachkraft-module/${f.datei}" target="_blank"
+           style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;
+                  background:#FDF2F8;border:1.5px solid #FBCFE8;border-radius:6px;
+                  text-decoration:none;color:#9D174D;font-size:12px;font-weight:600;">
+          <span style="font-size:16px;">🧑‍⚕️</span>
+          <span style="flex:1;">${f.titel}</span>
+          <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
+        </a>`).join('')}
       </div>` : ''}
     </div>`;
 }
@@ -725,14 +748,22 @@ function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
 }
 
 function switchPanelTab(themaId, tab) {
-  ['ab','tm'].forEach(t => {
+  ['ab','tm','fk'].forEach(t => {
     const el = document.getElementById(`pt-${t}-${themaId}`);
     if (el) el.style.display = t === tab ? 'block' : 'none';
   });
   const tabs = document.getElementById(`panel-tabs-${themaId}`);
-  if (tabs) tabs.querySelectorAll('.panel-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', ['ab','tm'][i] === tab);
-  });
+  if (tabs) {
+    const tabIds = [];
+    tabs.querySelectorAll('.panel-tab').forEach(btn => {
+      const onclick = btn.getAttribute('onclick') || '';
+      const match = onclick.match(/'([^']+)'\s*\)/);
+      if (match) tabIds.push(match[1]);
+    });
+    tabs.querySelectorAll('.panel-tab').forEach((btn, i) => {
+      btn.classList.toggle('active', tabIds[i] === tab);
+    });
+  }
 }
 
 function getStatusFarbe(key) {

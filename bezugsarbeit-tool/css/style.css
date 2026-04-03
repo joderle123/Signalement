@@ -3472,3 +3472,222 @@ select {
   line-height: 1.6;
 }
 .bericht-footer { margin-top: 40px; }
+
+/* ============================================================
+   PHASEN-RESSOURCEN
+   ============================================================ */
+.phase-ressourcen {
+  margin-top: 16px;
+  padding: 16px;
+  background: #F8FAFC;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+}
+.phase-ressourcen-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6366F1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.phase-ressourcen-icon { margin-right: 4px; }
+.phase-res-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.phase-res-btn { text-decoration: none !important; }
+.phase-res-section { margin-bottom: 12px; }
+.phase-res-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #374151;
+}
+.phase-res-textarea {
+  width: 100%;
+  min-height: 60px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+  resize: vertical;
+  font-family: inherit;
+}
+.phase-res-textarea:focus {
+  outline: none;
+  border-color: #6366F1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+}
+.phase-res-checklist {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+.phase-res-checklist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.phase-res-checklist-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+.phase-res-checklist-count {
+  font-size: 11px;
+  color: #6B7280;
+}
+.phase-res-check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+  cursor: pointer;
+}
+.phase-res-check-item:hover { background: #F9FAFB; border-radius: 4px; }
+.phase-res-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #D1D5DB;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.phase-res-checkbox.checked {
+  border-color: #059669;
+  background: #059669;
+}
+.phase-res-done {
+  text-decoration: line-through;
+  color: #9CA3AF;
+}
+/* Leitfaden-Accordion */
+.phase-res-accordion {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.phase-res-accordion-head {
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+.phase-res-accordion-head:hover { background: #F9FAFB; }
+.phase-res-accordion-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+.phase-res-accordion-toggle {
+  font-size: 11px;
+  color: #9CA3AF;
+}
+.phase-res-accordion-body {
+  display: none;
+  padding: 0 12px 12px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.phase-res-accordion-body.open { display: block; }
+/* Leitfaden-Karten */
+.phase-res-tip {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border-left: 3px solid;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.phase-res-tip-green { background: #F0FDF4; border-color: #22C55E; }
+.phase-res-tip-yellow { background: #FFFBEB; border-color: #F59E0B; }
+.phase-res-tip-blue { background: #EFF6FF; border-color: #3B82F6; }
+.phase-res-tip-red { background: #FEF2F2; border-color: #EF4444; }
+.phase-res-tip-purple { background: #F5F3FF; border-color: #8B5CF6; }
+/* Status-Badges */
+.phase-res-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.phase-res-badge-ok { background: #DCFCE7; color: #166534; }
+.phase-res-badge-wait { background: #FEF3C7; color: #92400E; }
+/* Info-Box */
+.phase-res-info {
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.phase-res-info-blue { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
+.phase-res-info-yellow { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
+.phase-res-info-green { background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; }
+/* Empfehlungs-Karten */
+.phase-res-cards {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.phase-res-card {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.phase-res-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+/* PVT-Filter Buttons */
+.pvt-filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.15s;
+}
+.pvt-filter-btn.active { color: #fff !important; }
+.pvt-filter-btn:hover { transform: scale(1.03); }
+/* Brief-Textarea */
+.phase-res-brief {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 13px;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  resize: vertical;
+  line-height: 1.7;
+}
+.phase-res-brief:focus {
+  outline: none;
+  border-color: #0EA5E9;
+  box-shadow: 0 0 0 2px rgba(14,165,233,0.15);
+}

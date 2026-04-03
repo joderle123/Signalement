@@ -4301,6 +4301,7 @@ function renderScreeningErgebnis(scr) {
 
   // Chart
   renderScrProfilChart(scr);
+  renderScrRadarChart(scr);
   renderScrEmpfehlungen(scr);
   renderScrVerlauf(scr.schuelerId);
 
@@ -4374,6 +4375,68 @@ function renderScrProfilChart(scr) {
         y: { beginAtZero: true, ticks: { stepSize: 1 } },
       },
     },
+  });
+}
+
+function renderScrRadarChart(scr) {
+  const canvas = document.getElementById('scr-radar-chart');
+  if (!canvas) return;
+
+  if (window._scrRadarChart) window._scrRadarChart.destroy();
+
+  const domains = SCREENING_DOMAINS.filter(d => !d.invertiert);
+  const labels = domains.map(d => d.label.length > 18 ? d.label.substring(0, 16) + '…' : d.label);
+  const scores = domains.map(d => scr.scores[d.id] || 0);
+  const cutoffs = domains.map(d => d.cutoff);
+  const maxScores = domains.map(d => d.items.length * 3);
+  // Normalisiere auf 0-100%
+  const normalizedScores = scores.map((s, i) => Math.round((s / maxScores[i]) * 100));
+  const normalizedCutoffs = cutoffs.map((c, i) => Math.round((c / maxScores[i]) * 100));
+
+  window._scrRadarChart = new Chart(canvas, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Score (%)',
+          data: normalizedScores,
+          backgroundColor: 'rgba(99, 102, 241, 0.15)',
+          borderColor: '#6366F1',
+          borderWidth: 2,
+          pointBackgroundColor: domains.map(d => {
+            const s = scr.scores[d.id] || 0;
+            return s >= d.cutoff && d.cutoff > 0 ? d.farbe : '#6366F1';
+          }),
+          pointRadius: 4,
+        },
+        {
+          label: 'Cutoff',
+          data: normalizedCutoffs,
+          backgroundColor: 'rgba(239, 68, 68, 0.05)',
+          borderColor: '#EF444480',
+          borderDash: [4, 4],
+          borderWidth: 1.5,
+          pointRadius: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { font: { size: 11 } } },
+      },
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { stepSize: 25, font: { size: 10 }, callback: v => v + '%' },
+          pointLabels: { font: { size: 10 } },
+          grid: { color: 'rgba(0,0,0,0.06)' },
+        }
+      }
+    }
   });
 }
 

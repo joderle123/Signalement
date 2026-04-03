@@ -1042,6 +1042,9 @@ const THEMEN_KATEGORIEN = [
       { id: 'soziales-netzwerk', titel: 'Soziales Netzwerk', beschreibung: 'Ressourcen, Unterstützungspersonen, Isolation' },
       { id: 'genogramm', titel: 'Genogramm', beschreibung: 'Familienstammbaum, Mehrgenerationenperspektive' },
       { id: 'pflegefamilie', titel: 'Pflegefamilie / Heimunterbringung', beschreibung: 'Fremdunterbringung, Bindung, Übergänge' },
+      { id: 'parentifizierung', titel: 'Parentifizierung', beschreibung: 'Kind übernimmt Elternrolle, Rollenkonfusion, Überforderung' },
+      { id: 'young-carers', titel: 'Young Carers / Pflegende Jugendliche', beschreibung: 'Pflege kranker Angehöriger, eigene Bedürfnisse, Entlastung' },
+      { id: 'institutionserfahrung', titel: 'Institutionserfahrung', beschreibung: 'Heim, Pflegefamilie, Wechsel, Bindungsabbrüche, Leaving Care' },
     ]
   },
   {
@@ -1078,6 +1081,7 @@ const THEMEN_KATEGORIEN = [
       { id: 'romantische-beziehungen', titel: 'Romantische Beziehungen', beschreibung: 'Liebe, Partnerschaft, Trennung' },
       { id: 'grenzen-setzen', titel: 'Grenzen setzen', beschreibung: 'Nein sagen, eigene Grenzen kennen & respektieren' },
       { id: 'mobbing', titel: 'Mobbing & Ausgrenzung', beschreibung: 'Cybermobbing, Opfer/Täter/Zuschauer' },
+      { id: 'cybermobbing', titel: 'Cybermobbing & Medienkompetenz', beschreibung: 'Online-Mobbing, Sexting, digitale Zivilcourage, Medienkompetenz' },
       { id: 'gruppendynamik', titel: 'Gruppendynamik', beschreibung: 'Peer-Pressure, Rollen in der Gruppe' },
       { id: 'empathie', titel: 'Empathie & Perspektivenwechsel', beschreibung: 'Sich in andere hineinversetzen' },
     ]
@@ -1111,6 +1115,8 @@ const THEMEN_KATEGORIEN = [
       { id: 'zukunftsplanung', titel: 'Zukunftsplanung', beschreibung: 'Ziele setzen, Lebensplanung, Träume' },
       { id: 'motivation', titel: 'Motivation & Antrieb', beschreibung: 'Intrinsische Motivation, Zielorientierung' },
       { id: 'prüfungsangst', titel: 'Prüfungsangst', beschreibung: 'Leistungsdruck, Prüfungsvorbereitung' },
+      { id: 'schulverweigerung', titel: 'Schulverweigerung / Absentismus', beschreibung: 'Schulangst, systematisches Fehlen, Reintegration' },
+      { id: 'lernbehinderung', titel: 'Lernbehinderung / Teilleistungsstörung', beschreibung: 'Legasthenie, Dyskalkulie, Nachteilsausgleich, Förderbedarf' },
     ]
   },
   {
@@ -1128,6 +1134,7 @@ const THEMEN_KATEGORIEN = [
       { id: 'koerperbild', titel: 'Körperbild & Aussehen', beschreibung: 'Selbstwahrnehmung, Körperzufriedenheit' },
       { id: 'mentale-gesundheit', titel: 'Mentale Gesundheit', beschreibung: 'Psychische Stabilität, Ressourcen, Hilfe suchen' },
       { id: 'chronische-erkrankung', titel: 'Chronische Erkrankungen', beschreibung: 'Umgang mit körperlichen Einschränkungen' },
+      { id: 'psychoedukation', titel: 'Psychoedukation', beschreibung: 'Eigene Diagnose verstehen, Krankheit einordnen, Psychohygiene' },
     ]
   },
   {
@@ -1142,6 +1149,7 @@ const THEMEN_KATEGORIEN = [
       { id: 'freizeit', titel: 'Freizeit & Hobbys', beschreibung: 'Freizeitgestaltung, Interessen, Kreativität' },
       { id: 'mediennutzung', titel: 'Mediennutzung & Digital Literacy', beschreibung: 'Kritischer Umgang mit Medien, Fake News' },
       { id: 'ehrenamt', titel: 'Ehrenamt & Engagement', beschreibung: 'Gesellschaftliches Engagement, Sinn & Zweck' },
+      { id: 'uebergaenge', titel: 'Übergänge & Transitionen', beschreibung: 'Schulwechsel, Leaving Care, Verselbstständigung, Erwachsenwerden' },
     ]
   },
   {
@@ -1171,6 +1179,7 @@ const THEMEN_KATEGORIEN = [
       { id: 'spiritualitaet', titel: 'Spiritualität & Religion', beschreibung: 'Glaube, Spiritualität, Gemeinschaft' },
       { id: 'zugehoerigkeit', titel: 'Zugehörigkeit & Ausgrenzung', beschreibung: 'Dazugehören, Außenseiter, soziale Inklusion' },
       { id: 'lebenssinn', titel: 'Lebenssinn & Lebensfreude', beschreibung: 'Bedeutung finden, Ressourcen aktivieren' },
+      { id: 'migration-flucht', titel: 'Migration & Flucht', beschreibung: 'Fluchterleben, Entwurzelung, Integration, kulturelle Brücken' },
     ]
   },
   {
@@ -1188,6 +1197,7 @@ const THEMEN_KATEGORIEN = [
       { id: 'gewalt', titel: 'Gewalt & Missbrauch', beschreibung: 'Häusliche Gewalt, sexueller Missbrauch, Schutz' },
       { id: 'resilienz', titel: 'Resilienz & Schutzfaktoren', beschreibung: 'Stärken aufbauen, Widerstandsfähigkeit' },
       { id: 'trennungsangst', titel: 'Trennungsangst & Verlassensangst', beschreibung: 'Bindungsangst, Sicherheit aufbauen' },
+      { id: 'bindungsstoerung', titel: 'Bindungsstörung', beschreibung: 'Unsichere Bindung, Bindungsvermeidung, Beziehungsfähigkeit aufbauen' },
     ]
   },
 ];
@@ -1572,9 +1582,9 @@ const SCREENING_THEMA_MAP = {
   'schlaf':             ['schlaf', 'stress-angst', 'koerperbeschwerden'],
   'psychose':           ['wahrnehmungsveraenderungen', 'mentale-gesundheit', 'krisenintervention'],
   'autismus':           ['soziale-wahrnehmung', 'kommunikation', 'emotionserkennung', 'gruppendynamik'],
-  'trennungsangst':     ['trennungsangst', 'eltern-kind-beziehung', 'emotionsregulation'],
-  'mobbing':            ['mobbing', 'selbstwertgefuehl', 'kommunikation', 'grenzen-setzen'],
-  'familie':            ['familienzusammensetzung', 'eltern-kind-beziehung', 'trennung-scheidung', 'soziales-netzwerk'],
+  'trennungsangst':     ['trennungsangst', 'bindungsstoerung', 'eltern-kind-beziehung', 'emotionsregulation'],
+  'mobbing':            ['mobbing', 'cybermobbing', 'selbstwertgefuehl', 'kommunikation', 'grenzen-setzen'],
+  'familie':            ['familienzusammensetzung', 'eltern-kind-beziehung', 'trennung-scheidung', 'soziales-netzwerk', 'parentifizierung', 'young-carers'],
   'diskriminierung':    ['diskriminierung', 'kulturelle-identitaet', 'selbstwertgefuehl', 'resilienz'],
   'soziale-isolation':  ['einsamkeit', 'freundschaften', 'soziales-netzwerk', 'kommunikation'],
   'zwang':              ['wiederkehrende-gedanken', 'stress-angst', 'emotionsregulation'],

@@ -2331,6 +2331,99 @@ select {
 }
 
 /* ============================================================
+   SOAP SITZUNGSPROTOKOLL
+   ============================================================ */
+
+/* Stimmungs-Buttons */
+.prot-stimmung-row {
+  margin-bottom: 14px;
+}
+.prot-stimmung-row > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+.prot-stimmung-btns {
+  display: flex;
+  gap: 6px;
+}
+.prot-stimmung-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 22px;
+  transition: all 0.15s;
+  flex: 1;
+}
+.prot-stimmung-btn span { font-size: 10px; color: #6B7280; }
+.prot-stimmung-btn:hover { border-color: #A78BFA; background: #F5F3FF; }
+.prot-stimmung-btn.selected {
+  border-color: #7C3AED;
+  background: #F5F3FF;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.15);
+}
+.prot-stimmung-btn.selected span { color: #7C3AED; font-weight: 600; }
+
+/* SOAP sections */
+.protokoll-soap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 14px 0;
+}
+.soap-section {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.soap-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.soap-letter {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.soap-s .soap-header { background: #EFF6FF; color: #1D4ED8; }
+.soap-s .soap-letter { background: #2563EB; }
+.soap-o .soap-header { background: #F0FDF4; color: #166534; }
+.soap-o .soap-letter { background: #16A34A; }
+.soap-a .soap-header { background: #FFF7ED; color: #9A3412; }
+.soap-a .soap-letter { background: #EA580C; }
+.soap-p .soap-header { background: #F5F3FF; color: #5B21B6; }
+.soap-p .soap-letter { background: #7C3AED; }
+
+.soap-section .notiz-textarea {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+}
+
+/* Zusatz */
+.protokoll-zusatz {
+  margin-bottom: 12px;
+}
+
+/* ============================================================
    AMPELSYSTEM (Home Dashboard)
    ============================================================ */
 

@@ -19,6 +19,7 @@ const APP = {
   staerkenChart: null,
   wohlbefindenChart: null,
   wohlbefindenScore: null,
+  protStimmung: null,
 };
 
 // ---- Init ----
@@ -923,6 +924,8 @@ function addThemaNotiz(themaId) {
 // NOTIZEN TAB
 // ============================================================
 function renderNotizen() {
+  populateProtThemen();
+
   const notizen = DB.getNotizen(APP.currentSchuelerId)
     .sort((a, b) => new Date(b.datum) - new Date(a.datum));
 
@@ -970,32 +973,89 @@ function toggleNotizModus(modus) {
 
 function addProtokoll() {
   const datum       = document.getElementById('prot-datum').value;
-  const dauer       = document.getElementById('prot-dauer').value.trim();
+  const dauer       = document.getElementById('prot-dauer').value;
   const setting     = document.getElementById('prot-setting').value;
-  const thema       = document.getElementById('prot-thema').value.trim();
-  const verlauf     = document.getElementById('prot-verlauf').value.trim();
-  const interv      = document.getElementById('prot-interventionen').value.trim();
-  const fortschritt = document.getElementById('prot-fortschritte').value.trim();
-  const naechste    = document.getElementById('prot-naechste').value.trim();
+  const nr          = document.getElementById('prot-nr').value;
+  const stimmung    = APP.protStimmung || '';
+  const themaId     = document.getElementById('prot-thema-id').value;
+  const subjektiv   = document.getElementById('prot-subjektiv').value.trim();
+  const objektiv    = document.getElementById('prot-objektiv').value.trim();
+  const assessment  = document.getElementById('prot-assessment').value.trim();
+  const plan        = document.getElementById('prot-plan').value.trim();
+  const materialien = document.getElementById('prot-materialien').value.trim();
 
-  if (!datum || !thema) { showToast('Datum und Thema sind Pflichtfelder', 'error'); return; }
+  if (!datum) { showToast('Datum ist ein Pflichtfeld', 'error'); return; }
+  if (!subjektiv && !objektiv && !assessment && !plan) {
+    showToast('Bitte mindestens ein SOAP-Feld ausfüllen', 'error'); return;
+  }
+
+  // Find theme title
+  let themaLabel = '';
+  if (themaId) {
+    for (const kat of THEMEN_KATEGORIEN) {
+      const t = kat.themen.find(th => th.id === themaId);
+      if (t) { themaLabel = t.titel; break; }
+    }
+  }
+
+  const stimmungMap = { 'sehr-schlecht': '😫', 'schlecht': '😞', 'neutral': '😐', 'gut': '🙂', 'sehr-gut': '😄' };
 
   const text = [
-    `🗓 ${datum}  |  ⏱ ${dauer || '—'}  |  📍 ${setting}`,
-    `\n📌 Thema: ${thema}`,
-    verlauf     ? `\n📝 Verlauf:\n${verlauf}` : '',
-    interv      ? `\n🛠 Interventionen:\n${interv}` : '',
-    fortschritt ? `\n📈 Fortschritte:\n${fortschritt}` : '',
-    naechste    ? `\n➡️ Nächste Schritte:\n${naechste}` : '',
+    `🗓 ${datum}  |  ⏱ ${dauer} Min.  |  📍 ${setting}${nr ? `  |  #${nr}` : ''}`,
+    stimmung ? `\nStimmung: ${stimmungMap[stimmung] || ''} ${stimmung}` : '',
+    themaLabel ? `\n📌 Thema: ${themaLabel}` : '',
+    subjektiv  ? `\n━━━ S (Subjektiv) ━━━\n${subjektiv}` : '',
+    objektiv   ? `\n━━━ O (Objektiv) ━━━\n${objektiv}` : '',
+    assessment ? `\n━━━ A (Assessment) ━━━\n${assessment}` : '',
+    plan       ? `\n━━━ P (Plan) ━━━\n${plan}` : '',
+    materialien ? `\n📎 Materialien: ${materialien}` : '',
   ].filter(Boolean).join('');
 
-  DB.createNotiz({ schuelerId: APP.currentSchuelerId, datum, inhalt: text, kategorie: 'session' });
+  DB.createNotiz({
+    schuelerId: APP.currentSchuelerId,
+    datum,
+    inhalt: text,
+    kategorie: 'session',
+    themaId: themaId || null,
+    soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel },
+  });
 
-  ['prot-thema','prot-verlauf','prot-interventionen','prot-fortschritte','prot-naechste'].forEach(id => {
+  // Also log wellbeing if mood was set
+  if (stimmung) {
+    const moodScore = { 'sehr-schlecht': 2, 'schlecht': 4, 'neutral': 5, 'gut': 7, 'sehr-gut': 9 };
+    DB.addWohlbefinden(APP.currentSchuelerId, moodScore[stimmung] || 5, `Sitzung: ${themaLabel || setting}`);
+  }
+
+  // Reset form
+  ['prot-subjektiv','prot-objektiv','prot-assessment','prot-plan','prot-materialien'].forEach(id => {
     document.getElementById(id).value = '';
   });
+  document.getElementById('prot-thema-id').value = '';
+  document.getElementById('prot-nr').value = '';
+  APP.protStimmung = null;
+  document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
+
   renderNotizen();
-  showToast('Protokoll gespeichert', 'success');
+  showToast('Protokoll gespeichert (SOAP)', 'success');
+}
+
+function selectProtStimmung(btn) {
+  document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  APP.protStimmung = btn.dataset.val;
+}
+
+function populateProtThemen() {
+  const sel = document.getElementById('prot-thema-id');
+  if (!sel) return;
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— Kein Thema verknüpft —</option>' +
+    THEMEN_KATEGORIEN.map(kat =>
+      `<optgroup label="${kat.icon} ${kat.titel}">
+        ${kat.themen.map(t => `<option value="${t.id}">${t.titel}</option>`).join('')}
+      </optgroup>`
+    ).join('');
+  sel.value = current;
 }
 
 function addNotiz() {
@@ -1420,139 +1480,221 @@ function druckeProfilbericht(schuelerId) {
   const s = DB.getSchuelerById(schuelerId);
   if (!s) return;
 
-  const notizen = DB.getNotizen(schuelerId)
-    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const notizen = DB.getNotizen(schuelerId).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const screenings = DB.getScreenings(schuelerId).filter(sc => sc.abgeschlossen).sort((a, b) => b.datum.localeCompare(a.datum));
+  const roadmap = DB.getRoadmap(schuelerId);
+  const wb = DB.getWohlbefinden(schuelerId).sort((a, b) => a.datum.localeCompare(b.datum));
+  const profil = s.staerkenProfil || {};
 
   const topicStatus = s.topicStatus || {};
   const abgeschlossen = Object.values(topicStatus).filter(v => v === 'abgeschlossen').length;
   const inBearbeitung = Object.values(topicStatus).filter(v => v === 'in-bearbeitung').length;
 
+  const getThemaTitel = (themaId) => {
+    for (const kat of THEMEN_KATEGORIEN) { const t = kat.themen.find(th => th.id === themaId); if (t) return t.titel; }
+    return themaId;
+  };
+
+  // -- Themen Section --
   const themenHTML = THEMEN_KATEGORIEN.map(kat => {
     const themenMitStatus = kat.themen.filter(t => topicStatus[t.id] && topicStatus[t.id] !== 'nicht-begonnen');
     if (themenMitStatus.length === 0) return '';
-    return `
-      <div style="margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:700;color:#2C5F8A;margin-bottom:6px;border-bottom:1px solid #DDE2E8;padding-bottom:4px;">
-          ${kat.icon} ${kat.titel}
+    return `<div style="margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:#2C5F8A;margin-bottom:4px;">${kat.icon} ${kat.titel}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;">
+        ${themenMitStatus.map(t => {
+          const farbe = getStatusFarbe(topicStatus[t.id]);
+          return `<span style="padding:2px 8px;border-radius:10px;font-size:10px;background:${farbe}18;color:${farbe};border:1px solid ${farbe}44;">${THEMA_STATUS[topicStatus[t.id]].icon} ${t.titel}</span>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // -- Screening Section --
+  let screeningHTML = '';
+  if (screenings.length > 0) {
+    const scr = screenings[0];
+    const flagged = (scr.flaggedAreas || []);
+    const severityMap = { low: 'Unauffällig', medium: 'Erhöhter Bedarf', high: 'Hoher Bedarf', urgent: 'Dringend' };
+    const severityColor = { low: '#166534', medium: '#854D0E', high: '#991B1B', urgent: '#7F1D1D' };
+    screeningHTML = `
+      <div class="section">
+        <div class="section-title">🔍 Screening (${new Date(scr.datum).toLocaleDateString('de-DE')})</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span style="padding:3px 12px;border-radius:12px;font-size:12px;font-weight:600;background:${severityColor[scr.severity]}18;color:${severityColor[scr.severity]};">${severityMap[scr.severity]}</span>
+          <span style="font-size:11px;color:#6B7280;">${flagged.length} auffällige Bereiche</span>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${themenMitStatus.map(t => {
-            const st = THEMA_STATUS[topicStatus[t.id]];
-            return `<span style="padding:3px 8px;border-radius:12px;font-size:11px;background:${getStatusFarbe(topicStatus[t.id])}22;color:${getStatusFarbe(topicStatus[t.id])};border:1px solid ${getStatusFarbe(topicStatus[t.id])}44;">
-              ${st.icon} ${t.titel}
+        ${flagged.length > 0 ? `<div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${flagged.map(fId => {
+            const d = SCREENING_DOMAINS.find(dd => dd.id === fId);
+            return d ? `<span style="padding:3px 8px;border-radius:8px;font-size:10px;background:${d.farbe}15;color:${d.farbe};border:1px solid ${d.farbe}33;">${d.icon} ${d.label} (${scr.scores[d.id] || 0}/${d.items.length*3})</span>` : '';
+          }).join('')}
+        </div>` : ''}
+        ${scr.clinicalNotes ? `<div style="margin-top:8px;padding:8px;background:#F9FAFB;border-radius:6px;font-size:11px;font-style:italic;">${escapeHtml(scr.clinicalNotes)}</div>` : ''}
+      </div>`;
+  }
+
+  // -- Stärken Section --
+  let staerkenHTML = '';
+  const ratings = profil.ratings || {};
+  const ratedDims = STAERKEN_DIMENSIONEN.filter(d => ratings[d.id] > 0);
+  if (ratedDims.length > 0 || (profil.schutzfaktoren || []).length > 0) {
+    staerkenHTML = `
+      <div class="section">
+        <div class="section-title">💪 Stärken & Ressourcen</div>
+        ${ratedDims.length > 0 ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+          ${ratedDims.sort((a, b) => ratings[b.id] - ratings[a.id]).map(d =>
+            `<span style="padding:3px 10px;border-radius:8px;font-size:11px;background:${d.farbe}15;color:${d.farbe};border:1px solid ${d.farbe}33;">${d.icon} ${d.label}: <strong>${ratings[d.id]}/10</strong></span>`
+          ).join('')}
+        </div>` : ''}
+        ${(profil.interessen || []).length > 0 ? `<div style="font-size:11px;margin-bottom:4px;"><strong>Interessen:</strong> ${profil.interessen.join(', ')}</div>` : ''}
+        ${(profil.vorbilder || []).length > 0 ? `<div style="font-size:11px;margin-bottom:4px;"><strong>Vorbilder:</strong> ${profil.vorbilder.join(', ')}</div>` : ''}
+        ${(profil.schutzfaktoren || []).length > 0 ? `<div style="font-size:11px;margin-bottom:4px;"><strong>Schutzfaktoren:</strong> ${profil.schutzfaktoren.join(', ')}</div>` : ''}
+        ${profil.freitext ? `<div style="font-size:11px;margin-top:6px;padding:6px;background:#F9FAFB;border-radius:4px;">${escapeHtml(profil.freitext)}</div>` : ''}
+      </div>`;
+  }
+
+  // -- Roadmap Section --
+  let roadmapHTML = '';
+  if (roadmap) {
+    const totalThemen = roadmap.phasen.reduce((s, p) => s + p.themen.length, 0);
+    const doneThemen = roadmap.phasen.reduce((s, p) => s + p.themen.filter(t => t.status === 'abgeschlossen').length, 0);
+    roadmapHTML = `
+      <div class="section">
+        <div class="section-title">🗺️ Förderplan (${doneThemen}/${totalThemen} Themen erledigt)</div>
+        ${roadmap.phasen.map((phase, idx) => {
+          const def = ROADMAP_PHASEN[idx];
+          const statusLabel = phase.status === 'aktiv' ? '▶ Aktiv' : phase.status === 'erledigt' ? '✓ Erledigt' : '○ Offen';
+          return `<div style="margin-bottom:10px;padding:8px 10px;border-left:4px solid ${def.farbe};background:#F9FAFB;border-radius:0 6px 6px 0;">
+            <div style="font-size:12px;font-weight:700;color:${def.farbe};">${def.icon} Phase ${def.nr}: ${def.label} <span style="font-weight:400;color:#6B7280;font-size:10px;">(${statusLabel})</span></div>
+            ${phase.themen.length > 0 ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">
+              ${phase.themen.map(t => `<span style="font-size:10px;padding:1px 6px;border-radius:8px;background:${t.status==='abgeschlossen'?'#DCFCE7':'#F3F4F6'};color:${t.status==='abgeschlossen'?'#166534':'#374151'};">${t.status==='abgeschlossen'?'✓':' '} ${getThemaTitel(t.id)}</span>`).join('')}
+            </div>` : ''}
+            ${phase.notizen ? `<div style="font-size:10px;font-style:italic;color:#6B7280;margin-top:4px;">${escapeHtml(phase.notizen)}</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  // -- Wohlbefinden Section --
+  let wbHTML = '';
+  if (wb.length > 0) {
+    const last10 = wb.slice(-10);
+    const avg = (last10.reduce((s, w) => s + w.score, 0) / last10.length).toFixed(1);
+    wbHTML = `
+      <div class="section">
+        <div class="section-title">📈 Wohlbefindens-Verlauf (Ø ${avg}/10, ${wb.length} Einträge)</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+          ${last10.map(w => {
+            const farbe = w.score <= 3 ? '#EF4444' : w.score <= 5 ? '#F59E0B' : '#22C55E';
+            return `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;background:${farbe}15;color:${farbe};border:1px solid ${farbe}33;">
+              ${new Date(w.datum).toLocaleDateString('de-DE', {day:'2-digit',month:'2-digit'})} <strong>${w.score}</strong>
             </span>`;
           }).join('')}
         </div>
       </div>`;
-  }).join('');
+  }
 
-  const notizenHTML = notizen.slice(0, 20).map(n => {
+  // -- Notizen Section --
+  const notizenHTML = notizen.slice(0, 15).map(n => {
     const kat = NOTIZ_KATEGORIEN[n.kategorie] || NOTIZ_KATEGORIEN.session;
-    return `
-      <div style="border-left:3px solid ${kat.farbe};padding:8px 10px;margin-bottom:8px;background:#F9FAFB;border-radius:0 4px 4px 0;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-          <span style="font-size:10px;font-weight:700;color:${kat.farbe};">${kat.icon} ${kat.label}</span>
-          <span style="font-size:10px;color:#95A5A6;margin-left:auto;">${formatDatum(n.datum)}</span>
-        </div>
-        <div style="font-size:12px;white-space:pre-wrap;">${escapeHtml(n.inhalt)}</div>
-      </div>`;
+    return `<div style="border-left:3px solid ${kat.farbe};padding:6px 10px;margin-bottom:6px;background:#F9FAFB;border-radius:0 4px 4px 0;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+        <span style="font-size:10px;font-weight:700;color:${kat.farbe};">${kat.icon} ${kat.label}</span>
+        <span style="font-size:10px;color:#95A5A6;margin-left:auto;">${formatDatum(n.datum)}</span>
+      </div>
+      <div style="font-size:11px;white-space:pre-wrap;line-height:1.5;">${escapeHtml(n.inhalt)}</div>
+    </div>`;
   }).join('');
 
+  // -- Ziele Section --
   const zieleHTML = (s.ziele || []).map(z =>
-    `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px;">
+    `<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px;">
       <span>${z.erledigt ? '✅' : '☐'}</span>
       <span style="${z.erledigt ? 'text-decoration:line-through;color:#95A5A6;' : ''}">${escapeHtml(z.text)}</span>
-    </div>`).join('') || '<p style="color:#95A5A6;font-size:12px;">Keine Ziele definiert</p>';
+    </div>`).join('') || '<p style="color:#95A5A6;font-size:11px;">Keine Ziele definiert</p>';
 
+  // -- Build full report --
   const fenster = window.open('', '_blank');
-  fenster.document.write(`
-    <!DOCTYPE html>
-    <html lang="de">
-    <head>
-      <meta charset="UTF-8">
-      <title>Profil – ${s.vorname} ${s.nachname}</title>
-      <style>
-        * { box-sizing: border-box; margin:0; padding:0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; color:#2C3E50; padding:20px; background:#F0F4F8; }
-        .seite { width:210mm; background:white; margin:0 auto 20px; padding:16mm 16mm 12mm; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
-        .header { border-bottom:3px solid #2C5F8A; padding-bottom:12px; margin-bottom:16px; display:flex; align-items:center; gap:16px; }
-        .header-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2C5F8A,#3A7AB8); display:flex; align-items:center; justify-content:center; color:white; font-size:22px; font-weight:700; flex-shrink:0; overflow:hidden; }
-        .header-avatar img { width:100%; height:100%; object-fit:cover; }
-        h1 { font-size:22px; color:#2C5F8A; }
-        .meta { font-size:12px; color:#7F8C8D; margin-top:4px; }
-        .stat-row { display:flex; gap:10px; margin:12px 0 16px; }
-        .stat-chip { background:#EBF5FB; color:#2980B9; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; }
-        .stat-chip.green { background:#EAFAF1; color:#27AE60; }
-        .stat-chip.orange { background:#FEF9E7; color:#E67E22; }
-        .stat-chip.red { background:#FDEDEC; color:#E74C3C; }
-        .section { margin-bottom:20px; }
-        .section-title { font-size:14px; font-weight:700; color:#2C5F8A; margin-bottom:10px; padding-bottom:4px; border-bottom:1px solid #DDE2E8; }
-        .info-box { background:#F8FAFB; border:1px solid #DDE2E8; border-radius:6px; padding:10px; font-size:12px; line-height:1.6; }
-        .print-btn { display:flex; gap:10px; justify-content:flex-end; width:210mm; margin:0 auto 12px; }
-        .btn { padding:9px 18px; border-radius:6px; border:none; cursor:pointer; font-size:13px; font-weight:600; }
-        .btn-blue { background:#2C5F8A; color:white; }
-        @media print { body { background:white; padding:0; } .seite { box-shadow:none; } .print-btn { display:none; } }
-      </style>
-    </head>
-    <body>
-      <div class="print-btn">
-        <button class="btn btn-blue" onclick="window.print()">🖨️ Drucken / Als PDF speichern</button>
-      </div>
-      <div class="seite">
-        <div class="header">
-          <div class="header-avatar">
-            ${s.foto ? `<img src="${s.foto}" alt="">` : getInitials(s.vorname, s.nachname)}
-          </div>
-          <div>
-            <h1>${s.vorname} ${s.nachname}</h1>
-            <div class="meta">
-              Klasse: ${s.klasse || '—'} &nbsp;·&nbsp; ${alter(s.geburtsdatum)}
-              &nbsp;·&nbsp; Seit ${formatDatum(s.eintrittsdatum)}
-              &nbsp;·&nbsp; Erstellt: ${formatDatum(s.erstellt?.split('T')[0])}
-            </div>
-          </div>
-          <div style="margin-left:auto;text-align:right;">
-            <div style="font-size:11px;font-weight:700;color:${s.risiko==='hoch'?'#E74C3C':s.risiko==='mittel'?'#E67E22':'#27AE60'};">
-              ${s.risiko==='hoch'?'🔴':s.risiko==='mittel'?'🟡':'🟢'} Risiko: ${capitalize(s.risiko||'niedrig')}
-            </div>
-            <div style="font-size:10px;color:#95A5A6;margin-top:4px;">Bericht: ${new Date().toLocaleDateString('de-DE')}</div>
-          </div>
+  fenster.document.write(`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+    <title>Fallbericht – ${s.vorname} ${s.nachname}</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;}
+      body{font-family:'Segoe UI',system-ui,sans-serif;color:#1F2937;padding:20px;background:#F0F4F8;line-height:1.5;}
+      .seite{width:210mm;background:white;margin:0 auto 20px;padding:14mm 16mm 12mm;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+      .header{border-bottom:3px solid #2C5F8A;padding-bottom:12px;margin-bottom:16px;display:flex;align-items:center;gap:16px;}
+      .header-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2C5F8A,#3A7AB8);display:flex;align-items:center;justify-content:center;color:white;font-size:20px;font-weight:700;flex-shrink:0;overflow:hidden;}
+      .header-avatar img{width:100%;height:100%;object-fit:cover;}
+      h1{font-size:20px;color:#2C5F8A;}
+      .meta{font-size:11px;color:#6B7280;margin-top:3px;}
+      .stat-row{display:flex;gap:8px;margin:10px 0 14px;flex-wrap:wrap;}
+      .stat-chip{padding:3px 10px;border-radius:16px;font-size:10px;font-weight:600;}
+      .section{margin-bottom:18px;}
+      .section-title{font-size:13px;font-weight:700;color:#2C5F8A;margin-bottom:8px;padding-bottom:3px;border-bottom:1.5px solid #E5E7EB;}
+      .print-bar{display:flex;gap:10px;justify-content:flex-end;width:210mm;margin:0 auto 12px;}
+      .btn{padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;}
+      .btn-blue{background:#2C5F8A;color:white;}
+      .footer{text-align:center;font-size:9px;color:#9CA3AF;padding-top:12px;border-top:1px solid #E5E7EB;margin-top:16px;}
+      @media print{body{background:white;padding:0;}.seite{box-shadow:none;margin:0;}.print-bar{display:none;}.seite{page-break-after:always;}.seite:last-child{page-break-after:auto;}}
+    </style></head><body>
+    <div class="print-bar">
+      <button class="btn btn-blue" onclick="window.print()">🖨️ Drucken / PDF speichern</button>
+    </div>
+
+    <!-- SEITE 1: Übersicht -->
+    <div class="seite">
+      <div class="header">
+        <div class="header-avatar">${s.foto ? `<img src="${s.foto}" alt="">` : getInitials(s.vorname, s.nachname)}</div>
+        <div>
+          <h1>Fallbericht — ${s.vorname} ${s.nachname}</h1>
+          <div class="meta">Klasse: ${s.klasse || '—'} · ${alter(s.geburtsdatum)} · Seit ${formatDatum(s.eintrittsdatum)} · Erstellt: ${formatDatum(s.erstellt?.split('T')[0])}</div>
         </div>
-
-        <div class="stat-row">
-          <div class="stat-chip green">✅ ${abgeschlossen} Themen abgeschlossen</div>
-          <div class="stat-chip">◐ ${inBearbeitung} in Bearbeitung</div>
-          <div class="stat-chip orange">💬 ${notizen.length} Notizen</div>
-          <div class="stat-chip">${(s.ziele||[]).length} Ziele</div>
-        </div>
-
-        ${s.allgemeineNotizen ? `
-        <div class="section">
-          <div class="section-title">ℹ️ Allgemeine Informationen</div>
-          <div class="info-box">${escapeHtml(s.allgemeineNotizen)}</div>
-        </div>` : ''}
-
-        <div class="section">
-          <div class="section-title">📋 Bearbeitete Themen</div>
-          ${themenHTML || '<p style="color:#95A5A6;font-size:12px;">Noch keine Themen bearbeitet</p>'}
-        </div>
-
-        <div class="section">
-          <div class="section-title">🎯 Ziele</div>
-          ${zieleHTML}
+        <div style="margin-left:auto;text-align:right;">
+          <div style="font-size:11px;font-weight:700;color:${s.risiko==='hoch'?'#DC2626':s.risiko==='mittel'?'#D97706':'#059669'};">
+            ${s.risiko==='hoch'?'🔴':s.risiko==='mittel'?'🟡':'🟢'} Risiko: ${capitalize(s.risiko||'niedrig')}
+          </div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:3px;">CDSE Luxembourg · ${new Date().toLocaleDateString('de-DE')}</div>
         </div>
       </div>
 
-      ${notizen.length > 0 ? `
-      <div class="seite">
-        <div class="section">
-          <div class="section-title">💬 Notizen & Sitzungsprotokolle (letzte ${Math.min(notizen.length,20)})</div>
-          ${notizenHTML}
-        </div>
-      </div>` : ''}
-    </body>
-    </html>
-  `);
+      <div class="stat-row">
+        <span class="stat-chip" style="background:#DCFCE7;color:#166534;">✅ ${abgeschlossen} abgeschlossen</span>
+        <span class="stat-chip" style="background:#DBEAFE;color:#1D4ED8;">◐ ${inBearbeitung} in Bearbeitung</span>
+        <span class="stat-chip" style="background:#FEF3C7;color:#92400E;">💬 ${notizen.length} Notizen</span>
+        <span class="stat-chip" style="background:#F3F4F6;color:#374151;">🎯 ${(s.ziele||[]).length} Ziele</span>
+        ${screenings.length ? `<span class="stat-chip" style="background:#EDE9FE;color:#5B21B6;">🔍 ${screenings.length} Screening(s)</span>` : ''}
+      </div>
+
+      ${s.allgemeineNotizen ? `<div class="section"><div class="section-title">ℹ️ Allgemeine Informationen</div><div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:8px;font-size:11px;">${escapeHtml(s.allgemeineNotizen)}</div></div>` : ''}
+
+      ${screeningHTML}
+      ${staerkenHTML}
+      ${wbHTML}
+
+      <div class="section">
+        <div class="section-title">📋 Bearbeitete Themen</div>
+        ${themenHTML || '<p style="color:#9CA3AF;font-size:11px;">Noch keine Themen bearbeitet</p>'}
+      </div>
+
+      <div class="section">
+        <div class="section-title">🎯 Ziele</div>
+        ${zieleHTML}
+      </div>
+
+      ${roadmapHTML}
+
+      <div class="footer">Vertraulich · CDSE Bezugsarbeit Tool · Erstellt am ${new Date().toLocaleDateString('de-DE')} um ${new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'})}</div>
+    </div>
+
+    <!-- SEITE 2: Protokolle -->
+    ${notizen.length > 0 ? `<div class="seite">
+      <div class="section">
+        <div class="section-title">💬 Sitzungsprotokolle & Notizen (${Math.min(notizen.length, 15)} von ${notizen.length})</div>
+        ${notizenHTML}
+      </div>
+      <div class="footer">Vertraulich · ${s.vorname} ${s.nachname} · Seite 2</div>
+    </div>` : ''}
+  </body></html>`);
   fenster.document.close();
 }
 

@@ -1556,6 +1556,49 @@ const SCREENING_DOMAINS = [
   },
 ];
 
+// ============================================================
+// Screening-Domäne → Thema-IDs Zuordnung (für Roadmap-Generierung)
+// ============================================================
+const SCREENING_THEMA_MAP = {
+  'depression':         ['depressive-stimmungen', 'selbstwertgefuehl', 'emotionsregulation', 'freude-wohlbefinden'],
+  'angst-generalisiert':['stress-angst', 'emotionsregulation', 'angstanfaelle', 'resilienz'],
+  'angst-sozial':       ['kommunikation', 'selbstwertgefuehl', 'einsamkeit', 'soziale-wahrnehmung', 'grenzen-setzen'],
+  'trauma':             ['trauma', 'dissoziative-erfahrungen', 'resilienz', 'krisenintervention'],
+  'adhs':               ['konzentration-aufmerksamkeit', 'impulskontrolle', 'lernstrategien', 'motivation'],
+  'conduct':            ['wut-aggression', 'impulskontrolle', 'konfliktmanagement', 'grenzen-setzen'],
+  'selbstverletzung':   ['selbstverletzung', 'krisenintervention', 'emotionsregulation', 'suizidpraevention'],
+  'essstoerung':        ['essverhalten', 'koerperbild', 'selbstwertgefuehl', 'emotionserkennung'],
+  'substanz':           ['alkohol', 'cannabis', 'selbstmedikation', 'emotionsregulation'],
+  'schlaf':             ['schlaf', 'stress-angst', 'koerperbeschwerden'],
+  'psychose':           ['wahrnehmungsveraenderungen', 'mentale-gesundheit', 'krisenintervention'],
+  'autismus':           ['soziale-wahrnehmung', 'kommunikation', 'emotionserkennung', 'gruppendynamik'],
+  'trennungsangst':     ['trennungsangst', 'eltern-kind-beziehung', 'emotionsregulation'],
+  'mobbing':            ['mobbing', 'selbstwertgefuehl', 'kommunikation', 'grenzen-setzen'],
+  'familie':            ['familienzusammensetzung', 'eltern-kind-beziehung', 'trennung-scheidung', 'soziales-netzwerk'],
+  'diskriminierung':    ['diskriminierung', 'kulturelle-identitaet', 'selbstwertgefuehl', 'resilienz'],
+  'soziale-isolation':  ['einsamkeit', 'freundschaften', 'soziales-netzwerk', 'kommunikation'],
+  'zwang':              ['wiederkehrende-gedanken', 'stress-angst', 'emotionsregulation'],
+  'stimmung-extrem':    ['stimmungsextreme', 'emotionsregulation', 'impulskontrolle'],
+  'psychosomatik':      ['koerperbeschwerden', 'stress-angst', 'emotionserkennung'],
+  'dissoziation':       ['dissoziative-erfahrungen', 'trauma', 'emotionserkennung'],
+};
+
+// Roadmap-Phasen-Definitionen
+const ROADMAP_PHASEN = [
+  { nr: 1, label: 'Stabilisierung & Beziehungsaufbau', farbe: '#DC2626', icon: '🛡️',
+    beschreibung: 'Vertrauen aufbauen, akute Krisen stabilisieren, Sicherheit schaffen',
+    dauer: '2–4 Wochen', schwerpunkt: ['krisenintervention', 'suizidpraevention', 'selbstverletzung', 'trauma'] },
+  { nr: 2, label: 'Verstehen & Einordnen', farbe: '#D97706', icon: '🔍',
+    beschreibung: 'Screening durchführen, Stärken erkennen, Problemverständnis entwickeln',
+    dauer: '2–3 Wochen', schwerpunkt: ['emotionserkennung', 'selbstwertgefuehl', 'familienzusammensetzung', 'soziale-wahrnehmung'] },
+  { nr: 3, label: 'Aktive Bearbeitung', farbe: '#2563EB', icon: '🔧',
+    beschreibung: 'Kernthemen bearbeiten, Kompetenzen aufbauen, Interventionen durchführen',
+    dauer: '6–12 Wochen', schwerpunkt: [] },
+  { nr: 4, label: 'Transfer & Abschluss', farbe: '#059669', icon: '🌱',
+    beschreibung: 'Gelerntes festigen, Rückfallprävention, Abschied gestalten',
+    dauer: '2–4 Wochen', schwerpunkt: ['resilienz', 'zukunftsplanung', 'soziales-netzwerk', 'lebenssinn'] },
+];
+
 // Komorbiditats-Muster-Erkennung
 const KOMORBIDITÄT_MUSTER = [
   {
@@ -1611,6 +1654,7 @@ const DB = {
     NOTIZEN: 'cdse_notizen',
     TERMINE: 'cdse_termine',
     SCREENINGS: 'cdse_screenings',
+    ROADMAPS: 'cdse_roadmaps',
   },
 
   generateId() {
@@ -1759,6 +1803,46 @@ const DB = {
   deleteScreening(id) {
     const alle = this.getScreenings().filter(s => s.id !== id);
     localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
+  },
+
+  // Roadmaps
+  getRoadmaps(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.ROADMAPS) || '[]');
+    return schuelerId ? alle.filter(r => r.schuelerId === schuelerId) : alle;
+  },
+  getRoadmap(schuelerId) {
+    // Returns the most recent roadmap for a student
+    const all = this.getRoadmaps(schuelerId);
+    return all.length ? all.sort((a, b) => b.erstellt.localeCompare(a.erstellt))[0] : null;
+  },
+  saveRoadmap(roadmap) {
+    const alle = this.getRoadmaps();
+    const idx = alle.findIndex(r => r.id === roadmap.id);
+    roadmap.geaendert = new Date().toISOString();
+    if (idx >= 0) { alle[idx] = roadmap; } else { alle.push(roadmap); }
+    localStorage.setItem(this.KEYS.ROADMAPS, JSON.stringify(alle));
+    return roadmap;
+  },
+  createRoadmap(schuelerId) {
+    return {
+      id: this.generateId(),
+      schuelerId,
+      screeningId: null,
+      phasen: ROADMAP_PHASEN.map(p => ({
+        nr: p.nr,
+        status: p.nr === 1 ? 'aktiv' : 'offen',
+        startDatum: p.nr === 1 ? new Date().toISOString().split('T')[0] : null,
+        endDatum: null,
+        themen: [],
+        notizen: '',
+      })),
+      erstellt: new Date().toISOString(),
+      geaendert: new Date().toISOString(),
+    };
+  },
+  deleteRoadmap(id) {
+    const alle = this.getRoadmaps().filter(r => r.id !== id);
+    localStorage.setItem(this.KEYS.ROADMAPS, JSON.stringify(alle));
   },
 };
 

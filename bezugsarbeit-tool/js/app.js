@@ -222,6 +222,7 @@ function showProfilTab(tab) {
   });
 
   if (tab === 'dashboard') renderDashboard();
+  if (tab === 'roadmap') renderRoadmap();
   if (tab === 'themen') renderThemen();
   if (tab === 'notizen') renderNotizen();
   if (tab === 'ziele') renderZiele();
@@ -1469,11 +1470,13 @@ function druckeProfilbericht(schuelerId) {
 // ============================================================
 function exportDaten() {
   const daten = {
-    version: 1,
+    version: 2,
     exportiert: new Date().toISOString(),
     schueler: DB.getSchueler(),
     notizen: DB.getNotizen(),
     termine: DB.getTermine(),
+    screenings: DB.getScreenings(),
+    roadmaps: DB.getRoadmaps(),
   };
   const json = JSON.stringify(daten, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -1527,6 +1530,16 @@ function importDaten(event) {
       const lokalTIds = new Set(DB.getTermine().map(t => t.id));
       const alleTermine = [...DB.getTermine(), ...(daten.termine || []).filter(t => !lokalTIds.has(t.id))];
       localStorage.setItem(DB.KEYS.TERMINE, JSON.stringify(alleTermine));
+
+      // Screenings zusammenführen
+      const lokalSIds = new Set(DB.getScreenings().map(s => s.id));
+      const alleScreenings = [...DB.getScreenings(), ...(daten.screenings || []).filter(s => !lokalSIds.has(s.id))];
+      localStorage.setItem(DB.KEYS.SCREENINGS, JSON.stringify(alleScreenings));
+
+      // Roadmaps zusammenführen
+      const lokalRIds = new Set(DB.getRoadmaps().map(r => r.id));
+      const alleRoadmaps = [...DB.getRoadmaps(), ...(daten.roadmaps || []).filter(r => !lokalRIds.has(r.id))];
+      localStorage.setItem(DB.KEYS.ROADMAPS, JSON.stringify(alleRoadmaps));
 
       renderSidebar();
       renderHome();
@@ -1859,6 +1872,458 @@ function deleteNotizbuchNotiz(notizId, sektionIndex) {
   sek.notizen = sek.notizen.filter(n => n.id !== notizId);
   DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
   renderNotizbuch();
+}
+
+// ============================================================
+// FÖRDERPLAN / ROADMAP MODULE
+// ============================================================
+
+function renderRoadmap() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const container = document.getElementById('roadmap-container');
+  if (!container) return;
+
+  let roadmap = DB.getRoadmap(sid);
+  const screenings = DB.getScreenings(sid).filter(s => s.abgeschlossen);
+  const latestScreening = screenings.length ? screenings.sort((a,b) => b.datum.localeCompare(a.datum))[0] : null;
+  const s = DB.getSchuelerById(sid);
+
+  // No roadmap yet — show creation UI
+  if (!roadmap) {
+    container.innerHTML = `
+      <div class="roadmap-empty">
+        <div class="roadmap-empty-icon">🗺️</div>
+        <h3>Noch kein Förderplan erstellt</h3>
+        <p>Der Förderplan ist eine strukturierte Roadmap für die Begleitung von <strong>${s.vorname}</strong>.
+           Er gliedert die Arbeit in 4 Phasen — von der Stabilisierung bis zum Transfer.</p>
+        ${latestScreening
+          ? `<button class="btn btn-primary" onclick="generateRoadmapFromScreening('${latestScreening.id}')">
+               🔍 Aus Screening generieren
+             </button>
+             <p style="font-size:12px;color:#6B7280;margin-top:8px;">
+               Basierend auf Screening vom ${new Date(latestScreening.datum).toLocaleDateString('de-DE')}
+               (${(latestScreening.flaggedAreas||[]).length} auffällige Bereiche)
+             </p>`
+          : `<p style="font-size:12px;color:#9CA3AF;margin-top:8px;">
+               💡 Tipp: Führe zuerst ein Screening durch — der Förderplan wird dann automatisch mit passenden Themen gefüllt.
+             </p>`}
+        <button class="btn btn-secondary" style="margin-top:8px;" onclick="createEmptyRoadmap()">
+          📝 Leeren Förderplan erstellen
+        </button>
+      </div>`;
+    return;
+  }
+
+  // Render existing roadmap
+  const totalThemen = roadmap.phasen.reduce((sum, p) => sum + p.themen.length, 0);
+  const erledigteThemen = roadmap.phasen.reduce((sum, p) => sum + p.themen.filter(t => t.status === 'abgeschlossen').length, 0);
+  const gesamtFortschritt = totalThemen > 0 ? Math.round((erledigteThemen / totalThemen) * 100) : 0;
+  const aktivePhasenNr = roadmap.phasen.find(p => p.status === 'aktiv')?.nr || 0;
+
+  container.innerHTML = `
+    <div class="roadmap-header">
+      <div class="roadmap-header-left">
+        <h2 class="roadmap-titel">🗺️ Förderplan — ${s.vorname} ${s.nachname}</h2>
+        <div class="roadmap-meta">
+          Erstellt: ${new Date(roadmap.erstellt).toLocaleDateString('de-DE')} ·
+          ${totalThemen} Themen · Phase ${aktivePhasenNr}/4
+        </div>
+      </div>
+      <div class="roadmap-header-actions">
+        ${latestScreening ? `<button class="btn btn-secondary btn-sm" onclick="generateRoadmapFromScreening('${latestScreening.id}')">🔄 Aus Screening aktualisieren</button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="druckeRoadmap()">🖨️ Drucken</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteCurrentRoadmap()">🗑</button>
+      </div>
+    </div>
+
+    <!-- Gesamtfortschritt -->
+    <div class="roadmap-progress-bar-container">
+      <div class="roadmap-progress-label">
+        <span>Gesamtfortschritt</span>
+        <span>${gesamtFortschritt}% (${erledigteThemen}/${totalThemen} Themen)</span>
+      </div>
+      <div class="roadmap-progress-bar">
+        <div class="roadmap-progress-fill" style="width:${gesamtFortschritt}%;"></div>
+      </div>
+    </div>
+
+    <!-- Phasen-Timeline -->
+    <div class="roadmap-timeline">
+      ${roadmap.phasen.map((phase, idx) => renderRoadmapPhase(roadmap, phase, idx)).join('')}
+    </div>
+  `;
+}
+
+function renderRoadmapPhase(roadmap, phase, idx) {
+  const def = ROADMAP_PHASEN[idx];
+  const isAktiv = phase.status === 'aktiv';
+  const isErledigt = phase.status === 'erledigt';
+  const isOffen = phase.status === 'offen';
+  const themenDone = phase.themen.filter(t => t.status === 'abgeschlossen').length;
+  const themenTotal = phase.themen.length;
+  const phasePct = themenTotal > 0 ? Math.round((themenDone / themenTotal) * 100) : 0;
+
+  // Find theme titles
+  const getThemaTitel = (themaId) => {
+    for (const kat of THEMEN_KATEGORIEN) {
+      const t = kat.themen.find(th => th.id === themaId);
+      if (t) return t.titel;
+    }
+    return themaId;
+  };
+
+  const getThemaKat = (themaId) => {
+    for (const kat of THEMEN_KATEGORIEN) {
+      if (kat.themen.find(th => th.id === themaId)) return kat;
+    }
+    return null;
+  };
+
+  return `
+    <div class="roadmap-phase ${isAktiv ? 'aktiv' : ''} ${isErledigt ? 'erledigt' : ''} ${isOffen ? 'offen' : ''}">
+      <!-- Phase-Marker -->
+      <div class="roadmap-phase-marker" style="--phase-farbe:${def.farbe};">
+        <div class="roadmap-phase-dot">
+          ${isErledigt ? '✓' : def.nr}
+        </div>
+        ${idx < 3 ? '<div class="roadmap-phase-line"></div>' : ''}
+      </div>
+
+      <!-- Phase-Content -->
+      <div class="roadmap-phase-content">
+        <div class="roadmap-phase-header" onclick="toggleRoadmapPhase(${phase.nr})">
+          <div class="roadmap-phase-header-left">
+            <span class="roadmap-phase-icon">${def.icon}</span>
+            <div>
+              <div class="roadmap-phase-label">Phase ${def.nr}: ${def.label}</div>
+              <div class="roadmap-phase-desc">${def.beschreibung}</div>
+              <div class="roadmap-phase-timing">
+                ${def.dauer}
+                ${phase.startDatum ? ` · Start: ${new Date(phase.startDatum).toLocaleDateString('de-DE')}` : ''}
+                ${phase.endDatum ? ` · Ende: ${new Date(phase.endDatum).toLocaleDateString('de-DE')}` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="roadmap-phase-header-right">
+            <span class="roadmap-phase-status-badge roadmap-status-${phase.status}">
+              ${phase.status === 'aktiv' ? '▶ Aktiv' : phase.status === 'erledigt' ? '✓ Erledigt' : '○ Offen'}
+            </span>
+            ${themenTotal > 0 ? `<span class="roadmap-phase-count">${themenDone}/${themenTotal}</span>` : ''}
+            <span class="roadmap-phase-arrow" id="roadmap-arrow-${phase.nr}">▼</span>
+          </div>
+        </div>
+
+        <!-- Phase-Body (collapsible) -->
+        <div class="roadmap-phase-body" id="roadmap-body-${phase.nr}" style="display:${isAktiv ? 'block' : 'none'};">
+          <!-- Progress -->
+          ${themenTotal > 0 ? `
+          <div class="roadmap-phase-progress">
+            <div class="roadmap-mini-bar"><div class="roadmap-mini-bar-fill" style="width:${phasePct}%;background:${def.farbe};"></div></div>
+            <span>${phasePct}%</span>
+          </div>` : ''}
+
+          <!-- Themen-Liste -->
+          <div class="roadmap-themen-liste">
+            ${phase.themen.length === 0
+              ? `<div class="roadmap-themen-empty">Noch keine Themen zugewiesen</div>`
+              : phase.themen.map((t, ti) => {
+                  const kat = getThemaKat(t.id);
+                  return `
+                  <div class="roadmap-thema-item ${t.status === 'abgeschlossen' ? 'done' : ''}">
+                    <button class="roadmap-thema-check"
+                      onclick="toggleRoadmapThema(${phase.nr}, ${ti})"
+                      style="border-color:${def.farbe};${t.status === 'abgeschlossen' ? `background:${def.farbe};color:#fff;` : ''}">
+                      ${t.status === 'abgeschlossen' ? '✓' : ''}
+                    </button>
+                    <div class="roadmap-thema-info">
+                      <span class="roadmap-thema-titel">${getThemaTitel(t.id)}</span>
+                      ${kat ? `<span class="roadmap-thema-kat" style="color:${kat.farbe};">${kat.icon} ${kat.titel}</span>` : ''}
+                    </div>
+                    <div class="roadmap-thema-actions">
+                      <button class="btn-icon btn-xs" title="Thema öffnen" onclick="openRoadmapThema('${t.id}')">📋</button>
+                      <button class="btn-icon btn-xs" title="Entfernen" onclick="removeRoadmapThema(${phase.nr}, ${ti})">✕</button>
+                    </div>
+                  </div>`;
+                }).join('')}
+          </div>
+
+          <!-- Thema hinzufügen -->
+          <div class="roadmap-add-thema">
+            <select id="roadmap-add-select-${phase.nr}" class="roadmap-select">
+              <option value="">+ Thema hinzufügen...</option>
+              ${THEMEN_KATEGORIEN.map(kat =>
+                `<optgroup label="${kat.icon} ${kat.titel}">
+                  ${kat.themen.map(t =>
+                    `<option value="${t.id}">${t.titel}</option>`
+                  ).join('')}
+                </optgroup>`
+              ).join('')}
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="addRoadmapThema(${phase.nr})">Hinzufügen</button>
+          </div>
+
+          <!-- Phase-Notizen -->
+          <div class="roadmap-phase-notizen">
+            <textarea class="roadmap-notiz-input" placeholder="Notizen zu dieser Phase..."
+              id="roadmap-notiz-${phase.nr}"
+              onchange="saveRoadmapNotiz(${phase.nr}, this.value)">${phase.notizen || ''}</textarea>
+          </div>
+
+          <!-- Phase-Aktionen -->
+          <div class="roadmap-phase-actions">
+            ${phase.status === 'offen' ? `<button class="btn btn-sm" style="background:${def.farbe};color:#fff;border:none;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">▶ Phase starten</button>` : ''}
+            ${phase.status === 'aktiv' ? `<button class="btn btn-sm" style="background:${def.farbe};color:#fff;border:none;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>` : ''}
+            ${phase.status === 'erledigt' ? `<button class="btn btn-secondary btn-sm" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">↺ Wieder öffnen</button>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleRoadmapPhase(nr) {
+  const body = document.getElementById(`roadmap-body-${nr}`);
+  const arrow = document.getElementById(`roadmap-arrow-${nr}`);
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function createEmptyRoadmap() {
+  const roadmap = DB.createRoadmap(APP.currentSchuelerId);
+  DB.saveRoadmap(roadmap);
+  renderRoadmap();
+}
+
+function generateRoadmapFromScreening(screeningId) {
+  const scr = DB.getScreenings().find(s => s.id === screeningId);
+  if (!scr) return;
+
+  let roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) {
+    roadmap = DB.createRoadmap(APP.currentSchuelerId);
+  }
+  roadmap.screeningId = screeningId;
+
+  // Clear existing auto-generated themes
+  roadmap.phasen.forEach(p => { p.themen = []; });
+
+  const flagged = scr.flaggedAreas || [];
+  const scores = scr.scores || {};
+
+  // Collect all relevant themes from flagged domains, scored by severity
+  const themaScores = {};
+  flagged.forEach(domainId => {
+    const domain = SCREENING_DOMAINS.find(d => d.id === domainId);
+    if (!domain) return;
+    const score = scores[domainId] || 0;
+    const max = domain.items.length * 3;
+    const severity = score / max; // 0-1
+
+    const mappedThemen = SCREENING_THEMA_MAP[domainId] || [];
+    mappedThemen.forEach((themaId, idx) => {
+      // Primary theme gets full score, secondary themes get less
+      const weight = severity * (1 - idx * 0.15);
+      themaScores[themaId] = Math.max(themaScores[themaId] || 0, weight);
+    });
+  });
+
+  // Sort themes by score
+  const sortedThemen = Object.entries(themaScores)
+    .sort((a, b) => b[1] - a[1])
+    .map(([id, score]) => ({ id, score }));
+
+  // Assign to phases
+  const assigned = new Set();
+
+  // Phase 1: Crisis/stabilization themes (high severity + crisis topics)
+  const phase1Ids = ROADMAP_PHASEN[0].schwerpunkt;
+  sortedThemen.forEach(t => {
+    if (phase1Ids.includes(t.id) && t.score > 0.3) {
+      roadmap.phasen[0].themen.push({ id: t.id, status: 'offen' });
+      assigned.add(t.id);
+    }
+  });
+
+  // Phase 2: Understanding themes
+  const phase2Ids = ROADMAP_PHASEN[1].schwerpunkt;
+  sortedThemen.forEach(t => {
+    if (!assigned.has(t.id) && phase2Ids.includes(t.id)) {
+      roadmap.phasen[1].themen.push({ id: t.id, status: 'offen' });
+      assigned.add(t.id);
+    }
+  });
+
+  // Phase 3: All remaining high-priority themes
+  sortedThemen.forEach(t => {
+    if (!assigned.has(t.id) && t.score > 0.2) {
+      roadmap.phasen[2].themen.push({ id: t.id, status: 'offen' });
+      assigned.add(t.id);
+    }
+  });
+
+  // Phase 4: Transfer themes
+  const phase4Ids = ROADMAP_PHASEN[3].schwerpunkt;
+  phase4Ids.forEach(id => {
+    if (!assigned.has(id)) {
+      roadmap.phasen[3].themen.push({ id, status: 'offen' });
+      assigned.add(id);
+    }
+  });
+
+  DB.saveRoadmap(roadmap);
+  renderRoadmap();
+}
+
+function deleteCurrentRoadmap() {
+  if (!confirm('Förderplan wirklich löschen?')) return;
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (roadmap) DB.deleteRoadmap(roadmap.id);
+  renderRoadmap();
+}
+
+function setRoadmapPhaseStatus(nr, status) {
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) return;
+  const phase = roadmap.phasen.find(p => p.nr === nr);
+  if (!phase) return;
+  phase.status = status;
+  if (status === 'aktiv' && !phase.startDatum) {
+    phase.startDatum = new Date().toISOString().split('T')[0];
+  }
+  if (status === 'erledigt') {
+    phase.endDatum = new Date().toISOString().split('T')[0];
+    // Auto-start next phase
+    const next = roadmap.phasen.find(p => p.nr === nr + 1);
+    if (next && next.status === 'offen') {
+      next.status = 'aktiv';
+      next.startDatum = new Date().toISOString().split('T')[0];
+    }
+  }
+  DB.saveRoadmap(roadmap);
+  renderRoadmap();
+}
+
+function toggleRoadmapThema(phaseNr, themaIdx) {
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) return;
+  const phase = roadmap.phasen.find(p => p.nr === phaseNr);
+  if (!phase || !phase.themen[themaIdx]) return;
+  phase.themen[themaIdx].status = phase.themen[themaIdx].status === 'abgeschlossen' ? 'offen' : 'abgeschlossen';
+  DB.saveRoadmap(roadmap);
+  renderRoadmap();
+}
+
+function addRoadmapThema(phaseNr) {
+  const sel = document.getElementById(`roadmap-add-select-${phaseNr}`);
+  if (!sel || !sel.value) return;
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) return;
+  const phase = roadmap.phasen.find(p => p.nr === phaseNr);
+  if (!phase) return;
+  // Avoid duplicates across all phases
+  const allIds = roadmap.phasen.flatMap(p => p.themen.map(t => t.id));
+  if (allIds.includes(sel.value)) {
+    alert('Dieses Thema ist bereits im Förderplan enthalten.');
+    return;
+  }
+  phase.themen.push({ id: sel.value, status: 'offen' });
+  DB.saveRoadmap(roadmap);
+  renderRoadmap();
+}
+
+function removeRoadmapThema(phaseNr, themaIdx) {
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) return;
+  const phase = roadmap.phasen.find(p => p.nr === phaseNr);
+  if (!phase) return;
+  phase.themen.splice(themaIdx, 1);
+  DB.saveRoadmap(roadmap);
+  renderRoadmap();
+}
+
+function saveRoadmapNotiz(phaseNr, text) {
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) return;
+  const phase = roadmap.phasen.find(p => p.nr === phaseNr);
+  if (!phase) return;
+  phase.notizen = text;
+  DB.saveRoadmap(roadmap);
+}
+
+function openRoadmapThema(themaId) {
+  // Find theme category and open the side panel
+  for (const kat of THEMEN_KATEGORIEN) {
+    const t = kat.themen.find(th => th.id === themaId);
+    if (t) {
+      openThemaPanel(kat.id, themaId);
+      return;
+    }
+  }
+}
+
+function druckeRoadmap() {
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  if (!s) return;
+
+  const getThemaTitel = (themaId) => {
+    for (const kat of THEMEN_KATEGORIEN) {
+      const t = kat.themen.find(th => th.id === themaId);
+      if (t) return t.titel;
+    }
+    return themaId;
+  };
+
+  const html = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+    <title>Förderplan – ${s.vorname} ${s.nachname}</title>
+    <style>
+      body{font-family:'Segoe UI',system-ui,sans-serif;margin:40px;color:#1F2937;font-size:13px;line-height:1.6;}
+      h1{font-size:20px;margin-bottom:4px;} h2{font-size:15px;margin:20px 0 8px;color:#374151;}
+      .meta{color:#6B7280;font-size:12px;margin-bottom:20px;}
+      .phase{margin-bottom:24px;padding:16px;border:1px solid #E5E7EB;border-radius:8px;page-break-inside:avoid;}
+      .phase-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+      .phase-dot{width:28px;height:28px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+      .phase-label{font-weight:700;font-size:14px;}
+      .phase-desc{font-size:12px;color:#6B7280;}
+      .thema{padding:4px 0;display:flex;align-items:center;gap:8px;}
+      .thema-check{width:14px;height:14px;border:2px solid #D1D5DB;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;}
+      .thema-check.done{background:#059669;border-color:#059669;color:#fff;}
+      .notiz{margin-top:10px;padding:10px;background:#F9FAFB;border-radius:6px;font-size:12px;font-style:italic;}
+      @media print{body{margin:20px;}.phase{border:1px solid #ccc;}}
+    </style></head><body>
+    <h1>🗺️ Förderplan — ${s.vorname} ${s.nachname}</h1>
+    <div class="meta">Erstellt: ${new Date(roadmap.erstellt).toLocaleDateString('de-DE')} · Klasse: ${s.klasse} · Gedruckt: ${new Date().toLocaleDateString('de-DE')}</div>
+    ${roadmap.phasen.map((phase, idx) => {
+      const def = ROADMAP_PHASEN[idx];
+      return `<div class="phase">
+        <div class="phase-header">
+          <div class="phase-dot" style="background:${def.farbe};">${def.nr}</div>
+          <div>
+            <div class="phase-label">${def.icon} Phase ${def.nr}: ${def.label}</div>
+            <div class="phase-desc">${def.beschreibung} · ${def.dauer}
+              ${phase.startDatum ? ` · Start: ${new Date(phase.startDatum).toLocaleDateString('de-DE')}` : ''}
+              ${phase.endDatum ? ` · Ende: ${new Date(phase.endDatum).toLocaleDateString('de-DE')}` : ''}
+              · <strong>${phase.status === 'aktiv' ? '▶ Aktiv' : phase.status === 'erledigt' ? '✓ Erledigt' : '○ Offen'}</strong>
+            </div>
+          </div>
+        </div>
+        ${phase.themen.length ? phase.themen.map(t =>
+          `<div class="thema"><span class="thema-check ${t.status === 'abgeschlossen' ? 'done' : ''}">${t.status === 'abgeschlossen' ? '✓' : ''}</span> ${getThemaTitel(t.id)}</div>`
+        ).join('') : '<div style="color:#9CA3AF;font-size:12px;">Keine Themen zugewiesen</div>'}
+        ${phase.notizen ? `<div class="notiz">${phase.notizen}</div>` : ''}
+      </div>`;
+    }).join('')}
+  </body></html>`;
+
+  const win = window.open('', '_blank');
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 600);
 }
 
 // ============================================================

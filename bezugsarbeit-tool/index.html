@@ -106,6 +106,7 @@
     <!-- Tabs -->
     <div class="profil-tabs">
       <div class="profil-tab active" data-tab="dashboard" onclick="showProfilTab('dashboard')">🏠 Übersicht</div>
+      <div class="profil-tab" data-tab="roadmap" onclick="showProfilTab('roadmap')">🗺️ Förderplan</div>
       <div class="profil-tab" data-tab="themen" onclick="showProfilTab('themen')">📋 Themenübersicht</div>
       <div class="profil-tab" data-tab="notizen" onclick="showProfilTab('notizen')">💬 Notizen & Sitzungen</div>
       <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
@@ -176,6 +177,11 @@
         </div>
 
       </div><!-- end dashboard tab -->
+
+      <!-- FÖRDERPLAN / ROADMAP -->
+      <div class="profil-tab-content" data-tab="roadmap">
+        <div id="roadmap-container"></div>
+      </div>
 
       <!-- THEMEN -->
       <div class="profil-tab-content" data-tab="themen">

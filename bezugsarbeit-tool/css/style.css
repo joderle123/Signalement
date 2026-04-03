@@ -2331,6 +2331,320 @@ select {
 }
 
 /* ============================================================
+   AMPELSYSTEM (Home Dashboard)
+   ============================================================ */
+
+.ampel-container {
+  background: #FFFBEB;
+  border: 1.5px solid #FDE68A;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.ampel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400E;
+  background: #FEF3C7;
+  border-bottom: 1px solid #FDE68A;
+}
+.ampel-count {
+  background: #F59E0B;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+.ampel-liste {
+  display: flex;
+  flex-direction: column;
+}
+.ampel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid #FEF3C7;
+}
+.ampel-item:last-child { border-bottom: none; }
+.ampel-item:hover { background: #FEF9C3; }
+.ampel-icon { font-size: 18px; flex-shrink: 0; }
+.ampel-info { flex: 1; min-width: 0; }
+.ampel-name { font-size: 13px; font-weight: 600; color: #1F2937; display: block; }
+.ampel-text { font-size: 12px; color: #78350F; }
+.ampel-detail { font-size: 11px; color: #92400E; opacity: 0.7; flex-shrink: 0; white-space: nowrap; }
+
+.ampel-rot { background: #FEF2F2; }
+.ampel-rot:hover { background: #FEE2E2; }
+.ampel-rot .ampel-text { color: #991B1B; }
+
+/* ============================================================
+   WOHLBEFINDEN-TRACKER
+   ============================================================ */
+
+.dashboard-card-wohlbefinden { grid-column: 1 / -1; }
+
+.wohlbefinden-eingabe {
+  margin-bottom: 12px;
+}
+.wohlbefinden-skala {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  justify-content: space-between;
+}
+.wohlbefinden-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 4px;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  flex: 1;
+  transition: all 0.15s;
+}
+.wohlbefinden-btn:hover {
+  border-color: var(--wb-farbe);
+  background: color-mix(in srgb, var(--wb-farbe) 8%, white);
+  transform: translateY(-2px);
+}
+.wohlbefinden-btn.selected {
+  border-color: var(--wb-farbe);
+  background: color-mix(in srgb, var(--wb-farbe) 15%, white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+.wb-emoji { font-size: 18px; line-height: 1; }
+.wb-nr { font-size: 10px; font-weight: 700; color: #6B7280; }
+.wohlbefinden-btn.selected .wb-nr { color: var(--wb-farbe); }
+
+.wohlbefinden-eingabe input[type="text"] {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 6px;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+.wohlbefinden-eingabe input[type="text"]:focus { border-color: #7F77DD; outline: none; }
+
+.wohlbefinden-chart-container {
+  height: 120px;
+  margin-bottom: 10px;
+}
+
+/* History entries */
+.wb-eintrag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 12px;
+  border-bottom: 1px solid #F3F4F6;
+}
+.wb-eintrag:last-child { border-bottom: none; }
+.wb-eintrag-score {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wb-eintrag-datum { color: #6B7280; min-width: 42px; }
+.wb-eintrag-notiz { flex: 1; color: #374151; font-style: italic; }
+.wb-eintrag .btn-icon { opacity: 0; transition: opacity 0.15s; }
+.wb-eintrag:hover .btn-icon { opacity: 0.5; }
+.wb-eintrag .btn-icon:hover { opacity: 1; }
+
+/* ============================================================
+   STÄRKEN-PROFIL
+   ============================================================ */
+
+.staerken-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.staerken-card-chart { grid-column: 1; }
+.staerken-card-sliders { grid-column: 2; }
+.staerken-card-extra { grid-column: 1 / -1; }
+
+@media (max-width: 900px) {
+  .staerken-layout { grid-template-columns: 1fr; }
+}
+
+/* Slider rows */
+.staerken-slider-row {
+  padding: 8px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+.staerken-slider-row:last-child { border-bottom: none; }
+.staerken-slider-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.staerken-slider-label > span { font-size: 18px; }
+.staerken-slider-titel { font-size: 13px; font-weight: 600; color: #1F2937; }
+.staerken-slider-desc { font-size: 11px; color: #9CA3AF; }
+
+.staerken-slider-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.staerken-range {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #E5E7EB;
+  border-radius: 3px;
+  outline: none;
+}
+.staerken-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--range-farbe, #6366F1);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.staerken-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--range-farbe, #6366F1);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.staerken-wert {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Tags */
+.staerken-extra-group {
+  margin-bottom: 16px;
+}
+.staerken-extra-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+.staerken-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.staerken-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #EEF2FF;
+  border: 1px solid #C7D2FE;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4338CA;
+}
+.staerken-tag.tag-vorbilder {
+  background: #FDF2F8;
+  border-color: #FBCFE8;
+  color: #9D174D;
+}
+.staerken-tag.tag-schutz {
+  background: #F0FDF4;
+  border-color: #BBF7D0;
+  color: #166534;
+}
+.staerken-tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: inherit;
+  opacity: 0.5;
+  padding: 0;
+  margin-left: 2px;
+}
+.staerken-tag button:hover { opacity: 1; }
+
+.staerken-tag-add {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.staerken-tag-add input {
+  flex: 1;
+  padding: 5px 10px;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.staerken-tag-add input:focus { border-color: #7F77DD; outline: none; }
+
+.staerken-schutz-vorschlaege {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.staerken-vorschlag {
+  background: #F9FAFB;
+  border: 1px dashed #D1D5DB;
+  border-radius: 14px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.staerken-vorschlag:hover {
+  background: #F0FDF4;
+  border-color: #86EFAC;
+  color: #166534;
+}
+
+.staerken-freitext {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+.staerken-freitext:focus { border-color: #7F77DD; outline: none; }
+
+/* ============================================================
    FÖRDERPLAN / ROADMAP
    ============================================================ */
 

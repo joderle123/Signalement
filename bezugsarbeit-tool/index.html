@@ -75,6 +75,7 @@
     </div>
     <div class="content">
       <div class="home-stats" id="home-stats"></div>
+      <div id="ampelsystem"></div>
       <div class="home-grid" id="home-grid"></div>
     </div>
   </div>
@@ -110,6 +111,7 @@
       <div class="profil-tab" data-tab="themen" onclick="showProfilTab('themen')">📋 Themenübersicht</div>
       <div class="profil-tab" data-tab="notizen" onclick="showProfilTab('notizen')">💬 Notizen & Sitzungen</div>
       <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
+      <div class="profil-tab" data-tab="staerken" onclick="showProfilTab('staerken')">💪 Stärken</div>
       <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Infos</div>
       <div class="profil-tab" id="profil-tab-screening" onclick="showView('screening', APP.currentSchuelerId)">🔍 Screening</div>
     </div>
@@ -159,6 +161,25 @@
                   onkeydown="if(event.key==='Enter') addDashTodo()">
                 <button class="btn btn-primary btn-sm" onclick="addDashTodo()">+</button>
               </div>
+            </div>
+          </div>
+
+          <!-- Wohlbefinden -->
+          <div class="card dashboard-card-wohlbefinden">
+            <div class="card-header">
+              <span>📈</span>
+              <div class="card-title">Wohlbefinden</div>
+            </div>
+            <div class="card-body">
+              <div class="wohlbefinden-eingabe">
+                <div class="wohlbefinden-skala" id="wohlbefinden-skala"></div>
+                <input type="text" id="wohlbefinden-notiz" placeholder="Kurze Notiz (optional)..."
+                  onkeydown="if(event.key==='Enter') saveWohlbefinden()">
+              </div>
+              <div class="wohlbefinden-chart-container">
+                <canvas id="wohlbefinden-chart" height="120"></canvas>
+              </div>
+              <div id="wohlbefinden-historie"></div>
             </div>
           </div>
 
@@ -287,6 +308,11 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- STÄRKEN-PROFIL -->
+      <div class="profil-tab-content" data-tab="staerken">
+        <div id="staerken-container"></div>
       </div>
 
       <!-- INFO -->

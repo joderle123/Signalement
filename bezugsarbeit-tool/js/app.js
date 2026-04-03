@@ -16,6 +16,9 @@ const APP = {
   screeningAntworten: {},
   scrProfilChart: null,
   scrVerlaufChart: null,
+  staerkenChart: null,
+  wohlbefindenChart: null,
+  wohlbefindenScore: null,
 };
 
 // ---- Init ----
@@ -133,6 +136,9 @@ function renderHome() {
     statsEl.innerHTML = '';
   }
 
+  // Ampelsystem — Aufmerksamkeit erforderlich
+  renderAmpelsystem(schueler, statsEl);
+
   if (gefiltert.length === 0) {
     grid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
@@ -184,6 +190,90 @@ function countStatus(schueler, status) {
   return Object.values(schueler.topicStatus || {}).filter(v => v === status).length;
 }
 
+function renderAmpelsystem(schueler, afterEl) {
+  const container = document.getElementById('ampelsystem');
+  if (!container || schueler.length === 0) { if (container) container.innerHTML = ''; return; }
+
+  const heute = new Date();
+  const alerts = [];
+
+  schueler.forEach(s => {
+    const notizen = DB.getNotizen(s.id);
+    const screenings = DB.getScreenings(s.id).filter(sc => sc.abgeschlossen);
+    const wb = DB.getWohlbefinden(s.id).sort((a, b) => b.datum.localeCompare(a.datum));
+
+    // 1. Hochrisiko
+    if (s.risiko === 'hoch') {
+      alerts.push({ typ: 'rot', icon: '🔴', schueler: s,
+        text: 'Hochrisiko-Einstufung', detail: 'Erfordert engmaschige Begleitung' });
+    }
+
+    // 2. Lange nicht gesehen (>14 Tage keine Notiz)
+    const letzteNotiz = notizen.length > 0
+      ? notizen.sort((a, b) => b.datum.localeCompare(a.datum))[0] : null;
+    if (letzteNotiz) {
+      const tageSeit = Math.floor((heute - new Date(letzteNotiz.datum)) / 86400000);
+      if (tageSeit > 21) {
+        alerts.push({ typ: 'gelb', icon: '🟡', schueler: s,
+          text: `Seit ${tageSeit} Tagen kein Eintrag`, detail: 'Kontakt aufnehmen empfohlen' });
+      }
+    } else if (notizen.length === 0) {
+      const erstelltVor = Math.floor((heute - new Date(s.erstellt)) / 86400000);
+      if (erstelltVor > 7) {
+        alerts.push({ typ: 'gelb', icon: '🟡', schueler: s,
+          text: 'Noch keine Notizen', detail: `Profil seit ${erstelltVor} Tagen ohne Einträge` });
+      }
+    }
+
+    // 3. Screening mit dringendem Ergebnis
+    const latestScr = screenings.length > 0
+      ? screenings.sort((a, b) => b.datum.localeCompare(a.datum))[0] : null;
+    if (latestScr && (latestScr.severity === 'urgent' || latestScr.severity === 'high')) {
+      const label = latestScr.severity === 'urgent' ? 'Dringendes Screening-Ergebnis' : 'Erhöhtes Screening-Ergebnis';
+      const flagCount = (latestScr.flaggedAreas || []).length;
+      alerts.push({ typ: latestScr.severity === 'urgent' ? 'rot' : 'orange', icon: latestScr.severity === 'urgent' ? '🚨' : '🟠', schueler: s,
+        text: label, detail: `${flagCount} auffällige Bereiche` });
+    }
+
+    // 4. Wohlbefinden-Trend abfallend (letzte 3 Werte sinken)
+    if (wb.length >= 3) {
+      const letzte3 = wb.slice(0, 3).map(w => w.score);
+      if (letzte3[0] < letzte3[1] && letzte3[1] < letzte3[2] && letzte3[0] <= 4) {
+        alerts.push({ typ: 'orange', icon: '📉', schueler: s,
+          text: `Wohlbefinden sinkt (${letzte3[0]}/10)`, detail: 'Abfallender Trend in den letzten Einträgen' });
+      }
+    }
+  });
+
+  if (alerts.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  // Sort: rot first, then orange, then gelb
+  const sortOrder = { rot: 0, orange: 1, gelb: 2 };
+  alerts.sort((a, b) => (sortOrder[a.typ] ?? 9) - (sortOrder[b.typ] ?? 9));
+
+  container.innerHTML = `
+    <div class="ampel-container">
+      <div class="ampel-header">
+        <span>⚡</span> Aufmerksamkeit erforderlich
+        <span class="ampel-count">${alerts.length}</span>
+      </div>
+      <div class="ampel-liste">
+        ${alerts.slice(0, 8).map(a => `
+          <div class="ampel-item ampel-${a.typ}" onclick="showView('profil','${a.schueler.id}')">
+            <span class="ampel-icon">${a.icon}</span>
+            <div class="ampel-info">
+              <span class="ampel-name">${a.schueler.vorname} ${a.schueler.nachname}</span>
+              <span class="ampel-text">${a.text}</span>
+            </div>
+            <span class="ampel-detail">${a.detail}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
 // ============================================================
 // PROFIL VIEW
 // ============================================================
@@ -226,6 +316,7 @@ function showProfilTab(tab) {
   if (tab === 'themen') renderThemen();
   if (tab === 'notizen') renderNotizen();
   if (tab === 'ziele') renderZiele();
+  if (tab === 'staerken') renderStaerken();
   if (tab === 'info') renderInfo();
 }
 
@@ -1477,6 +1568,7 @@ function exportDaten() {
     termine: DB.getTermine(),
     screenings: DB.getScreenings(),
     roadmaps: DB.getRoadmaps(),
+    wohlbefinden: DB.getWohlbefinden(),
   };
   const json = JSON.stringify(daten, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -1541,6 +1633,11 @@ function importDaten(event) {
       const alleRoadmaps = [...DB.getRoadmaps(), ...(daten.roadmaps || []).filter(r => !lokalRIds.has(r.id))];
       localStorage.setItem(DB.KEYS.ROADMAPS, JSON.stringify(alleRoadmaps));
 
+      // Wohlbefinden zusammenführen
+      const lokalWIds = new Set(DB.getWohlbefinden().map(w => w.id));
+      const alleWb = [...DB.getWohlbefinden(), ...(daten.wohlbefinden || []).filter(w => !lokalWIds.has(w.id))];
+      localStorage.setItem(DB.KEYS.WOHLBEFINDEN, JSON.stringify(alleWb));
+
       renderSidebar();
       renderHome();
       showToast(`Import erfolgreich: ${lokalMap.size} Schüler gesamt`, 'success');
@@ -1583,6 +1680,7 @@ function renderDashboard() {
   if (!s) return;
   renderDashKalender();
   renderDashTodo();
+  renderWohlbefinden();
   renderNotizbuch();
 }
 
@@ -1872,6 +1970,405 @@ function deleteNotizbuchNotiz(notizId, sektionIndex) {
   sek.notizen = sek.notizen.filter(n => n.id !== notizId);
   DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
   renderNotizbuch();
+}
+
+// ============================================================
+// WOHLBEFINDEN-TRACKER
+// ============================================================
+
+function renderWohlbefinden() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  // Render scale buttons (1-10)
+  const skala = document.getElementById('wohlbefinden-skala');
+  if (skala) {
+    const emojis = ['😫','😢','😞','😕','😐','🙂','😊','😄','😁','🤩'];
+    const farben = ['#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#22C55E','#10B981','#059669','#047857'];
+    skala.innerHTML = emojis.map((e, i) => {
+      const nr = i + 1;
+      return `<button class="wohlbefinden-btn" style="--wb-farbe:${farben[i]};"
+        onclick="selectWohlbefinden(${nr}, this)" title="${nr}/10">
+        <span class="wb-emoji">${e}</span>
+        <span class="wb-nr">${nr}</span>
+      </button>`;
+    }).join('');
+  }
+
+  // Render chart
+  renderWohlbefindenChart(sid);
+
+  // Render history (last 5)
+  const eintraege = DB.getWohlbefinden(sid).sort((a, b) => b.datum.localeCompare(a.datum));
+  const historie = document.getElementById('wohlbefinden-historie');
+  if (historie) {
+    if (eintraege.length === 0) {
+      historie.innerHTML = '<div style="color:#9CA3AF;font-size:12px;text-align:center;padding:8px;">Noch keine Einträge</div>';
+    } else {
+      historie.innerHTML = eintraege.slice(0, 5).map(w => {
+        const farben = ['','#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#22C55E','#10B981','#059669','#047857'];
+        return `<div class="wb-eintrag">
+          <span class="wb-eintrag-score" style="background:${farben[w.score]};">${w.score}</span>
+          <span class="wb-eintrag-datum">${new Date(w.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}</span>
+          ${w.notiz ? `<span class="wb-eintrag-notiz">${w.notiz}</span>` : ''}
+          <button class="btn-icon btn-xs" onclick="deleteWohlbefindenEintrag('${w.id}')" title="Löschen">✕</button>
+        </div>`;
+      }).join('');
+    }
+  }
+}
+
+function selectWohlbefinden(score, btn) {
+  // Highlight selected
+  document.querySelectorAll('.wohlbefinden-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  APP.wohlbefindenScore = score;
+}
+
+function saveWohlbefinden() {
+  const score = APP.wohlbefindenScore;
+  if (!score) return;
+  const notiz = document.getElementById('wohlbefinden-notiz')?.value || '';
+  DB.addWohlbefinden(APP.currentSchuelerId, score, notiz);
+  APP.wohlbefindenScore = null;
+  const input = document.getElementById('wohlbefinden-notiz');
+  if (input) input.value = '';
+  renderWohlbefinden();
+  showToast('Wohlbefinden gespeichert', 'success');
+}
+
+function deleteWohlbefindenEintrag(id) {
+  DB.deleteWohlbefinden(id);
+  renderWohlbefinden();
+}
+
+function renderWohlbefindenChart(schuelerId) {
+  const ctx = document.getElementById('wohlbefinden-chart');
+  if (!ctx) return;
+
+  if (APP.wohlbefindenChart) {
+    APP.wohlbefindenChart.destroy();
+    APP.wohlbefindenChart = null;
+  }
+
+  const eintraege = DB.getWohlbefinden(schuelerId)
+    .sort((a, b) => a.datum.localeCompare(b.datum))
+    .slice(-20); // Last 20 entries
+
+  if (eintraege.length < 2) {
+    APP.wohlbefindenChart = null;
+    return;
+  }
+
+  const labels = eintraege.map(w =>
+    new Date(w.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
+  );
+  const data = eintraege.map(w => w.score);
+
+  APP.wohlbefindenChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Wohlbefinden',
+        data,
+        borderColor: '#6366F1',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        borderWidth: 2.5,
+        pointBackgroundColor: data.map(v => {
+          if (v <= 3) return '#EF4444';
+          if (v <= 5) return '#F59E0B';
+          return '#22C55E';
+        }),
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        fill: true,
+        tension: 0.3,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            afterLabel: (ctx) => {
+              const entry = eintraege[ctx.dataIndex];
+              return entry.notiz ? `"${entry.notiz}"` : '';
+            },
+          },
+        },
+      },
+      scales: {
+        y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 10 } } },
+        x: { ticks: { font: { size: 10 }, maxRotation: 45 } },
+      },
+    },
+  });
+}
+
+// ============================================================
+// STÄRKEN-PROFIL MODULE
+// ============================================================
+
+function renderStaerken() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const container = document.getElementById('staerken-container');
+  if (!container) return;
+
+  const s = DB.getSchuelerById(sid);
+  const profil = s.staerkenProfil || {};
+  const ratings = profil.ratings || {};
+  const interessen = profil.interessen || [];
+  const vorbilder = profil.vorbilder || [];
+  const schutzfaktoren = profil.schutzfaktoren || [];
+  const freitext = profil.freitext || '';
+
+  // Calculate average
+  const vals = STAERKEN_DIMENSIONEN.map(d => ratings[d.id] || 0).filter(v => v > 0);
+  const avg = vals.length > 0 ? (vals.reduce((a,b) => a+b, 0) / vals.length).toFixed(1) : '–';
+  const filled = vals.length;
+
+  container.innerHTML = `
+    <div class="staerken-layout">
+      <!-- Radar Chart -->
+      <div class="card staerken-card-chart">
+        <div class="card-header">
+          <span>💪</span>
+          <div class="card-title">Stärken-Radar</div>
+          <div style="margin-left:auto;font-size:12px;color:#6B7280;">
+            Durchschnitt: <strong>${avg}</strong>/10 · ${filled}/${STAERKEN_DIMENSIONEN.length} bewertet
+          </div>
+        </div>
+        <div class="card-body" style="display:flex;justify-content:center;padding:10px;">
+          <div style="width:100%;max-width:420px;aspect-ratio:1;">
+            <canvas id="staerken-radar-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sliders -->
+      <div class="card staerken-card-sliders">
+        <div class="card-header">
+          <span>📊</span>
+          <div class="card-title">Bewertung (1–10)</div>
+        </div>
+        <div class="card-body">
+          ${STAERKEN_DIMENSIONEN.map(d => {
+            const val = ratings[d.id] || 0;
+            return `
+            <div class="staerken-slider-row">
+              <div class="staerken-slider-label">
+                <span>${d.icon}</span>
+                <div>
+                  <div class="staerken-slider-titel">${d.label}</div>
+                  <div class="staerken-slider-desc">${d.beschreibung}</div>
+                </div>
+              </div>
+              <div class="staerken-slider-control">
+                <input type="range" min="0" max="10" value="${val}"
+                  class="staerken-range" style="--range-farbe:${d.farbe};"
+                  oninput="updateStaerkenWert('${d.id}', this.value, this)">
+                <span class="staerken-wert" id="staerken-wert-${d.id}" style="color:${d.farbe};">${val || '–'}</span>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Zusatzinfos -->
+      <div class="card staerken-card-extra">
+        <div class="card-header">
+          <span>🌟</span>
+          <div class="card-title">Ressourcen & Schutzfaktoren</div>
+        </div>
+        <div class="card-body">
+          <!-- Interessen -->
+          <div class="staerken-extra-group">
+            <label>🎯 Interessen & Hobbys</label>
+            <div class="staerken-tags" id="staerken-interessen">
+              ${interessen.map((t, i) =>
+                `<span class="staerken-tag">${t} <button onclick="removeStaerkenTag('interessen',${i})">✕</button></span>`
+              ).join('')}
+            </div>
+            <div class="staerken-tag-add">
+              <input type="text" id="staerken-interessen-input" placeholder="Interesse hinzufügen..."
+                onkeydown="if(event.key==='Enter') addStaerkenTag('interessen')">
+              <button class="btn btn-secondary btn-sm" onclick="addStaerkenTag('interessen')">+</button>
+            </div>
+          </div>
+
+          <!-- Vorbilder -->
+          <div class="staerken-extra-group">
+            <label>⭐ Vorbilder & wichtige Personen</label>
+            <div class="staerken-tags" id="staerken-vorbilder">
+              ${vorbilder.map((t, i) =>
+                `<span class="staerken-tag tag-vorbilder">${t} <button onclick="removeStaerkenTag('vorbilder',${i})">✕</button></span>`
+              ).join('')}
+            </div>
+            <div class="staerken-tag-add">
+              <input type="text" id="staerken-vorbilder-input" placeholder="Person hinzufügen..."
+                onkeydown="if(event.key==='Enter') addStaerkenTag('vorbilder')">
+              <button class="btn btn-secondary btn-sm" onclick="addStaerkenTag('vorbilder')">+</button>
+            </div>
+          </div>
+
+          <!-- Schutzfaktoren -->
+          <div class="staerken-extra-group">
+            <label>🛡️ Schutzfaktoren</label>
+            <div class="staerken-tags" id="staerken-schutzfaktoren">
+              ${schutzfaktoren.map((t, i) =>
+                `<span class="staerken-tag tag-schutz">${t} <button onclick="removeStaerkenTag('schutzfaktoren',${i})">✕</button></span>`
+              ).join('')}
+            </div>
+            <div class="staerken-tag-add">
+              <input type="text" id="staerken-schutzfaktoren-input" placeholder="Schutzfaktor hinzufügen..."
+                onkeydown="if(event.key==='Enter') addStaerkenTag('schutzfaktoren')">
+              <button class="btn btn-secondary btn-sm" onclick="addStaerkenTag('schutzfaktoren')">+</button>
+            </div>
+            <div class="staerken-schutz-vorschlaege">
+              ${['Stabile Bezugsperson','Freundeskreis','Sportverein','Gute Schulleistung','Religiöse Gemeinschaft','Therapeutische Anbindung','Humor','Musisches Talent']
+                .filter(v => !schutzfaktoren.includes(v))
+                .slice(0, 5)
+                .map(v => `<button class="staerken-vorschlag" onclick="addStaerkenTagDirect('schutzfaktoren','${v}')">${v}</button>`)
+                .join('')}
+            </div>
+          </div>
+
+          <!-- Freitext -->
+          <div class="staerken-extra-group">
+            <label>📝 Weitere Beobachtungen zu Stärken</label>
+            <textarea class="staerken-freitext" id="staerken-freitext"
+              placeholder="Was kann der Schüler besonders gut? Was fällt positiv auf?"
+              onchange="saveStaerkenFreitext(this.value)">${freitext}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Render radar chart
+  renderStaerkenRadar(ratings);
+}
+
+function renderStaerkenRadar(ratings) {
+  const ctx = document.getElementById('staerken-radar-chart');
+  if (!ctx) return;
+
+  if (APP.staerkenChart) {
+    APP.staerkenChart.destroy();
+    APP.staerkenChart = null;
+  }
+
+  const labels = STAERKEN_DIMENSIONEN.map(d => d.label);
+  const data = STAERKEN_DIMENSIONEN.map(d => ratings[d.id] || 0);
+  const colors = STAERKEN_DIMENSIONEN.map(d => d.farbe);
+
+  APP.staerkenChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Stärken',
+        data,
+        backgroundColor: 'rgba(99, 102, 241, 0.15)',
+        borderColor: '#6366F1',
+        borderWidth: 2,
+        pointBackgroundColor: colors,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        r: {
+          min: 0,
+          max: 10,
+          ticks: {
+            stepSize: 2,
+            font: { size: 10 },
+            backdropColor: 'transparent',
+          },
+          pointLabels: {
+            font: { size: 11, weight: '600' },
+            color: '#374151',
+          },
+          grid: {
+            color: '#E5E7EB',
+          },
+          angleLines: {
+            color: '#E5E7EB',
+          },
+        },
+      },
+    },
+  });
+}
+
+function updateStaerkenWert(dimId, value, el) {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const s = DB.getSchuelerById(sid);
+  if (!s.staerkenProfil) s.staerkenProfil = { ratings: {}, interessen: [], vorbilder: [], schutzfaktoren: [], freitext: '' };
+  s.staerkenProfil.ratings[dimId] = parseInt(value);
+  DB.updateSchueler(sid, { staerkenProfil: s.staerkenProfil });
+
+  // Update display
+  const wertEl = document.getElementById(`staerken-wert-${dimId}`);
+  if (wertEl) wertEl.textContent = value == 0 ? '–' : value;
+
+  // Update chart
+  renderStaerkenRadar(s.staerkenProfil.ratings);
+}
+
+function addStaerkenTag(field) {
+  const input = document.getElementById(`staerken-${field}-input`);
+  if (!input || !input.value.trim()) return;
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s.staerkenProfil) s.staerkenProfil = { ratings: {}, interessen: [], vorbilder: [], schutzfaktoren: [], freitext: '' };
+  if (!s.staerkenProfil[field]) s.staerkenProfil[field] = [];
+  s.staerkenProfil[field].push(input.value.trim());
+  DB.updateSchueler(sid, { staerkenProfil: s.staerkenProfil });
+  renderStaerken();
+}
+
+function addStaerkenTagDirect(field, value) {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s.staerkenProfil) s.staerkenProfil = { ratings: {}, interessen: [], vorbilder: [], schutzfaktoren: [], freitext: '' };
+  if (!s.staerkenProfil[field]) s.staerkenProfil[field] = [];
+  if (!s.staerkenProfil[field].includes(value)) {
+    s.staerkenProfil[field].push(value);
+    DB.updateSchueler(sid, { staerkenProfil: s.staerkenProfil });
+    renderStaerken();
+  }
+}
+
+function removeStaerkenTag(field, idx) {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s.staerkenProfil || !s.staerkenProfil[field]) return;
+  s.staerkenProfil[field].splice(idx, 1);
+  DB.updateSchueler(sid, { staerkenProfil: s.staerkenProfil });
+  renderStaerken();
+}
+
+function saveStaerkenFreitext(text) {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s.staerkenProfil) s.staerkenProfil = { ratings: {}, interessen: [], vorbilder: [], schutzfaktoren: [], freitext: '' };
+  s.staerkenProfil.freitext = text;
+  DB.updateSchueler(sid, { staerkenProfil: s.staerkenProfil });
 }
 
 // ============================================================

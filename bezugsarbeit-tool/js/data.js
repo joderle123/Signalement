@@ -1599,6 +1599,22 @@ const ROADMAP_PHASEN = [
     dauer: '2–4 Wochen', schwerpunkt: ['resilienz', 'zukunftsplanung', 'soziales-netzwerk', 'lebenssinn'] },
 ];
 
+// ============================================================
+// Stärken-Profil Dimensionen
+// ============================================================
+const STAERKEN_DIMENSIONEN = [
+  { id: 'kreativitaet',   label: 'Kreativität',       icon: '🎨', farbe: '#EC4899', beschreibung: 'Künstlerische/musische Fähigkeiten, originelles Denken' },
+  { id: 'empathie',       label: 'Empathie',           icon: '💗', farbe: '#8B5CF6', beschreibung: 'Mitgefühl, emotionale Intelligenz, Fürsorge' },
+  { id: 'humor',          label: 'Humor',              icon: '😄', farbe: '#F59E0B', beschreibung: 'Humorvolles Denken, andere zum Lachen bringen' },
+  { id: 'durchhaltung',   label: 'Durchhaltevermögen', icon: '💪', farbe: '#EF4444', beschreibung: 'Ausdauer, Beharrlichkeit, nicht aufgeben' },
+  { id: 'neugier',        label: 'Neugier',            icon: '🔍', farbe: '#3B82F6', beschreibung: 'Wissbegier, Entdeckungsfreude, Offenheit' },
+  { id: 'sport',          label: 'Sport & Bewegung',   icon: '⚽', farbe: '#10B981', beschreibung: 'Sportliche Fähigkeiten, Koordination, Fitness' },
+  { id: 'sozial',         label: 'Soziale Kompetenz',  icon: '🤝', farbe: '#6366F1', beschreibung: 'Teamfähigkeit, Freundschaften, Hilfsbereitschaft' },
+  { id: 'selbststaendig', label: 'Selbstständigkeit',  icon: '🏠', farbe: '#0EA5E9', beschreibung: 'Eigenverantwortung, Alltagskompetenz, Organisieren' },
+  { id: 'mut',            label: 'Mut & Tapferkeit',   icon: '🦁', farbe: '#F97316', beschreibung: 'Sich trauen, Ängste überwinden, Stärke zeigen' },
+  { id: 'schulisch',      label: 'Schulische Stärken', icon: '📚', farbe: '#14B8A6', beschreibung: 'Fächer, Lernbereitschaft, kognitive Stärken' },
+];
+
 // Komorbiditats-Muster-Erkennung
 const KOMORBIDITÄT_MUSTER = [
   {
@@ -1655,6 +1671,7 @@ const DB = {
     TERMINE: 'cdse_termine',
     SCREENINGS: 'cdse_screenings',
     ROADMAPS: 'cdse_roadmaps',
+    WOHLBEFINDEN: 'cdse_wohlbefinden',
   },
 
   generateId() {
@@ -1843,6 +1860,27 @@ const DB = {
   deleteRoadmap(id) {
     const alle = this.getRoadmaps().filter(r => r.id !== id);
     localStorage.setItem(this.KEYS.ROADMAPS, JSON.stringify(alle));
+  },
+
+  // Wohlbefinden
+  getWohlbefinden(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.WOHLBEFINDEN) || '[]');
+    return schuelerId ? alle.filter(w => w.schuelerId === schuelerId) : alle;
+  },
+  addWohlbefinden(schuelerId, score, notiz) {
+    const alle = this.getWohlbefinden();
+    alle.push({
+      id: this.generateId(),
+      schuelerId,
+      datum: new Date().toISOString(),
+      score,
+      notiz: notiz || '',
+    });
+    localStorage.setItem(this.KEYS.WOHLBEFINDEN, JSON.stringify(alle));
+  },
+  deleteWohlbefinden(id) {
+    const alle = this.getWohlbefinden().filter(w => w.id !== id);
+    localStorage.setItem(this.KEYS.WOHLBEFINDEN, JSON.stringify(alle));
   },
 };
 

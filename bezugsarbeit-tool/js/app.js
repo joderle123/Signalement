@@ -3559,6 +3559,9 @@ function renderRoadmapPhase(roadmap, phase, idx) {
             ${phase.status === 'aktiv' ? `<button class="btn btn-sm" style="background:${def.farbe};color:#fff;border:none;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>` : ''}
             ${phase.status === 'erledigt' ? `<button class="btn btn-secondary btn-sm" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">↺ Wieder öffnen</button>` : ''}
           </div>
+
+          <!-- Phasen-Ressourcen -->
+          ${renderPhaseRessourcen(phase, idx, roadmap)}
         </div>
       </div>
     </div>`;

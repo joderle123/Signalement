@@ -2,6 +2,36 @@
 // PHASEN-RESSOURCEN — Kontextbezogene Werkzeuge pro Phase
 // ============================================================
 
+// ---- Suggestion Chips: Klickbare Vorschläge neben Freitext-Feldern ----
+function renderSuggestionChips(chips, targetId, mode) {
+  // mode: 'append' = Text an Textarea anhängen, 'replace' = Input-Wert ersetzen
+  var html = '<div class="suggestion-chips">';
+  for (var i = 0; i < chips.length; i++) {
+    var chip = chips[i];
+    var escaped = chip.replace(/'/g, "\\'");
+    html += '<button type="button" class="suggestion-chip" ' +
+      'onclick="applySuggestion(\'' + escaped + '\', \'' + targetId + '\', \'' + (mode || 'append') + '\')">' +
+      chip + '</button>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function applySuggestion(text, targetId, mode) {
+  var el = document.getElementById(targetId);
+  if (!el) return;
+  if (mode === 'replace') {
+    el.value = text;
+  } else {
+    // append mode
+    var current = el.value.trim();
+    if (current && current.indexOf(text) !== -1) return; // bereits vorhanden
+    el.value = current ? current + ', ' + text : text;
+  }
+  // Trigger onchange
+  el.dispatchEvent(new Event('change'));
+}
+
 function savePhaseData(key, value) {
   var sid = APP.currentSchuelerId;
   if (!sid) return;
@@ -69,9 +99,14 @@ function renderRessourcenPhase0() {
   // Systemkarte
   html += '<div class="phase-res-section">' +
     '<label class="phase-res-label">&#128506; Systemkarte — Wer ist involviert?</label>' +
-    '<textarea class="phase-res-textarea" ' +
+    '<textarea class="phase-res-textarea" id="systemkarte-input" ' +
       'placeholder="Eltern, Lehrer, Sozialarbeiter, Therapeut, Jugendgericht, weitere Bezugspersonen..." ' +
       'onchange="savePhaseData(\'systemkarte\', this.value)">' + escapeHtml(systemkarte) + '</textarea>' +
+    renderSuggestionChips([
+      'Mutter', 'Vater', 'Stiefvater/-mutter', 'Großeltern', 'Pflegeeltern',
+      'Klassenlehrer/in', 'Schulpsychologe', 'Schulsozialarbeiter',
+      'SCAS', 'OPJ', 'Richter', 'Therapeut/in', 'Kinderarzt'
+    ], 'systemkarte-input', 'append') +
   '</div>';
 
   // Überweisungs-Checkliste
@@ -556,9 +591,14 @@ function renderRessourcenPhase5() {
     '</div>' +
     '<div class="phase-res-accordion-body" id="fruehwarnung">' +
       '<p style="margin:0 0 8px;font-size:12px;">Gemeinsam mit dem Jugendlichen besprechen: <em>Woran merkst du, dass es dir wieder schlechter geht?</em></p>' +
-      '<textarea class="phase-res-textarea" style="min-height:80px;" ' +
+      '<textarea class="phase-res-textarea" id="fruehwarnung-input" style="min-height:80px;" ' +
         'placeholder="z.B. Schlaf wird schlechter, ziehe mich zurück, esse weniger, werde aggressiver, schwänze Schule..." ' +
         'onchange="savePhaseData(\'fruehwarnung\', this.value)">' + escapeHtml(fruehwarnung) + '</textarea>' +
+      renderSuggestionChips([
+        'Schlaf wird schlechter', 'Ziehe mich zurück', 'Esse weniger/mehr',
+        'Werde aggressiv', 'Schwänze Schule', 'Gedankenkreisen',
+        'Konzentration lässt nach', 'Weinen ohne Grund', 'Selbstverletzungs-Drang'
+      ], 'fruehwarnung-input', 'append') +
     '</div>' +
   '</div>';
 
@@ -575,16 +615,26 @@ function renderRessourcenPhase5() {
     'Mein Notfall-Werkzeug (immer dabei):'
   ];
   var werkzeugIcons = ['&#128546;', '&#128545;', '&#128552;', '&#128532;', '&#127384;'];
+  var werkzeugSuggestions = [
+    ['Musik hören', 'Spazieren gehen', 'Tagebuch schreiben', 'Mit jemandem reden', 'Weinen zulassen'],
+    ['Sport machen', 'Kissen boxen', 'Tief atmen', 'Raum verlassen', 'Eiswürfel halten'],
+    ['4-7-8 Atmung', 'Grounding (5-4-3-2-1)', 'Vertrauensperson anrufen', 'Bewegung', 'Sichere Orte vorstellen'],
+    ['Freund/in treffen', 'Online-Chat', 'Haustier kuscheln', 'Brief schreiben', 'Ehrenamt'],
+    ['Notfallnummer speichern', 'Krisenplan dabei haben', 'Atemübung', 'Lieblingslied', 'Foto von Vertrauensperson']
+  ];
 
   for (var i = 0; i < werkzeugLabels.length; i++) {
-    html += '<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 10px;border:1px solid #E5E7EB;border-radius:6px;">' +
-      '<span style="font-size:16px;flex-shrink:0;">' + werkzeugIcons[i] + '</span>' +
-      '<div style="flex:1;">' +
-        '<div style="font-size:11px;color:#6B7280;margin-bottom:2px;">' + werkzeugLabels[i] + '</div>' +
-        '<input type="text" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;" ' +
-          'placeholder="..." value="' + escapeHtml(werkzeuge[i] || '') + '" ' +
-          'onchange="saveWerkzeug(' + i + ', this.value)">' +
+    html += '<div style="background:#fff;padding:8px 10px;border:1px solid #E5E7EB;border-radius:6px;">' +
+      '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<span style="font-size:16px;flex-shrink:0;">' + werkzeugIcons[i] + '</span>' +
+        '<div style="flex:1;">' +
+          '<div style="font-size:11px;color:#6B7280;margin-bottom:2px;">' + werkzeugLabels[i] + '</div>' +
+          '<input type="text" id="werkzeug-input-' + i + '" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;" ' +
+            'placeholder="..." value="' + escapeHtml(werkzeuge[i] || '') + '" ' +
+            'onchange="saveWerkzeug(' + i + ', this.value)">' +
+        '</div>' +
       '</div>' +
+      renderSuggestionChips(werkzeugSuggestions[i], 'werkzeug-input-' + i, 'replace') +
     '</div>';
   }
   html += '</div></div>';
@@ -592,9 +642,14 @@ function renderRessourcenPhase5() {
   // Rückfallplan
   html += '<div class="phase-res-section">' +
     '<label class="phase-res-label">&#128196; Rückfallplan — Wenn es mir wieder schlecht geht</label>' +
-    '<textarea class="phase-res-textarea" style="min-height:100px;" ' +
+    '<textarea class="phase-res-textarea" id="rueckfallplan-input" style="min-height:100px;" ' +
       'placeholder="Schritt 1: Frühwarnsignale erkennen&#10;Schritt 2: Werkzeugkoffer nutzen&#10;Schritt 3: Vertrauensperson anrufen&#10;Schritt 4: Professionelle Hilfe holen&#10;Notfallnummer: ..." ' +
       'onchange="savePhaseData(\'rueckfallplan\', this.value)">' + escapeHtml(rueckfallplan) + '</textarea>' +
+    renderSuggestionChips([
+      'Frühwarnsignale erkennen', 'Werkzeugkoffer nutzen',
+      'Vertrauensperson anrufen', 'Professionelle Hilfe holen',
+      'Krisentelefon: 12345', 'Notarzt: 112'
+    ], 'rueckfallplan-input', 'append') +
   '</div>';
 
   // Links

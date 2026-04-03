@@ -1947,10 +1947,79 @@ function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
   renderNaechsteSchritte();
+  renderRueckschrittAlert();
   renderDashKalender();
   renderDashTodo();
   renderWohlbefinden();
   renderNotizbuch();
+}
+
+// ---- RÜCKSCHRITT-PROTOKOLL (SRS < 25 in letzten 3 Sitzungen) ----
+function renderRueckschrittAlert() {
+  // Prüfe ob schon ein Container existiert, sonst erstellen
+  let alertEl = document.getElementById('rueckschritt-alert');
+  if (!alertEl) {
+    const widget = document.getElementById('naechste-schritte-widget');
+    if (!widget) return;
+    alertEl = document.createElement('div');
+    alertEl.id = 'rueckschritt-alert';
+    widget.after(alertEl);
+  }
+
+  const sid = APP.currentSchuelerId;
+  const notizen = DB.getNotizen(sid)
+    .filter(n => n.soap && n.soap.srs && n.soap.srs.total > 0)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+
+  // Brauchen min. 3 Sitzungen mit SRS
+  if (notizen.length < 3) {
+    alertEl.innerHTML = '';
+    return;
+  }
+
+  const letzte3 = notizen.slice(0, 3);
+  const alleUnter25 = letzte3.every(n => n.soap.srs.total < 25);
+
+  if (!alleUnter25) {
+    alertEl.innerHTML = '';
+    return;
+  }
+
+  const scores = letzte3.map(n => n.soap.srs.total);
+  const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+
+  alertEl.innerHTML = `
+    <div class="card" style="margin-bottom:16px;border-left:4px solid #F59E0B;background:#FFFBEB;">
+      <div class="card-body" style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;">
+        <span style="font-size:24px;">⚠️</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:14px;color:#92400E;margin-bottom:4px;">
+            Verlauf auffällig — Reflexion empfohlen
+          </div>
+          <div style="font-size:12px;color:#78350F;margin-bottom:10px;">
+            Die letzten 3 Sitzungen haben alle einen SRS-Score unter 25/40 (Ø ${avg}).
+            Das kann auf Schwierigkeiten in der therapeutischen Beziehung, unpassende Methoden oder unerkannte Faktoren hinweisen.
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:10px;">
+            ${letzte3.map(n => `
+              <span style="padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;
+                background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;">
+                ${formatDatum(n.datum)}: ${n.soap.srs.total}/40
+              </span>
+            `).join('')}
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-sm" style="background:#F59E0B;color:#fff;border:none;" onclick="showProfilTab('fallformulierung')">
+              🧩 5P-Formulierung überarbeiten
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('rueckschritt-alert').innerHTML=''">
+              Ausblenden
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ---- NÄCHSTE SCHRITTE & FORTSCHRITTSBALKEN ----
@@ -2370,6 +2439,11 @@ function renderWohlbefinden() {
   // Render chart
   renderWohlbefindenChart(sid);
 
+  // Trend-Pfeil und Mini-Chart der letzten 8
+  const alleSortiert = DB.getWohlbefinden(sid).sort((a, b) => a.datum.localeCompare(b.datum));
+  const letzte8 = alleSortiert.slice(-8);
+  renderWohlbefindenMiniTrend(letzte8);
+
   // Render history (last 5)
   const eintraege = DB.getWohlbefinden(sid).sort((a, b) => b.datum.localeCompare(a.datum));
   const historie = document.getElementById('wohlbefinden-historie');
@@ -2388,6 +2462,72 @@ function renderWohlbefinden() {
       }).join('');
     }
   }
+}
+
+// ---- Wohlbefinden Mini-Trend (letzte 8 Einträge + Trend-Pfeil) ----
+function renderWohlbefindenMiniTrend(letzte8) {
+  // Finde oder erstelle den Container (zwischen Chart und Historie)
+  let container = document.getElementById('wb-mini-trend');
+  const chartContainer = document.querySelector('.wohlbefinden-chart-container');
+  if (!container && chartContainer) {
+    container = document.createElement('div');
+    container.id = 'wb-mini-trend';
+    chartContainer.after(container);
+  }
+  if (!container) return;
+
+  if (letzte8.length < 2) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const ersterWert = letzte8[0].score;
+  const letzterWert = letzte8[letzte8.length - 1].score;
+  const diff = letzterWert - ersterWert;
+
+  let trendPfeil, trendFarbe, trendLabel;
+  if (diff > 1) {
+    trendPfeil = '↑'; trendFarbe = '#059669'; trendLabel = 'Aufwärtstrend';
+  } else if (diff < -1) {
+    trendPfeil = '↓'; trendFarbe = '#DC2626'; trendLabel = 'Abwärtstrend';
+  } else {
+    trendPfeil = '→'; trendFarbe = '#6B7280'; trendLabel = 'Stabil';
+  }
+
+  const avg = (letzte8.reduce((s, w) => s + w.score, 0) / letzte8.length).toFixed(1);
+  const wbFarben = ['','#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#22C55E','#10B981','#059669','#047857'];
+
+  // Mini-Balken (Sparkline-artig)
+  const maxH = 28;
+  const barWidth = Math.min(24, Math.floor(150 / letzte8.length));
+
+  container.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #F3F4F6;">
+      <!-- Trend-Pfeil -->
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:22px;font-weight:700;color:${trendFarbe};">${trendPfeil}</span>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:${trendFarbe};">${trendLabel}</div>
+          <div style="font-size:10px;color:#9CA3AF;">Ø ${avg}/10</div>
+        </div>
+      </div>
+
+      <!-- Mini-Sparkline Balken -->
+      <div style="display:flex;align-items:flex-end;gap:2px;height:${maxH}px;flex:1;justify-content:flex-end;">
+        ${letzte8.map(w => {
+          const h = Math.max(3, (w.score / 10) * maxH);
+          return `<div title="${new Date(w.datum).toLocaleDateString('de-DE')}: ${w.score}/10"
+            style="width:${barWidth}px;height:${h}px;background:${wbFarben[w.score]};border-radius:2px 2px 0 0;opacity:0.85;"></div>`;
+        }).join('')}
+      </div>
+
+      <!-- Letzter Wert -->
+      <div style="text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:${wbFarben[letzterWert]};">${letzterWert}</div>
+        <div style="font-size:9px;color:#9CA3AF;">Aktuell</div>
+      </div>
+    </div>
+  `;
 }
 
 function selectWohlbefinden(score, btn) {

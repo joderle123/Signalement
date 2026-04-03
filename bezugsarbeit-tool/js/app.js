@@ -338,10 +338,13 @@ function renderArbeitsblaetter(themaId) {
   const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
   const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
   const modul = typeof THEMA_MODULE !== 'undefined' ? (THEMA_MODULE[themaId] || null) : null;
+  const tmDatei = typeof THERAPIE_MODULE_DATEIEN !== 'undefined' ? (THERAPIE_MODULE_DATEIEN[themaId] || null) : null;
+  const fkDatei = typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' ? (FACHKRAFT_MODULE_DATEIEN[themaId] || null) : null;
 
-  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul) return '';
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul && !tmDatei && !fkDatei) return '';
 
-  const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0;
+  const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0 || tmDatei;
+  const hasFachkraft = !!fkDatei;
 
   return `
     <div style="margin-bottom:20px;">
@@ -353,6 +356,10 @@ function renderArbeitsblaetter(themaId) {
         ${hasModul ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','tm')">
           🏥 Therapiemodul
           <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 2 · Vertiefung</span>
+        </button>` : ''}
+        ${hasFachkraft ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','fk')">
+          🎓 Fachkraft
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 3 · Fachwissen</span>
         </button>` : ''}
       </div>
 
@@ -375,7 +382,39 @@ function renderArbeitsblaetter(themaId) {
 
       ${hasModul ? `
       <div id="pt-tm-${themaId}" class="panel-tab-content" style="display:none;">
-        ${modul ? renderTherapiemodul(modul, themaId) : renderTherapiemodul_legacy(aktivitaeten, interventionen)}
+        ${tmDatei ? `
+        <div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+          <strong>Therapiemodul (Ebene 2)</strong> · Druckbare Sitzungsanleitung<br>
+          <span style="opacity:0.75;">Detaillierter Leitfaden mit Timing, Skript &amp; Übungen für jede Sitzung.</span>
+        </div>
+        <a href="therapie-module/${tmDatei}" target="_blank"
+           style="display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:10px;
+                  background:#F5F3FF;border:1.5px solid #C4B5FD;border-radius:8px;
+                  text-decoration:none;color:#5B21B6;font-size:13px;font-weight:600;">
+          <span style="font-size:20px;">🏥</span>
+          <span style="flex:1;">Therapiemodul öffnen (druckbar)</span>
+          <span style="font-size:12px;opacity:0.7;">Öffnen →</span>
+        </a>` : ''}
+        ${modul ? renderTherapiemodul(modul, themaId) : (aktivitaeten.length > 0 || interventionen.length > 0 ? renderTherapiemodul_legacy(aktivitaeten, interventionen) : '')}
+      </div>` : ''}
+
+      ${hasFachkraft ? `
+      <div id="pt-fk-${themaId}" class="panel-tab-content" style="display:none;">
+        <div style="background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#9A3412;line-height:1.5;">
+          <strong>Fachkraft-Modul (Ebene 3)</strong> · Fachliches Hintergrundwissen<br>
+          <span style="opacity:0.75;">ICD-Codes, Prävalenzen, Diagnostik, Interventionsansätze &amp; Luxemburger Hilfsangebote.</span>
+        </div>
+        <a href="fachkraft-module/${fkDatei}" target="_blank"
+           style="display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:10px;
+                  background:#FFF7ED;border:1.5px solid #FDBA74;border-radius:8px;
+                  text-decoration:none;color:#9A3412;font-size:13px;font-weight:600;">
+          <span style="font-size:20px;">🎓</span>
+          <span style="flex:1;">Fachkraft-Modul öffnen (druckbar)</span>
+          <span style="font-size:12px;opacity:0.7;">Öffnen →</span>
+        </a>
+        <div style="font-size:11px;color:var(--text-muted);padding:8px 0;">
+          <strong>Inhalte:</strong> Störungsbild &amp; Entstehung · Diagnostische Kriterien (ICD-10/11) · Evidenzbasierte Interventionen · Gesprächsführung · Luxemburger Fachstellen &amp; Anlaufstellen
+        </div>
       </div>` : ''}
     </div>`;
 }
@@ -725,13 +764,14 @@ function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
 }
 
 function switchPanelTab(themaId, tab) {
-  ['ab','tm'].forEach(t => {
+  ['ab','tm','fk'].forEach(t => {
     const el = document.getElementById(`pt-${t}-${themaId}`);
     if (el) el.style.display = t === tab ? 'block' : 'none';
   });
   const tabs = document.getElementById(`panel-tabs-${themaId}`);
-  if (tabs) tabs.querySelectorAll('.panel-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', ['ab','tm'][i] === tab);
+  if (tabs) tabs.querySelectorAll('.panel-tab').forEach(btn => {
+    const isActive = btn.getAttribute('onclick')?.includes(`'${tab}'`);
+    btn.classList.toggle('active', !!isActive);
   });
 }
 

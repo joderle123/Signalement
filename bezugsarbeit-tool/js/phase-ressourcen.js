@@ -652,4 +652,213 @@ function druckeWerkzeugkoffer() {
   w.document.close();
   w.print();
 }
-function renderRessourcenPhase6() { return ''; }
+// ---- Phase 6: Abschluss — Brief, Follow-Up, Abschlussbericht ----
+function renderRessourcenPhase6() {
+  var sid = APP.currentSchuelerId;
+  var brief = getPhaseData('briefAnSich', '');
+  var followUp = getPhaseData('followUpTermine', [
+    { datum: '', notiz: '', erledigt: false },
+    { datum: '', notiz: '', erledigt: false },
+    { datum: '', notiz: '', erledigt: false }
+  ]);
+
+  var html = '';
+
+  // Verlaufs-Zusammenfassung
+  var roadmap = DB.getRoadmap(sid);
+  if (roadmap) {
+    var erledigte = roadmap.phasen.filter(function(p) { return p.status === 'erledigt'; }).length;
+    var total = roadmap.phasen.length;
+    var notizen = DB.getNotizen(sid).filter(function(n) { return n.soap; });
+    var sitzungen = notizen.length;
+    var startDatum = roadmap.phasen[0] && roadmap.phasen[0].startDatum
+      ? new Date(roadmap.phasen[0].startDatum).toLocaleDateString('de-DE')
+      : '?';
+
+    html += '<div style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BBF7D0;border-radius:8px;padding:12px;margin-bottom:12px;">' +
+      '<div style="font-size:13px;font-weight:600;color:#166534;margin-bottom:8px;">&#127942; Verlauf auf einen Blick</div>' +
+      '<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#374151;">' +
+        '<div>&#128197; Beginn: <strong>' + startDatum + '</strong></div>' +
+        '<div>&#128172; Sitzungen: <strong>' + sitzungen + '</strong></div>' +
+        '<div>&#9989; Phasen: <strong>' + erledigte + '/' + total + '</strong></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // Brief an mich selbst
+  html += '<div class="phase-res-section">' +
+    '<label class="phase-res-label">&#9993; Brief an mein zukünftiges Ich</label>' +
+    '<p style="font-size:12px;color:#6B7280;margin:0 0 8px;">Der Jugendliche schreibt sich selbst einen Brief — ' +
+      'was er/sie gelernt hat, was er/sie sich wünscht, was er/sie nicht vergessen will.</p>' +
+    '<textarea class="phase-res-brief" ' +
+      'placeholder="Liebe/r zukünftige/r [Name],&#10;&#10;Wenn du das hier liest, erinnere dich daran, dass...&#10;&#10;Was ich gelernt habe:&#10;&#10;Was ich mir wünsche:&#10;&#10;Was ich nie vergessen will:" ' +
+      'onchange="savePhaseData(\'briefAnSich\', this.value)">' + escapeHtml(brief) + '</textarea>' +
+  '</div>';
+
+  // Follow-Up Termine
+  html += '<div class="phase-res-section">' +
+    '<label class="phase-res-label">&#128197; Follow-Up Termine nach Abschluss</label>' +
+    '<div style="display:flex;flex-direction:column;gap:6px;">';
+
+  var followLabels = ['1. Nachkontakt (4 Wochen)', '2. Nachkontakt (3 Monate)', '3. Nachkontakt (6 Monate)'];
+  for (var i = 0; i < 3; i++) {
+    var fu = followUp[i] || { datum: '', notiz: '', erledigt: false };
+    html += '<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 10px;border:1px solid #E5E7EB;border-radius:6px;">' +
+      '<span class="phase-res-checkbox ' + (fu.erledigt ? 'checked' : '') + '" ' +
+        'onclick="toggleFollowUp(' + i + ')" style="cursor:pointer;">' +
+        (fu.erledigt ? '&#10003;' : '') + '</span>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:11px;color:#6B7280;margin-bottom:2px;">' + followLabels[i] + '</div>' +
+        '<div style="display:flex;gap:6px;">' +
+          '<input type="date" style="border:1px solid #D1D5DB;border-radius:4px;padding:3px 6px;font-size:11px;" ' +
+            'value="' + (fu.datum || '') + '" onchange="saveFollowUp(' + i + ', \'datum\', this.value)">' +
+          '<input type="text" style="flex:1;border:1px solid #D1D5DB;border-radius:4px;padding:3px 6px;font-size:11px;" ' +
+            'placeholder="Notiz..." value="' + escapeHtml(fu.notiz || '') + '" ' +
+            'onchange="saveFollowUp(' + i + ', \'notiz\', this.value)">' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+  html += '</div></div>';
+
+  // Buttons
+  html += '<div class="phase-res-links">' +
+    '<button class="btn btn-primary btn-sm phase-res-btn" onclick="druckeAbschluss()">' +
+      '&#128424; Abschlussbericht drucken</button>' +
+    '<button class="btn btn-secondary btn-sm phase-res-btn" onclick="druckeWerkzeugkoffer()">' +
+      '&#129520; Werkzeugkoffer drucken</button>' +
+    '<button class="btn btn-secondary btn-sm phase-res-btn" onclick="druckeBriefAnSich()">' +
+      '&#9993; Brief drucken</button>' +
+  '</div>';
+
+  return html;
+}
+
+function toggleFollowUp(index) {
+  var followUp = getPhaseData('followUpTermine', [
+    { datum: '', notiz: '', erledigt: false },
+    { datum: '', notiz: '', erledigt: false },
+    { datum: '', notiz: '', erledigt: false }
+  ]);
+  followUp[index].erledigt = !followUp[index].erledigt;
+  savePhaseData('followUpTermine', followUp);
+  if (typeof renderRoadmap === 'function') renderRoadmap();
+}
+
+function saveFollowUp(index, key, value) {
+  var followUp = getPhaseData('followUpTermine', [
+    { datum: '', notiz: '', erledigt: false },
+    { datum: '', notiz: '', erledigt: false },
+    { datum: '', notiz: '', erledigt: false }
+  ]);
+  followUp[index][key] = value;
+  savePhaseData('followUpTermine', followUp);
+}
+
+function druckeBriefAnSich() {
+  var sid = APP.currentSchuelerId;
+  var s = DB.getSchuelerById(sid);
+  if (!s) return;
+  var brief = getPhaseData('briefAnSich', '');
+  if (!brief) { showToast('Der Brief ist noch leer.', 'error'); return; }
+
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Brief an mich</title>' +
+    '<style>body{font-family:Georgia,serif;padding:60px;max-width:550px;margin:0 auto;line-height:1.8;font-size:15px;color:#1F2937;} ' +
+    'h1{font-size:20px;color:#0EA5E9;font-family:Arial,sans-serif;} ' +
+    '.date{font-size:12px;color:#9CA3AF;margin-bottom:30px;font-family:Arial,sans-serif;} ' +
+    '.brief{white-space:pre-wrap;font-style:italic;} ' +
+    '@media print{body{padding:40px;}}</style></head><body>' +
+    '<h1>&#9993; Brief an mein zukünftiges Ich</h1>' +
+    '<div class="date">Geschrieben am ' + new Date().toLocaleDateString('de-DE') + '</div>' +
+    '<div class="brief">' + escapeHtml(brief) + '</div>' +
+    '</body></html>');
+  w.document.close();
+  w.print();
+}
+
+function druckeAbschluss() {
+  var sid = APP.currentSchuelerId;
+  var s = DB.getSchuelerById(sid);
+  if (!s) return;
+  var roadmap = DB.getRoadmap(sid);
+  if (!roadmap) return;
+
+  var notizen = DB.getNotizen(sid).filter(function(n) { return n.soap; });
+  var screenings = DB.getScreenings(sid).filter(function(sc) { return sc.abgeschlossen; });
+  var werkzeuge = getPhaseData('werkzeugkoffer', ['', '', '', '', '']);
+  var fruehwarnung = getPhaseData('fruehwarnung', '');
+  var rueckfallplan = getPhaseData('rueckfallplan', '');
+  var followUp = getPhaseData('followUpTermine', []);
+
+  var werkzeugLabels = ['Traurigkeit', 'Wut', 'Angst', 'Einsamkeit', 'Notfall'];
+  var startDatum = roadmap.phasen[0] && roadmap.phasen[0].startDatum
+    ? new Date(roadmap.phasen[0].startDatum).toLocaleDateString('de-DE') : '?';
+
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Abschlussbericht</title>' +
+    '<style>body{font-family:Arial,sans-serif;padding:40px;max-width:700px;margin:0 auto;font-size:13px;color:#1F2937;line-height:1.6;} ' +
+    'h1{font-size:20px;color:#0EA5E9;border-bottom:2px solid #0EA5E9;padding-bottom:8px;} ' +
+    'h2{font-size:15px;color:#374151;margin-top:24px;} ' +
+    '.meta{background:#F8FAFC;padding:12px;border-radius:6px;margin-bottom:20px;} ' +
+    '.meta td{padding:3px 12px 3px 0;} .meta-label{color:#6B7280;font-size:12px;} ' +
+    '.phase{padding:6px 0;border-bottom:1px solid #F3F4F6;display:flex;justify-content:space-between;} ' +
+    '.phase-status{font-size:11px;padding:2px 8px;border-radius:10px;} ' +
+    '.done{background:#DCFCE7;color:#166534;} .aktiv{background:#DBEAFE;color:#1E40AF;} .offen{background:#F3F4F6;color:#6B7280;} ' +
+    '.tool{padding:6px 10px;margin:4px 0;background:#F0FDF4;border-radius:4px;border-left:3px solid #059669;} ' +
+    '.section{padding:10px;background:#F8FAFC;border-radius:6px;border:1px solid #E2E8F0;margin:8px 0;white-space:pre-wrap;} ' +
+    '@media print{body{padding:20px;}}</style></head><body>');
+
+  w.document.write('<h1>&#127891; Abschlussbericht</h1>');
+  w.document.write('<div class="meta"><table>' +
+    '<tr><td class="meta-label">Name:</td><td><strong>' + escapeHtml(s.vorname + ' ' + s.nachname) + '</strong></td></tr>' +
+    '<tr><td class="meta-label">Beginn:</td><td>' + startDatum + '</td></tr>' +
+    '<tr><td class="meta-label">Abschluss:</td><td>' + new Date().toLocaleDateString('de-DE') + '</td></tr>' +
+    '<tr><td class="meta-label">Sitzungen:</td><td>' + notizen.length + '</td></tr>' +
+    '<tr><td class="meta-label">Screenings:</td><td>' + screenings.length + '</td></tr>' +
+    '</table></div>');
+
+  // Phasen-Übersicht
+  w.document.write('<h2>Behandlungsphasen</h2>');
+  for (var i = 0; i < roadmap.phasen.length; i++) {
+    var p = roadmap.phasen[i];
+    var def = ROADMAP_PHASEN[p.nr] || {};
+    var statusClass = p.status === 'erledigt' ? 'done' : (p.status === 'aktiv' ? 'aktiv' : 'offen');
+    var statusLabel = p.status === 'erledigt' ? 'Abgeschlossen' : (p.status === 'aktiv' ? 'Aktiv' : 'Offen');
+    w.document.write('<div class="phase"><span>' + def.icon + ' Phase ' + p.nr + ': ' + def.label + '</span>' +
+      '<span class="phase-status ' + statusClass + '">' + statusLabel + '</span></div>');
+  }
+
+  // Werkzeugkoffer
+  w.document.write('<h2>&#129520; Werkzeugkoffer</h2>');
+  for (var j = 0; j < werkzeugLabels.length; j++) {
+    if (werkzeuge[j]) {
+      w.document.write('<div class="tool"><strong>' + werkzeugLabels[j] + ':</strong> ' + escapeHtml(werkzeuge[j]) + '</div>');
+    }
+  }
+
+  if (fruehwarnung) {
+    w.document.write('<h2>&#9888; Frühwarnsignale</h2><div class="section">' + escapeHtml(fruehwarnung) + '</div>');
+  }
+  if (rueckfallplan) {
+    w.document.write('<h2>&#128196; Rückfallplan</h2><div class="section">' + escapeHtml(rueckfallplan) + '</div>');
+  }
+
+  // Follow-Up
+  var hatFollowUp = followUp.some(function(fu) { return fu.datum; });
+  if (hatFollowUp) {
+    w.document.write('<h2>&#128197; Follow-Up Termine</h2>');
+    for (var k = 0; k < followUp.length; k++) {
+      if (followUp[k].datum) {
+        w.document.write('<div class="phase"><span>' + new Date(followUp[k].datum).toLocaleDateString('de-DE') +
+          (followUp[k].notiz ? ' — ' + escapeHtml(followUp[k].notiz) : '') + '</span>' +
+          '<span class="phase-status ' + (followUp[k].erledigt ? 'done' : 'offen') + '">' +
+          (followUp[k].erledigt ? 'Erledigt' : 'Geplant') + '</span></div>');
+      }
+    }
+  }
+
+  w.document.write('</body></html>');
+  w.document.close();
+  w.print();
+}

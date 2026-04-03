@@ -2940,6 +2940,7 @@ function renderFallformulierung() {
                 <button class="btn btn-sm" style="background:${p.farbe};color:#fff;border:none;"
                   onclick="add5PTag('${p.key}')">+</button>
               </div>
+              ${render5PSuggestions(p.key, items)}
             </div>
           </div>`;
       }).join('')}
@@ -2955,6 +2956,12 @@ function renderFallformulierung() {
     </div>
 
     ${ff ? render5PPatternAnalysis(ff) : ''}
+    ${ff ? render5PKomorbidity(ff) : ''}
+
+    <!-- Radar-Chart -->
+    <div id="fivep-radar-container" style="margin-top:18px;max-width:400px;margin-left:auto;margin-right:auto;">
+      <canvas id="fivep-radar-chart" width="400" height="300"></canvas>
+    </div>
 
     <!-- Datenübernahme-Buttons -->
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
@@ -2972,8 +2979,13 @@ function renderFallformulierung() {
           ? '<button class="btn btn-secondary btn-sm" onclick="staerkenTo5P()">💪 Stärken → Protective übernehmen</button>'
           : '';
       })()}
+      ${ff ? '<button class="btn btn-secondary btn-sm" onclick="generate5PHypothese()">💡 Hypothese generieren</button>' : ''}
+      ${ff ? '<button class="btn btn-secondary btn-sm" onclick="fivePToRoadmap()">🗺️ 5P → Förderplan übernehmen</button>' : ''}
     </div>
   `;
+
+  // Radar-Chart initialisieren
+  if (ff) setTimeout(render5PRadar, 50);
 }
 
 function add5PTag(key) {
@@ -3019,6 +3031,188 @@ function delete5P() {
   if (ff) DB.deleteFallformulierung(ff.id);
   renderFallformulierung();
   showToast('5P-Formulierung zurückgesetzt', 'success');
+}
+
+// ---- 5P Suggestion Chips pro Spalte ----
+function render5PSuggestions(key, existingTags) {
+  const suggestions = {
+    presenting: SCREENING_DOMAINS.filter(d => !d.invertiert).map(d => d.label),
+    predisposing: ['Familiäre Vorbelastung', 'Traumatische Erfahrungen', 'Genetische Disposition',
+      'Vernachlässigung', 'Bindungsstörung', 'Institutionserfahrung', 'Migration/Flucht',
+      'Armut', 'Parentifizierung'],
+    precipitating: ['Schulwechsel', 'Trennung der Eltern', 'Verlust/Tod', 'Mobbing',
+      'Umzug', 'Gewalterfahrung', 'Pandemie', 'Freundschaftsbruch', 'Diagnose'],
+    perpetuating: ['Fehlende Tagesstruktur', 'Soziale Isolation', 'Substanzkonsum',
+      'Familiäre Konflikte', 'Schulvermeidung', 'Negative Denkmuster',
+      'Fehlende professionelle Hilfe', 'Mobbingsituation besteht'],
+    protective: ['Stabile Bezugsperson', 'Hobbys/Interessen', 'Schulische Stärken',
+      'Peer-Gruppe', 'Humor', 'Sport/Bewegung', 'Resilienz',
+      'Therapie/Beratung', 'Familiärer Zusammenhalt'],
+  };
+
+  const chips = (suggestions[key] || []).filter(s => !existingTags.includes(s));
+  if (chips.length === 0) return '';
+
+  return '<div class="suggestion-chips" style="margin-top:6px;">' +
+    chips.slice(0, 6).map(c =>
+      `<button type="button" class="suggestion-chip" onclick="add5PTagDirect('${key}','${c.replace(/'/g, "\\'")}')">${c}</button>`
+    ).join('') + '</div>';
+}
+
+function add5PTagDirect(key, value) {
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) ff = DB.createFallformulierung(sid);
+  if (!ff[key]) ff[key] = [];
+  if (ff[key].includes(value)) return;
+  ff[key].push(value);
+  DB.saveFallformulierung(ff);
+  renderFallformulierung();
+  // Radar aktualisieren
+  setTimeout(render5PRadar, 50);
+}
+
+// ---- Auto-Hypothese ----
+function generate5PHypothese() {
+  const sid = APP.currentSchuelerId;
+  const ff = DB.getFallformulierung(sid);
+  if (!ff) return;
+  const s = DB.getSchuelerById(sid);
+  const name = s ? s.vorname : 'Der/Die Jugendliche';
+
+  const presenting = (ff.presenting || []).join(', ') || '[keine Symptome eingetragen]';
+  const predisposing = (ff.predisposing || []).join(', ') || '[keine Risikofaktoren]';
+  const precipitating = (ff.precipitating || []).join(', ') || '[keine Auslöser]';
+  const perpetuating = (ff.perpetuating || []).join(', ') || '[keine aufrechterhaltenden Faktoren]';
+  const protective = (ff.protective || []).join(', ') || '[keine Schutzfaktoren]';
+
+  const hypothese =
+    `${name} zeigt aktuell ${presenting} (Presenting). ` +
+    `Diese Problematik ist vor dem Hintergrund von ${predisposing} (Predisposing) zu verstehen ` +
+    `und wurde ausgelöst durch ${precipitating} (Precipitating). ` +
+    `Aufrechterhalten wird die Symptomatik durch ${perpetuating} (Perpetuating). ` +
+    `Als Schutzfaktoren stehen ${protective} (Protective) zur Verfügung, ` +
+    `die im Behandlungsverlauf gezielt gestärkt werden sollten.`;
+
+  const textarea = document.getElementById('fivep-hypothese');
+  if (textarea) {
+    textarea.value = hypothese;
+    save5PHypothese(hypothese);
+  }
+  showToast('Hypothese generiert — bitte anpassen', 'success');
+}
+
+// ---- 5P → Förderplan ----
+function fivePToRoadmap() {
+  const sid = APP.currentSchuelerId;
+  const ff = DB.getFallformulierung(sid);
+  if (!ff) return;
+
+  const presenting = ff.presenting || [];
+  const suggestedThemen = [];
+
+  // Map presenting tags zu Screening-Domains zu Themen
+  for (const tag of presenting) {
+    const dom = SCREENING_DOMAINS.find(d => d.label === tag || d.id === tag.toLowerCase().replace(/\s/g, '-'));
+    if (dom && SCREENING_THEMA_MAP[dom.id]) {
+      for (const themaId of SCREENING_THEMA_MAP[dom.id]) {
+        if (!suggestedThemen.includes(themaId)) suggestedThemen.push(themaId);
+      }
+    }
+  }
+
+  if (suggestedThemen.length === 0) {
+    showToast('Keine passenden Themen gefunden. Presenting-Tags müssen Screening-Domänen entsprechen.', 'error');
+    return;
+  }
+
+  let roadmap = DB.getRoadmap(sid);
+  if (!roadmap) {
+    roadmap = DB.createRoadmap(sid);
+    DB.saveRoadmap(roadmap);
+  }
+
+  const phase4 = roadmap.phasen.find(p => p.nr === 4);
+  if (!phase4) return;
+
+  let added = 0;
+  for (const tid of suggestedThemen.slice(0, 8)) {
+    if (!phase4.themen.includes(tid)) {
+      phase4.themen.push(tid);
+      added++;
+    }
+  }
+
+  DB.saveRoadmap(roadmap);
+  showToast(`${added} Themen in Phase 4 (Intervention) übernommen`, 'success');
+}
+
+// ---- Komorbidität in 5P anzeigen ----
+function render5PKomorbidity(ff) {
+  const presenting = (ff.presenting || []).map(p => {
+    const dom = SCREENING_DOMAINS.find(d => d.label === p);
+    return dom ? dom.id : p.toLowerCase().replace(/\s/g, '-');
+  });
+
+  const matches = KOMORBIDITÄT_MUSTER.filter(m => m.bedingung(presenting));
+  if (matches.length === 0) return '';
+
+  return '<div style="margin-top:14px;">' +
+    '<div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px;">⚡ Erkannte Muster</div>' +
+    matches.map(m =>
+      '<div style="padding:8px 12px;background:#fff;border:1px solid ' + m.farbe + '40;border-left:3px solid ' + m.farbe +
+      ';border-radius:6px;margin-bottom:6px;font-size:12px;">' +
+      '<strong style="color:' + m.farbe + ';">' + m.label + '</strong><br>' +
+      '<span style="color:#6B7280;">' + m.beschreibung + '</span></div>'
+    ).join('') + '</div>';
+}
+
+// ---- 5P Radar Chart ----
+function render5PRadar() {
+  const sid = APP.currentSchuelerId;
+  const ff = DB.getFallformulierung(sid);
+  const canvas = document.getElementById('fivep-radar-chart');
+  if (!canvas || !ff) return;
+
+  // Alten Chart zerstören
+  if (window._fivepRadarChart) window._fivepRadarChart.destroy();
+
+  const data = {
+    labels: ['Presenting', 'Predisposing', 'Precipitating', 'Perpetuating', 'Protective'],
+    datasets: [{
+      label: '5P-Profil',
+      data: [
+        (ff.presenting || []).length,
+        (ff.predisposing || []).length,
+        (ff.precipitating || []).length,
+        (ff.perpetuating || []).length,
+        (ff.protective || []).length,
+      ],
+      backgroundColor: 'rgba(99, 102, 241, 0.15)',
+      borderColor: '#6366F1',
+      borderWidth: 2,
+      pointBackgroundColor: ['#EF4444', '#F97316', '#EAB308', '#3B82F6', '#22C55E'],
+      pointRadius: 5,
+    }]
+  };
+
+  window._fivepRadarChart = new Chart(canvas, {
+    type: 'radar',
+    data: data,
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          beginAtZero: true,
+          ticks: { stepSize: 1, font: { size: 11 } },
+          pointLabels: { font: { size: 12, weight: '600' } },
+          grid: { color: 'rgba(0,0,0,0.06)' },
+        }
+      }
+    }
+  });
 }
 
 function render5PPatternAnalysis(ff) {

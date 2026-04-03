@@ -197,8 +197,171 @@ function togglePhaseAccordion(id) {
     toggle.textContent = isOpen ? '\u25BC Aufklappen' : '\u25B2 Zuklappen';
   }
 }
-function renderRessourcenPhase2() { return ''; }
-function renderRessourcenPhase3() { return ''; }
+// ---- Phase 2: Exploration ----
+function renderRessourcenPhase2() {
+  var sid = APP.currentSchuelerId;
+  var screenings = DB.getScreenings(sid).filter(function(s) { return s.abgeschlossen; });
+  var hasScreening = screenings.length > 0;
+  var has5P = !!DB.getFallformulierung(sid);
+
+  var html = '';
+
+  // Buttons
+  html += '<div class="phase-res-links">' +
+    '<button class="btn ' + (hasScreening ? 'btn-secondary' : 'btn-primary') + ' btn-sm phase-res-btn" ' +
+      'onclick="showProfilTab(\'screening\')">' +
+      '&#128270; ' + (hasScreening ? 'Screening anzeigen' : 'Screening starten') + ' &#8594;</button>' +
+    '<button class="btn ' + (has5P ? 'btn-secondary' : 'btn-primary') + ' btn-sm phase-res-btn" ' +
+      'onclick="showProfilTab(\'fallformulierung\')">' +
+      '&#129513; ' + (has5P ? '5P-Formulation öffnen' : '5P-Formulation starten') + ' &#8594;</button>' +
+  '</div>';
+
+  // Status-Badges
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">' +
+    '<span class="phase-res-badge ' + (hasScreening ? 'phase-res-badge-ok' : 'phase-res-badge-wait') + '">' +
+      (hasScreening ? '&#10003; Screening durchgeführt' : '&#9203; Screening ausstehend') + '</span>' +
+    '<span class="phase-res-badge ' + (has5P ? 'phase-res-badge-ok' : 'phase-res-badge-wait') + '">' +
+      (has5P ? '&#10003; 5P-Analyse vorhanden' : '&#9203; 5P-Analyse ausstehend') + '</span>' +
+  '</div>';
+
+  // Wenn Screening vorhanden: Top-Problembereiche anzeigen
+  if (hasScreening) {
+    var latest = screenings.sort(function(a, b) {
+      return new Date(b.datum) - new Date(a.datum);
+    })[0];
+    var flagged = [];
+    for (var domId in latest.scores) {
+      var dom = SCREENING_DOMAINS.find(function(d) { return d.id === domId; });
+      if (dom && !dom.invertiert && latest.scores[domId] >= dom.cutoff) {
+        flagged.push({ id: domId, score: latest.scores[domId], domain: dom });
+      }
+    }
+    flagged.sort(function(a, b) { return b.score - a.score; });
+
+    if (flagged.length > 0) {
+      html += '<div class="phase-res-section">' +
+        '<label class="phase-res-label">&#128200; Auffällige Bereiche aus Screening</label>' +
+        '<div class="phase-res-cards">';
+      var maxShow = Math.min(flagged.length, 4);
+      for (var i = 0; i < maxShow; i++) {
+        var f = flagged[i];
+        html += '<div class="phase-res-card" style="border:1.5px solid ' + f.domain.farbe + '40;border-top:3px solid ' + f.domain.farbe + ';">' +
+          '<div style="font-size:16px;margin-bottom:4px;">' + f.domain.icon + '</div>' +
+          '<div style="font-size:12px;font-weight:600;color:#1F2937;">' + f.domain.label + '</div>' +
+          '<div style="font-size:11px;color:#6B7280;margin-top:2px;">Score: ' + f.score + ' (Cutoff: ' + f.domain.cutoff + ')</div>' +
+        '</div>';
+      }
+      html += '</div></div>';
+    }
+  }
+
+  // Hinweis
+  html += '<div class="phase-res-info phase-res-info-blue">' +
+    '&#8505; <strong>Themen-Auswahl erst nach der 5P-Formulation.</strong> Erst verstehen, dann planen.' +
+  '</div>';
+
+  return html;
+}
+
+// ---- Phase 3: Ziele & Plan ----
+function renderRessourcenPhase3() {
+  var sid = APP.currentSchuelerId;
+  var screenings = DB.getScreenings(sid).filter(function(s) { return s.abgeschlossen; });
+  var html = '';
+
+  // Buttons
+  html += '<div class="phase-res-links">' +
+    '<button class="btn btn-primary btn-sm phase-res-btn" onclick="showProfilTab(\'ziele\')">' +
+      '&#127919; SMART-Ziele definieren &#8594;</button>' +
+    '<button class="btn btn-secondary btn-sm phase-res-btn" onclick="druckeRoadmap()">' +
+      '&#128424; Behandlungsplan drucken</button>' +
+  '</div>';
+
+  // Empfohlene Themen basierend auf Screening
+  if (screenings.length > 0) {
+    var latest = screenings.sort(function(a, b) {
+      return new Date(b.datum) - new Date(a.datum);
+    })[0];
+
+    // Flagged domains über Cutoff
+    var flagged = [];
+    for (var domId in latest.scores) {
+      var dom = SCREENING_DOMAINS.find(function(d) { return d.id === domId; });
+      if (dom && !dom.invertiert && latest.scores[domId] >= dom.cutoff) {
+        flagged.push({ id: domId, score: latest.scores[domId], domain: dom });
+      }
+    }
+    flagged.sort(function(a, b) { return b.score - a.score; });
+
+    if (flagged.length > 0) {
+      html += '<div class="phase-res-section">' +
+        '<label class="phase-res-label">&#127919; Empfohlene Themen (basierend auf Screening)</label>' +
+        '<div class="phase-res-cards">';
+
+      var shown = Math.min(flagged.length, 3);
+      for (var i = 0; i < shown; i++) {
+        var f = flagged[i];
+        var themen = SCREENING_THEMA_MAP[f.id] || [];
+        var erstesThema = themen[0] || null;
+        var themaTitel = '';
+
+        if (erstesThema) {
+          for (var k = 0; k < THEMEN_KATEGORIEN.length; k++) {
+            var kat = THEMEN_KATEGORIEN[k];
+            for (var j = 0; j < kat.themen.length; j++) {
+              if (kat.themen[j].id === erstesThema) {
+                themaTitel = kat.themen[j].titel;
+                break;
+              }
+            }
+            if (themaTitel) break;
+          }
+        }
+
+        var onclick = erstesThema ? 'onclick="openRoadmapThema(\'' + erstesThema + '\')"' : '';
+        html += '<div class="phase-res-card" style="border:1.5px solid ' + f.domain.farbe + '40;border-top:3px solid ' + f.domain.farbe + ';" ' + onclick + '>' +
+          '<div style="font-size:16px;margin-bottom:4px;">' + f.domain.icon + '</div>' +
+          '<div style="font-size:12px;font-weight:600;color:#1F2937;">' + f.domain.label + '</div>' +
+          '<div style="font-size:11px;color:#6B7280;margin-top:2px;">Score: ' + f.score + '</div>' +
+          (themaTitel ? '<div style="font-size:11px;color:' + f.domain.farbe + ';margin-top:4px;">&#8594; ' + themaTitel + '</div>' : '') +
+        '</div>';
+      }
+      html += '</div></div>';
+    }
+  }
+
+  // Accordion: SMART-Ziele Anleitung
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'smart-anleitung\')">' +
+      '<span class="phase-res-accordion-title">&#128161; Wie formuliere ich SMART-Ziele?</span>' +
+      '<span class="phase-res-accordion-toggle" id="smart-anleitung-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="smart-anleitung">' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>S</strong>pezifisch — Was genau soll erreicht werden?<br>' +
+        '<em>Nicht: &laquo;Besser in der Schule&raquo; — Sondern: &laquo;Mathe-Note von 5 auf 4 verbessern&raquo;</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-green">' +
+        '<strong>M</strong>essbar — Woran erkenne ich den Fortschritt?<br>' +
+        '<em>&laquo;3 von 5 Hausaufgaben pro Woche abgeben&raquo;</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-yellow">' +
+        '<strong>A</strong>ttraktiv — Warum ist das Ziel wichtig für den Jugendlichen?<br>' +
+        '<em>&laquo;Damit ich meinen Wunschberuf ergreifen kann&raquo;</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-purple">' +
+        '<strong>R</strong>ealistisch — Ist es in dieser Phase erreichbar?<br>' +
+        '<em>Kleine Schritte statt Riesensprünge</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>T</strong>erminiert — Bis wann?<br>' +
+        '<em>&laquo;Bis Ende des Semesters&raquo; oder &laquo;In 4 Wochen&raquo;</em>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  return html;
+}
 function renderRessourcenPhase4() { return ''; }
 function renderRessourcenPhase5() { return ''; }
 function renderRessourcenPhase6() { return ''; }

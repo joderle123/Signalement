@@ -20,6 +20,7 @@ const APP = {
   wohlbefindenChart: null,
   wohlbefindenScore: null,
   protStimmung: null,
+  protPVT: null,
 };
 
 // ---- Init ----
@@ -318,6 +319,8 @@ function showProfilTab(tab) {
   if (tab === 'notizen') renderNotizen();
   if (tab === 'ziele') renderZiele();
   if (tab === 'staerken') renderStaerken();
+  if (tab === 'fallformulierung') renderFallformulierung();
+  if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
 }
 
@@ -983,6 +986,12 @@ function addProtokoll() {
   const assessment  = document.getElementById('prot-assessment').value.trim();
   const plan        = document.getElementById('prot-plan').value.trim();
   const materialien = document.getElementById('prot-materialien').value.trim();
+  const pvtState    = APP.protPVT || '';
+  const srsR = parseInt(document.getElementById('srs-relationship')?.value || 0);
+  const srsG = parseInt(document.getElementById('srs-goals')?.value || 0);
+  const srsA = parseInt(document.getElementById('srs-approach')?.value || 0);
+  const srsO = parseInt(document.getElementById('srs-overall')?.value || 0);
+  const srsTotal = srsR + srsG + srsA + srsO;
 
   if (!datum) { showToast('Datum ist ein Pflichtfeld', 'error'); return; }
   if (!subjektiv && !objektiv && !assessment && !plan) {
@@ -999,16 +1008,19 @@ function addProtokoll() {
   }
 
   const stimmungMap = { 'sehr-schlecht': '😫', 'schlecht': '😞', 'neutral': '😐', 'gut': '🙂', 'sehr-gut': '😄' };
+  const pvtLabels = { safe: '🟢 Sicher & offen', activated: '🟡 Angespannt', frozen: '🟣 Eingefroren' };
 
   const text = [
     `🗓 ${datum}  |  ⏱ ${dauer} Min.  |  📍 ${setting}${nr ? `  |  #${nr}` : ''}`,
     stimmung ? `\nStimmung: ${stimmungMap[stimmung] || ''} ${stimmung}` : '',
+    pvtState ? `\n🧠 Polyvagal: ${pvtLabels[pvtState] || pvtState}` : '',
     themaLabel ? `\n📌 Thema: ${themaLabel}` : '',
     subjektiv  ? `\n━━━ S (Subjektiv) ━━━\n${subjektiv}` : '',
     objektiv   ? `\n━━━ O (Objektiv) ━━━\n${objektiv}` : '',
     assessment ? `\n━━━ A (Assessment) ━━━\n${assessment}` : '',
     plan       ? `\n━━━ P (Plan) ━━━\n${plan}` : '',
     materialien ? `\n📎 Materialien: ${materialien}` : '',
+    `\n📊 SRS: ${srsTotal}/40 (Beziehung: ${srsR}, Ziele: ${srsG}, Ansatz: ${srsA}, Gesamt: ${srsO})`,
   ].filter(Boolean).join('');
 
   DB.createNotiz({
@@ -1017,7 +1029,7 @@ function addProtokoll() {
     inhalt: text,
     kategorie: 'session',
     themaId: themaId || null,
-    soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel },
+    soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel, pvt: pvtState, srs: { relationship: srsR, goals: srsG, approach: srsA, overall: srsO, total: srsTotal } },
   });
 
   // Also log wellbeing if mood was set
@@ -1035,6 +1047,24 @@ function addProtokoll() {
   APP.protStimmung = null;
   document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
 
+  // Reset PVT
+  APP.protPVT = null;
+  document.querySelectorAll('.pvt-card').forEach(b => b.classList.remove('selected'));
+  const pvtEmpf = document.getElementById('pvt-empfehlung');
+  if (pvtEmpf) pvtEmpf.style.display = 'none';
+
+  // Reset SRS
+  ['relationship', 'goals', 'approach', 'overall'].forEach(id => {
+    const slider = document.getElementById(`srs-${id}`);
+    if (slider) { slider.value = 5; }
+    const valEl = document.getElementById(`srs-val-${id}`);
+    if (valEl) valEl.textContent = '5';
+  });
+  const srsTotal2 = document.getElementById('srs-total-zahl');
+  if (srsTotal2) srsTotal2.textContent = '20';
+  const srsAlert2 = document.getElementById('srs-alert');
+  if (srsAlert2) srsAlert2.style.display = 'none';
+
   renderNotizen();
   showToast('Protokoll gespeichert (SOAP)', 'success');
 }
@@ -1043,6 +1073,43 @@ function selectProtStimmung(btn) {
   document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   APP.protStimmung = btn.dataset.val;
+}
+
+// ---- Polyvagal Check-in ----
+function selectPVT(btn) {
+  document.querySelectorAll('.pvt-card').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  APP.protPVT = btn.dataset.val;
+
+  const empf = document.getElementById('pvt-empfehlung');
+  const map = {
+    safe: { farbe: '#059669', bg: '#F0FDF4', border: '#BBF7D0',
+      text: '✅ <strong>Tiefenarbeit möglich.</strong> Starte mit dem geplanten Thema. Der Jugendliche ist reguliert und kontaktfähig.' },
+    activated: { farbe: '#D97706', bg: '#FFFBEB', border: '#FDE68A',
+      text: '⚠️ <strong>Erst regulieren.</strong> Starte mit Atemübungen oder Körperübungen. Kein neues Material heute — Stabilisierung hat Vorrang.' },
+    frozen: { farbe: '#7C3AED', bg: '#F5F3FF', border: '#DDD6FE',
+      text: '🟣 <strong>Nur Grounding heute.</strong> 5-4-3-2-1 Übung, sanfte Bewegung, warmes Getränk. Die Allianz halten ist das Ziel dieser Sitzung.' },
+  };
+  const m = map[APP.protPVT];
+  empf.style.display = 'block';
+  empf.style.background = m.bg;
+  empf.style.borderColor = m.border;
+  empf.style.color = m.farbe;
+  empf.innerHTML = m.text;
+}
+
+// ---- SRS Session Rating Scale ----
+function updateSRS() {
+  const ids = ['relationship', 'goals', 'approach', 'overall'];
+  let total = 0;
+  ids.forEach(id => {
+    const val = parseInt(document.getElementById(`srs-${id}`).value);
+    document.getElementById(`srs-val-${id}`).textContent = val;
+    total += val;
+  });
+  document.getElementById('srs-total-zahl').textContent = total;
+  const alert = document.getElementById('srs-alert');
+  if (alert) alert.style.display = total < 25 ? 'block' : 'none';
 }
 
 function populateProtThemen() {
@@ -2511,6 +2578,462 @@ function saveStaerkenFreitext(text) {
   if (!s.staerkenProfil) s.staerkenProfil = { ratings: {}, interessen: [], vorbilder: [], schutzfaktoren: [], freitext: '' };
   s.staerkenProfil.freitext = text;
   DB.updateSchueler(sid, { staerkenProfil: s.staerkenProfil });
+}
+
+// ============================================================
+// 5P-FALLFORMULIERUNG
+// ============================================================
+
+function renderFallformulierung() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const container = document.getElementById('fallformulierung-container');
+  if (!container) return;
+
+  let ff = DB.getFallformulierung(sid);
+
+  const pDefs = [
+    { key: 'presenting',     label: 'Presenting',     icon: '🔴', farbe: '#EF4444', bg: '#FEF2F2', desc: 'Aktuelle Symptome & Probleme' },
+    { key: 'predisposing',   label: 'Predisposing',   icon: '🟠', farbe: '#F97316', bg: '#FFF7ED', desc: 'Vorbestehende Risikofaktoren' },
+    { key: 'precipitating',  label: 'Precipitating',  icon: '🟡', farbe: '#EAB308', bg: '#FEFCE8', desc: 'Auslösende Ereignisse' },
+    { key: 'perpetuating',   label: 'Perpetuating',   icon: '🔵', farbe: '#3B82F6', bg: '#EFF6FF', desc: 'Aufrechterhaltende Faktoren' },
+    { key: 'protective',     label: 'Protective',     icon: '🟢', farbe: '#22C55E', bg: '#F0FDF4', desc: 'Schutzfaktoren & Ressourcen' },
+  ];
+
+  container.innerHTML = `
+    <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div>
+        <h3 style="margin:0;font-size:18px;">🧩 5P-Fallformulierung</h3>
+        <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Klinische Fallkonzeption nach dem 5P-Modell</p>
+      </div>
+      ${ff ? `<button class="btn btn-outline btn-sm" onclick="delete5P()">🗑 Zurücksetzen</button>` : ''}
+    </div>
+
+    <div class="fivep-grid">
+      ${pDefs.map(p => {
+        const items = ff ? (ff[p.key] || []) : [];
+        return `
+          <div class="fivep-column" style="border-top:3px solid ${p.farbe};">
+            <div class="fivep-col-header" style="background:${p.bg};">
+              <span class="fivep-col-icon">${p.icon}</span>
+              <div>
+                <strong>${p.label}</strong>
+                <div class="fivep-col-desc">${p.desc}</div>
+              </div>
+            </div>
+            <div class="fivep-col-body">
+              <div class="fivep-tags" id="fivep-tags-${p.key}">
+                ${items.map((item, i) => `
+                  <span class="fivep-tag" style="background:${p.bg};border-color:${p.farbe};">
+                    ${item}
+                    <span class="fivep-tag-del" onclick="remove5PTag('${p.key}', ${i})">×</span>
+                  </span>
+                `).join('')}
+              </div>
+              <div class="fivep-input-row">
+                <input type="text" class="fivep-input" id="fivep-input-${p.key}"
+                  placeholder="Faktor eingeben…"
+                  onkeydown="if(event.key==='Enter'){add5PTag('${p.key}')}" />
+                <button class="btn btn-sm" style="background:${p.farbe};color:#fff;border:none;"
+                  onclick="add5PTag('${p.key}')">+</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>
+
+    <div class="fivep-hypothese" style="margin-top:20px;">
+      <label style="font-weight:600;font-size:13px;display:block;margin-bottom:6px;">
+        💡 Klinische Hypothese / Formulierung
+      </label>
+      <textarea class="fivep-hypothese-input" id="fivep-hypothese" rows="4"
+        placeholder="Zusammenfassende klinische Hypothese basierend auf den 5P-Faktoren…"
+        onchange="save5PHypothese(this.value)">${ff ? (ff.hypothese || '') : ''}</textarea>
+    </div>
+
+    ${ff ? render5PPatternAnalysis(ff) : ''}
+  `;
+}
+
+function add5PTag(key) {
+  const input = document.getElementById(`fivep-input-${key}`);
+  const val = input.value.trim();
+  if (!val) return;
+
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) {
+    ff = DB.createFallformulierung(sid);
+  }
+  if (!ff[key]) ff[key] = [];
+  ff[key].push(val);
+  DB.saveFallformulierung(ff);
+  input.value = '';
+  renderFallformulierung();
+}
+
+function remove5PTag(key, idx) {
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) return;
+  ff[key].splice(idx, 1);
+  DB.saveFallformulierung(ff);
+  renderFallformulierung();
+}
+
+function save5PHypothese(text) {
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) {
+    ff = DB.createFallformulierung(sid);
+  }
+  ff.hypothese = text;
+  DB.saveFallformulierung(ff);
+}
+
+function delete5P() {
+  if (!confirm('5P-Formulierung wirklich zurücksetzen?')) return;
+  const sid = APP.currentSchuelerId;
+  const ff = DB.getFallformulierung(sid);
+  if (ff) DB.deleteFallformulierung(ff.id);
+  renderFallformulierung();
+  showToast('5P-Formulierung zurückgesetzt', 'success');
+}
+
+function render5PPatternAnalysis(ff) {
+  const total = (ff.presenting?.length || 0) + (ff.predisposing?.length || 0) +
+    (ff.precipitating?.length || 0) + (ff.perpetuating?.length || 0) + (ff.protective?.length || 0);
+  if (total < 3) return '';
+
+  const protCount = ff.protective?.length || 0;
+  const riskCount = (ff.presenting?.length || 0) + (ff.perpetuating?.length || 0);
+  const ratio = riskCount > 0 ? (protCount / riskCount).toFixed(1) : '∞';
+
+  let insight = '';
+  if (protCount === 0) {
+    insight = '⚠️ <strong>Keine Schutzfaktoren identifiziert.</strong> Fokus auf Ressourcenarbeit empfohlen.';
+  } else if (protCount < riskCount) {
+    insight = `⚡ <strong>Risiko-Schutz-Verhältnis ${ratio}:1</strong> — Schutzfaktoren gezielt aufbauen.`;
+  } else {
+    insight = `✅ <strong>Gutes Gleichgewicht</strong> (Verhältnis ${ratio}:1) — Schutzfaktoren sind vorhanden.`;
+  }
+
+  const perpCount = ff.perpetuating?.length || 0;
+  let perpHint = '';
+  if (perpCount >= 2) {
+    perpHint = `<br>🔄 <strong>${perpCount} aufrechterhaltende Faktoren</strong> — diese sind oft der beste Hebel für Veränderung.`;
+  }
+
+  return `
+    <div class="fivep-analysis" style="margin-top:18px;">
+      <div class="fivep-analysis-header">📊 Muster-Analyse</div>
+      <div class="fivep-analysis-body">
+        <div class="fivep-analysis-stat">
+          <span class="fivep-stat-num">${total}</span>
+          <span class="fivep-stat-label">Faktoren gesamt</span>
+        </div>
+        <div class="fivep-analysis-stat">
+          <span class="fivep-stat-num" style="color:#EF4444;">${riskCount}</span>
+          <span class="fivep-stat-label">Risikofaktoren</span>
+        </div>
+        <div class="fivep-analysis-stat">
+          <span class="fivep-stat-num" style="color:#22C55E;">${protCount}</span>
+          <span class="fivep-stat-label">Schutzfaktoren</span>
+        </div>
+      </div>
+      <div class="fivep-analysis-insight">${insight}${perpHint}</div>
+    </div>
+  `;
+}
+
+// ============================================================
+// BERICHTE (SCAS, Elternbrief, Kollegenübergabe)
+// ============================================================
+
+function renderBerichte() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const container = document.getElementById('berichte-container');
+  if (!container) return;
+
+  const s = DB.getSchuelerById(sid);
+  const name = `${s.vorname} ${s.nachname}`;
+
+  container.innerHTML = `
+    <div class="section-header" style="margin-bottom:18px;">
+      <h3 style="margin:0;font-size:18px;">📄 Berichts-Generator</h3>
+      <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Automatisierte Berichte auf Basis der Falldaten</p>
+    </div>
+
+    <div class="berichte-grid">
+      <div class="bericht-card" onclick="generateBericht('scas')">
+        <div class="bericht-card-icon" style="background:#FEF2F2;color:#EF4444;">🏛</div>
+        <div class="bericht-card-body">
+          <strong>SCAS-Bericht</strong>
+          <p>Offizieller Bericht für den Service Central d'Assistance Sociale</p>
+        </div>
+        <span class="bericht-card-arrow">→</span>
+      </div>
+
+      <div class="bericht-card" onclick="generateBericht('eltern')">
+        <div class="bericht-card-icon" style="background:#EFF6FF;color:#3B82F6;">👨‍👩‍👧</div>
+        <div class="bericht-card-body">
+          <strong>Elternbrief</strong>
+          <p>Zusammenfassung für Eltern/Erziehungsberechtigte</p>
+        </div>
+        <span class="bericht-card-arrow">→</span>
+      </div>
+
+      <div class="bericht-card" onclick="generateBericht('uebergabe')">
+        <div class="bericht-card-icon" style="background:#F0FDF4;color:#22C55E;">🤝</div>
+        <div class="bericht-card-body">
+          <strong>Kollegenübergabe</strong>
+          <p>Fallübergabe an Kolleg:innen mit allen relevanten Informationen</p>
+        </div>
+        <span class="bericht-card-arrow">→</span>
+      </div>
+    </div>
+
+    <div id="bericht-preview" style="display:none;margin-top:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h4 style="margin:0;" id="bericht-preview-titel"></h4>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-sm btn-outline" onclick="druckeBericht()">🖨 Drucken</button>
+          <button class="btn btn-sm btn-outline" onclick="document.getElementById('bericht-preview').style.display='none'">✕ Schließen</button>
+        </div>
+      </div>
+      <div class="bericht-inhalt" id="bericht-inhalt"></div>
+    </div>
+  `;
+}
+
+function generateBericht(typ) {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+
+  const name = `${s.vorname} ${s.nachname}`;
+  const notizen = DB.getNotizen().filter(n => n.schuelerId === sid && n.kategorie === 'session');
+  const screenings = DB.getScreenings(sid);
+  const latestScr = screenings.length ? screenings.sort((a, b) => b.datum.localeCompare(a.datum))[0] : null;
+  const roadmap = DB.getRoadmap(sid);
+  const ff = DB.getFallformulierung(sid);
+  const wb = DB.getWohlbefinden(sid);
+  const heute = new Date().toLocaleDateString('de-DE');
+
+  const preview = document.getElementById('bericht-preview');
+  const titel = document.getElementById('bericht-preview-titel');
+  const inhalt = document.getElementById('bericht-inhalt');
+
+  let html = '';
+
+  if (typ === 'scas') {
+    titel.textContent = '🏛 SCAS-Bericht';
+    html = generateSCASBericht(s, name, notizen, latestScr, roadmap, ff, wb, heute);
+  } else if (typ === 'eltern') {
+    titel.textContent = '👨‍👩‍👧 Elternbrief';
+    html = generateElternbrief(s, name, notizen, roadmap, wb, heute);
+  } else if (typ === 'uebergabe') {
+    titel.textContent = '🤝 Kollegenübergabe';
+    html = generateUebergabe(s, name, notizen, latestScr, roadmap, ff, wb, heute);
+  }
+
+  inhalt.innerHTML = html;
+  preview.style.display = 'block';
+  preview.scrollIntoView({ behavior: 'smooth' });
+}
+
+function generateSCASBericht(s, name, notizen, scr, roadmap, ff, wb, heute) {
+  const alter = s.geburtsdatum ? Math.floor((Date.now() - new Date(s.geburtsdatum)) / 31557600000) : '—';
+  const sitzungen = notizen.length;
+  const ersteSitzung = sitzungen ? notizen.sort((a, b) => a.datum.localeCompare(b.datum))[0].datum : '—';
+  const letzteSitzung = sitzungen ? notizen.sort((a, b) => b.datum.localeCompare(a.datum))[0].datum : '—';
+
+  let scrAbschnitt = '';
+  if (scr) {
+    const flagged = Object.entries(scr.antworten || {}).filter(([, v]) => v >= 3);
+    scrAbschnitt = `
+      <h4>3. Screening-Ergebnisse</h4>
+      <p>Datum: ${scr.datum} | Schweregrad: <strong>${scr.severity || 'nicht bewertet'}</strong></p>
+      ${flagged.length ? `<p>Auffällige Bereiche: ${flagged.map(([k]) => k).join(', ')}</p>` : '<p>Keine auffälligen Bereiche.</p>'}
+    `;
+  }
+
+  let ffAbschnitt = '';
+  if (ff) {
+    ffAbschnitt = `
+      <h4>4. Klinische Fallformulierung (5P-Modell)</h4>
+      ${ff.presenting?.length ? `<p><strong>Presenting:</strong> ${ff.presenting.join(', ')}</p>` : ''}
+      ${ff.predisposing?.length ? `<p><strong>Predisposing:</strong> ${ff.predisposing.join(', ')}</p>` : ''}
+      ${ff.precipitating?.length ? `<p><strong>Precipitating:</strong> ${ff.precipitating.join(', ')}</p>` : ''}
+      ${ff.perpetuating?.length ? `<p><strong>Perpetuating:</strong> ${ff.perpetuating.join(', ')}</p>` : ''}
+      ${ff.protective?.length ? `<p><strong>Protective:</strong> ${ff.protective.join(', ')}</p>` : ''}
+      ${ff.hypothese ? `<p><em>Hypothese: ${ff.hypothese}</em></p>` : ''}
+    `;
+  }
+
+  let roadmapAbschnitt = '';
+  if (roadmap) {
+    const aktiv = roadmap.phasen.find(p => p.status === 'aktiv');
+    roadmapAbschnitt = `
+      <h4>5. Förderplan</h4>
+      <p>Aktuelle Phase: <strong>${aktiv ? `Phase ${aktiv.nr}` : 'Keine aktive Phase'}</strong></p>
+      ${aktiv?.themen?.length ? `<p>Aktuelle Themen: ${aktiv.themen.map(t => t.titel || t).join(', ')}</p>` : ''}
+    `;
+  }
+
+  return `
+    <div class="bericht-doc">
+      <div class="bericht-header-block">
+        <strong>CDSE Luxembourg — Service Bezugspädagogik</strong><br>
+        <strong>Bericht für SCAS</strong><br>
+        Datum: ${heute}
+      </div>
+      <hr>
+      <h4>1. Stammdaten</h4>
+      <table class="bericht-table">
+        <tr><td><strong>Name:</strong></td><td>${name}</td></tr>
+        <tr><td><strong>Geburtsdatum:</strong></td><td>${s.geburtsdatum || '—'}</td></tr>
+        <tr><td><strong>Alter:</strong></td><td>${alter} Jahre</td></tr>
+        <tr><td><strong>Klasse:</strong></td><td>${s.klasse || '—'}</td></tr>
+        <tr><td><strong>Eintritt:</strong></td><td>${s.eintrittsdatum || '—'}</td></tr>
+        <tr><td><strong>Risikostufe:</strong></td><td>${capitalize(s.risiko || 'niedrig')}</td></tr>
+      </table>
+
+      <h4>2. Betreuungsverlauf</h4>
+      <p>Anzahl Sitzungen: <strong>${sitzungen}</strong></p>
+      <p>Erste Sitzung: ${ersteSitzung} | Letzte Sitzung: ${letzteSitzung}</p>
+      ${wb.length ? `<p>Letzter Wohlbefindens-Score: ${wb.sort((a, b) => b.datum.localeCompare(a.datum))[0].score}/10</p>` : ''}
+
+      ${scrAbschnitt}
+      ${ffAbschnitt}
+      ${roadmapAbschnitt}
+
+      <h4>6. Empfehlung</h4>
+      <p><em>[Hier Empfehlung einfügen]</em></p>
+
+      <div class="bericht-footer">
+        <br><br>
+        <p>_________________________<br>Bezugspädagoge/in<br>CDSE Luxembourg</p>
+      </div>
+    </div>
+  `;
+}
+
+function generateElternbrief(s, name, notizen, roadmap, wb, heute) {
+  const sitzungen = notizen.length;
+
+  let fortschritt = '';
+  if (wb.length >= 2) {
+    const sorted = wb.sort((a, b) => a.datum.localeCompare(b.datum));
+    const first = sorted[0].score;
+    const last = sorted[sorted.length - 1].score;
+    const diff = last - first;
+    if (diff > 0) fortschritt = `Das Wohlbefinden von ${s.vorname} hat sich positiv entwickelt.`;
+    else if (diff < 0) fortschritt = `${s.vorname} braucht weiterhin Unterstützung im Bereich Wohlbefinden.`;
+    else fortschritt = `Das Wohlbefinden von ${s.vorname} ist stabil.`;
+  }
+
+  let themen = '';
+  if (roadmap) {
+    const aktiv = roadmap.phasen.find(p => p.status === 'aktiv');
+    if (aktiv?.themen?.length) {
+      themen = `<p>Aktuelle Schwerpunkte: ${aktiv.themen.map(t => t.titel || t).join(', ')}</p>`;
+    }
+  }
+
+  return `
+    <div class="bericht-doc">
+      <div class="bericht-header-block">
+        <strong>CDSE Luxembourg</strong><br>
+        Datum: ${heute}
+      </div>
+      <hr>
+      <p>Liebe Eltern von <strong>${name}</strong>,</p>
+
+      <p>wir möchten Ihnen einen kurzen Überblick über den Stand der Betreuung Ihres Kindes geben.</p>
+
+      <p><strong>Bisherige Sitzungen:</strong> ${sitzungen} Sitzung${sitzungen !== 1 ? 'en' : ''}</p>
+      ${fortschritt ? `<p><strong>Entwicklung:</strong> ${fortschritt}</p>` : ''}
+      ${themen}
+
+      <p>Wir arbeiten weiterhin daran, ${s.vorname} bestmöglich zu unterstützen.
+      Bei Fragen stehen wir Ihnen jederzeit zur Verfügung.</p>
+
+      <p>Mit freundlichen Grüßen,<br>
+      <em>Bezugspädagogisches Team — CDSE Luxembourg</em></p>
+    </div>
+  `;
+}
+
+function generateUebergabe(s, name, notizen, scr, roadmap, ff, wb, heute) {
+  const sitzungen = notizen.length;
+  const letzteNotizen = notizen.sort((a, b) => b.datum.localeCompare(a.datum)).slice(0, 3);
+
+  return `
+    <div class="bericht-doc">
+      <div class="bericht-header-block">
+        <strong>Kollegenübergabe — Vertraulich</strong><br>
+        Datum: ${heute}
+      </div>
+      <hr>
+      <h4>Stammdaten</h4>
+      <p><strong>${name}</strong> | Klasse: ${s.klasse || '—'} | Risiko: ${capitalize(s.risiko || 'niedrig')} | Sitzungen: ${sitzungen}</p>
+
+      ${ff ? `
+        <h4>5P-Fallformulierung</h4>
+        ${ff.presenting?.length ? `<p>🔴 <strong>Presenting:</strong> ${ff.presenting.join(', ')}</p>` : ''}
+        ${ff.predisposing?.length ? `<p>🟠 <strong>Predisposing:</strong> ${ff.predisposing.join(', ')}</p>` : ''}
+        ${ff.precipitating?.length ? `<p>🟡 <strong>Precipitating:</strong> ${ff.precipitating.join(', ')}</p>` : ''}
+        ${ff.perpetuating?.length ? `<p>🔵 <strong>Perpetuating:</strong> ${ff.perpetuating.join(', ')}</p>` : ''}
+        ${ff.protective?.length ? `<p>🟢 <strong>Protective:</strong> ${ff.protective.join(', ')}</p>` : ''}
+        ${ff.hypothese ? `<p><em>${ff.hypothese}</em></p>` : ''}
+      ` : ''}
+
+      ${roadmap ? (() => {
+        const aktiv = roadmap.phasen.find(p => p.status === 'aktiv');
+        return `
+          <h4>Förderplan</h4>
+          <p>Phase: ${aktiv ? aktiv.nr : '—'} | Themen: ${aktiv?.themen?.length ? aktiv.themen.map(t => t.titel || t).join(', ') : 'Keine'}</p>
+        `;
+      })() : ''}
+
+      ${wb.length ? (() => {
+        const latest = wb.sort((a, b) => b.datum.localeCompare(a.datum))[0];
+        return `<h4>Wohlbefinden</h4><p>Letzter Score: ${latest.score}/10 (${new Date(latest.datum).toLocaleDateString('de-DE')})</p>`;
+      })() : ''}
+
+      <h4>Letzte Sitzungen</h4>
+      ${letzteNotizen.length ? letzteNotizen.map(n => `
+        <div class="bericht-notiz-block">
+          <strong>${n.datum}</strong>
+          <p>${(n.inhalt || '').substring(0, 300)}${n.inhalt?.length > 300 ? '…' : ''}</p>
+        </div>
+      `).join('') : '<p>Keine Sitzungsprotokolle vorhanden.</p>'}
+
+      <h4>Wichtige Hinweise für die Übernahme</h4>
+      <p><em>[Hier individuelle Hinweise einfügen]</em></p>
+    </div>
+  `;
+}
+
+function druckeBericht() {
+  const inhalt = document.getElementById('bericht-inhalt').innerHTML;
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>Bericht</title>
+    <style>
+      body { font-family: 'Segoe UI', sans-serif; padding: 40px; font-size: 13px; line-height: 1.6; color: #1F2937; }
+      h4 { margin-top: 20px; color: #374151; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; }
+      table { border-collapse: collapse; width: 100%; }
+      td { padding: 4px 12px 4px 0; }
+      .bericht-header-block { text-align: center; margin-bottom: 12px; }
+      .bericht-notiz-block { background: #F9FAFB; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; }
+      .bericht-footer { margin-top: 40px; }
+      @media print { body { padding: 20px; } }
+    </style>
+  </head><body>${inhalt}</body></html>`);
+  w.document.close();
+  w.print();
 }
 
 // ============================================================

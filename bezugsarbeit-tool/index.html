@@ -112,7 +112,9 @@
       <div class="profil-tab" data-tab="notizen" onclick="showProfilTab('notizen')">💬 Notizen & Sitzungen</div>
       <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
       <div class="profil-tab" data-tab="staerken" onclick="showProfilTab('staerken')">💪 Stärken</div>
+      <div class="profil-tab" data-tab="fallformulierung" onclick="showProfilTab('fallformulierung')">🧩 5P-Analyse</div>
       <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Infos</div>
+      <div class="profil-tab" data-tab="berichte" onclick="showProfilTab('berichte')">📄 Berichte</div>
       <div class="profil-tab" id="profil-tab-screening" onclick="showView('screening', APP.currentSchuelerId)">🔍 Screening</div>
     </div>
 
@@ -285,6 +287,29 @@
             </div>
           </div>
 
+          <!-- Polyvagal Check-in -->
+          <div class="pvt-checkin">
+            <label class="pvt-label">🧠 Polyvagal Check-in — Wo ist der Jugendliche heute?</label>
+            <div class="pvt-cards" id="pvt-cards">
+              <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVT(this)">
+                <span class="pvt-dot" style="background:#22C55E;"></span>
+                <span class="pvt-card-titel">Sicher & offen</span>
+                <span class="pvt-card-desc">Entspannt, neugierig, Augenkontakt, bereit zu arbeiten</span>
+              </button>
+              <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVT(this)">
+                <span class="pvt-dot" style="background:#F59E0B;"></span>
+                <span class="pvt-card-titel">Angespannt / unruhig</span>
+                <span class="pvt-card-desc">Nervös, ausweichend, Körper angespannt, schwer erreichbar</span>
+              </button>
+              <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVT(this)">
+                <span class="pvt-dot" style="background:#8B5CF6;"></span>
+                <span class="pvt-card-titel">Eingefroren / abwesend</span>
+                <span class="pvt-card-desc">Leer, einsilbig, kein Kontakt, dissoziiert wirkend</span>
+              </button>
+            </div>
+            <div id="pvt-empfehlung" class="pvt-empfehlung" style="display:none;"></div>
+          </div>
+
           <!-- Themen-Verknüpfung -->
           <div class="form-group">
             <label>Bearbeitetes Thema</label>
@@ -325,6 +350,49 @@
             </div>
           </div>
 
+          <!-- SRS Session Rating Scale -->
+          <div class="srs-section">
+            <div class="srs-header">📊 Sitzungsbewertung <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span></div>
+            <div class="srs-sliders">
+              <div class="srs-row">
+                <label>Beziehung <span>— Ich fühlte mich gehört und verstanden</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-relationship" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-relationship">7</span>
+                </div>
+              </div>
+              <div class="srs-row">
+                <label>Ziele & Themen <span>— Wir haben an dem gearbeitet was wichtig war</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-goals" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-goals">7</span>
+                </div>
+              </div>
+              <div class="srs-row">
+                <label>Ansatz & Methode <span>— Die Vorgehensweise hat gepasst</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-approach" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-approach">7</span>
+                </div>
+              </div>
+              <div class="srs-row">
+                <label>Gesamteindruck <span>— Insgesamt war diese Sitzung gut für mich</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-overall" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-overall">7</span>
+                </div>
+              </div>
+            </div>
+            <div class="srs-total">
+              <span class="srs-total-zahl" id="srs-total-zahl">28</span>
+              <span class="srs-total-text">von 40 Punkten</span>
+            </div>
+            <div id="srs-alert" class="srs-alert" style="display:none;">
+              ⚠️ <strong>Score unter 25 — Reflexion empfohlen.</strong><br>
+              Mögliche Fragen: Was könnte die Beziehung belastet haben? War das Thema zu früh? War der Schüler reguliert genug?
+            </div>
+          </div>
+
           <div class="protokoll-footer">
             <button class="btn btn-primary" onclick="addProtokoll()">📋 Protokoll speichern</button>
           </div>
@@ -354,6 +422,16 @@
       <!-- STÄRKEN-PROFIL -->
       <div class="profil-tab-content" data-tab="staerken">
         <div id="staerken-container"></div>
+      </div>
+
+      <!-- 5P-FALLFORMULIERUNG -->
+      <div class="profil-tab-content" data-tab="fallformulierung">
+        <div id="fallformulierung-container"></div>
+      </div>
+
+      <!-- BERICHTE -->
+      <div class="profil-tab-content" data-tab="berichte">
+        <div id="berichte-container"></div>
       </div>
 
       <!-- INFO -->

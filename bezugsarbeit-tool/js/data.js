@@ -1672,6 +1672,7 @@ const DB = {
     SCREENINGS: 'cdse_screenings',
     ROADMAPS: 'cdse_roadmaps',
     WOHLBEFINDEN: 'cdse_wohlbefinden',
+    FALLFORMULIERUNGEN: 'cdse_fallformulierungen',
   },
 
   generateId() {
@@ -1881,6 +1882,42 @@ const DB = {
   deleteWohlbefinden(id) {
     const alle = this.getWohlbefinden().filter(w => w.id !== id);
     localStorage.setItem(this.KEYS.WOHLBEFINDEN, JSON.stringify(alle));
+  },
+
+  // Fallformulierungen (5P)
+  getFallformulierungen(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.FALLFORMULIERUNGEN) || '[]');
+    return schuelerId ? alle.filter(f => f.schuelerId === schuelerId) : alle;
+  },
+  getFallformulierung(schuelerId) {
+    const all = this.getFallformulierungen(schuelerId);
+    return all.length ? all.sort((a, b) => b.erstellt.localeCompare(a.erstellt))[0] : null;
+  },
+  saveFallformulierung(ff) {
+    const alle = this.getFallformulierungen();
+    const idx = alle.findIndex(f => f.id === ff.id);
+    ff.geaendert = new Date().toISOString();
+    if (idx >= 0) { alle[idx] = ff; } else { alle.push(ff); }
+    localStorage.setItem(this.KEYS.FALLFORMULIERUNGEN, JSON.stringify(alle));
+    return ff;
+  },
+  createFallformulierung(schuelerId) {
+    return {
+      id: this.generateId(),
+      schuelerId,
+      presenting: [],
+      predisposing: [],
+      precipitating: [],
+      perpetuating: [],
+      protective: [],
+      hypothese: '',
+      erstellt: new Date().toISOString(),
+      geaendert: new Date().toISOString(),
+    };
+  },
+  deleteFallformulierung(id) {
+    const alle = this.getFallformulierungen().filter(f => f.id !== id);
+    localStorage.setItem(this.KEYS.FALLFORMULIERUNGEN, JSON.stringify(alle));
   },
 };
 

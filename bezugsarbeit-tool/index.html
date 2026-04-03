@@ -104,18 +104,17 @@
       </div>
     </div>
 
-    <!-- Tabs -->
+    <!-- Tabs — therapeutische Reihenfolge -->
     <div class="profil-tabs">
       <div class="profil-tab active" data-tab="dashboard" onclick="showProfilTab('dashboard')">🏠 Übersicht</div>
-      <div class="profil-tab" data-tab="roadmap" onclick="showProfilTab('roadmap')">🗺️ Förderplan</div>
-      <div class="profil-tab" data-tab="themen" onclick="showProfilTab('themen')">📋 Themenübersicht</div>
-      <div class="profil-tab" data-tab="notizen" onclick="showProfilTab('notizen')">💬 Notizen & Sitzungen</div>
-      <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
-      <div class="profil-tab" data-tab="staerken" onclick="showProfilTab('staerken')">💪 Stärken</div>
+      <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Aufnahme</div>
+      <div class="profil-tab" data-tab="screening" onclick="showProfilTab('screening')">🔍 Screening</div>
       <div class="profil-tab" data-tab="fallformulierung" onclick="showProfilTab('fallformulierung')">🧩 5P-Analyse</div>
-      <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Infos</div>
+      <div class="profil-tab" data-tab="staerken" onclick="showProfilTab('staerken')">💪 Stärken</div>
+      <div class="profil-tab" data-tab="roadmap" onclick="showProfilTab('roadmap')">🗺️ Förderplan</div>
+      <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
+      <div class="profil-tab" data-tab="themen" onclick="showProfilTab('themen')">📋 Themen & Sitzungen</div>
       <div class="profil-tab" data-tab="berichte" onclick="showProfilTab('berichte')">📄 Berichte</div>
-      <div class="profil-tab" id="profil-tab-screening" onclick="showView('screening', APP.currentSchuelerId)">🔍 Screening</div>
     </div>
 
     <!-- Tab-Inhalte -->
@@ -123,6 +122,9 @@
 
       <!-- DASHBOARD -->
       <div class="profil-tab-content active" data-tab="dashboard">
+        <!-- Nächste Schritte & Fortschritt -->
+        <div id="naechste-schritte-widget"></div>
+
         <div class="dashboard-grid">
 
           <!-- Mini-Kalender -->
@@ -201,17 +203,23 @@
 
       </div><!-- end dashboard tab -->
 
+      <!-- SCREENING (eingebettet) -->
+      <div class="profil-tab-content" data-tab="screening">
+        <div id="screening-embedded-container"></div>
+      </div>
+
       <!-- FÖRDERPLAN / ROADMAP -->
       <div class="profil-tab-content" data-tab="roadmap">
         <div id="roadmap-container"></div>
       </div>
 
-      <!-- THEMEN -->
+      <!-- THEMEN & SITZUNGEN (zusammengelegt) -->
       <div class="profil-tab-content" data-tab="themen">
         <div id="themen-container"></div>
+        <div id="sitzungen-im-themen-tab" style="margin-top:24px;"></div>
       </div>
 
-      <!-- NOTIZEN -->
+      <!-- NOTIZEN (kein eigener Tab, aber über showProfilTab('notizen') erreichbar) -->
       <div class="profil-tab-content" data-tab="notizen">
 
         <!-- Modus-Toggle -->

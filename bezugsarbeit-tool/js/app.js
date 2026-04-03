@@ -306,8 +306,10 @@ function renderProfil(schuelerId) {
 
 function showProfilTab(tab) {
   APP.currentProfilTab = tab;
+  // Notizen-Tab hat keinen eigenen Header-Tab, wird dem Themen-Tab zugeordnet
+  const highlightTab = (tab === 'notizen') ? 'themen' : tab;
   document.querySelectorAll('.profil-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.tab === tab);
+    t.classList.toggle('active', t.dataset.tab === highlightTab);
   });
   document.querySelectorAll('.profil-tab-content').forEach(c => {
     c.classList.toggle('active', c.dataset.tab === tab);
@@ -315,11 +317,12 @@ function showProfilTab(tab) {
 
   if (tab === 'dashboard') renderDashboard();
   if (tab === 'roadmap') renderRoadmap();
-  if (tab === 'themen') renderThemen();
+  if (tab === 'themen') { renderThemen(); renderSitzungenImThemenTab(); }
   if (tab === 'notizen') renderNotizen();
   if (tab === 'ziele') renderZiele();
   if (tab === 'staerken') renderStaerken();
   if (tab === 'fallformulierung') renderFallformulierung();
+  if (tab === 'screening') renderScreeningEmbedded();
   if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
 }
@@ -1770,7 +1773,7 @@ function druckeProfilbericht(schuelerId) {
 // ============================================================
 function exportDaten() {
   const daten = {
-    version: 2,
+    version: 3,
     exportiert: new Date().toISOString(),
     schueler: DB.getSchueler(),
     notizen: DB.getNotizen(),
@@ -1778,6 +1781,7 @@ function exportDaten() {
     screenings: DB.getScreenings(),
     roadmaps: DB.getRoadmaps(),
     wohlbefinden: DB.getWohlbefinden(),
+    fallformulierungen: DB.getFallformulierungen(),
   };
   const json = JSON.stringify(daten, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -1847,6 +1851,13 @@ function importDaten(event) {
       const alleWb = [...DB.getWohlbefinden(), ...(daten.wohlbefinden || []).filter(w => !lokalWIds.has(w.id))];
       localStorage.setItem(DB.KEYS.WOHLBEFINDEN, JSON.stringify(alleWb));
 
+      // Fallformulierungen (5P) zusammenführen
+      if (daten.fallformulierungen) {
+        const lokalFFIds = new Set(DB.getFallformulierungen().map(f => f.id));
+        const alleFF = [...DB.getFallformulierungen(), ...daten.fallformulierungen.filter(f => !lokalFFIds.has(f.id))];
+        localStorage.setItem(DB.KEYS.FALLFORMULIERUNGEN, JSON.stringify(alleFF));
+      }
+
       renderSidebar();
       renderHome();
       showToast(`Import erfolgreich: ${lokalMap.size} Schüler gesamt`, 'success');
@@ -1887,10 +1898,114 @@ function uploadFoto(schuelerId) {
 function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
+  renderNaechsteSchritte();
   renderDashKalender();
   renderDashTodo();
   renderWohlbefinden();
   renderNotizbuch();
+}
+
+// ---- NÄCHSTE SCHRITTE & FORTSCHRITTSBALKEN ----
+function renderNaechsteSchritte() {
+  const widget = document.getElementById('naechste-schritte-widget');
+  if (!widget) return;
+
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  const ff = DB.getFallformulierung(sid);
+  const profil = s.staerkenProfil || {};
+  const staerkenBewertet = Object.values(profil.ratings || {}).filter(v => v > 0).length;
+  const roadmap = DB.getRoadmap(sid);
+  const notizen = DB.getNotizen(sid);
+  const ziele = s.ziele || [];
+  const topicStatus = s.topicStatus || {};
+  const aktiveThemen = Object.values(topicStatus).filter(v => v === 'in-bearbeitung').length;
+  const abgeschlosseneThemen = Object.values(topicStatus).filter(v => v === 'abgeschlossen').length;
+
+  // Phasen definieren
+  const phasen = [
+    { id: 'info', label: 'Aufnahme', icon: 'ℹ️', done: !!(s.allgemeineNotizen || s.geburtsdatum), tab: 'info' },
+    { id: 'screening', label: 'Screening', icon: '🔍', done: screenings.length > 0, tab: 'screening' },
+    { id: '5p', label: '5P-Analyse', icon: '🧩', done: !!(ff && ((ff.presenting||[]).length + (ff.predisposing||[]).length + (ff.precipitating||[]).length + (ff.perpetuating||[]).length + (ff.protective||[]).length) >= 3), tab: 'fallformulierung' },
+    { id: 'staerken', label: 'Stärken', icon: '💪', done: staerkenBewertet >= 3, tab: 'staerken' },
+    { id: 'roadmap', label: 'Förderplan', icon: '🗺️', done: !!roadmap, tab: 'roadmap' },
+    { id: 'ziele', label: 'Ziele', icon: '🎯', done: ziele.length > 0, tab: 'ziele' },
+    { id: 'themen', label: 'Themen', icon: '📋', done: aktiveThemen > 0 || abgeschlosseneThemen > 0, tab: 'themen' },
+    { id: 'berichte', label: 'Berichte', icon: '📄', done: false, tab: 'berichte' },
+  ];
+
+  const erledigte = phasen.filter(p => p.done).length;
+  const fortschritt = Math.round((erledigte / phasen.length) * 100);
+
+  // Nächster Schritt ermitteln
+  const naechster = phasen.find(p => !p.done);
+
+  // Empfehlungen basierend auf nächstem Schritt
+  const empfehlungen = [];
+  if (!phasen[0].done) empfehlungen.push({ icon: 'ℹ️', text: 'Allgemeine Infos und Hintergrund erfassen', tab: 'info' });
+  if (!phasen[1].done) empfehlungen.push({ icon: '🔍', text: 'Erstes Screening durchführen', tab: 'screening' });
+  if (phasen[1].done && !phasen[2].done) empfehlungen.push({ icon: '🧩', text: '5P-Analyse aus Screening-Daten befüllen', tab: 'fallformulierung' });
+  if (!phasen[3].done) empfehlungen.push({ icon: '💪', text: 'Stärken-Profil bewerten (min. 3 Dimensionen)', tab: 'staerken' });
+  if (phasen[1].done && !phasen[4].done) empfehlungen.push({ icon: '🗺️', text: 'Förderplan aus Screening generieren', tab: 'roadmap' });
+
+  widget.innerHTML = `
+    <div class="card" style="margin-bottom:20px;border-left:4px solid #6366F1;">
+      <div class="card-header">
+        <span>🧭</span>
+        <div class="card-title">Therapeutischer Fortschritt</div>
+        <div style="margin-left:auto;font-size:13px;font-weight:600;color:#6366F1;">${fortschritt}%</div>
+      </div>
+      <div class="card-body">
+        <!-- Fortschrittsbalken -->
+        <div style="margin-bottom:16px;">
+          <div class="progress-bar" style="height:10px;border-radius:5px;">
+            <div class="progress-bar-fill" style="width:${fortschritt}%;background:linear-gradient(90deg,#6366F1,#8B5CF6);border-radius:5px;transition:width 0.5s;"></div>
+          </div>
+        </div>
+
+        <!-- Phasen-Schritte -->
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;">
+          ${phasen.map(p => `
+            <div onclick="showProfilTab('${p.tab}')" style="
+              display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;
+              background:${p.done ? '#F0FDF4' : '#F9FAFB'};
+              border:1px solid ${p.done ? '#BBF7D0' : '#E5E7EB'};
+              color:${p.done ? '#15803D' : '#6B7280'};
+            ">
+              <span style="font-size:13px;">${p.done ? '✅' : p.icon}</span>
+              ${p.label}
+            </div>
+          `).join('')}
+        </div>
+
+        ${empfehlungen.length > 0 ? `
+        <!-- Empfehlungen -->
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;font-weight:600;color:#6366F1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
+            Nächste Schritte
+          </div>
+          ${empfehlungen.slice(0, 3).map(e => `
+            <div onclick="showProfilTab('${e.tab}')" style="
+              display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:13px;color:#374151;
+              border-bottom:1px solid #F3F4F6;
+            ">
+              <span>${e.icon}</span>
+              <span>${e.text}</span>
+              <span style="margin-left:auto;color:#9CA3AF;font-size:11px;">→</span>
+            </div>
+          `).join('')}
+        </div>
+        ` : `
+        <div style="text-align:center;padding:8px;color:#15803D;font-size:13px;font-weight:500;">
+          ✅ Alle Phasen abgeschlossen — Berichte können generiert werden!
+        </div>
+        `}
+      </div>
+    </div>
+  `;
 }
 
 // ---- MINI KALENDER ----
@@ -2652,6 +2767,24 @@ function renderFallformulierung() {
     </div>
 
     ${ff ? render5PPatternAnalysis(ff) : ''}
+
+    <!-- Datenübernahme-Buttons -->
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      ${(function(){
+        const scrs = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+        return scrs.length > 0
+          ? '<button class="btn btn-secondary btn-sm" onclick="screeningTo5P()">🔍 Screening → Presenting übernehmen</button>'
+          : '';
+      })()}
+      ${(function(){
+        const schul = DB.getSchuelerById(sid);
+        const p = schul ? (schul.staerkenProfil || {}) : {};
+        const has = Object.values(p.ratings || {}).filter(v => v > 0).length > 0 || (p.schutzfaktoren || []).length > 0;
+        return has
+          ? '<button class="btn btn-secondary btn-sm" onclick="staerkenTo5P()">💪 Stärken → Protective übernehmen</button>'
+          : '';
+      })()}
+    </div>
   `;
 }
 
@@ -3969,4 +4102,247 @@ function severityBadgeHtml(severity, large = false) {
   const s = map[severity] || map.low;
   const sz = large ? 'font-size:13px;padding:6px 14px;' : 'font-size:11px;padding:3px 10px;';
   return `<span class="scr-severity" style="background:${s.bg};color:${s.color};${sz}border-radius:20px;font-weight:600;">${s.label}</span>`;
+}
+
+// ============================================================
+// SCREENING EMBEDDED (im Profil-Tab)
+// ============================================================
+function renderScreeningEmbedded() {
+  const container = document.getElementById('screening-embedded-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+
+  const screenings = DB.getScreenings(sid);
+  const abgeschlossene = screenings.filter(sc => sc.abgeschlossen)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const latestScr = abgeschlossene[0] || null;
+
+  let scrSummary = '';
+  if (latestScr) {
+    const flagged = latestScr.flaggedAreas || [];
+    const domainLabels = flagged.map(areaId => {
+      const d = (typeof SCREENING_DOMAINS !== 'undefined') ? SCREENING_DOMAINS.find(dom => dom.id === areaId) : null;
+      return d ? `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;background:${d.farbe}18;border:1px solid ${d.farbe}40;border-radius:12px;font-size:11px;color:${d.farbe};">${d.icon} ${d.label}</span>` : areaId;
+    }).join(' ');
+
+    scrSummary = `
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-header">
+          <span>📊</span>
+          <div class="card-title">Letztes Screening</div>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+            ${renderSeverityBadge(latestScr.severity, false)}
+            <span style="font-size:12px;color:#6B7280;">${new Date(latestScr.datum).toLocaleDateString('de-DE')}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          ${flagged.length > 0 ? `
+            <div style="margin-bottom:12px;">
+              <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:6px;">Auffällige Bereiche (${flagged.length})</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">${domainLabels}</div>
+            </div>
+          ` : '<div style="color:#059669;font-size:13px;">✅ Keine auffälligen Bereiche</div>'}
+
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button class="btn btn-secondary btn-sm" onclick="showView('screening', '${sid}')">📊 Ergebnisse anzeigen</button>
+            <button class="btn btn-primary btn-sm" onclick="screeningTo5P()">🧩 → 5P-Analyse übernehmen</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  container.innerHTML = `
+    <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div>
+        <h3 style="margin:0;font-size:18px;">🔍 Screening</h3>
+        <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Multi-dimensionales Belastungsscreening</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary btn-sm" onclick="showView('screening', '${sid}')">
+          ${abgeschlossene.length > 0 ? '📊 Ergebnisse öffnen' : '+ Neues Screening'}
+        </button>
+      </div>
+    </div>
+
+    ${scrSummary}
+
+    <!-- Screening-Historie -->
+    ${abgeschlossene.length > 0 ? `
+    <div class="card">
+      <div class="card-header">
+        <span>📋</span>
+        <div class="card-title">Screening-Verlauf</div>
+        <span style="margin-left:auto;font-size:12px;color:#6B7280;">${abgeschlossene.length} durchgeführt</span>
+      </div>
+      <div class="card-body">
+        ${abgeschlossene.map(scr => {
+          const flagged = scr.flaggedAreas || [];
+          return `
+          <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #F3F4F6;cursor:pointer;"
+               onclick="showView('screening', '${sid}')">
+            ${renderSeverityBadge(scr.severity, false)}
+            <span style="font-size:13px;font-weight:500;">${new Date(scr.datum).toLocaleDateString('de-DE')}</span>
+            <span style="font-size:12px;color:#6B7280;">${flagged.length} auffällige Bereiche</span>
+            <span style="margin-left:auto;color:#9CA3AF;">→</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : `
+    <div style="text-align:center;padding:40px;color:#6B7280;">
+      <div style="font-size:32px;margin-bottom:12px;">🔍</div>
+      <p style="font-size:14px;margin-bottom:12px;">Noch kein Screening durchgeführt</p>
+      <p style="font-size:12px;color:#9CA3AF;margin-bottom:16px;">
+        Das Screening hilft, Belastungsbereiche systematisch zu erfassen und den Förderbedarf zu ermitteln.
+      </p>
+      <button class="btn btn-primary" onclick="showView('screening', '${sid}')">+ Erstes Screening starten</button>
+    </div>`}
+
+    <div class="screening-disclaimer" style="margin-top:16px;">
+      <strong>⚠️ Hinweis:</strong> Dieses Screening-Tool ist kein diagnostisches Instrument und ersetzt keine klinische Diagnose.
+    </div>
+  `;
+}
+
+// ============================================================
+// FEATURE-VERBINDUNGEN: Screening → 5P
+// ============================================================
+function screeningTo5P() {
+  const sid = APP.currentSchuelerId;
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  if (screenings.length === 0) {
+    showToast('Kein abgeschlossenes Screening vorhanden', 'error');
+    return;
+  }
+
+  const latestScr = screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+  const flagged = latestScr.flaggedAreas || [];
+
+  if (flagged.length === 0) {
+    showToast('Keine auffälligen Bereiche im Screening', 'info');
+    return;
+  }
+
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) {
+    ff = DB.createFallformulierung(sid);
+  }
+
+  // Flagged areas → Presenting (Symptome)
+  const presentingNeu = [];
+  flagged.forEach(areaId => {
+    const domain = (typeof SCREENING_DOMAINS !== 'undefined') ? SCREENING_DOMAINS.find(d => d.id === areaId) : null;
+    const label = domain ? `${domain.icon} ${domain.label}` : areaId;
+    const score = latestScr.scores[areaId] || 0;
+    const entry = `${label} (Screening-Score: ${score})`;
+    if (!ff.presenting.includes(entry)) {
+      presentingNeu.push(entry);
+    }
+  });
+
+  if (presentingNeu.length === 0) {
+    showToast('Screening-Daten bereits in 5P vorhanden', 'info');
+    return;
+  }
+
+  ff.presenting = [...ff.presenting, ...presentingNeu];
+  DB.saveFallformulierung(ff);
+  showToast(`${presentingNeu.length} Bereiche in 5P-Presenting übernommen`, 'success');
+  showProfilTab('fallformulierung');
+}
+
+// ============================================================
+// FEATURE-VERBINDUNGEN: Stärken → 5P Protective
+// ============================================================
+function staerkenTo5P() {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+
+  const profil = s.staerkenProfil || {};
+  const ratings = profil.ratings || {};
+  const schutzfaktoren = profil.schutzfaktoren || [];
+  const interessen = profil.interessen || [];
+
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) {
+    ff = DB.createFallformulierung(sid);
+  }
+
+  const protectiveNeu = [];
+
+  // Hohe Stärken-Werte (>= 7) → Protective
+  if (typeof STAERKEN_DIMENSIONEN !== 'undefined') {
+    STAERKEN_DIMENSIONEN.forEach(d => {
+      if ((ratings[d.id] || 0) >= 7) {
+        const entry = `💪 ${d.label} (${ratings[d.id]}/10)`;
+        if (!ff.protective.includes(entry)) protectiveNeu.push(entry);
+      }
+    });
+  }
+
+  // Schutzfaktoren direkt übernehmen
+  schutzfaktoren.forEach(sf => {
+    const entry = `🛡️ ${sf}`;
+    if (!ff.protective.includes(entry)) protectiveNeu.push(entry);
+  });
+
+  // Interessen als Ressourcen
+  interessen.forEach(int => {
+    const entry = `🎯 ${int}`;
+    if (!ff.protective.includes(entry)) protectiveNeu.push(entry);
+  });
+
+  if (protectiveNeu.length === 0) {
+    showToast('Stärken-Daten bereits in 5P vorhanden', 'info');
+    return;
+  }
+
+  ff.protective = [...ff.protective, ...protectiveNeu];
+  DB.saveFallformulierung(ff);
+  showToast(`${protectiveNeu.length} Schutzfaktoren in 5P übernommen`, 'success');
+  showProfilTab('fallformulierung');
+}
+
+// ============================================================
+// SITZUNGEN IM THEMEN-TAB
+// ============================================================
+function renderSitzungenImThemenTab() {
+  const container = document.getElementById('sitzungen-im-themen-tab');
+  if (!container) return;
+
+  const notizen = DB.getNotizen(APP.currentSchuelerId)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const sitzungen = notizen.filter(n => n.kategorie === 'session' || n.kategorie === 'fortschritt');
+
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-header" style="cursor:pointer;" onclick="
+        const el = document.getElementById('sitzungen-liste-eingebettet');
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        this.querySelector('.toggle-icon').textContent = el.style.display === 'none' ? '▶' : '▼';
+      ">
+        <span>💬</span>
+        <div class="card-title">Sitzungen & Notizen</div>
+        <span style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:#6B7280;">${notizen.length} Einträge</span>
+          <span class="toggle-icon" style="font-size:10px;color:#9CA3AF;">▼</span>
+        </span>
+      </div>
+      <div id="sitzungen-liste-eingebettet" class="card-body">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button class="btn btn-primary btn-sm" onclick="showProfilTab('notizen')">+ Neue Notiz / Protokoll</button>
+        </div>
+        ${notizen.length === 0
+          ? '<div style="text-align:center;color:#9CA3AF;padding:16px;">Noch keine Sitzungen</div>'
+          : notizen.slice(0, 5).map(n => renderNotizKarte(n)).join('') +
+            (notizen.length > 5 ? `<div style="text-align:center;padding:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="showProfilTab('notizen')">
+                Alle ${notizen.length} Einträge anzeigen →
+              </button>
+            </div>` : '')}
+      </div>
+    </div>
+  `;
 }

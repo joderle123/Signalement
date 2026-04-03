@@ -25,9 +25,57 @@ const APP = {
 
 // ---- Init ----
 document.addEventListener('DOMContentLoaded', () => {
+  migrateRoadmapsTo7Phasen();
   renderSidebar();
   showView('home');
 });
+
+// ---- Migration: 4 Phasen → 7 Phasen ----
+function migrateRoadmapsTo7Phasen() {
+  const alle = DB.getRoadmaps();
+  let changed = false;
+  alle.forEach(roadmap => {
+    if (roadmap.phasen.length === 4) {
+      // Alt: Phase 1-4 → Neu: Phase 0-6
+      const alt = roadmap.phasen;
+      roadmap.phasen = ROADMAP_PHASEN.map(p => {
+        if (p.nr === 0) {
+          // Phase 0 (Vorbereitung) — neu, übernehme Status von alter Phase 1
+          return { nr: 0, status: alt[0].status === 'erledigt' ? 'erledigt' : 'offen', startDatum: null, endDatum: null, themen: [], notizen: '' };
+        }
+        if (p.nr === 1) {
+          // Phase 1 (Sicherheit) ← alte Phase 1 (Stabilisierung)
+          return { ...alt[0], nr: 1 };
+        }
+        if (p.nr === 2) {
+          // Phase 2 (Exploration) ← alte Phase 2 (Verstehen)
+          return { ...alt[1], nr: 2 };
+        }
+        if (p.nr === 3) {
+          // Phase 3 (Ziele & Plan) — neu
+          return { nr: 3, status: 'offen', startDatum: null, endDatum: null, themen: [], notizen: '' };
+        }
+        if (p.nr === 4) {
+          // Phase 4 (Intervention) ← alte Phase 3 (Aktive Bearbeitung)
+          return { ...alt[2], nr: 4 };
+        }
+        if (p.nr === 5) {
+          // Phase 5 (Konsolidierung) — neu, übernehme Themen von alter Phase 4
+          return { ...alt[3], nr: 5 };
+        }
+        if (p.nr === 6) {
+          // Phase 6 (Abschluss) — neu
+          return { nr: 6, status: 'offen', startDatum: null, endDatum: null, themen: [], notizen: '' };
+        }
+        return { nr: p.nr, status: 'offen', startDatum: null, endDatum: null, themen: [], notizen: '' };
+      });
+      changed = true;
+    }
+  });
+  if (changed) {
+    localStorage.setItem(DB.KEYS.ROADMAPS, JSON.stringify(alle));
+  }
+}
 
 // ============================================================
 // VIEWS
@@ -3191,7 +3239,7 @@ function renderRoadmap() {
         <div class="roadmap-empty-icon">🗺️</div>
         <h3>Noch kein Förderplan erstellt</h3>
         <p>Der Förderplan ist eine strukturierte Roadmap für die Begleitung von <strong>${s.vorname}</strong>.
-           Er gliedert die Arbeit in 4 Phasen — von der Stabilisierung bis zum Transfer.</p>
+           Er gliedert die Arbeit in 7 Phasen (0–6) — von der Vorbereitung bis zum Abschluss.</p>
         ${latestScreening
           ? `<button class="btn btn-primary" onclick="generateRoadmapFromScreening('${latestScreening.id}')">
                🔍 Aus Screening generieren
@@ -3222,7 +3270,7 @@ function renderRoadmap() {
         <h2 class="roadmap-titel">🗺️ Förderplan — ${s.vorname} ${s.nachname}</h2>
         <div class="roadmap-meta">
           Erstellt: ${new Date(roadmap.erstellt).toLocaleDateString('de-DE')} ·
-          ${totalThemen} Themen · Phase ${aktivePhasenNr}/4
+          ${totalThemen} Themen · Phase ${aktivePhasenNr}/6
         </div>
       </div>
       <div class="roadmap-header-actions">
@@ -3282,7 +3330,7 @@ function renderRoadmapPhase(roadmap, phase, idx) {
         <div class="roadmap-phase-dot">
           ${isErledigt ? '✓' : def.nr}
         </div>
-        ${idx < 3 ? '<div class="roadmap-phase-line"></div>' : ''}
+        ${idx < ROADMAP_PHASEN.length - 1 ? '<div class="roadmap-phase-line"></div>' : ''}
       </div>
 
       <!-- Phase-Content -->
@@ -3429,40 +3477,67 @@ function generateRoadmapFromScreening(screeningId) {
     .sort((a, b) => b[1] - a[1])
     .map(([id, score]) => ({ id, score }));
 
-  // Assign to phases
+  // Assign to 7 phases (0-6)
   const assigned = new Set();
 
-  // Phase 1: Crisis/stabilization themes (high severity + crisis topics)
-  const phase1Ids = ROADMAP_PHASEN[0].schwerpunkt;
+  // Phase 0 (Vorbereitung): Assessment-Themen
+  const phase0Ids = ROADMAP_PHASEN[0].schwerpunkt;
   sortedThemen.forEach(t => {
-    if (phase1Ids.includes(t.id) && t.score > 0.3) {
+    if (phase0Ids.includes(t.id)) {
       roadmap.phasen[0].themen.push({ id: t.id, status: 'offen' });
       assigned.add(t.id);
     }
   });
 
-  // Phase 2: Understanding themes
-  const phase2Ids = ROADMAP_PHASEN[1].schwerpunkt;
+  // Phase 1 (Sicherheit & Beziehung): Krisenthemen mit hoher Severity
+  const phase1Ids = ROADMAP_PHASEN[1].schwerpunkt;
   sortedThemen.forEach(t => {
-    if (!assigned.has(t.id) && phase2Ids.includes(t.id)) {
+    if (!assigned.has(t.id) && phase1Ids.includes(t.id) && t.score > 0.3) {
       roadmap.phasen[1].themen.push({ id: t.id, status: 'offen' });
       assigned.add(t.id);
     }
   });
 
-  // Phase 3: All remaining high-priority themes
+  // Phase 2 (Exploration): Verstehens-Themen
+  const phase2Ids = ROADMAP_PHASEN[2].schwerpunkt;
   sortedThemen.forEach(t => {
-    if (!assigned.has(t.id) && t.score > 0.2) {
+    if (!assigned.has(t.id) && phase2Ids.includes(t.id)) {
       roadmap.phasen[2].themen.push({ id: t.id, status: 'offen' });
       assigned.add(t.id);
     }
   });
 
-  // Phase 4: Transfer themes
-  const phase4Ids = ROADMAP_PHASEN[3].schwerpunkt;
-  phase4Ids.forEach(id => {
+  // Phase 3 (Ziele & Plan): Planungs-Themen
+  const phase3Ids = ROADMAP_PHASEN[3].schwerpunkt;
+  sortedThemen.forEach(t => {
+    if (!assigned.has(t.id) && phase3Ids.includes(t.id)) {
+      roadmap.phasen[3].themen.push({ id: t.id, status: 'offen' });
+      assigned.add(t.id);
+    }
+  });
+
+  // Phase 4 (Intervention): Alle verbleibenden hochpriorisierten Themen
+  sortedThemen.forEach(t => {
+    if (!assigned.has(t.id) && t.score > 0.2) {
+      roadmap.phasen[4].themen.push({ id: t.id, status: 'offen' });
+      assigned.add(t.id);
+    }
+  });
+
+  // Phase 5 (Konsolidierung): Transfer-Themen
+  const phase5Ids = ROADMAP_PHASEN[5].schwerpunkt;
+  phase5Ids.forEach(id => {
     if (!assigned.has(id)) {
-      roadmap.phasen[3].themen.push({ id, status: 'offen' });
+      roadmap.phasen[5].themen.push({ id, status: 'offen' });
+      assigned.add(id);
+    }
+  });
+
+  // Phase 6 (Abschluss): Zukunftsthemen
+  const phase6Ids = ROADMAP_PHASEN[6].schwerpunkt;
+  phase6Ids.forEach(id => {
+    if (!assigned.has(id)) {
+      roadmap.phasen[6].themen.push({ id, status: 'offen' });
       assigned.add(id);
     }
   });

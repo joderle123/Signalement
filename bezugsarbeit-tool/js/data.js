@@ -1585,18 +1585,27 @@ const SCREENING_THEMA_MAP = {
 
 // Roadmap-Phasen-Definitionen
 const ROADMAP_PHASEN = [
-  { nr: 1, label: 'Stabilisierung & Beziehungsaufbau', farbe: '#DC2626', icon: '🛡️',
+  { nr: 0, label: 'Vorbereitung', farbe: '#6B7280', icon: '📋',
+    beschreibung: 'Daten sammeln, Screening, 5P-Analyse, Stärken erfassen',
+    dauer: '1–2 Wochen', schwerpunkt: ['emotionserkennung', 'soziale-wahrnehmung', 'familienzusammensetzung'] },
+  { nr: 1, label: 'Sicherheit & Beziehung', farbe: '#DC2626', icon: '🛡️',
     beschreibung: 'Vertrauen aufbauen, akute Krisen stabilisieren, Sicherheit schaffen',
     dauer: '2–4 Wochen', schwerpunkt: ['krisenintervention', 'suizidpraevention', 'selbstverletzung', 'trauma'] },
-  { nr: 2, label: 'Verstehen & Einordnen', farbe: '#D97706', icon: '🔍',
-    beschreibung: 'Screening durchführen, Stärken erkennen, Problemverständnis entwickeln',
-    dauer: '2–3 Wochen', schwerpunkt: ['emotionserkennung', 'selbstwertgefuehl', 'familienzusammensetzung', 'soziale-wahrnehmung'] },
-  { nr: 3, label: 'Aktive Bearbeitung', farbe: '#2563EB', icon: '🔧',
+  { nr: 2, label: 'Exploration', farbe: '#D97706', icon: '🔍',
+    beschreibung: 'Probleme verstehen, Stärken erkennen, Muster identifizieren',
+    dauer: '2–3 Wochen', schwerpunkt: ['selbstwertgefuehl', 'emotionsregulation', 'selbstbild'] },
+  { nr: 3, label: 'Ziele & Plan', farbe: '#2563EB', icon: '🎯',
+    beschreibung: 'Gemeinsame Ziele definieren, Förderplan konkretisieren',
+    dauer: '1–2 Wochen', schwerpunkt: ['zukunftsplanung', 'motivation', 'lernstrategien'] },
+  { nr: 4, label: 'Intervention', farbe: '#7C3AED', icon: '🔧',
     beschreibung: 'Kernthemen bearbeiten, Kompetenzen aufbauen, Interventionen durchführen',
     dauer: '6–12 Wochen', schwerpunkt: [] },
-  { nr: 4, label: 'Transfer & Abschluss', farbe: '#059669', icon: '🌱',
-    beschreibung: 'Gelerntes festigen, Rückfallprävention, Abschied gestalten',
-    dauer: '2–4 Wochen', schwerpunkt: ['resilienz', 'zukunftsplanung', 'soziales-netzwerk', 'lebenssinn'] },
+  { nr: 5, label: 'Konsolidierung', farbe: '#059669', icon: '🌿',
+    beschreibung: 'Gelerntes festigen, Rückfallprävention, Erfolge sichern',
+    dauer: '2–4 Wochen', schwerpunkt: ['resilienz', 'soziales-netzwerk', 'lebenssinn'] },
+  { nr: 6, label: 'Abschluss', farbe: '#0EA5E9', icon: '🎓',
+    beschreibung: 'Transfer in den Alltag, Abschied gestalten, Nachsorge planen',
+    dauer: '1–2 Wochen', schwerpunkt: ['zukunftsplanung', 'berufsorientierung'] },
 ];
 
 // ============================================================
@@ -1848,8 +1857,8 @@ const DB = {
       screeningId: null,
       phasen: ROADMAP_PHASEN.map(p => ({
         nr: p.nr,
-        status: p.nr === 1 ? 'aktiv' : 'offen',
-        startDatum: p.nr === 1 ? new Date().toISOString().split('T')[0] : null,
+        status: p.nr === 0 ? 'aktiv' : 'offen',
+        startDatum: p.nr === 0 ? new Date().toISOString().split('T')[0] : null,
         endDatum: null,
         themen: [],
         notizen: '',

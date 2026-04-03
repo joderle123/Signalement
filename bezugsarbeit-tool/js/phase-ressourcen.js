@@ -529,5 +529,127 @@ function findThemaLabel(themaId) {
   }
   return themaId;
 }
-function renderRessourcenPhase5() { return ''; }
+// ---- Phase 5: Konsolidierung — Rückfallprävention & Werkzeugkoffer ----
+function renderRessourcenPhase5() {
+  var sid = APP.currentSchuelerId;
+  var rueckfallplan = getPhaseData('rueckfallplan', '');
+  var werkzeuge = getPhaseData('werkzeugkoffer', ['', '', '', '', '']);
+  var fruehwarnung = getPhaseData('fruehwarnung', '');
+
+  var html = '';
+
+  // Fortschritts-Zusammenfassung
+  var notizen = DB.getNotizen(sid).filter(function(n) { return n.soap && n.soap.srs; });
+  var totalSitzungen = notizen.length;
+  var screenings = DB.getScreenings(sid).filter(function(s) { return s.abgeschlossen; });
+
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">' +
+    '<span class="phase-res-badge phase-res-badge-ok">' + totalSitzungen + ' Sitzungen dokumentiert</span>' +
+    '<span class="phase-res-badge phase-res-badge-ok">' + screenings.length + ' Screening(s) durchgeführt</span>' +
+  '</div>';
+
+  // Frühwarnsignale
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'fruehwarnung\')">' +
+      '<span class="phase-res-accordion-title">&#9888; Frühwarnsignale erkennen</span>' +
+      '<span class="phase-res-accordion-toggle" id="fruehwarnung-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="fruehwarnung">' +
+      '<p style="margin:0 0 8px;font-size:12px;">Gemeinsam mit dem Jugendlichen besprechen: <em>Woran merkst du, dass es dir wieder schlechter geht?</em></p>' +
+      '<textarea class="phase-res-textarea" style="min-height:80px;" ' +
+        'placeholder="z.B. Schlaf wird schlechter, ziehe mich zurück, esse weniger, werde aggressiver, schwänze Schule..." ' +
+        'onchange="savePhaseData(\'fruehwarnung\', this.value)">' + escapeHtml(fruehwarnung) + '</textarea>' +
+    '</div>' +
+  '</div>';
+
+  // Werkzeugkoffer — Was hat funktioniert?
+  html += '<div class="phase-res-section">' +
+    '<label class="phase-res-label">&#129520; Mein Werkzeugkoffer — Was hat mir geholfen?</label>' +
+    '<div style="display:flex;flex-direction:column;gap:6px;">';
+
+  var werkzeugLabels = [
+    'Wenn ich traurig bin, hilft mir:',
+    'Wenn ich wütend bin, hilft mir:',
+    'Wenn ich Angst habe, hilft mir:',
+    'Wenn ich mich einsam fühle, hilft mir:',
+    'Mein Notfall-Werkzeug (immer dabei):'
+  ];
+  var werkzeugIcons = ['&#128546;', '&#128545;', '&#128552;', '&#128532;', '&#127384;'];
+
+  for (var i = 0; i < werkzeugLabels.length; i++) {
+    html += '<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 10px;border:1px solid #E5E7EB;border-radius:6px;">' +
+      '<span style="font-size:16px;flex-shrink:0;">' + werkzeugIcons[i] + '</span>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:11px;color:#6B7280;margin-bottom:2px;">' + werkzeugLabels[i] + '</div>' +
+        '<input type="text" style="width:100%;border:1px solid #D1D5DB;border-radius:4px;padding:4px 8px;font-size:12px;" ' +
+          'placeholder="..." value="' + escapeHtml(werkzeuge[i] || '') + '" ' +
+          'onchange="saveWerkzeug(' + i + ', this.value)">' +
+      '</div>' +
+    '</div>';
+  }
+  html += '</div></div>';
+
+  // Rückfallplan
+  html += '<div class="phase-res-section">' +
+    '<label class="phase-res-label">&#128196; Rückfallplan — Wenn es mir wieder schlecht geht</label>' +
+    '<textarea class="phase-res-textarea" style="min-height:100px;" ' +
+      'placeholder="Schritt 1: Frühwarnsignale erkennen&#10;Schritt 2: Werkzeugkoffer nutzen&#10;Schritt 3: Vertrauensperson anrufen&#10;Schritt 4: Professionelle Hilfe holen&#10;Notfallnummer: ..." ' +
+      'onchange="savePhaseData(\'rueckfallplan\', this.value)">' + escapeHtml(rueckfallplan) + '</textarea>' +
+  '</div>';
+
+  // Links
+  html += '<div class="phase-res-links">' +
+    '<a href="arbeitsblatter/resilienz-staerken.html" target="_blank" class="btn btn-secondary btn-sm phase-res-btn">' +
+      '&#128170; Resilienz-Arbeitsblatt</a>' +
+    '<button class="btn btn-secondary btn-sm phase-res-btn" onclick="druckeWerkzeugkoffer()">' +
+      '&#128424; Werkzeugkoffer drucken</button>' +
+  '</div>';
+
+  return html;
+}
+
+function saveWerkzeug(index, value) {
+  var werkzeuge = getPhaseData('werkzeugkoffer', ['', '', '', '', '']);
+  werkzeuge[index] = value;
+  savePhaseData('werkzeugkoffer', werkzeuge);
+}
+
+function druckeWerkzeugkoffer() {
+  var sid = APP.currentSchuelerId;
+  var s = DB.getSchuelerById(sid);
+  if (!s) return;
+  var werkzeuge = getPhaseData('werkzeugkoffer', ['', '', '', '', '']);
+  var fruehwarnung = getPhaseData('fruehwarnung', '');
+  var rueckfallplan = getPhaseData('rueckfallplan', '');
+  var labels = ['Wenn ich traurig bin', 'Wenn ich wütend bin', 'Wenn ich Angst habe', 'Wenn ich mich einsam fühle', 'Mein Notfall-Werkzeug'];
+
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Werkzeugkoffer</title>' +
+    '<style>body{font-family:Arial,sans-serif;padding:40px;max-width:600px;margin:0 auto;} ' +
+    'h1{color:#059669;font-size:22px;} h2{font-size:16px;margin-top:24px;color:#374151;} ' +
+    '.tool{padding:10px;margin:6px 0;background:#F0FDF4;border-radius:6px;border-left:3px solid #059669;} ' +
+    '.tool-label{font-size:12px;color:#6B7280;} .tool-value{font-size:14px;font-weight:600;margin-top:2px;} ' +
+    '.section{margin-top:20px;padding:12px;background:#F8FAFC;border-radius:6px;border:1px solid #E2E8F0;} ' +
+    '@media print{body{padding:20px;}}</style></head><body>' +
+    '<h1>&#129520; Mein Werkzeugkoffer</h1>' +
+    '<p>Für: <strong>' + escapeHtml(s.vorname + ' ' + s.nachname) + '</strong> — Erstellt: ' + new Date().toLocaleDateString('de-DE') + '</p>');
+
+  for (var i = 0; i < labels.length; i++) {
+    w.document.write('<div class="tool"><div class="tool-label">' + labels[i] + ':</div>' +
+      '<div class="tool-value">' + escapeHtml(werkzeuge[i] || '(noch nicht ausgefüllt)') + '</div></div>');
+  }
+
+  if (fruehwarnung) {
+    w.document.write('<h2>&#9888; Meine Frühwarnsignale</h2><div class="section">' +
+      escapeHtml(fruehwarnung).replace(/\n/g, '<br>') + '</div>');
+  }
+  if (rueckfallplan) {
+    w.document.write('<h2>&#128196; Mein Rückfallplan</h2><div class="section">' +
+      escapeHtml(rueckfallplan).replace(/\n/g, '<br>') + '</div>');
+  }
+
+  w.document.write('</body></html>');
+  w.document.close();
+  w.print();
+}
 function renderRessourcenPhase6() { return ''; }

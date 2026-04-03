@@ -362,6 +362,172 @@ function renderRessourcenPhase3() {
 
   return html;
 }
-function renderRessourcenPhase4() { return ''; }
+// ---- Phase 4: Intervention — PVT-gesteuertes Werkzeug ----
+function renderRessourcenPhase4() {
+  var sid = APP.currentSchuelerId;
+  var roadmap = DB.getRoadmap(sid);
+  if (!roadmap) return '';
+
+  // Letzte PVT-Zustand aus Sitzungen ermitteln
+  var notizen = DB.getNotizen(sid)
+    .filter(function(n) { return n.soap && n.soap.pvt; })
+    .sort(function(a, b) { return new Date(b.datum) - new Date(a.datum); });
+  var lastPVT = notizen.length > 0 ? notizen[0].soap.pvt : null;
+
+  // Aktive Phase-Themen
+  var phase4 = roadmap.phasen.find(function(p) { return p.nr === 4; });
+  var themenIds = phase4 ? phase4.themen : [];
+
+  var html = '';
+
+  // PVT-Filter
+  html += '<div class="phase-res-section">' +
+    '<label class="phase-res-label">&#129504; Nervensystem-Status &#8594; Was ist heute möglich?</label>';
+
+  if (lastPVT) {
+    html += '<div style="font-size:11px;color:#6B7280;margin-bottom:8px;">' +
+      'Letzter Check-in: <strong>' + pvtLabel(lastPVT) + '</strong></div>';
+  }
+
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">';
+  var states = [
+    { id: 'safe', label: '&#128994; Sicher', farbe: '#059669', active: lastPVT === 'safe' },
+    { id: 'activated', label: '&#128993; Angespannt', farbe: '#D97706', active: lastPVT === 'activated' },
+    { id: 'frozen', label: '&#128995; Eingefroren', farbe: '#7C3AED', active: lastPVT === 'frozen' }
+  ];
+  for (var i = 0; i < states.length; i++) {
+    var st = states[i];
+    html += '<button class="pvt-filter-btn' + (st.active ? ' active' : '') + '" ' +
+      'style="border-color:' + st.farbe + ';color:' + st.farbe + ';' +
+      (st.active ? 'background:' + st.farbe + ';color:#fff;' : '') + '" ' +
+      'onclick="setPhase4PVTFilter(\'' + st.id + '\')">' +
+      st.label + '</button>';
+  }
+  html += '</div>';
+
+  // PVT-basierte Empfehlung
+  var pvtFilter = getPhaseData('pvtFilter', lastPVT || 'safe');
+  html += renderPVTEmpfehlung(pvtFilter);
+  html += '</div>';
+
+  // Aktive Themen + passende Arbeitsblätter
+  if (themenIds.length > 0) {
+    html += '<div class="phase-res-section">' +
+      '<label class="phase-res-label">&#128196; Arbeitsblätter für aktive Themen</label>' +
+      '<div style="display:flex;flex-direction:column;gap:6px;">';
+
+    for (var t = 0; t < themenIds.length; t++) {
+      var tid = themenIds[t];
+      // Finde Domain mit passenden Worksheets
+      var worksheets = findWorksheetsForThema(tid);
+      if (worksheets.length > 0) {
+        var themaLabel = findThemaLabel(tid);
+        html += '<div style="background:#fff;border:1px solid #E5E7EB;border-radius:6px;padding:8px 10px;">' +
+          '<div style="font-size:12px;font-weight:600;margin-bottom:4px;">' + themaLabel + '</div>' +
+          '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+        for (var w = 0; w < worksheets.length; w++) {
+          var ws = worksheets[w];
+          html += '<a href="arbeitsblatter/' + ws + '" target="_blank" ' +
+            'class="btn btn-secondary btn-sm phase-res-btn" style="font-size:11px;">' +
+            ws.replace('.html', '').replace(/-/g, ' ') + '</a>';
+        }
+        html += '</div></div>';
+      }
+    }
+    html += '</div></div>';
+  }
+
+  // SRS-Trend
+  var srsNotizen = notizen.filter(function(n) { return n.soap && n.soap.srs && n.soap.srs.total > 0; });
+  if (srsNotizen.length >= 2) {
+    var last3 = srsNotizen.slice(0, 3);
+    var scores = last3.map(function(n) { return n.soap.srs.total; });
+    var trend = scores[0] - scores[scores.length - 1];
+    var trendClass = trend > 0 ? 'phase-res-info-green' : (trend < -5 ? 'phase-res-tip-red' : 'phase-res-info-blue');
+    var trendIcon = trend > 0 ? '&#128200;' : (trend < -5 ? '&#128201;' : '&#8596;');
+    var trendText = trend > 0
+      ? 'SRS-Trend positiv (' + scores.join(' &#8594; ') + '). Weiter so!'
+      : (trend < -5
+        ? 'SRS-Trend negativ (' + scores.join(' &#8594; ') + '). Allianz-Reparatur nötig — Formulation überprüfen?'
+        : 'SRS stabil (' + scores.join(', ') + ').');
+
+    html += '<div class="phase-res-info ' + trendClass + '">' +
+      trendIcon + ' <strong>' + trendText + '</strong></div>';
+  }
+
+  return html;
+}
+
+function pvtLabel(state) {
+  var map = { safe: '&#128994; Sicher & offen', activated: '&#128993; Angespannt', frozen: '&#128995; Eingefroren' };
+  return map[state] || state;
+}
+
+function renderPVTEmpfehlung(state) {
+  var empf = {
+    safe: {
+      bg: 'phase-res-tip-green',
+      title: 'Tiefenarbeit möglich',
+      text: 'Der Jugendliche ist reguliert. Starte mit dem geplanten Thema. Arbeitsblätter und Reflexionsübungen sind möglich.',
+      methoden: ['Kognitive Umstrukturierung', 'Rollenspiel', 'Arbeitsblatt bearbeiten', 'Narrative Übungen', 'Expositionsplanung']
+    },
+    activated: {
+      bg: 'phase-res-tip-yellow',
+      title: 'Erst regulieren, dann arbeiten',
+      text: 'Das Nervensystem ist im Kampf-/Fluchtmodus. Starte mit Co-Regulation bevor du zum Thema gehst.',
+      methoden: ['Atemübung (4-7-8)', 'Bilaterale Stimulation', 'Bewegung/Spaziergang', 'Musikhören', 'Nur kurze Arbeitsblätter']
+    },
+    frozen: {
+      bg: 'phase-res-tip-purple',
+      title: 'Nur Grounding & Sicherheit',
+      text: 'Dorsal-Vagal aktiv. Kein neues Material heute. Das Ziel ist Kontakt halten.',
+      methoden: ['5-4-3-2-1 Grounding', 'Warmes Getränk', 'Sanfte Bewegung', 'Malen/Zeichnen', 'Stille aushalten']
+    }
+  };
+
+  var e = empf[state] || empf.safe;
+  var html = '<div class="phase-res-tip ' + e.bg + '">' +
+    '<strong>' + e.title + '</strong><br>' + e.text +
+    '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">';
+  for (var i = 0; i < e.methoden.length; i++) {
+    html += '<span style="padding:2px 8px;background:rgba(255,255,255,0.7);border-radius:10px;font-size:11px;">' +
+      e.methoden[i] + '</span>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function setPhase4PVTFilter(state) {
+  savePhaseData('pvtFilter', state);
+  if (typeof renderRoadmap === 'function') renderRoadmap();
+}
+
+function findWorksheetsForThema(themaId) {
+  // Suche in SCREENING_THEMA_MAP welche Domains dieses Thema enthalten
+  var worksheets = [];
+  for (var domId in SCREENING_THEMA_MAP) {
+    if (SCREENING_THEMA_MAP[domId].indexOf(themaId) !== -1) {
+      var dom = SCREENING_DOMAINS.find(function(d) { return d.id === domId; });
+      if (dom && dom.worksheets) {
+        for (var i = 0; i < dom.worksheets.length; i++) {
+          if (worksheets.indexOf(dom.worksheets[i]) === -1) {
+            worksheets.push(dom.worksheets[i]);
+          }
+        }
+      }
+    }
+  }
+  return worksheets.slice(0, 4); // Max 4 pro Thema
+}
+
+function findThemaLabel(themaId) {
+  for (var k = 0; k < THEMEN_KATEGORIEN.length; k++) {
+    var kat = THEMEN_KATEGORIEN[k];
+    for (var j = 0; j < kat.themen.length; j++) {
+      if (kat.themen[j].id === themaId) return kat.themen[j].titel;
+    }
+  }
+  return themaId;
+}
 function renderRessourcenPhase5() { return ''; }
 function renderRessourcenPhase6() { return ''; }

@@ -1142,6 +1142,45 @@ function toggleSoapBeispiel(feld) {
   box.style.display = 'block';
 }
 
+// ---- Tool-Legitimation (Fachliche Grundlage anzeigen) ----
+function showToolLegitimation(toolKey) {
+  const data = TOOL_LEGITIMATION[toolKey];
+  if (!data) return;
+  // Check if already open
+  const existing = document.getElementById('tool-legit-overlay');
+  if (existing) { existing.remove(); return; }
+  const overlay = document.createElement('div');
+  overlay.id = 'tool-legit-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.2);max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="font-size:18px;font-weight:700;color:#1F2937;">📚 ${data.name}</div>
+        <button onclick="document.getElementById('tool-legit-overlay').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#9CA3AF;">✕</button>
+      </div>
+      <div style="background:#F0F9FF;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #3B82F6;">
+        <div style="font-weight:600;color:#1E40AF;font-size:13px;margin-bottom:6px;">Was ist das?</div>
+        <div style="font-size:13px;color:#374151;line-height:1.6;">${data.was}</div>
+      </div>
+      <div style="background:#F0FDF4;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #22C55E;">
+        <div style="font-weight:600;color:#166534;font-size:13px;margin-bottom:6px;">Warum dieses Tool?</div>
+        <div style="font-size:13px;color:#374151;line-height:1.6;">${data.warum}</div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #F97316;">
+        <div style="font-weight:600;color:#9A3412;font-size:13px;margin-bottom:6px;">Evidenz</div>
+        <div style="font-size:13px;color:#374151;line-height:1.6;">${data.evidenz}</div>
+      </div>
+      <div style="background:#F5F3FF;border-radius:10px;padding:14px;border-left:4px solid #8B5CF6;">
+        <div style="font-weight:600;color:#6D28D9;font-size:13px;margin-bottom:6px;">Quelle</div>
+        <div style="font-size:12px;color:#6B7280;line-height:1.5;font-style:italic;">${data.quelle}</div>
+        <div style="font-size:12px;color:#9CA3AF;margin-top:4px;">Entwickelt von: ${data.entwickler}</div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
 // ---- 5P Hilfe-Toggle ----
 function toggle5PHilfe(key) {
   const box = document.getElementById('fivep-hilfe-' + key);
@@ -2641,10 +2680,10 @@ function renderPhaseTransitionPrompt() {
             ${done} von ${total} Themen erledigt${dauerText}. Bereit für Phase ${nextPhaseNr} (${nextPhaseDef.titel})?
           </div>
           <div style="display:flex;gap:8px;">
-            <button class="btn btn-primary btn-sm" onclick="advancePhase(${aktivePhase.nr})">
-              Phase abschließen & weiter
+            <button class="btn btn-primary" style="padding:10px 22px;font-size:15px;font-weight:600;" onclick="advancePhase(${aktivePhase.nr})">
+              ✓ Phase abschließen & weiter
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('phase-transition-prompt').innerHTML=''">
+            <button class="btn btn-secondary" style="padding:8px 16px;font-size:14px;" onclick="document.getElementById('phase-transition-prompt').innerHTML=''">
               Noch nicht
             </button>
           </div>
@@ -4686,9 +4725,9 @@ function renderRoadmapPhase(roadmap, phase, idx) {
 
           <!-- Phase-Aktionen -->
           <div class="roadmap-phase-actions">
-            ${phase.status === 'offen' ? `<button class="btn btn-sm" style="background:${def.farbe};color:#fff;border:none;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">▶ Phase starten</button>` : ''}
-            ${phase.status === 'aktiv' ? `<button class="btn btn-sm" style="background:${def.farbe};color:#fff;border:none;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>` : ''}
-            ${phase.status === 'erledigt' ? `<button class="btn btn-secondary btn-sm" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">↺ Wieder öffnen</button>` : ''}
+            ${phase.status === 'offen' ? `<button class="btn" style="background:${def.farbe};color:#fff;border:none;padding:10px 20px;font-size:15px;font-weight:600;border-radius:8px;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">▶ Phase starten</button>` : ''}
+            ${phase.status === 'aktiv' ? `<button class="btn" style="background:${def.farbe};color:#fff;border:none;padding:10px 20px;font-size:15px;font-weight:600;border-radius:8px;box-shadow:0 2px 8px ${def.farbe}40;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>` : ''}
+            ${phase.status === 'erledigt' ? `<button class="btn btn-secondary" style="padding:8px 16px;font-size:14px;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">↺ Wieder öffnen</button>` : ''}
           </div>
 
           <!-- Phasen-Ressourcen -->
@@ -5382,15 +5421,15 @@ function renderScrRadarChart(scr) {
       responsive: true,
       maintainAspectRatio: true,
       plugins: {
-        legend: { display: true, position: 'bottom', labels: { font: { size: 11 } } },
+        legend: { display: true, position: 'bottom', labels: { font: { size: 13 } } },
       },
       scales: {
         r: {
           beginAtZero: true,
           max: 100,
-          ticks: { stepSize: 25, font: { size: 10 }, callback: v => v + '%' },
-          pointLabels: { font: { size: 10 } },
-          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { stepSize: 25, font: { size: 11 }, callback: v => v + '%' },
+          pointLabels: { font: { size: 12, weight: '500' } },
+          grid: { color: 'rgba(0,0,0,0.08)' },
         }
       }
     }

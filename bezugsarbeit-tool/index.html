@@ -303,7 +303,10 @@
 
           <!-- Polyvagal Check-in -->
           <div class="pvt-checkin">
-            <label class="pvt-label">🧠 Polyvagal Check-in — Wo ist der Jugendliche heute?</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <label class="pvt-label">🧠 Polyvagal Check-in — Wo ist der Jugendliche heute?</label>
+              <button onclick="showToolLegitimation('pvt')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist PVT?</button>
+            </div>
             <div class="pvt-cards" id="pvt-cards">
               <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVT(this)">
                 <span class="pvt-dot" style="background:#22C55E;"></span>
@@ -333,6 +336,9 @@
           </div>
 
           <!-- SOAP-Felder mit Beispiel-Buttons -->
+          <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+            <button onclick="showToolLegitimation('soap')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist SOAP?</button>
+          </div>
           <div class="protokoll-soap">
             <div class="soap-section soap-s">
               <div class="soap-header"><span class="soap-letter">S</span> Subjektiv — Was berichtet der Jugendliche? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('subjektiv')" title="Beispiel anzeigen">💡</button></div>
@@ -370,7 +376,7 @@
 
           <!-- SRS Session Rating Scale -->
           <div class="srs-section">
-            <div class="srs-header">📊 Sitzungsbewertung <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span></div>
+            <div class="srs-header">📊 Sitzungsbewertung <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span> <button onclick="showToolLegitimation('srs')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist SRS?</button></div>
             <div class="srs-sliders">
               <div class="srs-row">
                 <label>Beziehung <span>— Ich fühlte mich gehört und verstanden</span></label>
@@ -430,7 +436,7 @@
             <div id="ziele-liste" style="margin-bottom:16px;"></div>
             <!-- SMART-Hilfe aufklappbar -->
             <details class="smart-hilfe" style="margin-bottom:12px;">
-              <summary style="font-size:12px;color:#3B82F6;cursor:pointer;font-weight:600;">📐 SMART-Methode — Wie formuliere ich gute Ziele?</summary>
+              <summary style="font-size:12px;color:#3B82F6;cursor:pointer;font-weight:600;">📐 SMART-Methode — Wie formuliere ich gute Ziele? <span onclick="event.stopPropagation();showToolLegitimation('smart')" style="margin-left:8px;color:#6B7280;font-weight:400;text-decoration:underline;cursor:pointer;">📚 Evidenz</span></summary>
               <div style="font-size:12px;color:#6B7280;padding:8px 12px;background:#F0F7FF;border-radius:8px;margin-top:6px;line-height:1.6;">
                 <strong>S</strong>pezifisch — Was genau soll erreicht werden?<br>
                 <strong>M</strong>essbar — Woran erkenne ich den Fortschritt?<br>
@@ -456,6 +462,9 @@
 
       <!-- 5P-FALLFORMULIERUNG -->
       <div class="profil-tab-content" data-tab="fallformulierung">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button onclick="showToolLegitimation('fivep')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;">📚 Was ist die 5P-Fallformulierung?</button>
+        </div>
         <div id="fallformulierung-container"></div>
       </div>
 
@@ -651,13 +660,13 @@
           <div class="card" style="margin-bottom:16px;">
             <div class="card-header">
               <span>📊</span>
-              <div class="card-title">Belastungsprofil</div>
+              <div class="card-title">Belastungsprofil <button onclick="showToolLegitimation('screening')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;font-weight:400;">📚 Grundlage</button></div>
             </div>
             <div class="card-body">
               <div style="position:relative;height:320px;">
                 <canvas id="scr-chart-profil"></canvas>
               </div>
-              <div style="max-width:380px;margin:16px auto 0;">
+              <div style="max-width:600px;margin:16px auto 0;">
                 <canvas id="scr-radar-chart"></canvas>
               </div>
             </div>

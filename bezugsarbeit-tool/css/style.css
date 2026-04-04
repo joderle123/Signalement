@@ -3352,7 +3352,9 @@ select {
 @media (max-width: 1200px) { .fivep-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 800px) { .fivep-grid { grid-template-columns: 1fr; } }
 .fivep-column {
-  background: #fff;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
@@ -3362,8 +3364,9 @@ select {
   box-shadow: var(--shadow-xs);
 }
 .fivep-column:hover {
-  box-shadow: var(--shadow);
-  border-color: #CBD5E1;
+  box-shadow: var(--shadow-md);
+  border-color: var(--border);
+  transform: translateY(-2px);
 }
 .fivep-col-header {
   padding: 14px 14px 10px;
@@ -3391,13 +3394,18 @@ select {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 5px 11px;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
   font-weight: 500;
   border: 1px solid;
   transition: all var(--transition-fast);
   animation: tagIn 0.2s cubic-bezier(0.34,1.4,0.64,1);
+  cursor: default;
+}
+.fivep-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 @keyframes tagIn {
   from { opacity: 0; transform: scale(0.85); }
@@ -3441,18 +3449,18 @@ select {
 }
 .fivep-hypothese-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
 .fivep-analysis {
-  background: white;
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
 }
 .fivep-analysis-header {
-  padding: 12px 16px;
+  padding: var(--space-3) var(--space-4);
   font-weight: 700;
-  font-size: 13px;
+  font-size: var(--text-base);
   border-bottom: 1px solid var(--border-light);
-  background: linear-gradient(180deg, #FAFCFF, #F8FAFC);
+  background: linear-gradient(180deg, var(--primary-50), var(--bg));
   letter-spacing: -0.2px;
 }
 .fivep-analysis-body {

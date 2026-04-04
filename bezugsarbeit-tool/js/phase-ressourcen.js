@@ -449,6 +449,23 @@ function renderRessourcenPhase4() {
 
   var html = '';
 
+  // Phase 4 Anleitung — Was wird erwartet?
+  html += '<div style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BAE6FD;border-radius:10px;padding:14px;margin-bottom:14px;">' +
+    '<div style="font-size:14px;font-weight:700;color:#1E40AF;margin-bottom:8px;">&#128736; Phase 4: Intervention — So gehst du vor</div>' +
+    '<div style="font-size:12px;color:#374151;line-height:1.7;">' +
+      '<strong>Was ist das Ziel?</strong> Die in der 5P-Analyse identifizierten Perpetuating-Faktoren (aufrechterhaltende Faktoren) gezielt bearbeiten.<br><br>' +
+      '<strong>Was tust du in jeder Sitzung?</strong>' +
+      '<ol style="margin:6px 0 6px 18px;padding:0;">' +
+        '<li><strong>PVT-Check</strong> — Prüfe den Nervensystem-Zustand. Bei „eingefroren" erst Grounding, bei „angespannt" erst Co-Regulation.</li>' +
+        '<li><strong>Thema wählen</strong> — Nimm das nächste Thema aus der Liste unten. Die Reihenfolge orientiert sich am PVT-Zustand.</li>' +
+        '<li><strong>Therapiemodul öffnen</strong> — Klicke auf das Modul. Es enthält ein durchgeskriptetes 60-Min-Programm mit Minute-für-Minute-Anleitung.</li>' +
+        '<li><strong>Arbeitsblatt einsetzen</strong> — Begleitend zum Modul gibt es druckbare Arbeitsblätter.</li>' +
+        '<li><strong>SOAP dokumentieren</strong> — Nach jeder Sitzung: Was wurde besprochen? Wie hat der Schüler reagiert? Was sind die nächsten Schritte?</li>' +
+      '</ol>' +
+      '<strong>Wann ist Phase 4 abgeschlossen?</strong> Wenn alle zugeordneten Themen bearbeitet sind ODER die SMART-Ziele erreicht sind (mind. 70% Fortschritt).' +
+    '</div>' +
+  '</div>';
+
   // PVT-Filter
   html += '<div class="phase-res-section">' +
     '<label class="phase-res-label">&#129504; Nervensystem-Status &#8594; Was ist heute möglich?</label>';

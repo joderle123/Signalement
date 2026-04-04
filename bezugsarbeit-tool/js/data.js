@@ -209,6 +209,17 @@ const THERAPIE_MODULE_DATEIEN = {
   'gewalt':                  'therapiemodul-gewalt.html',
   'resilienz':               'therapiemodul-resilienz.html',
   'trennungsangst':          'therapiemodul-trennungsangst.html',
+  // Neue Module (bisher fehlend)
+  'bindungsstoerung':        'therapiemodul-bindungsstoerung.html',
+  'cybermobbing':            'therapiemodul-cybermobbing.html',
+  'schulverweigerung':       'therapiemodul-schulverweigerung.html',
+  'lernbehinderung':         'therapiemodul-lernbehinderung.html',
+  'psychoedukation':         'therapiemodul-psychoedukation.html',
+  'uebergaenge':             'therapiemodul-uebergaenge.html',
+  'migration-flucht':        'therapiemodul-migration-flucht.html',
+  'parentifizierung':        'therapiemodul-parentifizierung.html',
+  'young-carers':            'therapiemodul-young-carers.html',
+  'institutionserfahrung':   'therapiemodul-institutionserfahrung.html',
 };
 
 // ============================================================
@@ -307,6 +318,17 @@ const FACHKRAFT_MODULE_DATEIEN = {
   'gewalt':                  'gewalt-schutz.html',
   'resilienz':               'resilienz.html',
   'trennungsangst':          'trauma-stabilisierung.html',
+  // Neue Module (bisher fehlend) — verwenden existierende themenverwandte Fachkraft-Seiten
+  'bindungsstoerung':        'familie.html',
+  'cybermobbing':            'mobbing.html',
+  'schulverweigerung':       'pruefungsangst.html',
+  'lernbehinderung':         'lernstrategien.html',
+  'psychoedukation':         'mentale-gesundheit.html',
+  'uebergaenge':             'zukunftsplanung.html',
+  'migration-flucht':        'identitaet.html',
+  'parentifizierung':        'familie.html',
+  'young-carers':            'familie.html',
+  'institutionserfahrung':   'familie.html',
 };
 
 // ============================================================

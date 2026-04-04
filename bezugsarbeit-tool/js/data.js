@@ -1634,6 +1634,60 @@ const STAERKEN_DIMENSIONEN = [
   { id: 'schulisch',      label: 'Schulische Stärken', icon: '📚', farbe: '#14B8A6', beschreibung: 'Fächer, Lernbereitschaft, kognitive Stärken' },
 ];
 
+// Rating-Anker für Stärken-Dimensionen (1-3 niedrig, 4-6 mittel, 7-10 hoch)
+const STAERKEN_ANKER = {
+  kreativitaet: {
+    niedrig: 'Zeigt wenig Interesse an kreativem Ausdruck, malt/bastelt/musiziert kaum',
+    mittel:  'Hat kreative Ansätze, braucht aber Anregung und Struktur',
+    hoch:    'Drückt sich gerne kreativ aus, hat eigene Ideen, denkt originell',
+  },
+  empathie: {
+    niedrig: 'Nimmt Gefühle anderer kaum wahr, reagiert wenig auf Emotionen im Umfeld',
+    mittel:  'Erkennt Gefühle anderer, zeigt gelegentlich Mitgefühl',
+    hoch:    'Spürt intuitiv wie es anderen geht, zeigt aktiv Fürsorge und Trost',
+  },
+  humor: {
+    niedrig: 'Lacht selten, zeigt wenig Freude an Witz und Spaß',
+    mittel:  'Kann über Witze lachen, bringt gelegentlich andere zum Schmunzeln',
+    hoch:    'Hat ausgeprägten Sinn für Humor, lockert Situationen auf, kann über sich selbst lachen',
+  },
+  durchhaltung: {
+    niedrig: 'Gibt schnell auf bei Schwierigkeiten, vermeidet anstrengende Aufgaben',
+    mittel:  'Hält durch wenn die Aufgabe überschaubar ist, braucht Ermutigung bei Rückschlägen',
+    hoch:    'Bleibt auch bei Hindernissen dran, versucht es erneut, zeigt Beharrlichkeit',
+  },
+  neugier: {
+    niedrig: 'Zeigt wenig Interesse an Neuem, fragt selten nach, bleibt passiv',
+    mittel:  'Ist bei bestimmten Themen interessiert, stellt gelegentlich Fragen',
+    hoch:    'Will alles wissen, erforscht aktiv, probiert Neues aus, stellt viele Fragen',
+  },
+  sport: {
+    niedrig: 'Bewegt sich ungern, meidet Sport und körperliche Aktivitäten',
+    mittel:  'Macht bei Sport mit, hat durchschnittliche Koordination und Fitness',
+    hoch:    'Ist sportlich aktiv, gute Koordination, Freude an Bewegung, evtl. im Verein',
+  },
+  sozial: {
+    niedrig: 'Zieht sich zurück, hat Schwierigkeiten Kontakte aufzubauen, wenig Teamfähigkeit',
+    mittel:  'Hat einzelne Freundschaften, kann in Gruppen mitarbeiten mit Unterstützung',
+    hoch:    'Baut leicht Kontakte auf, hilfsbereit, guter Teamplayer, beliebt bei Gleichaltrigen',
+  },
+  selbststaendig: {
+    niedrig: 'Braucht ständige Anleitung, kann Alltag kaum eigenständig organisieren',
+    mittel:  'Erledigt Routineaufgaben selbstständig, braucht bei Neuem Unterstützung',
+    hoch:    'Organisiert sich gut, übernimmt Verantwortung, plant voraus, löst Alltagsprobleme',
+  },
+  mut: {
+    niedrig: 'Vermeidet unbekannte Situationen, traut sich wenig zu, weicht Konflikten aus',
+    mittel:  'Traut sich in bekanntem Umfeld, braucht Ermutigung für neue Herausforderungen',
+    hoch:    'Stellt sich Ängsten, wagt Neues, steht für sich ein, zeigt Zivilcourage',
+  },
+  schulisch: {
+    niedrig: 'Zeigt wenig Lernbereitschaft, hat Schwierigkeiten dem Unterricht zu folgen',
+    mittel:  'Hat einzelne starke Fächer, lernt bei Interesse, braucht Struktur',
+    hoch:    'Lernt gerne, gutes Auffassungsvermögen, zeigt kognitive Stärken in mehreren Bereichen',
+  },
+};
+
 // Komorbiditats-Muster-Erkennung
 const KOMORBIDITÄT_MUSTER = [
   {

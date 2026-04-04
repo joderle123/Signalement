@@ -3350,6 +3350,14 @@ function renderStaerken() {
                   oninput="updateStaerkenWert('${d.id}', this.value, this)">
                 <span class="staerken-wert" id="staerken-wert-${d.id}" style="color:${d.farbe};">${val || '–'}</span>
               </div>
+              ${(function(){
+                const anker = STAERKEN_ANKER[d.id];
+                if (!anker || !val) return '';
+                const stufe = val <= 3 ? 'niedrig' : (val <= 6 ? 'mittel' : 'hoch');
+                const label = val <= 3 ? '1–3 Wenig ausgeprägt' : (val <= 6 ? '4–6 Durchschnittlich' : '7–10 Stark ausgeprägt');
+                const fc = val <= 3 ? '#EF4444' : (val <= 6 ? '#F59E0B' : '#22C55E');
+                return '<div class="staerken-anker" id="staerken-anker-' + d.id + '" style="font-size:11px;margin-top:4px;padding:6px 8px;background:' + fc + '10;border-radius:6px;border-left:3px solid ' + fc + ';"><span style="font-weight:600;color:' + fc + ';">' + label + ':</span> <span style="color:#6B7280;">' + anker[stufe] + '</span></div>';
+              })()}
             </div>`;
           }).join('')}
         </div>
@@ -3502,6 +3510,32 @@ function updateStaerkenWert(dimId, value, el) {
   // Update display
   const wertEl = document.getElementById(`staerken-wert-${dimId}`);
   if (wertEl) wertEl.textContent = value == 0 ? '–' : value;
+
+  // Update rating anchor text
+  const ankerEl = document.getElementById(`staerken-anker-${dimId}`);
+  const anker = STAERKEN_ANKER[dimId];
+  if (anker && parseInt(value) > 0) {
+    const v = parseInt(value);
+    const stufe = v <= 3 ? 'niedrig' : (v <= 6 ? 'mittel' : 'hoch');
+    const label = v <= 3 ? '1–3 Wenig ausgeprägt' : (v <= 6 ? '4–6 Durchschnittlich' : '7–10 Stark ausgeprägt');
+    const fc = v <= 3 ? '#EF4444' : (v <= 6 ? '#F59E0B' : '#22C55E');
+    if (ankerEl) {
+      ankerEl.style.background = fc + '10';
+      ankerEl.style.borderLeftColor = fc;
+      ankerEl.innerHTML = '<span style="font-weight:600;color:' + fc + ';">' + label + ':</span> <span style="color:#6B7280;">' + anker[stufe] + '</span>';
+    } else {
+      // Create anchor element if it doesn't exist yet (first interaction)
+      const row = document.querySelector(`#staerken-wert-${dimId}`)?.closest('.staerken-slider-row');
+      if (row) {
+        const div = document.createElement('div');
+        div.className = 'staerken-anker';
+        div.id = `staerken-anker-${dimId}`;
+        div.style.cssText = 'font-size:11px;margin-top:4px;padding:6px 8px;border-radius:6px;border-left:3px solid ' + fc + ';background:' + fc + '10;';
+        div.innerHTML = '<span style="font-weight:600;color:' + fc + ';">' + label + ':</span> <span style="color:#6B7280;">' + anker[stufe] + '</span>';
+        row.appendChild(div);
+      }
+    }
+  }
 
   // Update chart
   renderStaerkenRadar(s.staerkenProfil.ratings);

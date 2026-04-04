@@ -19280,4 +19280,193 @@ var WIKI_ARTIKEL = [
     leitfaden_ids: [],
     quellen: ['Siegel, D.J. (2012). The Developing Mind. Guilford Press.', 'Ogden, P. et al. (2006). Trauma and the Body. Norton.', 'Dana, D. (2018). The Polyvagal Theory in Therapy. Norton.']
   },
+
+  {
+    id: 'fremdplatzierung',
+    titel: 'Fremdplatzierung — Ablauf, Rechte, Begleitung',
+    aliases: ['Fremdplatzierung', 'Placement', 'Heimerziehung', 'Pflegefamilie', 'Out-of-Home Care', 'Inobhutnahme', 'Unterbringung', 'Foyer'],
+    kategorie: 'recht-system',
+    icon: '🏠',
+    farbe: '#f39c12',
+    definition: 'Fremdplatzierung (placement) bezeichnet die Unterbringung eines Kindes/Jugendlichen außerhalb der Herkunftsfamilie — in einer Pflegefamilie, einem Heim (foyer), einer Wohngruppe oder einer spezialisierten Einrichtung. Sie ist die einschneidendste Maßnahme der Jugendhilfe und darf nur als letztes Mittel eingesetzt werden, wenn das Kindeswohl in der Familie nicht gewährleistet werden kann. Für den Jugendlichen ist die Fremdplatzierung immer ein kritisches Lebensereignis — auch wenn sie notwendig und schützend ist.',
+    altersgruppe: 'Alle Altersgruppen (0-18, ggf. bis 21/27)',
+    praevalenz: 'In Luxemburg sind ca. 1.000-1.200 Kinder und Jugendliche fremdplatziert (ca. 1% der Minderjährigen).',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Formen der Fremdplatzierung in Luxemburg', items: ['Famille d\'accueil (Pflegefamilie): Familiäres Setting, für jüngere Kinder bevorzugt', 'Foyer/Maison relais (Heim/Wohngruppe): Gruppen-Setting mit professionellen Betreuern', 'Centre socio-éducatif: Spezialisierte Einrichtungen für besondere Bedarfe', 'Placement de crise (Krisenplatzierung): Notfallunterbringung bei akuter Gefährdung', 'Placement pénal (Jugendstrafrechtliche Unterbringung): UNISEC', 'Betreutes Wohnen: Für ältere Jugendliche als Übergang zur Selbstständigkeit']},
+      {section: 'Ablauf einer Fremdplatzierung', items: ['1. Meldung/Antrag: Durch ONE, Eltern, Fachkräfte, Polizei', '2. Prüfung: ONE oder Jugendgericht prüft Kindeswohlgefährdung', '3. Entscheidung: Freiwillige Platzierung (accord des parents) oder gerichtlich angeordnet (Tribunal de la Jeunesse)', '4. Matching: Passendes Setting finden (Alter, Bedarf, Geschwister)', '5. Übergang: Behutsame Eingewöhnung (wenn möglich) oder Notfallplatzierung', '6. Begleitung: Hilfeplan, regelmäßige Überprüfung, Elternarbeit', '7. Perspektive: Rückführung, Verselbstständigung oder Dauerpflege']}
+    ],
+    ursachen: [
+      {section: 'Häufige Gründe für Fremdplatzierung', items: ['Vernachlässigung (häufigster Grund)', 'Physische oder sexuelle Misshandlung', 'Psychische Erkrankung der Eltern (mit Beeinträchtigung der Erziehungsfähigkeit)', 'Suchterkrankung der Eltern', 'Überforderung/Erziehungsunfähigkeit', 'Delinquenz/schwere Verhaltensauffälligkeiten des Jugendlichen', 'Unbegleitete minderjährige Flüchtlinge (MENA)']},
+      {section: 'Auswirkungen auf den Jugendlichen', items: ['Loyalitätskonflikte: Gleichzeitig erleichtert und schuldig, traurig und wütend', 'Bindungsabbruch: Verlust der primären Bezugspersonen (auch wenn diese schädlich waren)', 'Identitätsfragen: "Warum bin ich hier? Wer bin ich?"', 'Stigmatisierung: "Heimkind" als Etikett', 'Schulwechsel, Peergruppenverlust, Kontextverlust', 'Chance: Sichere Umgebung, neue Beziehungserfahrungen, Stabilität']}
+    ],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Sichere Basis schaffen', beschreibung: 'Priorität Nr. 1: Dem Jugendlichen Sicherheit und Vorhersagbarkeit bieten. Klare Strukturen, verlässliche Bezugspersonen, transparente Regeln. "Du bist hier sicher."'},
+      {name: 'Biographie-Arbeit', beschreibung: 'Die eigene Geschichte verstehen: Lebensbuch, Lebensfluss, Genogramm. Warum bin ich hier? Was ist passiert? — altersgerechte, ehrliche Antworten.'},
+      {name: 'Elternarbeit / Besuchskontakte', beschreibung: 'Auch bei Fremdplatzierung: Eltern bleiben Eltern. Begleitete Besuchskontakte, Elternberatung, Stärkung der Elternkompetenz — sofern Kindeswohl nicht gefährdet.'},
+      {name: 'Leaving Care / Care Leaver', beschreibung: 'Übergang in die Selbstständigkeit: Verselbstständigungsprogramme, Nachbetreuung, praktische Fähigkeiten (Kochen, Finanzen, Behörden). Care Leaver haben erhöhtes Risiko für Obdachlosigkeit, Armut, psychische Probleme.'}
+    ],
+    praxis_tipps: [
+      'Erste Nacht: Der Jugendliche braucht jemanden, der DA ist — nicht Regeln erklärt',
+      'Loyalitätskonflikte respektieren: "Du darfst deine Eltern vermissen UND froh sein, hier zu sein"',
+      'Keine negativen Aussagen über die Herkunftsfamilie — sie gehört zur Identität',
+      'Partizipation: Jugendliche in Entscheidungen einbeziehen, soweit möglich',
+      'Geschwister: Gemeinsame Platzierung anstreben (Geschwisterbindung!)',
+      'Schulkontinuität wahren, wenn möglich — Schule als Stabilitätsfaktor',
+      'Rechte des Jugendlichen kennen und vermitteln: Beschwerderecht, Ombudsperson',
+      'Regelmäßige Hilfeplanüberprüfung: Ist das Setting noch passend? Rückführung möglich?',
+      'Care Leaver nicht mit 18 in die Leere entlassen — Nachbetreuung ist essenziell',
+      'Eigene Gefühle reflektieren: Wut auf Eltern, Rettungsphantasien, Ohnmacht'
+    ],
+    wann_ueberweisen: 'ONE (Office National de l\'Enfance) bei Kindeswohlgefährdung. Tribunal de la Jeunesse bei gerichtlicher Maßnahme. Spezialisierte Einrichtungen bei komplexem Bedarf.',
+    luxemburg_spezifisch: 'ONE (Office National de l\'Enfance): Zentrale Anlaufstelle für Fremdplatzierung. Tribunal de la Jeunesse: Gerichtliche Anordnung von Maßnahmen. Wichtige Träger: Croix-Rouge, Caritas, Elisabeth, ARCUS, Fondation Kannerschlass. Loi ASFT (2008): Gesetzliche Grundlage. MENA-Betreuung: OLAI (Office Luxembourgeois de l\'Accueil et de l\'Intégration). Ombudsman fir Kanner a Jugendlecher (OKaJu): Beschwerdeinstanz.',
+    verwandte_wiki: ['vernachlaessigung', 'haeusliche-gewalt', 'bindungsstoerung', 'kinderrechte', 'krisenintervention'],
+    screening_domains: [],
+    themen_ids: ['recht', 'system', 'uebergaenge'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Kindler, H. et al. (2011). Handbuch Pflegekinderhilfe. DJI.', 'Stein, M. (2012). Young People Leaving Care. Jessica Kingsley.', 'ONE (2020). Rapport d\'activité. Office National de l\'Enfance Luxembourg.']
+  },
+  {
+    id: 'schweigepflicht-netzwerk',
+    titel: 'Schweigepflicht im multiprofessionellen Netzwerk',
+    aliases: ['Schweigepflicht', 'Secret professionnel', 'Datenschutz', 'Informationsaustausch', 'Netzwerkarbeit', 'Multiprofessionell', 'Vertraulichkeit'],
+    kategorie: 'recht-system',
+    icon: '🔒',
+    farbe: '#f39c12',
+    definition: 'Die Schweigepflicht (secret professionnel) schützt die Privatsphäre von Klienten und ist eine grundlegende Voraussetzung für Vertrauen in der psychosozialen Arbeit. Gleichzeitig erfordert wirksame Jugendhilfe Zusammenarbeit und Informationsaustausch zwischen verschiedenen Fachkräften (Schule, Therapie, Jugendamt, Polizei, Ärzte). Dieses Spannungsfeld ist eine der größten Herausforderungen im Alltag: Wann DARF ich Informationen teilen? Wann MUSS ich? Wann darf ich es NICHT?',
+    altersgruppe: 'Relevant für die Arbeit mit allen Altersgruppen',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Rechtliche Grundlage in Luxemburg', items: ['Art. 458 Code pénal: Verletzung des Berufsgeheimnisses ist strafbar (Geldstrafe + Gefängnis)', 'Betrifft: Ärzte, Psychologen, Sozialarbeiter, Erzieher, Therapeuten — alle die beruflich Kenntnis von persönlichen Daten erhalten', 'DSGVO/RGPD: Europäische Datenschutz-Grundverordnung — Verarbeitung personenbezogener Daten', 'Loi ASFT (2008): Regelungen zur Jugendhilfe und Informationsaustausch mit ONE', 'Meldepflicht (Art. 7 Loi ASFT): Pflicht zur Meldung an ONE bei Kindeswohlgefährdung → durchbricht Schweigepflicht']},
+      {section: 'Wann darf/muss ich Informationen teilen?', items: ['✅ MIT Einverständnis: Schweigepflichtsentbindung (schriftlich!) → Information darf geteilt werden', '✅ Meldepflicht: Bei Kindeswohlgefährdung MUSS gemeldet werden (ONE/Jugendgericht) → Schweigepflicht tritt zurück', '✅ Rechtfertigender Notstand: Bei unmittelbarer Gefahr für Leib und Leben → z.B. Suizidalität → Polizei/Notarzt', '❌ OHNE Einverständnis und ohne Meldepflicht: Keine Information an Dritte — auch nicht an Eltern volljähriger Klienten', '⚠️ Im Team: Interner Informationsaustausch im gleichen Dienst ist in der Regel erlaubt (Need-to-know-Prinzip)', '⚠️ Netzwerktreffen: Nur mit Einverständnis des Klienten oder anonymisiert']}
+    ],
+    ursachen: [],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Schweigepflichtsentbindung', beschreibung: 'Schriftliche Einverständniserklärung: Wer darf mit wem über was sprechen? Zeitlich begrenzt. Kann jederzeit widerrufen werden. Bei Minderjährigen: Einverständnis der Sorgeberechtigten UND des Jugendlichen (je nach Alter und Reife).'},
+      {name: 'Need-to-know-Prinzip', beschreibung: 'Nur die Information teilen, die für die jeweilige Fachkraft zur Aufgabenerfüllung notwendig ist. Nicht: "Ich erzähle mal alles, was ich weiß." Sondern: "Welche Information braucht der Lehrer konkret?"'},
+      {name: 'Anonymisierte Fallbesprechung', beschreibung: 'Im multiprofessionellen Netzwerk: Fälle besprechen ohne identifizierende Merkmale. In kleinen Kontexten wie Luxemburg schwierig — Anonymisierung kann schnell aufgehoben werden.'}
+    ],
+    praxis_tipps: [
+      'Im Zweifel: Schweigepflicht geht vor — lieber einmal zu viel geschwiegen als zu wenig',
+      'Einverständnis einholen: "Ich möchte mit deinem Lehrer über X sprechen. Ist das ok?"',
+      'Transparenz: Jugendlichem erklären, was man teilt und warum',
+      'Schweigepflicht gegenüber Jugendlichem: "Was du mir sagst, bleibt hier — AUSSER du oder jemand anders ist in Gefahr"',
+      'Grenzen der Schweigepflicht VOR dem Gespräch klären, nicht danach',
+      'Meldepflicht bei Kindeswohlgefährdung: Hier gibt es kein Ermessen — melden ist Pflicht',
+      'Dokumentation: Was wurde wem wann mitgeteilt? Schriftlich festhalten',
+      'E-Mail/WhatsApp: KEINE sensiblen Daten per unverschlüsseltem Kanal!',
+      'Supervisionsgruppe: Auch hier gilt Schweigepflicht — explizit ansprechen',
+      'Eltern volljähriger Jugendlicher haben KEIN automatisches Informationsrecht'
+    ],
+    wann_ueberweisen: '',
+    luxemburg_spezifisch: 'Art. 458 Code pénal: Grundlage des Berufsgeheimnisses. Art. 7 Loi ASFT: Meldepflicht an ONE. CNPD (Commission Nationale pour la Protection des Données): Datenschutzaufsicht. Ombudsman fir Kanner a Jugendlecher: Beschwerdeinstanz bei Rechtsverletzungen. ONE als zentrale Meldestelle für Kindeswohlgefährdung.',
+    verwandte_wiki: ['meldepflicht', 'fremdplatzierung', 'kinderrechte'],
+    screening_domains: [],
+    themen_ids: ['recht', 'ethik', 'netzwerk'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Code pénal luxembourgeois, Art. 458.', 'Loi du 16 décembre 2008 relative à l\'aide à l\'enfance et à la famille (Loi ASFT).', 'RGPD/DSGVO: Règlement (UE) 2016/679.']
+  },
+  {
+    id: 'lgbtq-jugendliche',
+    titel: 'LGBTQ+ Jugendliche — Rechte, Risiken, Ressourcen',
+    aliases: ['LGBTQ+', 'LGBT', 'Queer', 'Homosexualität', 'Transgender', 'Coming-Out', 'Geschlechtliche Vielfalt', 'Sexuelle Orientierung', 'Non-binär'],
+    kategorie: 'recht-system',
+    icon: '🏳️‍🌈',
+    farbe: '#f39c12',
+    definition: 'LGBTQ+ Jugendliche (Lesbian, Gay, Bisexual, Transgender, Queer und weitere) haben spezifische Bedürfnisse, Risiken und Ressourcen, die in der Jugendhilfe berücksichtigt werden müssen. Sie sind überproportional von psychischen Problemen betroffen — NICHT wegen ihrer Identität, sondern wegen Diskriminierung, Ablehnung und Minderheitenstress (Minority Stress Model). Eine affirmierende, akzeptierende Haltung der Fachkräfte ist ein zentraler Schutzfaktor.',
+    altersgruppe: 'Identitätsexploration typischerweise ab 10-14 Jahren, Coming-Out durchschnittlich mit 14-17 Jahren',
+    praevalenz: 'Ca. 5-15% der Jugendlichen identifizieren sich als LGBTQ+ (Tendenz steigend durch höhere Offenheit). Ca. 0.5-2% identifizieren sich als transgender oder non-binär.',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Begriffe verstehen', items: ['Sexuelle Orientierung: Wen man liebt/begehrt (lesbisch, schwul, bisexuell, pansexuell, asexuell...)', 'Geschlechtsidentität: Wer man IST (cisgender, transgender, non-binär, genderfluid, agender...)', 'Geschlechtsausdruck: Wie man sich nach außen zeigt (maskulin, feminin, androgyn...)', 'Biologisches Geschlecht: Chromosomen, Hormone, Anatomie (männlich, weiblich, intersex)', 'Diese 4 Dimensionen sind unabhängig voneinander!', 'Pronomen: Sie/Er/They — immer nach bevorzugten Pronomen fragen und diese respektieren']},
+      {section: 'Spezifische Risiken', items: ['Suizidalität: 3-5× höheres Risiko für Suizidversuche als heterosexuelle/cisgender Peers', 'Obdachlosigkeit: 20-40% der obdachlosen Jugendlichen sind LGBTQ+ (familiäre Ablehnung)', 'Mobbing: 70-80% erleben verbale Belästigung, 30-40% physische Gewalt', 'Depression und Angst: 2-3× häufiger', 'Substanzkonsum: Erhöhtes Risiko (Bewältigung von Minderheitenstress)', 'Selbstverletzung: 2-3× häufiger', 'Essstörungen: Besonders bei schwulen/bisexuellen Jungen und trans Jugendlichen', 'Internalisierte Homonegativität: Scham über die eigene Identität']}
+    ],
+    ursachen: [
+      {section: 'Minority Stress Model (Meyer, 2003)', items: ['Distaler Stress: Externe Diskriminierung, Gewalt, strukturelle Benachteiligung', 'Proximaler Stress: Antizipation von Ablehnung, Verbergen der Identität, internalisierte Homonegativität', 'Schutzfaktoren: Soziale Unterstützung, Community, affirmierendes Umfeld', 'LGBTQ+ Identität selbst ist KEIN Risikofaktor — Diskriminierung ist es', 'Konversionstherapie ("Reparativtherapie") ist schädlich und wird international abgelehnt']},
+      {section: 'Coming-Out-Prozess', items: ['Awareness: Bewusstwerdung der eigenen Orientierung/Identität', 'Exploration: Ausprobieren, Recherche, Kontakt zu Community', 'Disclosure: Mitteilung an andere — in der Regel schrittweise (zuerst Freunde, dann Familie)', 'Integration: Identität als Teil des Selbst akzeptieren und integrieren', 'Coming-Out ist kein einmaliges Ereignis — es passiert in jeder neuen Situation neu']}
+    ],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Affirmative Praxis', beschreibung: 'Nicht nur "neutral" oder "tolerant" — aktiv bejahend. Einrichtung signalisiert Sicherheit: Regenbogen-Symbol, inkludierende Sprache, LGBTQ+-Themen in Bibliothek/Materialien. "Du bist willkommen, wie du bist."'},
+      {name: 'Coming-Out unterstützen', beschreibung: 'Tempo des Jugendlichen respektieren — nicht outen! Sicherheit prüfen: Ist Coming-Out in der Familie sicher? Wenn nicht: Schutzplan. Validieren: "Es braucht Mut, das zu sagen. Danke fürs Vertrauen."'},
+      {name: 'Familienakzeptanz fördern', beschreibung: 'Family Acceptance Project (Ryan): Familienakzeptanz ist der stärkste Schutzfaktor. Psychoedukation für Eltern. PFLAG-Ansatz: Eltern vernetzen mit anderen Eltern von LGBTQ+ Kindern.'},
+      {name: 'Peer-Support & Community', beschreibung: 'Kontakt zu LGBTQ+-Jugendgruppen ermöglichen. Rolle von LGBTQ+-Vorbildern. Online-Communities können wichtige Ressource sein (aber auch Risiken bergen).'}
+    ],
+    praxis_tipps: [
+      'Gendern in der Ansprache: Nach bevorzugten Pronomen fragen und sie verwenden',
+      'Heteronormativität hinterfragen: Nicht "Hast du einen Freund?" sondern "Bist du verliebt?"',
+      'Coming-Out NIEMALS erzwingen oder für den Jugendlichen übernehmen (Outing = Vertrauensbruch)',
+      'Affirmative Haltung sichtbar machen: Regenbogen-Sticker, inklusive Sprache, LGBTQ+-Bücher',
+      'Eigene Haltung reflektieren: Unbewusste Vorurteile erkennen und bearbeiten',
+      'Konversionstherapie ist schädlich und unethisch — klare Haltung dagegen',
+      'Trans Jugendliche: Gewählten Namen und Pronomen verwenden — auch wenn Eltern dagegen sind',
+      'Intersektionalität beachten: LGBTQ+ + Migration + Armut = kumulative Belastung',
+      'Nicht jeder LGBTQ+ Jugendliche hat Probleme — Pathologisierung vermeiden',
+      'Eigene Wissenslücken eingestehen: "Ich kenne mich nicht so gut aus, aber ich will lernen"'
+    ],
+    wann_ueberweisen: 'Psychotherapie bei: Minderheitenstress-bedingter Depression/Angst, Suizidalität, Coming-Out-Krise. Genderberatung bei: Trans/non-binäre Identitätsfragen, Wunsch nach Transition. LGBTQ+-spezialisierte Beratung empfehlen.',
+    luxemburg_spezifisch: 'CIGALE Luxembourg: LGBTQ+ Jugendgruppe und Beratung. Rosa Lëtzebuerg: LGBTQ+ Dachverband. Intersex & Transgender Luxembourg. Gesetzgebung: Gleichgeschlechtliche Ehe (seit 2015), Adoption (seit 2015), Änderung des Geschlechtseintrags (seit 2018, ohne medizinische Voraussetzungen). Centre pour l\'Égalité de Traitement (CET): Anlaufstelle bei Diskriminierung.',
+    verwandte_wiki: ['geschlechtsidentitaet', 'suizidalitaet', 'mobbing', 'kinderrechte', 'peer-beziehungen'],
+    screening_domains: [],
+    themen_ids: ['identitaet', 'rechte', 'diversitaet'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Meyer, I.H. (2003). Prejudice, social stress, and mental health in lesbian, gay, and bisexual populations. Psychological Bulletin.', 'Ryan, C. et al. (2010). Family Acceptance in Adolescence and the Health of LGBT Young Adults. Journal of Child and Adolescent Psychiatric Nursing.', 'APA (2021). Guidelines for Psychological Practice with Sexual Minority Persons.']
+  },
+  {
+    id: 'kinderrechte',
+    titel: 'UN-Kinderrechtskonvention — Die wichtigsten Artikel',
+    aliases: ['Kinderrechte', 'UN-Kinderrechtskonvention', 'KRK', 'CRC', 'Convention on the Rights of the Child', 'Rechte des Kindes', 'Kindeswohl'],
+    kategorie: 'recht-system',
+    icon: '⚖️',
+    farbe: '#f39c12',
+    definition: 'Die UN-Kinderrechtskonvention (KRK, englisch CRC) wurde 1989 von der UN-Generalversammlung verabschiedet und ist das meistratifizierte Menschenrechtsabkommen der Welt (alle Staaten außer den USA). Sie definiert Kinder als eigenständige Rechtsträger — nicht nur als Schutzobjekte. Luxemburg hat die KRK 1993 ratifiziert. Für Fachkräfte in der Jugendhilfe sind die Kinderrechte das normative Fundament ihrer Arbeit: Jede Entscheidung muss am Kindeswohl (best interests of the child) orientiert sein.',
+    altersgruppe: 'Gilt für alle Menschen unter 18 Jahren',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Die 4 Grundprinzipien der KRK', items: ['Art. 2 — Nichtdiskriminierung: Alle Rechte gelten für JEDES Kind, ohne Unterschied nach Herkunft, Geschlecht, Religion, Behinderung, Status der Eltern etc.', 'Art. 3 — Kindeswohl (Best Interests): Bei allen Maßnahmen, die Kinder betreffen, ist das Wohl des Kindes vorrangig zu berücksichtigen', 'Art. 6 — Recht auf Leben und Entwicklung: Jedes Kind hat das Recht auf Leben und auf bestmögliche Entwicklung', 'Art. 12 — Partizipation: Jedes Kind hat das Recht, seine Meinung frei zu äußern, und diese Meinung ist angemessen zu berücksichtigen (je nach Alter und Reife)']},
+      {section: 'Wichtige Artikel für die Jugendhilfe', items: ['Art. 9 — Trennung von den Eltern: Nur wenn zum Wohl des Kindes. Kind hat Recht auf Kontakt zu beiden Eltern', 'Art. 19 — Schutz vor Gewalt: Schutz vor jeder Form von Gewalt, Verwahrlosung, Misshandlung, Ausbeutung', 'Art. 20 — Kinder ohne familiäre Fürsorge: Recht auf besonderen staatlichen Schutz und Beistand', 'Art. 24 — Recht auf Gesundheit: Bestmögliche Gesundheitsversorgung', 'Art. 25 — Überprüfung der Unterbringung: Regelmäßige Überprüfung bei Fremdplatzierung', 'Art. 28/29 — Recht auf Bildung: Zugang zu Bildung, die die Persönlichkeit voll entfaltet', 'Art. 31 — Recht auf Spiel und Freizeit: Oft vergessen, aber fundamental', 'Art. 37 — Schutz vor Folter und Freiheitsentzug: Freiheitsentzug nur als letztes Mittel', 'Art. 39 — Genesung und Wiedereingliederung: Recht auf Rehabilitation nach Misshandlung/Ausbeutung', 'Art. 42 — Bekanntmachung: Die Rechte müssen Kindern und Erwachsenen bekannt gemacht werden']}
+    ],
+    ursachen: [],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Partizipation leben (Art. 12)', beschreibung: 'Nicht nur informieren, sondern beteiligen: Hilfeplangespräche MIT dem Jugendlichen, nicht über ihn. Beschwerdemöglichkeiten schaffen. Jugendparlamente in Einrichtungen. Meinung des Kindes einholen UND berücksichtigen.'},
+      {name: 'Kinderrechtsorientierte Einrichtung', beschreibung: 'Institutionelles Schutzkonzept, Beschwerdeverfahren, Partizipationsstrukturen, Transparenz über Regeln und Rechte. Kinderrechte sind kein Poster an der Wand — sie müssen im Alltag gelebt werden.'},
+      {name: 'Kinderrechtebildung', beschreibung: 'Jugendlichen ihre Rechte beibringen: Workshops, Materialien, Poster. Art. 42: Die Rechte müssen bekannt gemacht werden. "Du hast Rechte — und du darfst sie einfordern."'}
+    ],
+    praxis_tipps: [
+      'Kindeswohl (Art. 3) bei JEDER Entscheidung explizit abwägen und dokumentieren',
+      'Partizipation (Art. 12) ist kein Extra — es ist ein Recht: "Was denkst du dazu?"',
+      'Beschwerderecht aktiv kommunizieren: "Wenn du dich ungerecht behandelt fühlst, kannst du..."',
+      'Kinderrechte-Poster in der Einrichtung aufhängen — sichtbar und verständlich',
+      'Auch unbequeme Meinungen von Jugendlichen ernst nehmen',
+      'Recht auf Spiel und Freizeit (Art. 31) nicht dem Leistungsdruck opfern',
+      'Recht auf Privatsphäre (Art. 16): Zimmer klopfen, Post nicht öffnen, Tagebuch nicht lesen',
+      'Kinderrechte sind KEINE Gefälligkeit — sie sind einklagbar',
+      'Schutzkonzept: Wie schützt unsere Einrichtung vor Gewalt (auch durch Fachkräfte)?',
+      'OKaJu (Ombudsman) als Ressource kennen und Jugendlichen vermitteln'
+    ],
+    wann_ueberweisen: '',
+    luxemburg_spezifisch: 'Luxemburg hat die KRK 1993 ratifiziert. OKaJu (Ombudsman fir Kanner a Jugendlecher): Unabhängige Beschwerdeinstanz für Kinderrechte in Luxemburg. CCDH (Commission Consultative des Droits de l\'Homme): Menschenrechtskommission. Loi ASFT (2008): Luxemburgische Umsetzung von Kinderrechten in der Jugendhilfe. Comité des droits de l\'enfant (UN): Überprüft Luxemburgs Umsetzung regelmäßig.',
+    verwandte_wiki: ['fremdplatzierung', 'schweigepflicht-netzwerk', 'lgbtq-jugendliche', 'meldepflicht', 'jugendschutz-lu'],
+    screening_domains: [],
+    themen_ids: ['recht', 'partizipation', 'ethik'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['UN-Kinderrechtskonvention (1989). Convention on the Rights of the Child.', 'UNICEF (2007). Implementation Handbook for the Convention on the Rights of the Child.', 'OKaJu (2022). Rapport annuel. Ombudsman fir Kanner a Jugendlecher Luxembourg.']
+  },
 ];

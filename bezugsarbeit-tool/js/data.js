@@ -17248,4 +17248,547 @@ var WIKI_ARTIKEL = [
     leitfaden_ids: ['elterngespraech'],
     quellen: ['Landgraf, M.N. & Heinen, F. (2017). S3-Leitlinie FASD. Springer.', 'Streissguth, A.P. et al. (2004). Risk Factors for Adverse Life Outcomes in FASD. Journal of Developmental and Behavioral Pediatrics.']
   },
+  // ========== ENTWICKLUNG (10 Artikel) ==========
+  {
+    id: 'pubertaet',
+    titel: 'Pubertät & körperliche Entwicklung',
+    aliases: ['Pubertät', 'Körperliche Reifung', 'Tanner-Stadien', 'Wachstumsschub', 'Menarche', 'Stimmbruch'],
+    kategorie: 'entwicklung',
+    icon: '🌱',
+    farbe: '#10B981',
+    definition: 'Die Pubertät ist die biologische Reifungsphase, in der das Kind zum fortpflanzungsfähigen Erwachsenen wird. Ausgelöst durch die HPG-Achse (Hypothalamus-Hypophyse-Gonaden). Bei Mädchen: 8-13 Jahre Beginn, bei Jungen: 9-14 Jahre. Die körperlichen Veränderungen sind tiefgreifend und beeinflussen Selbstbild, Emotionen und Sozialverhalten. "Normales" Timing variiert stark — Abweichungen können psychisch sehr belastend sein.',
+    altersgruppe: 'Mädchen: Beginn 8-13 Jahre (Thelarche), Menarche ca. 12-13. Jungen: Beginn 9-14 Jahre, Stimmbruch ca. 13-15.',
+    praevalenz: 'Universell — betrifft ALLE. Trend zur früheren Pubertät (säkularer Trend): Menarche heute 6-12 Monate früher als vor 50 Jahren.',
+    icd10: { code: '-', label: 'Normale Entwicklung' },
+    icd11: { code: '-', label: 'Normale Entwicklung' },
+    erscheinungsbild: [
+      'Mädchen: Brustwachstum (erstes Zeichen), Schambehaarung, Wachstumsschub, Menarche, Hüftverbreiterung',
+      'Jungen: Hodenwachstum (erstes Zeichen), Schambehaarung, Peniswachstum, Stimmbruch, Muskelaufbau, Bart',
+      'Beide: Akne, Schweißgeruch, Wachstumsschub (10-30cm!), veränderte Körperproportionen',
+      'Gehirn: Massive Umbauprozesse — Synaptic Pruning ("Use it or lose it"), Myelinisierung, PFC-Reifung bis 25!',
+      'Emotionen: Stimmungsschwankungen, Reizbarkeit, Impulsivität — NICHT pathologisch sondern neurobiologisch normal',
+      'Schlaf: Melatonin-Verschiebung → Jugendliche sind biologisch Nachteulen. Frühes Aufstehen = Schlafmangel.',
+      'Pubertas praecox (<8 Mädchen/<9 Jungen): Zu frühe Pubertät → psychisch belastend, medizinisch abklären'
+    ],
+    ursachen: [
+      { faktor: 'Hormonell', text: 'HPG-Achse: Hypothalamus → GnRH → Hypophyse → LH/FSH → Gonaden → Östrogen/Testosteron. Dieser "Pubertäts-Schalter" wird durch Genetik, Ernährung, Körperfett und Umweltfaktoren beeinflusst.' },
+      { faktor: 'Neurobiologisch', text: 'Limbisches System (Emotionen, Belohnung) reift VOR dem präfrontalen Cortex (Kontrolle, Planung). Ergebnis: "Gas ohne Bremse" — hohe Emotionalität bei noch unreifer Regulation.' },
+      { faktor: 'Säkularer Trend', text: 'Pubertät beginnt heute früher: Bessere Ernährung, Übergewicht (Leptin!), endokrine Disruptoren (Plastik, Pestizide). Psychosoziale Konsequenzen: Kinder in Erwachsenenkörpern.' },
+      { faktor: 'PVT-Perspektive', text: 'Hormonelle Umstellung destabilisiert das autonome Nervensystem: Stimmungsschwankungen, Impulsivität, Sensibilität → normaler Ausdruck einer neurobiologischen Revolution.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Pathologie vs. normal', unterschied: 'Stimmungsschwankungen in der Pubertät sind NORMAL. Pathologisch erst bei: Dauer >2 Wochen, Funktionsbeeinträchtigung, Suizidalität, Selbstverletzung.' },
+      { was: 'Pubertas praecox', unterschied: 'Pubertät VOR 8 (Mädchen) / 9 (Jungen): Medizinisch abklären! Kann hormonell behandelt werden.' }
+    ],
+    komorbiditaeten: ['Körperbild-Sorgen', 'Stimmungsschwankungen', 'Risikoverhalten', 'Essstörungen (Pubertät als Trigger)', 'Geschlechtsdysphorie (wird in Pubertät oft deutlich)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Aufklärung/Psychoedukation', evidenz: '★★★', beschreibung: 'Altersgerechte Information VOR der Pubertät: Was passiert mit dem Körper? Warum Stimmungsschwankungen? Das ist NORMAL. Bücher, Videos, Gespräche.' },
+      { methode: 'Normalisierung', evidenz: '★★★', beschreibung: '"Jeder Körper entwickelt sich in seinem eigenen Tempo." Vergleiche mit Peers reduzieren. Vielfalt betonen.' },
+      { methode: 'Emotionscoaching', evidenz: '★★★', beschreibung: 'Stimmungsschwankungen validieren: "Deine Hormone spielen gerade verrückt — das ist normal und geht vorbei." Regulation unterstützen, nicht unterdrücken.' },
+      { methode: 'Körperpositive Haltung', evidenz: '★★☆', beschreibung: 'Körper als funktional betrachten, nicht nur ästhetisch. "Dein Körper wächst und wird stärker." Social-Media-Kritik.' }
+    ],
+    praxis_tipps: [
+      'VOR der Pubertät aufklären — nicht "das Gespräch" haben, sondern fortlaufend altersgerecht informieren',
+      'Körperliche Veränderungen normalisieren: "Das passiert ALLEN" — Scham reduzieren',
+      'Stimmungsschwankungen NICHT personalisieren: "Er ist unmöglich" → "Sein Gehirn baut gerade um"',
+      'Schlafbedürfnis respektieren: Wenn möglich späteren Schulbeginn/Aufstehzeit ermöglichen',
+      'Bei früher Pubertät: Besonders aufmerksam begleiten — Kind ist körperlich "weiter" als psychisch',
+      'Privatsphäre respektieren: Zunehmender Rückzug ist NORMAL und GESUND. Klopfen lernen!'
+    ],
+    wann_ueberweisen: 'Bei Pubertas praecox (<8/9): Kinderendokrinologe. Bei ausbleibender Pubertät (>14/15): Ebenfalls. Bei massiven Körperbild-Sorgen: Essstörungs-Screening. Bei Geschlechtsdysphorie: Spezialisierte Beratung.',
+    luxemburg_spezifisch: 'CHL Pädiatrie/Endokrinologie: Bei Pubertas praecox/tarda. Planning Familial: Sexualaufklärung. CePAS: Schulische Begleitung.',
+    verwandte_wiki: ['adoleszenz-identitaet', 'geschlechtsidentitaet', 'sexuelle-entwicklung', 'essstoerungen'],
+    screening_domains: ['entwicklung'],
+    themen_ids: ['koerperbild', 'sexualitaet', 'identitaet'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Silbereisen, R.K. & Lerner, R.M. (2007). Approaches to Positive Youth Development. Sage.', 'Blakemore, S.-J. (2018). Inventing Ourselves: The Secret Life of the Teenage Brain. PublicAffairs.']
+  },
+  {
+    id: 'adoleszenz-identitaet',
+    titel: 'Identitätsentwicklung in der Adoleszenz',
+    aliases: ['Identität', 'Erikson', 'Marcia', 'Wer bin ich', 'Identitätskrise', 'Selbstfindung'],
+    kategorie: 'entwicklung',
+    icon: '🪞',
+    farbe: '#6366F1',
+    definition: 'Die zentrale Entwicklungsaufgabe der Adoleszenz (Erikson): "Identität vs. Identitätsdiffusion". Der Jugendliche muss ein kohärentes Selbstbild entwickeln — Wer bin ich? Was will ich? Wohin gehöre ich? Marcia (1966) beschreibt vier Identitätsstatus: Diffusion (kein Commitment, keine Exploration), Foreclosure (Commitment ohne Exploration), Moratorium (aktive Exploration) und Achievement (Commitment nach Exploration). Identitätsentwicklung ist ARBEIT und kann krisenhaft verlaufen.',
+    altersgruppe: 'Hauptphase: 14-25 Jahre. Beginnt mit Pubertät, ist mit 25 oft noch nicht abgeschlossen.',
+    praevalenz: 'Universelle Entwicklungsaufgabe. 30% der Jugendlichen erleben eine signifikante "Identitätskrise".',
+    icd10: { code: '-', label: 'Normale Entwicklungsaufgabe' },
+    icd11: { code: '-', label: 'Normale Entwicklungsaufgabe' },
+    erscheinungsbild: [
+      'Exploration: Ausprobieren von Rollen, Stilen, Werten, Beziehungen, Berufsideen, politischen Überzeugungen',
+      'Identitätsdiffusion: "Ich weiß nicht wer ich bin", Orientierungslosigkeit, Desinteresse, Passivität',
+      'Foreclosure: Übernahme elterlicher Werte ohne eigene Exploration — "Ich werde Arzt wie Papa"',
+      'Moratorium: Aktive Suche, Experimentieren, Veränderungen — kann chaotisch aussehen, ist aber GESUND',
+      'Achievement: Eigene Werte, Ziele, Identität gefunden — nach Phase der Exploration',
+      'Identitätsbereiche: Beruf, Ideologie/Werte, Sexualität, Geschlecht, Ethnie/Kultur, Religion, Freundschaften'
+    ],
+    ursachen: [
+      { faktor: 'Erikson', text: 'Psychosoziale Entwicklung: Jede Lebensphase hat eine Kernkrise. Adoleszenz: Identität vs. Identitätsdiffusion. Positive Lösung: Fähigkeit zu Treue (Commitment).' },
+      { faktor: 'Kognitive Reifung', text: 'Formal-operationales Denken (Piaget): Jugendliche können erstmals ÜBER SICH SELBST nachdenken, hypothetisch denken, Widersprüche erkennen. Das ermöglicht — und erzwingt — Identitätsarbeit.' },
+      { faktor: 'Soziales Umfeld', text: 'Peers: Spiegel und Vergleich. Eltern: Sichere Basis für Exploration. Schule/Beruf: Kompetenz-Erfahrungen. Medien/Kultur: Identitätsangebote und -vorbilder.' },
+      { faktor: 'PVT-Perspektive', text: 'Identitätsexploration erfordert ventral-vagalen Zustand: Sicherheit, Neugier, soziales Engagement. Bei traumatisierten Jugendlichen: Überlebensmodus verhindert Exploration → Identitätsdiffusion.' }
+    ],
+    differentialdiagnose: [
+      { was: 'BPS', unterschied: 'Identitätsstörung bei BPS: Chronisch, instabil, verbunden mit SVV/Suizidalität. Normale Identitätskrise: Vorübergehend, ohne schwere Symptome.' },
+      { was: 'Depression', unterschied: 'Identitätsdiffusion kann depressive Symptome auslösen. ABER: Bei reiner Identitätskrise kein Interessenverlust, keine Suizidalität.' }
+    ],
+    komorbiditaeten: ['Depression (bei Identitätsdiffusion)', 'Angststörungen', 'Substanzexperimente', 'Beziehungskonflikte', 'Schulprobleme'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Identitätsarbeit', evidenz: '★★★', beschreibung: '"Wer bist du? Was ist dir wichtig? Was macht dich aus?" — Aktive Exploration unterstützen durch Fragen, nicht durch Antworten.' },
+      { methode: 'Sichere Basis bieten', evidenz: '★★★', beschreibung: 'Bindungstheorie: Der Jugendliche braucht eine sichere Basis, von der aus er explorieren kann. "Du kannst alles ausprobieren — ich bin da wenn du mich brauchst."' },
+      { methode: 'Biografie-Arbeit', evidenz: '★★☆', beschreibung: 'Besonders bei Jugendhilfe-Kindern: "Wo komme ich her? Was hat mich geprägt? Was will ich mitnehmen, was zurücklassen?"' },
+      { methode: 'Peer-Erfahrungen', evidenz: '★★☆', beschreibung: 'Gruppenarbeit, Freizeiten, Projekte — Jugendliche entwickeln Identität im Peer-Kontext, nicht im Einzelgespräch.' }
+    ],
+    praxis_tipps: [
+      'Exploration unterstützen, nicht lenken: "Das klingt interessant — erzähl mehr!" statt "Das wird doch nichts"',
+      'Rollen-Wechsel normalisieren: "Diese Woche Punk, nächste Woche Sportler" — das IST Identitätsarbeit',
+      'Foreclosure erkennen: Jugendliche, die "alles wissen" und nie hinterfragen → Exploration anregen',
+      'Jugendhilfe-Kinder: Besonderer Bedarf an Identitätsarbeit — "Bin ich meine Diagnose? Meine Akte? Mein Wohnheim?"',
+      'Kulturelle Identität: Bei Migrationshintergrund: Zwischen zwei Kulturen navigieren ist EXTRA-ARBEIT, nicht Defizit',
+      'Fragen stellen, nicht bewerten: "Warum ist dir das wichtig?" statt "Das ist doch Unsinn"'
+    ],
+    wann_ueberweisen: 'Bei anhaltender Identitätsdiffusion + Depression/SVV: Psychotherapie. Bei V.a. BPS: Spezialisierte Diagnostik. Bei Geschlechtsdysphorie: Spezialisierte Beratung.',
+    luxemburg_spezifisch: 'CePAS: Berufsorientierung und Identitätsberatung. SNJ (Service National de la Jeunesse): Jugendarbeit, Freiwilligendienst. Jugendhaiser: Offene Jugendarbeit.',
+    verwandte_wiki: ['pubertaet', 'geschlechtsidentitaet', 'migration-kulturelle-identitaet', 'abloesung-autonomie'],
+    screening_domains: [],
+    themen_ids: ['identitaet', 'selbstwert', 'zukunftsplanung'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Erikson, E.H. (1968). Identity: Youth and Crisis. Norton.', 'Marcia, J.E. (1966). Development and Validation of Ego Identity Status. Journal of Personality and Social Psychology.', 'Kroger, J. (2007). Identity Development: Adolescence Through Adulthood. 2nd ed. Sage.']
+  },
+  {
+    id: 'kognitive-entwicklung',
+    titel: 'Kognitive Entwicklung (Piaget, Exekutive Funktionen)',
+    aliases: ['Piaget', 'Denken', 'Exekutive Funktionen', 'Formal-operational', 'Abstrakt denken', 'Metakognition'],
+    kategorie: 'entwicklung',
+    icon: '💭',
+    farbe: '#3B82F6',
+    definition: 'Die kognitive Entwicklung in der Adoleszenz umfasst den Übergang zum formal-operationalen Denken (Piaget): Abstraktes, hypothetisches, systematisches Denken wird möglich. Gleichzeitig reifen die exekutiven Funktionen (Planung, Impulskontrolle, Arbeitsgedächtnis, Flexibilität) — der präfrontale Cortex ist erst mit 25 Jahren voll ausgereift. Dies erklärt vieles "typisch Jugendliche": Risikobereitschaft, schlechte Planung, emotionale Impulsivität.',
+    altersgruppe: 'Formal-operationales Denken: Ab ca. 11-12 Jahre. Exekutive Funktionen: Reifung bis 25 Jahre.',
+    praevalenz: 'Universell — betrifft alle Jugendlichen. Individuelle Unterschiede im Tempo und Ausmaß.',
+    icd10: { code: '-', label: 'Normale Entwicklung' },
+    icd11: { code: '-', label: 'Normale Entwicklung' },
+    erscheinungsbild: [
+      'Abstraktion: Kann über Ideen, Werte, Zukunft, Hypothesen nachdenken — nicht mehr nur über Konkretes',
+      'Adoleszenter Egozentrismus (Elkind): "Imaginary Audience" (alle schauen mich an) + "Personal Fable" (mir passiert das nicht)',
+      'Idealismus: Kann eine "bessere Welt" denken → Kritik an Erwachsenen, politisches Engagement, Enttäuschung',
+      'Risikobereitschaft: Belohnungssystem (Dopamin) voll aktiv, aber Bremse (PFC) noch unreif → kalkulierte Risiken im Beisein von Peers',
+      'Exekutive Funktionen: Planung, Organisation, Zeitmanagement, Impulskontrolle — alles noch "in Entwicklung"',
+      'Metakognition: "Denken über das Denken" wird möglich → Reflexionsfähigkeit, aber auch Grübeln'
+    ],
+    ursachen: [
+      { faktor: 'Piaget', text: 'Formal-operationales Stadium (ab 11-12): Hypothetisch-deduktives Denken, Proportionales Denken, Kombinatorik. Nicht alle Erwachsenen erreichen dieses Stadium vollständig!' },
+      { faktor: 'Neurobiologisch', text: 'PFC-Reifung: Synaptic Pruning ("Use it or lose it") + Myelinisierung = schnellere, effizientere Verarbeitung. Aber: Dauert bis 25! Letzte Region: Dorsolateraler PFC (Planung, Urteilsvermögen).' },
+      { faktor: 'Dual-Systems-Model', text: 'Steinberg: Emotionales System (Limbisches System) reift schneller als kognitives Kontrollsystem (PFC). Ergebnis: Hohe Emotionalität + geringe Kontrolle = typisch Jugendlich.' },
+      { faktor: 'Soziales Gehirn', text: 'Das "soziale Gehirn" (Theory of Mind, Perspektivenübernahme, soziale Kognition) ist in der Adoleszenz besonders plastisch — daher sind Peer-Einflüsse so stark.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ADHS', unterschied: 'ADHS: Exekutive Dysfunktion über das normale Maß hinaus. Normale Adoleszenz: Eingeschränkte EF, aber im Rahmen. Grenze ist fließend!' },
+      { was: 'Intelligenzminderung', unterschied: 'IB: Abstraktes Denken NICHT oder eingeschränkt möglich. Normale Entwicklung: Abstraktion entwickelt sich, manchmal nur langsamer.' }
+    ],
+    komorbiditaeten: ['Risikobereitschaft kann zu Unfällen, Substanzkonsum, riskantem Sexualverhalten führen', 'Grübeln als Vorläufer von Depression/Angst'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Scaffolding', evidenz: '★★★', beschreibung: 'Vygotsky: Unterstützung in der "Zone der nächsten Entwicklung". Nicht alles abnehmen, aber auch nicht allein lassen. Hilfe zur Selbsthilfe.' },
+      { methode: 'Exekutive Funktionen trainieren', evidenz: '★★☆', beschreibung: 'Planungs-Tools (Kalender, To-Do-Listen), Selbstmonitoring, Reflexionsübungen, Strategiespiele, Sport mit Regelwerk.' },
+      { methode: 'Motivierende Lernumgebung', evidenz: '★★★', beschreibung: 'Autonomie + Kompetenz + Soziale Eingebundenheit (Deci & Ryan). Jugendliche lernen, wenn sie Relevanz, Wahlmöglichkeit und Zugehörigkeit erleben.' },
+      { methode: 'Peer-Learning', evidenz: '★★★', beschreibung: 'Jugendliche lernen am besten von Peers. Gruppenarbeit, Peer-Tutoring, Diskussionen nutzen das "soziale Gehirn" optimal.' }
+    ],
+    praxis_tipps: [
+      'PFC ist noch nicht fertig — Erwartungen anpassen! Planung, Organisation, Impulskontrolle sind neurobiologisch unreif',
+      'Risikobereitschaft nicht nur bestrafen, sondern kanalisieren: Sport, Outdoor-Aktivitäten, kontrollierte Risiken',
+      '"Imaginary Audience" verstehen: Wenn ein Jugendlicher sagt "ALLE schauen mich an" — für ihn ist das REAL',
+      'Abstraktion nutzen: Jugendliche können philosophische Gespräche führen, Werte diskutieren, hypothetisch denken — das einsetzen!',
+      'Externe Struktur bieten: Timer, Checklisten, Kalender — nicht als "Baby-Behandlung" sondern als Hirnstütze',
+      'Fehler als Lernchance: Das Gehirn lernt durch Erfahrung. Kontrolliertes Scheitern zulassen.'
+    ],
+    wann_ueberweisen: 'Bei V.a. ADHS: Psychiatrische Diagnostik (exekutive Dysfunktion über Normbereich). Bei Lernstörungen trotz guter Intelligenz: Schulpsychologie. Bei Hochbegabung: Psychologische Diagnostik.',
+    luxemburg_spezifisch: 'CePAS: Lernberatung und Begabungsdiagnostik. Uni.lu: Kognitionswissenschaft-Forschung. SNJ: Jugendarbeit mit kognitiven Herausforderungen.',
+    verwandte_wiki: ['pubertaet', 'adhs', 'lernstoerungen', 'emotionsregulation'],
+    screening_domains: ['kognitiv'],
+    themen_ids: ['lernen', 'impulskontrolle', 'problemloesung'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Piaget, J. (1972). Intellectual Evolution from Adolescence to Adulthood. Human Development.', 'Steinberg, L. (2008). A Social Neuroscience Perspective on Adolescent Risk-Taking. Developmental Review.', 'Blakemore, S.-J. & Choudhury, S. (2006). Development of the Adolescent Brain. Journal of Child Psychology and Psychiatry.']
+  },
+  {
+    id: 'moralentwicklung',
+    titel: 'Moralentwicklung (Kohlberg, Gilligan)',
+    aliases: ['Moral', 'Kohlberg', 'Gilligan', 'Gewissen', 'Ethik', 'Werte', 'Recht und Unrecht'],
+    kategorie: 'entwicklung',
+    icon: '⚖️',
+    farbe: '#8B5CF6',
+    definition: 'Moralentwicklung beschreibt, wie Kinder und Jugendliche ein Verständnis von Recht und Unrecht, Fairness und Gerechtigkeit entwickeln. Kohlberg (1969): 3 Niveaus mit je 2 Stufen — von "Strafe vermeiden" bis zu universellen ethischen Prinzipien. Gilligan (1982): Kritik an Kohlberg — Ethik der Fürsorge (Care) neben Ethik der Gerechtigkeit (Justice). In der Jugendhilfe relevant: Moralisches Urteil ≠ moralisches Handeln.',
+    altersgruppe: 'Prä-konventionell: 0-9 Jahre. Konventionell: 9-20 Jahre (Mehrheit der Erwachsenen). Post-konventionell: Ab 20+ (nur 10-15%).',
+    praevalenz: 'Universell. Allerdings: Nur 10-15% der Erwachsenen erreichen post-konventionelles Niveau.',
+    icd10: { code: '-', label: 'Entwicklungspsychologisches Konzept' },
+    icd11: { code: '-', label: 'Entwicklungspsychologisches Konzept' },
+    erscheinungsbild: [
+      'Stufe 1: Strafe-Gehorsam — "Es ist falsch, weil ich bestraft werde"',
+      'Stufe 2: Instrumenteller Austausch — "Wie du mir, so ich dir" / "Was bringt es mir?"',
+      'Stufe 3: Interpersonelle Konkordanz — "Ich will ein guter Mensch sein" / Gruppennormen',
+      'Stufe 4: Gesellschaftsordnung — "Regeln und Gesetze gelten für alle"',
+      'Stufe 5: Sozialvertrag — "Regeln sind vereinbart und können geändert werden"',
+      'Stufe 6: Universelle ethische Prinzipien — "Gerechtigkeit, Würde, Menschenrechte" (selten erreicht)',
+      'Gilligan: Ethik der Fürsorge — Moral basiert auf Beziehungen, Verantwortung füreinander, Kontextsensitivität'
+    ],
+    ursachen: [
+      { faktor: 'Kohlberg', text: 'Moralentwicklung folgt einer universellen Sequenz, getrieben durch kognitive Reifung und soziale Erfahrungen. Höhere Stufen bauen auf niedrigeren auf.' },
+      { faktor: 'Gilligan', text: 'Kohlberg\'s Modell ist männlich zentriert (Gerechtigkeit/Rechte). Frauen betonen Fürsorge/Beziehungen — das ist nicht "niedrigere" Moral, sondern eine ANDERE Moral.' },
+      { faktor: 'Soziale Erfahrung', text: 'Moralische Entwicklung braucht: Perspektivenübernahme, Konflikte, Diskussionen, Vorbilder. Jugendliche in Institutionen: Oft weniger Gelegenheiten für moralische Sozialisation.' },
+      { faktor: 'PVT-Perspektive', text: 'Moralisches Handeln erfordert ventral-vagalen Zustand: Empathie, Perspektivenübernahme, langfristiges Denken. Im Überlebensmodus: Moral = Luxus. "Erst kommt das Fressen, dann die Moral" (Brecht).' }
+    ],
+    differentialdiagnose: [
+      { was: 'Conduct Disorder', unterschied: 'CD: Persistent moralische Regelverletzung. Aber: Ist es fehlendes moralisches Urteil (kognitive Unreife) oder fehlendes moralisches HANDELN (Emotion/Impuls)?' },
+      { was: 'CU-Traits', unterschied: 'Callous-Unemotional: Echtes Empathie-Defizit. Unterscheiden von: Situativer Empathiemangel durch Trauma/Stress.' }
+    ],
+    komorbiditaeten: ['Moralische Disengagement bei: CD, Mobbing. Überentwickeltes Gewissen bei: Angst, Depression, OCD.'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Dilemma-Diskussionen (Blatt-Effekt)', evidenz: '★★★', beschreibung: 'Moralische Dilemmata diskutieren (Heinz-Dilemma): Verschiedene Perspektiven einnehmen. "+1 Convention": Konfrontation mit einer Stufe über dem aktuellen Niveau.' },
+      { methode: 'Just Community (Kohlberg)', evidenz: '★★☆', beschreibung: 'Demokratische Schulgemeinschaft: Jugendliche bestimmen Regeln MIT. Führt nachweislich zu höherer moralischer Entwicklung.' },
+      { methode: 'Empathie-Training', evidenz: '★★☆', beschreibung: 'Perspektivenübernahme üben: Rollenspiele, Geschichten, "Wie fühlt sich die andere Person?" Besonders bei Mobbing und CD.' },
+      { methode: 'Prosoziales Handeln', evidenz: '★★☆', beschreibung: 'Ehrenamt, Hilfe für andere, Verantwortung übernehmen: Moralisches Handeln entwickelt sich durch TATEN, nicht nur durch Denken.' }
+    ],
+    praxis_tipps: [
+      'Moralisieren hilft NICHT: "Du sollst nicht..." → Widerstand. Stattdessen: Dilemma stellen, Perspektive wechseln lassen',
+      'Stufe erkennen: Auf welcher Stufe argumentiert der Jugendliche? Dann: Eine Stufe darüber ansetzen',
+      'Trauma und Moral: Traumatisierte Kinder sind oft auf niedrigeren Stufen nicht weil sie "schlecht" sind, sondern weil ihr Nervensystem Überleben priorisiert',
+      'Empathie MODELLIEREN: "Ich glaube, das hat Lisa wehgetan" — Perspektivenübernahme vorleben',
+      'Regeln GEMEINSAM erstellen: "Was brauchen wir alle, damit es hier gut läuft?" → Eigenverantwortung'
+    ],
+    wann_ueberweisen: 'Bei persistierendem Empathiemangel + Regelverletzung: Psychiatrische Diagnostik (CU-Traits, CD). Bei überentwickeltem Gewissen (Schuldgefühle, Perfektionismus): Psychotherapie.',
+    luxemburg_spezifisch: 'SCRIPT: Werte-Erziehung in Luxemburger Schulen ("Vie et Société"). SNJ: Jugendarbeit mit demokratischer Beteiligung.',
+    verwandte_wiki: ['conduct-disorder', 'kognitive-entwicklung', 'empathie'],
+    screening_domains: [],
+    themen_ids: ['werte', 'empathie', 'verantwortung'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Kohlberg, L. (1984). The Psychology of Moral Development. Harper & Row.', 'Gilligan, C. (1982). In a Different Voice. Harvard University Press.']
+  },
+  {
+    id: 'geschlechtsidentitaet',
+    titel: 'Geschlechtsidentität & Geschlechtsdysphorie',
+    aliases: ['Transgender', 'Trans', 'Geschlechtsdysphorie', 'Nicht-binär', 'Genderfluid', 'Geschlechtsidentität'],
+    kategorie: 'entwicklung',
+    icon: '⚧️',
+    farbe: '#EC4899',
+    definition: 'Geschlechtsidentität ist das innere Erleben des eigenen Geschlechts — unabhängig vom biologischen Geschlecht. Geschlechtsdysphorie: Anhaltendes Leid durch Diskrepanz zwischen erlebtem und zugewiesenem Geschlecht. Trans: Geschlechtsidentität ≠ Zuweisungsgeschlecht. Nicht-binär: Identität außerhalb der Binarität Mann/Frau. WICHTIG: Geschlechtsidentität ist KEIN Störungsbild — nur die DYSPHORIE (das Leiden) wird im ICD erfasst.',
+    altersgruppe: 'Geschlechtsidentität entwickelt sich ab 2-4 Jahren. Persistierende Dysphorie: Ab Pubertät besonders belastend (Körperveränderungen).',
+    praevalenz: 'Trans-Identität: 0.3-1.5% der Bevölkerung. Geschlechtsdysphorie bei Jugendlichen: Steigende Vorstellungsraten (Awareness-Effekt). Nicht-binär: Bis 5% der jungen Erwachsenen.',
+    icd10: { code: 'F64.0', label: 'Transsexualismus / Störung der Geschlechtsidentität (veraltet!)' },
+    icd11: { code: 'HA60', label: 'Gender Incongruence of Adolescence or Adulthood (NICHT mehr unter psychischen Störungen!)' },
+    erscheinungsbild: [
+      'Kindheit: "Ich bin ein Mädchen/Junge" (gegensätzlich zum Zuweisungsgeschlecht), Kleidungspräferenzen, Spielzeugpräferenzen, Namensgebung',
+      'Pubertät: Massive Belastung durch Körperveränderungen (Brust, Bart, Menstruation), Vermeidung (weite Kleidung, Binding)',
+      'Dysphorie: Leiden an Körpermerkmalen, sozialer Rolle, Pronomen. Depression, Angst, SVV, Suizidalität deutlich erhöht',
+      'Coming-Out: Kann enormer Stress sein — Reaktion der Eltern ist entscheidend für psychische Gesundheit',
+      'Social Transition: Gewünschter Name, Pronomen, Kleidung, Auftreten — kann Dysphorie massiv reduzieren',
+      'Nicht-binär: "Weder nur Mann noch nur Frau", fluid, agender, genderqueer — vielfältig'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Hirnstudien zeigen: Trans-Personen haben Hirnstrukturen, die eher dem erlebten Geschlecht entsprechen. Geschlechtsidentität hat biologische Grundlagen.' },
+      { faktor: 'Nicht pathologisch', text: 'ICD-11 hat Geschlechtsinkongruenz aus den "psychischen Störungen" entfernt. Trans-Sein ist keine Störung — das Leiden an der Diskrepanz kann behandelt werden.' },
+      { faktor: 'Minority Stress', text: 'Diskriminierung, Ablehnung, Mobbing, Gewalt → psychische Belastung. 40% Suizidversuche bei trans Jugendlichen OHNE Unterstützung. MIT Unterstützung: Deutlich weniger!' },
+      { faktor: 'Elternreaktion', text: 'Der wichtigste einzelne Schutzfaktor: Akzeptierende Eltern. Ablehnende Eltern → 13x höheres Suizidrisiko.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Geschlechtsnonkonformität', unterschied: 'Nonkonformität: Junge mag Rosa/Kleider, Mädchen mag Fußball. KEIN Zeichen für Trans-Identität. Trans: Konsistente, persistente Identifikation mit anderem Geschlecht.' },
+      { was: 'Phase', unterschied: 'Manche Jugendliche explorieren und kommen zum Ausgangspunkt zurück. Das ist ok! Aber: Persistierende Dysphorie ist KEINE Phase. "Watchful waiting" ≠ Ignorieren.' }
+    ],
+    komorbiditaeten: ['Depression (50%)', 'Angststörungen (40%)', 'Suizidalität (40% Suizidversuche ohne Support!)', 'SVV (30%)', 'Essstörungen (Körperdysphorie)', 'ASS (erhöhte Komorbidität)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Affirmative Begleitung', evidenz: '★★★', beschreibung: 'Gewünschten Namen und Pronomen verwenden. Soziale Transition unterstützen. Explorationsraum bieten ohne Druck. "Ich glaube dir und unterstütze dich."' },
+      { methode: 'Pubertätsblocker (GnRH-Analoga)', evidenz: '★★☆', beschreibung: 'Ab Tanner 2: Reversibel — pausieren die Pubertät und geben Zeit zum Nachdenken. Kontrovers diskutiert, aber: Verhindern irreversible Körperveränderungen. Nur durch Spezialist:innen.' },
+      { methode: 'Familientherapie', evidenz: '★★★', beschreibung: 'Eltern begleiten: Trauer über "Verlust" des erwarteten Kindes, Information, Akzeptanz fördern. Eltern-Akzeptanz = stärkster Schutzfaktor.' },
+      { methode: 'Peer-Gruppen', evidenz: '★★☆', beschreibung: 'Kontakt mit anderen trans/nicht-binären Jugendlichen: Normalisierung, Gemeinschaft, Vorbilder. Reduziert Isolation massiv.' }
+    ],
+    praxis_tipps: [
+      'Gewünschten Namen und Pronomen VERWENDEN: Das ist kein Luxus, sondern Grundrespekt. Kostet nichts, bewirkt viel.',
+      'Nicht pathologisieren: Trans-Sein ist keine Krankheit. Behandlungsbedürftig ist nur das LEIDEN.',
+      'Eltern einbeziehen: Eltern-Akzeptanz ist der stärkste Schutzfaktor. Aber: Eltern brauchen selbst Unterstützung und Zeit.',
+      'Suizidalität systematisch abfragen: 40% Suizidversuchsrate bei nicht-unterstützten trans Jugendlichen!',
+      'Coming-Out nicht forcieren: Der Jugendliche bestimmt, wann und wem er sich anvertraut.',
+      'Aménagements: Toilettenzugang, Umkleide, Schulregister — proaktiv klären.'
+    ],
+    wann_ueberweisen: 'Bei persistierender Geschlechtsdysphorie: Spezialisierte Gender-Beratung/-Klinik. Bei Wunsch nach Pubertätsblockern: Kinderendokrinologe mit Gendererfahrung. Bei Suizidalität: Sofort Krisenintervention.',
+    luxemburg_spezifisch: 'Centre LGBTIQ+ CIGALE: Information und Beratung. Intersex & Transgender Luxembourg. Planning Familial: Beratung. CHL: Endokrinologie bei medizinischer Transition. Ministère de la Justice: Namens-/Personenstandsänderung vereinfacht seit 2018.',
+    verwandte_wiki: ['lgbtq-jugendliche', 'pubertaet', 'adoleszenz-identitaet', 'depression', 'suizidalitaet'],
+    screening_domains: [],
+    themen_ids: ['identitaet', 'geschlecht', 'selbstwert'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Coleman, E. et al. (2022). Standards of Care for Transgender Health. 8th Version. World Professional Association for Transgender Health.', 'de Vries, A.L.C. & Cohen-Kettenis, P.T. (2012). Clinical Management of Gender Dysphoria in Children and Adolescents. Journal of Homosexuality.']
+  },
+  {
+    id: 'sexuelle-entwicklung',
+    titel: 'Sexuelle Entwicklung & Sexualpädagogik',
+    aliases: ['Sexualität', 'Sexualpädagogik', 'Aufklärung', 'Konsens', 'Sexuelle Reifung', 'Pornografie'],
+    kategorie: 'entwicklung',
+    icon: '❤️',
+    farbe: '#F43F5E',
+    definition: 'Die sexuelle Entwicklung umfasst die körperlichen, emotionalen, kognitiven und sozialen Aspekte der Sexualität von der Geburt bis ins Erwachsenenalter. Sexualpädagogik: Altersgerechte Begleitung dieser Entwicklung. In der Jugendhilfe besonders relevant: Viele Klient:innen haben Gewalterfahrungen → sexuelle Entwicklung oft gestört oder übersexualisiert. Gleichzeitig: Recht auf sexuelle Selbstbestimmung und Aufklärung.',
+    altersgruppe: 'Sexualität beginnt im Säuglingsalter (Körperentdeckung). Pubertät: Sexuelles Verlangen, erste Beziehungen, Masturbation. Adoleszenz: Intime Beziehungen, sexuelle Identität.',
+    praevalenz: 'Universell. 70% der Jugendlichen haben mit 17 Jahren erste sexuelle Erfahrungen.',
+    icd10: { code: '-', label: 'Normale Entwicklung' },
+    icd11: { code: '-', label: 'Normale Entwicklung' },
+    erscheinungsbild: [
+      'Kindheit (0-9): Körperneugier, "Doktorspiele" (normal!), Fragen über Babys und Körper',
+      'Vorpubertät (10-12): Interesse an Sexualität, erste Schwärmerei, Beginn der Masturbation',
+      'Pubertät (12-15): Sexuelles Verlangen, Verliebtheit, erste Beziehungen, Masturbation, Pornografie-Konsum',
+      'Adoleszenz (15-18): Intime Beziehungen, sexuelle Erfahrungen, sexuelle Orientierung wird klarer',
+      'Pornografie: 50-90% der Jugendlichen ab 12 haben Pornografie gesehen. Beeinflusst Körperbild, Erwartungen, Konsens-Verständnis',
+      'Sexting: Versenden sexueller Bilder — zunehmend normalisiert, aber rechtlich problematisch und Risiko für Cybergrooming/Erpressung'
+    ],
+    ursachen: [
+      { faktor: 'Biologisch', text: 'Hormonelle Reifung (Testosteron/Östrogen) löst sexuelles Verlangen aus. Dopamin-System: Sexualität ist neurobiologisch mit Belohnung verknüpft.' },
+      { faktor: 'Psychosozial', text: 'Peers: Normenbildung ("Alle machen das schon"). Medien: Unrealistische Darstellungen. Familie: Offenheit vs. Tabu. Kultur: Unterschiedliche Normen.' },
+      { faktor: 'Trauma-Bezug', text: 'Sexueller Missbrauch → kann zu: Übersexualisierung, Sexualangst, Dissoziation bei Intimität, Reviktimisierung führen. IMMER berücksichtigen!' },
+      { faktor: 'PVT-Perspektive', text: 'Gesunde Sexualität erfordert ventral-vagalen Zustand: Sicherheit, Verbundenheit, Entspannung. Trauma: Sex wird mit Gefahr assoziiert → Freeze, Dissoziation, oder Sympathikus-Überaktivierung (Risikoverhalten).' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normales vs. problematisches Sexualverhalten', unterschied: 'Normal: Altersgerecht, einvernehmlich, spielerisch, zwischen Gleichaltrigen. Problematisch: Altersunterschied, Zwang, Geheimhaltung, Wiederholung trotz Verbots.' },
+      { was: 'Übersexualisierung', unterschied: 'Altersunangemessenes sexuelles Wissen/Verhalten → IMMER an sexuellen Missbrauch denken!' }
+    ],
+    komorbiditaeten: ['Sexueller Missbrauch → Hypersexualität ODER Sexualangst', 'STIs bei Risikoverhaltens', 'Teenagerschwangerschaft', 'Pornografie-Abhängigkeit'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Umfassende Sexualerziehung', evidenz: '★★★', beschreibung: 'Evidenzbasiert: Verzögert den ersten Geschlechtsverkehr, erhöht Verhütungsnutzung, reduziert STIs/Schwangerschaft. Abstinenz-only Programme sind UNWIRKSAM.' },
+      { methode: 'Konsens-Erziehung', evidenz: '★★★', beschreibung: '"Ja heißt Ja": Enthusiastischer Konsens lehren. Grenzen setzen und respektieren. Besonders wichtig für traumatisierte Jugendliche: "Du darfst NEIN sagen."' },
+      { methode: 'Pornografie-Kompetenz', evidenz: '★★☆', beschreibung: 'Nicht verbieten (unrealistisch), sondern: Kritisch reflektieren. "Was zeigt Pornografie? Was zeigt sie NICHT? Wie unterscheidet sich das von realer Sexualität?"' },
+      { methode: 'Traumasensible Sexualpädagogik', evidenz: '★★☆', beschreibung: 'Für Jugendhilfe-Klient:innen: Körper-Ownership, Grenzen, Selbstbestimmung. KEIN Zwang zu Gesprächen über Sexualität. "Dein Körper gehört DIR."' }
+    ],
+    praxis_tipps: [
+      'Scham nicht verstärken: "Masturbation ist normal" — nicht moralisieren, aber: privater Raum',
+      'Sexualität NICHT tabuisieren in der Einrichtung: Jugendliche haben ein RECHT auf altersgerechte Aufklärung',
+      'Bei traumatisierten Jugendlichen: Vorsichtig, nicht aufdringlich. "Du bestimmst, worüber wir reden."',
+      'Pornografie: Nicht ignorieren! 90% der Jungs haben mit 14 Pornografie gesehen. Gespräch darüber ist NÖTIG.',
+      'LGBTQ+: Sexualerziehung inklusiv gestalten. Nicht nur heteronormativ aufklären.',
+      'Grenzen der eigenen Rolle: Bezugsperson ≠ Sexualtherapeut:in. Bei Problemen: An Spezialist:innen verweisen.'
+    ],
+    wann_ueberweisen: 'Bei V.a. sexuellen Missbrauch: ALUPSE + SCAS. Bei problematischem Sexualverhalten: Spezialisierte Beratung. Bei Teenagerschwangerschaft: Planning Familial. Bei sexueller Identitätskrise: CIGALE.',
+    luxemburg_spezifisch: 'Planning Familial Luxembourg: Sexualberatung, Verhütung, STI-Tests. CIGALE: LGBTQ+ Beratung. BEE SECURE: Bei Sexting/Cybergrooming. ALUPSE: Bei sexueller Gewalt.',
+    verwandte_wiki: ['pubertaet', 'geschlechtsidentitaet', 'sexueller-missbrauch', 'lgbtq-jugendliche'],
+    screening_domains: ['sexualitaet'],
+    themen_ids: ['sexualitaet', 'koerperbild', 'grenzen'],
+    verhaltens_ids: ['hypersexuell'],
+    leitfaden_ids: [],
+    quellen: ['WHO (2010). Standards for Sexuality Education in Europe. BZgA.', 'Sielert, U. (2015). Einführung in die Sexualpädagogik. Beltz.']
+  },
+  {
+    id: 'peer-beziehungen',
+    titel: 'Peer-Beziehungen & Gruppendynamik',
+    aliases: ['Peers', 'Freundschaft', 'Clique', 'Gruppendruck', 'Peer Pressure', 'Beliebtheit', 'Außenseiter'],
+    kategorie: 'entwicklung',
+    icon: '👥',
+    farbe: '#0EA5E9',
+    definition: 'In der Adoleszenz verlagert sich der primäre Bezugsrahmen von der Familie zu den Peers. Peer-Beziehungen sind DAS zentrale Entwicklungsfeld: Hier werden Identität, soziale Kompetenz, Intimität, Konfliktlösung und Autonomie erprobt. Peer-Einfluss kann positiv (prosoziale Normen, Unterstützung) oder negativ (Devianz, Substanzkonsum, Mobbing) sein. Soziale Zurückweisung ist eine der schmerzhaftesten Erfahrungen der Adoleszenz.',
+    altersgruppe: 'Peer-Orientierung nimmt ab 10-11 Jahren zu, Peak 14-16 Jahre, nimmt ab ca. 18 wieder leicht ab.',
+    praevalenz: 'Universell. 10-15% der Jugendlichen haben anhaltende Peer-Probleme (Ablehnung, Isolation).',
+    icd10: { code: '-', label: 'Entwicklungsthema' },
+    icd11: { code: '-', label: 'Entwicklungsthema' },
+    erscheinungsbild: [
+      'Cliquen (Frühes Jugendalter): Gleichgeschlechtliche Gruppen, klare Normen, In-Group/Out-Group',
+      'Crowds (Mittleres Jugendalter): Größere Zugehörigkeit (Sportler, Nerds, Punks) — Identitätsangebot',
+      'Dyaden (Spätes Jugendalter): Enge Freundschaften, Intimität, romantische Beziehungen',
+      'Peer Pressure: Direkt ("Komm, trink mit!") oder indirekt (Normen, "alle machen das")',
+      'Soziometrischer Status: Beliebt, Abgelehnt, Vernachlässigt, Kontrovers, Durchschnittlich — hat massive Langzeitfolgen',
+      'Social Media: Peer-Beziehungen sind jetzt 24/7. Likes = soziale Währung. FOMO. Cybermobbing.'
+    ],
+    ursachen: [
+      { faktor: 'Entwicklungspsychologisch', text: 'Sullivan: Peers erfüllen in der Adoleszenz Bedürfnisse, die Eltern nicht mehr erfüllen können: Gleichwertigkeit, geteilte Erfahrungen, horizontale Beziehungen.' },
+      { faktor: 'Neurobiologisch', text: 'Das "soziale Gehirn" ist in der Adoleszenz besonders plastisch. Dopamin-Ausschüttung bei sozialer Anerkennung → Peers sind neurobiologisch "belohnend".' },
+      { faktor: 'Autonomie', text: 'Ablösung von den Eltern → Peers als "Ersatz-Bindungsfiguren". Peer-Zugehörigkeit = existenziell, nicht "nur" Spaß.' },
+      { faktor: 'PVT-Perspektive', text: 'Co-Regulation durch Peers: Gemeinsam lachen, reden, Musik hören = ventral-vagale Aktivierung. Soziale Ablehnung: Aktiviert Schmerznetzwerke im Gehirn (Eisenberger) — so real wie physischer Schmerz.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Soziale Angst vs. Ablehnung', unterschied: 'Soziale Angst: WILL dazugehören, kann nicht (Angst). Ablehnung: WIRD nicht akzeptiert (aktive Zurückweisung). Beides: Isolation, Depression.' },
+      { was: 'Normaler Peer-Einfluss vs. Devianztraining', unterschied: 'Normal: Peers beeinflussen Mode, Musik, Sprache. Problematisch: Peers verstärken antisoziales Verhalten (Patterson: "Deviancy Training").' }
+    ],
+    komorbiditaeten: ['Depression (bei Ablehnung)', 'Angststörungen', 'Substanzmissbrauch (Peer Pressure)', 'Mobbing', 'Schulvermeidung'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Soziale Kompetenz-Training', evidenz: '★★★', beschreibung: 'Kontaktaufnahme, Konfliktlösung, Assertivität, Empathie. In Gruppen üben. Rollenspiele. Besonders wirksam bei abgelehnten Kindern.' },
+      { methode: 'Prosoziale Peer-Gruppen', evidenz: '★★★', beschreibung: 'Kontakt mit prosozialen Peers fördern: Sport, Vereine, Jugendgruppen, Freiwilligenarbeit. NICHT: Nur deviant Peers in einer Gruppe zusammen!' },
+      { methode: 'Peer-Mediation', evidenz: '★★☆', beschreibung: 'Ausgebildete Schüler:innen vermitteln bei Konflikten. Wirksamer als Erwachsenen-Intervention, weil Peers = Augenhöhe.' },
+      { methode: 'Social Media Kompetenz', evidenz: '★★☆', beschreibung: 'Kritische Reflexion: "Wie fühlst du dich nach einer Stunde Instagram?" "Wie viel davon ist echt?"' }
+    ],
+    praxis_tipps: [
+      'Peer-Zugehörigkeit ist ein GRUNDBEDÜRFNIS — nicht "nur Spaß". Soziale Isolation = Risikofaktor Nr. 1',
+      'Deviant Peers: NICHT verbieten, sondern prosoziale Alternativen aufbauen. Verbote → Geheimhaltung',
+      'Jugendhilfe-Kinder: Oft Peer-Probleme wegen häufiger Wechsel, Stigma, sozialer Kompetenz-Defizite → aktiv fördern!',
+      'Abgelehnte Kinder: NICHT zwingen, mit den "Beliebten" zu spielen. Stattdessen: Eine gute Freundschaft reicht als Schutzfaktor',
+      'Social Media nicht verteufeln: Es IST die Peer-Welt der Jugendlichen. Begleiten statt verbieten.',
+      'Gruppenarbeit nutzen: Peer-Einfluss ist STÄRKER als Erwachsenen-Einfluss. Prosoziale Gruppen sind die mächtigste Intervention.'
+    ],
+    wann_ueberweisen: 'Bei chronischer Peer-Ablehnung + Depression: Psychotherapie. Bei Mobbing: Anti-Mobbing-Intervention. Bei deviantem Peer-Einfluss + Delinquenz: MST oder FFT.',
+    luxemburg_spezifisch: 'SNJ: Jugendarbeit, Jugendhaiser. Scouting: Pfadfinder in Luxemburg. Sport-Vereine über LASEL/COSL. CePAS: Bei Peer-Problemen in der Schule.',
+    verwandte_wiki: ['mobbing', 'soziale-angst', 'adoleszenz-identitaet', 'mediensozialisation'],
+    screening_domains: ['sozial', 'peers'],
+    themen_ids: ['sozialkompetenz', 'freundschaft', 'gruppendynamik'],
+    verhaltens_ids: ['sozialer-rueckzug'],
+    leitfaden_ids: [],
+    quellen: ['Brown, B.B. & Prinstein, M.J. (2011). Encyclopedia of Adolescence: Peer Relations. Academic Press.', 'Hartup, W.W. (1996). The Company They Keep: Friendships and Their Developmental Significance. Child Development.']
+  },
+  {
+    id: 'mediensozialisation',
+    titel: 'Mediensozialisation & Digitale Welten',
+    aliases: ['Social Media', 'Digitale Medien', 'Smartphone', 'TikTok', 'Instagram', 'Bildschirmzeit', 'Digital Natives'],
+    kategorie: 'entwicklung',
+    icon: '📱',
+    farbe: '#6366F1',
+    definition: 'Mediensozialisation beschreibt, wie digitale Medien die Entwicklung von Kindern und Jugendlichen beeinflussen — und umgekehrt. Die Generation Z/Alpha wächst mit Smartphones, Social Media, Gaming und Streaming auf. Medien sind nicht per se gut oder schlecht — entscheidend ist WIE, WIE VIEL, WAS und in WELCHEM KONTEXT. Medienkompetenz ist eine Schlüsselkompetenz des 21. Jahrhunderts.',
+    altersgruppe: 'Mediennutzung ab 2-3 Jahren. Social Media ab 10-13 Jahren (oft trotz Mindestalter 13). Peak-Nutzung: 14-18 Jahre.',
+    praevalenz: '95%+ der Jugendlichen besitzen ein Smartphone. Durchschnittliche Bildschirmzeit: 4-7 Stunden/Tag.',
+    icd10: { code: '-', label: 'Sozialisationskontext' },
+    icd11: { code: '-', label: 'Sozialisationskontext' },
+    erscheinungsbild: [
+      'Social Media: Identitätsarbeit (Profil = "Wer bin ich?"), sozialer Vergleich, FOMO, Likes als Selbstwert-Barometer',
+      'Positive Effekte: Kreativität, Vernetzung, Zugang zu Information, Community für Marginalisierte (LGBTQ+, chronisch krank)',
+      'Risiken: Cybermobbing, Sexting, Cybergrooming, Filterblasen, Desinformation, Schlafstörungen, Bodyshaming',
+      'Algorithmische Verstärkung: Algorithmen zeigen, was Engagement erzeugt → negative Inhalte verbreiten sich schneller',
+      'Vergleichsspirale: "Alle sind schöner, glücklicher, erfolgreicher als ich" → Depression, Essstörungen, Selbstwertprobleme',
+      'Doom-Scrolling: Endloses Scrollen als Emotion Regulation (Betäubung) — ähnlich wie Substanzkonsum'
+    ],
+    ursachen: [
+      { faktor: 'Persuasive Design', text: 'Apps sind ABSICHTLICH süchtig-machend gestaltet: Variable Belohnungen, Infinite Scroll, Push-Benachrichtigungen, soziale Verpflichtungen.' },
+      { faktor: 'Entwicklungspsychologisch', text: 'Jugendliche sind besonders vulnerabel: Identitätssuche, Peer-Orientierung, Belohnungssuche, unreifer PFC → perfekte Zielgruppe für Social Media.' },
+      { faktor: 'Positiv', text: 'Digitale Medien ermöglichen: Kreativität (YouTube, TikTok), Bildung (Khan Academy, Wikipedia), Community (Discord), Selbstausdruck, politische Partizipation.' },
+      { faktor: 'PVT-Perspektive', text: 'Social Media kann ventral-vagal wirken (Verbindung, Community) ODER Sympathikus aktivieren (Vergleich, Mobbing, FOMO). Doom-Scrolling: Dorsaler Vagus (Betäubung). Kontext entscheidet.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Nutzung vs. problematisch', unterschied: 'Normal: Soziale Pflege, Kreativität, Information. Problematisch: Kontrollverlust, Schlafverlust, Vernachlässigung anderer Bereiche, emotionale Abhängigkeit.' },
+      { was: 'Gaming Disorder vs. Social Media Problematik', unterschied: 'Gaming: Spiel-fokussiert (ICD-11). Social Media: Beziehungs-/Vergleichs-fokussiert (noch nicht im ICD). Verschiedene Mechanismen.' }
+    ],
+    komorbiditaeten: ['Depression (bei exzessiver Nutzung)', 'Angst (FOMO, sozialer Vergleich)', 'Schlafstörungen (50%+!)', 'Essstörungen (Bodyshaming)', 'Cybermobbing → PTBS'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Medienkompetenz-Programme', evidenz: '★★★', beschreibung: 'Kritisches Denken: "Wer hat das gepostet und warum?" "Was passiert mit meinen Daten?" "Ist das ein echtes Bild?" In Schulen und Einrichtungen.' },
+      { methode: 'Digital Wellbeing', evidenz: '★★☆', beschreibung: 'Bildschirmzeit-Awareness, App-Timer, Benachrichtigungs-Management, Screen-Free-Zeiten, "Handyfreie Zone" beim Essen/Schlafen.' },
+      { methode: 'Gemeinsame Mediennutzung', evidenz: '★★★', beschreibung: 'Bei jüngeren: Gemeinsam schauen/spielen. Bei älteren: Über Inhalte SPRECHEN. Nicht überwachen, sondern begleiten.' },
+      { methode: 'Eltern-Medienerziehung', evidenz: '★★☆', beschreibung: 'Eltern als Vorbild: Eigenes Smartphone-Verhalten reflektieren. Regeln GEMEINSAM aufstellen. Nicht nur "weniger", sondern "bewusster".' }
+    ],
+    praxis_tipps: [
+      'Medien nicht verteufeln: "Social Media ist gefährlich!" → Jugendliche hören weg. Stattdessen: Differenziert und neugierig',
+      'FRAGEN statt verbieten: "Was machst du gerade online? Zeig mal!" — echtes Interesse statt Kontrolle',
+      'Bildschirmzeit allein ist KEIN guter Indikator: 3h kreatives Programmieren ≠ 3h Doom-Scrolling',
+      'Schlaf-Regel: Handy 1h vor dem Schlafen aus dem Zimmer. Nicht verhandelbar. (Gut für ALLE, auch Erwachsene)',
+      'Cybermobbing: Screenshots sichern. BEE SECURE Helpline. Bei Drohungen/Nacktbildern: Polizei.',
+      'Vorbild sein: "Leg dein Handy weg, wenn du mit mir redest" — gilt auch für Fachkräfte!'
+    ],
+    wann_ueberweisen: 'Bei V.a. Gaming Disorder: Suchtberatung (Impuls). Bei Cybermobbing: BEE SECURE + ggf. Polizei. Bei Cybergrooming: ALUPSE + Polizei. Bei Social Media + Depression: Psychotherapie.',
+    luxemburg_spezifisch: 'BEE SECURE (bee-secure.lu): Helpline 8002-1234, Medienkompetenz, Workshops für Schulen. SCRIPT: Medienerziehung im Lehrplan. Kanner-Jugendtelefon: 116 111.',
+    verwandte_wiki: ['gaming-disorder', 'mobbing', 'schlafstoerungen', 'peer-beziehungen'],
+    screening_domains: ['medien'],
+    themen_ids: ['medienkonsum', 'selbstwert', 'sozialkompetenz'],
+    verhaltens_ids: ['medienabhaengig'],
+    leitfaden_ids: [],
+    quellen: ['Twenge, J.M. (2017). iGen. Atria Books.', 'Livingstone, S. & Helsper, E. (2010). Balancing Opportunities and Risks in Teenagers\' Use of the Internet. New Media & Society.', 'OECD (2019). How\'s Life in the Digital Age?']
+  },
+  {
+    id: 'abloesung-autonomie',
+    titel: 'Ablösung & Autonomieentwicklung',
+    aliases: ['Ablösung', 'Autonomie', 'Individuation', 'Loslösung', 'Erwachsenwerden', 'Auszug'],
+    kategorie: 'entwicklung',
+    icon: '🦅',
+    farbe: '#F59E0B',
+    definition: 'Der Ablösungsprozess beschreibt die zunehmende psychologische und praktische Eigenständigkeit des Jugendlichen von den Eltern. Mahler: Individuation. Blos: Zweite Individuation. Ziel: NICHT Trennung, sondern Transformation der Beziehung — von der vertikalen (Eltern oben, Kind unten) zur horizontalen Beziehung (Erwachsene unter sich). In der Jugendhilfe: Dieser Prozess ist oft gestört oder verfrüht (Parentifizierung, Fremdplatzierung).',
+    altersgruppe: 'Beginn 12-14 Jahre. Intensivphase 15-18. Abschluss oft erst 20-25 (verlängerte Adoleszenz). Leaving Care: 18 = gesetzliches Ende der Jugendhilfe, oft zu früh.',
+    praevalenz: 'Universell. Bei Jugendhilfe-Kindern: Besondere Herausforderungen (Ablösung von WEM? Autonomie WOHIN?).',
+    icd10: { code: '-', label: 'Entwicklungsaufgabe' },
+    icd11: { code: '-', label: 'Entwicklungsaufgabe' },
+    erscheinungsbild: [
+      'Konflikte: Zunehmende Auseinandersetzungen mit Eltern/Betreuern — NORMAL und NOTWENDIG für Ablösung',
+      'Privatsphäre: Rückzug ins Zimmer, Geheimnisse, "Geht dich nichts an" — Grenzziehung',
+      'Eigene Meinung: Widersprechen, kritisieren, hinterfragen — Identitätsarbeit, nicht Respektlosigkeit',
+      'Risikoverhalten: Ausprobieren von Grenzen (Ausgehen, Substanzen, Sexualität) — Autonomie-Übung',
+      'Leaving Care (Jugendhilfe): Auszug mit 18, oft ohne Netzwerk, finanzielle Sicherheit, Lebenserfahrung',
+      'Verlängerte Adoleszenz: Studium, Arbeitsmarkt → viele junge Erwachsene leben bis 25-30 bei Eltern'
+    ],
+    ursachen: [
+      { faktor: 'Blos', text: 'Zweite Individuation: Der Jugendliche muss die verinnerlichten Elternbilder "updaten" — von den omnipotenten Eltern der Kindheit zu den realen, fehlbaren Eltern. Das erfordert Enttäuschung und Trauer.' },
+      { faktor: 'Bindungstheorie', text: 'Sichere Bindung = sichere Basis für Exploration = gute Ablösung. "Ich kann gehen, WEIL ich weiß, dass ich zurückkommen kann." Unsichere Bindung: Klammern oder vorzeitiger Abbruch.' },
+      { faktor: 'Kulturell', text: 'Westlich-individualistisch: Autonomie = positiv. Kollektivistisch: Familie > Individuum. Beides hat Vor- und Nachteile. Kulturelle Sensibilität!' },
+      { faktor: 'PVT-Perspektive', text: 'Ablösung erfordert ein reguliertes Nervensystem: "Ich kann allein sein und es aushalten." Traumatisierte Jugendliche: Entweder klammern (kein Vertrauen in eigene Fähigkeit) oder vorzeitige Pseudo-Autonomie (Parentifizierung).' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Konflikte vs. pathologisch', unterschied: 'Normal: Konflikte nehmen zu 12-15, dann ab. Beziehung bleibt intakt. Pathologisch: Eskalation zu Gewalt, Kontaktabbruch, Ausreißen.' },
+      { was: 'Pseudo-Autonomie', unterschied: 'Echte Autonomie: Kann allein UND in Beziehung sein. Pseudo: "Ich brauch niemanden" (Vermeidend). Beides sieht von außen "selbstständig" aus.' }
+    ],
+    komorbiditaeten: ['Familienkonflikte', 'Depression (bei Leaving Care)', 'Wohnungslosigkeit (Care Leaver!)', 'Substanzmissbrauch'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Begleitete Verselbstständigung', evidenz: '★★★', beschreibung: 'Stufenmodell: Betreutes Wohnen → Teilbetreut → Eigene Wohnung. Nicht "ins kalte Wasser werfen" sondern schrittweise Kompetenzen aufbauen.' },
+      { methode: 'Alltagskompetenzen', evidenz: '★★★', beschreibung: 'Kochen, Putzen, Wäsche, Budget, Behördengänge, Arztbesuche — diese Basics werden in Familien nebenbei gelernt, in Einrichtungen oft nicht!' },
+      { methode: 'Nachbetreuung', evidenz: '★★★', beschreibung: 'Leaving Care Programme: Begleitung NACH dem 18. Geburtstag. Kontaktperson, Krisentelefon, praktische Hilfe. In Luxemburg: Möglich bis 21 (in Ausnahmen 27).' },
+      { methode: 'Elternarbeit', evidenz: '★★☆', beschreibung: 'Eltern im Ablösungsprozess begleiten: "Ihr Kind braucht Sie ANDERS, nicht WENIGER." Loslassen üben.' }
+    ],
+    praxis_tipps: [
+      'Konflikte in der Ablösung sind NORMAL und NÖTIG — nicht pathologisieren, aber begleiten',
+      'Jugendhilfe-Kinder: Ablösung von WEM? Die Beziehung zur Einrichtung ist oft die stabilste. Abschied begleiten!',
+      'Leaving Care: 18 ist zu früh! Frühzeitig Übergangsplanung (6-12 Monate vorher). Netzwerk aufbauen.',
+      'Alltagskompetenzen FRÜH üben: Ab 14 gemeinsam kochen, Wäsche machen, Budget planen — nicht erst mit 17',
+      'Nachbetreuung anbieten: "Du kannst IMMER anrufen" — auch nach dem Auszug. Beziehung endet nicht mit dem 18. Geburtstag.',
+      'Eltern stärken: "Wenn Ihr Kind streitet, heißt das: Es vertraut Ihnen genug, um sich abzugrenzen."'
+    ],
+    wann_ueberweisen: 'Bei Eskalation zu Gewalt: Krisenintervention. Bei drohender Wohnungslosigkeit: SCAS. Bei verfrühter/erzwungener Autonomie (Straßenkinder): Jugendhilfe. Bei pathologischer Trennungsangst: Psychotherapie.',
+    luxemburg_spezifisch: 'Projet CARE: Leaving Care Begleitung. SNJ: Jugendwohnen. SCAS: Bei Krisensituationen. ONE: Verlängerung der Jugendhilfe bis 21 (27 in Ausnahmefällen) möglich.',
+    verwandte_wiki: ['adoleszenz-identitaet', 'bindungstheorie', 'parentifizierung', 'fremdplatzierung'],
+    screening_domains: [],
+    themen_ids: ['autonomie', 'alltagskompetenzen', 'zukunftsplanung'],
+    verhaltens_ids: [],
+    leitfaden_ids: ['abschlussgespraech'],
+    quellen: ['Blos, P. (1967). The Second Individuation Process of Adolescence. Psychoanalytic Study of the Child.', 'Stein, M. (2012). Young People Leaving Care. Jessica Kingsley.']
+  },
+  {
+    id: 'migration-kulturelle-identitaet',
+    titel: 'Migration, kulturelle Identität & Akkulturation',
+    aliases: ['Migration', 'Kultur', 'Akkulturation', 'Flüchtling', 'Integration', 'Kulturschock', 'Interkulturell'],
+    kategorie: 'entwicklung',
+    icon: '🌍',
+    farbe: '#0D9488',
+    definition: 'Kinder und Jugendliche mit Migrationshintergrund stehen vor der doppelten Aufgabe: Normale Entwicklungsaufgaben (Identität, Autonomie, Peer-Integration) PLUS Navigation zwischen Herkunfts- und Aufnahmekultur. Berry (1997): Vier Akkulturationsstrategien: Integration (beide Kulturen), Assimilation (nur Aufnahmekultur), Separation (nur Herkunftskultur), Marginalisierung (keine). Integration → bestes psychisches Wohlbefinden.',
+    altersgruppe: 'Alle Altersgruppen. Besonders vulnerabel: Unbegleitete Minderjährige, Kinder die während der Identitätsentwicklung migrieren (10-16).',
+    praevalenz: 'In Luxemburg: 47% der Bevölkerung hat ausländische Nationalität! 170+ Nationalitäten. Migration ist in Luxemburg NORMALITÄT, nicht Ausnahme.',
+    icd10: { code: '-', label: 'Sozialisationskontext / Entwicklungsaufgabe' },
+    icd11: { code: '-', label: 'Sozialisationskontext / Entwicklungsaufgabe' },
+    erscheinungsbild: [
+      'Kulturelle Identitätsarbeit: "Bin ich Portugiese, Luxemburger, oder beides?" — Navigation zwischen Welten',
+      'Akkulturationssstress: Sprachwechsel, Wertekonflikte, Diskriminierungserfahrungen, Heimweh, kulturelle Isolation',
+      'Eltern-Kind-Konflikt: Kind akkulturiert schneller als Eltern → "Akkulturierungslücke" → Konflikte',
+      'Sprachbarrieren: Schullaufbahn gefährdet, Isolation, Frustration, Missverständnisse in der Diagnostik',
+      'Diskriminierung/Rassismus: Reale Erfahrung mit Ausgrenzung, Vorurteilen, struktureller Benachteiligung',
+      'Trauma (Flucht): Unbegleitete Minderjährige, Krieg, Verfolgung, Trennung von Familie → PTBS, Depression',
+      'Stärken: Bilingualität, Flexibilität, Resilienz, kulturelle Kompetenz, Perspektivenvielfalt'
+    ],
+    ursachen: [
+      { faktor: 'Berry (Akkulturation)', text: '4 Strategien: Integration (beide Kulturen pflegen → bestes Outcome), Assimilation (Herkunft aufgeben), Separation (Herkunft behalten, Aufnahmekultur ablehnen), Marginalisierung (keine Zugehörigkeit → schlechtestes Outcome).' },
+      { faktor: 'Discrimination-Distress', text: 'Reale und wahrgenommene Diskriminierung → chronischer Stress → psychische Probleme. Rassismus ist ein GESUNDHEITSRISIKO.' },
+      { faktor: 'Kulturelle Diagnostik', text: 'CAVE: Diagnose-Bias! Kulturelle Ausdrucksformen von Distress (Somatisierung, spirituelle Erklärungsmodelle) können fehldiagnostiziert werden.' },
+      { faktor: 'PVT-Perspektive', text: 'Neue Kultur = neue Gefahrenlandkarte. Neuroception muss "umlernen": Was ist hier sicher? Wem kann ich vertrauen? Das braucht Zeit und sichere Beziehungen.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Sprachbarriere vs. Lernstörung', unterschied: 'Sprachbarriere: Leistung verbessert sich mit Sprachkompetenz. Lernstörung: Persistiert auch in der Muttersprache. Diagnostik IMMER in beiden Sprachen!' },
+      { was: 'Kulturelle Norm vs. Pathologie', unterschied: 'Was in einer Kultur "normal" ist (z.B. strenge Erziehung, Geschlechterrollen), kann in einer anderen als problematisch gelten. Kulturelle Kompetenz nötig!' }
+    ],
+    komorbiditaeten: ['Depression (bei Diskriminierung)', 'PTBS (bei Flucht)', 'Angststörungen', 'Identitätsdiffusion', 'Schulprobleme (Sprache)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Integrative Identitätsarbeit', evidenz: '★★★', beschreibung: '"Du musst nicht WÄHLEN zwischen den Kulturen. Du kannst BEIDE leben." Bikulturelle Identität als Stärke, nicht als Problem.' },
+      { methode: 'Dolmetschereinsatz', evidenz: '★★★', beschreibung: 'Professionelle Dolmetscher bei Diagnostik, Beratung, Elterngesprächen. Kinder NIEMALS als Dolmetscher missbrauchen (Parentifizierung!).' },
+      { methode: 'Kulturvermittler', evidenz: '★★☆', beschreibung: 'Brückenbauer zwischen Kulturen: Erklären beiden Seiten die jeweils andere Perspektive. Besonders wertvoll bei Elternarbeit.' },
+      { methode: 'Anti-Rassismus-Arbeit', evidenz: '★★☆', beschreibung: 'Institutionell: Eigene Biases reflektieren, Strukturen prüfen, Vielfalt normalisieren. Individuell: Diskriminierungserfahrungen validieren und Coping stärken.' }
+    ],
+    praxis_tipps: [
+      'Kulturelle Neugier statt kulturelle Kompetenz: "Erzähl mir, wie das bei euch ist" — fragen statt wissen',
+      'Kinder NIEMALS als Dolmetscher einsetzen: Das ist Parentifizierung und gefährdet die therapeutische Beziehung',
+      'Rassismus ernst nehmen: "Das bildest du dir nicht ein" — validieren und Coping stärken',
+      'Diagnostik: Immer kulturelle Faktoren berücksichtigen. Tests können kulturell biased sein!',
+      'Stärken benennen: Zweisprachigkeit, Flexibilität, Resilienz, interkulturelle Kompetenz — das sind SUPERKRÄFTE',
+      'Luxemburg: 47% Ausländer → Migration ist keine Randgruppe, sondern Normalität. Haltung anpassen!'
+    ],
+    wann_ueberweisen: 'Bei Flucht-Trauma: Traumatherapie mit Dolmetscher. Bei Diskriminierungs-Depression: Psychotherapie. Bei Schulversagen wegen Sprache: Cours d\'accueil (CASNA).',
+    luxemburg_spezifisch: 'CASNA: Aufnahmeklassen für Neuankömmlinge. ASTI: Association de Soutien aux Travailleurs Immigrés. CEFIS: Forschung zu Integration. Croix-Rouge: Betreuung von Flüchtlingen. Service des Médiateurs Interculturels (MIFA): Kostenlose Dolmetsch-/Kulturvermittlung.',
+    verwandte_wiki: ['adoleszenz-identitaet', 'trauma-ptbs', 'parentifizierung', 'resilienz'],
+    screening_domains: [],
+    themen_ids: ['identitaet', 'kultur', 'sprache'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Berry, J.W. (1997). Immigration, Acculturation, and Adaptation. Applied Psychology.', 'Lustig, S.L. et al. (2004). Review of Child and Adolescent Refugee Mental Health. Journal of the American Academy of Child and Adolescent Psychiatry.']
+  },
 ];

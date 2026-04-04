@@ -108,6 +108,7 @@
     <div class="profil-tabs">
       <div class="profil-tab active" data-tab="dashboard" onclick="showProfilTab('dashboard')">🏠 Übersicht</div>
       <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Aufnahme</div>
+      <div class="profil-tab" data-tab="genogramm" onclick="showProfilTab('genogramm')">👨‍👩‍👧 Genogramm</div>
       <div class="profil-tab" data-tab="screening" onclick="showProfilTab('screening')">🔍 Screening</div>
       <div class="profil-tab" data-tab="fallformulierung" onclick="showProfilTab('fallformulierung')">🧩 5P-Analyse</div>
       <div class="profil-tab" data-tab="staerken" onclick="showProfilTab('staerken')">💪 Stärken</div>
@@ -475,6 +476,61 @@
       <!-- BERICHTE -->
       <div class="profil-tab-content" data-tab="berichte">
         <div id="berichte-container"></div>
+      </div>
+
+      <!-- GENOGRAMM -->
+      <div class="profil-tab-content" data-tab="genogramm">
+        <div class="card">
+          <div class="card-header">
+            <span>👨‍👩‍👧</span>
+            <div class="card-title">Familien-Genogramm</div>
+          </div>
+          <div class="card-body">
+            <div style="font-size:12px;color:#6B7280;margin-bottom:12px;line-height:1.5;">
+              Erfasse die wichtigsten Bezugspersonen und Familienmitglieder. Das Genogramm hilft, Familienstrukturen,
+              Beziehungsqualitäten und systemische Muster auf einen Blick zu sehen.
+            </div>
+            <div id="genogramm-visual" style="min-height:120px;margin-bottom:14px;"></div>
+            <div id="genogramm-liste" style="margin-bottom:14px;"></div>
+            <div style="background:#F9FAFB;border-radius:10px;padding:12px;border:1px solid #E5E7EB;">
+              <div style="font-size:12px;font-weight:600;margin-bottom:8px;">Person hinzufügen</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                <input type="text" id="geno-name" placeholder="Name" style="font-size:13px;">
+                <select id="geno-rolle" style="font-size:13px;">
+                  <option value="mutter">Mutter</option>
+                  <option value="vater">Vater</option>
+                  <option value="stiefmutter">Stiefmutter</option>
+                  <option value="stiefvater">Stiefvater</option>
+                  <option value="schwester">Schwester</option>
+                  <option value="bruder">Bruder</option>
+                  <option value="halbgeschwister">Halbgeschwister</option>
+                  <option value="grossmutter">Großmutter</option>
+                  <option value="grossvater">Großvater</option>
+                  <option value="pflegemutter">Pflegemutter</option>
+                  <option value="pflegevater">Pflegevater</option>
+                  <option value="tante-onkel">Tante/Onkel</option>
+                  <option value="partner-in">Partner/in</option>
+                  <option value="freund-in">Freund/in</option>
+                  <option value="betreuer-in">Betreuer/in</option>
+                  <option value="lehrer-in">Lehrer/in</option>
+                  <option value="sonstige">Sonstige</option>
+                </select>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                <select id="geno-beziehung" style="font-size:13px;">
+                  <option value="eng">🟢 Enge Beziehung</option>
+                  <option value="normal">🔵 Normale Beziehung</option>
+                  <option value="distanziert">🟡 Distanziert</option>
+                  <option value="konflikt">🔴 Konfliktbelastet</option>
+                  <option value="abbruch">⚫ Kontaktabbruch</option>
+                  <option value="ambivalent">🟠 Ambivalent (Nähe+Konflikt)</option>
+                </select>
+                <input type="text" id="geno-notiz" placeholder="Notiz (optional)" style="font-size:13px;">
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="addGenogrammPerson()">+ Person hinzufügen</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- INFO -->

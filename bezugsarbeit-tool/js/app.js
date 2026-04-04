@@ -373,6 +373,7 @@ function showProfilTab(tab) {
   if (tab === 'screening') renderScreeningEmbedded();
   if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
+  if (tab === 'genogramm') renderGenogramm();
 }
 
 // ============================================================
@@ -5936,4 +5937,126 @@ function renderSitzungenImThemenTab() {
       </div>
     </div>
   `;
+}
+
+// ============================================================
+// GENOGRAMM
+// ============================================================
+const GENO_ROLLEN_LABELS = {
+  mutter: '👩 Mutter', vater: '👨 Vater', stiefmutter: '👩 Stiefmutter', stiefvater: '👨 Stiefvater',
+  schwester: '👧 Schwester', bruder: '👦 Bruder', halbgeschwister: '👶 Halbgeschwister',
+  grossmutter: '👵 Großmutter', grossvater: '👴 Großvater',
+  pflegemutter: '👩‍🦱 Pflegemutter', pflegevater: '👨‍🦱 Pflegevater',
+  'tante-onkel': '🧑 Tante/Onkel', 'partner-in': '💑 Partner/in', 'freund-in': '🤝 Freund/in',
+  'betreuer-in': '🧑‍⚕️ Betreuer/in', 'lehrer-in': '🧑‍🏫 Lehrer/in', sonstige: '👤 Sonstige',
+};
+const GENO_BEZ_STYLES = {
+  eng: { farbe: '#22C55E', label: 'Eng', border: '3px solid #22C55E' },
+  normal: { farbe: '#3B82F6', label: 'Normal', border: '2px solid #3B82F6' },
+  distanziert: { farbe: '#EAB308', label: 'Distanziert', border: '2px dashed #EAB308' },
+  konflikt: { farbe: '#EF4444', label: 'Konflikt', border: '2px solid #EF4444' },
+  abbruch: { farbe: '#374151', label: 'Abbruch', border: '2px dotted #374151' },
+  ambivalent: { farbe: '#F97316', label: 'Ambivalent', border: '2px dashed #F97316' },
+};
+
+function getGenogramm() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  return (s && s.genogramm) || [];
+}
+
+function saveGenogramm(genogramm) {
+  DB.updateSchueler(APP.currentSchuelerId, { genogramm });
+}
+
+function addGenogrammPerson() {
+  const name = document.getElementById('geno-name').value.trim();
+  if (!name) return;
+  const rolle = document.getElementById('geno-rolle').value;
+  const beziehung = document.getElementById('geno-beziehung').value;
+  const notiz = document.getElementById('geno-notiz').value.trim();
+  const geno = getGenogramm();
+  geno.push({ name, rolle, beziehung, notiz, id: Date.now() });
+  saveGenogramm(geno);
+  document.getElementById('geno-name').value = '';
+  document.getElementById('geno-notiz').value = '';
+  renderGenogramm();
+}
+
+function deleteGenogrammPerson(id) {
+  const geno = getGenogramm().filter(p => p.id !== id);
+  saveGenogramm(geno);
+  renderGenogramm();
+}
+
+function renderGenogramm() {
+  const geno = getGenogramm();
+  const liste = document.getElementById('genogramm-liste');
+  const visual = document.getElementById('genogramm-visual');
+  if (!liste || !visual) return;
+
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const schuelerName = s ? s.name : 'Schüler';
+
+  if (geno.length === 0) {
+    liste.innerHTML = '<div style="text-align:center;padding:16px;color:#9CA3AF;font-size:13px;">Noch keine Personen erfasst. Füge Familienmitglieder und Bezugspersonen hinzu.</div>';
+    visual.innerHTML = '';
+    return;
+  }
+
+  // Visual: Schüler in Mitte, Personen drum herum als Karten
+  const eltern = geno.filter(p => ['mutter','vater','stiefmutter','stiefvater','pflegemutter','pflegevater'].includes(p.rolle));
+  const geschwister = geno.filter(p => ['schwester','bruder','halbgeschwister'].includes(p.rolle));
+  const erweitert = geno.filter(p => ['grossmutter','grossvater','tante-onkel'].includes(p.rolle));
+  const andere = geno.filter(p => !eltern.includes(p) && !geschwister.includes(p) && !erweitert.includes(p));
+
+  function personCard(p) {
+    const bez = GENO_BEZ_STYLES[p.beziehung] || GENO_BEZ_STYLES.normal;
+    const rolleLabel = GENO_ROLLEN_LABELS[p.rolle] || p.rolle;
+    return '<div style="background:#fff;border:' + bez.border + ';border-radius:10px;padding:8px 10px;min-width:100px;text-align:center;position:relative;">'
+      + '<div style="font-size:13px;font-weight:600;">' + escapeHtml(p.name) + '</div>'
+      + '<div style="font-size:10px;color:#6B7280;">' + rolleLabel + '</div>'
+      + '<div style="font-size:9px;color:' + bez.farbe + ';font-weight:600;margin-top:2px;">' + bez.label + '</div>'
+      + (p.notiz ? '<div style="font-size:9px;color:#9CA3AF;margin-top:2px;font-style:italic;">' + escapeHtml(p.notiz) + '</div>' : '')
+      + '<button onclick="deleteGenogrammPerson(' + p.id + ')" style="position:absolute;top:2px;right:4px;background:none;border:none;font-size:10px;cursor:pointer;color:#D1D5DB;">✕</button>'
+      + '</div>';
+  }
+
+  let vHtml = '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">';
+
+  if (erweitert.length > 0) {
+    vHtml += '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;opacity:0.8;">'
+      + erweitert.map(personCard).join('') + '</div>'
+      + '<div style="color:#D1D5DB;font-size:16px;">│</div>';
+  }
+
+  if (eltern.length > 0) {
+    vHtml += '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">'
+      + eltern.map(personCard).join('') + '</div>'
+      + '<div style="color:#D1D5DB;font-size:16px;">│</div>';
+  }
+
+  vHtml += '<div style="background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border-radius:12px;padding:10px 20px;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(99,102,241,0.3);">'
+    + '⭐ ' + escapeHtml(schuelerName) + '</div>';
+
+  if (geschwister.length > 0) {
+    vHtml += '<div style="color:#D1D5DB;font-size:16px;">│</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">'
+      + geschwister.map(personCard).join('') + '</div>';
+  }
+
+  if (andere.length > 0) {
+    vHtml += '<div style="color:#D1D5DB;font-size:16px;">│</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;opacity:0.9;">'
+      + andere.map(personCard).join('') + '</div>';
+  }
+
+  vHtml += '</div>';
+  visual.innerHTML = vHtml;
+
+  // Legende
+  liste.innerHTML = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">'
+    + Object.entries(GENO_BEZ_STYLES).map(([k, v]) =>
+      '<span style="font-size:10px;padding:2px 8px;border:' + v.border + ';border-radius:12px;color:' + v.farbe + ';">' + v.label + '</span>'
+    ).join('')
+    + '</div>';
 }

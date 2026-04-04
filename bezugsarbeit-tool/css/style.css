@@ -3854,3 +3854,92 @@ select {
   /* Sidebar wird bei 768px schon collapsed — hier nur Feinschliff */
   .main-content { padding: 12px; }
 }
+
+/* ========== Quick-Entry: Akutes Thema ========== */
+.quick-entry {
+  background: var(--bg-card);
+  border: 1.5px solid var(--primary-100);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow);
+}
+.quick-entry-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--text);
+}
+.quick-entry-header svg { color: var(--primary); }
+.quick-entry-search-wrap { position: relative; }
+.quick-entry-input {
+  width: 100%;
+  padding: 10px 14px 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  font-family: inherit;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.quick-entry-input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+.quick-entry-input::placeholder { color: var(--text-muted); }
+.quick-entry-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.quick-entry-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  border-bottom: 1px solid var(--border-light);
+}
+.quick-entry-item:last-child { border-bottom: none; }
+.quick-entry-item:hover { background: var(--primary-50); }
+.quick-entry-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.quick-entry-titel {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+.quick-entry-desc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.quick-entry-kat {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.quick-entry-empty {
+  padding: 16px;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}

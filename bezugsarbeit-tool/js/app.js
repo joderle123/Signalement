@@ -1940,12 +1940,313 @@ function uploadFoto(schuelerId) {
 }
 
 // ============================================================
+// AKUTES THEMA — Quick-Entry System
+// ============================================================
+
+// Fuzzy-Suche über alle Themen
+function searchThemen(query) {
+  if (!query || query.length < 2) return [];
+  const q = query.toLowerCase();
+  const results = [];
+  for (const kat of THEMEN_KATEGORIEN) {
+    for (const t of kat.themen) {
+      const haystack = (t.id + ' ' + t.titel + ' ' + t.beschreibung).toLowerCase();
+      if (haystack.includes(q)) {
+        results.push({ ...t, katId: kat.id, katTitel: kat.titel, farbe: kat.farbe });
+      }
+    }
+  }
+  return results.slice(0, 8);
+}
+
+// Reverse-Map: Thema → Screening-Domains
+function getDomainsForThema(themaId) {
+  return Object.entries(SCREENING_THEMA_MAP)
+    .filter(([domId, themen]) => themen.includes(themaId))
+    .map(([domId]) => SCREENING_DOMAINS.find(d => d.id === domId))
+    .filter(Boolean);
+}
+
+// Verknüpfte Themen aus SCREENING_THEMA_MAP
+function getRelatedThemen(themaId) {
+  const domains = getDomainsForThema(themaId);
+  const related = new Set();
+  for (const dom of domains) {
+    for (const tid of (SCREENING_THEMA_MAP[dom.id] || [])) {
+      if (tid !== themaId) related.add(tid);
+    }
+  }
+  return [...related].slice(0, 6);
+}
+
+// Thema-Titel aus ID finden
+function getThemaTitel(themaId) {
+  for (const kat of THEMEN_KATEGORIEN) {
+    const t = kat.themen.find(th => th.id === themaId);
+    if (t) return t.titel;
+  }
+  return themaId;
+}
+
+// Quick-Entry: Suche rendern
+function renderQuickEntry(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="quick-entry">
+      <div class="quick-entry-header">
+        ${icon('bolt', 18)} <strong>Akutes Thema</strong>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:6px;">Was beschäftigt den Jugendlichen?</span>
+      </div>
+      <div class="quick-entry-search-wrap">
+        <input type="text" id="quick-entry-input" class="quick-entry-input"
+          placeholder="Thema eingeben z.B. Mobbing, Angst, Streit mit Eltern..."
+          oninput="onQuickEntryInput(this.value)"
+          autocomplete="off" />
+        <div id="quick-entry-results" class="quick-entry-results"></div>
+      </div>
+    </div>
+  `;
+}
+
+// Suche bei Eingabe
+function onQuickEntryInput(query) {
+  const resultsEl = document.getElementById('quick-entry-results');
+  if (!resultsEl) return;
+
+  const results = searchThemen(query);
+  if (results.length === 0) {
+    resultsEl.innerHTML = query.length >= 2
+      ? '<div class="quick-entry-empty">Kein Thema gefunden. Versuche andere Stichwörter.</div>'
+      : '';
+    resultsEl.style.display = query.length >= 2 ? 'block' : 'none';
+    return;
+  }
+
+  resultsEl.style.display = 'block';
+  resultsEl.innerHTML = results.map(r => `
+    <div class="quick-entry-item" onclick="showQuickEntryPanel('${r.id}', '${r.katId}')">
+      <span class="quick-entry-dot" style="background:${r.farbe};"></span>
+      <div>
+        <div class="quick-entry-titel">${r.titel}</div>
+        <div class="quick-entry-desc">${r.beschreibung}</div>
+      </div>
+      <span class="quick-entry-kat">${r.katTitel}</span>
+    </div>
+  `).join('');
+}
+
+// Aktionspanel für gewähltes Thema
+function showQuickEntryPanel(themaId, katId) {
+  // Suche schließen
+  const resultsEl = document.getElementById('quick-entry-results');
+  if (resultsEl) resultsEl.style.display = 'none';
+  const inputEl = document.getElementById('quick-entry-input');
+  if (inputEl) inputEl.value = '';
+
+  const kat = THEMEN_KATEGORIEN.find(k => k.id === katId);
+  const thema = kat ? kat.themen.find(t => t.id === themaId) : null;
+  if (!thema) return;
+
+  // Arbeitsblätter & Module
+  const arbeitsblaetter = ARBEITSBLÄTTER[themaId] || [];
+  const therapieModul = THERAPIE_MODULE_DATEIEN[themaId];
+  const fachkraftModul = FACHKRAFT_MODULE_DATEIEN[themaId];
+
+  // Verknüpfte Themen
+  const related = getRelatedThemen(themaId);
+  const domains = getDomainsForThema(themaId);
+
+  // Screening-Status prüfen
+  const sid = APP.currentSchuelerId;
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  let screeningInfo = '';
+  if (screenings.length > 0 && domains.length > 0) {
+    const latest = screenings[screenings.length - 1];
+    screeningInfo = domains.map(d => {
+      const score = latest.scores[d.id] || 0;
+      const max = d.items.length * 3;
+      const flagged = score >= d.cutoff && d.cutoff > 0;
+      return `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:11px;
+        background:${flagged ? d.farbe + '18' : '#F3F4F6'};
+        color:${flagged ? d.farbe : '#6B7280'};
+        border:1px solid ${flagged ? d.farbe + '40' : '#E5E7EB'};">
+        ${flagged ? '⚠' : '✓'} ${d.label}: ${score}/${max}
+      </span>`;
+    }).join(' ');
+  }
+
+  // Prüfe ob schon im Förderplan
+  const roadmap = DB.getRoadmap(sid);
+  let inRoadmap = false;
+  if (roadmap) {
+    inRoadmap = roadmap.phasen.some(p => p.themen && p.themen.some(t => (typeof t === 'string' ? t : t.id) === themaId));
+  }
+
+  // Status des Themas
+  const s = DB.getSchuelerById(sid);
+  const currentStatus = (s.topicStatus || {})[themaId] || 'nicht-begonnen';
+
+  // Panel erstellen
+  const panel = document.createElement('div');
+  panel.className = 'modal-overlay';
+  panel.id = 'quick-entry-panel';
+  panel.onclick = e => { if (e.target === panel) panel.remove(); };
+  panel.innerHTML = `
+    <div class="modal" style="max-width:600px;">
+      <div class="modal-header" style="border-left:4px solid ${kat.farbe};">
+        <div>
+          <div style="font-size:11px;color:${kat.farbe};font-weight:600;">${kat.titel}</div>
+          <div class="modal-title" style="font-size:16px;">${icon('bolt', 20)} ${thema.titel}</div>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('quick-entry-panel').remove()">✕</button>
+      </div>
+      <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">${thema.beschreibung}</p>
+
+        <!-- Handlungsweg -->
+        <div style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
+          <div style="font-weight:700;font-size:13px;color:#0369A1;margin-bottom:10px;">${icon('clipboard', 16)} Sofort-Handlungsweg</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            ${arbeitsblaetter.length > 0 ? arbeitsblaetter.map(ab => `
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+                <span style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span>
+                <span><strong>Arbeitsblatt:</strong> ${ab.titel}</span>
+                <a href="arbeitsblaetter/${ab.datei}" target="_blank" style="margin-left:auto;color:#0369A1;font-size:11px;">Öffnen →</a>
+              </div>
+            `).join('') : '<div style="font-size:12px;color:#6B7280;">Kein Arbeitsblatt verfügbar</div>'}
+            ${therapieModul ? `
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+                <span style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span>
+                <span><strong>Therapiemodul:</strong> Detaillierter Sitzungsleitfaden</span>
+                <a href="therapie-module/${therapieModul}" target="_blank" style="margin-left:auto;color:#0369A1;font-size:11px;">Öffnen →</a>
+              </div>
+            ` : ''}
+            ${fachkraftModul ? `
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+                <span style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span>
+                <span><strong>Fachkraft-Hintergrund:</strong> Klinisches Wissen</span>
+                <a href="fachkraft-module/${fachkraftModul}" target="_blank" style="margin-left:auto;color:#0369A1;font-size:11px;">Öffnen →</a>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        <!-- Verknüpfte Bereiche -->
+        ${related.length > 0 ? `
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text-secondary);margin-bottom:6px;">${icon('users', 14)} Verknüpfte Bereiche (häufig zusammen betroffen)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            ${related.map(rid => {
+              const rTitel = getThemaTitel(rid);
+              return `<span style="padding:3px 10px;border-radius:12px;font-size:11px;background:#F3F4F6;color:#374151;border:1px solid #E5E7EB;">${rTitel}</span>`;
+            }).join('')}
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Screening-Relevanz -->
+        ${screeningInfo ? `
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text-secondary);margin-bottom:6px;">${icon('chart', 14)} Screening-Relevanz</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">${screeningInfo}</div>
+        </div>
+        ` : domains.length > 0 ? `
+        <div style="margin-bottom:14px;padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:12px;color:#92400E;">
+          ${icon('info', 14)} Betrifft Screening-Domäne(n): <strong>${domains.map(d => d.label).join(', ')}</strong> — Kein Screening vorhanden, bitte durchführen.
+        </div>
+        ` : ''}
+
+        <!-- Status -->
+        <div style="padding:8px 12px;background:#F9FAFB;border-radius:6px;font-size:12px;color:var(--text-light);margin-bottom:6px;">
+          Status: <strong>${THEMA_STATUS[currentStatus].label}</strong>
+          ${inRoadmap ? ' · Bereits im Förderplan' : ' · Noch nicht im Förderplan'}
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${!inRoadmap ? `<button class="btn btn-primary btn-sm" onclick="quickAddThema('${themaId}');document.getElementById('quick-entry-panel').remove();">
+          ${icon('plus', 14)} In Förderplan aufnehmen
+        </button>` : `<button class="btn btn-secondary btn-sm" disabled style="opacity:0.5;">Bereits im Förderplan</button>`}
+        <button class="btn btn-secondary btn-sm" onclick="quickStartSession('${themaId}');document.getElementById('quick-entry-panel').remove();">
+          ${icon('pencil', 14)} Sitzung dazu starten
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('quick-entry-panel').remove();openThemaPanel('${katId}','${themaId}');">
+          ${icon('external-link', 14)} Thema öffnen
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(panel);
+}
+
+// Quick-Entry: Thema in Förderplan aufnehmen + 5P aktualisieren
+function quickAddThema(themaId) {
+  const sid = APP.currentSchuelerId;
+
+  // 1. Status auf in-bearbeitung
+  setThemaStatus(themaId, 'in-bearbeitung');
+
+  // 2. In aktive Phase des Förderplans aufnehmen
+  let roadmap = DB.getRoadmap(sid);
+  if (roadmap) {
+    const aktivePhase = roadmap.phasen.find(p => p.status === 'aktiv')
+                     || roadmap.phasen.find(p => p.nr === 4);
+    if (aktivePhase) {
+      const already = aktivePhase.themen && aktivePhase.themen.some(t => (typeof t === 'string' ? t : t.id) === themaId);
+      if (!already) {
+        if (!aktivePhase.themen) aktivePhase.themen = [];
+        aktivePhase.themen.push(themaId);
+        DB.saveRoadmap(roadmap);
+      }
+    }
+  }
+
+  // 3. In 5P Presenting aufnehmen
+  let ff = DB.getFallformulierung(sid);
+  if (ff) {
+    const domains = getDomainsForThema(themaId);
+    for (const dom of domains) {
+      if (!ff.presenting) ff.presenting = [];
+      if (!ff.presenting.includes(dom.label)) {
+        ff.presenting.push(dom.label);
+        DB.saveFallformulierung(ff);
+      }
+    }
+  }
+
+  const titel = getThemaTitel(themaId);
+  showToast(`"${titel}" in Förderplan aufgenommen & 5P aktualisiert`, 'success');
+
+  // Refresh
+  if (typeof renderRoadmap === 'function') renderRoadmap();
+  if (typeof renderDashboard === 'function') renderDashboard();
+}
+
+// Quick-Entry: Sitzung mit Thema starten
+function quickStartSession(themaId) {
+  // Zum Notiz-Tab wechseln und Thema vorausfüllen
+  showProfilTab('notizbuch');
+  setTimeout(() => {
+    // Protokoll-Modus aktivieren
+    const protTab = document.querySelector('[onclick*="toggleNotizModus(\'protokoll\')"]');
+    if (protTab) protTab.click();
+    setTimeout(() => {
+      const themaSelect = document.getElementById('prot-thema-id');
+      if (themaSelect) themaSelect.value = themaId;
+    }, 100);
+  }, 200);
+}
+
+// ============================================================
 // DASHBOARD
 // ============================================================
 
 function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
+  renderQuickEntry('quick-entry-dashboard');
   renderNaechsteSchritte();
   renderRueckschrittAlert();
   renderDashKalender();

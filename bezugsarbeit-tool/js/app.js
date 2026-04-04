@@ -2538,6 +2538,7 @@ function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
   renderQuickEntry('quick-entry-dashboard');
+  renderDashboardSummary();
   renderSitzungsvorschlag();
   renderPhaseTransitionPrompt();
   renderNaechsteSchritte();
@@ -2546,6 +2547,91 @@ function renderDashboard() {
   renderDashTodo();
   renderWohlbefinden();
   renderNotizbuch();
+}
+
+// ---- DASHBOARD SUMMARY — "Alles auf einen Blick" ----
+function renderDashboardSummary() {
+  const container = document.getElementById('dashboard-summary-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) { container.innerHTML = ''; return; }
+
+  const roadmap = DB.getRoadmap(sid);
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  const ziele = s.ziele || [];
+  const notizen = DB.getNotizen(sid);
+
+  // Roadmap-Status
+  let phaseText = '—';
+  let phaseNr = '—';
+  let phasePct = 0;
+  let phaseFarbe = '#6B7280';
+  if (roadmap) {
+    const aktiv = roadmap.phasen.find(p => p.status === 'aktiv');
+    if (aktiv) {
+      const def = ROADMAP_PHASEN[aktiv.nr] || {};
+      phaseNr = aktiv.nr;
+      phaseText = def.titel || 'Phase ' + aktiv.nr;
+      phaseFarbe = def.farbe || '#6B7280';
+      const total = aktiv.themen ? aktiv.themen.length : 0;
+      const done = aktiv.themen ? aktiv.themen.filter(t => aktiv.themenStatus && aktiv.themenStatus[t] === 'erledigt').length : 0;
+      phasePct = total > 0 ? Math.round(done / total * 100) : 0;
+    }
+  }
+
+  // Screening-Status
+  let scrFlagged = 0;
+  let scrTotal = 0;
+  if (screenings.length > 0) {
+    const latest = screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+    for (const domId in latest.scores) {
+      const dom = SCREENING_DOMAINS.find(d => d.id === domId);
+      if (dom && !dom.invertiert) {
+        scrTotal++;
+        if (latest.scores[domId] >= dom.cutoff) scrFlagged++;
+      }
+    }
+  }
+
+  // Ziele-Fortschritt
+  const avgZiel = ziele.length > 0 ? Math.round(ziele.reduce((sum, z) => sum + (z.fortschritt || (z.erledigt ? 100 : 0)), 0) / ziele.length) : 0;
+  const zielFarbe = avgZiel >= 70 ? '#22C55E' : (avgZiel >= 30 ? '#F59E0B' : '#EF4444');
+
+  // Sitzungen
+  const sitzungsCount = notizen.length;
+  const lastSitzung = notizen.length > 0 ? notizen.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0] : null;
+  const tageText = lastSitzung ? Math.round((Date.now() - new Date(lastSitzung.datum)) / 86400000) + ' Tage her' : '—';
+
+  container.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px;">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${phaseFarbe};text-align:center;cursor:pointer;" onclick="showProfilTab('roadmap')">
+        <div style="font-size:22px;margin-bottom:4px;">🗺️</div>
+        <div style="font-size:11px;color:#6B7280;">Aktive Phase</div>
+        <div style="font-size:16px;font-weight:700;color:${phaseFarbe};">${phaseNr}: ${phaseText}</div>
+        <div style="height:4px;background:#E5E7EB;border-radius:2px;margin-top:6px;"><div style="height:100%;width:${phasePct}%;background:${phaseFarbe};border-radius:2px;"></div></div>
+        <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${phasePct}% erledigt</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${scrFlagged > 0 ? '#EF4444' : '#22C55E'};text-align:center;cursor:pointer;" onclick="showProfilTab('screening')">
+        <div style="font-size:22px;margin-bottom:4px;">📊</div>
+        <div style="font-size:11px;color:#6B7280;">Screening</div>
+        <div style="font-size:16px;font-weight:700;color:${scrFlagged > 0 ? '#EF4444' : '#22C55E'};">${screenings.length === 0 ? 'Ausstehend' : scrFlagged + ' auffällig'}</div>
+        <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${screenings.length > 0 ? 'von ' + scrTotal + ' Bereichen' : 'Noch kein Screening'}</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showProfilTab('ziele')">
+        <div style="font-size:22px;margin-bottom:4px;">🎯</div>
+        <div style="font-size:11px;color:#6B7280;">Ziele</div>
+        <div style="font-size:16px;font-weight:700;color:${zielFarbe};">${ziele.length === 0 ? 'Keine' : avgZiel + '%'}</div>
+        <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${ziele.length} Ziel${ziele.length !== 1 ? 'e' : ''} definiert</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid #6366F1;text-align:center;cursor:pointer;" onclick="showProfilTab('notizen')">
+        <div style="font-size:22px;margin-bottom:4px;">📝</div>
+        <div style="font-size:11px;color:#6B7280;">Sitzungen</div>
+        <div style="font-size:16px;font-weight:700;color:#6366F1;">${sitzungsCount}</div>
+        <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">Letzte: ${tageText}</div>
+      </div>
+    </div>
+  `;
 }
 
 // ---- SITZUNGSVORSCHLAG — "Heute empfohlen" ----

@@ -3930,6 +3930,15 @@ function renderBerichte() {
         </div>
         <span class="bericht-card-arrow">→</span>
       </div>
+
+      <div class="bericht-card" onclick="showUeberweisungsForm()">
+        <div class="bericht-card-icon" style="background:#FDF4FF;color:#A855F7;">📨</div>
+        <div class="bericht-card-body">
+          <strong>Überweisungsschreiben</strong>
+          <p>Formelles Schreiben an Fachstellen (Psychologe, Psychiater, Beratungsstelle)</p>
+        </div>
+        <span class="bericht-card-arrow">→</span>
+      </div>
     </div>
 
     <div id="bericht-preview" style="display:none;margin-top:20px;">
@@ -4151,6 +4160,173 @@ function generateUebergabe(s, name, notizen, scr, roadmap, ff, wb, heute) {
 
       <h4>Wichtige Hinweise für die Übernahme</h4>
       <p><em>[Hier individuelle Hinweise einfügen]</em></p>
+    </div>
+  `;
+}
+
+// ---- Überweisungsschreiben ----
+function showUeberweisungsForm() {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+
+  const preview = document.getElementById('bericht-preview');
+  const titel = document.getElementById('bericht-preview-titel');
+  const inhalt = document.getElementById('bericht-inhalt');
+
+  titel.textContent = '📨 Überweisungsschreiben erstellen';
+
+  const empfaengerOptionen = [
+    { id: 'psychologe', label: 'Psycholog:in' },
+    { id: 'psychiater', label: 'Kinder- & Jugendpsychiater:in' },
+    { id: 'beratungsstelle', label: 'Beratungsstelle' },
+    { id: 'schule', label: 'Schule / Schulleitung' },
+    { id: 'gericht', label: 'Gericht / Jugendamt' },
+    { id: 'andere', label: 'Andere Fachstelle' }
+  ];
+
+  inhalt.innerHTML = `
+    <div style="max-width:500px;">
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Empfänger</label>
+        <select id="ueberw-empfaenger" class="form-input" style="width:100%;">
+          ${empfaengerOptionen.map(e => `<option value="${e.id}">${e.label}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Name der Einrichtung / Person</label>
+        <input type="text" id="ueberw-name" class="form-input" style="width:100%;" placeholder="z.B. Dr. Schmidt, CHL Pädiatrie">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Empfehlung / Fragestellung</label>
+        <textarea id="ueberw-empfehlung" class="form-input" rows="3" style="width:100%;" placeholder="z.B. Abklärung ADHS, Traumatherapie empfohlen..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="generateUeberweisungsschreiben()">Schreiben generieren</button>
+    </div>
+  `;
+
+  preview.style.display = 'block';
+  preview.scrollIntoView({ behavior: 'smooth' });
+}
+
+function generateUeberweisungsschreiben() {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+
+  const name = `${s.vorname} ${s.nachname}`;
+  const alter = s.geburtsdatum ? Math.floor((Date.now() - new Date(s.geburtsdatum)) / 31557600000) : '—';
+  const heute = new Date().toLocaleDateString('de-DE');
+
+  const empfaenger = document.getElementById('ueberw-empfaenger').value;
+  const empfName = document.getElementById('ueberw-name').value || '[Empfänger]';
+  const empfehlung = document.getElementById('ueberw-empfehlung').value || '[Fragestellung einfügen]';
+
+  const empfLabels = {
+    psychologe: 'Psycholog:in', psychiater: 'Kinder- & Jugendpsychiater:in',
+    beratungsstelle: 'Beratungsstelle', schule: 'Schule / Schulleitung',
+    gericht: 'Gericht / Jugendamt', andere: 'Fachstelle'
+  };
+
+  const notizen = DB.getNotizen().filter(n => n.schuelerId === sid && n.kategorie === 'session');
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  const latestScr = screenings.length ? screenings.sort((a, b) => b.datum.localeCompare(a.datum))[0] : null;
+  const ff = DB.getFallformulierung(sid);
+  const roadmap = DB.getRoadmap(sid);
+
+  const sitzungen = notizen.length;
+  const ersteSitzung = sitzungen ? notizen.sort((a, b) => a.datum.localeCompare(b.datum))[0].datum : '—';
+  const letzteSitzung = sitzungen ? notizen.sort((a, b) => b.datum.localeCompare(a.datum))[0].datum : '—';
+
+  // Auffällige Bereiche aus Screening
+  let auffaellig = '';
+  if (latestScr && latestScr.flaggedAreas && latestScr.flaggedAreas.length > 0) {
+    auffaellig = latestScr.flaggedAreas.map(a => {
+      const dom = SCREENING_DOMAINS.find(d => d.id === a);
+      return dom ? dom.label : a;
+    }).join(', ');
+  }
+
+  // 5P-Zusammenfassung
+  let fivePText = '';
+  if (ff) {
+    const parts = [];
+    if (ff.presenting?.length) parts.push(`Vorstellungsgrund: ${ff.presenting.join(', ')}`);
+    if (ff.predisposing?.length) parts.push(`Prädisponierende Faktoren: ${ff.predisposing.join(', ')}`);
+    if (ff.precipitating?.length) parts.push(`Auslöser: ${ff.precipitating.join(', ')}`);
+    if (ff.perpetuating?.length) parts.push(`Aufrechterhaltende Faktoren: ${ff.perpetuating.join(', ')}`);
+    if (ff.protective?.length) parts.push(`Schutzfaktoren: ${ff.protective.join(', ')}`);
+    fivePText = parts.join('<br>');
+  }
+
+  // Fortschritt
+  let fortschritt = '';
+  if (roadmap) {
+    const aktiv = roadmap.phasen.find(p => p.status === 'aktiv');
+    const abgeschlossen = roadmap.phasen.filter(p => p.status === 'abgeschlossen').length;
+    fortschritt = `Aktuelle Phase: ${aktiv ? aktiv.nr + ' (' + (ROADMAP_PHASEN[aktiv.nr]?.titel || '') + ')' : '—'}, ${abgeschlossen} Phase${abgeschlossen !== 1 ? 'n' : ''} abgeschlossen`;
+  }
+
+  const titel = document.getElementById('bericht-preview-titel');
+  const inhalt = document.getElementById('bericht-inhalt');
+
+  titel.textContent = '📨 Überweisungsschreiben';
+
+  inhalt.innerHTML = `
+    <div class="bericht-doc">
+      <div class="bericht-header-block">
+        <strong>Centre de Documentation et de Services pour l'Éducation (CDSE)</strong><br>
+        Überweisungsschreiben<br>
+        <small>Datum: ${heute}</small>
+      </div>
+      <hr>
+
+      <p>An: <strong>${empfLabels[empfaenger] || 'Fachstelle'}</strong><br>
+      ${empfName}</p>
+
+      <p>Betreff: <strong>Überweisung — ${name}</strong></p>
+
+      <h4>1. Angaben zum Jugendlichen</h4>
+      <table>
+        <tr><td><strong>Name:</strong></td><td>${name}</td></tr>
+        <tr><td><strong>Alter:</strong></td><td>${alter} Jahre</td></tr>
+        <tr><td><strong>Klasse:</strong></td><td>${s.klasse || '—'}</td></tr>
+        <tr><td><strong>Begleitung seit:</strong></td><td>${ersteSitzung !== '—' ? new Date(ersteSitzung).toLocaleDateString('de-DE') : '—'}</td></tr>
+        <tr><td><strong>Anzahl Sitzungen:</strong></td><td>${sitzungen}</td></tr>
+      </table>
+
+      <h4>2. Anlass der Überweisung</h4>
+      <p>${empfehlung}</p>
+
+      ${auffaellig ? `
+        <h4>3. Screening-Ergebnisse</h4>
+        <p>Screening vom ${new Date(latestScr.datum).toLocaleDateString('de-DE')} ergab auffällige Werte in folgenden Bereichen:</p>
+        <p><strong>${auffaellig}</strong></p>
+      ` : ''}
+
+      ${fivePText ? `
+        <h4>${auffaellig ? '4' : '3'}. Klinische Einschätzung (5P-Modell)</h4>
+        <p>${fivePText}</p>
+        ${ff.hypothese ? `<p><em>Hypothese: ${ff.hypothese}</em></p>` : ''}
+      ` : ''}
+
+      ${fortschritt ? `
+        <h4>${(auffaellig ? 4 : 3) + (fivePText ? 1 : 0) + 1}. Bisheriger Verlauf</h4>
+        <p>${fortschritt}</p>
+        <p>Die Begleitung umfasste bisher ${sitzungen} Sitzung${sitzungen !== 1 ? 'en' : ''}
+        ${letzteSitzung !== '—' ? '(letzte: ' + new Date(letzteSitzung).toLocaleDateString('de-DE') + ')' : ''}.</p>
+      ` : ''}
+
+      <h4>Empfehlung</h4>
+      <p>Aufgrund der oben beschriebenen Befunde wird eine weiterführende ${empfLabels[empfaenger] || 'fachliche'}ische Abklärung/Begleitung empfohlen.</p>
+
+      <div class="bericht-footer">
+        <p>Mit freundlichen Grüßen,</p>
+        <br><br>
+        <p>_________________________________<br>
+        Bezugspädagoge/in, CDSE<br>
+        ${heute}</p>
+      </div>
     </div>
   `;
 }

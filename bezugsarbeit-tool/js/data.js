@@ -17791,4 +17791,395 @@ var WIKI_ARTIKEL = [
     leitfaden_ids: [],
     quellen: ['Berry, J.W. (1997). Immigration, Acculturation, and Adaptation. Applied Psychology.', 'Lustig, S.L. et al. (2004). Review of Child and Adolescent Refugee Mental Health. Journal of the American Academy of Child and Adolescent Psychiatry.']
   },
+
+  {
+    id: 'krisenintervention',
+    titel: 'Krisenintervention — Sofortmaßnahmen',
+    aliases: ['Krisenintervention', 'Krisenhilfe', 'Notfallintervention', 'Crisis Intervention', 'Krisenplan'],
+    kategorie: 'krisen',
+    icon: '🆘',
+    farbe: '#e74c3c',
+    definition: 'Krisenintervention bezeichnet strukturierte Sofortmaßnahmen zur Stabilisierung von Personen in akuten psychischen Krisen. Ziel ist die unmittelbare Reduktion von Leidensdruck, die Wiederherstellung eines Minimums an Handlungsfähigkeit und die Einleitung weiterführender Hilfen. In der Jugendhilfe sind Kriseninterventionen häufig — ob bei suizidalen Krisen, Eskalationen im Wohnumfeld, nach traumatischen Ereignissen oder bei akuten familiären Konflikten.',
+    altersgruppe: 'Alle Altersgruppen',
+    praevalenz: 'Ca. 5-10% der Jugendlichen erleben mindestens eine akute psychische Krise pro Jahr, die professionelle Intervention erfordert.',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Akute Krisensymptome', items: ['Intensive emotionale Überflutung (Angst, Wut, Verzweiflung)', 'Gefühl der Ausweglosigkeit und Hilflosigkeit', 'Einengung des Denkens auf das Krisenereignis', 'Psychomotorische Unruhe oder Erstarrung', 'Dissoziative Symptome (Derealisation, Depersonalisation)', 'Schlaf- und Appetitstörungen']},
+      {section: 'Verhaltenszeichen', items: ['Rückzug oder aggressive Ausbrüche', 'Selbstverletzendes Verhalten', 'Suizidale Äußerungen oder Handlungen', 'Substanzkonsum als Bewältigungsversuch', 'Weglaufen oder Schulverweigerung', 'Hilfesuchverhalten oder dessen Vermeidung']}
+    ],
+    ursachen: [
+      {section: 'Häufige Krisenauslöser', items: ['Verlust/Tod einer Bezugsperson', 'Trennung der Eltern oder Beziehungsabbrüche', 'Gewalterfahrungen (physisch, sexuell, emotional)', 'Mobbing und soziale Ausgrenzung', 'Schulversagen oder Leistungsdruck', 'Traumatische Ereignisse (Unfälle, Katastrophen)', 'Coming-Out-Situationen mit Ablehnung', 'Eskalation vorbestehender psychischer Störungen']},
+      {section: 'Krisenmodelle', items: ['Caplan (1964): Krise als Ungleichgewicht zwischen Belastung und Bewältigungsressourcen', 'Cullberg: Traumatische Krise vs. Veränderungskrise', 'BELLA-Modell: Beziehung aufbauen, Erfassen der Lage, Linderung schaffen, Leute einbeziehen, Ansatz zur Bewältigung']}
+    ],
+    differentialdiagnose: ['Akute Belastungsreaktion (F43.0)', 'Anpassungsstörung (F43.2)', 'Suizidale Krise (→ eigenes Protokoll)', 'Psychotische Krise (→ eigenes Protokoll)', 'Panikattacke (→ eigenes Protokoll)', 'Dissoziative Störung'],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'BELLA-Modell', beschreibung: 'Strukturiertes Vorgehen: Beziehung aufbauen → Erfassen der Situation → Linderung der Symptome → Leute (Netzwerk) einbeziehen → Ansatz zur Bewältigung finden.'},
+      {name: 'Safety Planning', beschreibung: 'Gemeinsame Erstellung eines Sicherheitsplans: Warnzeichen erkennen, interne Bewältigungsstrategien, soziale Kontakte zur Ablenkung, professionelle Hilfe, Umgebung sichern.'},
+      {name: 'Psychologische Erste Hilfe (PFA)', beschreibung: 'WHO-Modell: Schauen (Sicherheit prüfen), Hören (aktives Zuhören), Verbinden (mit Ressourcen und Netzwerk). Keine Debriefing-Techniken in der Akutphase.'},
+      {name: 'Krisentelefon & Notdienste', beschreibung: 'Sofortige Erreichbarkeit professioneller Hilfe: Kanner-Jugendtelefon (116 111), SOS Détresse (45 45 45), Notaufnahme.'}
+    ],
+    praxis_tipps: [
+      'Ruhe bewahren — eigene Sicherheit zuerst, dann die des Jugendlichen',
+      'Validieren statt bewerten: "Ich sehe, dass du gerade sehr leidest"',
+      'Einfache, klare Sprache verwenden — kognitive Kapazität ist eingeschränkt',
+      'Keine Versprechen machen, die nicht gehalten werden können',
+      'Suizidalität IMMER direkt ansprechen — das Ansprechen erhöht das Risiko NICHT',
+      'Sicherheitsplan schriftlich festhalten und dem Jugendlichen mitgeben',
+      'Netzwerk aktivieren: Familie, Freunde, Fachpersonen informieren (mit Einverständnis)',
+      'Nachsorge planen: Termin innerhalb von 24-48 Stunden vereinbaren',
+      'Eigene Grenzen erkennen — wann ist professionelle Hilfe (Psychiatrie) nötig?',
+      'Dokumentation zeitnah anfertigen'
+    ],
+    wann_ueberweisen: 'Sofort bei: akuter Suizidalität mit konkretem Plan, psychotischen Symptomen, schwerer Selbstverletzung, Gefahr für andere, Intoxikation mit Bewusstseinstrübung. → Notaufnahme oder Kinder-/Jugendpsychiatrie kontaktieren.',
+    luxemburg_spezifisch: 'Kanner-Jugendtelefon: 116 111 (kostenlos, anonym). SOS Détresse: 45 45 45. Psychiatrische Notaufnahme: CHL oder CHEM. KJP-Bereitschaftsdienst über die Notaufnahme erreichbar. ONE (Office National de l\'Enfance) für Inobhutnahme bei Kindeswohlgefährdung.',
+    verwandte_wiki: ['suizidalitaet', 'selbstverletzung', 'akute-belastungsreaktion', 'panikattacke-notfall', 'psychotische-krise'],
+    screening_domains: [],
+    themen_ids: ['krisen', 'sicherheit'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Roberts, A.R. (2005). Crisis Intervention Handbook. Oxford University Press.', 'WHO (2011). Psychological First Aid: Guide for Field Workers.', 'Sonneck, G. et al. (2016). Krisenintervention und Suizidverhütung. UTB.']
+  },
+  {
+    id: 'haeusliche-gewalt',
+    titel: 'Häusliche Gewalt & Partnerschaftsgewalt (Kinder als Zeugen)',
+    aliases: ['Häusliche Gewalt', 'Domestic Violence', 'Partnerschaftsgewalt', 'Gewalt in der Familie', 'Kinder als Zeugen', 'IPV', 'Intimate Partner Violence'],
+    kategorie: 'krisen',
+    icon: '🏚️',
+    farbe: '#e74c3c',
+    definition: 'Häusliche Gewalt umfasst alle Formen von physischer, psychischer, sexueller und ökonomischer Gewalt zwischen (ehemaligen) Partnern oder Familienmitgliedern. Kinder, die häusliche Gewalt miterleben, sind IMMER Mitbetroffene — selbst wenn sie nicht direkt Ziel der Gewalt sind. Das Miterleben von Partnerschaftsgewalt gilt als Form der Kindeswohlgefährdung und hat schwerwiegende Auswirkungen auf die kindliche Entwicklung.',
+    altersgruppe: 'Alle Altersgruppen',
+    praevalenz: 'Ca. 10-30% aller Kinder erleben häusliche Gewalt. In Europa sind jährlich ca. 12-15% aller Frauen von Partnerschaftsgewalt betroffen. 60-75% der Kinder in betroffenen Haushalten erleben die Gewalt direkt mit.',
+    icd10: 'T74 (Misshandlungssyndrome), Z61 (Probleme in der Kindheit), Z63 (Probleme in der Bezugsgruppe)',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Auswirkungen auf Kinder (nach Alter)', items: ['Kleinkinder: Schlafstörungen, Regression, Anhänglichkeit, Schreckhaftigkeit', 'Schulkinder: Schulprobleme, somatische Beschwerden, Schuldgefühle, Aggressivität oder Rückzug', 'Jugendliche: Depression, Substanzkonsum, eigene Gewaltbereitschaft, Weglaufen, Suizidalität', 'Übergreifend: Bindungsunsicherheit, emotionale Dysregulation, PTBS-Symptome']},
+      {section: 'Warnsignale erkennen', items: ['Unerklärliche Verletzungen (beim Kind oder Elternteil)', 'Übermäßige Wachsamkeit/Hypervigilanz', 'Altersuntypische Überanpassung ("braves Kind")', 'Plötzliche Verhaltensänderungen', 'Vermeidung bestimmter Themen oder Personen', 'Parentifizierung — Kind übernimmt Schutzrolle', 'Häufige Abwesenheit oder Verspätung']}
+    ],
+    ursachen: [
+      {section: 'Gewaltdynamik', items: ['Gewaltzyklus (Walker): Spannungsaufbau → Gewaltausbruch → Honeymoon-Phase → erneuter Aufbau', 'Macht- und Kontrollrad: Isolation, Einschüchterung, ökonomische Kontrolle, emotionale Gewalt', 'Risikofaktoren: Suchterkrankungen, eigene Gewalterfahrungen, Arbeitslosigkeit, soziale Isolation', 'Transgenerational: Kinder aus Gewaltfamilien haben erhöhtes Risiko, selbst Täter oder Opfer zu werden']},
+      {section: 'Warum Verlassen schwer ist', items: ['Ökonomische Abhängigkeit', 'Angst vor Eskalation (gefährlichste Phase nach Trennung)', 'Bindung an den Partner trotz Gewalt (Trauma-Bonding)', 'Scham und Schuldgefühle', 'Kulturelle/religiöse Normen', 'Mangel an sicheren Alternativen (Wohnung, Unterhalt)']}
+    ],
+    differentialdiagnose: ['PTBS / Komplexe PTBS', 'Bindungsstörung', 'Anpassungsstörung', 'Depression', 'Externalisierende Verhaltensstörungen (ODD/CD)', 'Angststörungen'],
+    komorbiditaeten: ['PTBS (30-60% der mitbetroffenen Kinder)', 'Depression', 'Angststörungen', 'Bindungsstörungen', 'Substanzkonsum (Jugendliche)', 'Schulvermeidung'],
+    evidenzbasierte_interventionen: [
+      {name: 'Sicherheitsplanung', beschreibung: 'Erarbeitung eines Sicherheitsplans mit dem Jugendlichen: Sichere Orte identifizieren, Notnummern bereithalten, Fluchtweg planen, Notfallkoffer packen.'},
+      {name: 'Kid-KINDL / Trauma-fokussierte KVT', beschreibung: 'Evidenzbasierte Therapie für traumatisierte Kinder, die häusliche Gewalt erlebt haben. Fokus auf Trauma-Verarbeitung, Sicherheit und Stabilisierung.'},
+      {name: 'Psychoedukation', beschreibung: 'Dem Kind/Jugendlichen vermitteln: "Du bist nicht schuld. Gewalt ist nie in Ordnung. Du hast das Recht auf Sicherheit." Normalisierung der Reaktionen.'},
+      {name: 'Mutter-Kind-Interventionen', beschreibung: 'Stärkung der Beziehung zwischen gewaltbetroffenem Elternteil und Kind. Unterstützung der Erziehungskompetenz unter erschwerten Bedingungen.'}
+    ],
+    praxis_tipps: [
+      'Sicherheit geht vor Therapie — zuerst Schutzkonzept, dann Aufarbeitung',
+      'Keine gemeinsamen Elterngespräche bei aktiver Gewalt — Gefahr für den betroffenen Elternteil',
+      'Kinder NIE als Informationsquelle gegen einen Elternteil instrumentalisieren',
+      'Ambivalente Gefühle des Kindes gegenüber dem gewalttätigen Elternteil aushalten',
+      'Schweigepflicht: Meldepflicht bei Kindeswohlgefährdung beachten',
+      'Häusliche Gewalt ist kein "Streit" — Begriffswahl prägt Wahrnehmung',
+      'Ressourcen des betroffenen Elternteils stärken — meist beste Schutzfaktor für das Kind',
+      'Dokumentation sorgfältig und neutral (gerichtsverwertbar)',
+      'Eigene Grenzen erkennen — häusliche Gewalt erfordert multiprofessionelle Zusammenarbeit'
+    ],
+    wann_ueberweisen: 'Sofort bei akuter Gefährdung: Polizei (113) und ONE kontaktieren. Bei Verdacht auf Kindeswohlgefährdung: Meldepflicht beachten. Spezialisierte Beratungsstellen für Gewaltopfer einschalten.',
+    luxemburg_spezifisch: 'Femmes en Détresse: 12 13 45 (Frauenhaus, Beratung). Infomann: Beratung für gewaltausübende Männer. ONE (Office National de l\'Enfance): Meldung bei Kindeswohlgefährdung. Polizei: 113 (bei akuter Gewalt). Gesetz vom 8.9.2003: Wegweisung des Täters aus der gemeinsamen Wohnung (expulsion) möglich.',
+    verwandte_wiki: ['trauma', 'krisenintervention', 'vernachlaessigung', 'sexueller-missbrauch', 'bindungsstoerung'],
+    screening_domains: [],
+    themen_ids: ['gewalt', 'familie', 'sicherheit'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Holt, S. et al. (2008). The impact of exposure to domestic violence on children. Child Abuse & Neglect.', 'WHO (2012). Understanding and addressing violence against women.', 'Kindler, H. (2013). Partnergewalt und Kindeswohl. DJI.']
+  },
+  {
+    id: 'sexueller-missbrauch',
+    titel: 'Sexueller Missbrauch bei Kindern & Jugendlichen',
+    aliases: ['Sexueller Missbrauch', 'CSA', 'Child Sexual Abuse', 'Sexuelle Gewalt', 'Sexualisierte Gewalt', 'Sexueller Übergriff'],
+    kategorie: 'krisen',
+    icon: '⚠️',
+    farbe: '#e74c3c',
+    definition: 'Sexueller Missbrauch bezeichnet jede sexuelle Handlung, die an oder vor einem Kind/Jugendlichen vorgenommen wird und die gegen den Willen des Betroffenen geschieht oder der er aufgrund körperlicher, seelischer, geistiger oder sprachlicher Unterlegenheit nicht wissentlich zustimmen kann. Dies umfasst Handlungen mit und ohne Körperkontakt (auch digitale sexuelle Gewalt). Es handelt sich immer um einen Missbrauch eines Macht- und Abhängigkeitsverhältnisses.',
+    altersgruppe: 'Alle Altersgruppen — Häufung zwischen 6-12 Jahren bei Erstmissbrauch',
+    praevalenz: 'Meta-Analysen: Ca. 8-13% der Mädchen und 3-5% der Jungen weltweit. Hohe Dunkelziffer — Schätzungen bis 1 von 4 Mädchen und 1 von 6 Jungen. 70-90% der Täter sind dem Opfer bekannt.',
+    icd10: 'T74.2 (Sexueller Missbrauch), Z61.4/Z61.5 (Probleme im Zusammenhang mit sexuellem Missbrauch)',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Mögliche Indikatoren (kein einzelnes Zeichen ist beweisend!)', items: ['Altersunangemessenes Sexualverhalten oder sexualisierte Sprache', 'Plötzliche Verhaltensänderungen (Regression, Rückzug, Aggression)', 'Schlafstörungen, Alpträume, Einnässen', 'Schulleistungsabfall, Konzentrationsprobleme', 'Selbstverletzendes Verhalten, Suizidalität', 'Essstörungen', 'Dissoziation', 'Körperliche Symptome: Bauch-/Genitalschmerzen, Entzündungen, STIs', 'Vermeidung bestimmter Personen oder Orte', 'Übermäßige Scham bezüglich des eigenen Körpers']},
+      {section: 'Disclosure-Dynamik', items: ['Kinder offenbaren Missbrauch selten spontan und vollständig', 'Häufig: Andeutungen testen ("Was wäre wenn...")', 'Zurücknahme der Aussage (Recantation) ist häufig und bedeutet NICHT, dass es nicht stattfand', 'Summit (1983): Child Sexual Abuse Accommodation Syndrome — Geheimhaltung, Hilflosigkeit, Anpassung, verspätete Offenlegung, Widerruf', 'Digitale Gewalt: Cybergrooming, Sexting-Erpressung, Verbreitung intimer Bilder']}
+    ],
+    ursachen: [
+      {section: 'Täterstrategien (Grooming)', items: ['Gezielter Vertrauensaufbau zum Kind und dessen Umfeld', 'Schrittweise Grenzüberschreitungen (Desensibilisierung)', 'Isolierung des Kindes von Bezugspersonen', 'Geheimhaltungsdruck: Drohungen, Schuldumkehr, "Liebesbeweis"', 'Ausnutzung von Abhängigkeit und Loyalität', 'Online-Grooming: Über soziale Medien, Gaming-Plattformen']},
+      {section: 'Risikofaktoren', items: ['Familiäre Dysfunktion und mangelnde Aufsicht', 'Vorbestehende emotionale Bedürftigkeit des Kindes', 'Behinderung oder Entwicklungsverzögerung', 'Soziale Isolation', 'Vorherige Viktimisierung', 'Institutionelle Settings ohne ausreichendes Schutzkonzept']}
+    ],
+    differentialdiagnose: ['PTBS / Komplexe PTBS', 'Andere Formen von Misshandlung', 'Sexuelle Verhaltensprobleme anderer Ursache', 'Hauterkrankungen vs. Verletzungen', 'Dissoziative Störungen'],
+    komorbiditaeten: ['PTBS (50-70%)', 'Depression (40-60%)', 'Angststörungen', 'Dissoziative Störungen', 'Essstörungen', 'Substanzkonsum', 'Borderline-PS (bei chronischem Missbrauch)', 'Sexuelle Funktionsstörungen'],
+    evidenzbasierte_interventionen: [
+      {name: 'Trauma-fokussierte KVT (TF-KVT)', beschreibung: 'Goldstandard bei sexuellem Missbrauch. Stabilisierung, Psychoedukation, schrittweise Exposition, kognitive Verarbeitung, Einbezug nicht-missbrauchender Bezugsperson.'},
+      {name: 'EMDR', beschreibung: 'Wirksam bei PTBS nach sexuellem Missbrauch. Kann als Ergänzung oder Alternative zu TF-KVT eingesetzt werden.'},
+      {name: 'Schutzkonzept & Sicherheitsplanung', beschreibung: 'Vor jeder therapeutischen Aufarbeitung muss Sicherheit gewährleistet sein: Kein Kontakt zum Täter oder klare Schutzmaßnahmen.'},
+      {name: 'Psychoedukation für Bezugspersonen', beschreibung: 'Nicht-missbrauchende Bezugspersonen sind der wichtigste Schutzfaktor. Information über Auswirkungen, Umgang mit Disclosure, Vermeidung von Sekundärviktimisierung.'}
+    ],
+    praxis_tipps: [
+      'Bei Disclosure: Ruhig bleiben, zuhören, glauben, keine suggestiven Fragen stellen',
+      'NICHT selbst ermitteln — keine detaillierten Befragungen durchführen (Gefahr der Aussageverfälschung)',
+      'Wörtlich dokumentieren, was das Kind von sich aus sagt',
+      'Meldepflicht: Sofort ONE/Jugendgericht informieren bei Verdacht',
+      'Schutz vor dem Täter hat absolute Priorität',
+      'Keine Konfrontation des mutmaßlichen Täters',
+      'Kind validieren: "Ich glaube dir. Du bist nicht schuld. Es war richtig, es zu erzählen."',
+      'Eigene emotionale Reaktionen reflektieren — Supervision nutzen',
+      'Sekundäre Traumatisierung bei Fachkräften ernst nehmen',
+      'Forensische Befragung durch geschulte Fachkräfte (Barnahus-Modell)'
+    ],
+    wann_ueberweisen: 'Sofort bei Verdacht oder Disclosure: Meldung an ONE/Jugendgericht. Spezialisierte Beratungsstelle einschalten. Bei akuter Gefährdung: Polizei (113). Forensische Untersuchung zeitnah veranlassen (max. 72h bei akutem Missbrauch).',
+    luxemburg_spezifisch: 'ONE (Office National de l\'Enfance): Meldung bei Verdacht auf sexuellen Missbrauch (Pflicht!). Jugendgericht (Tribunal de la Jeunesse). Service Psycho-Social de la Police Grand-Ducale: Spezialisierte Vernehmung. ALUPSE (Association Luxembourgeoise de Pédiatrie Sociale): Medizinische Untersuchung. Ecpat Luxembourg: Prävention sexueller Ausbeutung.',
+    verwandte_wiki: ['trauma', 'dissoziation', 'krisenintervention', 'haeusliche-gewalt', 'vernachlaessigung'],
+    screening_domains: [],
+    themen_ids: ['gewalt', 'sicherheit', 'sexualitaet'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Finkelhor, D. (2009). The Prevention of Childhood Sexual Abuse. The Future of Children.', 'Cohen, J.A. et al. (2006). Treating Trauma and Traumatic Grief in Children and Adolescents. Guilford Press.', 'WHO (2017). Responding to children and adolescents who have been sexually abused.']
+  },
+  {
+    id: 'vernachlaessigung',
+    titel: 'Vernachlässigung (Neglect)',
+    aliases: ['Vernachlässigung', 'Neglect', 'Kindesvernachlässigung', 'Child Neglect', 'Verwahrlosung', 'Mangelversorgung'],
+    kategorie: 'krisen',
+    icon: '🚫',
+    farbe: '#e74c3c',
+    definition: 'Vernachlässigung ist die anhaltende oder wiederholte Unterlassung fürsorglichen Handelns durch Eltern oder Sorgeberechtigte, das zur Sicherstellung der physischen und psychischen Versorgung eines Kindes notwendig wäre. Sie ist die häufigste Form der Kindesmisshandlung und oft die am schwierigsten zu erkennende, da sie durch Abwesenheit (von Fürsorge, Stimulation, Aufsicht) definiert ist — nicht durch aktives Handeln.',
+    altersgruppe: 'Alle Altersgruppen — besonders schädlich in den ersten Lebensjahren',
+    praevalenz: 'Häufigste Form der Kindeswohlgefährdung (60-70% aller Fälle). Hohe Dunkelziffer. Schätzungen: 5-10% aller Kinder in westlichen Ländern sind von mindestens einer Form der Vernachlässigung betroffen.',
+    icd10: 'T74.0 (Vernachlässigung oder Im-Stich-Lassen), Z62.0 (Unzureichende elterliche Aufsicht und Kontrolle)',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Formen der Vernachlässigung', items: ['Physische Vernachlässigung: Mangelernährung, unzureichende Hygiene, fehlende medizinische Versorgung, unzureichende Kleidung, Obdachlosigkeit', 'Emotionale Vernachlässigung: Fehlende emotionale Zuwendung, Ignorieren der kindlichen Bedürfnisse, fehlende Stimulation, chronische Unempfänglichkeit', 'Kognitive Vernachlässigung: Fehlende Bildungsförderung, keine Anmeldung zur Schule, fehlendes Interesse an schulischen Belangen', 'Aufsichtspflicht-Vernachlässigung: Unzureichende Aufsicht, altersunangemessene Eigenverantwortung, Exposition gegenüber Gefahren']},
+      {section: 'Warnsignale beim Kind', items: ['Gedeihstörung (Failure to Thrive)', 'Häufige Krankheiten, unbehandelte medizinische Probleme', 'Verzögerung in Sprache, Motorik, kognitiver Entwicklung', 'Wahllos freundliches Verhalten (indiskriminierte Bindung)', 'Oder: extremer Rückzug und Apathie', 'Horten von Nahrungsmitteln', 'Schmutzige, unpassende Kleidung', 'Häufiges Fehlen in der Schule', 'Selbstversorgungsverhalten weit unter/über Altersnorm']}
+    ],
+    ursachen: [
+      {section: 'Risikofaktoren (Eltern)', items: ['Psychische Erkrankungen (Depression, Sucht)', 'Eigene Vernachlässigungserfahrungen in der Kindheit', 'Kognitive Einschränkungen', 'Soziale Isolation, fehlende Unterstützung', 'Armut und materielle Deprivation', 'Überforderung (viele Kinder, Alleinerziehend, Mehrfachbelastung)', 'Junge Elternschaft ohne Unterstützungssystem']},
+      {section: 'Systemische Faktoren', items: ['Armut ist Risikofaktor, aber NICHT gleichbedeutend mit Vernachlässigung', 'Mangelnde soziale Infrastruktur', 'Kulturelle Normen bezüglich Kinderbetreuung', 'Fehlende Frühe Hilfen', 'Gesellschaftliche Tabuisierung']}
+    ],
+    differentialdiagnose: ['Armut ohne Vernachlässigung (materielle vs. emotionale Deprivation)', 'Kulturelle Unterschiede in Erziehungspraktiken', 'Organische Ursachen für Gedeihstörung', 'Andere Formen der Misshandlung', 'Bindungsstörung (Folge, nicht Ursache)'],
+    komorbiditaeten: ['Bindungsstörungen (reaktiv oder enthemmt)', 'Entwicklungsverzögerungen (global)', 'Depression', 'PTBS', 'ADHS-ähnliche Symptome', 'Schulversagen', 'Verhaltensauffälligkeiten'],
+    evidenzbasierte_interventionen: [
+      {name: 'SafeCare', beschreibung: 'Evidenzbasiertes Elternprogramm für Familien mit Vernachlässigungsrisiko. Fokus auf Eltern-Kind-Interaktion, Sicherheit im Haushalt, Gesundheitsvorsorge.'},
+      {name: 'Triple P / STEEP', beschreibung: 'Präventive Elternprogramme zur Stärkung der Erziehungskompetenz und emotionalen Responsivität.'},
+      {name: 'Sozialpädagogische Familienhilfe', beschreibung: 'Aufsuchende Hilfe im Alltag der Familie. Unterstützung bei Strukturierung des Familienlebens, Aktivierung von Ressourcen.'},
+      {name: 'Therapeutische Intervention für das Kind', beschreibung: 'Spieltherapie, Bindungsbasierte Interventionen, Entwicklungsförderung. Stabile Beziehungsangebote als korrigierende Erfahrung.'}
+    ],
+    praxis_tipps: [
+      'Vernachlässigung ist ein Prozess, kein einzelnes Ereignis — Muster erkennen',
+      'Empathisch und nicht-wertend mit Eltern arbeiten — Schuldzuweisungen verhindern Kooperation',
+      'Ressourcen der Familie stärken, nicht nur Defizite benennen',
+      'Entwicklungsstand des Kindes systematisch erfassen (Screening)',
+      'Multiprofessionelle Zusammenarbeit ist essenziell (Schule, Arzt, Jugendhilfe)',
+      'Langzeitige Begleitung nötig — Vernachlässigung ist selten schnell zu beheben',
+      'Dokumentation: Konkrete Beobachtungen statt vager Bewertungen',
+      'Cave: Eigene "Rettungsphantasien" reflektieren — Nachhaltigkeit statt schnelle Lösungen',
+      'Bei Kindern unter 3 Jahren ist die Dringlichkeit besonders hoch (kritische Entwicklungsphase)'
+    ],
+    wann_ueberweisen: 'Meldung an ONE bei Verdacht auf Kindeswohlgefährdung. Bei akuter Gefährdung (z.B. Säugling ohne Versorgung): Sofort Polizei/Jugendgericht. Kinderärztliche Untersuchung bei Gedeihstörung. Entwicklungsdiagnostik bei Verdacht auf Entwicklungsverzögerung.',
+    luxemburg_spezifisch: 'ONE (Office National de l\'Enfance): Zuständig für Meldungen und Schutzmaßnahmen. CIS (Centre d\'Information et de Soutien): Familienberatung. Jugendgericht: Anordnung von Schutzmaßnahmen. Kanner-Jugendtelefon: 116 111. Frühe Hilfen (Aides Précoces): Für Familien mit Säuglingen und Kleinkindern.',
+    verwandte_wiki: ['bindungsstoerung', 'haeusliche-gewalt', 'krisenintervention', 'parentifizierung'],
+    screening_domains: [],
+    themen_ids: ['familie', 'sicherheit', 'entwicklung'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Dubowitz, H. (2013). Neglect in Children. Pediatric Clinics of North America.', 'Kindler, H. (2006). Was ist unter Vernachlässigung zu verstehen? DJI Handbuch Kindeswohlgefährdung.', 'WHO (2006). Preventing Child Maltreatment.']
+  },
+  {
+    id: 'trauer',
+    titel: 'Trauer & komplizierte Trauer bei Jugendlichen',
+    aliases: ['Trauer', 'Grief', 'Trauerbewältigung', 'Komplizierte Trauer', 'Prolonged Grief', 'Verlustbewältigung', 'Tod', 'Sterben'],
+    kategorie: 'krisen',
+    icon: '🕊️',
+    farbe: '#e74c3c',
+    definition: 'Trauer ist eine natürliche Reaktion auf den Verlust einer nahestehenden Person. Bei Jugendlichen verläuft Trauer oft anders als bei Erwachsenen und wird häufig übersehen oder unterschätzt. Komplizierte (prolongierte) Trauer liegt vor, wenn die Trauersymptome über das erwartbare Maß hinaus andauern (>6-12 Monate), intensiv bleiben und die Funktionsfähigkeit deutlich beeinträchtigen. In der ICD-11 ist die Anhaltende Trauerstörung (Prolonged Grief Disorder) erstmals als eigene Diagnose anerkannt.',
+    altersgruppe: 'Alle Altersgruppen — Trauerverständnis entwickelt sich mit dem Alter',
+    praevalenz: 'Ca. 3-5% aller Kinder/Jugendlichen verlieren vor dem 18. Lebensjahr einen Elternteil. Ca. 7-10% der Trauernden entwickeln eine prolongierte Trauerstörung.',
+    icd10: 'Z63.4 (Verschwinden oder Tod eines Familienangehörigen)',
+    icd11: '6B42 (Prolonged Grief Disorder)',
+    erscheinungsbild: [
+      {section: 'Normale Trauer bei Jugendlichen', items: ['Schmerz, Sehnsucht, Weinen — aber auch Phasen von Normalität ("Puddle-Jumping")', 'Wut auf den Verstorbenen oder auf Gott/das Schicksal', 'Schuldgefühle ("Hätte ich nur...")', 'Konzentrationsprobleme, Schulleistungsabfall', 'Somatische Beschwerden (Kopf-/Bauchschmerzen)', 'Rückzug oder exzessives Ablenken (Medien, Sport)', 'Identitätsfragen: "Wer bin ich ohne diese Person?"', 'Angst, weitere Bezugspersonen zu verlieren']},
+      {section: 'Komplizierte/Prolongierte Trauer', items: ['Anhaltende intensive Sehnsucht/Seelenschmerz (>6-12 Monate)', 'Unfähigkeit, den Verlust als real zu akzeptieren', 'Emotionale Taubheit oder ständiges Vermeiden von Erinnerungen', 'Verlust des Lebensinns', 'Starke Identitätsveränderung ("Ein Teil von mir ist gestorben")', 'Soziale Isolation, Unfähigkeit zur Alltagsbewältigung', 'Suizidale Gedanken, Sehnsucht, dem Verstorbenen zu folgen']}
+    ],
+    ursachen: [
+      {section: 'Risikofaktoren für komplizierte Trauer', items: ['Art des Todes: Plötzlich, gewaltsam, Suizid (erhöht Risiko deutlich)', 'Qualität der Beziehung: Enge Bindung, ambivalente Beziehung, Abhängigkeit', 'Fehlende soziale Unterstützung', 'Vorbestehende psychische Erkrankungen', 'Kumulative Verluste', 'Fehlende Möglichkeit, Abschied zu nehmen', 'Tabuisierung der Trauer im Umfeld ("Sei stark")']},
+      {section: 'Entwicklungsaspekte', items: ['Vorschulkinder: Verstehen Tod nicht als endgültig — magisches Denken', 'Grundschulalter: Verstehen Endgültigkeit, aber nicht Universalität', 'Ab ca. 10-12 Jahren: Erwachsenenähnliches Todeskonzept', 'Jugendliche: Existenzielle Dimension — Trauer berührt Identitäts- und Sinnfragen', 'Besonderheit: Jugendliche trauern oft "in Wellen" — Erwachsene interpretieren das als "darüber hinweg"']}
+    ],
+    differentialdiagnose: ['Depression (signifikante Überlappung, aber unterschiedliche Kernmerkmale)', 'PTBS (bei traumatischem Verlust)', 'Anpassungsstörung', 'Trennungsangst'],
+    komorbiditaeten: ['Depression (30-50% bei komplizierter Trauer)', 'PTBS (besonders bei gewaltsamen Todesfällen)', 'Angststörungen', 'Substanzkonsum', 'Suizidalität'],
+    evidenzbasierte_interventionen: [
+      {name: 'Trauer-KVT (Grief-CBT)', beschreibung: 'Spezifische KVT-Interventionen für Trauer: Psychoedukation, Traueraufgaben (Worden), kognitive Umstrukturierung dysfunktionaler Gedanken, graduelle Exposition gegenüber Erinnerungen.'},
+      {name: 'Family Bereavement Program', beschreibung: 'Evidenzbasiertes Programm für trauernde Familien. Stärkung der Eltern-Kind-Beziehung, Emotionsregulation, Bewältigungsstrategien.'},
+      {name: 'Narrative Trauerarbeit', beschreibung: 'Erstellen einer kohärenten Erzählung über den Verstorbenen und den Verlust. Erinnerungsbücher, Briefe, Rituale.'},
+      {name: 'Peer-Trauergruppen', beschreibung: 'Austausch mit Gleichaltrigen, die ähnliche Verluste erlebt haben. Normalisierung, Reduktion von Isolation.'}
+    ],
+    praxis_tipps: [
+      'Trauer ist keine Krankheit — nicht jeder Trauernde braucht Therapie',
+      'Den Verlust beim Namen nennen — keine Euphemismen ("eingeschlafen", "weggegangen")',
+      'Erinnerung erlauben und ermutigen — der Verstorbene bleibt Teil der Lebensgeschichte',
+      'Ambivalente Gefühle (Wut, Erleichterung) normalisieren — das ist keine Respektlosigkeit',
+      'Geduld mit dem Trauertempo — es gibt keinen "richtigen" Zeitplan',
+      'Peer-Beziehungen aktiv fördern — Jugendliche schämen sich oft für ihre Trauer',
+      'Rituale anbieten: Kerze anzünden, Brief schreiben, Erinnerungsbox gestalten',
+      'Jahrestage, Feiertage, Geburtstage besonders beachten — Trauer kommt in Wellen',
+      'Suizidalität aktiv explorieren, besonders bei Verlust durch Suizid',
+      'Eigene Betroffenheit reflektieren — Trauer kann Gegenübertragung auslösen'
+    ],
+    wann_ueberweisen: 'Bei prolongierter Trauer (>6-12 Monate mit starker Beeinträchtigung), Suizidalität, Substanzkonsum, schwerer Depression, fehlendem sozialem Netz. Spezialisierte Trauerberatung oder Therapie empfehlen.',
+    luxemburg_spezifisch: 'Omega 90: Spezialisiert auf Sterbebegleitung und Trauerarbeit (auch für Kinder/Jugendliche). Kannerschlass: Trauerbegleitung für Kinder. SOS Détresse: 45 45 45 (bei akuter Krise). Schulpsychologischer Dienst (CEPAS): Unterstützung nach Todesfällen in der Schulgemeinschaft.',
+    verwandte_wiki: ['depression', 'suizidalitaet', 'krisenintervention', 'akute-belastungsreaktion'],
+    screening_domains: [],
+    themen_ids: ['verlust', 'emotionen', 'krisen'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Worden, J.W. (2018). Grief Counseling and Grief Therapy. Springer.', 'Prigerson, H.G. et al. (2009). Prolonged Grief Disorder. Bereavement Care.', 'Rosner, R. et al. (2015). Behandlung komplizierter Trauer. Hogrefe.']
+  },
+  {
+    id: 'akute-belastungsreaktion',
+    titel: 'Akute Belastungsreaktion',
+    aliases: ['Akute Belastungsreaktion', 'Acute Stress Reaction', 'Akute Stressreaktion', 'ASD', 'Acute Stress Disorder', 'Schock', 'Psychischer Schock'],
+    kategorie: 'krisen',
+    icon: '⚡',
+    farbe: '#e74c3c',
+    definition: 'Die akute Belastungsreaktion (ICD-10: F43.0) ist eine vorübergehende Störung, die sich bei einem psychisch nicht manifest gestörten Menschen als Reaktion auf eine außergewöhnliche physische oder psychische Belastung entwickelt und im Allgemeinen innerhalb von Stunden bis Tagen abklingt. Sie ist eine normale Reaktion auf ein abnormales Ereignis. Wenn die Symptome länger als einen Monat anhalten, ist eine PTBS-Diagnose zu erwägen.',
+    altersgruppe: 'Alle Altersgruppen',
+    praevalenz: 'Ca. 5-20% der Personen nach traumatischen Ereignissen entwickeln eine akute Belastungsreaktion. Häufigkeit hängt stark vom Ereignistyp ab (höher bei interpersoneller Gewalt als bei Naturkatastrophen).',
+    icd10: 'F43.0',
+    icd11: 'QE84 (Akute Stressreaktion)',
+    erscheinungsbild: [
+      {section: 'Symptome (Beginn innerhalb von Minuten bis Stunden)', items: ['Initialer "Betäubungszustand": Bewusstseinseinengung, reduzierte Wahrnehmung', 'Dissoziation: Derealisation, Depersonalisation, "wie im Film"', 'Vegetative Symptome: Herzrasen, Schwitzen, Übelkeit, Zittern', 'Flashbacks oder intrusive Bilder des Ereignisses', 'Übermäßige Schreckhaftigkeit (Hyperarousal)', 'Schlafstörungen, Alpträume', 'Emotionale Labilität: Wechsel zwischen Angst, Trauer, Wut, Taubheit', 'Motorische Unruhe oder Erstarrung ("Fight-Flight-Freeze")']},
+      {section: 'Verlauf', items: ['Symptombeginn: Minuten bis Stunden nach dem Ereignis', 'Normaler Verlauf: Abklingen innerhalb von 3 Tagen bis 4 Wochen', 'Wenn >4 Wochen: Übergang in PTBS möglich (ca. 30-50% der ASD-Fälle)', 'Prognostisch günstig: Gutes soziales Netz, frühe Stabilisierung, keine Vortraumatisierung', 'Prognostisch ungünstig: Peritraumatische Dissoziation, fehlende Unterstützung, kumulative Traumata']}
+    ],
+    ursachen: [
+      {section: 'Typische Auslöser', items: ['Unfälle (Verkehr, Sportunfälle)', 'Gewalterfahrungen (Überfall, Körperverletzung)', 'Naturkatastrophen oder Brände', 'Plötzlicher Tod einer nahestehenden Person', 'Zeuge von schwerer Verletzung oder Tod', 'Sexuelle Gewalt', 'Kriegs- und Fluchterfahrungen', 'Bei Jugendlichen auch: schweres Mobbing, Outing-Zwang, Schulamok-Drohung']},
+      {section: 'Neurobiologisches Modell', items: ['Aktivierung der Stressachse (HPA-Achse): Adrenalin, Cortisol', 'Amygdala-Hyperaktivierung → Alarmreaktion', 'Hippocampus-Hemmung → fragmentierte Erinnerung', 'Präfrontaler Cortex unterdrückt → eingeschränkte Reflexion', 'Dissoziation als Schutzreaktion des Gehirns bei Überforderung']}
+    ],
+    differentialdiagnose: ['PTBS (>4 Wochen Symptome)', 'Anpassungsstörung (weniger schwerer Stressor)', 'Panikstörung', 'Dissoziative Störung', 'Akute psychotische Episode'],
+    komorbiditaeten: ['PTBS (als mögliche Folge)', 'Depression', 'Angststörungen', 'Substanzkonsum (Selbstmedikation)', 'Dissoziative Störungen'],
+    evidenzbasierte_interventionen: [
+      {name: 'Psychologische Erste Hilfe (PFA)', beschreibung: 'WHO-Standardprotokoll: Schauen (Sicherheit prüfen), Hören (aktives Zuhören, nicht drängen), Verbinden (praktische Hilfe, soziales Netz). KEIN Debriefing in der Akutphase!'},
+      {name: 'Stabilisierung & Reorientierung', beschreibung: 'Orientierung an Hier und Jetzt, Grounding-Techniken (5-4-3-2-1), Atemmuster (4-7-8), sicherer Ort, basale Bedürfnisse sichern (Wärme, Nahrung, Ruhe).'},
+      {name: 'Watchful Waiting', beschreibung: 'Die meisten akuten Belastungsreaktionen klingen von selbst ab. Aktive Beobachtung ohne sofortige Therapie. Kontrolltermin nach 2-4 Wochen.'},
+      {name: 'Frühe KVT (bei Bedarf)', beschreibung: 'Nur bei fortbestehenden Symptomen (>2 Wochen): Kurze trauma-fokussierte KVT kann PTBS-Entwicklung vorbeugen. NICE-Guideline empfiehlt 5 Sitzungen.'}
+    ],
+    praxis_tipps: [
+      'Ruhe und Sicherheit vermitteln — "Du bist jetzt in Sicherheit"',
+      'KEIN Debriefing/Defusing erzwingen — kann schaden (Cochrane-Review 2002)',
+      'Grounding-Techniken anleiten: "Nenne mir 5 Dinge, die du siehst..."',
+      'Basale Bedürfnisse sichern: Wasser, Decke, ruhiger Raum',
+      'Normalisierende Psychoedukation: "Deine Reaktion ist normal auf ein unnormales Ereignis"',
+      'Nicht allein lassen — aber auch nicht mit Fragen überhäufen',
+      'Soziales Netz aktivieren: Wer kann jetzt für dich da sein?',
+      'Schlaf fördern: Schlafhygiene, ggf. kurzzeitig Medikation (ärztlich)',
+      'Follow-up planen: Kontrolltermin in 2-4 Wochen',
+      'Cave: Peritraumatische Dissoziation ist Risikofaktor für PTBS → Monitoring'
+    ],
+    wann_ueberweisen: 'Bei anhaltenden Symptomen >4 Wochen → Trauma-Therapeut (PTBS-Diagnostik). Bei schwerer Dissoziation oder Suizidalität → sofort KJP. Bei Bedarf an Medikation (Schlaf, Angst) → Arzt/Psychiater.',
+    luxemburg_spezifisch: 'SOS Détresse: 45 45 45. Kanner-Jugendtelefon: 116 111. Notaufnahme CHL/CHEM bei akuter psychischer Krise. CPOS (Centre de Psychologie et d\'Orientation Scolaires) bei schulbezogenen traumatischen Ereignissen. Service de Psychotraumatologie des CHL.',
+    verwandte_wiki: ['trauma', 'krisenintervention', 'dissoziation', 'trauer'],
+    screening_domains: [],
+    themen_ids: ['trauma', 'krisen'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['WHO (2011). Psychological First Aid: Guide for Field Workers.', 'NICE (2018). Post-traumatic stress disorder (PTSD): Management. Clinical Guideline NG116.', 'Bryant, R.A. (2019). Post-traumatic stress disorder: a state-of-the-art review. The Lancet.']
+  },
+  {
+    id: 'panikattacke-notfall',
+    titel: 'Panikattacke — Sofortmaßnahmen',
+    aliases: ['Panikattacke', 'Panic Attack', 'Panik-Notfall', 'Hyperventilation', 'Panik Soforthilfe', 'Panik Erstreaktion'],
+    kategorie: 'krisen',
+    icon: '💨',
+    farbe: '#e74c3c',
+    definition: 'Eine Panikattacke ist eine plötzliche Episode intensiver Angst mit massiven körperlichen Symptomen, die innerhalb von Minuten ihren Höhepunkt erreicht. Obwohl medizinisch ungefährlich, erleben Betroffene sie als lebensbedrohlich (Todesangst, Herzinfarkt-Gefühl, "Verrücktwerden"). Für Fachkräfte in der Jugendhilfe ist es wichtig, Panikattacken zu erkennen und kompetent erste Hilfe leisten zu können — sowohl zur Entlastung des Jugendlichen als auch zur Vermeidung unnötiger Notaufnahme-Besuche.',
+    altersgruppe: '12-25 Jahre (Erstmanifestation typischerweise in der Adoleszenz/jungem Erwachsenenalter)',
+    praevalenz: 'Ca. 11% der Jugendlichen erleben mindestens eine Panikattacke. Ca. 2-3% entwickeln eine Panikstörung.',
+    icd10: 'F41.0 (Panikstörung)',
+    icd11: '6B01 (Panikstörung)',
+    erscheinungsbild: [
+      {section: 'Typische Symptome einer Panikattacke', items: ['Herzrasen, Herzklopfen', 'Atemnot, Engegefühl in der Brust', 'Schwitzen, Zittern', 'Schwindel, Benommenheit', 'Übelkeit, Bauchbeschwerden', 'Taubheit/Kribbeln in Extremitäten', 'Hitzewallungen oder Kälteschauer', 'Derealisation ("alles wirkt unwirklich")', 'Todesangst oder Angst, die Kontrolle zu verlieren', 'Dauer: typischerweise 10-30 Minuten (max. 60 Min)']},
+      {section: 'Hyperventilation', items: ['Schnelles, flaches Atmen → CO₂-Abfall im Blut', 'Folge: Kribbeln in Händen/Gesicht, Muskelkrämpfe, Schwindel', 'Verstärkt die Panikreaktion (Teufelskreis)', 'Wichtigste Sofortmaßnahme: Verlangsamung der Atmung']}
+    ],
+    ursachen: [
+      {section: 'Auslöser & Mechanismus', items: ['Fehlinterpretation normaler Körperempfindungen als gefährlich (Clark-Modell)', 'Teufelskreis: Körpersensation → katastrophisierende Bewertung → Angst → mehr Körpersensationen', 'Auslöser: Stress, Koffein, Schlafmangel, enge Räume, Menschenmengen, Hitze', 'Prädisposition: Anxiety Sensitivity (Angst vor Angstsymptomen)', 'Oft komorbid mit Agoraphobie (Vermeidung angstbesetzter Orte)']}
+    ],
+    differentialdiagnose: ['Hyperthyreose', 'Herzrhythmusstörungen', 'Asthma', 'Hypoglykämie', 'Epilepsie (Temporallappenanfall)', 'Substanzintoxikation (Cannabis, Stimulanzien)', 'Akuter Asthmaanfall'],
+    komorbiditaeten: ['Agoraphobie', 'Generalisierte Angststörung', 'Depression', 'Soziale Phobie', 'Substanzkonsum'],
+    evidenzbasierte_interventionen: [
+      {name: 'Sofortmaßnahmen (Erste Hilfe)', beschreibung: '1) Ruhig ansprechen: "Ich bin hier, du bist sicher." 2) Atmung verlangsamen: Gemeinsam atmen — 4 Sek. ein, 7 Sek. halten, 8 Sek. aus. 3) Grounding: "Nenne mir 5 Dinge die du siehst." 4) Körperkontakt nur mit Erlaubnis. 5) Validieren: "Das fühlt sich schrecklich an, aber es geht vorbei."'},
+      {name: 'Atemtechniken bei Hyperventilation', beschreibung: 'NICHT in Tüte atmen (veraltet, kann gefährlich sein bei Asthma/Herzproblemen). Stattdessen: Lippenbremse (durch gespitzte Lippen ausatmen), Bauchatmung, gemeinsames langsames Atmen.'},
+      {name: 'KVT bei Panikstörung', beschreibung: 'Goldstandard: Psychoedukation über Teufelskreis, kognitive Umstrukturierung der Katastrophengedanken, interozeptive Exposition (Körpersensationen absichtlich auslösen), in-vivo-Exposition.'},
+      {name: 'Panik-Protokoll / Notfallkarte', beschreibung: 'Gemeinsam mit dem Jugendlichen eine Notfallkarte erstellen: Schritte bei Panikattacke, hilfreiche Sätze, Atemtechnik, Kontaktpersonen.'}
+    ],
+    praxis_tipps: [
+      'Ruhe bewahren — eigene Gelassenheit ist ansteckend',
+      'NICHT sagen: "Beruhige dich" oder "Es ist nichts" — das invalidiert',
+      'Stattdessen: "Ich sehe, dass du Angst hast. Ich bleibe bei dir. Das geht vorbei."',
+      'Gemeinsam atmen: Handgeste für Ein-/Ausatmen verwenden',
+      'Grounding: Etwas Kaltes anfassen, Füße fest auf den Boden drücken',
+      'Nach der Attacke: Normalisieren, Psychoedukation anbieten',
+      'Notfallkarte gemeinsam erstellen für zukünftige Attacken',
+      'Vermeidungsverhalten nicht verstärken — nach Stabilisierung wieder normal handeln',
+      'Bei erstmaliger Panikattacke: Organische Abklärung empfehlen (Schilddrüse, Herz)',
+      'Medikation (Benzodiazepine) nur als ärztliche Notfallmaßnahme — Suchtpotenzial!'
+    ],
+    wann_ueberweisen: 'Bei wiederkehrenden Panikattacken → KVT-Therapie. Bei ausgeprägter Agoraphobie → Expositionstherapie. Bei Verdacht auf organische Ursache → ärztliche Abklärung. Bei Suizidalität oder komorbider Depression → KJP.',
+    luxemburg_spezifisch: 'Kanner-Jugendtelefon: 116 111. Notaufnahme nur bei unklarer Erstmanifestation oder V.a. organische Ursache. CPOS für schulbezogene Angst. Ambulante KVT-Therapeuten über CNS (Caisse Nationale de Santé) abrufbar.',
+    verwandte_wiki: ['panikstorung', 'angst', 'krisenintervention', 'soziale-angst'],
+    screening_domains: [],
+    themen_ids: ['angst', 'krisen'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Clark, D.M. (1986). A cognitive approach to panic. Behaviour Research and Therapy.', 'NICE (2011). Generalised anxiety disorder and panic disorder in adults. CG113.', 'Schneider, S. & Margraf, J. (2017). Agoraphobie und Panikstörung. Springer.']
+  },
+  {
+    id: 'psychotische-krise',
+    titel: 'Akute psychotische Krise — Sofortmaßnahmen',
+    aliases: ['Psychotische Krise', 'Psychotic Crisis', 'Akute Psychose', 'Wahnvorstellungen', 'Halluzinationen Notfall', 'Psychose Erstreaktion'],
+    kategorie: 'krisen',
+    icon: '🌀',
+    farbe: '#e74c3c',
+    definition: 'Eine akute psychotische Krise liegt vor, wenn ein Jugendlicher plötzlich den Bezug zur Realität verliert — durch Halluzinationen (meist akustisch), Wahnvorstellungen, schwere Denkstörungen oder massive Verhaltensdesorganisation. Für Fachkräfte in der Jugendhilfe ist es essenziell, psychotische Symptome zu erkennen und angemessen zu reagieren, da die Situation für den Betroffenen extrem beängstigend ist und eine professionelle psychiatrische Einschätzung erfordert.',
+    altersgruppe: '15-25 Jahre (Hauptmanifestation von Erstpsychosen)',
+    praevalenz: 'Ca. 3% der Jugendlichen erleben mindestens einmal psychotische Symptome. Erstmanifestation einer Schizophrenie: ca. 15 pro 100.000 im Alter 15-24.',
+    icd10: 'F23 (Akute vorübergehende psychotische Störungen), F20 (Schizophrenie)',
+    icd11: '6A23 (Akute und vorübergehende psychotische Störung)',
+    erscheinungsbild: [
+      {section: 'Psychotische Symptome erkennen', items: ['Halluzinationen: Stimmen hören (imperative Stimmen besonders gefährlich), Visionen, taktile Halluzinationen', 'Wahnvorstellungen: Verfolgungswahn, Beziehungswahn ("alles hat mit mir zu tun"), Größenwahn, bizarrer Wahn', 'Formale Denkstörungen: Zerfahrenes Denken, Neologismen, Gedankenabreißen, Inkohärenz', 'Verhaltensdesorganisation: Bizarres Verhalten, Selbstgefährdung, Agitation oder Stupor', 'Katatone Symptome: Starre, Mutismus, Negativismus, Echolalie']},
+      {section: 'Warnsignale (Prodromalphase)', items: ['Wochen bis Monate vor der akuten Psychose', 'Sozialer Rückzug, Leistungsknick', 'Ungewöhnliche Überzeugungen, magisches Denken', 'Misstrauen, Beziehungsideen', 'Schlafstörungen, Konzentrationsprobleme', 'Verflachter oder inadäquater Affekt', 'Substanzkonsum (Cannabis erhöht Psychose-Risiko 2-5-fach)']}
+    ],
+    ursachen: [
+      {section: 'Mögliche Auslöser einer akuten Psychose', items: ['Erstmanifestation einer Schizophrenie oder bipolaren Störung', 'Substanzinduzierte Psychose (Cannabis, Amphetamine, LSD, synthetische Cannabinoide)', 'Extremer Schlafentzug', 'Schwerer Stress/Trauma', 'Medikamentennebenwirkungen', 'Organische Ursachen (Enzephalitis, Epilepsie, Hirntumor — selten, aber auszuschließen)', 'Absetzen von Antipsychotika']},
+      {section: 'Vulnerabilitäts-Stress-Modell', items: ['Genetische Vulnerabilität + Umweltstressoren = Psychose', 'Cannabis in der Adoleszenz bei genetischer Prädisposition: Risiko bis 5-fach erhöht', 'Urbanität, Migration, Trauma als Risikofaktoren', 'Dopamin-Hypothese: Überaktivität im mesolimbischen System']}
+    ],
+    differentialdiagnose: ['Substanzintoxikation (Cannabis, Amphetamine)', 'Dissoziativer Zustand', 'Delir (organisch)', 'Manie mit psychotischen Symptomen', 'Schwere PTBS (Flashbacks ≠ Halluzinationen)', 'Autismus mit ungewöhnlichen Interessen (≠ Wahn)'],
+    komorbiditaeten: ['Substanzkonsum (50%+)', 'Depression', 'Suizidalität (10% Lebenszeitrisiko bei Schizophrenie)', 'Angststörungen', 'Trauma/PTBS'],
+    evidenzbasierte_interventionen: [
+      {name: 'Sofortmaßnahmen (Nicht-psychiatrisch)', beschreibung: '1) Ruhig, klar und respektvoll kommunizieren. 2) Nicht den Wahn argumentativ widerlegen. 3) Sicherheit herstellen (für Betroffenen UND Umfeld). 4) Reizarme Umgebung schaffen. 5) Psychiatrischen Notdienst kontaktieren.'},
+      {name: 'De-Eskalation', beschreibung: 'Offene Körperhaltung, Abstand wahren, keine schnellen Bewegungen. Einfache Sätze, Wahlmöglichkeiten geben ("Möchtest du Wasser oder dich setzen?"). NICHT lügen oder täuschen.'},
+      {name: 'Psychiatrische Notfallversorgung', beschreibung: 'Akute Psychose erfordert IMMER psychiatrische Einschätzung. Medikamentöse Akutbehandlung (Antipsychotika). Ggf. stationäre Aufnahme bei Eigen- oder Fremdgefährdung.'},
+      {name: 'Frühinterventionsprogramme', beschreibung: 'Je früher eine Erstpsychose behandelt wird, desto besser die Prognose. "Duration of Untreated Psychosis" (DUP) möglichst kurz halten.'}
+    ],
+    praxis_tipps: [
+      'KEINE Diskussion über Wahnideen — nicht bestätigen, aber auch nicht widerlegen',
+      'Stattdessen: "Ich verstehe, dass du das so erlebst. Das muss beängstigend sein."',
+      'Eigene Sicherheit zuerst: Fluchtweg sichern, Tür offen lassen, nicht allein',
+      'Einfache, kurze Sätze verwenden — Informationsverarbeitung ist gestört',
+      'Reizreduktion: Lärm, Licht, Menschenmenge reduzieren',
+      'Keine körperliche Annäherung ohne Ankündigung',
+      'Imperative Stimmen ("Die Stimme sagt mir, ich soll...") = HOHE GEFAHR → sofort Psychiatrie',
+      'Substanzkonsum erfragen (Cannabis, neue psychoaktive Substanzen)',
+      'Angehörige informieren und einbeziehen (wenn sicher)',
+      'Nach Stabilisierung: Psychoedukation für den Jugendlichen und Familie',
+      'Eigene Angst reflektieren — Psychose kann bei Fachkräften Unsicherheit auslösen'
+    ],
+    wann_ueberweisen: 'SOFORT bei akuter Psychose: Kinder- und Jugendpsychiatrie oder psychiatrische Notaufnahme. Bei Eigen- oder Fremdgefährdung: Notruf 112/113. Bei V.a. Prodromalsymptome: Zeitnah psychiatrische Abklärung (Früherkennungszentrum).',
+    luxemburg_spezifisch: 'Psychiatrische Notaufnahme: CHL (Centre Hospitalier de Luxembourg) oder CHEM (Centre Hospitalier Emile Mayrisch). KJP-Bereitschaftsdienst über Notaufnahme erreichbar. SOS Détresse: 45 45 45. Bei Minderjährigen: Eltern/Sorgeberechtigte informieren (außer bei Gefährdung durch diese).',
+    verwandte_wiki: ['psychose', 'krisenintervention', 'substanzkonsum', 'bipolare-stoerung', 'schizotype-stoerung'],
+    screening_domains: [],
+    themen_ids: ['psychose', 'krisen'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['NICE (2014). Psychosis and schizophrenia in children and young people. CG155.', 'McGorry, P.D. (2015). Early Intervention in Psychosis. The Journal of Nervous and Mental Disease.', 'DGPPN (2019). S3-Leitlinie Schizophrenie.']
+  },
 ];

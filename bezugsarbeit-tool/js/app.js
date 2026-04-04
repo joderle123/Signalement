@@ -375,6 +375,7 @@ function showProfilTab(tab) {
   if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
   if (tab === 'genogramm') renderGenogramm();
+  if (tab === 'wiki') renderWiki();
 }
 
 // ============================================================
@@ -6607,4 +6608,309 @@ function open5PBeispiel() {
   var overlay = document.createElement('div');
   overlay.innerHTML = html;
   document.body.appendChild(overlay.firstChild);
+}
+
+// ============================================================
+// PÄDAGOGISCHES WIKI — Wissensdatenbank
+// ============================================================
+var wikiFilter = '';
+var wikiKategorieFilter = '';
+
+function renderWiki() {
+  var container = document.getElementById('wiki-container');
+  if (!container || typeof WIKI_ARTIKEL === 'undefined') return;
+
+  var artikel = WIKI_ARTIKEL;
+
+  // Filter
+  if (wikiFilter) {
+    var q = wikiFilter.toLowerCase();
+    artikel = artikel.filter(function(a) {
+      return a.titel.toLowerCase().indexOf(q) !== -1 ||
+        (a.aliases && a.aliases.some(function(al) { return al.toLowerCase().indexOf(q) !== -1; })) ||
+        a.definition.toLowerCase().indexOf(q) !== -1 ||
+        (a.kategorie && a.kategorie.toLowerCase().indexOf(q) !== -1);
+    });
+  }
+  if (wikiKategorieFilter) {
+    artikel = artikel.filter(function(a) { return a.kategorie === wikiKategorieFilter; });
+  }
+
+  var html = '';
+
+  // Header
+  html += '<div style="margin-bottom:20px;">';
+  html += '<h3 style="margin:0 0 4px;font-size:20px;">📚 Pädagogisches Wiki</h3>';
+  html += '<p style="margin:0;font-size:12px;color:#6B7280;">Nachschlagewerk für Fachkräfte — Störungsbilder, Methoden, Konzepte & Recht</p>';
+  html += '</div>';
+
+  // Suchfeld
+  html += '<div style="margin-bottom:14px;">';
+  html += '<input type="text" id="wiki-search" placeholder="Suche (z.B. ADHS, Bindung, ODD, Trauma...)" value="' + escapeHtml(wikiFilter) + '" oninput="wikiFilter=this.value;renderWiki();" style="width:100%;padding:10px 14px;border:2px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor=\'#3B82F6\'" onblur="this.style.borderColor=\'#E5E7EB\'">';
+  html += '</div>';
+
+  // Kategorie-Filter
+  if (typeof WIKI_KATEGORIEN !== 'undefined') {
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">';
+    html += '<button onclick="wikiKategorieFilter=\'\';renderWiki();" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (!wikiKategorieFilter ? '#3B82F6' : '#E5E7EB') + ';background:' + (!wikiKategorieFilter ? '#3B82F6' : 'white') + ';color:' + (!wikiKategorieFilter ? 'white' : '#374151') + ';font-size:12px;cursor:pointer;">Alle</button>';
+    WIKI_KATEGORIEN.forEach(function(k) {
+      var active = wikiKategorieFilter === k.id;
+      html += '<button onclick="wikiKategorieFilter=\'' + k.id + '\';renderWiki();" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (active ? k.farbe : '#E5E7EB') + ';background:' + (active ? k.farbe : 'white') + ';color:' + (active ? 'white' : '#374151') + ';font-size:12px;cursor:pointer;">' + k.icon + ' ' + k.titel + '</button>';
+    });
+    html += '</div>';
+  }
+
+  // Anzahl
+  html += '<div style="font-size:11px;color:#9CA3AF;margin-bottom:10px;">' + artikel.length + ' Artikel' + (wikiFilter || wikiKategorieFilter ? ' (gefiltert)' : '') + '</div>';
+
+  // Artikel-Grid
+  if (artikel.length === 0) {
+    html += '<div style="text-align:center;padding:40px;color:#9CA3AF;"><div style="font-size:36px;margin-bottom:8px;">🔍</div>Kein Artikel gefunden. Versuche einen anderen Suchbegriff.</div>';
+  } else {
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">';
+    artikel.forEach(function(a) {
+      var kat = (typeof WIKI_KATEGORIEN !== 'undefined') ? WIKI_KATEGORIEN.find(function(k) { return k.id === a.kategorie; }) : null;
+      html += '<div onclick="openWikiArtikel(\'' + a.id + '\')" style="cursor:pointer;padding:16px;border-radius:12px;border:1px solid #E5E7EB;background:white;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.05);" onmouseover="this.style.borderColor=\'' + a.farbe + '\';this.style.boxShadow=\'0 4px 12px rgba(0,0,0,0.1)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'#E5E7EB\';this.style.boxShadow=\'0 1px 3px rgba(0,0,0,0.05)\';this.style.transform=\'none\'">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;">';
+      html += '<span style="font-size:28px;">' + a.icon + '</span>';
+      if (a.icd10) html += '<span style="font-size:10px;background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:4px;font-family:monospace;">' + a.icd10.code + '</span>';
+      html += '</div>';
+      html += '<div style="font-weight:700;font-size:14px;color:#1E293B;margin-bottom:4px;">' + a.titel + '</div>';
+      if (kat) html += '<span style="font-size:10px;background:' + kat.farbe + '15;color:' + kat.farbe + ';padding:2px 8px;border-radius:10px;font-weight:500;">' + kat.icon + ' ' + kat.titel + '</span>';
+      html += '<div style="font-size:12px;color:#6B7280;margin-top:8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">' + a.definition + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+
+  // Fokus auf Suchfeld behalten
+  if (wikiFilter) {
+    var s = document.getElementById('wiki-search');
+    if (s) { s.focus(); s.selectionStart = s.selectionEnd = s.value.length; }
+  }
+}
+
+function openWikiArtikel(id) {
+  var a = (typeof WIKI_ARTIKEL !== 'undefined') ? WIKI_ARTIKEL.find(function(x) { return x.id === id; }) : null;
+  if (!a) return;
+  var kat = (typeof WIKI_KATEGORIEN !== 'undefined') ? WIKI_KATEGORIEN.find(function(k) { return k.id === a.kategorie; }) : null;
+
+  var html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove()">';
+  html += '<div style="background:white;border-radius:16px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;padding:0;" onclick="event.stopPropagation()">';
+
+  // Header
+  html += '<div style="background:' + a.farbe + ';color:white;padding:24px;border-radius:16px 16px 0 0;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+  html += '<div><span style="font-size:40px;">' + a.icon + '</span>';
+  html += '<h2 style="margin:8px 0 6px;font-size:22px;">' + a.titel + '</h2>';
+  html += '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+  if (a.icd10) html += '<span style="background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;font-size:11px;font-family:monospace;">ICD-10: ' + a.icd10.code + ' — ' + a.icd10.label + '</span>';
+  if (a.icd11) html += '<span style="background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;font-size:11px;font-family:monospace;">ICD-11: ' + a.icd11.code + '</span>';
+  if (kat) html += '<span style="background:rgba(255,255,255,0.15);padding:3px 10px;border-radius:12px;font-size:11px;">' + kat.icon + ' ' + kat.titel + '</span>';
+  html += '</div>';
+  if (a.altersgruppe) html += '<div style="margin-top:6px;font-size:12px;opacity:0.85;">Altersgruppe: ' + a.altersgruppe + (a.praevalenz ? ' · Prävalenz: ' + a.praevalenz : '') + '</div>';
+  html += '</div>';
+  html += '<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;">✕</button>';
+  html += '</div></div>';
+
+  html += '<div style="padding:24px;">';
+
+  // Definition
+  html += '<div style="font-size:14px;color:#1E293B;line-height:1.7;margin-bottom:20px;border-left:4px solid ' + a.farbe + ';padding-left:14px;">' + a.definition + '</div>';
+
+  // Erscheinungsbild
+  if (a.erscheinungsbild && a.erscheinungsbild.length) {
+    html += '<details open style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">👁️ Erscheinungsbild — Wie zeigt es sich?</summary>';
+    html += '<div style="padding:8px 0;display:grid;grid-template-columns:1fr 1fr;gap:6px;">';
+    a.erscheinungsbild.forEach(function(e) {
+      html += '<div style="font-size:12px;color:#374151;padding:6px 10px;background:#F9FAFB;border-radius:6px;display:flex;gap:6px;"><span style="color:' + a.farbe + ';">•</span>' + e + '</div>';
+    });
+    html += '</div></details>';
+  }
+
+  // Ursachen
+  if (a.ursachen && a.ursachen.length) {
+    html += '<details style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">🔍 Ursachen & Risikofaktoren</summary>';
+    html += '<div style="padding:8px 0;">';
+    a.ursachen.forEach(function(u) {
+      html += '<div style="background:#F9FAFB;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-left:3px solid ' + a.farbe + ';">';
+      html += '<div style="font-weight:600;font-size:12px;color:' + a.farbe + ';margin-bottom:3px;">' + u.faktor + '</div>';
+      html += '<div style="font-size:12px;color:#374151;line-height:1.5;">' + u.text + '</div></div>';
+    });
+    html += '</div></details>';
+  }
+
+  // Differentialdiagnose
+  if (a.differentialdiagnose && a.differentialdiagnose.length) {
+    html += '<details style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">⚖️ Differentialdiagnose</summary>';
+    html += '<div style="padding:8px 0;">';
+    a.differentialdiagnose.forEach(function(d) {
+      html += '<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #F3F4F6;">';
+      html += '<div style="font-weight:600;font-size:12px;color:#1E293B;min-width:120px;">' + d.was + '</div>';
+      html += '<div style="font-size:12px;color:#6B7280;">' + d.unterschied + '</div></div>';
+    });
+    html += '</div></details>';
+  }
+
+  // Komorbiditäten
+  if (a.komorbiditaeten && a.komorbiditaeten.length) {
+    html += '<details style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">🔗 Häufige Komorbiditäten</summary>';
+    html += '<div style="padding:8px 0;display:flex;gap:6px;flex-wrap:wrap;">';
+    a.komorbiditaeten.forEach(function(k) {
+      html += '<span style="font-size:12px;background:#EFF6FF;color:#1E40AF;padding:4px 10px;border-radius:12px;">' + k + '</span>';
+    });
+    html += '</div></details>';
+  }
+
+  // Evidenzbasierte Interventionen
+  if (a.evidenzbasierte_interventionen && a.evidenzbasierte_interventionen.length) {
+    html += '<details open style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">🔬 Evidenzbasierte Interventionen</summary>';
+    html += '<div style="padding:8px 0;">';
+    a.evidenzbasierte_interventionen.forEach(function(i) {
+      html += '<div style="background:#ECFDF5;border-radius:8px;padding:10px 12px;margin-bottom:6px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">';
+      html += '<span style="font-weight:600;font-size:12px;color:#065F46;">' + i.methode + '</span>';
+      html += '<span style="font-size:11px;color:#F59E0B;">' + i.evidenz + '</span></div>';
+      html += '<div style="font-size:12px;color:#047857;">' + i.beschreibung + '</div></div>';
+    });
+    html += '</div></details>';
+  }
+
+  // Praxis-Tipps
+  if (a.praxis_tipps && a.praxis_tipps.length) {
+    html += '<details open style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">💡 Praxis-Tipps für Bezugspersonen</summary>';
+    html += '<div style="padding:8px 0;">';
+    a.praxis_tipps.forEach(function(t) {
+      html += '<div style="font-size:12px;color:#374151;padding:6px 10px;background:#F0FDF4;border-radius:6px;margin-bottom:4px;display:flex;gap:6px;"><span style="color:#10B981;font-weight:bold;">✓</span>' + t + '</div>';
+    });
+    html += '</div></details>';
+  }
+
+  // Wann überweisen
+  if (a.wann_ueberweisen) {
+    html += '<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:12px;margin-bottom:14px;">';
+    html += '<div style="font-weight:600;font-size:13px;color:#991B1B;margin-bottom:4px;">🚨 Wann überweisen?</div>';
+    html += '<div style="font-size:12px;color:#B91C1C;line-height:1.5;">' + a.wann_ueberweisen + '</div></div>';
+  }
+
+  // Luxemburg-spezifisch
+  if (a.luxemburg_spezifisch) {
+    html += '<div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;margin-bottom:14px;">';
+    html += '<div style="font-weight:600;font-size:13px;color:#1E40AF;margin-bottom:4px;">🇱🇺 Luxemburg-spezifisch</div>';
+    html += '<div style="font-size:12px;color:#1D4ED8;line-height:1.5;">' + a.luxemburg_spezifisch + '</div></div>';
+  }
+
+  // Verknüpfte Ressourcen
+  html += renderWikiRessourcen(a);
+
+  // Verwandte Wiki-Artikel
+  if (a.verwandte_wiki && a.verwandte_wiki.length) {
+    html += '<div style="margin-top:16px;padding-top:14px;border-top:1px solid #E5E7EB;">';
+    html += '<div style="font-weight:600;font-size:13px;color:#1E293B;margin-bottom:8px;">📚 Verwandte Artikel</div>';
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+    a.verwandte_wiki.forEach(function(vid) {
+      var va = WIKI_ARTIKEL.find(function(x) { return x.id === vid; });
+      if (va) {
+        html += '<button onclick="event.stopPropagation();this.closest(\'div[style*=fixed]\').remove();openWikiArtikel(\'' + vid + '\')" style="padding:5px 12px;border-radius:8px;border:1px solid ' + va.farbe + '30;background:' + va.farbe + '08;color:' + va.farbe + ';font-size:12px;cursor:pointer;font-weight:500;">' + va.icon + ' ' + va.titel + '</button>';
+      }
+    });
+    html += '</div></div>';
+  }
+
+  // Quellen
+  if (a.quellen && a.quellen.length) {
+    html += '<details style="margin-top:14px;"><summary style="font-size:11px;color:#9CA3AF;cursor:pointer;">📖 Quellen (' + a.quellen.length + ')</summary>';
+    html += '<div style="padding:6px 0;">';
+    a.quellen.forEach(function(q, i) {
+      html += '<div style="font-size:11px;color:#9CA3AF;padding:2px 0;">[' + (i + 1) + '] ' + q + '</div>';
+    });
+    html += '</div></details>';
+  }
+
+  html += '</div></div></div>';
+
+  var overlay = document.createElement('div');
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay.firstChild);
+}
+
+function renderWikiRessourcen(a) {
+  var html = '';
+  var hasAny = false;
+
+  // Sammle alle verlinkten Ressourcen
+  var links = [];
+
+  // Arbeitsblätter
+  if (a.themen_ids && typeof ARBEITSBLÄTTER !== 'undefined') {
+    a.themen_ids.forEach(function(tid) {
+      var ab = ARBEITSBLÄTTER[tid];
+      if (ab) ab.forEach(function(b) {
+        links.push({ typ: 'Arbeitsblatt', icon: '📝', titel: b.titel, href: 'arbeitsblatter/' + b.datei });
+      });
+    });
+  }
+
+  // Therapiemodule
+  if (a.themen_ids && typeof THERAPIE_MODULE_DATEIEN !== 'undefined') {
+    a.themen_ids.forEach(function(tid) {
+      var tm = THERAPIE_MODULE_DATEIEN[tid];
+      if (tm) links.push({ typ: 'Therapiemodul', icon: '🧠', titel: tid.replace(/-/g, ' '), href: 'therapie-module/' + tm });
+    });
+  }
+
+  // Gesprächsleitfäden
+  if (a.leitfaden_ids && typeof GESPRAECHSLEITFAEDEN !== 'undefined') {
+    a.leitfaden_ids.forEach(function(lid) {
+      var gl = GESPRAECHSLEITFAEDEN.find(function(g) { return g.id === lid; });
+      if (gl) links.push({ typ: 'Gesprächsleitfaden', icon: '📋', titel: gl.titel, onclick: 'openGespraechsleitfaden(\'' + lid + '\')' });
+    });
+  }
+
+  if (links.length === 0) return '';
+
+  html += '<div style="margin-top:16px;padding-top:14px;border-top:1px solid #E5E7EB;">';
+  html += '<div style="font-weight:600;font-size:13px;color:#1E293B;margin-bottom:8px;">🔧 Verknüpfte Ressourcen</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;">';
+  links.forEach(function(l) {
+    if (l.onclick) {
+      html += '<div onclick="' + l.onclick + '" style="cursor:pointer;font-size:12px;padding:8px 10px;background:#F9FAFB;border-radius:6px;display:flex;gap:6px;align-items:center;border:1px solid #E5E7EB;">';
+      html += '<span>' + l.icon + '</span><div><div style="font-weight:500;color:#1E293B;">' + l.titel + '</div><div style="font-size:10px;color:#9CA3AF;">' + l.typ + '</div></div></div>';
+    } else {
+      html += '<a href="' + l.href + '" target="_blank" style="text-decoration:none;font-size:12px;padding:8px 10px;background:#F9FAFB;border-radius:6px;display:flex;gap:6px;align-items:center;border:1px solid #E5E7EB;">';
+      html += '<span>' + l.icon + '</span><div><div style="font-weight:500;color:#1E293B;">' + l.titel + '</div><div style="font-size:10px;color:#9CA3AF;">' + l.typ + '</div></div></a>';
+    }
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function renderWikiLink(artikelId) {
+  if (typeof WIKI_ARTIKEL === 'undefined') return '';
+  var a = WIKI_ARTIKEL.find(function(x) { return x.id === artikelId; });
+  if (!a) return '';
+  return '<span onclick="openWikiArtikel(\'' + artikelId + '\')" style="cursor:pointer;font-size:11px;color:#3B82F6;font-weight:500;display:inline-flex;align-items:center;gap:3px;">📚 ' + a.titel + '</span>';
+}
+
+function findWikiForScreeningDomain(domainId) {
+  if (typeof WIKI_ARTIKEL === 'undefined') return null;
+  return WIKI_ARTIKEL.find(function(a) {
+    return a.screening_domains && a.screening_domains.indexOf(domainId) !== -1;
+  });
+}
+
+function findWikiForThema(themaId) {
+  if (typeof WIKI_ARTIKEL === 'undefined') return null;
+  return WIKI_ARTIKEL.find(function(a) {
+    return (a.themen_ids && a.themen_ids.indexOf(themaId) !== -1) || a.id === themaId;
+  });
+}
+
+function findWikiForVerhalten(verhaltensId) {
+  if (typeof WIKI_ARTIKEL === 'undefined') return null;
+  return WIKI_ARTIKEL.find(function(a) {
+    return a.verhaltens_ids && a.verhaltens_ids.indexOf(verhaltensId) !== -1;
+  });
 }

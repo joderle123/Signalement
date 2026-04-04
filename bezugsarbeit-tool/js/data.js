@@ -14433,3 +14433,587 @@ var FIVEP_BEISPIEL_KOMPLETT = {
   ],
   hypothese: 'Max\' oppositionelles Verhalten ist ein Schrei nach Kontrolle in einer Welt, die ihm unkontrollierbar erscheint. Der Verlust des Vaters hat sein Grundvertrauen erschüttert ("Wenn mein eigener Vater mich verlässt, bin ich es nicht wert"). Die Depression ist die Kehrseite der Aggression — beides Ausdruck von Schmerz. Die ADHS-Problematik führt zu chronischem Schulversagen, was den Selbstwert weiter untergräbt. Der Teufelskreis (Aggression → Bestrafung → schlechtes Selbstbild → mehr Aggression) muss durchbrochen werden über: 1) Positive Beziehungserfahrung (Bezugsarbeit), 2) Emotionsregulation (Wut-Management), 3) Selbstwert-Aufbau (Stärken aktivieren, v.a. Fußball), 4) Systemarbeit (Mutter entlasten, Schule sensibilisieren).'
 };
+
+// ============================================================
+// PÄDAGOGISCHES WIKI — Kategorien
+// ============================================================
+var WIKI_KATEGORIEN = [
+  { id: 'stoerungsbilder', titel: 'Störungsbilder & Diagnosen', icon: '🏥', farbe: '#EF4444',
+    beschreibung: 'Klinische Störungsbilder nach ICD-10/11 mit Erscheinungsbild, Ursachen und Interventionen' },
+  { id: 'entwicklung', titel: 'Entwicklung & Adoleszenz', icon: '🌱', farbe: '#10B981',
+    beschreibung: 'Normale Entwicklungsaufgaben, Pubertät, kognitive und emotionale Reifung' },
+  { id: 'methoden', titel: 'Methoden & Ansätze', icon: '🛠️', farbe: '#3B82F6',
+    beschreibung: 'Therapeutische Methoden, pädagogische Ansätze, Gesprächstechniken' },
+  { id: 'konzepte', titel: 'Fachbegriffe & Konzepte', icon: '📖', farbe: '#8B5CF6',
+    beschreibung: 'Polyvagaltheorie, Bindungstheorie, Salutogenese, Resilienz etc.' },
+  { id: 'recht-system', titel: 'Recht & Hilfesystem', icon: '⚖️', farbe: '#F59E0B',
+    beschreibung: 'Luxemburger Jugendrecht, Meldepflichten, Hilfesystem, Institutionen' },
+  { id: 'krisen', titel: 'Krisen & Notfälle', icon: '🚨', farbe: '#DC2626',
+    beschreibung: 'Suizidalität, Selbstverletzung, Dissoziation, akute Psychose — Sofortmaßnahmen' }
+];
+
+// ============================================================
+// PÄDAGOGISCHES WIKI — Artikel
+// ============================================================
+var WIKI_ARTIKEL = [
+  // === STÖRUNGSBILDER ===
+  {
+    id: 'depression',
+    titel: 'Depression bei Jugendlichen',
+    aliases: ['Depressive Störung', 'Major Depression', 'Niedergeschlagenheit', 'PHQ-A'],
+    kategorie: 'stoerungsbilder',
+    icon: '😔',
+    farbe: '#5B6ABF',
+    definition: 'Eine depressive Episode bei Jugendlichen zeigt sich anders als bei Erwachsenen: Statt klassischer Traurigkeit dominieren oft Reizbarkeit, Wutausbrüche und körperliche Beschwerden. Mindestens 2 Wochen anhaltende gedrückte Stimmung ODER Interessenverlust, begleitet von Konzentrationsproblemen, Schlafstörungen, Appetitveränderungen und Gefühlen von Wertlosigkeit. Bei Jugendlichen ist die Abgrenzung zu normaler Pubertätsstimmung eine zentrale Herausforderung — Dauer und Funktionseinschränkung sind die Schlüsselkriterien.',
+    altersgruppe: '12-18 Jahre, Häufigkeitsgipfel 14-17',
+    praevalenz: '5-8% aller Jugendlichen, Mädchen 2-3x häufiger als Jungen ab Pubertät',
+    icd10: { code: 'F32/F33', label: 'Depressive Episode / Rezidivierende depressive Störung' },
+    icd11: { code: '6A70/6A71', label: 'Single episode depressive disorder / Recurrent depressive disorder' },
+    erscheinungsbild: [
+      'Reizbarkeit und Wutausbrüche (bei Jugendlichen häufiger als Traurigkeit!)',
+      'Sozialer Rückzug: Zieht sich von Freunden und Familie zurück',
+      'Schulleistungsabfall und Konzentrationsprobleme',
+      'Schlafstörungen: Zu viel oder zu wenig Schlaf, Einschlafprobleme',
+      'Verändertes Essverhalten: Appetitlosigkeit oder "Frustessen"',
+      'Interessenverlust: "Mir macht nichts mehr Spaß"',
+      'Negative Selbstbewertung: "Ich bin zu nichts gut", "Alle wären besser ohne mich"',
+      'Psychomotorische Verlangsamung: Wirkt träge, antriebslos, "wie in Watte"'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Dysbalance von Serotonin, Noradrenalin und Dopamin. Veränderte Stressachse (HPA-Achse): Chronisch erhöhtes Cortisol beeinträchtigt Hippocampus-Entwicklung. Genetische Vulnerabilität: 40-50% Heritabilität.' },
+      { faktor: 'Psychologisch', text: 'Negative kognitive Triade (Beck): Negatives Selbstbild, negative Weltsicht, negative Zukunftserwartung. Gelernte Hilflosigkeit (Seligman): "Egal was ich tue, es ändert nichts." Geringes Selbstwertgefühl als Risikofaktor.' },
+      { faktor: 'Bindung', text: 'Unsichere Bindung erhöht Depressionsrisiko 2-3x. Verlust einer Bezugsperson (Trennung, Tod, Kontaktabbruch) als häufiger Auslöser. Emotionale Vernachlässigung: Keine Spiegelung von Gefühlen.' },
+      { faktor: 'Sozial', text: 'Mobbing (5x erhöhtes Risiko), soziale Isolation, Leistungsdruck, familiäre Konflikte, Armut, Migration. Social Media: Vergleichsdruck und Schlafentzug als verstärkende Faktoren.' },
+      { faktor: 'PVT-Perspektive', text: 'Depression als dorsal-vagaler Zustand: Der Körper "fährt runter" als Schutzreaktion auf chronische Überforderung. Energiesparmodus des Nervensystems. Aktivierung (ventral) muss behutsam erfolgen.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Pubertätsstimmung', unterschied: 'Pubertät: Stimmungsschwankungen sind kurzfristig und situativ. Depression: Anhaltend (>2 Wochen), durchgängig, mit Funktionseinschränkung.' },
+      { was: 'Anpassungsstörung', unterschied: 'Anpassungsstörung: Klarer Auslöser, Symptome klingen nach 6 Monaten ab. Depression: Kann ohne erkennbaren Auslöser auftreten, persistiert.' },
+      { was: 'Bipolare Störung', unterschied: 'Bei Depression: Nur depressive Episoden. Bei bipolar: Auch manische/hypomane Phasen (gehobene Stimmung, Größenideen, weniger Schlaf).' },
+      { was: 'Hypothyreose', unterschied: 'Schilddrüsenunterfunktion kann Depression imitieren. Immer TSH-Wert bestimmen lassen.' }
+    ],
+    komorbiditaeten: ['Angststörungen (40-70%)', 'ADHS (20-30%)', 'Substanzmissbrauch (20-25%)', 'Essstörungen (15-20%)', 'Suizidalität (60% denken daran)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'KVT (Kognitive Verhaltenstherapie)', evidenz: '★★★', beschreibung: 'Goldstandard bei leichter-mittlerer Depression. Kognitive Umstrukturierung + Verhaltensaktivierung. Wirksamkeit: NNT=4 (jeder 4. profitiert signifikant). Manualisierte Programme: "Stimmungsprobleme bewältigen" (Pössel).' },
+      { methode: 'Interpersonelle Therapie (IPT-A)', evidenz: '★★★', beschreibung: 'Speziell für Jugendliche adaptiert. Fokus auf Beziehungsprobleme als Auslöser/Aufrechterhalter. 12-16 Sitzungen. Besonders wirksam bei interpersonellen Konflikten und Rollenwechseln.' },
+      { methode: 'Verhaltensaktivierung', evidenz: '★★☆', beschreibung: 'Einfacher als volle KVT, gut für Bezugsarbeit: Angenehme Aktivitäten planen und durchführen. Durchbricht den Rückzug-Kreis. "Nicht auf Motivation warten, sondern mit Aktion Motivation erzeugen."' },
+      { methode: 'SSRI-Medikation', evidenz: '★★★', beschreibung: 'Bei mittlerer-schwerer Depression: Fluoxetin als 1. Wahl (einziges SSRI mit ausreichender Evidenz bei <18). NUR durch Kinder-/Jugendpsychiater. Monitoring auf Suizidalität in ersten Wochen wichtig.' }
+    ],
+    praxis_tipps: [
+      'Immer nach Suizidalität fragen — das rettet Leben und schadet nie',
+      'Verhaltensaktivierung: Tagesstruktur und kleine angenehme Aktivitäten planen',
+      'Nicht "Reiß dich zusammen" — Depression ist keine Willensschwäche',
+      'Stärken aktivieren: Was konnte er/sie früher gut? Was hat Freude gemacht?',
+      'Bewegung/Sport als Antidepressivum: 3x30 Min./Woche zeigt Effekte vergleichbar mit leichter Medikation',
+      'Schlafhygiene: Feste Zeiten, kein Handy ab 21 Uhr, dunkles Zimmer',
+      'Psychoedukation: Depression erklären als "Krankheit, nicht Schwäche"',
+      'SRS (Session Rating Scale) nutzen: Beziehung regelmäßig überprüfen'
+    ],
+    wann_ueberweisen: 'Bei mittlerer-schwerer Depression (PHQ-A >10): Psychotherapie. Bei Suizidalität, Psychose oder Nicht-Ansprechen nach 8 Wochen: Kinder- und Jugendpsychiater. Bei akuter Suizidalität: Notaufnahme Psychiatrie.',
+    luxemburg_spezifisch: 'CePAS: Erstanlaufstelle für psychische Probleme bei Jugendlichen. CHNP (Centre Hospitalier Neuro-Psychiatrique): Stationäre Versorgung. Kanner-Jugendtelefon: 116 111. Association Luxembourgeoise de Pédopsychiatrie für ambulante Therapie.',
+    verwandte_wiki: ['suizidalitaet', 'selbstverletzung', 'angststoerungen', 'adhs'],
+    screening_domains: ['depression'],
+    themen_ids: ['depressive-stimmungen', 'selbstwertgefuehl', 'emotionsregulation', 'freude-wohlbefinden'],
+    verhaltens_ids: ['rueckzug', 'antriebslosigkeit'],
+    leitfaden_ids: ['krisengespraech'],
+    quellen: [
+      'Beck, A.T. (1979). Cognitive Therapy of Depression. Guilford.',
+      'Brent, D.A. et al. (2008). TADS: Long-term treatment study. JAMA.',
+      'Pössel, P. (2011). Stimmungsprobleme bewältigen. Hogrefe.',
+      'NICE (2019). Depression in children and young people. NG134.',
+      'Porges, S. (2011). The Polyvagal Theory. Norton.'
+    ]
+  },
+  {
+    id: 'oppositionelles-verhalten',
+    titel: 'Oppositionelles Verhalten (ODD)',
+    aliases: ['ODD', 'Trotzverhalten', 'Verweigerung', 'Widerstand', 'Oppositionelle Störung'],
+    kategorie: 'stoerungsbilder',
+    icon: '🔥',
+    farbe: '#EF4444',
+    definition: 'Wiederholtes Muster von negativistischem, feindseligem und trotzigem Verhalten gegenüber Autoritätspersonen, das über das alterstypische Maß hinausgeht. Kernmerkmale: Häufige Wutausbrüche, aktive Verweigerung von Regeln, absichtliches Ärgern anderer, Beschuldigung anderer für eigene Fehler. Wichtig: ODD ist NICHT dasselbe wie normale Autonomie-Entwicklung in der Pubertät — Dauer (>6 Monate), Häufigkeit und Beeinträchtigung sind die Schlüsselkriterien.',
+    altersgruppe: '6-18 Jahre, Häufigkeitsgipfel 8-14',
+    praevalenz: '3-5% aller Kinder/Jugendlichen, Jungen häufiger als Mädchen (2:1)',
+    icd10: { code: 'F91.3', label: 'Störung des Sozialverhaltens mit oppositionellem, aufsässigem Verhalten' },
+    icd11: { code: '6C90', label: 'Oppositional Defiant Disorder' },
+    erscheinungsbild: [
+      'Häufige Wutausbrüche, wird schnell ärgerlich und reizbar',
+      'Streitet aktiv mit Erwachsenen und Autoritätspersonen',
+      'Verweigert aktiv Regeln und Anweisungen ("Nein!", "Mach ich nicht!")',
+      'Provoziert andere absichtlich, testet Grenzen permanent',
+      'Beschuldigt andere für eigene Fehler und Fehlverhalten',
+      'Ist empfindlich, leicht zu verärgern, fühlt sich schnell ungerecht behandelt',
+      'Nachtragend und rachsüchtig (altersuntypisch)',
+      'Verweigert Kompromisse, besteht auf seinem Willen'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Reduzierte Serotonin-Aktivität → geringere Impulskontrolle. Veränderte Amygdala-Reaktivität → überschießende emotionale Reaktionen. Häufig komorbide ADHS (exekutive Dysfunktion).' },
+      { faktor: 'Bindung/Beziehung', text: 'Unsichere Bindung: Das Kind hat gelernt, dass seine Bedürfnisse nur durch Eskalation gehört werden. Opposition als Kontrollversuch in einer als unsicher erlebten Welt. "Lieber negative Aufmerksamkeit als gar keine."' },
+      { faktor: 'Lerntheoretisch', text: 'Negative Verstärkung: Kind wehrt sich → Eltern geben nach → Verhalten wird beibehalten ("coercive cycle" nach Patterson). Modelllernen: Kind beobachtet aggressive Konfliktlösung in der Familie.' },
+      { faktor: 'Systemisch', text: 'Inkonsistente Erziehung: Manchmal Strafe, manchmal Ignorieren → Kind testet permanent. Eheliche Konflikte als Stressor. Autoritärer Erziehungsstil provoziert Opposition bei autonomiebedürftigen Jugendlichen.' },
+      { faktor: 'PVT-Perspektive', text: 'Chronische Sympathikus-Aktivierung: Das Kind ist permanent im "Kampfmodus". Opposition = Überlebensstrategie. Das Nervensystem interpretiert Anweisungen als Bedrohung der Autonomie und reagiert mit Kampf.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ADHS', unterschied: 'ADHS: Impulsivität OHNE Absicht zu provozieren — "kann nicht warten". ODD: Gezielte, absichtliche Verweigerung — "will nicht".' },
+      { was: 'Conduct Disorder (CD)', unterschied: 'ODD: Kein schweres Regelbrechen (kein Stehlen, Lügen, Gewalt gegen Tiere/Menschen). CD: Schwere Verstöße gegen Regeln und Rechte anderer. ODD kann in CD übergehen (ca. 25%).' },
+      { was: 'Normale Pubertät', unterschied: 'Pubertät: Gelegentliches Aufbegehren, situativ, kurz. ODD: Persistierend (>6 Monate), durchgängig, in mehreren Settings.' },
+      { was: 'Depression', unterschied: 'Depression bei Jugendlichen zeigt sich oft als Reizbarkeit — aber zusätzlich: Rückzug, Interessenverlust, Schlafstörungen. ODD: Keine depressive Grundstimmung.' }
+    ],
+    komorbiditaeten: ['ADHS (50-65%)', 'Depression (30-40%)', 'Angststörungen (25%)', 'Lernstörungen (20%)', 'Sprachentwicklungsstörungen (15%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'CPS (Collaborative & Proactive Solutions)', evidenz: '★★★', beschreibung: 'Gemeinsames Problemlösen statt Bestrafung. 3 Schritte: 1) Empathie ("Mir fällt auf, dass..."), 2) Sorge definieren ("Mein Problem dabei ist..."), 3) Einladung ("Hast du eine Idee wie wir das lösen?"). Greene (2014).' },
+      { methode: 'Parent Management Training (PMT)', evidenz: '★★★', beschreibung: 'Eltern lernen: Positive Verstärkung, klare Anweisungen, konsistente (nicht harte) Konsequenzen, Ignorieren von Provokationen. Webster-Stratton "Incredible Years".' },
+      { methode: 'Neue Autorität (Omer)', evidenz: '★★☆', beschreibung: 'Gewaltfreier Widerstand + Beziehungsangebot. "Ich bin da und gehe nicht weg." Ankündigung statt Drohung, Öffentlichkeit herstellen, Wiedergutmachung statt Bestrafung.' },
+      { methode: 'Funktionale Verhaltensanalyse', evidenz: '★★☆', beschreibung: 'Was löst das Verhalten aus? Was hält es aufrecht? Verhalten hat immer eine Funktion (Aufmerksamkeit, Vermeidung, Kontrolle, sensorisch). Funktion verstehen → Alternative anbieten.' }
+    ],
+    praxis_tipps: [
+      'Beziehung VOR Konfrontation: Ohne tragfähige Beziehung keine Kooperation',
+      'Wahlmöglichkeiten geben statt Befehle: "Willst du zuerst Mathe oder Deutsch?"',
+      'Positive Umkehr: 5x positiv zu 1x negativ (Gottman-Ratio)',
+      'Machtkämpfe vermeiden: "Ich sage dir was ich tue, nicht was du tun sollst"',
+      'CPS-Ansatz: Problem gemeinsam lösen statt einseitig durchsetzen',
+      'Warnsignale erkennen: Eskalation verhindern statt reagieren',
+      'Keine Drohungen: "Wenn...dann" durch "Ich wünsche mir..." ersetzen',
+      'Erfolge feiern: Jede Kooperation benennen und wertschätzen'
+    ],
+    wann_ueberweisen: 'Bei Persistenz >6 Monate + Beeinträchtigung in >2 Settings (Schule + Zuhause): Kinder-/Jugendpsychiater zur Abklärung ADHS. Bei Eskalation zu körperlicher Gewalt, Tierquälerei oder Delinquenz (Übergang zu CD): Sofort.',
+    luxemburg_spezifisch: 'CePAS als Erstanlaufstelle. SCAS bei familiärer Belastung. Aménagements raisonnables in der Schule beantragen. Bei Schulausschluss: SCRIPT und Maison de l\'Orientation kontaktieren.',
+    verwandte_wiki: ['adhs', 'conduct-disorder', 'bindungsstoerung', 'depression'],
+    screening_domains: ['conduct'],
+    themen_ids: ['wut-aggression', 'impulskontrolle', 'konfliktmanagement', 'grenzen-setzen'],
+    verhaltens_ids: ['oppositionell', 'aggressiv'],
+    leitfaden_ids: ['konfliktgespraech'],
+    quellen: [
+      'Greene, R.W. (2014). Lost at School. Scribner.',
+      'Omer, H. (2015). Neue Autorität. Vandenhoeck & Ruprecht.',
+      'Patterson, G.R. (2002). Coercive Family Process. Castalia.',
+      'Webster-Stratton, C. (2011). Incredible Years. Incredible Years Inc.',
+      'APA (2013). DSM-5. American Psychiatric Association.'
+    ]
+  },
+  {
+    id: 'adhs',
+    titel: 'ADHS bei Jugendlichen',
+    aliases: ['ADHS', 'ADS', 'Aufmerksamkeitsstörung', 'Hyperaktivität', 'Konzentrationsprobleme'],
+    kategorie: 'stoerungsbilder',
+    icon: '⚡',
+    farbe: '#F59E0B',
+    definition: 'Aufmerksamkeitsdefizit-Hyperaktivitätsstörung: Neurodevelopmentale Störung mit Kernmerkmalen Unaufmerksamkeit, Hyperaktivität und Impulsivität. Bei Jugendlichen verändert sich das Bild: Hyperaktivität wird oft zu innerer Unruhe, Impulsivität zeigt sich als riskantes Verhalten, Unaufmerksamkeit als Organisations- und Planungsprobleme. ADHS ist KEINE Erziehungsstörung und KEINE Modediagnose — es ist eine neurobiologische Variante mit genetischer Grundlage (Heritabilität 75-80%).',
+    altersgruppe: 'Beginn vor 12 Jahren, Persistenz in 60-70% der Fälle bis ins Erwachsenenalter',
+    praevalenz: '5-7% aller Kinder/Jugendlichen, Jungen 3x häufiger diagnostiziert (Mädchen unterdiagnostiziert)',
+    icd10: { code: 'F90', label: 'Hyperkinetische Störungen' },
+    icd11: { code: '6A05', label: 'Attention deficit hyperactivity disorder' },
+    erscheinungsbild: [
+      'Schwierigkeiten bei Aufgaben die anhaltende Konzentration erfordern',
+      'Flüchtigkeitsfehler, Details werden übersehen',
+      'Scheint nicht zuzuhören wenn direkt angesprochen',
+      'Schwierigkeiten Aufgaben zu organisieren und zu planen',
+      'Innere Unruhe, Zappeligkeit, kann nicht stillsitzen',
+      'Unterbricht andere, platzt mit Antworten heraus',
+      'Vergisst Termine, Materialien, Aufgaben',
+      'Riskantes Verhalten ohne Konsequenzen zu bedenken'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Dopamin- und Noradrenalin-Dysregulation im präfrontalen Kortex. Verzögerte Hirnreifung (2-3 Jahre). Verringerte Aktivität in Aufmerksamkeits-Netzwerken. Heritabilität 75-80% — stärkste genetische Komponente aller psychischer Störungen.' },
+      { faktor: 'Exekutive Funktionen', text: 'Beeinträchtigte Selbstregulation: Arbeitsgedächtnis, Impulshemmung, Zeitwahrnehmung, emotionale Kontrolle, Handlungsplanung. Barkley-Modell: ADHS als Störung der Selbstregulation, nicht der Aufmerksamkeit.' },
+      { faktor: 'Umweltfaktoren', text: 'Nikotinexposition in der Schwangerschaft, Frühgeburt, niedriges Geburtsgewicht als Risikofaktoren. Keine Verursachung durch Erziehung oder Ernährung — aber ungünstige Umgebung verschlechtert den Verlauf.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ODD', unterschied: 'ADHS: "Kann nicht" (Impulsivität, vergisst Regeln). ODD: "Will nicht" (gezielte Verweigerung).' },
+      { was: 'Hochbegabung', unterschied: 'Hochbegabte: Unruhig bei UNTER-forderung, konzentriert bei Interesse. ADHS: Unruhig durchgehend, auch bei Interesse.' },
+      { was: 'Trauma', unterschied: 'Trauma: Hypervigilanz kann ADHS imitieren. Plötzlicher Beginn, vorher unauffällig. ADHS: Seit der Kindheit vorhanden.' }
+    ],
+    komorbiditaeten: ['ODD (50-65%)', 'Lernstörungen (30-50%)', 'Angststörungen (25-35%)', 'Depression (20-30%)', 'Tic-Störungen (10-20%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Multimodale Therapie', evidenz: '★★★', beschreibung: 'Kombination aus Psychoedukation, Verhaltenstherapie, Elterntraining und ggf. Medikation. MTA-Studie: Kombination wirkt am besten.' },
+      { methode: 'Methylphenidat (Ritalin)', evidenz: '★★★', beschreibung: 'Goldstandard-Medikation, Wirksamkeit bei 70-80%. NUR durch Facharzt. Keine Abhängigkeit bei korrekter Dosierung. Reduziert sogar Suchtrisiko im Jugendalter.' },
+      { methode: 'Selbstorganisations-Training', evidenz: '★★☆', beschreibung: 'Kalender, Checklisten, Timer, Farbcodes. Externe Struktur bis interne Struktur reift. Apps und visuelle Hilfen.' },
+      { methode: 'Sporttherapie', evidenz: '★★☆', beschreibung: '30-60 Min. moderate Bewegung/Tag verbessert Dopaminhaushalt. Kampfsport (Struktur + Impulskontrolle), Schwimmen, Klettern besonders geeignet.' }
+    ],
+    praxis_tipps: [
+      'Kurze, klare Anweisungen — eine Sache auf einmal',
+      'Externe Struktur geben: Timer, Listen, Farbcodes, Visualisierungen',
+      'Stärken nutzen: ADHS-Hirne sind oft kreativ, spontan, energisch',
+      'Pausen erlauben: Alle 20 Min. Bewegungspause einplanen',
+      'Positiv verstärken: 5:1 Ratio positiv zu negativ',
+      'Nicht persönlich nehmen: "Er vergisst es nicht absichtlich"',
+      'Medikation nicht verteufeln: Brille für die Augen ≈ Medikation fürs Gehirn'
+    ],
+    wann_ueberweisen: 'Bei Verdacht auf ADHS: Immer Facharzt (Kinder-/Jugendpsychiater) zur Diagnostik. Für Medikation: Nur Facharzt. Für Schulanpassungen: Aménagements raisonnables beantragen.',
+    luxemburg_spezifisch: 'Diagnostik über CHL (Centre Hospitalier de Luxembourg), CHNP oder niedergelassene Kinder-/Jugendpsychiater. Aménagements raisonnables: Zeitverlängerung bei Prüfungen, separater Raum, Nachteilsausgleich. SCRIPT als Ansprechpartner für schulische Anpassungen.',
+    verwandte_wiki: ['oppositionelles-verhalten', 'conduct-disorder', 'schulvermeidung'],
+    screening_domains: ['adhs'],
+    themen_ids: ['konzentration-aufmerksamkeit', 'impulskontrolle', 'lernstrategien', 'motivation'],
+    verhaltens_ids: ['impulsiv', 'unaufmerksam'],
+    leitfaden_ids: ['elterngespraech'],
+    quellen: [
+      'Barkley, R.A. (2015). ADHD and Self-Regulation. Guilford.',
+      'MTA Cooperative Group (1999). 14-month RCT. Arch Gen Psychiatry.',
+      'NICE (2018). ADHD: Diagnosis and management. NG87.',
+      'Döpfner, M. et al. (2013). ADHS bei Kindern und Jugendlichen. Hogrefe.'
+    ]
+  },
+  {
+    id: 'angststoerungen',
+    titel: 'Angststörungen bei Jugendlichen',
+    aliases: ['Angst', 'Panikattacke', 'Generalisierte Angst', 'GAD', 'Phobie', 'Sorgen'],
+    kategorie: 'stoerungsbilder',
+    icon: '😰',
+    farbe: '#8B5CF6',
+    definition: 'Angststörungen sind die häufigsten psychischen Störungen im Jugendalter. Normale Angst ist adaptiv — sie schützt vor Gefahr. Pathologisch wird Angst wenn sie: 1) ohne reale Bedrohung auftritt, 2) unverhältnismäßig stark ist, 3) zu lange anhält und 4) zu Vermeidungsverhalten führt. Bei Jugendlichen zeigt sich Angst oft als körperliche Beschwerden (Bauchschmerzen, Kopfschmerzen, Übelkeit), Reizbarkeit oder Schulvermeidung.',
+    altersgruppe: '6-18 Jahre, 2 Häufigkeitsgipfel: 7-9 (Trennungsangst) und 13-17 (Soziale/Generalisierte Angst)',
+    praevalenz: '10-15% aller Jugendlichen, Mädchen 2x häufiger als Jungen',
+    icd10: { code: 'F40/F41', label: 'Phobische Störungen / Andere Angststörungen' },
+    icd11: { code: '6B00-6B06', label: 'Anxiety or fear-related disorders' },
+    erscheinungsbild: [
+      'Permanentes Sich-Sorgen über verschiedene Themen (Schule, Zukunft, Gesundheit, Familie)',
+      'Körperliche Symptome: Herzrasen, Schwitzen, Zittern, Übelkeit, Bauchschmerzen',
+      'Vermeidungsverhalten: Situationen aus dem Weg gehen die Angst auslösen',
+      'Schlafstörungen: Einschlafprobleme durch Grübeln',
+      'Perfektionismus: Übermäßige Angst vor Fehlern und Bewertung',
+      'Rückversicherungssuchen: Ständiges Fragen "Wird alles gut?"',
+      'Konzentrationsprobleme durch innere Anspannung',
+      'Reizbarkeit und Wutausbrüche (Angst unter der Oberfläche)'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Überaktive Amygdala: Gefahrenerkennung ist "überempfindlich". Genetische Vulnerabilität (30-40% Heritabilität). Temperament "Behavioral Inhibition": Schüchterne, gehemmte Kinder haben 4x erhöhtes Risiko.' },
+      { faktor: 'Kognitiv', text: 'Katastrophisierendes Denken: "Was wenn...?"-Spiralen. Überschätzung der Gefahr + Unterschätzung der eigenen Bewältigungskompetenz. Aufmerksamkeitsbias für bedrohliche Reize.' },
+      { faktor: 'Lerntheoretisch', text: 'Modelllernen: Ängstliche Eltern → ängstliches Kind. Negative Verstärkung: Vermeidung reduziert Angst kurzfristig → langfristig Verschlimmerung (Angst-Vermeidungs-Kreislauf).' },
+      { faktor: 'PVT-Perspektive', text: 'Chronische Sympathikus-Dominanz: Nervensystem ist permanent im "Alarm"-Modus. Mangelnde ventral-vagale Regulation. Co-Regulation durch sichere Beziehung als Schlüssel.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Sorgen', unterschied: 'Normal: Situativ, kurzfristig, beeinflussbar. Pathologisch: Generalisiert, anhaltend (>6 Monate), unkontrollierbar.' },
+      { was: 'Depression', unterschied: 'Angst: Zukunftssorgen, Anspannung, Vermeidung. Depression: Hoffnungslosigkeit, Rückzug, Antriebslosigkeit. Häufig komorbid (50%).' },
+      { was: 'ADHS', unterschied: 'Angst: Unruhe durch innere Anspannung. ADHS: Unruhe durch Impulsivität. Angst: Vermeidet Risiko. ADHS: Sucht Risiko.' }
+    ],
+    komorbiditaeten: ['Andere Angststörungen (50%)', 'Depression (40-60%)', 'ADHS (25%)', 'Somatoforme Störungen (30%)', 'Schlafstörungen (50%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'KVT (Kognitive Verhaltenstherapie)', evidenz: '★★★', beschreibung: 'Goldstandard. Psychoedukation + kognitive Umstrukturierung + graduierte Exposition. "Coping Cat" (Kendall) als bewährtes Manual. NNT=3.' },
+      { methode: 'Exposition/Konfrontation', evidenz: '★★★', beschreibung: 'Kern der Angstbehandlung: Angstauslöser in dosierter Form aufsuchen. Angst-Hierarchie erstellen, von leicht nach schwer. "Die Angst geht nicht weg wenn du sie vermeidest — sie geht weg wenn du sie aushältst."' },
+      { methode: 'Entspannungstechniken', evidenz: '★★☆', beschreibung: 'Progressive Muskelrelaxation (PMR), Bauchatmung, 5-4-3-2-1-Grounding, Achtsamkeitsübungen. Als Bewältigungsstrategie, nicht als Vermeidung.' },
+      { methode: 'SSRI-Medikation', evidenz: '★★★', beschreibung: 'Bei schwerer Angst: Sertralin oder Fluoxetin als 1. Wahl. Kombination KVT+SSRI wirksamer als beide allein (CAMS-Studie).' }
+    ],
+    praxis_tipps: [
+      'Angst NICHT vermeiden helfen — Vermeidung verstärkt Angst langfristig',
+      'Stattdessen: Graduierte Konfrontation mit Unterstützung',
+      'Körperliche Symptome ernst nehmen: "Das ist dein Körper im Alarm-Modus"',
+      'Bauchatmung als Soforthilfe: 4 Sek. ein, 6 Sek. aus (aktiviert Vagus)',
+      'Psychoedukation: Angstkurve erklären — Angst steigt, ABER sinkt auch wieder',
+      'Mut benennen, nicht Angstfreiheit: "Du hattest Angst UND hast es trotzdem gemacht"',
+      'Sicherheitsverhalten identifizieren und abbauen (Handy als Rettungsanker etc.)'
+    ],
+    wann_ueberweisen: 'Bei Schulvermeidung, Panikattacken, schwerem Leidensdruck, Generalisierung (Angst breitet sich auf immer mehr Bereiche aus): Psychotherapie (KVT). Bei schwerer Beeinträchtigung: Kinder-/Jugendpsychiater für SSRI-Erwägung.',
+    luxemburg_spezifisch: 'CePAS für Erstberatung. KVT-Therapeuten über Association Luxembourgeoise de Psychothérapie. Schulpsychologen (SePAS) als erste Anlaufstelle in der Schule.',
+    verwandte_wiki: ['depression', 'soziale-angst', 'schulvermeidung', 'dissoziation'],
+    screening_domains: ['angst-generalisiert'],
+    themen_ids: ['stress-angst', 'emotionsregulation', 'angstanfaelle', 'resilienz'],
+    verhaltens_ids: ['vermeidend', 'aengstlich'],
+    leitfaden_ids: ['krisengespraech'],
+    quellen: [
+      'Kendall, P.C. (2012). Coping Cat Workbook. Workbook Publishing.',
+      'Walkup, J.T. et al. (2008). CAMS: CBT, Sertraline, Combination. NEJM.',
+      'Clark, D.M. & Wells, A. (1995). Cognitive model of social phobia.',
+      'NICE (2014). Anxiety disorders. QS53.'
+    ]
+  },
+  {
+    id: 'trauma-ptbs',
+    titel: 'Trauma & PTBS bei Jugendlichen',
+    aliases: ['PTBS', 'PTSD', 'Posttraumatische Belastungsstörung', 'Traumafolgestörung', 'Flashback'],
+    kategorie: 'stoerungsbilder',
+    icon: '💔',
+    farbe: '#7C3AED',
+    definition: 'Trauma ist ein Ereignis, das die Bewältigungsfähigkeit eines Menschen überschreitet und intensive Angst, Hilflosigkeit oder Entsetzen auslöst. Bei Jugendlichen kann Trauma sich anders zeigen als bei Erwachsenen: Regression (jüngeres Verhalten), somatische Beschwerden, riskantes Verhalten, Aggression oder scheinbare "Gleichgültigkeit" (Dissoziation). Wichtig: Nicht jedes schlimme Ereignis führt zu PTBS — aber jedes Trauma verdient Beachtung.',
+    altersgruppe: 'Alle Altersgruppen, Jugendliche besonders vulnerabel',
+    praevalenz: '25-60% aller Jugendlichen erleben mind. 1 Trauma, 5-10% entwickeln PTBS',
+    icd10: { code: 'F43.1', label: 'Posttraumatische Belastungsstörung' },
+    icd11: { code: '6B40/6B41', label: 'PTSD / Complex PTSD' },
+    erscheinungsbild: [
+      'Wiedererleben: Flashbacks, Albträume, intrusives Erinnern, körperliche Reaktionen bei Triggern',
+      'Vermeidung: Orte, Menschen, Situationen die ans Trauma erinnern werden gemieden',
+      'Negative Veränderungen: "Die Welt ist gefährlich", Schuld- und Schamgefühle, emotionale Taubheit',
+      'Übererregung: Schreckhaftigkeit, Schlafstörungen, Reizbarkeit, Konzentrationsprobleme, Hypervigilanz',
+      'Bei Jugendlichen zusätzlich: Riskantes Verhalten, Substanzkonsum, Selbstverletzung, Aggression',
+      'Komplexe PTBS: Probleme mit Emotionsregulation, Selbstbild und Beziehungen (bei chronischem Trauma)'
+    ],
+    ursachen: [
+      { faktor: 'Typ-I-Trauma', text: 'Einmaliges Ereignis: Unfall, Überfall, Naturkatastrophe, Zeuge von Gewalt. Meist "klassische" PTBS mit Flashbacks und Vermeidung.' },
+      { faktor: 'Typ-II-Trauma', text: 'Chronisches/wiederholtes Trauma: Missbrauch, Vernachlässigung, häusliche Gewalt, Krieg/Flucht. Führt oft zu komplexer PTBS mit tiefgreifenden Persönlichkeitsveränderungen.' },
+      { faktor: 'Neurobiologisch', text: 'Trauma verändert das Gehirn: Überaktive Amygdala (Alarm), unteraktiver präfrontaler Kortex (Steuerung), veränderter Hippocampus (Erinnerung). "Der Körper hält die Punktzahl" (van der Kolk).' },
+      { faktor: 'PVT-Perspektive', text: 'Trauma fixiert das Nervensystem in Überlebens-Modi: Sympathikus (Kampf/Flucht) oder Dorsal-Vagal (Erstarrung/Dissoziation). Die Neurozeption erkennt Gefahren, die objektiv nicht mehr vorhanden sind.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ADHS', unterschied: 'Trauma kann ADHS imitieren (Hypervigilanz = Unruhe, Dissoziation = Unaufmerksamkeit). Schlüssel: Vor dem Trauma war das Kind unauffällig.' },
+      { was: 'Depression', unterschied: 'Trauma: Emotionale Taubheit + Flashbacks + Schreckhaftigkeit. Depression: Rückzug + Hoffnungslosigkeit ohne Flashbacks.' },
+      { was: 'Borderline', unterschied: 'Viele "Borderline"-Symptome bei Jugendlichen sind eigentlich komplexe Traumafolgen. Vor Persönlichkeitsstörung-Diagnose immer Trauma abklären.' }
+    ],
+    komorbiditaeten: ['Depression (50%)', 'Angststörungen (40%)', 'Substanzmissbrauch (25-35%)', 'Dissoziation (30%)', 'Selbstverletzung (20-30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'TF-KVT (Traumafokussierte KVT)', evidenz: '★★★', beschreibung: 'Goldstandard bei PTBS im Jugendalter. Phasenmodell: 1) Stabilisierung, 2) Trauma-Narrative, 3) Integration. Cohen, Mannarino & Deblinger.' },
+      { methode: 'EMDR', evidenz: '★★★', beschreibung: 'Eye Movement Desensitization and Reprocessing. Bilaterale Stimulation hilft bei der Verarbeitung traumatischer Erinnerungen. WHO-empfohlen.' },
+      { methode: 'Stabilisierung (Phase 1)', evidenz: '★★★', beschreibung: 'VOR jeder Traumabearbeitung: Sicherheit herstellen, Grounding-Techniken, Ressourcen aufbauen, Emotionsregulation lernen. Das ist die Aufgabe der Bezugsarbeit!' },
+      { methode: 'Körperorientierte Ansätze', evidenz: '★★☆', beschreibung: 'Somatic Experiencing (Levine), Yoga, Atemarbeit. "Trauma sitzt im Körper, nicht nur im Kopf." Besonders wirksam bei Dissoziation.' }
+    ],
+    praxis_tipps: [
+      'Sicherheit zuerst: Stabilisierung VOR Konfrontation — Bezugsarbeit = Phase 1',
+      'NIEMALS Trauma-Exploration ohne therapeutische Anbindung erzwingen',
+      'Trigger erkennen und benennen: "Dein Körper erinnert sich, auch wenn dein Kopf vergisst"',
+      'Grounding-Techniken vermitteln: 5-4-3-2-1, Eiswürfel, kaltes Wasser, starke Reize',
+      'Kontrolle zurückgeben: "Du entscheidest, worüber wir reden und wann wir aufhören"',
+      'Re-Traumatisierung vermeiden: Nicht nach Details fragen, kein Druck',
+      'Polyvagal-Brille: Verhalten verstehen als Überlebensreaktion, nicht als "Störung"'
+    ],
+    wann_ueberweisen: 'IMMER bei Trauma: Traumatherapie empfehlen (TF-KVT oder EMDR). Bezugsarbeit kann stabilisieren (Phase 1), aber NICHT Trauma aufarbeiten (Phase 2). Bei Dissoziation, Flashbacks, Suizidalität: Sofort Facharzt.',
+    luxemburg_spezifisch: 'CHNP: Trauma-Ambulanz. Croix-Rouge: Psychosoziale Beratung für Flüchtlinge. ASTI: Beratung bei Migrationstrauma. BEE SECURE Helpline bei Online-Trauma. VISAVI: Opferhilfe.',
+    verwandte_wiki: ['dissoziation', 'selbstverletzung', 'suizidalitaet', 'bindungsstoerung'],
+    screening_domains: ['trauma'],
+    themen_ids: ['trauma', 'dissoziative-erfahrungen', 'resilienz', 'krisenintervention'],
+    verhaltens_ids: ['dissoziativ', 'schreckhaft', 'vermeidend'],
+    leitfaden_ids: ['krisengespraech'],
+    quellen: [
+      'van der Kolk, B. (2014). The Body Keeps the Score. Viking.',
+      'Cohen, J.A. et al. (2017). TF-CBT. Guilford.',
+      'Porges, S. (2011). The Polyvagal Theory. Norton.',
+      'WHO (2013). Guidelines for PTSD. World Health Organization.',
+      'Levine, P. (2010). In an Unspoken Voice. North Atlantic Books.'
+    ]
+  },
+  {
+    id: 'selbstverletzung',
+    titel: 'Selbstverletzung (SVV/NSSV)',
+    aliases: ['SVV', 'Ritzen', 'Selbstverletzendes Verhalten', 'NSSV', 'Cutting', 'Selbstschädigung'],
+    kategorie: 'krisen',
+    icon: '🩹',
+    farbe: '#DC2626',
+    definition: 'Nicht-suizidales selbstverletzendes Verhalten (NSSV): Absichtliche Schädigung des eigenen Körpers OHNE Suizidabsicht. Häufigste Formen: Ritzen/Schneiden (70-90%), Verbrennen, Schlagen, Kratzen, Haare ausreißen. SVV ist KEIN Suizidversuch — aber ein Risikofaktor für spätere Suizidalität. SVV ist eine dysfunktionale Bewältigungsstrategie: Der Jugendliche verletzt sich, WEIL er keine bessere Strategie hat, nicht weil er "Aufmerksamkeit will".',
+    altersgruppe: '12-18 Jahre, Beginn meist 12-14',
+    praevalenz: '17-25% aller Jugendlichen (mindestens 1x), 6-8% wiederholt, Mädchen häufiger als Jungen',
+    icd10: { code: 'X78/X79', label: 'Vorsätzliche Selbstbeschädigung' },
+    icd11: { code: 'MB23.E', label: 'Non-suicidal self-injury' },
+    erscheinungsbild: [
+      'Schnitte/Ritzwunden meist an Unterarmen, Oberschenkeln, Bauch (verdeckbar)',
+      'Verbrennungen (Zigaretten, Feuerzeug)',
+      'Langärmlige Kleidung auch bei Hitze (Verbergen der Wunden)',
+      'Rückzug nach dem Verletzen, gefolgt von kurzer Erleichterung',
+      'Scham und Geheimhaltung — wird selten freiwillig gezeigt',
+      'Oft ritualisierte Handlung (bestimmtes Werkzeug, bestimmter Ort/Zeit)'
+    ],
+    ursachen: [
+      { faktor: 'Emotionsregulation', text: 'Häufigste Funktion (90%): SVV reduziert unerträgliche emotionale Spannung. "Ich fühle nichts und will fühlen" ODER "Ich fühle zu viel und will es stoppen." Kurzfristige Erleichterung durch Endorphin-Ausschüttung.' },
+      { faktor: 'Selbstbestrafung', text: '"Ich verdiene nichts Besseres." Internalisierte Schuld- und Schamgefühle, oft bei Missbrauch/Vernachlässigung.' },
+      { faktor: 'Kommunikation', text: 'Ausdruck von Schmerz, der nicht in Worte gefasst werden kann. NICHT "Aufmerksamkeit suchen" — die meisten verheimlichen SVV.' },
+      { faktor: 'Dissoziation', text: 'Beenden eines dissoziativen Zustands: "Wenn ich schneide, fühle ich mich wieder real." Häufig bei Trauma.' },
+      { faktor: 'PVT-Perspektive', text: 'SVV als Wechsel zwischen dorsal-vagalem Zustand (Erstarrung/Taubheit) und sympathischer Aktivierung (Schmerz = Lebendigkeit). Der Körper benutzt Schmerz als Regulationsmechanismus.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Suizidversuch', unterschied: 'SVV: Will sich NICHT töten, will Schmerz regulieren. Suizidversuch: Will sterben oder "nicht mehr sein". ABER: 50-70% der Jugendlichen mit SVV haben auch Suizidgedanken — immer abklären!' },
+      { was: 'Borderline', unterschied: 'SVV allein ist KEINE Borderline-Diagnose. Viele Jugendliche mit SVV haben "nur" Emotionsregulationsprobleme. Borderline erst ab 18 diagnostizieren.' }
+    ],
+    komorbiditaeten: ['Depression (60-70%)', 'Angststörungen (40%)', 'Essstörungen (25-35%)', 'PTBS (30%)', 'Suizidalität (50-70% Suizidgedanken)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'DBT-A (Dialektisch-Behaviorale Therapie für Adoleszente)', evidenz: '★★★', beschreibung: 'Goldstandard bei SVV. 4 Skills-Module: Achtsamkeit, Stresstoleranz, Emotionsregulation, zwischenmenschliche Fertigkeiten. Linehan adaptiert für Jugendliche.' },
+      { methode: 'Alternativverhalten', evidenz: '★★☆', beschreibung: 'Funktionale Alternativen: Eiswürfel auf die Haut, rotes Gummiband, Ammoniak-Riechsalz, in Chili beißen, Sport. Gleicher sensorischer Input OHNE Verletzung.' },
+      { methode: 'Sicherheitsplan', evidenz: '★★★', beschreibung: '1) Warnzeichen erkennen, 2) Eigene Coping-Strategien, 3) Ablenkende Aktivitäten, 4) Personen die helfen können, 5) Professionelle Hilfe (Nummern), 6) Umgebung sicher machen (Mittel entfernen).' }
+    ],
+    praxis_tipps: [
+      'NICHT erschrecken oder Vorwürfe machen: "Ich sehe, dass es dir nicht gut geht"',
+      'Wunden versorgen (lassen), nicht bewerten ("Das ist ja gar nicht tief")',
+      'Funktion verstehen: WARUM macht der Jugendliche das? Was hilft es ihm?',
+      'Alternativverhalten gemeinsam erarbeiten: Eiswürfel, Sport, rote Farbe malen',
+      'Sicherheitsplan schriftlich erstellen (Karte fürs Portemonnaie)',
+      'Nicht versprechen lassen "dass er/sie aufhört" — erzeugt nur Druck und Scham',
+      'Suizidalität IMMER parallel abklären: "Denkst du auch daran, dir das Leben zu nehmen?"'
+    ],
+    wann_ueberweisen: 'IMMER bei SVV: Psychotherapie empfehlen (DBT-A bevorzugt). Bei Zunahme der Frequenz/Schwere, bei Suizidalität, bei tiefen Wunden die genäht werden müssen: Sofort Psychiatrie/Notaufnahme.',
+    luxemburg_spezifisch: 'Kanner-Jugendtelefon: 116 111 (24/7). CHNP: Krisenintervention. CePAS: Therapeutenvermittlung. SOS Détresse: 45 45 45.',
+    verwandte_wiki: ['suizidalitaet', 'depression', 'trauma-ptbs', 'dissoziation'],
+    screening_domains: ['selbstverletzung'],
+    themen_ids: ['selbstverletzung', 'krisenintervention', 'emotionsregulation', 'suizidpraevention'],
+    verhaltens_ids: ['selbstverletzend'],
+    leitfaden_ids: ['krisengespraech'],
+    quellen: [
+      'Linehan, M.M. (2015). DBT Skills Training. Guilford.',
+      'Nock, M.K. (2010). Self-Injury. Annual Review Clinical Psychology.',
+      'NICE (2022). Self-harm: assessment, management. NG225.',
+      'In-Albon, T. (2015). NSSV bei Jugendlichen. Kohlhammer.'
+    ]
+  },
+  {
+    id: 'suizidalitaet',
+    titel: 'Suizidalität bei Jugendlichen',
+    aliases: ['Suizid', 'Suizidgedanken', 'Suizidversuch', 'Lebensmüdigkeit', 'C-SSRS'],
+    kategorie: 'krisen',
+    icon: '🚨',
+    farbe: '#DC2626',
+    definition: 'Suizidalität umfasst ein Spektrum von passiven Todeswünschen ("Wäre besser wenn ich nicht mehr da wäre") über aktive Suizidgedanken ("Ich denke daran mich umzubringen") bis zu Suizidplänen und -versuchen. Suizid ist die zweithäufigste Todesursache bei 15-24-Jährigen. JEDE Äußerung muss ernst genommen werden. Direkt fragen RETTET Leben — es "bringt niemanden auf die Idee". Das Gegenteil ist der Fall: Jugendliche sind erleichtert wenn jemand fragt.',
+    altersgruppe: '12-25 Jahre, Anstieg ab 14',
+    praevalenz: '15-25% aller Jugendlichen haben mind. 1x Suizidgedanken, 6-8% einen Versuch',
+    icd10: { code: 'X60-X84', label: 'Vorsätzliche Selbstbeschädigung' },
+    icd11: { code: 'MB23.1', label: 'Intentional self-harm' },
+    erscheinungsbild: [
+      'Verbale Hinweise: "Ohne mich wärt ihr besser dran", "Bald ist alles vorbei"',
+      'Rückzug von Freunden und Aktivitäten',
+      'Verschenken von persönlichen Gegenständen',
+      'Plötzliche Ruhe nach schwerer Krise (Entschluss gefasst)',
+      'Recherche über Suizidmethoden (Internet-History)',
+      'Abschieds-Handlungen: Briefe, "Letzte Male"',
+      'Zunehmende Hoffnungslosigkeit: "Es wird nie besser"'
+    ],
+    ursachen: [
+      { faktor: 'Interpersonal-Psychological Theory (Joiner)', text: '3 Faktoren müssen zusammenkommen: 1) Thwarted Belongingness ("Ich gehöre nirgendwo hin"), 2) Perceived Burdensomeness ("Ich bin eine Last"), 3) Acquired Capability (Fähigkeit zur Selbstschädigung, oft durch SVV).' },
+      { faktor: 'Risikofaktoren', text: 'Frühere Suizidversuche (stärkster Prädiktor), psychische Erkrankung (90%), Substanzmissbrauch, Impulsivität, Mobbing, LGBTQ+ (4x erhöhtes Risiko), familiäre Suizide, Zugang zu Mitteln, kürzlicher Verlust.' },
+      { faktor: 'Schutzfaktoren', text: 'Mindestens 1 sichere Beziehung, Zugehörigkeitsgefühl, Gründe zu leben, Problemlösefähigkeiten, religiöse/kulturelle Überzeugungen, eingeschränkter Zugang zu Mitteln.' }
+    ],
+    differentialdiagnose: [
+      { was: 'SVV ohne Suizidabsicht', unterschied: 'SVV: Will Schmerz regulieren, nicht sterben. Suizidalität: Will sterben oder "aufhören zu existieren". ABER: Beide können gleichzeitig vorliegen (50-70%)!' },
+      { was: 'Krisenreaktion', unterschied: 'Akute Krise: "Ich halte das nicht mehr aus" ≠ "Ich will sterben". Trotzdem ernst nehmen und C-SSRS durchführen.' }
+    ],
+    komorbiditaeten: ['Depression (60-90%)', 'Substanzmissbrauch (25-50%)', 'Angststörungen (30%)', 'Conduct Disorder (20%)', 'SVV (50-70%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'C-SSRS (Columbia Suicide Severity Rating Scale)', evidenz: '★★★', beschreibung: 'Strukturiertes Screening: 1) Todeswunsch? 2) Suizidgedanken? 3) Mit Plan? 4) Mit Absicht? 5) Vorbereitungen? 6) Früherer Versuch? Je mehr "Ja", desto höher das Risiko.' },
+      { methode: 'Safety Planning Intervention (Stanley & Brown)', evidenz: '★★★', beschreibung: '6 Schritte: Warnzeichen → Eigene Strategien → Ablenkung/Kontakte → Hilfe-Personen → Profis/Nummern → Umgebung sichern. Karte für die Tasche!' },
+      { methode: 'Means Restriction', evidenz: '★★★', beschreibung: 'Zugang zu Mitteln einschränken: Medikamente wegschließen, Messer sichern, Brückengeländer. Reduziert Suizidrate um 30-50%.' },
+      { methode: 'DBT / CAMS', evidenz: '★★★', beschreibung: 'DBT: Stresstoleranz-Skills. CAMS (Collaborative Assessment and Management of Suicidality): Gemeinsame Risiko-Einschätzung und Behandlungsplanung.' }
+    ],
+    praxis_tipps: [
+      'DIREKT fragen: "Denkst du daran, dir das Leben zu nehmen?" — Das rettet Leben',
+      'Nicht allein lassen wenn akut suizidal',
+      'Sicherheitsplan erstellen und auf Karte schreiben',
+      'Zugang zu Mitteln einschränken (Eltern informieren)',
+      'Folgetermin innerhalb von 24 Stunden',
+      'NICHT: "Denk an deine Eltern" — Schuldgefühle verstärken Suizidalität',
+      'NICHT: "Versprich mir dass du dir nichts antust" — funktioniert nicht',
+      'EIGENE Belastung ernst nehmen: Supervision suchen nach Krisengespräch'
+    ],
+    wann_ueberweisen: 'Bei aktiven Suizidgedanken MIT Plan: SOFORT Psychiatrie/Notaufnahme (112). Bei passiven Suizidgedanken: Innerhalb 48h Psychotherapie/Psychiater. Bei Suizidversuch: IMMER stationäre Abklärung.',
+    luxemburg_spezifisch: 'Notruf: 112. Kanner-Jugendtelefon: 116 111 (24/7). SOS Détresse: 45 45 45. CHNP: Psychiatrische Notaufnahme. Centre Hospitalier Kirchberg: Kinder-Notaufnahme.',
+    verwandte_wiki: ['selbstverletzung', 'depression', 'trauma-ptbs'],
+    screening_domains: ['suizidalitaet', 'selbstverletzung'],
+    themen_ids: ['suizidpraevention', 'krisenintervention', 'emotionsregulation'],
+    verhaltens_ids: ['selbstverletzend', 'rueckzug'],
+    leitfaden_ids: ['krisengespraech'],
+    quellen: [
+      'Joiner, T. (2005). Why People Die by Suicide. Harvard UP.',
+      'Stanley, B. & Brown, G. (2012). Safety Planning Intervention. Cognitive and Behavioral Practice.',
+      'Posner, K. et al. (2011). C-SSRS. Am J Psychiatry.',
+      'WHO (2014). Preventing Suicide: A Global Imperative.'
+    ]
+  },
+  {
+    id: 'bindungsstoerung',
+    titel: 'Bindungsstörung',
+    aliases: ['Bindung', 'Attachment', 'Bindungsmuster', 'Unsichere Bindung', 'Desorganisierte Bindung'],
+    kategorie: 'stoerungsbilder',
+    icon: '🔗',
+    farbe: '#F97316',
+    definition: 'Bindungsstörungen entstehen wenn die frühe Beziehung zu Bezugspersonen massiv gestört war (Vernachlässigung, Misshandlung, häufige Wechsel). Reaktive Bindungsstörung: Emotionaler Rückzug, sucht keinen Trost. Enthemmte Bindungsstörung: Distanzloses Verhalten, geht zu jedem, keine Fremdelreaktion. Bei Jugendlichen zeigen sich Bindungsprobleme als: Beziehungsabbrüche, Misstrauen, Kontrolle, Klammern oder totale Vermeidung von Nähe.',
+    altersgruppe: 'Beginn in früher Kindheit, Auswirkungen lebenslang',
+    praevalenz: '1-2% klinisch diagnostiziert, unsichere Bindungsmuster bei 40-50% aller Kinder',
+    icd10: { code: 'F94.1/F94.2', label: 'Reaktive Bindungsstörung / Enthemmte Bindungsstörung' },
+    icd11: { code: '6B44/6B45', label: 'Reactive attachment disorder / Disinhibited social engagement disorder' },
+    erscheinungsbild: [
+      'Unsicher-vermeidend: Vermeidet Nähe, zeigt keine Gefühle, "braucht niemanden", wirkt unabhängig',
+      'Unsicher-ambivalent: Klammert UND stößt weg, starke Verlustangst, Eifersucht, Wechsel zwischen Nähe und Distanz',
+      'Desorganisiert: Widersprüchliches Verhalten (nähert sich und erstarrt gleichzeitig), Dissoziation bei Nähe',
+      'Misstrauen gegenüber Erwachsenen: "Alle verlassen mich sowieso"',
+      'Kontrollierendes Verhalten: Versucht Beziehungen zu steuern (parentifiziert oder strafend)',
+      'Schwierigkeiten Hilfe anzunehmen: Hilfe = Schwäche = Verletzlichkeit'
+    ],
+    ursachen: [
+      { faktor: 'Vernachlässigung', text: 'Emotionale und/oder physische Vernachlässigung in den ersten Lebensjahren. Das Kind lernt: "Meine Bedürfnisse werden nicht beantwortet → Ich bin nicht wichtig."' },
+      { faktor: 'Misshandlung', text: 'Die Bezugsperson ist gleichzeitig Quelle von Angst und Trost → unlösbares Dilemma (desorganisierte Bindung). "Die Person die mich schützen soll, ist die die mich verletzt."' },
+      { faktor: 'Häufige Wechsel', text: 'Mehrere Pflegefamilien, Heimwechsel, Beziehungsabbrüche → "Warum soll ich mich binden, wenn alle gehen?"' },
+      { faktor: 'PVT-Perspektive', text: 'Die Neurorezeption ist dauerhaft auf "Gefahr" eingestellt. Nähe wird als bedrohlich wahrgenommen (weil Nähe in der Vergangenheit mit Schmerz verbunden war). Co-Regulation war nicht verlässlich.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Autismus', unterschied: 'ASS: Soziale Schwierigkeiten OHNE Trauma-Geschichte, bereits ab Geburt. Bindungsstörung: Nach Vernachlässigung/Misshandlung, vorher unauffällig.' },
+      { was: 'ADHS', unterschied: 'Bindungsstörung kann Unruhe und Konzentrationsprobleme verursachen. Schlüssel: Trauma-/Beziehungsgeschichte erfragen.' }
+    ],
+    komorbiditaeten: ['PTBS (40-60%)', 'Depression (35-50%)', 'ODD/Conduct (30-50%)', 'Dissoziation (25-40%)', 'ADHS-ähnliche Symptome (30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Stabile, verlässliche Beziehung', evidenz: '★★★', beschreibung: 'Die Bezugsarbeit SELBST ist die Intervention. Konsistenz, Vorhersehbarkeit, emotionale Verfügbarkeit. "Ich bin da, auch wenn du mich wegschiebst."' },
+      { methode: 'PACE (Hughes)', evidenz: '★★☆', beschreibung: 'Playfulness, Acceptance, Curiosity, Empathy. Spielerischer, akzeptierender, neugieriger, empathischer Zugang. "Ich frage mich, was da gerade in dir vorgeht..."' },
+      { methode: 'DDP (Dyadic Developmental Psychotherapy)', evidenz: '★★☆', beschreibung: 'Therapieform speziell für Bindungsstörungen. Arbeitet an der Beziehung zwischen Kind und Bezugsperson.' }
+    ],
+    praxis_tipps: [
+      'Verlässlichkeit ist das A und O: IMMER kommen, auch wenn der Jugendliche nicht kommt',
+      'Tests aushalten: "Du willst sehen ob ich bleibe, auch wenn du mich wegschiebst. Ich bleibe."',
+      'Abschied vorbereiten: Urlaub, Krankheit, Ende der Betreuung — frühzeitig ankündigen',
+      'Keine Beziehung erzwingen: Parallel-Aktivitäten (Spiel, Sport) als Zugang',
+      'Nicht persönlich nehmen: Ablehnung ist Schutz, nicht Angriff',
+      'Mikro-Momente nutzen: Jeder kurze Blickkontakt, jedes kurze Lächeln zählt'
+    ],
+    wann_ueberweisen: 'Diagnostik durch Kinder-/Jugendpsychiater bei Verdacht auf klinische Bindungsstörung. DDP-Therapeut für bindungsfokussierte Therapie. Traumatherapie wenn Missbrauch/Misshandlung vorliegt.',
+    luxemburg_spezifisch: 'Kanner-Jugendtelefon: 116 111. CHNP für Diagnostik. Fondation Kannerschlass bei Platzierungs-/Bindungsthemen.',
+    verwandte_wiki: ['trauma-ptbs', 'depression', 'oppositionelles-verhalten'],
+    screening_domains: ['trennungsangst', 'familie'],
+    themen_ids: ['bindungsstoerung', 'eltern-kind-beziehung', 'trennungsangst'],
+    verhaltens_ids: ['klammern', 'vermeidend', 'kontrollierend'],
+    leitfaden_ids: ['schweigender-jugendlicher', 'uebergabegespraech'],
+    quellen: [
+      'Bowlby, J. (1969). Attachment and Loss. Basic Books.',
+      'Hughes, D. (2009). Attachment-Focused Parenting. Norton.',
+      'Brisch, K.H. (2009). Bindungsstörungen. Klett-Cotta.',
+      'NICE (2015). Children\'s attachment. NG26.'
+    ]
+  },
+  {
+    id: 'schulvermeidung',
+    titel: 'Schulvermeidung & Schulabsentismus',
+    aliases: ['Schulangst', 'Schulphobie', 'Schulverweigerung', 'Schulschwänzen', 'Absentismus'],
+    kategorie: 'stoerungsbilder',
+    icon: '🏫',
+    farbe: '#6366F1',
+    definition: 'Schulvermeidung ist ein Sammelbegriff für verschiedene Formen des Fernbleibens von der Schule. Wichtig: Es gibt 3 verschiedene Typen mit verschiedenen Ursachen und Interventionen: 1) SCHULANGST: Angst vor der Schule selbst (Lehrer, Prüfungen, Mobbing). 2) TRENNUNGSANGST: Angst die Bezugsperson zu verlassen (nicht die Schule ist das Problem). 3) SCHULSCHWÄNZEN: Keine Angst, sondern fehlende Motivation/oppositionelle Verweigerung. Die Unterscheidung ist entscheidend für die richtige Intervention.',
+    altersgruppe: '6-18 Jahre, Häufigkeitsgipfel: 6-7 (Schulstart), 11-12 (Schulwechsel), 14-16 (Pubertät)',
+    praevalenz: '5-15% aller Schüler zeitweise, 1-5% chronisch (>10% Fehlzeiten)',
+    icd10: { code: 'F93.0/F40/F91', label: 'Je nach Typ: Trennungsangst / Phobie / Störung des Sozialverhaltens' },
+    icd11: { code: '6B05/6B00/6C90', label: 'Separation anxiety / Social anxiety / ODD' },
+    erscheinungsbild: [
+      'Schulangst: Montag-Morgen-Bauchschmerzen, Weinen, Panikattacken vor der Schule',
+      'Trennungsangst: Klammert an Eltern, kann nicht allein sein, ruft ständig an',
+      'Schulschwänzen: Geht morgens "zur Schule" aber kommt nicht an, keine körperlichen Symptome',
+      'Körperliche Beschwerden ohne medizinische Ursache (Kopfschmerzen, Übelkeit, Bauchschmerzen)',
+      'Zunehmende Fehlzeiten: Erst einzelne Tage, dann Wochen, dann Monate',
+      'Sozialer Rückzug: Verliert Anschluss an Gleichaltrige',
+      'Tag-Nacht-Umkehr bei längerer Abwesenheit (spät schlafen, spät aufstehen)'
+    ],
+    ursachen: [
+      { faktor: 'Schulangst', text: 'Leistungsangst (Prüfungen, mündliche Beteiligung), soziale Angst (Mobbing, Ausgrenzung), Lehrerkonflikt, Überforderung (Lernstörung, ADHS), sensorische Überlastung (bei ASS).' },
+      { faktor: 'Trennungsangst', text: 'Unsichere Bindung, Angst dass der Bezugsperson etwas zustößt ("Was wenn Mama stirbt während ich in der Schule bin?"), nach Verlusterfahrung, bei elterlicher psychischer Erkrankung.' },
+      { faktor: 'Schulschwänzen', text: 'Fehlende Motivation, negative Schulerfahrungen, Anschluss an delinquente Peer-Gruppe, Substanzkonsum, familiäre Vernachlässigung (niemand kontrolliert).' },
+      { faktor: 'Systemisch', text: 'Vermeidungs-Kreislauf: Fehlen → Stoff verpasst → Angst → mehr Fehlen. Eltern die selbst Angst haben und das Fernbleiben ermöglichen ("Er kann ja morgen gehen").' }
+    ],
+    differentialdiagnose: [
+      { was: 'Depression', unterschied: 'Depression: Bleibt auch am Wochenende/Ferien antriebslos. Schulvermeidung: Am Wochenende oft symptomfrei.' },
+      { was: 'Somatische Erkrankung', unterschied: 'Immer medizinisch abklären lassen. Aber: Wenn Beschwerden NUR an Schultagen auftreten → psychosomatisch.' }
+    ],
+    komorbiditaeten: ['Angststörungen (60-70%)', 'Depression (30-50%)', 'ADHS (20%)', 'Lernstörungen (25%)', 'Somatoforme Störungen (40%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Graduierte Rückführung', evidenz: '★★★', beschreibung: 'Schrittweise Wiederannäherung: 1) Schulgebäude ansehen, 2) Kurz hinein, 3) 1 Stunde, 4) Halber Tag, 5) Ganzer Tag. NICHT warten bis die Angst weg ist — Konfrontation reduziert Angst.' },
+      { methode: 'KVT bei Schulangst', evidenz: '★★★', beschreibung: 'Kognitive Umstrukturierung ("Was ist das Schlimmste was passieren kann?") + Exposition. Angst-Hierarchie für schulische Situationen erstellen.' },
+      { methode: 'Elternarbeit', evidenz: '★★★', beschreibung: 'Eltern müssen konsequent unterstützen: Morgenroutine, kein "Aushandeln", keine sekundären Gewinne (Fernsehen zu Hause). Aber: Mit Empathie, nicht mit Zwang.' },
+      { methode: 'Schulische Anpassungen', evidenz: '★★☆', beschreibung: 'Vertrauensperson in der Schule, Rückzugsraum, angepasster Stundenplan, Nachteilsausgleich bei Leistungsangst.' }
+    ],
+    praxis_tipps: [
+      'Zuerst Typ bestimmen: Schulangst vs. Trennungsangst vs. Schulschwänzen — verschiedene Interventionen!',
+      'Schnell handeln: Je länger die Abwesenheit, desto schwieriger die Rückführung',
+      'Runder Tisch: Schule + Eltern + Bezugsperson + ggf. Therapeut gemeinsam',
+      'Körperliche Beschwerden ernst nehmen UND psychosomatischen Zusammenhang erklären',
+      'Sekundäre Gewinne reduzieren: Zu Hause ist es LANGWEILIG (kein TV, kein Handy)',
+      'Morgenroutine etablieren: Aufstehen auch wenn nicht zur Schule gegangen wird'
+    ],
+    wann_ueberweisen: 'Bei >2 Wochen Schulabwesenheit: Sofort handeln. KVT-Therapeut bei Schulangst. Familientherapie bei Trennungsangst. Bei Schulschwänzen + Delinquenz: OPJ informieren.',
+    luxemburg_spezifisch: 'Loi scolaire: Schulpflicht bis 16. SePAS: Schulpsychologischer Dienst als erste Anlaufstelle. SCRIPT/Maison de l\'Orientation bei Schulwechsel-Bedarf. CePAS für therapeutische Anbindung.',
+    verwandte_wiki: ['angststoerungen', 'depression', 'mobbing'],
+    screening_domains: ['schulvermeidung', 'angst-generalisiert', 'trennungsangst'],
+    themen_ids: ['schulverweigerung', 'stress-angst', 'trennungsangst', 'motivation'],
+    verhaltens_ids: ['vermeidend', 'aengstlich', 'somatisierend'],
+    leitfaden_ids: ['elterngespraech'],
+    quellen: [
+      'Kearney, C.A. (2008). School absenteeism and school refusal. Clinical Psychology Review.',
+      'Heyne, D. et al. (2019). School Refusal: Assessment and Treatment. Springer.',
+      'Walter, D. & Döpfner, M. (2020). Schulvermeidung. Hogrefe.'
+    ]
+  },
+];

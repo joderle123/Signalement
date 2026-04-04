@@ -15016,4 +15016,1027 @@ var WIKI_ARTIKEL = [
       'Walter, D. & Döpfner, M. (2020). Schulvermeidung. Hogrefe.'
     ]
   },
+  {
+    id: 'soziale-angst', titel: 'Soziale Angststörung', aliases: ['Soziale Phobie', 'Sozialangst', 'Schüchternheit', 'Bewertungsangst'],
+    kategorie: 'stoerungsbilder', icon: '🫣', farbe: '#A855F7',
+    definition: 'Ausgeprägte und anhaltende Angst vor sozialen Situationen, in denen die Person der Bewertung durch andere ausgesetzt ist. Zentrale Furcht: Sich zu blamieren, negativ aufzufallen, peinlich zu wirken. Bei Jugendlichen: Vermeidung von mündlicher Beteiligung, Gruppenarbeit, Kantine, Partys. Wichtig: Soziale Angst ist NICHT dasselbe wie Schüchternheit — Schüchternheit bessert sich mit Vertrautheit, soziale Angst nicht.',
+    altersgruppe: '10-18 Jahre, Häufigkeitsgipfel 13-15', praevalenz: '5-10% aller Jugendlichen',
+    icd10: { code: 'F40.1', label: 'Soziale Phobien' }, icd11: { code: '6B04', label: 'Social anxiety disorder' },
+    erscheinungsbild: ['Vermeidung mündlicher Beteiligung im Unterricht', 'Kann nicht vor anderen essen/trinken (Kantine)', 'Erröten, Zittern, Schwitzen in sozialen Situationen', 'Kann keine Telefonate führen', 'Meidet Gruppenaktivitäten und Partys', 'Perfektionismus: Angst vor jeder Art von Fehler', 'Wenige oder keine Freundschaften trotz Wunsch nach Kontakt'],
+    ursachen: [
+      { faktor: 'Kognitiv', text: 'Überschätzung der negativen Bewertung durch andere. "Alle sehen, dass ich rot werde." Fokus auf sich selbst statt auf die Situation.' },
+      { faktor: 'Temperament', text: 'Behavioral Inhibition: Angeborene Gehemmtheit. Kind zieht sich bei Neuem zurück. 4x erhöhtes Risiko für soziale Angst.' },
+      { faktor: 'Lerngeschichte', text: 'Mobbing-Erfahrung, öffentliche Beschämung, überbehütende Eltern ("Du schaffst das nicht alleine").' }
+    ],
+    differentialdiagnose: [
+      { was: 'Schüchternheit', unterschied: 'Schüchternheit: Bessert sich mit Vertrautheit. Soziale Angst: Bleibt auch bei Bekannten.' },
+      { was: 'Autismus (ASS)', unterschied: 'ASS: Versteht soziale Regeln nicht. Soziale Angst: Versteht sie, hat aber Angst zu versagen.' }
+    ],
+    komorbiditaeten: ['Generalisierte Angst (50%)', 'Depression (40%)', 'Substanzmissbrauch (20%)', 'Schulvermeidung (30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'KVT mit Exposition', evidenz: '★★★', beschreibung: 'Kognitive Umstrukturierung ("Was ist das Schlimmste?") + graduierte Exposition (erst leichte, dann schwierige soziale Situationen).' },
+      { methode: 'Social Skills Training', evidenz: '★★☆', beschreibung: 'Übung sozialer Fertigkeiten: Blickkontakt, Gespräch initiieren, Nein sagen. In geschütztem Rahmen üben.' },
+      { methode: 'Videoaufnahme-Feedback', evidenz: '★★☆', beschreibung: 'Jugendlicher filmt sich bei sozialer Situation → sieht: "Ich wirke viel normaler als ich dachte." Korrigiert verzerrtes Selbstbild.' }
+    ],
+    praxis_tipps: ['Nicht zwingen, aber ermutigen: "Ich bin da, du schaffst das"', 'Kleine Schritte: Erst 1:1 Kontakt, dann Kleingruppe, dann Gruppe', 'Erfolge benennen: "Du hast heute im Unterricht was gesagt — Respekt!"', 'Sicherheitsverhalten abbauen: Handy als Schutzschild, Kapuze, Kopfhörer', 'Peergroup nutzen: Gemeinsame Aktivität statt "Rede mal mit jemandem"'],
+    wann_ueberweisen: 'Bei Schulvermeidung durch soziale Angst, bei kompletter sozialer Isolation, bei begleitender Depression: KVT-Therapeut.',
+    luxemburg_spezifisch: 'SePAS an der Schule als niedrigschwelliger Zugang. CePAS für Therapievermittlung. Jugend-Gruppenangebote über Maison des Jeunes.',
+    verwandte_wiki: ['angststoerungen', 'schulvermeidung', 'depression', 'mobbing'],
+    screening_domains: ['angst-sozial'], themen_ids: ['kommunikation', 'selbstwertgefuehl', 'einsamkeit', 'soziale-wahrnehmung'],
+    verhaltens_ids: ['vermeidend', 'aengstlich'], leitfaden_ids: ['schweigender-jugendlicher'],
+    quellen: ['Clark, D.M. & Wells, A. (1995). Cognitive model of social phobia.', 'Melfsen, S. & Warnke, A. (2007). Soziale Phobie im Kindes- und Jugendalter. Hogrefe.']
+  },
+  {
+    id: 'substanzkonsum', titel: 'Substanzkonsum bei Jugendlichen', aliases: ['Drogen', 'Cannabis', 'Alkohol', 'Sucht', 'Abhängigkeit', 'Kiffen'],
+    kategorie: 'stoerungsbilder', icon: '🍺', farbe: '#78716C',
+    definition: 'Substanzkonsum bei Jugendlichen umfasst Alkohol, Cannabis, Tabak/E-Zigaretten, und seltener andere Substanzen. Experimentieren ist häufig — problematisch wird es bei: Regelmäßigkeit, Funktionalität ("Ich brauche es zum Entspannen"), Eskalation und negativen Konsequenzen. Wichtig: Substanzkonsum bei Jugendlichen ist fast immer SELBSTMEDIKATION — die Frage ist nicht "Was nimmst du?" sondern "Was versuchst du damit zu bewältigen?"',
+    altersgruppe: 'Beginn typisch 13-16', praevalenz: '70% probieren Alkohol, 25% Cannabis bis 18',
+    icd10: { code: 'F10-F19', label: 'Psychische und Verhaltensstörungen durch psychotrope Substanzen' },
+    icd11: { code: '6C40-6C4Z', label: 'Disorders due to substance use' },
+    erscheinungsbild: ['Geruch (Alkohol, Cannabis), gerötete Augen, veränderte Pupillen', 'Leistungsabfall in der Schule', 'Neuer Freundeskreis, Geheimniskrämerei', 'Stimmungsschwankungen, Reizbarkeit (Entzug)', 'Geldprobleme, Stehlen', 'Vernachlässigung von Hobbys und Pflichten', 'Schlafveränderungen, Appetitveränderungen'],
+    ursachen: [
+      { faktor: 'Selbstmedikation', text: 'Cannabis gegen Angst/Schlafstörungen, Alkohol gegen soziale Hemmung, Stimulanzien gegen Antriebslosigkeit. Der Jugendliche hat ein Problem und findet eine "Lösung".' },
+      { faktor: 'Peer-Einfluss', text: 'Gruppendruck, Zugehörigkeit, Identitätssuche. "Alle machen das." Dazugehören wollen als Grundbedürfnis.' },
+      { faktor: 'Neurobiologisch', text: 'Adoleszentes Gehirn: Belohnungssystem (Nucleus accumbens) ist überaktiv, Impulskontrolle (PFC) noch unreif. → Jugendliche sind biologisch anfälliger für Sucht.' },
+      { faktor: 'Familiär', text: 'Elterlicher Substanzkonsum (Modelllernen), fehlende Aufsicht, familiäre Konflikte, Traumatisierung.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Experimentieren', unterschied: 'Experimentieren: Gelegentlich, in Peer-Kontext, keine Konsequenzen. Problematisch: Regelmäßig, allein, zur Bewältigung, mit Konsequenzen.' },
+      { was: 'Psychose', unterschied: 'Cannabispsychose: Cannabis kann Psychose auslösen bei genetischer Vulnerabilität. Bei Wahrnehmungsstörungen nach Konsum: Sofort Psychiatrie.' }
+    ],
+    komorbiditaeten: ['Depression (40%)', 'Angststörungen (30%)', 'ADHS (25%)', 'Conduct Disorder (35%)', 'Trauma (30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Motivational Interviewing (MI)', evidenz: '★★★', beschreibung: 'Goldstandard bei Substanzkonsum. Nicht konfrontieren, nicht moralisieren. Ambivalenz explorieren: "Was ist gut am Kiffen? Was nervt dich daran?" Veränderungsmotivation von innen fördern.' },
+      { methode: 'KVT + Rückfallprävention', evidenz: '★★★', beschreibung: 'Trigger identifizieren, alternative Bewältigungsstrategien lernen, Rückfall-Situationen antizipieren und planen.' },
+      { methode: 'Contingency Management', evidenz: '★★☆', beschreibung: 'Belohnung für drogenfreie Urintests. Bei Jugendlichen: Positive Anreize für Abstinenz.' },
+      { methode: 'Familientherapie (MDFT)', evidenz: '★★★', beschreibung: 'Multidimensionale Familientherapie: Arbeitet an Familie, Peers, Schule gleichzeitig. Stärkste Evidenz bei Jugendlichen.' }
+    ],
+    praxis_tipps: ['MI-Haltung: Nicht moralisieren, nicht konfrontieren, nicht belehren', 'Funktion verstehen: "Was gibt dir das Kiffen?" → Dann Alternative für diese Funktion finden', 'Harm Reduction bei Nicht-Abstinenz: Weniger ist besser als gleich viel', 'Rückfall normalisieren: "Das passiert. Was lernen wir daraus?"', 'Keine Urintests als Bestrafung — zerstört die Beziehung', 'LGBTQ+ Jugendliche: Erhöhtes Risiko, Kontext berücksichtigen'],
+    wann_ueberweisen: 'Bei täglichem Konsum, körperlicher Abhängigkeit, Entzugssymptomen, Cannabispsychose: Sofort Suchtberatung/Psychiatrie. Bei regelmäßigem Konsum + komorbider psychischer Störung: Doppeldiagnose-Behandlung.',
+    luxemburg_spezifisch: 'Impuls (Centre National de Prévention des Addictions): Suchtberatung. CePT (Centre de Prévention des Toxicomanies). Drénkstuff: Niedrigschwellige Anlaufstelle. Jugend- an Drogenhëllef: 49 77 77-1.',
+    verwandte_wiki: ['depression', 'angststoerungen', 'trauma-ptbs'],
+    screening_domains: ['substanz'], themen_ids: ['alkohol', 'cannabis', 'selbstmedikation', 'emotionsregulation'],
+    verhaltens_ids: ['substanzkonsum'], leitfaden_ids: ['motivationsgespraech'],
+    quellen: ['Miller, W.R. & Rollnick, S. (2013). Motivational Interviewing. 3rd ed. Guilford.', 'Liddle, H.A. (2010). MDFT for Adolescent Drug Abuse. Norton.', 'EMCDDA (2022). European Drug Report.']
+  },
+  // --- Artikel 12: Essstörungen ---
+  {
+    id: 'essstoerungen',
+    titel: 'Essstörungen',
+    aliases: ['Anorexie', 'Bulimie', 'Magersucht', 'Binge Eating', 'Ess-Brech-Sucht', 'Körperbild'],
+    kategorie: 'stoerungsbilder',
+    icon: '🍽️',
+    farbe: '#EC4899',
+    definition: 'Schwere psychische Störungen mit gestörtem Essverhalten, verzerrter Körperwahrnehmung und intensiver Angst vor Gewichtszunahme. Die drei Hauptformen sind Anorexia Nervosa (restriktives Essen/Hungern), Bulimia Nervosa (Essanfälle + Erbrechen/Kompensation) und Binge-Eating-Störung (Essanfälle ohne Kompensation). Essstörungen haben die höchste Mortalitätsrate aller psychischen Störungen.',
+    altersgruppe: 'Anorexie: Häufig 12-17 Jahre. Bulimie: 15-20 Jahre. Binge Eating: Jedes Alter. Zunehmend auch bei Jungen.',
+    praevalenz: 'Anorexie: 0.5-1% (Mädchen 10x häufiger). Bulimie: 1-3%. Binge Eating: 2-4%. Subklinische Formen: Bis zu 15% aller Jugendlichen zeigen gestörtes Essverhalten.',
+    icd10: { code: 'F50', label: 'Essstörungen (F50.0 Anorexia nervosa, F50.2 Bulimia nervosa)' },
+    icd11: { code: '6B80-6B85', label: 'Feeding or Eating Disorders' },
+    erscheinungsbild: [
+      'Anorexie: Starker Gewichtsverlust, Kälteempfindlichkeit, Lanugo-Behaarung, Amenorrhoe, exzessiver Sport',
+      'Bulimie: Normalgewicht, geschwollene Speicheldrüsen, Zahnschmelz-Erosion, Russell-Zeichen an Händen',
+      'Binge Eating: Übergewicht, Scham nach Essanfällen, Essen als Emotionsregulation',
+      'Kognitiv: Ständiges Kreisen um Essen, Kalorien, Körper. "Ich bin zu dick" trotz Untergewicht',
+      'Sozial: Rückzug, Vermeidung von gemeinsamen Mahlzeiten, geheimes Essen/Erbrechen',
+      'Rituale: Essen zerkleinern, langsam essen, Kalorien zählen, Body-Checking (ständiges Wiegen/Messen)',
+      'Emotionsregulation über Essen: Hungern gibt Kontrolle, Essanfälle betäuben Gefühle'
+    ],
+    ursachen: [
+      { faktor: 'Genetisch', text: 'Heritabilität 50-80%. Genetische Vulnerabilität für Perfektionismus, Angst und Zwanghaftigkeit.' },
+      { faktor: 'Neurobiologisch', text: 'Veränderte Serotonin- und Dopamin-Aktivität. Gestörte Hunger-/Sättigungssignale. Bei Anorexie: Hungern hat anxiolytische Wirkung.' },
+      { faktor: 'Psychologisch', text: 'Perfektionismus, geringes Selbstwertgefühl, Kontrollbedürfnis, Schwarz-Weiß-Denken. Körper als einziger Bereich, den man "kontrollieren" kann.' },
+      { faktor: 'Sozial/kulturell', text: 'Schlankheitsideal, Social Media (Filter, Fitspiration), Peer-Druck. Pro-Ana/Pro-Mia Communities online.' },
+      { faktor: 'Familiär', text: 'Verstrickung, Überbehütung, Konfliktvermeidung. Kommentare über Gewicht/Essen in der Familie. Diätkultur der Eltern.' },
+      { faktor: 'PVT-Perspektive', text: 'Hungern als dorsale Vagus-Strategie: Shutdown, Betäubung. Essanfälle als Sympathikus-Überflutung. Erbrechen als Reset. Der Körper ist Kriegsschauplatz innerer Konflikte.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Diät', unterschied: 'Diät: Flexibel, kein Leidensdruck, kein verzerrtes Körperbild. Essstörung: Rigide Regeln, Panik bei Abweichung, Körperbild-Verzerrung.' },
+      { was: 'Depression', unterschied: 'Depression: Appetitlosigkeit OHNE Angst vor Gewichtszunahme, OHNE Körperbild-Verzerrung.' },
+      { was: 'Somatische Ursachen', unterschied: 'Schilddrüse, Diabetes, M. Crohn: Gewichtsverlust OHNE absichtliche Nahrungsrestriktion. Immer medizinisch abklären!' }
+    ],
+    komorbiditaeten: ['Depression (50-75%)', 'Angststörungen (40-60%)', 'Zwangsstörung (25%)', 'PTBS/Trauma (30-50%)', 'Substanzmissbrauch (20%)', 'Persönlichkeitsstörungen (30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Family-Based Treatment (FBT/Maudsley)', evidenz: '★★★', beschreibung: 'Goldstandard bei Anorexie <18 Jahre. Eltern übernehmen vorübergehend Kontrolle über Essen. 3 Phasen: Gewichtsrestauration → Kontrolle zurückgeben → normale Entwicklung.' },
+      { methode: 'KVT-E (Enhanced CBT)', evidenz: '★★★', beschreibung: 'Goldstandard bei Bulimie und Binge Eating. Transdiagnostischer Ansatz: Ess-Tagebuch, kognitive Umstrukturierung, Exposition.' },
+      { methode: 'Adolescent-Focused Therapy (AFT)', evidenz: '★★☆', beschreibung: 'Individuelle Therapie für Anorexie. Fokus auf Autonomie-Entwicklung und Emotionsregulation.' },
+      { methode: 'Körpertherapie', evidenz: '★★☆', beschreibung: 'Körperwahrnehmung verbessern, Körper-Dissoziation reduzieren, positive Körpererfahrungen.' }
+    ],
+    praxis_tipps: [
+      'Nicht über Essen/Gewicht diskutieren — über Gefühle sprechen: "Wie geht es dir?"',
+      'Nie Aussehen kommentieren — auch nicht "du siehst gesund aus" (wird als "du bist dicker" gehört)',
+      'Gemeinsame Mahlzeiten: Vorleben statt Kontrollieren. Entspannte Atmosphäre ohne Druck',
+      'Kontrolle in anderen Bereichen anbieten: Zimmer einrichten, Kleidung wählen, Aktivitäten planen',
+      'Somatische Warnzeichen kennen: BMI <14, Synkopen, Bradykardie → sofort Arzt',
+      'Erbrechen NIE ignorieren: Elektrolyt-Entgleisungen können tödlich sein (Hypokaliämie → Herzstillstand)',
+      'Social Media kritisch begleiten, nicht verbieten: "Was löst dieses Bild bei dir aus?"'
+    ],
+    wann_ueberweisen: 'SOFORT bei: BMI <15, rapider Gewichtsverlust (>1kg/Woche), Synkopen, Bradykardie (<50 bpm), Elektrolyt-Störungen, Suizidalität. Essstörungen sind IMMER ein Fall für spezialisierte Behandlung — nie allein behandeln!',
+    luxemburg_spezifisch: 'Centre Hospitalier de Luxembourg (CHL): Kinder- und Jugendpsychiatrie mit Essstörungs-Programm. Hôpital Kirchberg: Stationäre Behandlung. CePAS: Erstberatung und Vermittlung. ANELO (Association Nationale des Eating disorders Luxembourg).',
+    verwandte_wiki: ['depression', 'angststoerungen', 'selbstverletzung', 'trauma-ptbs'],
+    screening_domains: ['essstoerung'],
+    themen_ids: ['koerperbild', 'selbstwert', 'emotionsregulation', 'perfektionismus'],
+    verhaltens_ids: ['essstoerung'],
+    leitfaden_ids: ['sorgengespraech'],
+    quellen: ['Fairburn, C.G. (2008). Cognitive Behavior Therapy and Eating Disorders. Guilford.', 'Lock, J. & Le Grange, D. (2013). Treatment Manual for Anorexia Nervosa: A Family-Based Approach. Guilford.', 'Herpertz-Dahlmann, B. (2015). Adolescent Eating Disorders. Springer.']
+  },
+  // --- Artikel 13: Mobbing ---
+  {
+    id: 'mobbing',
+    titel: 'Mobbing & Cybermobbing',
+    aliases: ['Bullying', 'Cyberbullying', 'Ausgrenzung', 'Hänseln', 'Schikane', 'Harcèlement'],
+    kategorie: 'stoerungsbilder',
+    icon: '🎯',
+    farbe: '#F97316',
+    definition: 'Wiederholte, absichtliche Schädigung einer Person durch eine oder mehrere andere über einen längeren Zeitraum bei bestehendem Machtungleichgewicht. Cybermobbing: Mobbing über digitale Medien (Social Media, Messenger, Gaming). Drei Kriterien: 1) Absicht zu schaden, 2) Wiederholung, 3) Machtungleichgewicht.',
+    altersgruppe: 'Häufigkeitsgipfel: 10-15 Jahre. Cybermobbing steigt ab 12 Jahren stark an. Kein Altersende — auch in Ausbildung/Beruf.',
+    praevalenz: 'Ca. 15-20% aller Schüler sind Opfer. 5-10% sind Täter. Cybermobbing: 10-15%. Bully-Victims (Opfer UND Täter): 5-8% — höchstes Risiko für psychische Probleme.',
+    icd10: { code: 'Z55-Z65', label: 'Probleme verbunden mit der sozialen Umgebung (keine eigene Diagnose)' },
+    icd11: { code: 'QE70', label: 'Problems associated with interpersonal interactions in childhood' },
+    erscheinungsbild: [
+      'Opfer: Rückzug, Schulvermeidung, psychosomatische Beschwerden, Angst, Depression, Schlafstörungen',
+      'Opfer: Plötzlicher Leistungsabfall, Verlust von Freundschaften, Habseligkeiten verschwinden/beschädigt',
+      'Cybermobbing-Opfer: Angst vor dem Handy, löscht Social-Media-Accounts, Panik wenn Benachrichtigung kommt',
+      'Täter: Dominanzverhalten, mangelnde Empathie, oft populär in der Peergroup, eigene Gewalterfahrungen',
+      'Bystander: Schweigen aus Angst, Mitlaufen, moralischer Stress',
+      'Formen: Physisch (schlagen, schubsen), verbal (beleidigen, drohen), relational (ausgrenzen, Gerüchte), cyber (Hassnachrichten, Bloßstellen, Fake-Profile)'
+    ],
+    ursachen: [
+      { faktor: 'Individuell (Täter)', text: 'Dominanzstreben, geringe Empathie, eigene Gewalterfahrungen, instrumentelle Aggression (Mobbing "lohnt sich": Status, Macht).' },
+      { faktor: 'Individuell (Opfer)', text: 'Kein "typisches Opfer" — aber Risikofaktoren: soziale Isolation, Unsicherheit, Anderssein (Herkunft, Aussehen, LGBTQ+, Behinderung). WICHTIG: Opfer tragen KEINE Schuld!' },
+      { faktor: 'Gruppendynamik', text: 'Participant Roles (Salmivalli): Täter, Assistenten, Verstärker, Verteidiger, Außenstehende. Mobbing ist ein GRUPPENPROZESS, kein Zweier-Konflikt.' },
+      { faktor: 'Systemisch', text: 'Schulklima: Fehlende Aufsicht, Normalisierung von Gewalt, fehlende Anti-Mobbing-Policy, Wegschauen von Erwachsenen.' },
+      { faktor: 'PVT-Perspektive', text: 'Opfer: Chronischer Sympathikus/Dorsal-Zustand. Schule = Gefahrenzone. Hypervigilanz in sozialen Situationen. Neuroception: "Nirgends sicher". Langfristig: Sozialer Rückzug als Schutz.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normaler Konflikt', unterschied: 'Konflikt: Zwischen Gleichstarken, gelegentlich, beide Seiten. Mobbing: Machtgefälle, wiederholend, einseitig.' },
+      { was: 'Necken/Spaß', unterschied: 'Spaß: Beide lachen. Mobbing: Opfer leidet, Täter genießt. Entscheidend ist die Wirkung auf das Opfer, nicht die Absicht des Täters.' }
+    ],
+    komorbiditaeten: ['Depression (Opfer: 40%)', 'Angststörungen (35%)', 'PTBS (25%)', 'Suizidalität (erhöht um Faktor 2-4)', 'Schulvermeidung (30%)', 'Selbstverletzung (20%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Whole-School-Approach (Olweus)', evidenz: '★★★', beschreibung: 'Schulweite Anti-Mobbing-Regeln, Konsequenzen, Aufsicht. Reduktion um 30-50%. Braucht Engagement der ganzen Schule.' },
+      { methode: 'No Blame Approach', evidenz: '★★☆', beschreibung: 'Kein Bestrafen: Unterstützungsgruppe bilden aus Täter, Bystandern UND Freunden des Opfers. Gruppe entwickelt Lösungen. Wirksam bei leichtem bis mittlerem Mobbing.' },
+      { methode: 'KiVa (Finland)', evidenz: '★★★', beschreibung: 'Evidenzbasiertes Programm: Empathie-Training für Bystander. Wenn Bystander eingreifen → Mobbing stoppt. Rollenspiele, Computerspiel.' },
+      { methode: 'Systemisches Vorgehen', evidenz: '★★☆', beschreibung: 'Elternarbeit, Klassengespräche, Mediation. Wichtig: NIE Opfer und Täter in gemeinsame Mediation zwingen (Machtgefälle!).' }
+    ],
+    praxis_tipps: [
+      'Opfer IMMER ernst nehmen — nie "stell dich nicht so an" oder "wehr dich halt"',
+      'Vertraulichkeit zusichern, aber: Handeln ist Pflicht. Kind vorher informieren was passiert',
+      'NICHT Opfer und Täter zusammensetzen — erst Opfer schützen, dann Täter konfrontieren',
+      'Cybermobbing: Screenshots sichern (Beweislast!), Profil melden, bei Drohungen Polizei einschalten',
+      'Bystander stärken: "Was könntest du tun?" — sie sind der Schlüssel zur Veränderung',
+      'Eltern informieren — beide Seiten. Täter-Eltern: Ohne Vorwurf, faktenbasiert',
+      'Langzeit-Monitoring: Mobbing hört nicht nach einem Gespräch auf. Wochen- und monatelang nachfragen'
+    ],
+    wann_ueberweisen: 'Bei Suizidalität, schwerer Depression, PTBS-Symptomen: Sofort Psychotherapie. Bei Cybermobbing mit Drohungen, Nacktbildern, Stalking: Polizei. Bei anhaltendem Schulversagen: Schulpsychologie + ggf. Schulwechsel.',
+    luxemburg_spezifisch: 'BEE SECURE (www.bee-secure.lu): Helpline 8002-1234 bei Cybermobbing. Kanner-Jugendtelefon: 116 111. SCRIPT (Service de Coordination de la Recherche et de l\'Innovation Pédagogiques): Anti-Mobbing-Programme für Schulen. Police Grand-Ducale: Jugendschutz-Abteilung bei strafrelevanten Fällen.',
+    verwandte_wiki: ['depression', 'angststoerungen', 'soziale-angst', 'schulvermeidung', 'selbstverletzung'],
+    screening_domains: ['sozial', 'peers'],
+    themen_ids: ['sozialkompetenz', 'selbstwert', 'konfliktmanagement', 'medienkonsum'],
+    verhaltens_ids: ['sozialer-rueckzug', 'aggressiv'],
+    leitfaden_ids: ['sorgengespraech'],
+    quellen: ['Olweus, D. (2013). School Bullying: Development and Some Important Challenges. Annual Review of Clinical Psychology.', 'Salmivalli, C. (2010). Bullying and the peer group. Aggression and Violent Behavior.', 'Smith, P.K. (2016). Bullying: Definition, Types, Causes, Consequences and Intervention. Social and Personality Psychology Compass.']
+  },
+  // --- Artikel 14: Dissoziation ---
+  {
+    id: 'dissoziation',
+    titel: 'Dissoziation',
+    aliases: ['Dissoziative Störung', 'Depersonalisation', 'Derealisation', 'Fugue', 'Abspaltung', 'Trance'],
+    kategorie: 'stoerungsbilder',
+    icon: '🌫️',
+    farbe: '#6B7280',
+    definition: 'Unterbrechung der normalerweise integrierten Funktionen von Bewusstsein, Gedächtnis, Identität, Wahrnehmung und Motorik. Dissoziation ist ein Spektrum: Von normaler Tagträumerei bis zu schweren dissoziativen Identitätsstörungen. Als Abwehrmechanismus schützt Dissoziation die Psyche vor überwältigenden Erfahrungen — der "Notausgang" des Gehirns bei unerträglichem Stress.',
+    altersgruppe: 'Beginn oft in Kindheit/Jugend. Dissoziative Symptome bei 10-20% der traumatisierten Jugendlichen. Oft erst im Erwachsenenalter diagnostiziert.',
+    praevalenz: 'Dissoziative Störungen: 2-3% der Allgemeinbevölkerung. In klinischen Populationen: 10-15%. Dissoziative Symptome (subklinisch): Bis zu 30% der traumatisierten Jugendlichen.',
+    icd10: { code: 'F44', label: 'Dissoziative Störungen (Konversionsstörungen)' },
+    icd11: { code: '6B60-6B66', label: 'Dissociative Disorders' },
+    erscheinungsbild: [
+      'Depersonalisation: "Ich bin nicht ich", "Ich sehe mich von außen", "Mein Körper gehört nicht zu mir"',
+      'Derealisation: "Alles ist wie hinter Glas", "Die Welt ist unwirklich", "Wie in einem Film"',
+      'Dissoziative Amnesie: Erinnerungslücken für traumatische Ereignisse oder ganze Lebensabschnitte',
+      'Emotionale Taubheit: "Ich fühle nichts", "Ich bin leer", flacher Affekt trotz belastender Themen',
+      'Flashback-Dissoziation: Plötzliches "Einfrieren", starrer Blick, nicht ansprechbar, zeitliche Desorientierung',
+      'Körperlich: Taubheitsgefühle, Schmerzunempfindlichkeit, "Tunnelblick", verändertes Zeiterleben',
+      'Im Alltag: "Autopilot"-Modus, Stunden vergehen ohne Erinnerung, Leistungseinbrüche, als "faul" oder "unaufmerksam" fehlinterpretiert'
+    ],
+    ursachen: [
+      { faktor: 'Trauma', text: 'Häufigste Ursache. Chronischer Missbrauch, Vernachlässigung, Gewalt in der Kindheit. Je früher, schwerer und chronischer das Trauma, desto stärker die Dissoziation.' },
+      { faktor: 'Neurobiologisch', text: 'Überaktivierung der dorsalen Vagus-Achse → Freeze/Shutdown. Präfrontaler Cortex "schaltet ab". Veränderte Schmerzverarbeitung, reduzierte Amygdala-Reaktivität.' },
+      { faktor: 'Bindung', text: 'Desorganisierte Bindung: Kind kann nicht zum Bindungsobjekt fliehen, WEIL es die Gefahrenquelle ist → Dissoziation als einziger "Ausweg".' },
+      { faktor: 'PVT-Perspektive', text: 'Dissoziation = dorsale Vagus-Dominanz. Wenn Kampf (Sympathikus) und Flucht unmöglich → letzter Notausgang: Shutdown, Erstarrung, "Totstellen". Adaptive Überlebensreaktion, die chronisch wird. Das Kind war NICHT "abwesend" — es hat ÜBERLEBT.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ADHS', unterschied: 'ADHS: Ablenkbarkeit OHNE Amnesie, OHNE Trigger-Bezug. Dissoziation: "Weg-sein" mit Erinnerungslücken, oft nach Triggern. CAVE: Komorbidität häufig!' },
+      { was: 'Epilepsie', unterschied: 'Epileptische Absencen: EEG-Veränderungen, kurze Dauer (Sekunden). Dissoziation: Kein EEG-Befund, kann Minuten bis Stunden dauern.' },
+      { was: 'Psychose', unterschied: 'Psychose: Realitätsverlust (Wahn, Halluzinationen als "real" erlebt). Dissoziation: Wissen "etwas stimmt nicht", keine Wahnüberzeugungen.' }
+    ],
+    komorbiditaeten: ['PTBS (50-80%)', 'Depression (60%)', 'Angststörungen (40%)', 'Selbstverletzung (30-40%)', 'Borderline-Persönlichkeitsstörung (30%)', 'Somatoforme Störungen (25%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Phasenorientierte Traumatherapie', evidenz: '★★★', beschreibung: 'Phase 1: Stabilisierung (Sicherheit, Ressourcen, Grounding). Phase 2: Trauma-Exposition (EMDR, PE). Phase 3: Integration. Bei Jugendlichen: Phase 1 oft über Monate!' },
+      { methode: 'Grounding-Techniken', evidenz: '★★★', beschreibung: '5-4-3-2-1 Technik (5 Dinge sehen, 4 hören, 3 fühlen...). Eiswürfel halten. Starke Gerüche (Ammoniak, Pfefferminz). Füße fest auf den Boden drücken.' },
+      { methode: 'EMDR', evidenz: '★★★', beschreibung: 'Eye Movement Desensitization and Reprocessing. Sehr wirksam bei Trauma + Dissoziation. NUR durch spezialisierte Therapeuten!' },
+      { methode: 'Sensorimotorische Psychotherapie', evidenz: '★★☆', beschreibung: 'Körperorientiert: Über den Körper die "eingefrorenen" Überlebensreaktionen vervollständigen und integrieren.' }
+    ],
+    praxis_tipps: [
+      'Dissoziation ERKENNEN: Starrer Blick, plötzliche Stille, verlangsamte Reaktion, "nicht da sein" — NICHT als Desinteresse interpretieren!',
+      'Grounding sofort: "Kannst du mich hören? Drück deine Füße auf den Boden. Was siehst du gerade?"',
+      'Stimme: Ruhig, klar, tief. Nicht laut werden — das verschlimmert die Dissoziation',
+      'NICHT anfassen ohne Erlaubnis: "Darf ich deine Hand berühren?" — Körperkontakt kann retraumatisieren',
+      'Trigger-Landkarte erstellen: Was löst Dissoziation aus? Gerüche, Orte, Berührungen, Stimmen, Jahreszeiten',
+      'Sicherheitssignale im Raum: Feste Sitzposition, Blick zur Tür, Wasser trinken, eigener Gegenstand',
+      'Dokumentieren: Wann, wie lange, was davor? Muster erkennen hilft Vorhersagbarkeit herzustellen'
+    ],
+    wann_ueberweisen: 'Dissoziation IMMER Trauma-spezialisierter Therapeut. Nicht versuchen, Trauma ohne Ausbildung zu bearbeiten — Retraumatisierung möglich! Bei dissoziativer Identitätsstörung: Hochspezialisierte Behandlung nötig.',
+    luxemburg_spezifisch: 'CHNP Ettelbréck: Trauma-Ambulanz. CHL Kinder- und Jugendpsychiatrie: Trauma-Spezialisierung. ALUPSE: Notfallpsychologie. SOS Détresse: 45 45 45.',
+    verwandte_wiki: ['trauma-ptbs', 'selbstverletzung', 'bindungsstoerung'],
+    screening_domains: ['trauma', 'dissoziation'],
+    themen_ids: ['trauma', 'emotionsregulation', 'koerperwahrnehmung'],
+    verhaltens_ids: ['dissoziativ'],
+    leitfaden_ids: [],
+    quellen: ['Van der Hart, O., Nijenhuis, E.R.S. & Steele, K. (2006). The Haunted Self. Norton.', 'Putnam, F.W. (1997). Dissociation in Children and Adolescents. Guilford.', 'Porges, S.W. (2011). The Polyvagal Theory. Norton.']
+  },
+  // --- Artikel 15: Conduct Disorder ---
+  {
+    id: 'conduct-disorder',
+    titel: 'Conduct Disorder (Störung des Sozialverhaltens)',
+    aliases: ['Verhaltensstörung', 'Sozialverhaltensstörung', 'CD', 'Delinquenz', 'Antisoziales Verhalten'],
+    kategorie: 'stoerungsbilder',
+    icon: '⚠️',
+    farbe: '#B91C1C',
+    definition: 'Wiederholtes und anhaltendes Muster von Verhalten, das grundlegende Rechte anderer oder wichtige altersgemäße gesellschaftliche Normen verletzt. Vier Kategorien: Aggression gegen Menschen/Tiere, Zerstörung von Eigentum, Betrug/Diebstahl, schwere Regelverstöße. Schwerer als ODD — hier wird aktiv geschädigt, nicht nur verweigert.',
+    altersgruppe: 'Childhood-onset (<10 Jahre): Schlechtere Prognose. Adolescent-onset (>10 Jahre): Bessere Prognose, oft peers-beeinflusst.',
+    praevalenz: '5-10% der Jugendlichen (Jungen 3-4x häufiger als Mädchen). Mädchen: Häufiger relational-aggressiv, weniger diagnostiziert.',
+    icd10: { code: 'F91', label: 'Störungen des Sozialverhaltens' },
+    icd11: { code: '6C91', label: 'Conduct-Dissocial Disorder' },
+    erscheinungsbild: [
+      'Aggression: Mobbing, Einschüchterung, körperliche Gewalt, Waffen, Tierquälerei',
+      'Sachbeschädigung: Vandalismus, Brandstiftung, Zerstörung von Eigentum anderer',
+      'Betrug/Diebstahl: Lügen, Ladendiebstahl, Einbruch, Manipulation',
+      'Regelverstöße: Weglaufen von zuhause, Schulschwänzen, Nacht durchmachen trotz Verbots',
+      'Callous-Unemotional Traits (Untergruppe): Geringe Empathie, kein Schuldgefühl, flacher Affekt, nutzt andere aus — schlechteste Prognose',
+      'Im Bezugsrahmen: Ständige Konflikte, Strafen zeigen keine Wirkung, Beziehungsabbrüche, Fremdplatzierung'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Reduzierte Amygdala-Reaktivität auf Angst und Leid anderer. Niedrige Cortisol-Stressreaktion. Bei CU-Traits: Genetische Komponente für geringe Empathie.' },
+      { faktor: 'Familiär', text: 'Gewalt in der Familie, inkonsistente/harte Erziehung, mangelnde Supervision, parentale Psychopathologie, Armut.' },
+      { faktor: 'Lerntheoretisch', text: 'Modelllernen: Aggression wird in der Familie vorgelebt. Instrumentelles Lernen: Aggression führt zu Zielerreichung. Coercive Cycles (Patterson).' },
+      { faktor: 'Peers', text: 'Deviante Peergruppen verstärken antisoziales Verhalten. "Deviancy Training" — Jugendliche lernen voneinander kriminelles Verhalten.' },
+      { faktor: 'PVT-Perspektive', text: 'Chronische Sympathikus-Aktivierung: "Angriff als beste Verteidigung". Das Nervensystem hat gelernt: Die Welt ist gefährlich → Aggression ist Überlebensnotwendig. Hinter der Härte: Oft massiver Schmerz und Verletzung.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ODD', unterschied: 'ODD: Verweigerung, Provokation — aber KEINE schweren Verstöße (Stehlen, Gewalt, Zerstörung). CD: Aktive Schädigung anderer und Regelverletzung.' },
+      { was: 'ADHS', unterschied: 'ADHS: Impulsive Aggression ohne Planung. CD: Auch proaktive, instrumentelle Aggression. CAVE: 50% Komorbidität!' },
+      { was: 'Trauma/PTBS', unterschied: 'Trauma kann identisches Verhalten verursachen. IMMER Traumaanamnese! Reaktive Aggression bei Trauma vs. proaktive bei CD.' }
+    ],
+    komorbiditaeten: ['ADHS (50%)', 'ODD (fast immer vorausgehend)', 'Substanzmissbrauch (40%)', 'Depression (30%)', 'Lernstörungen (25%)', 'Trauma (30-50%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Multisystemische Therapie (MST)', evidenz: '★★★', beschreibung: 'Intensiv (3-5x/Woche), im natürlichen Umfeld, arbeitet an Familie, Schule, Peers, Nachbarschaft gleichzeitig. Reduziert Fremdplatzierung und Rückfälligkeit.' },
+      { methode: 'Functional Family Therapy (FFT)', evidenz: '★★★', beschreibung: 'Kurzzeitig (12-14 Sitzungen), fokussiert auf Familienkommunikation und -dynamik. Wirksam bei mittlerer Schwere.' },
+      { methode: 'ART (Aggression Replacement Training)', evidenz: '★★☆', beschreibung: '3 Komponenten: Skillstreaming (soziale Fertigkeiten), Ärgerkontrolle, moralisches Reasoning. Gruppenformat.' },
+      { methode: 'MTFC (Multidimensional Treatment Foster Care)', evidenz: '★★★', beschreibung: 'Speziell ausgebildete Pflegefamilien als Alternative zur Heimunterbringung. Klare Struktur, warme Beziehung, intensives Monitoring.' }
+    ],
+    praxis_tipps: [
+      'Beziehung VOR Intervention — ohne Beziehung keine Veränderung. Diese Jugendlichen haben Beziehung als gefährlich gelernt',
+      'Kleine, machbare Erwartungen: Nicht "werde ein anderer Mensch" sondern "diese Woche keine Schlägerei"',
+      'Verstärkung von PRO-sozialem Verhalten: 5:1 Regel — 5x Positives bemerken für 1x Konfrontation',
+      'Konsequenzen: Klar, vorhersagbar, sofort, proportional. NICHT: Willkürlich, verzögert, eskalierend',
+      'Peergruppe: Prosoziale Peers fördern. Deviante Peergruppen sind der stärkste Risikofaktor',
+      'Eigene Grenzen kennen: CD-Jugendliche testen massiv. Supervision nutzen, eigene Trigger reflektieren',
+      'Hinter die Fassade schauen: Oft massive Traumatisierung, Vernachlässigung, Schmerz unter der "harten" Oberfläche'
+    ],
+    wann_ueberweisen: 'MST oder FFT wenn verfügbar. Bei CU-Traits: Spezialisierte Behandlung (schwer behandelbar). Bei Delinquenz: Jugendhilfe + Justiz koordinieren. Bei komorbider ADHS: Medikamentöse Abklärung.',
+    luxemburg_spezifisch: 'SCAS (Service Central d\'Assistance Sociale): Fallführung bei schweren Verhaltensproblemen. OPJ: Jugendrechtliche Maßnahmen. CSEE/Dreiborn: Stationäre Einrichtungen für Jugendliche mit schweren Verhaltensstörungen. Tribunal de la Jeunesse: Bei strafrechtlicher Relevanz.',
+    verwandte_wiki: ['oppositionelles-verhalten', 'adhs', 'trauma-ptbs', 'substanzkonsum'],
+    screening_domains: ['conduct', 'aggression'],
+    themen_ids: ['wut-aggression', 'impulskontrolle', 'konfliktmanagement', 'grenzen-setzen'],
+    verhaltens_ids: ['aggressiv', 'oppositionell', 'delinquent'],
+    leitfaden_ids: ['konfliktgespraech'],
+    quellen: ['Henggeler, S.W. et al. (2009). Multisystemic Therapy for Antisocial Behavior. Guilford.', 'Frick, P.J. & Viding, E. (2009). Antisocial Behavior from a Developmental Psychopathology Perspective. Development and Psychopathology.', 'Patterson, G.R. (1982). Coercive Family Process. Castalia.']
+  },
+  // --- Artikel 16: Polyvagaltheorie ---
+  {
+    id: 'pvt',
+    titel: 'Polyvagaltheorie (PVT)',
+    aliases: ['Polyvagal', 'Vagusnerv', 'Nervensystem', 'Neuroception', 'Ventral Vagal', 'Window of Tolerance'],
+    kategorie: 'konzepte',
+    icon: '🧬',
+    farbe: '#059669',
+    definition: 'Die Polyvagaltheorie (Stephen Porges, 1994) beschreibt drei hierarchische Zustände des autonomen Nervensystems: 1) Ventral Vagal (Sicherheit, soziales Engagement), 2) Sympathikus (Kampf/Flucht), 3) Dorsal Vagal (Shutdown, Erstarrung). Das Nervensystem scannt permanent die Umgebung auf Sicherheit/Gefahr (Neuroception) und schaltet automatisch zwischen den Zuständen. Verhalten ist NICHT Wahl — es ist Nervensystem-Zustand.',
+    altersgruppe: 'Konzept gilt für alle Altersgruppen. Besonders relevant für traumatisierte Kinder/Jugendliche.',
+    praevalenz: 'Rahmenkonzept, keine Diagnose. Relevant für alle Klient:innen in der Jugendhilfe.',
+    icd10: { code: '-', label: 'Kein diagnostisches Konzept' },
+    icd11: { code: '-', label: 'Theoretischer Rahmen' },
+    erscheinungsbild: [
+      'Ventral Vagal (grün): Entspannt, kontaktfreudig, lernfähig, kann Hilfe annehmen, lächelt, Blickkontakt',
+      'Sympathikus (gelb/rot): Unruhe, Aggression, Fluchtimpuls, erhöhter Puls, flache Atmung, "zappelig"',
+      'Dorsal Vagal (blau/grau): Shutdown, "abwesend", erschöpft, flacher Affekt, dissoziiert, "faul"',
+      'Mischzustände: Freeze (Sympathikus + Dorsal: angespannt aber erstarrt), Fawn (Ventral + Sympathikus: übermäßiges Anpassen)',
+      'Co-Regulation: Ein reguliertes Nervensystem kann ein dysreguliertes "mitregulieren" — DAS ist die Kernkompetenz von Bezugspersonen',
+      'Neuroception: Unbewusste Gefahren-Erkennung. Traumatisierte Kinder haben eine "fehlkalibrierte" Neuroception — sie erkennen Gefahr wo keine ist'
+    ],
+    ursachen: [
+      { faktor: 'Evolutionär', text: 'Die drei Systeme entstanden evolutionär: Dorsal (älteste: Reptilien), Sympathikus (Säugetiere), Ventral Vagal (neueste: Primaten/Menschen). Bei Gefahr: Hierarchie von neu nach alt.' },
+      { faktor: 'Neuroanatomisch', text: 'Vagusnerv = 10. Hirnnerv, verbindet Gehirn mit Herz, Lunge, Darm. Ventraler Ast: Gesicht, Stimme, Herzrate → Soziales Engagement. Dorsaler Ast: Organe → Shutdown.' },
+      { faktor: 'Trauma-Bezug', text: 'Chronisches Trauma = chronische Sympathikus/Dorsal-Aktivierung. Das Kind steckt im Überlebensmodus fest. Verhalten (Aggression, Rückzug, Dissoziation) = logische Nervensystem-Antwort, KEIN Fehlverhalten.' },
+      { faktor: 'Bindung', text: 'Sichere Bindung = Erfahrung ventral-vagaler Co-Regulation. Unsichere Bindung = Nervensystem lernt: "Andere Menschen regulieren mich NICHT" → Selbstregulation durch Substanzen, SVV, Isolation.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Behavioristische Sicht', unterschied: 'Behaviorismus: Verhalten ist gewählt und wird durch Konsequenzen gesteuert. PVT: Verhalten ist Nervensystem-Zustand — Konsequenzen wirken nur im ventral-vagalen Zustand.' },
+      { was: 'Rein kognitiver Ansatz', unterschied: 'Kognitive Therapie: "Denke anders → fühle anders". PVT: "Reguliere das Nervensystem ZUERST → dann kann das Gehirn denken". Bottom-up vor top-down.' }
+    ],
+    komorbiditaeten: ['Rahmenkonzept — keine Komorbidität. Anwendbar auf alle Störungsbilder.'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Co-Regulation', evidenz: '★★★', beschreibung: 'Die Bezugsperson reguliert ihr EIGENES Nervensystem zuerst (ruhige Stimme, langsame Bewegungen, regulierte Atmung) → das Kind spürt Sicherheit und co-reguliert sich. "Sei der Leuchtturm im Sturm."' },
+      { methode: 'Safe & Sound Protocol (SSP)', evidenz: '★★☆', beschreibung: 'Von Porges entwickelt: Modifizierte Musik stimuliert den ventralen Vagus über das Mittelohr. 5 Stunden über mehrere Tage. Verbessert soziales Engagement.' },
+      { methode: 'Somatische Regulationsübungen', evidenz: '★★☆', beschreibung: 'Atemübungen (verlängertes Ausatmen → Vagus-Aktivierung), progressive Muskelentspannung, Schaukeln, Summen, kaltes Wasser im Gesicht (Tauchreflex).' },
+      { methode: 'Vagus-Stimulation im Alltag', evidenz: '★★☆', beschreibung: 'Singen, Summen, Gurgeln (aktivieren Vagus). Sport mit Co-Regulation (Teamspiele). Natur (grüne Umgebung senkt Sympathikus). Rhythmus (Trommeln, Tanzen).' }
+    ],
+    praxis_tipps: [
+      'Regel Nr. 1: "Verbindung vor Korrektur" — ein Kind im Sympathikus/Dorsal KANN nicht lernen, kooperieren oder reflektieren',
+      'Zustand ERKENNEN: Grün = lernbereit. Gelb/Rot = regulieren. Blau/Grau = aktivieren. Intervention an Zustand anpassen!',
+      'Eigene Regulation: "Ich kann nur so gut co-regulieren wie ich selbst reguliert bin" — Selbstfürsorge ist Pflicht',
+      'Umgebung gestalten: Warmes Licht, ruhige Musik, keine Überraschungen, vorhersagbare Abläufe = ventral-vagale Signale',
+      'Prosodie nutzen: Melodische, warme Stimme = ventrales Signal. Monoton, laut, hektisch = Gefahrensignal',
+      'Nicht personalisieren: "Das Kind will mich nicht ärgern — sein Nervensystem ist im Überlebensmodus"',
+      '"Window of Tolerance" erweitern: Kleine Herausforderungen bei gleichzeitiger Sicherheit → Nervensystem lernt: "Ich kann das aushalten"'
+    ],
+    wann_ueberweisen: 'PVT ist ein Rahmenkonzept für die eigene Arbeit. Bei schwerer Dysregulation (chronische Dissoziation, selbstverletzendes Verhalten, Aggression): Trauma-spezialisierte Therapie nötig.',
+    luxemburg_spezifisch: 'PVT-Fortbildungen über FEDAS, ANCES oder Institut Luxembourgeois de la Formation Continue. SSP-Anbieter in Luxemburg über Unyte-iLs Webseite suchen.',
+    verwandte_wiki: ['trauma-ptbs', 'bindungstheorie', 'dissoziation', 'emotionsregulation'],
+    screening_domains: [],
+    themen_ids: ['emotionsregulation', 'koerperwahrnehmung', 'stressmanagement'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Porges, S.W. (2011). The Polyvagal Theory. Norton.', 'Dana, D. (2018). The Polyvagal Theory in Therapy. Norton.', 'Porges, S.W. & Dana, D. (2018). Clinical Applications of the Polyvagal Theory. Norton.']
+  },
+  // --- Artikel 17: Bindungstheorie ---
+  {
+    id: 'bindungstheorie',
+    titel: 'Bindungstheorie',
+    aliases: ['Attachment', 'Bowlby', 'Ainsworth', 'Sichere Bindung', 'Unsichere Bindung', 'Bindungsmuster'],
+    kategorie: 'konzepte',
+    icon: '🔗',
+    farbe: '#2563EB',
+    definition: 'Die Bindungstheorie (John Bowlby, 1969; Mary Ainsworth, 1978) beschreibt das angeborene Bedürfnis des Menschen nach emotionaler Nähe zu Bezugspersonen und die daraus entstehenden inneren Arbeitsmodelle von Beziehungen. Vier Bindungsmuster: Sicher (Typ B), Unsicher-vermeidend (Typ A), Unsicher-ambivalent (Typ C), Desorganisiert (Typ D). Bindungsmuster prägen lebenslang, wie wir Beziehungen gestalten, mit Stress umgehen und Hilfe suchen.',
+    altersgruppe: 'Bindungsmuster entstehen in den ersten 2 Lebensjahren, bleiben aber über die gesamte Lebensspanne wirksam und veränderbar.',
+    praevalenz: 'In der Normalbevölkerung: Sicher 55-65%, Vermeidend 20-25%, Ambivalent 10-15%, Desorganisiert 5-15%. In der Jugendhilfe: Unsicher/Desorganisiert bis 80%.',
+    icd10: { code: 'F94.1/F94.2', label: 'Reaktive Bindungsstörung / Bindungsstörung mit Enthemmung (nur Extremformen)' },
+    icd11: { code: '6B44/6B45', label: 'Reactive Attachment Disorder / Disinhibited Social Engagement Disorder' },
+    erscheinungsbild: [
+      'Sicher (B): Sucht Nähe bei Stress, lässt sich trösten, exploriert von sicherer Basis aus, vertraut Bezugspersonen',
+      'Vermeidend (A): Zeigt wenig Emotionen, "braucht niemanden", vermeidet Nähe, Pseudo-Autonomie, internalisiert',
+      'Ambivalent (C): Klammert und stößt weg, überwältigende Emotionen, "Drama", schwer zu beruhigen, externalisiert',
+      'Desorganisiert (D): Widersprüchliches Verhalten (Annäherung + Erstarren), Angst vor der Bezugsperson, bizarre Verhaltensweisen, höchstes Risiko für Psychopathologie',
+      'Bei Jugendlichen: Sicher = kann um Hilfe bitten. Vermeidend = "mir egal" + Rückzug. Ambivalent = Beziehungschaos. Desorganisiert = unvorhersagbar, kontrollierend-fürsorglich oder kontrollierend-strafend'
+    ],
+    ursachen: [
+      { faktor: 'Feinfühligkeit', text: 'Ainsworth: Die Feinfühligkeit der Bezugsperson bestimmt das Bindungsmuster. Feinfühlig = prompt, angemessen, konsistent auf Signale reagieren → sichere Bindung.' },
+      { faktor: 'Sicher', text: 'Bezugsperson: Verfügbar, responsiv, konsistent. Kind lernt: "Wenn ich Stress habe, werde ich getröstet. Die Welt ist sicher."' },
+      { faktor: 'Vermeidend', text: 'Bezugsperson: Zurückweisend bei Emotionen, belohnt Unabhängigkeit. Kind lernt: "Gefühle zeigen wird bestraft. Ich muss allein klarkommen."' },
+      { faktor: 'Ambivalent', text: 'Bezugsperson: Unvorhersagbar — mal verfügbar, mal nicht. Kind lernt: "Ich muss meine Signale VERSTÄRKEN, damit jemand reagiert."' },
+      { faktor: 'Desorganisiert', text: 'Bezugsperson: IST die Quelle der Angst (Missbrauch, Gewalt, schwere psychische Erkrankung). Kind lernt: "Der Mensch, der mich schützen soll, ist gefährlich." Unlösbares Paradox.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Bindungsstörung (ICD)', unterschied: 'Bindungsmuster (A/B/C/D): Normale Variation. Bindungsstörung (F94): Klinische Diagnose, nur bei extremer Deprivation (z.B. Heim ohne Bezugsperson). Nicht gleichsetzen!' },
+      { was: 'Temperament', unterschied: 'Temperament: Angeboren (Easy/Difficult/Slow-to-warm-up). Bindung: Entsteht in der Beziehung. Temperament beeinflusst Bindung, bestimmt sie aber nicht.' }
+    ],
+    komorbiditaeten: ['Unsichere Bindung erhöht Risiko für fast alle psychischen Störungen. Desorganisiert: Stärkstes Risiko für Dissoziation, BPS, PTBS.'],
+    evidenzbasierte_interventionen: [
+      { methode: 'STEEP (Steps Toward Effective Enjoyable Parenting)', evidenz: '★★★', beschreibung: 'Video-Feedback für Eltern: Eigene Feinfühligkeit sehen und verbessern. Besonders wirksam in der Prävention.' },
+      { methode: 'Circle of Security (COS)', evidenz: '★★★', beschreibung: 'Eltern-Programm: "Sei der sichere Hafen und die sichere Basis". Video-basiert, Grafik des Bindungskreises. Sehr anschaulich.' },
+      { methode: 'ABC (Attachment and Biobehavioral Catch-up)', evidenz: '★★★', beschreibung: 'Für Kinder in Fremdunterbringung: 10 Sitzungen mit Video-Feedback. Pflegeeltern lernen "entgegen dem Instinkt" zu reagieren (z.B. Nähe bieten wenn Kind abweist).' },
+      { methode: 'Mentalisierungsbasierte Therapie (MBT)', evidenz: '★★☆', beschreibung: 'Fähigkeit fördern, eigenes und fremdes Verhalten in Bezug auf innere Zustände zu verstehen. "Was könnte in ihm vorgehen?" statt "Er macht das extra!"' }
+    ],
+    praxis_tipps: [
+      'Sie SIND die korrigierende Bindungserfahrung — jede positive Beziehungserfahrung zählt und verändert das innere Arbeitsmodell',
+      'Vermeidende Jugendliche: Nicht bedrängen, Beziehung über gemeinsame Aktivitäten aufbauen (Seite an Seite statt Auge in Auge)',
+      'Ambivalente Jugendliche: Vorhersagbar sein! Immer gleiche Zeiten, gleicher Raum. Emotionen aushalten ohne sich zurückzuziehen',
+      'Desorganisierte: Sicherheit, Sicherheit, Sicherheit. Keine Überraschungen. Eigenes Verhalten transparent machen: "Ich gehe jetzt kurz raus und komme in 5 Minuten zurück"',
+      'Beziehungsabbrüche vermeiden: Für diese Kinder ist jeder Abbruch eine Bestätigung: "Ich bin nicht liebenswert"',
+      'Eigene Bindung reflektieren: Welches Muster habe ICH? Wie reagiere ich auf vermeidendes/klammerndes Verhalten?',
+      '"Earned Security": Unsicher gebundene Menschen können durch gute Beziehungserfahrungen sichere Bindung entwickeln — Hoffnung ist berechtigt!'
+    ],
+    wann_ueberweisen: 'Bei V.a. Bindungsstörung (F94): Kinder-/Jugendpsychiater. Bei desorganisierter Bindung + Trauma: Trauma-Therapie. Bindungsstörung NICHT ambulant "nebenbei" behandeln.',
+    luxemburg_spezifisch: 'CHL Kinder- und Jugendpsychiatrie: Diagnostik. Fondation Kannerschlass: Arbeit mit fremdplatzierten Kindern. ALUPSE: Beratung. COS-Fortbildungen über FEDAS.',
+    verwandte_wiki: ['bindungsstoerung', 'pvt', 'trauma-ptbs', 'emotionsregulation'],
+    screening_domains: ['bindung'],
+    themen_ids: ['bindung', 'vertrauen', 'beziehungsgestaltung'],
+    verhaltens_ids: ['bindungsverhalten'],
+    leitfaden_ids: [],
+    quellen: ['Bowlby, J. (1969). Attachment and Loss. Basic Books.', 'Ainsworth, M. et al. (1978). Patterns of Attachment. Erlbaum.', 'Brisch, K.H. (2009). Bindungsstörungen. Klett-Cotta.']
+  },
+  // --- Artikel 18: Motivational Interviewing ---
+  {
+    id: 'motivational-interviewing',
+    titel: 'Motivational Interviewing (MI)',
+    aliases: ['MI', 'Motivierende Gesprächsführung', 'OARS', 'Change Talk', 'Ambivalenz'],
+    kategorie: 'methoden',
+    icon: '💬',
+    farbe: '#0EA5E9',
+    definition: 'Motivational Interviewing (Miller & Rollnick, 1991) ist ein kooperativer, personenzentrierter Gesprächsstil zur Stärkung der Eigenmotivation und der Bereitschaft zur Veränderung. MI arbeitet MIT dem Widerstand statt dagegen. Kernidee: Menschen verändern sich nicht durch Druck oder Argumente, sondern durch die Entdeckung ihrer eigenen Gründe für Veränderung.',
+    altersgruppe: 'Adaptiert für Jugendliche (ab 12 Jahre). Bei jüngeren Kindern: MI mit Eltern.',
+    praevalenz: 'Methode — keine Diagnose. Goldstandard bei Substanzkonsum, Therapie-Motivation, Verhaltensänderung.',
+    icd10: { code: '-', label: 'Therapeutische Methode' },
+    icd11: { code: '-', label: 'Therapeutische Methode' },
+    erscheinungsbild: [
+      'Geist des MI: Partnerschaftlichkeit, Akzeptanz, Mitgefühl, Evokation (Hervorrufen statt Einreden)',
+      'OARS: Open questions (offene Fragen), Affirming (Bestärken), Reflecting (Reflektieren), Summarizing (Zusammenfassen)',
+      'Change Talk erkennen und verstärken: "Ich will...", "Ich könnte...", "Ich muss...", "Ich kann..."',
+      'Sustain Talk nicht bekämpfen: "Ich kann nicht aufhören" → Reflektieren: "Es fühlt sich unmöglich an"',
+      'Ambivalenz explorieren: "Was gefällt dir am Kiffen? Was nervt dich daran?" — BEIDE Seiten gleichberechtigt',
+      'Decisional Balance: Vorteile/Nachteile der Veränderung UND des Status quo systematisch erkunden'
+    ],
+    ursachen: [
+      { faktor: 'Theoretische Basis', text: 'Transtheoretisches Modell (Prochaska & DiClemente): Precontemplation → Contemplation → Preparation → Action → Maintenance. MI hilft, Menschen von einer Stufe zur nächsten zu begleiten.' },
+      { faktor: 'Humanistisch', text: 'Rogers: Empathie, Wertschätzung, Kongruenz. MI baut auf der klientenzentrierten Grundhaltung auf.' },
+      { faktor: 'Kognitive Dissonanz', text: 'Wenn Klienten ihre eigene Ambivalenz hören (durch Reflexionen) → entsteht Dissonanz → eigene Motivation zur Veränderung.' },
+      { faktor: 'Reaktanz vermeiden', text: 'Menschen reagieren auf Druck mit Gegendruck. "Du musst aufhören!" → "Erst recht nicht!" MI vermeidet diesen Reflex.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Konfrontative Therapie', unterschied: 'Konfrontativ: "Du musst dich ändern, sonst..." MI: "Was wünschst du dir? Wie passt [Verhalten] dazu?"' },
+      { was: 'Ratschläge geben', unterschied: 'Ratschlag: Lösung kommt von außen → Widerstand. MI: Lösung kommt vom Klienten → Ownership. Ratschläge NUR mit Erlaubnis: "Darf ich dir etwas vorschlagen?"' }
+    ],
+    komorbiditaeten: ['Methode — anwendbar bei allen Störungsbildern, besonders bei geringer Therapiemotivation'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Klassisches MI (Einzelgespräch)', evidenz: '★★★', beschreibung: 'Ursprüngliches Format. 1-4 Sitzungen können bereits wirksam sein (Brief MI). Langform: Integration in laufende Begleitung.' },
+      { methode: 'MI + KVT Kombination', evidenz: '★★★', beschreibung: 'MI als Motivations-Booster vor KVT-Behandlung. MI baut Motivation auf → KVT liefert die Werkzeuge.' },
+      { methode: 'Group MI', evidenz: '★★☆', beschreibung: 'MI-Prinzipien in Gruppensettings. Peers hören Change Talk voneinander → normativer Einfluss.' },
+      { methode: 'MI mit Eltern', evidenz: '★★☆', beschreibung: 'Eltern zur Veränderung motivieren (Erziehungsverhalten, Familienregeln). "Was wünschen Sie sich für Ihr Kind?"' }
+    ],
+    praxis_tipps: [
+      'Regel Nr. 1: Nie mehr für Veränderung argumentieren als der Klient selbst — das erzeugt Widerstand',
+      'Change Talk verstärken: Wenn der Jugendliche sagt "Vielleicht sollte ich weniger kiffen" → "Was hat dich auf den Gedanken gebracht?"',
+      'Columbo-Technik: "Hilf mir zu verstehen..." — neugierig statt wissend auftreten',
+      'Skalenfragen: "Auf einer Skala von 1-10, wie wichtig ist dir diese Veränderung? Warum nicht tiefer?"',
+      'Confidence Ruler: "Wie zuversichtlich bist du, dass du es schaffst? Was bräuchtest du, um auf eine 7 zu kommen?"',
+      'Widerstand = Signal: Wenn du drückst und der Klient drückt zurück → ändere die Richtung, nicht den Druck',
+      'Mit Jugendlichen: Autonomie betonen: "Es ist deine Entscheidung" — reduziert Reaktanz sofort'
+    ],
+    wann_ueberweisen: 'MI ist eine Gesprächsmethode für alle Fachkräfte. Weiterbildung empfohlen (2-3 Tage Grundkurs + Supervision). Bei schwerer Sucht: MI als Einstieg, dann spezialisierte Suchtbehandlung.',
+    luxemburg_spezifisch: 'MI-Fortbildungen über FEDAS, Impuls (Suchtprävention), oder Formation Continue. CNFPC bietet regelmäßig MI-Kurse an.',
+    verwandte_wiki: ['substanzkonsum', 'psychoedukation', 'neue-autoritaet'],
+    screening_domains: [],
+    themen_ids: ['motivation', 'veraenderungsbereitschaft'],
+    verhaltens_ids: [],
+    leitfaden_ids: ['motivationsgespraech'],
+    quellen: ['Miller, W.R. & Rollnick, S. (2013). Motivational Interviewing. 3rd ed. Guilford.', 'Naar, S. & Suarez, M. (2021). Motivational Interviewing with Adolescents and Young Adults. 2nd ed. Guilford.']
+  },
+  // --- Artikel 19: Trauma-Informed Care ---
+  {
+    id: 'trauma-informed-care',
+    titel: 'Trauma-Informed Care',
+    aliases: ['Traumapädagogik', 'Traumasensibel', 'TIC', 'Traumainformiert', 'Sicherer Ort'],
+    kategorie: 'methoden',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    definition: 'Trauma-Informed Care ist ein organisatorischer und fachlicher Rahmen, der davon ausgeht, dass die Mehrheit der Klient:innen in der Jugendhilfe Trauma erlebt hat — und der ALLE Interaktionen, Strukturen und Räume so gestaltet, dass Retraumatisierung vermieden und Heilung gefördert wird. Nicht "Was ist falsch mit dir?" sondern "Was ist dir passiert?"',
+    altersgruppe: 'Konzept für alle Settings und Altersgruppen. Besonders wichtig in der stationären Jugendhilfe.',
+    praevalenz: 'Rahmenkonzept. In der Jugendhilfe: 60-90% der Klient:innen haben mindestens eine Trauma-Erfahrung (ACE-Studien).',
+    icd10: { code: '-', label: 'Organisatorisches Rahmenkonzept' },
+    icd11: { code: '-', label: 'Organisatorisches Rahmenkonzept' },
+    erscheinungsbild: [
+      '6 Kernprinzipien (SAMHSA): Sicherheit, Vertrauenswürdigkeit, Peer-Support, Zusammenarbeit, Empowerment, Kulturelle Sensibilität',
+      'Sicherheit: Physisch (Rückzugsräume, keine Überraschungen) UND emotional (vorhersagbare Beziehungen, keine Beschämung)',
+      'Trigger-Bewusstsein: Wissen, dass Gerüche, Geräusche, Berührungen, Orte, Jahreszeiten → Traumareaktionen auslösen können',
+      'Transparenz: "Ich erkläre dir, was ich tue und warum" — Kontrolle zurückgeben',
+      'Strengths-based: Fokus auf Überlebensleistung statt auf Defizite: "Du hast SO viel überlebt — das zeigt deine Stärke"',
+      'Mitarbeiter:innen-Fürsorge: Sekundäre Traumatisierung erkennen und vorbeugen. Supervision, Selbstfürsorge als Pflicht'
+    ],
+    ursachen: [
+      { faktor: 'ACE-Studien', text: 'Adverse Childhood Experiences (Felitti et al., 1998): Kindheitstrauma erhöht Risiko für fast alle psychischen und physischen Erkrankungen. Je mehr ACEs, desto höher das Risiko. In der Jugendhilfe: Durchschnitt 4+ ACEs.' },
+      { faktor: 'Neurobiologisch', text: 'Trauma verändert das Gehirn: Hyperaktive Amygdala (Alarmanlage an), reduzierter Präfrontaler Cortex (Denken eingeschränkt), veränderte HPA-Achse (Stressreaktion dauerhaft aktiviert).' },
+      { faktor: 'Retraumatisierung', text: 'Herkömmliche Jugendhilfe-Strukturen können retraumatisieren: Zwangsmaßnahmen, Isolation, unangekündigte Durchsuchungen, Beziehungsabbrüche bei Verlegung, Machtkämpfe.' },
+      { faktor: 'Paradigmenwechsel', text: 'Vom Kontroll-Paradigma ("Wir müssen das Verhalten kontrollieren") zum Beziehungs-Paradigma ("Wir müssen Sicherheit herstellen, dann reguliert sich das Verhalten").' }
+    ],
+    differentialdiagnose: [
+      { was: 'Traumatherapie', unterschied: 'Traumatherapie: Klinische Behandlung durch Therapeut:innen (EMDR, PE). TIC: Haltung und Struktur der gesamten Organisation. TIC ist NICHT Traumatherapie, sondern der Rahmen drum herum.' },
+      { was: 'Behavioristisches Management', unterschied: 'Behavioristisch: Token-Systeme, Stufenpläne, Konsequenzen. TIC: Versteht Verhalten als Kommunikation von Bedürfnissen und Nervensystem-Zuständen.' }
+    ],
+    komorbiditaeten: ['Rahmenkonzept — anwendbar auf alle Störungsbilder und Settings'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Sanctuary Model (Bloom)', evidenz: '★★★', beschreibung: 'Ganzheitliche organisatorische Transformation. Safety Plans, Community Meetings, Psychoedukation für alle. Gut erforscht für stationäre Settings.' },
+      { methode: 'ARC Framework (Blaustein & Kinniburgh)', evidenz: '★★★', beschreibung: 'Attachment, Regulation, Competency: 3-Säulen-Modell für komplexe Trauma-Behandlung bei Kindern. Manualisiert, flexibel einsetzbar.' },
+      { methode: 'CARE Model (Residential Treatment)', evidenz: '★★☆', beschreibung: 'Children And Residential Experiences: Schulungsprogramm für Mitarbeitende in stationären Einrichtungen. 6 Module zu TIC-Prinzipien.' },
+      { methode: 'Sensorische Modulation', evidenz: '★★☆', beschreibung: 'Sensorische Räume (Weighted Blankets, Schaukel, Aromatherapie) als Alternative zu Fixierung/Isolation bei Krisen.' }
+    ],
+    praxis_tipps: [
+      'Frage IMMER: "Was ist dir passiert?" statt "Was ist falsch mit dir?"',
+      'Vorhersagbarkeit: Tagesstruktur, Ankündigung von Veränderungen, keine Überraschungen',
+      'Wahlmöglichkeiten: "Möchtest du im Büro oder draußen reden?" — Kontrolle zurückgeben',
+      'Sprache: Statt "Konsequenz" → "natürliche Folge". Statt "Verweigerung" → "noch nicht bereit"',
+      'Fenster/Tür-Metapher: Das Trauma-Fenster nur so weit öffnen, wie der Klient es aushält. Dann wieder schließen (Stabilisierung)',
+      'Sekundäre Traumatisierung beachten: "Wenn mich die Geschichte eines Kindes verfolgt, brauche ich Supervision — das ist professionell, nicht schwach"',
+      'Räume gestalten: Rückzugsmöglichkeiten, Beruhigungsecken, warme Farben, keine kalten Neonröhren'
+    ],
+    wann_ueberweisen: 'TIC ist Haltung, keine Therapie. Bei Trauma-Symptomen (Flashbacks, Dissoziation, schwere PTBS): Immer an Traumatherapeut:in überweisen. TIC schafft den sicheren Rahmen, Traumatherapie bearbeitet das Trauma.',
+    luxemburg_spezifisch: 'ANCES: Fortbildungen zu Traumapädagogik. FEDAS: Weiterbildungsangebote. Projet TRAJECT (Luxembourg): Trauma-Sensibilisierung für Jugendhilfe-Einrichtungen.',
+    verwandte_wiki: ['trauma-ptbs', 'pvt', 'bindungstheorie', 'dissoziation', 'resilienz'],
+    screening_domains: ['trauma'],
+    themen_ids: ['trauma', 'sicherheit', 'beziehungsgestaltung'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['SAMHSA (2014). Concept of Trauma and Guidance for a Trauma-Informed Approach. HHS.', 'Bloom, S.L. & Farragher, B. (2013). Restoring Sanctuary. Oxford University Press.', 'Felitti, V.J. et al. (1998). Relationship of Childhood Abuse and Household Dysfunction. American Journal of Preventive Medicine.']
+  },
+  // --- Artikel 20: Neue Autorität ---
+  {
+    id: 'neue-autoritaet',
+    titel: 'Neue Autorität (Haim Omer)',
+    aliases: ['Gewaltfreier Widerstand', 'Omer', 'Ankerfunktion', 'Präsenz', 'Stärke statt Macht'],
+    kategorie: 'methoden',
+    icon: '⚓',
+    farbe: '#0D9488',
+    definition: 'Die Neue Autorität (Haim Omer, ab 2001) ist ein Ansatz für Eltern, Pädagog:innen und Institutionen im Umgang mit destruktivem Verhalten von Kindern und Jugendlichen. Kernidee: Autorität basiert nicht auf Macht und Kontrolle ("alte Autorität"), sondern auf Präsenz, Beharrlichkeit und Beziehungsangebot. "Wir geben nicht auf, und wir schlagen nicht zurück." Inspiriert von Gandhis gewaltfreiem Widerstand.',
+    altersgruppe: 'Für Eltern/Pädagogen von Kindern und Jugendlichen jeden Alters. Besonders wirksam bei ODD/CD, 8-18 Jahre.',
+    praevalenz: 'Methode — keine Diagnose. Zunehmend verbreitet in Jugendhilfe, Schule und Familienberatung im deutschsprachigen Raum.',
+    icd10: { code: '-', label: 'Pädagogischer/therapeutischer Ansatz' },
+    icd11: { code: '-', label: 'Pädagogischer/therapeutischer Ansatz' },
+    erscheinungsbild: [
+      '7 Säulen: 1) Präsenz, 2) Selbstkontrolle, 3) Unterstützungsnetzwerk, 4) Gewaltfreier Widerstand, 5) Versöhnungsgesten, 6) Transparenz, 7) Beharrlichkeit',
+      'Ankerfunktion: "Ich bin da. Ich bleibe da. Egal was du tust." — Verlässlichkeit als Gegenmodell zu Eskalation',
+      'Sit-In: Eltern/Pädagogen setzen sich schweigend ins Zimmer des Jugendlichen: "Wir akzeptieren [Verhalten] nicht mehr. Wir warten auf deinen Vorschlag."',
+      'Versöhnungsgesten: WÄHREND des Konflikts Beziehungsangebote machen: Lieblingsessen kochen, nette SMS schreiben. "Ich bin gegen dein VERHALTEN, nicht gegen DICH"',
+      'Unterstützernetzwerk: Freunde, Verwandte, Lehrer, Nachbarn einbeziehen. Kein Geheimnis, keine Isolation. "Es braucht ein Dorf"',
+      'Aufschub statt Spontanreaktion: "Ich muss darüber nachdenken. Wir kommen darauf zurück." — Deeskalation durch Zeitgewinn'
+    ],
+    ursachen: [
+      { faktor: 'Autoritätskrise', text: 'Die "alte Autorität" (Gehorsam durch Macht, Strafe, Hierarchie) funktioniert nicht mehr und schadet. Permissivität ("alles erlauben") funktioniert auch nicht. Neue Autorität als dritter Weg.' },
+      { faktor: 'Eskalationsdynamik', text: 'Symmetrische Eskalation: Kind provoziert → Eltern strafen → Kind eskaliert → Eltern eskalieren → Gewalt. Neue Autorität durchbricht den Kreislauf durch einseitige Deeskalation.' },
+      { faktor: 'Systemisch', text: 'Verhalten wird im System aufrechterhalten. Wenn das System sich ändert (Eltern/Pädagogen handeln anders) → muss das Kind sein Verhalten anpassen.' },
+      { faktor: 'Gandhis Prinzipien', text: 'Satyagraha: "Festhalten an der Wahrheit". Gewaltfreier Widerstand ≠ Passivität. Es ist aktiv, beharrlich und selbstkontrolliert. "Stärke zeigen, ohne Gewalt auszuüben."' }
+    ],
+    differentialdiagnose: [
+      { was: 'Strafe/Konsequenz', unterschied: 'Strafe: "Wenn du das tust → passiert dir etwas Schlimmes" (Angst). Neue Autorität: "Wir akzeptieren das nicht und bleiben im Kontakt" (Beziehung + Grenze).' },
+      { was: 'Permissivität', unterschied: 'Permissiv: "Lass ihn machen, er wird schon lernen." Neue Autorität: "Wir nehmen Stellung, aber ohne Gewalt und mit Beziehungsangebot."' }
+    ],
+    komorbiditaeten: ['Methode — besonders wirksam bei ODD, CD, Verweigerung, Aggression, Schulvermeidung'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Eltern-Coaching (NA)', evidenz: '★★★', beschreibung: 'Eltern lernen die 7 Säulen in 10-15 Sitzungen. Begleitung durch Coach/Therapeut. Signifikante Reduktion von Gewalt und oppositionellem Verhalten.' },
+      { methode: 'Systemische NA in Einrichtungen', evidenz: '★★☆', beschreibung: 'Ganze Einrichtungen arbeiten nach NA-Prinzipien: Präsenz-Routinen, Sit-Ins im Team, Versöhnungsgesten als Standard, Vernetzung mit Familien.' },
+      { methode: 'NA in der Schule', evidenz: '★★☆', beschreibung: 'Lehrer:innen als "Anker": Präsenz zeigen, nicht eskalieren, Unterstützernetzwerk nutzen, transparente Kommunikation mit Eltern.' },
+      { methode: 'Sit-In', evidenz: '★★☆', beschreibung: 'Strukturiertes Sit-In: Ankündigung → Sitzen (schweigend, 30-60 Min.) → "Wir warten auf deinen Vorschlag" → Bei Eskalation: ruhig bleiben oder Raum verlassen und wiederkommen.' }
+    ],
+    praxis_tipps: [
+      '"Schmieden wenn es kalt ist" — Interventionen planen wenn alle ruhig sind, NICHT im Affekt',
+      'Einseitige Deeskalation: "Ich lasse mich nicht provozieren" ist KEIN Zeichen von Schwäche, sondern von Stärke',
+      'Aufschub: "Das war nicht ok. Ich denke darüber nach und komme darauf zurück." — wirksamer als spontane Strafe',
+      'Versöhnungsgesten sind KEIN Belohnen von Fehlverhalten — sie sichern die Beziehung, die Basis jeder Veränderung',
+      'Netzwerk aktivieren: Isolation ist der größte Feind. Onkel, Großeltern, Nachbarn, Lehrer einbeziehen',
+      'Transparenz: "Wir haben [Person] informiert, weil wir uns Sorgen machen" — kein Geheimnis, keine Drohung',
+      'Geduld: NA wirkt nicht sofort. Verhalten kann zunächst schlimmer werden (Löschungstrotz). Durchhalten!'
+    ],
+    wann_ueberweisen: 'NA-Coach/Therapeut bei: Massiver Aggression, Schulvermeidung, Substanzkonsum, wenn Eltern allein nicht weiterkommen. NA-Fortbildung für alle Fachkräfte empfohlen.',
+    luxemburg_spezifisch: 'Systemische Familienberatung (z.B. Familljenhëllef) bietet z.T. NA-orientierte Beratung. Fortbildungen über FEDAS, ANCES. Institut für Neue Autorität (DE/AT): Online-Fortbildungen.',
+    verwandte_wiki: ['oppositionelles-verhalten', 'conduct-disorder', 'schulvermeidung'],
+    screening_domains: ['conduct'],
+    themen_ids: ['grenzen-setzen', 'elternarbeit', 'konfliktmanagement'],
+    verhaltens_ids: ['oppositionell', 'aggressiv'],
+    leitfaden_ids: ['konfliktgespraech', 'elterngespraech'],
+    quellen: ['Omer, H. (2015). Neue Autorität: Das Geheimnis starker Eltern. Vandenhoeck & Ruprecht.', 'Omer, H. & von Schlippe, A. (2010). Stärke statt Macht. Vandenhoeck & Ruprecht.', 'Lemme, M. & Körner, B. (2018). Neue Autorität in der Schule. Carl-Auer.']
+  },
+  // --- Artikel 21: Psychoedukation ---
+  {
+    id: 'psychoedukation',
+    titel: 'Psychoedukation',
+    aliases: ['Psychoeducation', 'Aufklärung', 'Krankheitsinformation', 'Entstigmatisierung'],
+    kategorie: 'methoden',
+    icon: '📋',
+    farbe: '#6366F1',
+    definition: 'Systematische, strukturierte Vermittlung von Wissen über psychische Störungen, deren Entstehung, Verlauf und Behandlungsmöglichkeiten an Betroffene und deren Angehörige. Ziel: Verständnis fördern, Stigma abbauen, Selbstwirksamkeit stärken, Compliance verbessern. "Wissen ist die erste Medizin."',
+    altersgruppe: 'Alle Altersgruppen. Bei Kindern: Altersgerecht vereinfachen. Bei Jugendlichen: Auf Augenhöhe. Immer auch: Eltern/Bezugspersonen.',
+    praevalenz: 'Methode — Kernbestandteil jeder evidenzbasierten Behandlung.',
+    icd10: { code: '-', label: 'Therapeutische Intervention' },
+    icd11: { code: '-', label: 'Therapeutische Intervention' },
+    erscheinungsbild: [
+      'Information: Was ist die Diagnose? Was passiert im Gehirn/Körper? Warum reagiere ich so?',
+      'Normalisierung: "Du bist nicht verrückt — dein Gehirn reagiert auf schwierige Erfahrungen"',
+      'Entstigmatisierung: "Depression ist keine Schwäche" — "ADHS ist keine Faulheit"',
+      'Bewältigungsstrategien: Konkretes Werkzeug → "Wenn X passiert, kannst du Y versuchen"',
+      'Frühwarnzeichen: Erkennen, wann es schlechter wird → rechtzeitig Hilfe holen',
+      'Formate: Einzelgespräch, Gruppenformat, Materialien (Arbeitsblätter, Videos, Apps), Bibliotherapie'
+    ],
+    ursachen: [
+      { faktor: 'Evidenzbasis', text: 'Psychoedukation ist integraler Bestandteil aller evidenzbasierten Behandlungen (KVT, DBT, IPT, Familientherapie). Meta-Analysen zeigen signifikante Effekte auf Symptomreduktion und Rückfallprävention.' },
+      { faktor: 'Empowerment', text: 'Wissen = Macht. Wer seine Störung versteht, kann sie beeinflussen. Vom passiven Patienten zum aktiven Gestalter.' },
+      { faktor: 'Compliance', text: 'Patienten, die verstehen WARUM sie etwas tun sollen, halten sich eher daran. "Nimm die Medikamente" vs. "Dein Serotonin-Spiegel..." → Letzteres wirkt besser.' },
+      { faktor: 'Angstreduktion', text: 'Das Unbekannte macht Angst. Benennen und Erklären reduziert Angst: "Es hat einen Namen, andere haben es auch, es gibt Hilfe."' }
+    ],
+    differentialdiagnose: [
+      { was: 'Ratschläge geben', unterschied: 'Ratschlag: "Du solltest..." Psychoedukation: "Die Forschung zeigt, dass... Was denkst du, wie das bei dir ist?"' },
+      { was: 'Therapie', unterschied: 'Psychoedukation = Wissen vermitteln. Therapie = Veränderung begleiten. Psychoedukation ist TEIL der Therapie, nicht die ganze Therapie.' }
+    ],
+    komorbiditaeten: ['Methode — bei JEDER psychischen Störung indiziert. Besonders wichtig bei: Depression, Angst, PTBS, ADHS, Psychose, Essstörungen'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Einzelpsychoedukation', evidenz: '★★★', beschreibung: 'Individuell angepasste Information im Gespräch. Nutze Metaphern: "Das Gehirn ist wie eine Alarmanlage, die zu empfindlich eingestellt ist" (Angst).' },
+      { methode: 'Psychoedukative Gruppen', evidenz: '★★★', beschreibung: '8-12 Sitzungen, strukturiert, Manual-basiert. Besonders wirksam bei Depression (Lewinsohn) und bipolarer Störung. Peer-Effekt: "Ich bin nicht allein."' },
+      { methode: 'Familienpsychoedukation', evidenz: '★★★', beschreibung: 'Familie lernt gemeinsam: Was hat mein Kind? Was können WIR tun? Was müssen wir vermeiden? Reduziert Expressed Emotion und Rückfallrisiko.' },
+      { methode: 'Materialien & Medien', evidenz: '★★☆', beschreibung: 'Arbeitsblätter, Erklärvideos, Apps, Bücher. Für Jugendliche: Instagram-taugliche Infografiken, YouTube-Videos, Podcasts.' }
+    ],
+    praxis_tipps: [
+      'Sprache anpassen: Kein Fachchinesisch. "Amygdala" → "die Alarmanlage in deinem Gehirn"',
+      'Immer fragen: "Was weißt du schon über...?" — an Vorwissen anknüpfen, nicht belehren',
+      'Metaphern nutzen: "Depression ist wie ein schwerer Rucksack", "Angst ist ein übervorsichtiger Bodyguard"',
+      'Interaktiv: Nicht monologisieren. Fragen stellen, Zeichnungen nutzen, gemeinsam am Whiteboard arbeiten',
+      'Dosieren: Nicht alles auf einmal. 3-4 Kernbotschaften pro Sitzung, dann sacken lassen',
+      'Schriftlich mitgeben: Was im Gespräch gesagt wurde, auch aufschreiben/ausdrucken. Wird vergessen wenn nur mündlich',
+      'Kulturelle Sensibilität: "Depression" ist in manchen Kulturen tabuisiert. Alternative Erklärungsmodelle respektieren UND Wissen anbieten'
+    ],
+    wann_ueberweisen: 'Psychoedukation kann und soll JEDE Fachkraft leisten. Bei komplexen Störungsbildern (Psychose, bipolare Störung): Spezialisierte Psychoedukationsgruppen. Bei Medikamentenfragen: Psychiater:in.',
+    luxemburg_spezifisch: 'CePAS: Psychoedukative Materialien auf Deutsch, Französisch und Luxemburgisch. Kannertelefon: Informationen für Kinder. Eltereforum: Informationsabende für Eltern.',
+    verwandte_wiki: ['motivational-interviewing', 'resilienz', 'emotionsregulation'],
+    screening_domains: [],
+    themen_ids: ['selbstwahrnehmung', 'psychoedukation'],
+    verhaltens_ids: [],
+    leitfaden_ids: ['psychoedukation'],
+    quellen: ['Bäuml, J. et al. (2016). Psychoedukation bei psychischen Erkrankungen. Schattauer.', 'Colom, F. & Vieta, E. (2006). Psychoeducation Manual for Bipolar Disorder. Cambridge University Press.']
+  },
+  // --- Artikel 22: Resilienz ---
+  {
+    id: 'resilienz',
+    titel: 'Resilienz',
+    aliases: ['Widerstandsfähigkeit', 'Schutzfaktoren', 'Resilience', 'Salutogenese', 'Ressourcenorientierung'],
+    kategorie: 'konzepte',
+    icon: '🌿',
+    farbe: '#10B981',
+    definition: 'Resilienz bezeichnet die Fähigkeit, trotz widriger Umstände, Traumata oder chronischer Belastung eine positive Entwicklung zu nehmen. Resilienz ist KEIN angeborenes Persönlichkeitsmerkmal — sie entwickelt sich in Beziehungen und kann gefördert werden. Kernbotschaft: Es geht nicht darum, Risiken zu eliminieren, sondern Schutzfaktoren aufzubauen.',
+    altersgruppe: 'Konzept für alle Altersgruppen. Schutzfaktoren-Förderung besonders wirksam in Kindheit und Jugend.',
+    praevalenz: 'Konzept, keine Diagnose. Ca. 30-50% der Risiko-Kinder zeigen resiliente Entwicklung (Kauai-Studie).',
+    icd10: { code: '-', label: 'Entwicklungspsychologisches Konzept' },
+    icd11: { code: '-', label: 'Entwicklungspsychologisches Konzept' },
+    erscheinungsbild: [
+      'Individuelle Schutzfaktoren: Positives Temperament, Intelligenz, Problemlösefähigkeit, Selbstwirksamkeit, Humor',
+      'Familiäre Schutzfaktoren: Mindestens eine stabile Bezugsperson, warmherzige Erziehung, klare Strukturen',
+      'Soziale Schutzfaktoren: Positive Peerbeziehungen, unterstützendes Schulumfeld, Mentoren, Gemeinderessourcen',
+      '7 Resilienzfaktoren (Reivich & Shatté): Emotionsregulation, Impulskontrolle, Kausalanalyse, Empathie, Selbstwirksamkeit, Reaching Out, Optimismus',
+      'Resilienz ≠ Unverwundbarkeit: Resiliente Menschen LEIDEN auch — aber sie erholen sich und wachsen',
+      'Posttraumatisches Wachstum: Manche Menschen berichten nach schweren Krisen von positiven Veränderungen (neue Prioritäten, tiefere Beziehungen, Stärke-Bewusstsein)'
+    ],
+    ursachen: [
+      { faktor: 'Kauai-Studie', text: 'Emmy Werner (1955-1995): 40-Jahre-Langzeitstudie auf Hawaii. Ein Drittel der Hochrisiko-Kinder entwickelte sich positiv. Wichtigster Schutzfaktor: Mindestens EINE stabile, liebevolle Bezugsperson.' },
+      { faktor: 'Salutogenese', text: 'Aaron Antonovsky (1979): "Was hält gesund?" statt "Was macht krank?". Sense of Coherence (SOC): Verstehbarkeit, Handhabbarkeit, Sinnhaftigkeit → Resilienz.' },
+      { faktor: 'Neuroplastizität', text: 'Das Gehirn ist veränderbar. Positive Beziehungserfahrungen können negative überschreiben. "Neurons that fire together, wire together" — auch positiv.' },
+      { faktor: 'Bindung', text: 'Sichere Bindung = stärkster einzelner Schutzfaktor. Co-Regulation lernen → Selbstregulation entwickeln → Resilienz.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Defizitorientierung', unterschied: 'Defizit: "Was kann das Kind NICHT?" Resilienz: "Was kann es TROTZDEM?" und "Was hat es ÜBERLEBT?" — Stärken statt Schwächen.' },
+      { was: 'Toxischer Optimismus', unterschied: '"Sei positiv!" ist keine Resilienzförderung. Resilienz anerkennt den Schmerz UND stärkt die Bewältigung. Leid validieren, nicht weg-optimieren.' }
+    ],
+    komorbiditaeten: ['Konzept — Resilienzförderung ist bei ALLEN Risiko-Kindern indiziert, unabhängig von Diagnose'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Penn Resilience Program (PRP)', evidenz: '★★★', beschreibung: '12 Sitzungen für Jugendliche: KVT-basiert, Problemlösung, Emotionsregulation, Perspektivenübernahme. Gut evaluiert: Reduktion von Depression und Angst.' },
+      { methode: 'Mentoring-Programme', evidenz: '★★★', beschreibung: 'Eine stabile erwachsene Bezugsperson außerhalb der Familie. Big Brothers Big Sisters: Signifikante Effekte auf Verhalten, Schulleistung, Selbstwert.' },
+      { methode: 'Sozial-Emotionales Lernen (SEL)', evidenz: '★★★', beschreibung: 'Schulbasierte Programme: Selbstbewusstsein, Selbstmanagement, soziales Bewusstsein, Beziehungsfähigkeit, verantwortungsvolle Entscheidungen.' },
+      { methode: 'Stärken-basierter Ansatz', evidenz: '★★☆', beschreibung: 'Systematisch Stärken identifizieren und nutzen: "Was kannst du besonders gut? Wann hast du schon mal eine schwierige Situation gemeistert?"' }
+    ],
+    praxis_tipps: [
+      'SIE sind möglicherweise die eine Bezugsperson, die den Unterschied macht — unterschätzen Sie das nie',
+      'Stärken aktiv benennen: "Du bist letzte Woche trotz allem in die Schule gegangen — das zeigt Durchhaltevermögen"',
+      'Selbstwirksamkeit fördern: Aufgaben geben, die zu bewältigen sind. Erfolge sichtbar machen',
+      'Meisterungserfahrungen: "Du hast das geschafft!" — wichtiger als 100 Komplimente',
+      'Humor nicht unterschätzen: Humor ist ein mächtiger Schutzfaktor. Gemeinsam lachen verbindet',
+      'Zukunftsperspektive: "Wo siehst du dich in 5 Jahren?" — Hoffnung auf eine bessere Zukunft ist resilient-machend',
+      'Resilienz NICHT als Forderung: "Sei resilient!" ist absurd. Resilienz entsteht durch sichere Beziehungen und Erfahrungen, nicht durch Willenskraft'
+    ],
+    wann_ueberweisen: 'Resilienzförderung ist Aufgabe ALLER Fachkräfte. Bei manifesten psychischen Störungen: Therapie + Resilienzförderung parallel. Nicht statt Therapie.',
+    luxemburg_spezifisch: 'SCRIPT: SEL-Programme in Luxemburger Schulen. CePAS: Resilienzfördernde Beratungsangebote. Projet CARE Luxembourg: Stärken-basierte Jugendhilfe-Konzepte.',
+    verwandte_wiki: ['pvt', 'bindungstheorie', 'emotionsregulation', 'trauma-informed-care'],
+    screening_domains: [],
+    themen_ids: ['selbstwert', 'selbstwirksamkeit', 'zukunftsplanung', 'staerken'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Werner, E.E. & Smith, R.S. (2001). Journeys from Childhood to Midlife. Cornell University Press.', 'Antonovsky, A. (1997). Salutogenese. DGVT.', 'Reivich, K. & Shatté, A. (2002). The Resilience Factor. Broadway Books.']
+  },
+  // --- Artikel 23: Emotionsregulation ---
+  {
+    id: 'emotionsregulation',
+    titel: 'Emotionsregulation',
+    aliases: ['Affektregulation', 'Gefühlsregulation', 'Stressregulation', 'Coping', 'Skills', 'DBT'],
+    kategorie: 'konzepte',
+    icon: '🎭',
+    farbe: '#F59E0B',
+    definition: 'Emotionsregulation umfasst alle Prozesse, durch die Menschen ihre Emotionen beeinflussen — welche sie haben, wann sie sie haben, und wie sie sie erleben und ausdrücken. Emotionen sind NICHT das Problem — fehlende oder dysfunktionale Regulation ist das Problem. Jugendliche in der Jugendhilfe haben oft nie gelernt, Emotionen angemessen zu regulieren, weil ihnen die Co-Regulation durch Bezugspersonen fehlte.',
+    altersgruppe: 'Emotionsregulation entwickelt sich lebenslang. Kritische Phase: 0-3 Jahre (Co-Regulation → Selbstregulation). Jugend: Präfrontaler Cortex noch nicht ausgereift → natürlich eingeschränkte Regulation.',
+    praevalenz: 'Konzept — Dysregulation ist Kernsymptom vieler Störungen: BPS, ADHS, PTBS, Depression, Angst, SVV, Substanzkonsum.',
+    icd10: { code: '-', label: 'Transdiagnostisches Konzept' },
+    icd11: { code: '-', label: 'Transdiagnostisches Konzept' },
+    erscheinungsbild: [
+      'Unterregulation: Wutausbrüche, Weinkrämpfe, Panikattacken, Impulsivität, "von 0 auf 100"',
+      'Überregulation: Emotionale Taubheit, Alexithymie ("keine Worte für Gefühle"), Dissoziation, Vermeidung',
+      'Dysfunktionale Strategien: SVV (Schneiden reguliert Spannung), Substanzkonsum, Essanfälle/Hungern, exzessives Gaming, Risikoverhalten',
+      'Funktionale Strategien: Gespräch suchen, Sport, Atemübungen, Achtsamkeit, kreative Expression, Problemlösen',
+      'Emotionaler Kaskadeneffekt: Ein Gefühl → Angst vor dem Gefühl → Scham über die Angst → Explosion oder Shutdown',
+      'Window of Tolerance: Zu eng = schnelle Überflutung/Shutdown. Ziel: Fenster erweitern, Regulation innerhalb des Fensters verbessern'
+    ],
+    ursachen: [
+      { faktor: 'Entwicklung', text: 'Baby: 100% Co-Regulation durch Bezugsperson. Kleinkind: Beginnende Selbstregulation mit Unterstützung. Jugend: Zunehmende Autonomie bei noch unreifem PFC. Erwachsene: Flexible Selbstregulation (wenn gelernt!).' },
+      { faktor: 'Neurobiologisch', text: 'Amygdala (Alarmanlage) vs. Präfrontaler Cortex (Bremse). Bei Jugendlichen: Amygdala voll entwickelt, PFC erst mit 25 fertig. Bei Traumatisierten: PFC zusätzlich geschwächt.' },
+      { faktor: 'Bindung', text: 'Co-Regulation → internalisiertes Modell → Selbstregulation. Ohne sichere Co-Regulation: Kind muss sich SELBST regulieren → dysfunktionale Strategien (SVV, Substanzen, Dissoziation).' },
+      { faktor: 'Biosazialer Ansatz (Linehan)', text: 'Emotionale Vulnerabilität (Biologie) + invalidierendes Umfeld ("Stell dich nicht so an!") = Dysregulation. Beides zusammen → BPS/schwere Dysregulation.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Emotionale Störung', unterschied: 'Emotionale Störung = Diagnose (z.B. Depression, Angst). Dysregulation = Mechanismus, der vielen Störungen zugrunde liegt.' },
+      { was: 'Willentliches Fehlverhalten', unterschied: 'Dysregulation ≠ "Er will nicht" sondern "Er KANN nicht". Das Nervensystem ist überflutet — Willenskraft reicht nicht.' }
+    ],
+    komorbiditaeten: ['Transdiagnostisch — Dysregulation bei fast allen psychischen Störungen zentral'],
+    evidenzbasierte_interventionen: [
+      { methode: 'DBT Skills (Linehan)', evidenz: '★★★', beschreibung: '4 Module: Achtsamkeit, Stresstoleranz (TIPP-Skills: Temperature, Intense Exercise, Paced Breathing, Progressive Relaxation), Emotionsregulation, Zwischenmenschliche Fertigkeiten.' },
+      { methode: 'Emotionscoaching (Gottman)', evidenz: '★★★', beschreibung: 'Für Bezugspersonen: 1) Emotion wahrnehmen, 2) Als Lern-Chance nutzen, 3) Validieren, 4) Benennen helfen, 5) Grenzen setzen + Problemlösen.' },
+      { methode: 'RULER (Yale Center)', evidenz: '★★★', beschreibung: 'Schulbasiert: Recognizing, Understanding, Labeling, Expressing, Regulating Emotions. Mood Meter als tägliches Tool.' },
+      { methode: 'Körperbasierte Regulation', evidenz: '★★☆', beschreibung: 'Atemübungen (Box-Breathing: 4-4-4-4), Progressive Muskelentspannung, Yoga, Eiswürfel-Technik (Grounding), intensive körperliche Aktivität (Adrenalin abbauen).' }
+    ],
+    praxis_tipps: [
+      'Erst regulieren, dann reden: "Lass uns erstmal durchatmen" VOR jeder Problemlösung',
+      'Emotionen benennen: "Du bist gerade richtig wütend" — Benennen REDUZIERT Intensität um 30% (UCLA-Studie)',
+      'Validieren: "Es macht Sinn, dass du wütend bist" ≠ "Es ist ok, die Tür einzuschlagen". Gefühl validieren, Verhalten begrenzen',
+      'Skills VOR der Krise üben: "TIPP im Notfall" funktioniert nur, wenn es vorher geübt wurde',
+      'Individuelle Skills-Box: Jeder Jugendliche hat andere Strategien. Gemeinsam herausfinden: "Was hilft DIR?"',
+      'Emotionstagebuch: Tägliches Tracking von Emotionen, Intensität (0-10), Situation, Strategie. Muster erkennen',
+      'Modell sein: Eigene Emotionsregulation vorleben. "Ich bin gerade frustriert. Ich atme erstmal durch."'
+    ],
+    wann_ueberweisen: 'Bei schwerer Dysregulation (tägliche Krisen, SVV, Suizidalität): DBT/Skill-basierte Therapie. Bei V.a. BPS-Züge: Spezialisierte Diagnostik und Therapie.',
+    luxemburg_spezifisch: 'DBT-Angebote über CHL Kinder- und Jugendpsychiatrie. CePAS: Beratung zu Emotions-Themen. SCRIPT: SEL-Programme in Schulen.',
+    verwandte_wiki: ['pvt', 'selbstverletzung', 'bindungstheorie', 'resilienz'],
+    screening_domains: ['emotion'],
+    themen_ids: ['emotionsregulation', 'stressmanagement', 'achtsamkeit', 'impulskontrolle'],
+    verhaltens_ids: ['emotional-dysreguliert'],
+    leitfaden_ids: [],
+    quellen: ['Linehan, M.M. (2015). DBT Skills Training Manual. 2nd ed. Guilford.', 'Gross, J.J. (2015). Handbook of Emotion Regulation. 2nd ed. Guilford.', 'Gottman, J. & DeClaire, J. (1997). Raising an Emotionally Intelligent Child. Simon & Schuster.']
+  },
+  // --- Artikel 24: Jugendschutz Luxemburg ---
+  {
+    id: 'jugendschutz-luxemburg',
+    titel: 'Luxemburger Jugendschutzsystem',
+    aliases: ['Jugendschutz', 'Protection de la Jeunesse', 'Tribunal', 'ONE', 'Aide à l\'enfance'],
+    kategorie: 'recht-system',
+    icon: '⚖️',
+    farbe: '#D97706',
+    definition: 'Das Luxemburger Jugendschutzsystem basiert auf dem Gesetz vom 10. August 1992 (Protection de la Jeunesse) und wurde durch die Reform 2016 modernisiert. Es unterscheidet zwischen freiwilliger Hilfe (aide volontaire) und gerichtlich angeordneter Hilfe (aide judiciaire/placement). Zuständig: Office National de l\'Enfance (ONE), Tribunal de la Jeunesse, Service Central d\'Assistance Sociale (SCAS).',
+    altersgruppe: '0-18 Jahre (in Ausnahmefällen bis 21 Jahre verlängerbar).',
+    praevalenz: 'Ca. 2500 Minderjährige in Luxemburg erhalten aktuell Jugendhilfeleistungen. Ca. 800 fremdplatziert.',
+    icd10: { code: '-', label: 'Rechtlicher/institutioneller Rahmen' },
+    icd11: { code: '-', label: 'Rechtlicher/institutioneller Rahmen' },
+    erscheinungsbild: [
+      'Freiwillige Hilfe (ONE): Eltern stimmen zu. Ambulante Begleitung, Tagesgruppen, Erziehungsberatung. SCAS als Zugang.',
+      'Gerichtliche Hilfe (Tribunal): Bei Gefährdung + keine Kooperation der Eltern. Richter ordnet Maßnahmen an.',
+      'Maßnahmen-Spektrum: Ambulante Hilfe → Tageseinrichtung → Pflegefamilie → Stationäre Einrichtung → Geschlossene Unterbringung',
+      'ONE als Steuerungszentrale: Finanziert Einrichtungen, koordiniert Platzierungen, Qualitätssicherung.',
+      'Aide éducative en milieu ouvert (AEMO): Ambulante Hilfe in der Familie — häufigstes Angebot.',
+      'Placement: Fremd unter bringung in Einrichtung (CSEE, Kannerschlass, Elisabeth, etc.) oder Pflegefamilie (Famille d\'accueil).'
+    ],
+    ursachen: [
+      { faktor: 'Gesetzliche Basis', text: 'Loi du 10 août 1992 relative à la protection de la jeunesse. Reform 2016: Stärkung der Rechte des Kindes, Primat der freiwilligen Hilfe, Qualitätsstandards.' },
+      { faktor: 'Kindeswohlprimat', text: 'Art. 3 UN-Kinderrechtskonvention: Das Kindeswohl hat Vorrang. Luxemburg hat die KRK 1993 ratifiziert. Ombudsman fir Kanner a Jugendlecher (OKaJu) als unabhängige Kontrolle.' },
+      { faktor: 'Subsidiarität', text: 'Freiwillig vor gerichtlich. Ambulant vor stationär. Familie vor Fremdunterbringung. Geringster Eingriff, der Schutz gewährleistet.' },
+      { faktor: 'Akteure', text: 'ONE (Office National de l\'Enfance): Zentrale Behörde. SCAS: Zugang und Fallführung. Tribunal de la Jeunesse: Gerichtliche Anordnungen. CePAS: Schulische Jugendhilfe. OPJ (Organisme pour la protection de la Jeunesse): Familiäre Unterstützung.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Deutsches System', unterschied: 'Deutschland: Jugendamt als zentrale Behörde. Luxemburg: ONE + SCAS + Tribunal. Keine direkte 1:1-Übersetzung möglich.' },
+      { was: 'Strafrecht', unterschied: 'Jugendschutz ≠ Jugendstrafrecht. Jugendschutz: Kind als Opfer/Gefährdetes. Jugendstrafrecht: Kind als Täter. In Luxemburg: Beide beim Tribunal de la Jeunesse.' }
+    ],
+    komorbiditaeten: ['Systemwissen — relevant für ALLE Fachkräfte in der Jugendhilfe'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Freiwillige Hilfe (Aide volontaire)', evidenz: '★★★', beschreibung: 'Eltern und Kind stimmen zu. ONE koordiniert. Geringere Eskalation, bessere Kooperation. IMMER zuerst versuchen!' },
+      { methode: 'AEMO (Ambulante Hilfe)', evidenz: '★★★', beschreibung: 'Regelmäßige Besuche in der Familie, Elternberatung, Unterstützung bei Erziehungsfragen. Weniger invasiv als Platzierung.' },
+      { methode: 'Pflegefamilie', evidenz: '★★★', beschreibung: 'Bei Notwendigkeit der Fremdunterbringung: Pflegefamilie vor Einrichtung (besonders für kleine Kinder). Bindungskontinuität wichtig.' },
+      { methode: 'Stationäre Einrichtung', evidenz: '★★☆', beschreibung: 'Für ältere Kinder/Jugendliche wenn ambulante Hilfe nicht ausreicht. Therapeutische Wohngruppen, CSEE, Kannerschlass etc.' }
+    ],
+    praxis_tipps: [
+      'Signalement (Meldung): Im Zweifelsfall MELDEN. Lieber einmal zu viel als einmal zu wenig. Man meldet SORGEN, keine BEWEISE.',
+      'Dokumentation: Datum, Uhrzeit, was beobachtet/gesagt, wörtliche Zitate. Keine Interpretationen, nur Fakten.',
+      'Eltern informieren: WENN MÖGLICH Eltern über die Meldung informieren — AUSSER wenn es das Kind gefährdet.',
+      'Schweigepflicht vs. Meldepflicht: Bei Kindeswohlgefährdung hat Meldepflicht VORRANG vor Schweigepflicht.',
+      'Kooperation: Nie allein entscheiden. Team einbeziehen, SCAS kontaktieren, ggf. CePAS hinzuziehen.',
+      'Das Kind einbeziehen: Kinder haben das RECHT, gehört zu werden (Art. 12 KRK). Altersgerecht erklären, was passiert.'
+    ],
+    wann_ueberweisen: 'Bei Verdacht auf Kindeswohlgefährdung: SCAS kontaktieren (Beratung auch anonym möglich). Bei akuter Gefahr: Polizei 113. Bei sexuellem Missbrauch: ALUPSE.',
+    luxemburg_spezifisch: 'ONE: 247-73 100. SCAS: 247-82 478. OPJ: 247-73 270. Tribunal de la Jeunesse: Cité Judiciaire Luxembourg. OKaJu (Ombudsman fir Kanner): 26 123 124.',
+    verwandte_wiki: ['meldepflicht', 'hilfesystem-luxemburg'],
+    screening_domains: [],
+    themen_ids: ['kindeswohlgefaehrdung', 'recht'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Loi du 10 août 1992 relative à la protection de la jeunesse.', 'ONE (2020). Rapport d\'activités. Office National de l\'Enfance.', 'UN-Kinderrechtskonvention (1989), ratifiziert von Luxemburg 1993.']
+  },
+  // --- Artikel 25: Meldepflicht ---
+  {
+    id: 'meldepflicht',
+    titel: 'Meldepflicht & Schweigepflicht',
+    aliases: ['Signalement', 'Schweigepflicht', 'Anzeigepflicht', 'Secret professionnel', 'Kindeswohlgefährdung melden'],
+    kategorie: 'recht-system',
+    icon: '📢',
+    farbe: '#DC2626',
+    definition: 'In Luxemburg besteht eine GESETZLICHE Meldepflicht bei Kenntnis oder begründetem Verdacht auf Kindeswohlgefährdung (Art. 7 Loi du 10 août 1992). Diese Meldepflicht bricht die Schweigepflicht (secret professionnel, Art. 458 Code pénal). Eine Meldung (Signalement) geht an den Staatsanwalt (Procureur d\'État) oder den Jugendrichter. NICHT-Melden bei begründetem Verdacht ist strafbar!',
+    altersgruppe: 'Betrifft alle Minderjährigen (0-18 Jahre).',
+    praevalenz: 'Ca. 500-700 Signalements pro Jahr in Luxemburg.',
+    icd10: { code: '-', label: 'Rechtliche Pflicht' },
+    icd11: { code: '-', label: 'Rechtliche Pflicht' },
+    erscheinungsbild: [
+      'Meldepflichtige Situationen: Physische/sexuelle Gewalt, schwere Vernachlässigung, emotionaler Missbrauch, Kinderprostitution/-pornografie',
+      'Schweigepflicht (Art. 458 CP): Ärzte, Psychologen, Sozialarbeiter, Erzieher — alle an Schweigepflicht gebunden',
+      'AUSNAHME: Bei Kindesmisshandlung/Gefährdung → Meldepflicht bricht Schweigepflicht (Art. 7 Loi 1992)',
+      'Signalement = Sorge mitteilen, NICHT Beweis führen. Man muss nicht sicher sein — begründeter Verdacht reicht',
+      'Wege: Signalement an Procureur d\'État (Parquet), Jugendrichter, oder SCAS (für Beratung und Weiterleitung)',
+      'Immunität: Wer in gutem Glauben meldet, ist vor Strafverfolgung geschützt (Art. 7bis Loi 1992)'
+    ],
+    ursachen: [
+      { faktor: 'Gesetzliche Grundlage', text: 'Art. 7 Loi du 10 août 1992: Jede Person, die Kenntnis von Misshandlung oder Vernachlässigung eines Minderjährigen hat, muss den Procureur d\'État oder Jugendrichter informieren.' },
+      { faktor: 'Strafbarkeit des Nicht-Meldens', text: 'Art. 401bis Code pénal: Unterlassene Hilfeleistung/Nicht-Melden bei bekannter Kindesmisshandlung kann strafrechtlich verfolgt werden.' },
+      { faktor: 'Ethisches Dilemma', text: 'Spannung zwischen Vertrauensschutz (Schweigepflicht) und Kinderschutz (Meldepflicht). Das Gesetz ist klar: Kinderschutz geht VOR.' },
+      { faktor: 'Kinderrechte', text: 'Art. 19 UN-KRK: Kinder haben ein RECHT auf Schutz vor Gewalt, Misshandlung und Vernachlässigung. Die Meldepflicht setzt dieses Recht um.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Beratungsanfrage', unterschied: 'Bei Unsicherheit ZUERST SCAS kontaktieren (auch anonym). SCAS berät, ob ein formelles Signalement nötig ist.' },
+      { was: 'Sorge vs. Gefährdung', unterschied: 'Sorge: "Etwas stimmt nicht" → Beobachten, dokumentieren, SCAS beraten. Gefährdung: "Das Kind ist in Gefahr" → Sofort melden.' }
+    ],
+    komorbiditaeten: ['Rechtswissen — PFLICHT für alle Fachkräfte in der Jugendhilfe, Schule, Gesundheit'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Strukturiertes Signalement', evidenz: '★★★', beschreibung: 'Wer meldet? Über wen? Was beobachtet? Seit wann? Welche Gefährdungseinschätzung? → Schriftlich, sachlich, keine Interpretationen.' },
+      { methode: 'SCAS-Beratung vorgeschaltet', evidenz: '★★★', beschreibung: 'Bei Unsicherheit: SCAS anrufen, anonym beraten lassen. SCAS hilft einzuschätzen, ob Signalement nötig. Kein "Alleingang".' },
+      { methode: '4-Augen-Prinzip', evidenz: '★★☆', beschreibung: 'Gefährdungseinschätzung nie allein: Kolleg:in, Leitung, insofern erfahrene Fachkraft einbeziehen.' },
+      { methode: 'Dokumentation', evidenz: '★★★', beschreibung: 'Chronologisch, faktenbasiert, wörtliche Zitate. Unterscheide BEOBACHTUNG von INTERPRETATION. Dokumentation beginnt bei erster Sorge, nicht erst beim Signalement.' }
+    ],
+    praxis_tipps: [
+      'Im Zweifelsfall MELDEN — lieber einmal zu viel als zu wenig. Sie melden SORGEN, keine Beweise.',
+      'SCAS anrufen bei Unsicherheit: 247-82 478. Auch anonyme Beratung möglich.',
+      'Dokumentation sofort beginnen: Datum, Uhrzeit, was beobachtet, was gesagt (wörtlich), wer anwesend war',
+      'Kind informieren (wenn möglich): "Ich mache mir Sorgen um dich. Ich muss mit jemandem sprechen, der dir helfen kann."',
+      'NICHT selbst ermitteln: Keine Befragung des Kindes, kein Konfrontieren des mutmaßlichen Täters — das ist Aufgabe der Justiz',
+      'Eltern informieren: Grundsätzlich ja — AUSSER wenn dadurch das Kind gefährdet wird (z.B. Täter ist Elternteil)',
+      'Eigene Belastung beachten: Signalement-Situationen sind belastend. Supervision und Peer-Support nutzen.'
+    ],
+    wann_ueberweisen: 'Bei JEDER begründeten Sorge: SCAS (Beratung). Bei akuter Gefahr: Polizei 113. Bei sexueller Gewalt: ALUPSE. Bei Unsicherheit: Immer SCAS, nie allein entscheiden.',
+    luxemburg_spezifisch: 'Procureur d\'État: Cité Judiciaire, Plateau du St-Esprit, L-1475 Luxembourg. SCAS: 247-82 478. ALUPSE: 26 18 48 1. Polizei: 113. Kanner-Jugendtelefon: 116 111 (für Kinder, die selbst melden wollen).',
+    verwandte_wiki: ['jugendschutz-luxemburg', 'hilfesystem-luxemburg'],
+    screening_domains: [],
+    themen_ids: ['kindeswohlgefaehrdung', 'recht', 'sicherheit'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Loi du 10 août 1992 relative à la protection de la jeunesse.', 'Code pénal luxembourgeois, Art. 401bis, Art. 458.', 'ONE (2019). Guide pratique du signalement.']
+  },
+  // --- Artikel 26: Hilfesystem Luxemburg ---
+  {
+    id: 'hilfesystem-luxemburg',
+    titel: 'CePAS, SCAS, OPJ — Wer macht was?',
+    aliases: ['Hilfesystem', 'Anlaufstellen', 'Institutions', 'Aide à l\'enfance', 'Jugendhilfe Luxemburg'],
+    kategorie: 'recht-system',
+    icon: '🏛️',
+    farbe: '#2563EB',
+    definition: 'Überblick über die wichtigsten Akteure im Luxemburger Jugendhilfe- und Kinderschutzsystem. Wer ist wofür zuständig? Wie greifen die Systeme ineinander? Dieses Wissen ist PFLICHT für alle Fachkräfte, die mit Kindern und Jugendlichen arbeiten.',
+    altersgruppe: '0-18 Jahre (z.T. bis 21/27 Jahre).',
+    praevalenz: 'Systemwissen — für alle Fachkräfte relevant.',
+    icd10: { code: '-', label: 'Institutioneller Überblick' },
+    icd11: { code: '-', label: 'Institutioneller Überblick' },
+    erscheinungsbild: [
+      'ONE (Office National de l\'Enfance): Zentrale Behörde für Kinder- und Jugendhilfe. Finanziert, koordiniert, qualitätssichert. Tel: 247-73 100',
+      'SCAS (Service Central d\'Assistance Sociale): Zugang zum Hilfesystem. Beratung, Fallführung, Vermittlung. Erste Anlaufstelle bei Sorgen. Tel: 247-82 478',
+      'CePAS (Centre psycho-social et d\'accompagnement scolaires): Schulbasierte psychosoziale Begleitung. SSE (Service socio-éducatif) in jeder Schule. Beratung für Schüler, Eltern, Lehrer.',
+      'OPJ (Organisme pour la protection de la Jeunesse): Familiäre Unterstützung, Mediation, Erziehungshilfe. Arbeitet im Auftrag des Jugendrichters.',
+      'Tribunal de la Jeunesse: Jugendgericht. Ordnet Schutzmaßnahmen an wenn freiwillige Hilfe nicht ausreicht/verweigert wird.',
+      'CSEE/Einrichtungen: Stationäre Jugendhilfe. Dreiborn, Schrassig (geschlossen), zahlreiche Konventions-Einrichtungen.',
+      'Fondation Kannerschlass: Große Stiftung mit vielfältigen Angeboten (AEMO, Wohngruppen, Tagesgruppen, Pflegefamilien).',
+      'ALUPSE: Anlaufstelle für Opfer von sexueller Gewalt. Tel: 26 18 48 1'
+    ],
+    ursachen: [
+      { faktor: 'Systemlogik', text: 'Weg eines Falls: Sorge → SCAS (Beratung) → ONE (Koordination) → Freiwillige Hilfe ODER Signalement → Tribunal → Gerichtliche Maßnahme.' },
+      { faktor: 'Schulisches System', text: 'CePAS/SSE: Niedrigschwellig in der Schule. Erkennt Probleme früh. Vermittelt an SCAS oder direkt an spezialisierte Dienste.' },
+      { faktor: 'Gesundheitssystem', text: 'CHL/CHNP: Kinder- und Jugendpsychiatrie. Hôpital Kirchberg: Pädiatrische Abteilung. Kinder-Jugend-Psychotherapeuten in freier Praxis.' },
+      { faktor: 'Vernetzung', text: 'Alle Akteure sollen vernetzt arbeiten. In der Praxis: Schnittstellen sind oft problematisch. Gute Vernetzung = besserer Kinderschutz.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Wer zuerst?', unterschied: 'Bei Unsicherheit/allgemeiner Sorge: SCAS. Bei schulischen Problemen: CePAS/SSE. Bei akuter Gefährdung: Polizei 113 + Signalement an Procureur. Bei sexueller Gewalt: ALUPSE.' }
+    ],
+    komorbiditaeten: ['Systemwissen — PFLICHT für alle Fachkräfte'],
+    evidenzbasierte_interventionen: [
+      { methode: 'SCAS als Erstanlaufstelle', evidenz: '★★★', beschreibung: 'SCAS berät, orientiert, vermittelt. Auch anonyme Beratung möglich. Immer erster Schritt wenn man unsicher ist.' },
+      { methode: 'CePAS in der Schule', evidenz: '★★★', beschreibung: 'SSE in jeder Sekundarschule. SePAS in Grundschulen. Niedrigschwellig, vertraulich, kostenlos. Vermittlung an externe Stellen.' },
+      { methode: 'Netzwerkarbeit', evidenz: '★★★', beschreibung: 'Regelmäßige Abstimmung zwischen Schule, Jugendhilfe, Therapie, Familie. "Table ronde" bei komplexen Fällen.' },
+      { methode: 'Case Management', evidenz: '★★☆', beschreibung: 'Ein Dienst (meist SCAS oder ONE) koordiniert alle Hilfen. Verhindert Parallelstrukturen und "Durch-die-Raster-fallen".' }
+    ],
+    praxis_tipps: [
+      'Telefonnummern im Handy speichern: SCAS (247-82 478), ALUPSE (26 18 48 1), Polizei (113), Kanner-Jugendtelefon (116 111)',
+      'Bei Unsicherheit: IMMER SCAS anrufen — Beratung ist auch anonym möglich',
+      'Vernetzung pflegen: Persönliche Kontakte zu SSE, SCAS, CePAS aufbauen — im Ernstfall spart das Zeit',
+      'Schweigepflicht beachten: Nur mit Einverständnis der Eltern/des Jugendlichen Daten teilen — AUSSER bei Gefährdung',
+      'Sprache beachten: System ist zweisprachig (FR/DE). Viele Klienten sprechen Luxemburgisch, Portugiesisch, etc. → Dolmetscher einsetzen',
+      'Warten dokumentieren: Wartezeiten auf Plätze/Therapie dokumentieren — das ist relevant für Fallführung und Beschwerde'
+    ],
+    wann_ueberweisen: 'SCAS: Bei jeder Sorge. CePAS: Bei schulischen/psychosozialen Problemen. ONE: Bei Bedarf an Jugendhilfeleistungen. Psychiatrie: Bei akuter psychischer Krise. Polizei: Bei akuter Gefahr.',
+    luxemburg_spezifisch: 'Alle genannten Institutionen sind luxemburgisch. ONE: www.one.lu. SCAS: Abteilung des Ministeriums. CePAS: www.cepas.lu. OKaJu (Ombudsman): www.okaju.lu.',
+    verwandte_wiki: ['jugendschutz-luxemburg', 'meldepflicht'],
+    screening_domains: [],
+    themen_ids: ['recht', 'vernetzung'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['ONE (2020). Rapport d\'activités. Office National de l\'Enfance.', 'Ministère de l\'Éducation nationale (2021). CePAS Guide.', 'Loi du 10 août 1992 relative à la protection de la jeunesse.']
+  },
+  // --- Artikel 27: Aménagements raisonnables ---
+  {
+    id: 'amenagements-raisonnables',
+    titel: 'Aménagements raisonnables',
+    aliases: ['Nachteilsausgleich', 'Anpassungen', 'Inklusion', 'Reasonable Accommodations', 'Förderbedarf'],
+    kategorie: 'recht-system',
+    icon: '♿',
+    farbe: '#7C3AED',
+    definition: 'Aménagements raisonnables (angemessene Anpassungen) sind individuelle Maßnahmen in der Schule, die Schüler:innen mit besonderen Bedürfnissen (Behinderung, Lernschwierigkeiten, psychische Störungen) ermöglichen, gleichberechtigt am Unterricht teilzunehmen. Gesetzlich verankert seit 2017 (Loi du 20 juillet 2018). Keine Bevorzugung — sondern Ausgleich eines Nachteils.',
+    altersgruppe: 'Schulpflichtige Kinder und Jugendliche. Auch in Berufsausbildung und Hochschule.',
+    praevalenz: 'Ca. 5-10% aller Schüler:innen haben Anspruch. Bei Kindern in der Jugendhilfe: Deutlich häufiger (ADHS, Trauma, Lernschwächen).',
+    icd10: { code: '-', label: 'Schulrechtliche Maßnahme' },
+    icd11: { code: '-', label: 'Schulrechtliche Maßnahme' },
+    erscheinungsbild: [
+      'Zeitliche Anpassungen: Mehr Zeit bei Prüfungen (z.B. +25% oder +50%), verlängerte Abgabefristen',
+      'Räumliche Anpassungen: Separater Prüfungsraum, fester Sitzplatz vorne, Rückzugsraum',
+      'Technische Hilfsmittel: Laptop statt Handschrift, Textvorlese-Software, Taschenrechner, vergrößerte Texte',
+      'Didaktische Anpassungen: Vereinfachte Aufgabenstellung, mündliche statt schriftliche Prüfung, Nachteilsausgleich in Bewertung',
+      'Organisatorische Anpassungen: Reduzierter Stundenplan, Pausen-Regelung, Erlaubnis den Raum zu verlassen',
+      'Beispiele für psychische Störungen: ADHS → Bewegungspausen, Timer, reizarmer Arbeitsplatz. Angst → Mündliche Prüfung unter 4 Augen. Depression → Reduziertes Pensum. Trauma → Rückzugsraum, keine Gruppenarbeit erzwingen'
+    ],
+    ursachen: [
+      { faktor: 'Gesetzlich', text: 'Loi du 20 juillet 2018 portant création de la Commission des Aménagements Raisonnables (CAR). Jeder Schüler mit diagnostiziertem Bedarf hat RECHT auf Anpassungen.' },
+      { faktor: 'UN-BRK', text: 'UN-Behindertenrechtskonvention Art. 24: Recht auf inklusive Bildung. Luxemburg hat die BRK 2011 ratifiziert.' },
+      { faktor: 'Antragsprozess', text: 'Antrag über die Schule (SSE/Régent) → Diagnose beifügen → Commission des Aménagements Raisonnables (CAR) prüft → Entscheidung → Umsetzung in der Schule.' },
+      { faktor: 'Diagnose nötig', text: 'Offizielle Diagnose durch Arzt, Psychologe oder CePAS-Fachkraft. Für psychische Störungen: Kinder-/Jugendpsychiater oder zugelassener Psychologe.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Bevorzugung', unterschied: 'Aménagements ≠ Bevorzugung. Beispiel: Ein Kind mit gebrochenem Bein bekommt einen Aufzug — das ist kein Vorteil, sondern Ausgleich.' },
+      { was: 'Plan de réussite scolaire (PRS)', unterschied: 'PRS: Allgemeine schulische Förderung für ALLE Schüler mit Schwierigkeiten, ohne formale Diagnose. Aménagements: Formell, mit Diagnose, über CAR.' }
+    ],
+    komorbiditaeten: ['Relevant bei: ADHS, Legasthenie/Dyskalkulie, Autismus, Depression, Angststörungen, PTBS, Essstörungen, körperliche Behinderungen'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Individuelle Anpassungsplanung', evidenz: '★★★', beschreibung: 'Maßnahmen auf das individuelle Kind abstimmen. Was braucht DIESES Kind? Nicht Schema F, sondern maßgeschneidert.' },
+      { methode: 'Regelmäßige Evaluation', evidenz: '★★★', beschreibung: 'Aménagements jährlich überprüfen: Helfen sie? Braucht es mehr/weniger/andere? Kind und Eltern einbeziehen.' },
+      { methode: 'Lehrer:innen-Sensibilisierung', evidenz: '★★☆', beschreibung: 'Lehrkräfte müssen verstehen WARUM ein Kind Anpassungen braucht und WIE sie umzusetzen sind. Sonst: Umsetzung scheitert.' },
+      { methode: 'Zusammenarbeit Schule-Jugendhilfe', evidenz: '★★☆', beschreibung: 'Bezugspersonen können Schule über Bedürfnisse informieren (mit Einverständnis). Regelmäßige Abstimmung SSE + Bezugsperson.' }
+    ],
+    praxis_tipps: [
+      'Aktiv Aménagements beantragen: Viele Kinder in der Jugendhilfe HABEN Anspruch, aber niemand hat den Antrag gestellt',
+      'Diagnose beschaffen: Wenn Kind keine aktuelle Diagnose hat → CePAS oder Kinder-/Jugendpsychiater einschalten',
+      'Konkret formulieren: Nicht "braucht Unterstützung" sondern "braucht 50% mehr Zeit bei schriftlichen Prüfungen"',
+      'An Prüfungen denken: Besonders Examens de fin d\'études und Examen de passage — Aménagements VORHER beantragen!',
+      'Kind einbeziehen: "Was würde dir in der Schule helfen?" — Kinder wissen oft am besten, was sie brauchen',
+      'Dokumentieren wenn nicht umgesetzt: Wenn Lehrer Aménagements nicht umsetzen → schriftlich beim Direktor melden'
+    ],
+    wann_ueberweisen: 'CePAS/SSE: Für schulische Fragen und Antragstellung. SREA (Service de Rééducation Précoce): Für Kinder <6 Jahre. CAR-Sekretariat: Für Antragsformulare und Infos.',
+    luxemburg_spezifisch: 'CAR-Antrag über: car@men.lu. Info-Broschüre: men.lu/amenagements. CePAS berät und unterstützt bei Antragstellung. Für Hochschulstudium: Service des Étudiants à Besoins Spécifiques (Uni.lu).',
+    verwandte_wiki: ['hilfesystem-luxemburg', 'adhs', 'schulvermeidung'],
+    screening_domains: ['schule'],
+    themen_ids: ['schule', 'lernen', 'inklusion'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Loi du 20 juillet 2018 portant création de la CAR.', 'Ministère de l\'Éducation nationale (2019). Guide Aménagements Raisonnables.', 'UN-Behindertenrechtskonvention (2006), Art. 24.']
+  },
+  // --- Artikel 28: Parentifizierung ---
+  {
+    id: 'parentifizierung',
+    titel: 'Parentifizierung',
+    aliases: ['Parentification', 'Rollenumkehr', 'Adultification', 'Young Carer', 'Kindliche Überverantwortung'],
+    kategorie: 'konzepte',
+    icon: '👶➡️👨',
+    farbe: '#D97706',
+    definition: 'Parentifizierung bezeichnet die Umkehr der Eltern-Kind-Rolle: Das Kind übernimmt Verantwortung und Fürsorge, die eigentlich den Erwachsenen zukommt. Zwei Formen: Instrumentelle Parentifizierung (Haushalt, Geschwisterbetreuung, Finanzen) und Emotionale Parentifizierung (Trostspender, Mediator, Vertrauter für Erwachsenenprobleme). Besonders die emotionale Form ist entwicklungsschädigend.',
+    altersgruppe: 'Kann in jedem Alter auftreten. Häufig bei ältesten Kindern, Einzelkindern, Kindern psychisch kranker oder suchtkranker Eltern.',
+    praevalenz: 'Schwer zu erfassen. Schätzung: 10-20% der Kinder übernehmen unangemessene Verantwortung. In Jugendhilfe-Kontexten: Deutlich häufiger.',
+    icd10: { code: 'Z62.6', label: 'Unangemessener elterlicher Druck und andere abnorme Erziehungsmuster' },
+    icd11: { code: 'QE70', label: 'Problems associated with interpersonal interactions in childhood' },
+    erscheinungsbild: [
+      'Instrumentell: Kind kocht, putzt, kümmert sich um Geschwister, übersetzt für Eltern, verwaltet Geld',
+      'Emotional: Kind tröstet weinende Mutter, hört sich Eheprobleme an, vermittelt zwischen streitenden Eltern',
+      'Loyalitätskonflikte: Kind fühlt sich verantwortlich für das Wohlbefinden der Eltern. Kann sich NICHT erlauben, eigene Bedürfnisse zu haben',
+      'Pseudo-Reife: Wirkt "reifer als sein Alter", verantwortungsvoll, "pflegeleicht" — wird oft als positiv fehlinterpretiert',
+      'Versteckte Symptome: Perfektionismus, Ängstlichkeit, Schuldgefühle, Schlafstörungen, psychosomatische Beschwerden',
+      'Langzeitfolgen: Co-Abhängigkeit, Burnout, Depression, Schwierigkeiten eigene Bedürfnisse zu erkennen/äußern, Helfersyndrom'
+    ],
+    ursachen: [
+      { faktor: 'Psychische Erkrankung der Eltern', text: 'Depression, Sucht, Psychose, BPS → Elternteil kann Rolle nicht ausfüllen → Kind springt ein. Ca. 3,8 Millionen Kinder in der EU haben einen psychisch kranken Elternteil.' },
+      { faktor: 'Trennung/Scheidung', text: 'Kind als Vermittler, Spion, Trostspender, Partnerersatz. "Sag deinem Vater..." oder "Nur du verstehst mich."' },
+      { faktor: 'Migration/Armut', text: 'Kind als Dolmetscher, Behördengang-Begleiter, Verantwortlicher für jüngere Geschwister weil Eltern arbeiten.' },
+      { faktor: 'Kulturelle Faktoren', text: 'In manchen Kulturen: Ältere Kinder haben Pflichten gegenüber der Familie. Wichtig: Kulturelle Norm ≠ automatisch Parentifizierung. ENTSCHEIDEND: Leidet das Kind? Fehlen kindgerechte Freiräume?' },
+      { faktor: 'PVT-Perspektive', text: 'Das Kind geht in "Fawn" (Anpassung): Eigene Bedürfnisse unterdrücken, Bezugsperson regulieren, um Beziehung/Sicherheit zu sichern. Überlebensnotwendig, aber entwicklungsschädigend.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Altersgerechte Mithilfe', unterschied: 'Mithilfe: Aufgaben dem Alter entsprechend, Kind hat trotzdem Freizeit und Kindheit. Parentifizierung: Unangemessene Last, Kind kann keine Kindheit leben.' },
+      { was: 'Resilienz', unterschied: 'Manche parentifizierte Kinder entwickeln Stärken (Empathie, Organisationsfähigkeit). Das macht die Parentifizierung NICHT positiv — es sind Überlebenskompetenzen.' }
+    ],
+    komorbiditaeten: ['Depression (30-40%)', 'Angststörungen (25%)', 'Essstörungen (15%)', 'Beziehungsprobleme im Erwachsenenalter', 'Burnout/Helfersyndrom', 'Bindungsprobleme'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Eltern stärken', evidenz: '★★★', beschreibung: 'NICHT das Kind konfrontieren ("Du musst weniger machen"), SONDERN die Eltern befähigen, ihre Rolle wieder einzunehmen. Eltern-Therapie, Suchtbehandlung, Psychiatrie.' },
+      { methode: 'Entlastung des Kindes', evidenz: '★★★', beschreibung: 'Konkrete Entlastung organisieren: Haushaltshilfe, Geschwisterbetreuung, Schulsozialarbeit. Dem Kind "Kindheit zurückgeben".' },
+      { methode: 'Psychoedukation', evidenz: '★★☆', beschreibung: 'Dem Kind erklären: "Es ist nicht deine Aufgabe, für deine Mama zu sorgen. DU bist das Kind." Oft zum ersten Mal gehört!' },
+      { methode: 'Young Carer Programme', evidenz: '★★☆', beschreibung: 'Spezielle Angebote für Kinder psychisch kranker Eltern: Peer-Gruppen, Freizeitangebote, Psychoedukation über die Erkrankung der Eltern.' }
+    ],
+    praxis_tipps: [
+      'ERKENNEN ist der erste Schritt: Pseudo-reife Kinder werden oft übersehen. "Er ist ja so brav" → Genauer hinschauen!',
+      'Nicht das Kind "bestrafen": Verantwortung wegnehmen = dem Kind seine Identität nehmen. LANGSAM und mit Ersatz-Identitätsangeboten',
+      'Schuldgefühle antizipieren: "Wenn ich weniger für Mama sorge, geht es ihr schlecht" → Validieren und entlasten',
+      'Stärken anerkennen UND begrenzen: "Du bist unglaublich verantwortungsvoll — UND du darfst Kind sein"',
+      'Geschwisterdynamik beachten: Oft ist EIN Kind parentifiziert, andere nicht. Das hat Folgen für die Geschwisterbeziehung',
+      'Eigene Parentifizierung reflektieren: Viele Fachkräfte in der Jugendhilfe waren selbst parentifiziert — Helfersyndrom als Langzeitfolge',
+      'Eltern NICHT beschuldigen: "Ihre Krankheit hat dazu geführt, dass Ihr Kind zu viel Verantwortung übernommen hat. Lassen Sie uns gemeinsam schauen, was wir ändern können."'
+    ],
+    wann_ueberweisen: 'Bei schwerer Parentifizierung: Familientherapie. Bei psychisch kranken Eltern: Psychiatrie + Eltern-Kind-Programm. Bei Young Carers: Spezielle Beratungsangebote.',
+    luxemburg_spezifisch: 'SCAS: Familienunterstützung. Fondation Kannerschlass: AEMO für belastete Familien. Initiativ Liewensufank: Unterstützung bei postpartaler Depression. Associations des proches aidants: Unterstützung für pflegende Angehörige (auch für Kinder!).',
+    verwandte_wiki: ['bindungstheorie', 'depression', 'bindungsstoerung', 'resilienz'],
+    screening_domains: ['familie'],
+    themen_ids: ['familienrolle', 'verantwortung', 'selbstfuersorge'],
+    verhaltens_ids: ['parentifiziert'],
+    leitfaden_ids: ['elterngespraech'],
+    quellen: ['Boszormenyi-Nagy, I. & Spark, G.M. (1973). Invisible Loyalties. Routledge.', 'Hooper, L.M. (2007). The Application of Attachment Theory and Family Systems Theory to the Phenomena of Parentification. The Family Journal.', 'Leu, A. & Becker, S. (2017). Young Carers. In: Becker, F. et al. (Eds.), Young Carers in Europe.']
+  }
 ];

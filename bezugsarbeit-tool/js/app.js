@@ -446,6 +446,7 @@ function openThemaPanel(katId, themaId) {
     </div>
     <div class="thema-panel-body">
       <p style="color:var(--text-light);font-size:13px;margin-bottom:16px;">${thema.beschreibung}</p>
+      ${typeof findWikiForThema === 'function' && findWikiForThema(themaId) ? '<div style="margin-bottom:14px;">' + renderWikiLink(findWikiForThema(themaId).id) + '</div>' : ''}
 
       ${renderArbeitsblaetter(thema.id)}
 
@@ -2552,6 +2553,7 @@ function renderDashboard() {
   renderNotizbuch();
   renderGespraechsleitfaedenWidget();
   renderFallbeispieleWidget();
+  renderWikiTeaserWidget();
 }
 
 // ---- DASHBOARD SUMMARY — "Alles auf einen Blick" ----
@@ -4822,6 +4824,7 @@ function renderRoadmapPhase(roadmap, phase, idx) {
                       ${kat ? `<span class="roadmap-thema-kat" style="color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.titel}</span>` : ''}
                     </div>
                     <div class="roadmap-thema-actions">
+                      ${typeof findWikiForThema === 'function' && findWikiForThema(t.id) ? `<button class="btn-icon btn-xs" title="Wiki-Artikel" onclick="openWikiArtikel('${findWikiForThema(t.id).id}')" style="color:#3B82F6;">📚</button>` : ''}
                       <button class="btn-icon btn-xs" title="Thema öffnen" onclick="openRoadmapThema('${t.id}')">📋</button>
                       <button class="btn-icon btn-xs" title="Entfernen" onclick="removeRoadmapThema(${phase.nr}, ${ti})">✕</button>
                     </div>
@@ -5413,6 +5416,7 @@ function renderScreeningErgebnis(scr) {
         ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:3px;">ICD-10: ${d.icd}</div>` : ''}
         <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
         ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#3B82F6;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#F0F9FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1E40AF;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
+        ${(typeof findWikiForScreeningDomain === 'function' && findWikiForScreeningDomain(d.id)) ? renderWikiLink(findWikiForScreeningDomain(d.id).id) : ''}
       </div>`;
     }).join('') + '</div>'
     + '<div style="font-size:11px;color:#6B7280;padding:8px 12px;margin-top:8px;background:#F9FAFB;border-radius:6px;line-height:1.5;">ℹ️ <strong>Was bedeutet „auffällig"?</strong> Scores über dem Cutoff-Wert deuten auf erhöhte Belastung hin. Diese Bereiche sollten im Förderplan priorisiert und bei der 5P-Analyse als „Presenting" aufgenommen werden.</div>';
@@ -6173,6 +6177,14 @@ function renderVerhaltensEintrag(e, farbe) {
     html += '</div>';
   }
 
+  // Wiki-Link
+  if (typeof findWikiForVerhalten === 'function') {
+    var wikiArt = findWikiForVerhalten(e.id);
+    if (wikiArt) {
+      html += '<div style="margin-top:8px;">' + renderWikiLink(wikiArt.id) + '</div>';
+    }
+  }
+
   // SOAP-Übernahme Button
   html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid #E5E7EB;display:flex;gap:8px;flex-wrap:wrap;">';
   var soapText = e.titel + ': ' + e.wie_es_aussieht.slice(0, 3).join('; ');
@@ -6913,4 +6925,34 @@ function findWikiForVerhalten(verhaltensId) {
   return WIKI_ARTIKEL.find(function(a) {
     return a.verhaltens_ids && a.verhaltens_ids.indexOf(verhaltensId) !== -1;
   });
+}
+
+function renderWikiTeaserWidget() {
+  var container = document.getElementById('gespraechsleitfaeden-widget');
+  if (!container || typeof WIKI_ARTIKEL === 'undefined' || WIKI_ARTIKEL.length === 0) return;
+
+  // Pick a pseudo-random article based on the day
+  var dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  var artikel = WIKI_ARTIKEL[dayOfYear % WIKI_ARTIKEL.length];
+  var kat = WIKI_KATEGORIEN.find(function(k) { return k.id === artikel.kategorie; });
+
+  var html = '<div class="card" style="margin-top:16px;">';
+  html += '<div class="card-header">';
+  html += '<span>📚</span><div class="card-title">Wiki-Artikel des Tages</div>';
+  html += '</div>';
+  html += '<div class="card-body" style="padding:14px;">';
+  html += '<div onclick="openWikiArtikel(\'' + artikel.id + '\')" style="cursor:pointer;padding:14px;border-radius:10px;background:' + (artikel.farbe || '#3B82F6') + '10;border:1px solid ' + (artikel.farbe || '#3B82F6') + '25;transition:transform 0.15s;">';
+  html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">';
+  html += '<span style="font-size:28px;">' + (artikel.icon || '📖') + '</span>';
+  html += '<div>';
+  html += '<div style="font-weight:700;font-size:14px;color:' + (artikel.farbe || '#1E40AF') + ';">' + artikel.titel + '</div>';
+  if (kat) html += '<div style="font-size:11px;color:#6B7280;">' + kat.icon + ' ' + kat.titel + '</div>';
+  html += '</div></div>';
+  html += '<div style="font-size:12px;color:#374151;line-height:1.5;">' + (artikel.definition || '').substring(0, 180) + '...</div>';
+  html += '<div style="margin-top:8px;font-size:11px;color:#3B82F6;font-weight:600;">📚 Artikel lesen →</div>';
+  html += '</div>';
+  html += '<div style="text-align:center;margin-top:10px;"><button class="btn btn-sm" onclick="showProfilTab(\'wiki\')" style="font-size:11px;padding:4px 14px;background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;border-radius:6px;cursor:pointer;">Alle ' + WIKI_ARTIKEL.length + ' Wiki-Artikel anzeigen</button></div>';
+  html += '</div></div>';
+
+  container.insertAdjacentHTML('beforeend', html);
 }

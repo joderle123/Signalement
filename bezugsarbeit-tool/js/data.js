@@ -18725,4 +18725,559 @@ var WIKI_ARTIKEL = [
     leitfaden_ids: [],
     quellen: ['Yalom, I.D. & Leszcz, M. (2020). The Theory and Practice of Group Psychotherapy. Basic Books.', 'Shechtman, Z. (2007). Group Counseling and Psychotherapy with Children and Adolescents. Routledge.', 'Petermann, F. & Petermann, U. (2017). Training sozialer Kompetenzen bei Kindern und Jugendlichen. Beltz.']
   },
+
+  {
+    id: 'mentalisierung',
+    titel: 'Mentalisierung (Fonagy)',
+    aliases: ['Mentalisierung', 'Mentalization', 'Mentalizing', 'Fonagy', 'Theory of Mind', 'Reflexive Funktion', 'MBT'],
+    kategorie: 'konzepte',
+    icon: '🪞',
+    farbe: '#9b59b6',
+    definition: 'Mentalisierung bezeichnet die Fähigkeit, eigenes und fremdes Verhalten im Zusammenhang mit mentalen Zuständen (Gedanken, Gefühle, Wünsche, Absichten) zu verstehen und zu interpretieren. Peter Fonagy und Kollegen haben dieses Konzept am University College London entwickelt und in die klinische Praxis gebracht. Mentalisierung entwickelt sich in sicheren Bindungsbeziehungen: Ein Kind lernt, innere Zustände zu verstehen, wenn seine Bezugspersonen seine Gefühle spiegeln und benennen. Mentalisierungsbasierte Therapie (MBT) ist eine evidenzbasierte Behandlung für Borderline-PS.',
+    altersgruppe: 'Entwicklung ab früher Kindheit, Konzept relevant für alle Altersgruppen',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Dimensionen der Mentalisierung', items: ['Selbst vs. Andere: Eigene mentale Zustände vs. die anderer verstehen', 'Kognitiv vs. Affektiv: Gedanken verstehen vs. Gefühle nachempfinden', 'Implizit vs. Explizit: Automatisch-intuitiv vs. bewusst-reflektiert', 'Innen vs. Außen: Innere Zustände vs. äußere Merkmale als Quelle', 'Gute Mentalisierung = flexibles Wechseln zwischen allen Dimensionen']},
+      {section: 'Prä-mentalisierende Modi (bei Stress/Versagen)', items: ['Psychisches Äquivalenzdenken: "Wie ich fühle = wie es ist" (Gedanke = Realität)', 'Als-ob-Modus: Reden über Gefühle ohne echte emotionale Verbindung', 'Teleologischer Modus: Nur sichtbare Handlungen zählen ("Wenn du mich liebst, zeig es mir")', 'Diese Modi sind normal bei kleinen Kindern — problematisch bei Jugendlichen/Erwachsenen']}
+    ],
+    ursachen: [
+      {section: 'Entwicklung der Mentalisierungsfähigkeit', items: ['Sichere Bindung = Grundlage für Mentalisierung', 'Marked Mirroring: Bezugsperson spiegelt Gefühle des Kindes markiert ("Du bist wohl wütend!")', 'Kontingenzerfahrung: Kind erlebt, dass seine Signale verstanden und beantwortet werden', 'Trauma und Vernachlässigung stören die Mentalisierungsentwicklung massiv', 'BPS: Mentalisierungsversagen unter Stress → emotionale Dysregulation → impulsives Handeln']},
+      {section: 'Epistemic Trust (Fonagy)', items: ['Epistemisches Vertrauen: Grundvertrauen, dass andere Menschen zuverlässige Informationsquellen sind', 'Entwickelt sich in sicheren Bindungsbeziehungen', 'Epistemische Vigilanz: Chronisches Misstrauen gegenüber Information von anderen', 'Epistemische Erstarrung: Geschlossenes System — keine neue Information dringt durch', 'Therapeutisches Ziel: Epistemisches Vertrauen wiederherstellen']}
+    ],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'MBT (Mentalisierungsbasierte Therapie)', beschreibung: 'Evidenzbasierte Therapie für Borderline-PS. Fokus: Mentalisierung unter Stress aufrechterhalten. Techniken: Neugierige Haltung, Stoppen und Stehen, Mentalisierungs-Monitoring. Evidenz: Reduktion von Suizidalität und Selbstverletzung.'},
+      {name: 'MBT-A (für Adoleszente)', beschreibung: 'Adaptierte Version: 12-Monats-Programm, Einzel- und Gruppentherapie, Familienarbeit. Evidenz für Reduktion von Selbstverletzung und Depression bei Jugendlichen.'},
+      {name: 'Mentalisierungsförderung in der Jugendhilfe', beschreibung: 'Haltung statt Technik: Neugier vor Gewissheit, Nicht-Wissen-Position, eigene Gefühle transparent benennen. "Ich frage mich, ob du dich gerade allein gelassen fühlst..."'}
+    ],
+    praxis_tipps: [
+      'Neugierige Haltung: "Ich frage mich, was in dir vorgeht..." statt "Du fühlst dich wütend"',
+      'Eigene mentale Zustände transparent machen: "Das macht mich gerade unsicher"',
+      'Nicht-Wissen-Position: "Hilf mir zu verstehen..." — auch wenn man glaubt, es zu wissen',
+      'Bei Eskalation: Erst eigene Mentalisierung wiederherstellen, dann die des Jugendlichen',
+      'Stoppen und Stehen: Wenn Mentalisierung versagt → Pause, nicht weitermachen',
+      'Mentalisierungskette: Was ist passiert? → Was hast du gedacht? → Was gefühlt? → Was getan?',
+      'Im Team: Mentalisierung über den Jugendlichen im Team üben (nicht über ihn reden, ihn verstehen)',
+      'Cave: Mentalisierung unter Stress bricht zusammen — das ist normal, auch bei Fachkräften',
+      'Epistemisches Vertrauen aufbauen: Authentisch sein, Fehler eingestehen, zuverlässig handeln'
+    ],
+    wann_ueberweisen: 'MBT empfehlen bei: Borderline-PS (Verdacht), chronischer Selbstverletzung, schwerer Emotionsregulationsstörung, Beziehungsproblemen mit Mentalisierungsversagen. MBT-Therapeuten über Anna Freud Centre oder nationale Fachgesellschaften.',
+    luxemburg_spezifisch: 'MBT ist in Luxemburg begrenzt verfügbar. Einige Therapeuten haben MBT-Ausbildung. Fortbildungen über internationale Institute (Anna Freud Centre, MBT-Netzwerk). CNS übernimmt Psychotherapiekosten.',
+    verwandte_wiki: ['bindungstheorie', 'borderline', 'emotionsregulation', 'schematherapie'],
+    screening_domains: [],
+    themen_ids: ['beziehung', 'emotionen', 'reflexion'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Fonagy, P. et al. (2002). Affect Regulation, Mentalization, and the Development of the Self. Other Press.', 'Bateman, A. & Fonagy, P. (2016). Mentalization-Based Treatment for Personality Disorders. Oxford University Press.', 'Taubner, S. & Volkert, J. (2017). Mentalisierungsbasierte Therapie für Adoleszente. Vandenhoeck & Ruprecht.']
+  },
+  {
+    id: 'salutogenese',
+    titel: 'Salutogenese (Antonovsky)',
+    aliases: ['Salutogenese', 'Salutogenesis', 'Antonovsky', 'Kohärenzgefühl', 'SOC', 'Sense of Coherence', 'Gesundheitsentstehung'],
+    kategorie: 'konzepte',
+    icon: '🌱',
+    farbe: '#9b59b6',
+    definition: 'Die Salutogenese (von lat. salus = Gesundheit, griech. genesis = Entstehung) wurde von Aaron Antonovsky entwickelt und stellt die Frage: "Was hält Menschen gesund?" — im Gegensatz zur Pathogenese ("Was macht krank?"). Kernkonzept ist das Kohärenzgefühl (Sense of Coherence, SOC): die grundlegende Überzeugung, dass das Leben verstehbar, handhabbar und sinnvoll ist. Ein starkes Kohärenzgefühl ist der wichtigste Schutzfaktor für psychische Gesundheit — auch unter Belastung.',
+    altersgruppe: 'Konzept relevant für alle Altersgruppen',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Die 3 Komponenten des Kohärenzgefühls (SOC)', items: ['Verstehbarkeit (Comprehensibility): "Ich verstehe, was passiert" — Stimuli werden als geordnet, strukturiert und erklärbar wahrgenommen', 'Handhabbarkeit (Manageability): "Ich kann damit umgehen" — Es gibt Ressourcen (eigene und externe), um Anforderungen zu bewältigen', 'Sinnhaftigkeit (Meaningfulness): "Es lohnt sich" — Herausforderungen werden als sinnvoll erlebt, Engagement lohnt sich', 'Sinnhaftigkeit ist die wichtigste Komponente — ohne Sinn helfen Verstehen und Handeln wenig']},
+      {section: 'Generalisierte Widerstandsressourcen (GRR)', items: ['Materielle Ressourcen: Finanzielle Sicherheit, Wohnung, Nahrung', 'Kognitive/Emotionale Ressourcen: Wissen, Intelligenz, Ich-Stärke', 'Soziale Ressourcen: Unterstützende Beziehungen, Zugehörigkeit', 'Kulturelle Ressourcen: Werte, Rituale, Identität', 'Körperliche Ressourcen: Gesundheit, Konstitution', 'Diese GRR stärken das Kohärenzgefühl über die Lebensspanne']}
+    ],
+    ursachen: [],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Salutogene Orientierung in der Praxis', beschreibung: 'Perspektivwechsel: Statt "Was ist kaputt?" fragen "Was hält dich gesund trotz allem?". Ressourcenaktivierung: Widerstandsressourcen identifizieren und stärken. Sinnfrage: Wofür lohnt es sich? Was gibt dir Kraft?'},
+      {name: 'SOC-Fragebogen', beschreibung: 'Antonovskys SOC-29 oder SOC-13: Messinstrument für das Kohärenzgefühl. Kann als Reflexionsinstrument in der Bezugsarbeit genutzt werden.'},
+      {name: 'Salutogenese in der Jugendhilfe', beschreibung: 'Strukturierte Umgebung schaffen (Verstehbarkeit), Selbstwirksamkeit fördern (Handhabbarkeit), Sinnstiftende Aktivitäten anbieten (Sinnhaftigkeit). Beispiel: Klare Tagesstruktur, Mitbestimmung, gemeinnützige Projekte.'}
+    ],
+    praxis_tipps: [
+      'Immer auch fragen: "Was läuft gut? Was hält dich aufrecht?" — nicht nur Probleme fokussieren',
+      'Verstehbarkeit fördern: Transparenz, Erklärungen, Psychoedukation — "Ich erkläre dir warum"',
+      'Handhabbarkeit stärken: Aufgaben geben, die bewältigbar sind — Erfolgserlebnisse schaffen',
+      'Sinnhaftigkeit ermöglichen: Gemeinnützige Arbeit, Hobbys, Zukunftsperspektiven',
+      'SOC entwickelt sich vor allem in Kindheit und Adoleszenz — Jugendhilfe kann SOC nachhaltig stärken',
+      'Kohärenzgefühl ist nicht "positives Denken" — es geht um realistisches Vertrauen in die Welt',
+      'In der Teamreflexion: "Stärken wir das Kohärenzgefühl dieses Jugendlichen?"',
+      'Salutogenese und Pathogenese schließen sich nicht aus — beides beachten',
+      'Besonders relevant bei chronisch belasteten Jugendlichen: Was hält sie trotzdem gesund?'
+    ],
+    wann_ueberweisen: '',
+    luxemburg_spezifisch: 'Das salutogene Modell wird in der luxemburgischen Gesundheitsförderung (Promotion de la Santé) aufgegriffen. IFEN-Fortbildungen zu ressourcenorientierter Pädagogik.',
+    verwandte_wiki: ['resilienz', 'selbstwirksamkeit', 'ace-studie', 'window-of-tolerance'],
+    screening_domains: [],
+    themen_ids: ['gesundheit', 'ressourcen', 'sinn'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Antonovsky, A. (1997). Salutogenese: Zur Entmystifizierung der Gesundheit. DGVT.', 'Bengel, J. et al. (2001). Was erhält Menschen gesund? Antonovskys Modell der Salutogenese. BZgA.', 'Lindström, B. & Eriksson, M. (2005). Salutogenesis. Journal of Epidemiology and Community Health.']
+  },
+  {
+    id: 'ace-studie',
+    titel: 'ACE-Studie (Adverse Childhood Experiences)',
+    aliases: ['ACE', 'Adverse Childhood Experiences', 'ACE-Studie', 'Kindheitsbelastungen', 'Felitti', 'ACE-Score', 'Kindheitstrauma'],
+    kategorie: 'konzepte',
+    icon: '📊',
+    farbe: '#9b59b6',
+    definition: 'Die ACE-Studie (Adverse Childhood Experiences Study) ist eine der bedeutendsten epidemiologischen Studien des 20. Jahrhunderts. Sie wurde von Vincent Felitti und Robert Anda ab 1995 bei Kaiser Permanente mit über 17.000 Teilnehmern durchgeführt. Ergebnis: Belastende Kindheitserfahrungen sind erstens sehr häufig und zweitens kumulativ dosisabhängig mit praktisch allen wichtigen Gesundheitsproblemen im Erwachsenenalter assoziiert. Der ACE-Score zeigt: Je mehr Kindheitsbelastungen, desto höher das Risiko für psychische und körperliche Erkrankungen.',
+    altersgruppe: 'Konzept relevant für alle Altersgruppen',
+    praevalenz: 'Ca. 64% der Bevölkerung haben mindestens einen ACE. Ca. 12-13% haben ≥4 ACEs. ACEs sind schichtübergreifend — sie betreffen alle Bevölkerungsgruppen.',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Die 10 ACE-Kategorien', items: ['MISSHANDLUNG: 1. Emotionaler Missbrauch, 2. Physischer Missbrauch, 3. Sexueller Missbrauch', 'VERNACHLÄSSIGUNG: 4. Emotionale Vernachlässigung, 5. Physische Vernachlässigung', 'HAUSHALTSDYSFUNKTION: 6. Häusliche Gewalt, 7. Substanzkonsum im Haushalt, 8. Psychische Erkrankung im Haushalt, 9. Inhaftierung eines Haushaltsmitglieds, 10. Trennung/Scheidung der Eltern']},
+      {section: 'Dosis-Wirkungs-Beziehung (ACE-Score ≥4)', items: ['2× erhöhtes Risiko für Rauchen und Depression', '4× erhöhtes Risiko für Alkoholismus und Suizidversuche', '5× erhöhtes Risiko für intravenösen Drogenkonsum', '7× erhöhtes Risiko für Alkoholismus', '12× erhöhtes Risiko für Suizidversuche', 'Auch: Herzerkrankungen, Krebs, Diabetes, Autoimmunerkrankungen, Adipositas, Frühsterblichkeit', 'Lebenserwartung bei ACE ≥6: Durchschnittlich 20 Jahre kürzer']}
+    ],
+    ursachen: [
+      {section: 'Mechanismen (Wie ACEs schaden)', items: ['Toxischer Stress: Chronische Aktivierung der Stressachse ohne Regulation durch Bezugsperson', 'Neurobiologische Veränderungen: Veränderte Hirnentwicklung (Amygdala, Hippocampus, PFC)', 'Epigenetische Veränderungen: Genexpression wird durch Stress verändert (→ transgenerational)', 'Gestörte Emotionsregulation → dysfunktionale Bewältigungsstrategien (Rauchen, Trinken, Essen)', 'Hochrisiko-Verhalten als Bewältigungsversuch: "ACE-Score ist kein Krankheitsmarker, sondern zeigt die Dosis an toxischem Stress"', 'Immunologische Veränderungen: Chronische Entzündungsreaktionen → körperliche Erkrankungen']},
+      {section: 'Erweiterte ACEs (Beyond the Original 10)', items: ['Community-Level ACEs: Armut, Rassismus, Gewalt im Wohnumfeld, fehlende Infrastruktur', 'Weitere individuelle ACEs: Mobbing, Verlust eines Geschwisterkinds, chronische Krankheit eines Elternteils, Krieg/Flucht', 'Protective and Compensatory Experiences (PACEs): Schutzfaktoren als Gegengewicht zu ACEs']}
+    ],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'ACE-Screening', beschreibung: 'Systematische Erhebung von Kindheitsbelastungen (ACE-Fragebogen, 10 Ja/Nein-Fragen). CAVE: Screening ist kein Selbstzweck — es braucht klare Handlungskonsequenzen und Ressourcen für positive Befunde.'},
+      {name: 'Trauma-Informed Care (TIC)', beschreibung: 'Organisationsweiter Ansatz: Statt "Was ist falsch mit dir?" → "Was ist dir passiert?". 4 R: Realize (Wissen), Recognize (Erkennen), Respond (Reagieren), Resist Re-traumatization (Schutz).'},
+      {name: 'Resilienzförderung als Prävention', beschreibung: 'PACEs stärken: Stabile Bezugsperson, Zugehörigkeit zu Gemeinschaft, sichere Umgebung, Bildungszugang. Eine einzige zuverlässige Bezugsperson kann den Effekt multipler ACEs puffern.'}
+    ],
+    praxis_tipps: [
+      'ACE-Score ist kein Schicksal — Resilienz und Schutzfaktoren können ACEs ausgleichen',
+      'EINE stabile Bezugsperson kann den Unterschied machen — das können SIE sein',
+      'ACE-Fragebogen nicht als "Test" einsetzen, sondern als Gesprächsöffner',
+      'Vorsicht mit ACE-Score als Label: "Er hat ACE 7" → reduziert den Menschen auf seine Belastung',
+      'ACEs erklären Verhalten, entschuldigen es nicht: Verständnis UND Verantwortung',
+      'In der Jugendhilfe: Die meisten Jugendlichen haben multiple ACEs — das ist die Arbeit',
+      'Team-Psychoedukation: ACE-Wissen hilft, Verhalten als Überlebensstrategie zu verstehen',
+      'Auch eigene ACEs reflektieren: Fachkräfte haben oft eigene Kindheitsbelastungen',
+      'Prävention ist wirksamer als Intervention: Frühe Hilfen, Elternprogramme, Gemeindearbeit'
+    ],
+    wann_ueberweisen: '',
+    luxemburg_spezifisch: 'ACE-Studie wird zunehmend in luxemburgischen Fortbildungen für Fachkräfte thematisiert. Trauma-Informed Care als Konzept in einigen Jugendhilfeeinrichtungen implementiert.',
+    verwandte_wiki: ['trauma', 'resilienz', 'epigenetik-trauma', 'trauma-informed-care', 'vernachlaessigung'],
+    screening_domains: [],
+    themen_ids: ['trauma', 'praevention', 'gesundheit'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Felitti, V.J. et al. (1998). Relationship of Childhood Abuse and Household Dysfunction to Many of the Leading Causes of Death in Adults. American Journal of Preventive Medicine.', 'CDC-Kaiser Permanente ACE Study. Centers for Disease Control and Prevention.', 'Burke Harris, N. (2018). The Deepest Well: Healing the Long-Term Effects of Childhood Adversity. Houghton Mifflin.']
+  },
+  {
+    id: 'selbstwirksamkeit',
+    titel: 'Selbstwirksamkeit (Bandura)',
+    aliases: ['Selbstwirksamkeit', 'Self-Efficacy', 'Bandura', 'Selbstwirksamkeitserwartung', 'Kompetenzerwartung', 'Selbstwirksamkeitsüberzeugung'],
+    kategorie: 'konzepte',
+    icon: '💪',
+    farbe: '#9b59b6',
+    definition: 'Selbstwirksamkeit (Self-Efficacy) ist ein Konzept von Albert Bandura und bezeichnet die Überzeugung einer Person, in einer bestimmten Situation die nötigen Fähigkeiten zu besitzen und erfolgreich handeln zu können. Es ist NICHT Selbstwertgefühl ("Ich bin gut") und NICHT Selbstvertrauen ("Ich traue mir zu"), sondern spezifischer: "Ich kann diese bestimmte Herausforderung bewältigen." Selbstwirksamkeit ist einer der stärksten Prädiktoren für psychische Gesundheit, Leistung und Resilienz.',
+    altersgruppe: 'Konzept relevant für alle Altersgruppen',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: '4 Quellen der Selbstwirksamkeit (Bandura)', items: ['1. Eigene Erfolgserlebnisse (Mastery Experiences): Stärkste Quelle — Erfahrung, eine Herausforderung bewältigt zu haben', '2. Stellvertretende Erfahrung (Vicarious Experience): Modelle beobachten, die ähnliche Herausforderungen meistern — "Wenn der das kann, kann ich das auch"', '3. Verbale Überzeugung (Verbal Persuasion): Ermutigung durch andere — wirkt, aber schwächer als eigene Erfahrung', '4. Physiologische/Emotionale Zustände: Körperliche Anspannung → interpretiert als Kompetenz ("Ich bin aufgeregt") oder Inkompetenz ("Ich schaffe das nicht")']},
+      {section: 'Hohe vs. niedrige Selbstwirksamkeit', items: ['Hohe SE: Herausforderungen als lösbar sehen, Ausdauer bei Schwierigkeiten, schnelle Erholung nach Misserfolg, realistische Zielsetzung', 'Niedrige SE: Aufgabenvermeidung, schnelles Aufgeben, Grübeln nach Misserfolg, Unterschätzung eigener Fähigkeiten', 'Selbstwirksamkeit ist bereichsspezifisch: Man kann hohe SE in Sport und niedrige in Mathe haben', 'Allgemeine Selbstwirksamkeit = generalisierte Überzeugung, Herausforderungen insgesamt bewältigen zu können']}
+    ],
+    ursachen: [],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Erfolgserlebnisse schaffen', beschreibung: 'Aufgaben so gestalten, dass Erfolg wahrscheinlich ist (Zone der nächsten Entwicklung). Kleine, erreichbare Ziele setzen. Jeden Erfolg benennen und würdigen. Misserfolg als Lernchance rahmen, nicht als Beweis für Unfähigkeit.'},
+      {name: 'Modelllernen ermöglichen', beschreibung: 'Peer-Modelle nutzen (ähnliche Jugendliche, die etwas geschafft haben). Ehemalige Bewohner, die sich positiv entwickelt haben, einladen. "Coping-Modelle" sind wirksamer als "Mastery-Modelle" — also jemand, der kämpft und es schafft, nicht jemand, dem alles leichtfällt.'},
+      {name: 'Ermutigung richtig einsetzen', beschreibung: 'Spezifisch statt pauschal: "Du hast 45 Minuten durchgehalten, obwohl es schwer war" statt "Super gemacht!". Aufwand und Strategie loben, nicht Talent: "Du hast dir eine gute Methode überlegt" statt "Du bist so schlau".'}
+    ],
+    praxis_tipps: [
+      'Jede Aufgabe ist eine Selbstwirksamkeits-Chance: Kochen, aufräumen, planen, Konflikte lösen',
+      'Erfolgserlebnisse sichtbar machen: "Erinnerst du dich, als du XY geschafft hast?"',
+      'Aufgabenschwierigkeit dosieren: Nicht zu leicht (langweilig), nicht zu schwer (frustrierend)',
+      'Prozesslob statt Ergebnislob: "Du hast nicht aufgegeben" statt "Du hast gewonnen"',
+      'Selbstwirksamkeit ist ansteckend: Eigene Begeisterung und Zuversicht teilen',
+      'Verantwortung übertragen: Wer Entscheidungen trifft, erlebt Selbstwirksamkeit',
+      'Nicht zu schnell helfen — erst versuchen lassen, dann unterstützen',
+      'Bei Misserfolg: "Was hat nicht funktioniert? Was könntest du nächstes Mal anders machen?"',
+      'Jugendliche als Experten einsetzen: Wer anderen etwas beibringt, stärkt eigene SE',
+      'Cave: Leere Ermutigung ("Du schaffst das!") ohne reale Grundlage = Vertrauensverlust'
+    ],
+    wann_ueberweisen: '',
+    luxemburg_spezifisch: '',
+    verwandte_wiki: ['resilienz', 'salutogenese', 'kvt', 'erlebnispaedagogik'],
+    screening_domains: [],
+    themen_ids: ['motivation', 'ressourcen', 'entwicklung'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Bandura, A. (1997). Self-Efficacy: The Exercise of Control. Freeman.', 'Schwarzer, R. & Jerusalem, M. (1995). Generalized Self-Efficacy Scale. Measures in Health Psychology.', 'Bandura, A. (1977). Self-efficacy: Toward a unifying theory of behavioral change. Psychological Review.']
+  },
+  {
+    id: 'expressed-emotion',
+    titel: 'Expressed Emotion & Familiäre Kommunikation',
+    aliases: ['Expressed Emotion', 'EE', 'High-EE', 'Low-EE', 'Familiäre Kommunikation', 'Emotionale Überinvolviertheit', 'Kritik in der Familie'],
+    kategorie: 'konzepte',
+    icon: '🗣️',
+    farbe: '#9b59b6',
+    definition: 'Expressed Emotion (EE) ist ein Forschungskonzept, das den emotionalen Kommunikationsstil von Familienmitgliedern gegenüber einem psychisch erkrankten Angehörigen beschreibt. Hohes EE (High-EE) — gekennzeichnet durch übermäßige Kritik, Feindseligkeit und/oder emotionale Überinvolviertheit — ist einer der stärksten Prädiktoren für Rückfälle bei Schizophrenie, Depression, Essstörungen und anderen psychischen Erkrankungen. Das Konzept ist für die Jugendhilfe hochrelevant, da familiäre Kommunikationsmuster den Verlauf psychischer Probleme massiv beeinflussen.',
+    altersgruppe: 'Konzept relevant für alle Altersgruppen',
+    praevalenz: 'Ca. 30-50% der Familien mit einem psychisch erkrankten Mitglied zeigen High-EE.',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Die 3 Komponenten von Expressed Emotion', items: ['1. Kritik (Criticism): Häufige negative Bemerkungen über das Verhalten der erkrankten Person. "Du bist faul." "Du strengst dich nicht an." Beurteilt die Person, nicht das Verhalten.', '2. Feindseligkeit (Hostility): Generalisierte Ablehnung der Person (nicht nur einzelner Verhaltensweisen). "Du bist eine Belastung für die Familie."', '3. Emotionale Überinvolviertheit (EOI): Übermäßige Sorge, überbehütend, selbstaufopfernd, symbiotisch. Keine Grenzen zwischen eigenem und fremdem Leid.', 'Low-EE: Warmherzigkeit, angemessene Grenzen, emotionale Verfügbarkeit ohne Überinvolviertheit']},
+      {section: 'Auswirkungen von High-EE', items: ['Schizophrenie: Rückfallrate 48% bei High-EE vs. 21% bei Low-EE (9 Monate)', 'Depression: High-EE verdreifacht Rückfallrisiko', 'Essstörungen: High-EE verschlechtert Behandlungsergebnis', 'Allgemein: High-EE erhöht Stress, untergräbt Selbstwirksamkeit, verhindert Genesung', 'ABER: High-EE ist keine "Schuld" der Familie — es ist eine verständliche Reaktion auf eine belastende Situation']}
+    ],
+    ursachen: [
+      {section: 'Warum Familien High-EE entwickeln', items: ['Mangelndes Wissen über die Erkrankung (Attribution: "Er ist faul" statt "Er ist krank")', 'Hilflosigkeit und Frustration', 'Eigene Erschöpfung und Belastung (Caregiver Burden)', 'Trauer über den "verlorenen" gesunden Angehörigen', 'Angst vor der Zukunft', 'Fehlende professionelle Unterstützung']}
+    ],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Psychoedukation für Familien', beschreibung: 'Information über die Erkrankung, ihre Symptome und Behandlung. Verständnis fördern: "Es ist eine Krankheit, keine Willensschwäche." Evidenz: Signifikante Reduktion von Rückfällen.'},
+      {name: 'Familiäre Kommunikationstraining', beschreibung: 'Klare, ruhige Kommunikation üben: Ich-Botschaften, spezifisches Feedback statt globale Kritik, Wünsche statt Vorwürfe. Aktives Zuhören üben.'},
+      {name: 'Angehörigengruppen', beschreibung: 'Austausch mit anderen betroffenen Familien: Normalisierung, Entlastung, gegenseitige Unterstützung. Reduziert Isolation und Scham.'}
+    ],
+    praxis_tipps: [
+      'Eltern nicht beschuldigen — High-EE ist Ausdruck von Hilflosigkeit, nicht Boshaftigkeit',
+      'Psychoedukation: Erklären, was die Störung ist und was nicht unter Kontrolle des Jugendlichen steht',
+      'Modellhaft kommunizieren: Verhalten kritisieren, Person wertschätzen ("Ich mag dich, das Verhalten nicht")',
+      'Eltern entlasten: Eigene Belastung ernst nehmen, Pausen ermöglichen',
+      'Emotionale Überinvolviertheit erkennen: Mutter weint mehr als das Kind, übernimmt alle Aufgaben',
+      'Im Team reflektieren: Zeigen WIR High-EE gegenüber Jugendlichen? (Burnout → Kritik)',
+      'Kommunikationsregeln in Familiengesprächen etablieren: Ausreden lassen, Ich-Botschaften',
+      'Cave: EE-Konzept nicht als Schuldzuweisung missbrauchen ("Ihre Familie ist High-EE")'
+    ],
+    wann_ueberweisen: 'Familiäre Kommunikationsprobleme: Systemische Familientherapie empfehlen. Bei Schizophrenie/Psychose: Psychoedukative Familienintervention (PFI) — eines der am besten evidenzbasierten Verfahren.',
+    luxemburg_spezifisch: 'Angehörigenberatung: Similes Lëtzebuerg (Angehörige psychisch Erkrankter). Psychoedukative Programme in psychiatrischen Kliniken. CIS für Familienberatung.',
+    verwandte_wiki: ['systemische-therapie', 'psychoedukation', 'psychose', 'depression', 'parentifizierung'],
+    screening_domains: [],
+    themen_ids: ['familie', 'kommunikation'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Butzlaff, R.L. & Hooley, J.M. (1998). Expressed Emotion and Psychiatric Relapse. Archives of General Psychiatry.', 'Leff, J. & Vaughn, C. (1985). Expressed Emotion in Families. Guilford Press.', 'Pharoah, F. et al. (2010). Family intervention for schizophrenia. Cochrane Database.']
+  },
+  {
+    id: 'epigenetik-trauma',
+    titel: 'Epigenetik & Transgenerationale Traumatisierung',
+    aliases: ['Epigenetik', 'Transgenerationales Trauma', 'Intergenerationale Traumatisierung', 'Epigenetics', 'Vererbtes Trauma', 'Historisches Trauma'],
+    kategorie: 'konzepte',
+    icon: '🧬',
+    farbe: '#9b59b6',
+    definition: 'Transgenerationale Traumatisierung beschreibt das Phänomen, dass Traumafolgen über Generationen hinweg weitergegeben werden können — von traumatisierten Eltern an ihre Kinder, manchmal über mehrere Generationen. Die Epigenetik liefert einen biologischen Erklärungsansatz: Traumatischer Stress kann Genexpression verändern (ohne die DNA selbst zu verändern), und diese Veränderungen können an Nachkommen weitergegeben werden. Zusätzlich wirken psychologische und soziale Mechanismen der Trauma-Weitergabe.',
+    altersgruppe: 'Konzept relevant für alle Altersgruppen',
+    praevalenz: 'Häufig bei: Kindern von Holocaust-Überlebenden, Nachkommen von Genoziden, Kinder von Kriegstraumatisierten, Kinder von missbrauchten Eltern, Nachkommen von Vertriebenen/Geflüchteten.',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Mechanismen der Weitergabe', items: ['1. Epigenetische Übertragung: Stressbedingte Methylierungsänderungen an Genen (z.B. NR3C1-Gen → Cortisolregulation) können vererbt werden', '2. Pränatale Stressexposition: Mütterlicher Stress während Schwangerschaft verändert fetale Entwicklung (HPA-Achse)', '3. Bindung & Erziehung: Traumatisierte Eltern haben oft beeinträchtigte Mentalisierungs- und Regulationsfähigkeiten', '4. Kommunikationsmuster: Schweigen ("Darüber spricht man nicht"), Ängste, Misstrauen', '5. Familiengeheimnisse: Unausgesprochenes Trauma wirkt als "Geist im Kinderzimmer" (Fraiberg)', '6. Kulturelle/Kollektive Übertragung: Gruppenidentität als Überlebende/Opfer']},
+      {section: 'Mögliche Symptome bei der 2./3. Generation', items: ['Unerklärliche Ängste, die nicht zur eigenen Biographie passen', 'Übermäßige Wachsamkeit oder Gefühl von Bedrohung ohne reale Gefahr', 'Schwierigkeit, Vertrauen aufzubauen', 'Identifikation mit dem Trauma der Eltern/Großeltern', 'Schuldgefühle ("Mir geht es besser als meinen Eltern")', 'Parentifizierung: Übernahme der Beschützerrolle gegenüber traumatisierten Eltern', 'Symptome, die der PTBS ähneln, ohne eigenes Trauma-Ereignis']}
+    ],
+    ursachen: [
+      {section: 'Epigenetische Forschung', items: ['Yehuda et al.: Kinder von Holocaust-Überlebenden zeigen veränderte Cortisol-Regulation', 'Tiermodelle: Mäuse, die auf bestimmten Geruch konditioniert wurden, vererben Angstreaktion an Nachkommen', 'Mechanismus: DNA-Methylierung, Histon-Modifikation, nicht-kodierende RNA', 'CAVE: Die Forschung ist noch jung — nicht alle Befunde sind repliziert', 'Epigenetische Veränderungen sind potenziell reversibel (Therapie, positive Umwelt)']}
+    ],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Genogramm & Familiengeschichte', beschreibung: 'Systematische Exploration der Familiengeschichte über 3+ Generationen. Traumata, Verluste, Migrationen sichtbar machen. "Was ist in deiner Familie passiert?" — oft wissen Jugendliche wenig über die Geschichte ihrer Eltern/Großeltern.'},
+      {name: 'Narrative Therapie / Storytelling', beschreibung: 'Die Familiengeschichte erzählen, verstehen und einordnen. Das Schweigen brechen. "Deine Mutter konnte dir keine Nähe geben — vielleicht weil ihre Mutter es ihr nicht geben konnte."'},
+      {name: 'Resilienzförderung', beschreibung: 'Kreislauf durchbrechen: Sichere Bindung anbieten, Mentalisierung fördern, eigene Geschichte reflektieren. Ziel: "Das Trauma endet mit mir, nicht mit meinen Kindern."'}
+    ],
+    praxis_tipps: [
+      'In der Anamnese immer auch nach Eltern-/Großelterngeschichte fragen',
+      'Genogramm als Standard-Tool: Traumata, Migration, Verluste über Generationen sichtbar machen',
+      'Unerklärliche Symptome können transgenerationale Wurzeln haben — Hypothese bilden',
+      'Eltern mit eigener Traumageschichte brauchen Unterstützung, nicht Schuldzuweisung',
+      'Familiengeheimnisse respektieren, aber deren Wirkung thematisieren',
+      'Jugendliche aus Kriegs-/Fluchtfamilien: Fragen "Was weißt du über die Geschichte deiner Familie?"',
+      'Epigenetik NICHT als Determinismus vermitteln: Veränderungen sind möglich!',
+      'Eigene Familiengeschichte reflektieren — jede Fachkraft trägt transgenerationale Themen',
+      'Literatur und Filme können helfen, das Unaussprechliche ansprechbar zu machen'
+    ],
+    wann_ueberweisen: 'Traumatherapie für den Jugendlichen bei eigenen Traumafolgesymptomen. Traumatherapie für die Eltern bei unverarbeiteten Traumata. Familientherapie bei transgenerationalen Beziehungsmustern.',
+    luxemburg_spezifisch: 'Besonders relevant für Luxemburgs diverse Bevölkerung: Kinder von Geflüchteten, Nachkommen der portugiesischen Arbeitsmigration, Kinder von Holocaust-Überlebenden. Spezialisierte Traumatherapie über psychiatrische Dienste.',
+    verwandte_wiki: ['trauma', 'ace-studie', 'bindungstheorie', 'mentalisierung', 'migration-kulturelle-identitaet'],
+    screening_domains: [],
+    themen_ids: ['trauma', 'familie', 'geschichte'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Yehuda, R. et al. (2016). Holocaust Exposure Induced Intergenerational Effects on FKBP5 Methylation. Biological Psychiatry.', 'Kellermann, N.P.F. (2013). Epigenetic Transmission of Holocaust Trauma. Israel Journal of Psychiatry.', 'Fraiberg, S. et al. (1975). Ghosts in the Nursery. Journal of the American Academy of Child Psychiatry.']
+  },
+  {
+    id: 'sekundaere-traumatisierung',
+    titel: 'Sekundäre Traumatisierung & Burnout bei Fachkräften',
+    aliases: ['Sekundäre Traumatisierung', 'Secondary Traumatic Stress', 'Vicarious Trauma', 'Mitgefühlserschöpfung', 'Compassion Fatigue', 'Burnout Fachkräfte', 'Helfersyndrom'],
+    kategorie: 'konzepte',
+    icon: '🔥',
+    farbe: '#9b59b6',
+    definition: 'Sekundäre Traumatisierung (Secondary Traumatic Stress, STS) entsteht durch die indirekte Exposition gegenüber traumatischem Material — durch das Zuhören, Lesen oder Miterleben der Traumageschichten anderer. Fachkräfte in der Jugendhilfe sind besonders gefährdet, da sie täglich mit traumatisierten Kindern und Jugendlichen arbeiten. Verwandte Konzepte sind Compassion Fatigue (Mitgefühlserschöpfung), Vicarious Trauma (Stellvertretende Traumatisierung) und Burnout. Sich selbst zu schützen ist keine Schwäche, sondern professionelle Notwendigkeit.',
+    altersgruppe: 'Fachkräfte aller Altersgruppen',
+    praevalenz: 'Ca. 15-40% der Fachkräfte im psychosozialen Bereich zeigen Symptome sekundärer Traumatisierung. Burnout-Raten: 20-50% bei Sozialarbeitern/Therapeuten.',
+    icd10: 'Z73.0 (Burn-out-Syndrom)',
+    icd11: 'QD85 (Burn-out)',
+    erscheinungsbild: [
+      {section: 'Sekundäre Traumatisierung vs. Burnout', items: ['Sekundäre Traumatisierung: Plötzlicher Beginn, PTBS-ähnliche Symptome (Intrusionen, Vermeidung, Hyperarousal), ausgelöst durch spezifisches traumatisches Material', 'Burnout: Schleichender Beginn, emotionale Erschöpfung, Depersonalisation/Zynismus, reduzierte Leistungsfähigkeit', 'Compassion Fatigue: Umbrella-Term für STS + Burnout', 'Vicarious Trauma: Veränderung der eigenen Weltsicht, Grundüberzeugungen über Sicherheit, Vertrauen, Kontrolle']},
+      {section: 'Warnsignale erkennen', items: ['Intrusionen: Bilder/Geschichten der Klienten "verfolgen" einen', 'Vermeidung: Bestimmte Fälle meiden, emotional distanzieren, Akten nicht lesen', 'Hyperarousal: Schreckhaftigkeit, Schlafstörungen, Gereiztheit', 'Zynismus: "Denen ist sowieso nicht zu helfen"', 'Isolierung: Rückzug von Kollegen, Familie, Freunden', 'Somatisierung: Kopfschmerzen, Magenschmerzen, Immunschwäche', 'Substanzkonsum: Alkohol als Abschalt-Mechanismus', 'Verändertes Weltbild: "Die Welt ist ein gefährlicher Ort"', 'Grenzüberschreitungen: Zu viel oder zu wenig Engagement']}
+    ],
+    ursachen: [
+      {section: 'Risikofaktoren', items: ['Hohe Exposition: Viele schwere Fälle, wenig Distanz', 'Eigene Traumageschichte (erhöhte Vulnerabilität)', 'Wenig Supervision und kollegialer Austausch', 'Perfektionismus und Helfersyndrom ("Ich muss alle retten")', 'Hohe Empathie ohne Abgrenzungskompetenz', 'Organisatorische Faktoren: Hohe Fallzahlen, wenig Ressourcen, mangelnde Anerkennung', 'Fehlende Selbstfürsorge-Routinen', 'Isolation im Arbeitskontext (Einzelkämpfer)']}
+    ],
+    differentialdiagnose: ['PTBS (durch eigenes Trauma)', 'Depression', 'Anpassungsstörung', 'Generalisierte Angststörung'],
+    komorbiditaeten: ['Depression', 'Angststörungen', 'Substanzkonsum', 'Beziehungsprobleme', 'Somatische Beschwerden'],
+    evidenzbasierte_interventionen: [
+      {name: 'Regelmäßige Supervision', beschreibung: 'Einzelsupervision und Teamsupervision als institutionelle Pflicht (nicht freiwillig). Fälle reflektieren, Gegenübertragung bearbeiten, Belastung teilen. Supervision ist Qualitätsmerkmal, kein Zeichen von Schwäche.'},
+      {name: 'ProQOL (Professional Quality of Life Scale)', beschreibung: 'Messinstrument von Beth Stamm: Erfasst Compassion Satisfaction, Burnout und Secondary Traumatic Stress. Regelmäßiges Screening bei Fachkräften.'},
+      {name: 'Selbstfürsorge-Strategien', beschreibung: 'Physisch: Bewegung, Schlaf, Ernährung. Emotional: Hobbys, Natur, Kreativität. Sozial: Nicht-professionelle Beziehungen pflegen. Spirituell: Sinnfindung, Achtsamkeit. Professionell: Weiterbildung, Grenzen setzen, Supervision.'},
+      {name: 'Organisatorische Prävention', beschreibung: 'Angemessene Fallzahlen, Rotation bei schweren Fällen, Debriefing nach kritischen Ereignissen, Anerkennung und Wertschätzung, flexible Arbeitszeiten, psychologische Notfallnachsorge.'}
+    ],
+    praxis_tipps: [
+      'Selbstfürsorge ist KEINE Selbstverwöhnung — sie ist berufliche Pflicht',
+      'Die Sauerstoffmasken-Metapher: Erst eigene aufsetzen, dann anderen helfen',
+      'Grenzen setzen: Nicht jeder Fall braucht 24/7-Erreichbarkeit',
+      'Supervision einfordern: "Ich brauche Supervision" ist professionell, nicht schwach',
+      'Eigene Traumageschichte kennen und bearbeiten — erhöht sonst Vulnerabilität',
+      'Warnsignale bei Kollegen ansprechen: "Mir fällt auf, dass du anders wirkst als sonst"',
+      'Rituale für Übergänge: Zwischen Arbeit und Privatleben bewusst umschalten',
+      'Nicht alle Geschichten mit nach Hause nehmen — Containment üben',
+      'Humor im Team ist erlaubt und gesund — solange er nicht zynisch über Klienten wird',
+      'Compassion Satisfaction nicht vergessen: Warum mache ich das? Was gibt mir Kraft?',
+      'Regelmäßige Selbstcheck: "Wie geht es mir gerade auf einer Skala von 1-10?"'
+    ],
+    wann_ueberweisen: 'Eigene Therapie suchen bei: anhaltenden Intrusionen, Schlafstörungen, Substanzkonsum, Depression, Beziehungsproblemen im Zusammenhang mit der Arbeit. Krankschreibung bei schwerem Burnout. Arbeitgeberwechsel erwägen bei toxischem Arbeitsumfeld.',
+    luxemburg_spezifisch: 'Supervision in Luxemburg: Über verschiedene Anbieter (ANCES, private Supervisoren). Einige Arbeitgeber bieten Supervision als Standard an. Programme de Soutien aux Employés (PSE) über Arbeitgeber. ASTF (Association pour la Santé au Travail) für arbeitsmedizinische Beratung.',
+    verwandte_wiki: ['trauma', 'ace-studie', 'achtsamkeit', 'window-of-tolerance'],
+    screening_domains: [],
+    themen_ids: ['fachkraefte', 'stress', 'gesundheit'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Figley, C.R. (2002). Compassion Fatigue. Brunner-Routledge.', 'Stamm, B.H. (2010). The Concise ProQOL Manual. ProQOL.org.', 'Pearlman, L.A. & Saakvitne, K.W. (1995). Trauma and the Therapist. Norton.']
+  },
+  {
+    id: 'hochsensibilitaet',
+    titel: 'Hochsensibilität (HSP)',
+    aliases: ['Hochsensibilität', 'HSP', 'Highly Sensitive Person', 'Hochsensibel', 'Sensory Processing Sensitivity', 'Aron', 'Reizempfindlichkeit'],
+    kategorie: 'konzepte',
+    icon: '🌸',
+    farbe: '#9b59b6',
+    definition: 'Hochsensibilität (Sensory Processing Sensitivity, SPS) ist ein Temperamentsmerkmal, das von Elaine Aron beschrieben wurde. Ca. 15-20% der Menschen verarbeiten sensorische und emotionale Reize intensiver und tiefer als der Durchschnitt. Hochsensibilität ist KEINE Störung, KEINE Diagnose und KEIN Modebegriff — es ist ein gut erforschtes Persönlichkeitsmerkmal mit neurobiologischer Grundlage. In der Jugendhilfe ist es wichtig, hochsensible Jugendliche zu erkennen, um Überforderung zu vermeiden und ihre Stärken zu nutzen.',
+    altersgruppe: 'Angeboren — zeigt sich ab früher Kindheit',
+    praevalenz: 'Ca. 15-20% der Bevölkerung (auch bei Tieren nachgewiesen: Fliegen, Fische, Affen).',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'DOES-Modell (Aron)', items: ['D = Depth of Processing (Tiefe Verarbeitung): Gründliches Nachdenken, langsame Entscheidungen, Bedürfnis nach Verstehen', 'O = Overstimulation (Überreizung): Schneller überfordert durch Lärm, Menschenmengen, Multitasking, Zeitdruck', 'E = Emotional Reactivity/Empathy (Emotionale Reaktivität): Intensivere positive und negative Emotionen, hohe Empathie', 'S = Sensing Subtleties (Feines Wahrnehmen): Bemerkt Details, Nuancen, Stimmungen, die andere übersehen']},
+      {section: 'Hochsensibilität bei Jugendlichen erkennen', items: ['Schnelle Erschöpfung in lauten/stimulationsreichen Umgebungen', 'Braucht mehr Rückzugszeit als Gleichaltrige', 'Reagiert intensiv auf Kritik, Ungerechtigkeit, Leid anderer', 'Tiefgründige Gespräche statt Smalltalk', 'Empfindsam für Stimmungen im Raum', 'Meidet Horrorfilme, Gewaltszenen, laute Musik', 'Kann als "schüchtern", "überempfindlich" oder "zu sensibel" abgestempelt werden', 'Stärken: Kreativität, Empathie, Gewissenhaftigkeit, Tiefe']}
+    ],
+    ursachen: [
+      {section: 'Neurobiologische Grundlage', items: ['Verstärkte Aktivierung in Hirnarealen für Aufmerksamkeit, Empathie und Handlungsplanung', 'Stärkere Spiegelneuron-Aktivität → höhere Empathie', 'Differential Susceptibility: HSP reagieren nicht nur negativer auf schlechte Umwelt, sondern auch POSITIVER auf gute Umwelt ("Orchideen vs. Löwenzahn")', 'Genetische Komponente: Varianten im Serotonin-Transporter-Gen (5-HTTLPR)', 'NICHT gleichzusetzen mit: Introversion (30% der HSP sind extravertiert), Angststörung, Autismus, ADHS']}
+    ],
+    differentialdiagnose: ['Angststörung (HSP + belastende Umwelt → Angst möglich)', 'ADHS (Überreizung ≠ Aufmerksamkeitsdefizit)', 'Autismus-Spektrum-Störung (sensorische Empfindlichkeit ähnlich, aber soziale Kognition unterschiedlich)', 'Introversion (Korrelation, aber nicht identisch)', 'Vermeidende Persönlichkeitszüge'],
+    komorbiditaeten: ['Depression (bei HSP in invalidierender Umwelt)', 'Angststörungen', 'Burnout (durch chronische Überstimulation)', 'Somatische Beschwerden'],
+    evidenzbasierte_interventionen: [
+      {name: 'Psychoedukation', beschreibung: 'Jugendlichem und Umfeld erklären: "Du bist nicht zu sensibel — dein Nervensystem verarbeitet mehr als bei anderen." Normalisierung und Reframing als Stärke.'},
+      {name: 'Selbstregulation & Reizmanagement', beschreibung: 'Reizreduktion: Rückzugsorte schaffen, Kopfhörer erlauben, Pausen einplanen. Übergänge gestalten. Energiehaushalt managen: "Social Battery" verstehen.'},
+      {name: 'Stärkenbasierter Ansatz', beschreibung: 'Kreativität, Empathie, Tiefgang als Ressourcen nutzen. Berufsfelder, die zu HSP passen (Kunst, Beratung, Forschung, Natur). Die Welt braucht sensible Menschen.'}
+    ],
+    praxis_tipps: [
+      'Hochsensibilität ist ein Merkmal, keine Diagnose — nicht pathologisieren',
+      'Rückzugsorte in der Einrichtung: Ruhiger Raum, in den man sich zurückziehen kann',
+      'Übergänge planen: HSP brauchen mehr Zeit für Wechsel (z.B. zwischen Aktivitäten)',
+      'Stimulationsbalance: Nicht zu viel (Überreizung), nicht zu wenig (Langeweile)',
+      'Stärken benennen: "Du merkst Dinge, die andere nicht sehen — das ist wertvoll"',
+      'Nicht als "zu empfindlich" abtun — das ist Invalidierung',
+      'Differenzieren: HSP + gute Umwelt = Blühen. HSP + schlechte Umwelt = Leiden',
+      'Bei HSP in der Jugendhilfe: Die Einrichtung selbst kann Stressor sein (Lärm, Gruppentzwang)',
+      'Auch Fachkräfte können hochsensibel sein — Stärke und Gefahr zugleich'
+    ],
+    wann_ueberweisen: 'Hochsensibilität allein ist kein Überweisungsgrund. Bei komorbider Angst/Depression: Therapie empfehlen. Sensorische Integrationsstörung: Ergotherapie. V.a. Autismus: Differentialdiagnostik.',
+    luxemburg_spezifisch: 'Hochsensibilität wird in Luxemburg zunehmend thematisiert. Einzelne Therapeuten und Coaches bieten HSP-Beratung an. Selbsthilfegruppen in der Grenzregion.',
+    verwandte_wiki: ['emotionsregulation', 'angst', 'autismus', 'window-of-tolerance'],
+    screening_domains: [],
+    themen_ids: ['temperament', 'wahrnehmung', 'identitaet'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Aron, E.N. (2012). The Highly Sensitive Person. Harmony Books.', 'Acevedo, B.P. et al. (2014). The highly sensitive brain: An fMRI study of sensory processing sensitivity. Brain and Behavior.', 'Pluess, M. (2015). Individual Differences in Environmental Sensitivity. Child Development Perspectives.']
+  },
+  {
+    id: 'psychopharmaka',
+    titel: 'Psychopharmaka bei Kindern & Jugendlichen',
+    aliases: ['Psychopharmaka', 'Medikamente', 'Psychotropic Medication', 'Antidepressiva', 'Neuroleptika', 'Stimulanzien', 'Methylphenidat', 'SSRI', 'Ritalin'],
+    kategorie: 'konzepte',
+    icon: '💊',
+    farbe: '#9b59b6',
+    definition: 'Psychopharmaka sind Medikamente, die auf das zentrale Nervensystem wirken und psychische Symptome beeinflussen. Bei Kindern und Jugendlichen ist der Einsatz besonders sorgfältig abzuwägen, da das sich entwickelnde Gehirn anders auf Medikamente reagieren kann als das erwachsene. Fachkräfte in der Jugendhilfe verschreiben keine Medikamente, sollten aber über die wichtigsten Substanzklassen, deren Wirkungen und Nebenwirkungen Bescheid wissen — sowohl um Eltern und Jugendliche zu unterstützen als auch um Veränderungen unter Medikation zu erkennen.',
+    altersgruppe: 'Kinder und Jugendliche (besondere Vorsicht unter 6 Jahren)',
+    praevalenz: 'Ca. 3-7% aller Kinder/Jugendlichen in westlichen Ländern erhalten Psychopharmaka. Am häufigsten: Stimulanzien (ADHS), gefolgt von Antidepressiva.',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Wichtigste Substanzklassen', items: ['1. Stimulanzien (Methylphenidat/Ritalin, Amphetamine): Bei ADHS — verbessern Aufmerksamkeit und Impulskontrolle. NW: Appetitminderung, Schlafstörungen, Wachstumsverzögerung', '2. SSRI (Fluoxetin, Sertralin): Bei Depression und Angst — heben Stimmung, reduzieren Angst nach 2-4 Wochen. NW: Übelkeit, Kopfschmerzen, anfänglich ↑ Unruhe. Cave: Suizidalitäts-Monitoring in ersten Wochen!', '3. Antipsychotika/Neuroleptika (Risperidon, Aripiprazol): Bei Psychose, schwerer Aggression, Tics. NW: Gewichtszunahme, Müdigkeit, metabolische Effekte', '4. Mood Stabilizer (Lithium, Valproat): Bei bipolarer Störung. NW: Gewichtszunahme, Schilddrüseneffekte, Teratogenität', '5. Anxiolytika/Benzodiazepine: Nur kurzzeitig bei akuter Angst/Krise. NW: Abhängigkeitspotenzial! Cave: Nicht als Dauermedikation', '6. Melatonin: Bei Einschlafstörungen — niedrigschwellig, wenig NW']},
+      {section: 'Grundprinzipien', items: ['Start low, go slow: Niedrig dosieren, langsam steigern', 'Monotherapie bevorzugen (ein Medikament)', 'Immer in Kombination mit Psychotherapie und pädagogischen Maßnahmen', 'Regelmäßiges Monitoring: Wirkung, Nebenwirkungen, Labor', 'Informed Consent: Jugendlicher UND Eltern müssen aufgeklärt werden', 'Off-Label-Use: Viele Psychopharmaka haben keine Zulassung für Minderjährige', 'Absetzung: Immer ausschleichen, nie abrupt absetzen']}
+    ],
+    ursachen: [],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Multimodale Behandlung (MTA-Studie)', beschreibung: 'Größte ADHS-Studie: Kombination aus Medikation + Verhaltenstherapie ist der reinen Medikation oder reinen Therapie überlegen. Medikation allein reicht meist nicht.'},
+      {name: 'SSRI bei Adoleszenten-Depression', beschreibung: 'TADS-Studie: Fluoxetin + KVT > Fluoxetin allein > KVT allein > Placebo. SSRI sind wirksam, aber engmaschiges Suizidalitäts-Monitoring in den ersten 4 Wochen ist Pflicht (Black-Box-Warning).'},
+      {name: 'Shared Decision Making', beschreibung: 'Jugendliche in Medikamenten-Entscheidungen einbeziehen: Pro/Contra besprechen, Erwartungen klären, Sorgen ernst nehmen. Compliance steigt dramatisch bei geteilter Entscheidung.'}
+    ],
+    praxis_tipps: [
+      'Wir verschreiben nicht — aber wir beobachten und berichten',
+      'Verhaltensänderungen unter neuer Medikation dokumentieren und dem Arzt rückmelden',
+      'Medikamenten-Compliance unterstützen: Erinnerungen, Rituale, nicht moralisieren',
+      'Jugendliche haben oft Sorgen: "Bin ich dann nicht mehr ich selbst?" — ernst nehmen',
+      'Eltern haben oft Ängste vor Psychopharmaka — Psychoedukation anbieten',
+      'Medikation ist keine Schwäche: "Insulin bei Diabetes ist auch keine Schwäche"',
+      'Cave: Medikamente nicht als Erziehungsersatz! ("Gib ihm Ritalin, dann ist er ruhig")',
+      'Stimulanzien-Missbrauch beachten: Teilen oder Verkaufen in Einrichtungen möglich',
+      'SSRI: In den ersten 2-4 Wochen besonders auf Unruhe/Suizidalität achten',
+      'Medikamenten-Einnahme nicht heimlich in Essen/Trinken mischen — Vertrauensbruch',
+      'Bei Nebenwirkungen: Dokumentieren, Arzt informieren, nicht eigenmächtig absetzen'
+    ],
+    wann_ueberweisen: 'Medikamentöse Behandlung nur durch KJP (Kinder- und Jugendpsychiater). Indikationen: Schwere Depression (SSRI), ADHS mit starker Beeinträchtigung (Stimulanzien), Psychose (Antipsychotika), Bipolare Störung (Mood Stabilizer), schwere Angststörung (SSRI).',
+    luxemburg_spezifisch: 'Verschreibung durch Kinder- und Jugendpsychiater (médecin psychiatre). Service de Pédopsychiatrie am CHL. CNS übernimmt Kosten. Methylphenidat unterliegt BtM-Regelung (ordonnance spéciale). Apothekenberatung für Eltern/Jugendliche.',
+    verwandte_wiki: ['adhs', 'depression', 'psychose', 'bipolare-stoerung', 'angst'],
+    screening_domains: [],
+    themen_ids: ['medikation', 'therapie'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Banaschewski, T. et al. (2017). Psychopharmakotherapie im Kindes- und Jugendalter. Springer.', 'MTA Cooperative Group (1999). A 14-Month Randomized Clinical Trial of Treatment Strategies for ADHD. Archives of General Psychiatry.', 'March, J. et al. (2004). Fluoxetine, Cognitive-Behavioral Therapy, and Their Combination for Adolescents With Depression (TADS). JAMA.']
+  },
+  {
+    id: 'diagnostik-testverfahren',
+    titel: 'Diagnostische Verfahren & Testpsychologie',
+    aliases: ['Diagnostik', 'Testpsychologie', 'Psychologische Tests', 'Assessment', 'Screening', 'IQ-Test', 'CBCL', 'SDQ', 'Diagnostische Verfahren'],
+    kategorie: 'konzepte',
+    icon: '📋',
+    farbe: '#9b59b6',
+    definition: 'Psychologische Diagnostik bei Kindern und Jugendlichen umfasst systematische Methoden zur Erfassung von Verhaltensauffälligkeiten, emotionalen Problemen, kognitiven Fähigkeiten und Entwicklungsständen. Fachkräfte in der Jugendhilfe führen in der Regel keine vollständige psychologische Diagnostik durch, sollten aber Screening-Instrumente kennen, anwenden und Testergebnisse verstehen können. Gute Diagnostik ist die Grundlage für passende Interventionen — ohne Diagnostik keine gezielte Hilfe.',
+    altersgruppe: 'Alle Altersgruppen (altersgerechte Verfahren)',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Diagnostische Methoden', items: ['Klinisches Interview: Exploration des Jugendlichen und der Bezugspersonen (strukturiert, halbstrukturiert, offen)', 'Verhaltensbeobachtung: Systematisch (Häufigkeit, Dauer, Auslöser) oder unsystematisch im Alltag', 'Fragebögen/Rating-Skalen: Standardisiert, normiert, ökonomisch (Selbst- und Fremdbeurteilung)', 'Leistungstests: Intelligenz, Konzentration, Schulleistung', 'Projektive Verfahren: Zeichnungen, Satzergänzung, TAT (umstrittene Validität)', 'Neuropsychologische Tests: Exekutive Funktionen, Aufmerksamkeit, Gedächtnis']},
+      {section: 'Wichtige Screening-Instrumente', items: ['SDQ (Strengths and Difficulties Questionnaire): 25 Items, 5 Skalen, ab 4 Jahre, kostenlos. Goldstandard-Screening in der Jugendhilfe', 'CBCL (Child Behavior Checklist / Achenbach): Umfassend, Eltern- und Lehrerversion, internalisierende/externalisierende Probleme', 'BDI-II / PHQ-A: Depressions-Screening für Jugendliche', 'SCARED: Angst-Screening für Kinder und Jugendliche', 'AUDIT / CRAFFT: Substanzkonsum-Screening', 'WISC-V (Wechsler): IQ-Test für Kinder (6-16 Jahre) — nur durch Psychologen', 'DISYPS: Diagnostik-System für psychische Störungen bei Kindern und Jugendlichen']}
+    ],
+    ursachen: [],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'SDQ als Routine-Screening', beschreibung: 'Strengths and Difficulties Questionnaire: 25 Items, 5-10 Min., kostenlos, in >80 Sprachen. 5 Skalen: Emotionale Probleme, Verhaltensprobleme, Hyperaktivität, Peer-Probleme, Prosoziales Verhalten. Cut-off-Werte für auffällig/grenzwertig/unauffällig. Sollte bei jedem Jugendlichen in der Jugendhilfe erhoben werden.'},
+      {name: 'Multi-Informanten-Diagnostik', beschreibung: 'Informationen aus verschiedenen Quellen: Jugendlicher selbst, Eltern, Lehrer, Fachkräfte. Diskrepanzen sind informativ (nicht problematisch): Kind berichtet Angst, Eltern sehen nichts → Internalisierende Störungen werden oft übersehen.'},
+      {name: 'Verlaufsdiagnostik', beschreibung: 'Wiederholte Messung zur Erfolgskontrolle: SDQ alle 6 Monate, Symptomskalen vor/nach Intervention. "Was sich nicht messen lässt, lässt sich nicht managen."'}
+    ],
+    praxis_tipps: [
+      'SDQ bei Aufnahme und alle 6 Monate erheben — einfachstes valides Screening',
+      'Testergebnisse sind Momentaufnahmen, keine endgültigen Urteile',
+      'IQ-Ergebnis NIEMALS dem Jugendlichen als Zahl mitteilen — Gefahr der Etikettierung',
+      'Diagnostik immer im Kontext: Sprachbarrieren, kultureller Hintergrund, Tagesform',
+      'Fragebögen in der Muttersprache anbieten (SDQ gibt es in >80 Sprachen)',
+      'Diagnostik ist kein Selbstzweck — sie muss in Handlung münden',
+      'Ergebnisse verständlich kommunizieren: An Eltern, Team, Jugendliche (altersgerecht)',
+      'Kein "Googeln von Diagnosen" — Diagnosen stellt der Arzt/Psychologe',
+      'Aber: Eigene Beobachtungen systematisch dokumentieren und in die Diagnostik einbringen',
+      'Cave: Nicht jeder auffällige SDQ-Wert bedeutet eine Störung (Sensitivität vs. Spezifität)'
+    ],
+    wann_ueberweisen: 'Umfassende Diagnostik durch: Kinder- und Jugendpsychiater (medizinische Diagnostik), Psychologen (Testdiagnostik, IQ, neuropsychologisch), CPOS/SPOS (schulbezogene Diagnostik). Bei V.a. Entwicklungsstörung, Intelligenzminderung, ADHS, Autismus, Lernstörung.',
+    luxemburg_spezifisch: 'CPOS (Centre de Psychologie et d\'Orientation Scolaires): Schulbezogene Diagnostik. Service de Pédopsychiatrie CHL: Psychiatrische Diagnostik. SCAP (Service Central d\'Assistance Sociale): Psychologische Diagnostik. Centre de Logopédie: Sprach- und Entwicklungsdiagnostik.',
+    verwandte_wiki: ['verhaltensanalyse', 'adhs', 'autismus', 'lernstörungen', 'intelligenzminderung'],
+    screening_domains: [],
+    themen_ids: ['diagnostik', 'assessment'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Döpfner, M. et al. (2014). Diagnostik psychischer Störungen im Kindes- und Jugendalter. Hogrefe.', 'Goodman, R. (1997). The Strengths and Difficulties Questionnaire. Journal of Child Psychology and Psychiatry.', 'Petermann, F. & Macha, T. (2013). Psychologische Tests für die Praxis. Hogrefe.']
+  },
+  {
+    id: 'verhaltensanalyse',
+    titel: 'Funktionale Verhaltensanalyse (SORKC)',
+    aliases: ['Verhaltensanalyse', 'SORKC', 'SORC', 'Funktionale Analyse', 'Functional Behavior Analysis', 'FBA', 'Bedingungsanalyse', 'Verstärkeranalyse'],
+    kategorie: 'konzepte',
+    icon: '🔍',
+    farbe: '#9b59b6',
+    definition: 'Die funktionale Verhaltensanalyse (SORKC-Modell, nach Kanfer & Saslow) ist ein systematisches Werkzeug der Verhaltenstherapie, um Problemverhalten zu verstehen. Statt zu fragen "Warum macht er das?", fragt sie: "Unter welchen Bedingungen tritt das Verhalten auf und was hält es aufrecht?" Das SORKC-Schema analysiert: Stimulus (Auslöser) → Organismus (Person) → Reaktion (Verhalten) → Kontingenz (Regelmäßigkeit) → Konsequenz (Folge). In der Jugendhilfe ist die Verhaltensanalyse ein unverzichtbares Instrument für die Fallarbeit.',
+    altersgruppe: 'Alle Altersgruppen',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'SORKC-Schema', items: ['S = Stimulus (Auslöser): Was passiert unmittelbar VOR dem Verhalten? Externe (Situation, Personen) und interne Stimuli (Gedanken, Gefühle, Körperempfindungen)', 'O = Organismus (Personvariablen): Was bringt die Person mit? Biologische Faktoren, Lernerfahrung, Kognitionen, Grundüberzeugungen, Temperament, Entwicklungsstand', 'R = Reaktion (Verhalten): Was genau passiert? Auf 3 Ebenen: Motorisch (Verhalten), Kognitiv (Gedanken), Physiologisch (Körperreaktionen), Emotional (Gefühle)', 'K = Kontingenz (Zusammenhang): Wie regelmäßig folgt die Konsequenz? Immer, manchmal, unvorhersehbar? Intermittierende Verstärkung ist am löschungsresistentesten!', 'C = Konsequenz (Folge): Was passiert NACH dem Verhalten? Kurzfristig vs. langfristig. Positive Verstärkung (etwas Angenehmes kommt hinzu), negative Verstärkung (etwas Unangenehmes fällt weg), Bestrafung (etwas Unangenehmes kommt hinzu), Löschung (erwartete Konsequenz bleibt aus)']},
+      {section: 'Beispiel: Selbstverletzung', items: ['S: Streit mit Mutter (extern), Schamgefühl (intern)', 'O: Traumageschichte, geringe Frustrationstoleranz, fehlende alternative Coping-Skills', 'R: Ritzen am Unterarm (motorisch), "Ich bin wertlos" (kognitiv), Anspannung → Erleichterung (emotional)', 'K: Fast immer nach Konflikten (hohe Kontingenz)', 'C: Kurzfristig: Spannungsreduktion (negative Verstärkung!), Fürsorge durch Umfeld (positive Verstärkung). Langfristig: Narben, Scham, keine Konfliktlösung']}
+    ],
+    ursachen: [],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Verstärkerbasierte Interventionen', beschreibung: 'Aus der Analyse folgt die Intervention: Wenn Verhalten durch negative Verstärkung aufrechterhalten wird → alternative Wege zur Spannungsreduktion anbieten. Wenn durch positive Verstärkung → erwünschtes Alternativverhalten verstärken.'},
+      {name: 'ABC-Protokoll (vereinfacht)', beschreibung: 'Für den Alltag: A (Antecedent) = Was war vorher? B (Behavior) = Was hat er/sie getan? C (Consequence) = Was war danach? Über 1-2 Wochen protokollieren → Muster erkennen.'},
+      {name: 'Kontingenzmanagement', beschreibung: 'Systematische Veränderung der Konsequenzen: Token-Economy (Punkte sammeln), Verstärkerpläne, Response Cost (Verlust von Privilegien). Evidenzbasiert bei externalisierenden Verhaltensproblemen.'}
+    ],
+    praxis_tipps: [
+      'SORKC ist DAS Werkzeug der Bezugsarbeit: Verhalten verstehen, nicht nur reagieren',
+      'ABC-Protokoll im Alltag führen: Einfach, aber extrem aufschlussreich',
+      'Frage: "Was hat der Jugendliche DAVON?" — Verhalten hat IMMER eine Funktion',
+      'Kurzfristige Konsequenzen sind stärker als langfristige → erklärt "irrationales" Verhalten',
+      'Intermittierende Verstärkung: Wenn Verhalten manchmal zum Erfolg führt, hält es sich am längsten',
+      'Auch "gutes" Verhalten analysieren: Was sind Erfolgsbedingungen?',
+      'Im Team: SORKC gemeinsam erstellen — verschiedene Perspektiven bereichern',
+      'Nicht nur Problemverhalten analysieren — auch Stärken und funktionales Verhalten!',
+      'Cave: Verhaltensanalyse darf nicht reduktionistisch sein — Mensch ist mehr als sein Verhalten',
+      'Die beste Analyse nützt nichts ohne Handlungskonsequenz: Was verändern wir?'
+    ],
+    wann_ueberweisen: 'Komplexe Verhaltensanalysen bei schwierigen Fällen: Psychologische Fachkraft einbeziehen. Wenn Verhaltensanalyse auf traumatische Ursachen hindeutet: Traumatherapie. Bei Verdacht auf neurobiologische Ursachen: Diagnostik.',
+    luxemburg_spezifisch: '',
+    verwandte_wiki: ['kvt', 'odd', 'conduct-disorder', 'selbstverletzung', 'diagnostik-testverfahren'],
+    screening_domains: [],
+    themen_ids: ['verhalten', 'diagnostik', 'analyse'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Kanfer, F.H. & Saslow, G. (1969). Behavioral Diagnosis. In: Behavior Therapy. Academic Press.', 'Reinecker, H. (2015). Grundlagen der Verhaltenstherapie. Beltz.', 'Haynes, S.N. & O\'Brien, W.H. (2000). Principles and Practice of Behavioral Assessment. Springer.']
+  },
+  {
+    id: 'window-of-tolerance',
+    titel: 'Window of Tolerance & Arousal-Modulation',
+    aliases: ['Window of Tolerance', 'WoT', 'Arousal', 'Stresstoleranzfenster', 'Siegel', 'Hyper-Arousal', 'Hypo-Arousal', 'Optimales Erregungsniveau'],
+    kategorie: 'konzepte',
+    icon: '📊',
+    farbe: '#9b59b6',
+    definition: 'Das "Window of Tolerance" (Stresstoleranzfenster) ist ein von Daniel Siegel geprägtes Konzept, das den Bereich der Erregung (Arousal) beschreibt, in dem ein Mensch optimal funktioniert — denken, fühlen und handeln kann, ohne überflutet oder abgeschaltet zu sein. Traumatisierte Menschen haben oft ein sehr schmales Window of Tolerance: Schon geringe Belastungen führen zu Hyper-Arousal (Überregung: Panik, Wut, Flashbacks) oder Hypo-Arousal (Unterregung: Erstarrung, Dissoziation, Taubheit). Das Konzept ist einfach zu verstehen und in der Jugendhilfe direkt anwendbar.',
+    altersgruppe: 'Konzept relevant für alle Altersgruppen',
+    praevalenz: '',
+    icd10: '',
+    icd11: '',
+    erscheinungsbild: [
+      {section: 'Die 3 Zonen', items: ['🟢 Window of Tolerance (Optimale Zone): Fähig zu denken, zu fühlen und zu handeln. Kann Stress bewältigen. Soziales Engagement möglich. Lernen und Reflexion möglich.', '🔴 Hyper-Arousal (Überregung): Fight-or-Flight. Symptome: Angst, Panik, Wut, Unruhe, Hypervigilanz, Flashbacks, Herzrasen, Schwitzen. Sympathikus dominant.', '🔵 Hypo-Arousal (Unterregung): Freeze/Collapse. Symptome: Taubheit, Dissoziation, Erschlaffung, Leere, Apathie, "Abschalten", Verlangsamung. Dorsaler Vagus dominant.', 'Pendelreaktion: Traumatisierte Menschen pendeln oft zwischen Hyper- und Hypo-Arousal — ohne die mittlere Zone zu erreichen']},
+      {section: 'Verbindung mit Polyvagaltheorie (Porges)', items: ['Ventraler Vagus (soziales Engagement): Sicherheit → Window of Tolerance', 'Sympathikus (Mobilisierung): Gefahr → Hyper-Arousal (Kampf/Flucht)', 'Dorsaler Vagus (Immobilisierung): Lebensbedrohung → Hypo-Arousal (Erstarren/Kollaps)', 'Neuroception: Unbewusste Einschätzung von Sicherheit vs. Gefahr']}
+    ],
+    ursachen: [
+      {section: 'Was das Window of Tolerance verengt', items: ['Trauma und Traumafolgestörungen', 'Chronischer Stress', 'Schlafmangel', 'Substanzkonsum', 'Mangelernährung', 'Unsichere Bindungserfahrungen', 'Soziale Isolation', 'Re-Triggering (Konfrontation mit Trauma-Erinnerungen)']},
+      {section: 'Was das Window of Tolerance erweitert', items: ['Sichere Beziehungen', 'Körperliche Aktivität', 'Achtsamkeit und Meditation', 'Ausreichend Schlaf', 'Regelmäßige Routinen', 'Psychoedukation ("Ich verstehe, was mit mir passiert")', 'Therapeutische Arbeit (insbesondere Trauma-Therapie)', 'Co-Regulation durch Bezugspersonen']}
+    ],
+    differentialdiagnose: [],
+    komorbiditaeten: [],
+    evidenzbasierte_interventionen: [
+      {name: 'Psychoedukation mit dem WoT-Modell', beschreibung: 'Dem Jugendlichen das Modell erklären (zeichnen!): "Es gibt eine Zone, in der du klar denken und fühlen kannst. Wenn Stress zu groß wird, verlässt du diese Zone." Jugendliche verstehen das Modell sofort und können es auf sich anwenden.'},
+      {name: 'Arousal-Monitoring', beschreibung: 'Tägliche oder situative Einschätzung: "Wo bin ich gerade auf der Skala? Hyper (rot) — OK (grün) — Hypo (blau)?" Verkehrsampel-Modell oder Thermometer. Hilft, Eskalation frühzeitig zu erkennen.'},
+      {name: 'Up-Regulation (bei Hypo-Arousal)', beschreibung: 'Ins Fenster zurückkommen von unten: Kaltes Wasser, Bewegung, scharfe Gerüche (Ammoniak, Minze), rhythmisches Klatschen, Sinnesreize (saure Bonbons, Eiswürfel), aufrechte Körperhaltung.'},
+      {name: 'Down-Regulation (bei Hyper-Arousal)', beschreibung: 'Ins Fenster zurückkommen von oben: Tiefe Bauchatmung (4-7-8), Grounding (5-4-3-2-1-Technik), Progressive Muskelentspannung, langsame Bewegungen, beruhigende Musik, sicherer Ort.'}
+    ],
+    praxis_tipps: [
+      'Das WoT-Modell auf ein Whiteboard zeichnen und mit dem Jugendlichen erarbeiten',
+      'Tägliches Arousal-Check-In: Ampel (rot-grün-blau) oder Zahl 1-10',
+      'Fachkräfte müssen EIGENES Window of Tolerance kennen — auch wir verlassen es!',
+      'Co-Regulation: Eigene Ruhe reguliert den Jugendlichen mit (Nervensystem-zu-Nervensystem)',
+      'Bei Hyper-Arousal: ERST regulieren, DANN reden — Gehirn kann in Überregung nicht lernen',
+      'Bei Hypo-Arousal: Sanft aktivieren, nicht erschrecken — sensorische Stimulation',
+      'Routine und Vorhersagbarkeit erweitern das Window of Tolerance langfristig',
+      'Körperübungen sind effektiver als Worte: Atmen, Bewegen, Spüren',
+      'Individuell: Jeder Jugendliche hat andere Strategien, die wirken — gemeinsam herausfinden',
+      'Das Ziel ist nicht "immer im Fenster bleiben" — das Ziel ist "schneller zurückkommen"'
+    ],
+    wann_ueberweisen: 'Bei chronisch schmalem Window of Tolerance: Trauma-Therapie (EMDR, TF-KVT). Bei schwerer Dissoziation: Spezialisierte Dissozitationstherapie. Bei körperlicher Dysregulation: Sensorische Integrationstherapie, Somatic Experiencing.',
+    luxemburg_spezifisch: 'Das Window-of-Tolerance-Konzept wird zunehmend in luxemburgischen Fortbildungen für Jugendhilfe-Fachkräfte vermittelt. Trauma-Therapie über spezialisierte Therapeuten und Service de Psychotraumatologie des CHL.',
+    verwandte_wiki: ['pvt', 'trauma', 'emotionsregulation', 'dissoziation', 'achtsamkeit', 'dbt'],
+    screening_domains: [],
+    themen_ids: ['trauma', 'regulation', 'koerper'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Siegel, D.J. (2012). The Developing Mind. Guilford Press.', 'Ogden, P. et al. (2006). Trauma and the Body. Norton.', 'Dana, D. (2018). The Polyvagal Theory in Therapy. Norton.']
+  },
 ];

@@ -1906,6 +1906,34 @@ const SMART_SCREENING_VORSCHLAEGE = {
     'In 4 Wochen kann [Name] 3 Körpersignale benennen die auf Stress hinweisen',
     'In 6 Wochen setzt [Name] bei Bauchschmerzen/Kopfschmerzen eine Entspannungstechnik ein statt zu fehlen',
   ],
+  psychose: [
+    'In 2 Wochen hat [Name] einen festen Ansprechpartner für ungewöhnliche Wahrnehmungen identifiziert',
+    'In 4 Wochen nimmt [Name] regelmäßig an vereinbarten Facharztterminen teil',
+  ],
+  autismus: [
+    'In 4 Wochen kann [Name] 3 Strategien für Reizüberflutung benennen und 1 davon in der Schule einsetzen',
+    'In 6 Wochen nutzt [Name] eine visuelle Tagesstruktur an mind. 4 von 5 Schultagen selbstständig',
+  ],
+  diskriminierung: [
+    'In 4 Wochen kann [Name] 2 eigene Stärken benennen die unabhängig von Zuschreibungen anderer sind',
+    'In 6 Wochen kennt [Name] eine Anlaufstelle für Diskriminierungserfahrungen und weiß wie er/sie sich Hilfe holt',
+  ],
+  zwang: [
+    'In 4 Wochen kann [Name] Zwangsgedanken von eigenen Gedanken unterscheiden und als "Zwangsstörung" benennen',
+    'In 6 Wochen reduziert [Name] die Zeit für Zwangsrituale um 30% gegenüber dem aktuellen Niveau',
+  ],
+  stimmungsextreme: [
+    'In 4 Wochen führt [Name] ein Stimmungstagebuch und erkennt Muster in Hoch- und Tiefphasen',
+    'In 6 Wochen kann [Name] 3 Frühwarnzeichen für extreme Stimmungswechsel benennen und 1 Gegenstrategie einsetzen',
+  ],
+  dissoziation: [
+    'In 2 Wochen kann [Name] eine Grounding-Technik (5-4-3-2-1) selbstständig anwenden wenn er/sie „wegdriftet"',
+    'In 4 Wochen erkennt [Name] mind. 2 Trigger die Dissoziation auslösen und kennt Strategien zur Vorbeugung',
+  ],
+  resilienz: [
+    'In 4 Wochen kann [Name] 5 persönliche Stärken und Ressourcen benennen',
+    'In 6 Wochen hat [Name] sein/ihr Unterstützungsnetzwerk um mind. 1 Person/Anlaufstelle erweitert',
+  ],
 };
 
 // Rating-Anker für Stärken-Dimensionen (1-3 niedrig, 4-6 mittel, 7-10 hoch)
@@ -13292,3 +13320,1116 @@ const VERHALTENS_KATALOG = [
     ]
   }
 ];
+
+// ============================================================
+// SCREENING-INTERPRETATION — Was bedeuten auffällige Ergebnisse?
+// ============================================================
+const SCREENING_INTERPRETATION = {
+  depression: {
+    was_bedeutet_auffaellig: 'Der Jugendliche zeigt erhöhte Werte bei depressiven Symptomen: Traurigkeit, Antriebslosigkeit, Interessenverlust, Hoffnungslosigkeit. Dies kann eine depressive Episode, eine Trauerreaktion oder chronische Überforderung anzeigen.',
+    sofort_massnahmen: ['Suizidalität abklären (direkt fragen!)', 'Regelmäßige Sitzungen sicherstellen (1x/Woche)', 'Aktivitätsaufbau: 1 positive Aktivität pro Tag einplanen', 'Bezugspersonen informieren (Eltern, Lehrer)'],
+    empfohlene_themen: ['depressive-stimmungen', 'selbstwertgefuehl', 'freude-wohlbefinden'],
+    wann_ueberweisen: 'Bei Score >10/15: Therapeut/Kinder- und Jugendpsychiater empfehlen. Bei Suizidgedanken: SOFORT Krisenprotokoll.'
+  },
+  'angst-generalisiert': {
+    was_bedeutet_auffaellig: 'Der Jugendliche macht sich übermäßig viele Sorgen über verschiedene Lebensbereiche (Schule, Gesundheit, Familie, Zukunft). Die Sorgen sind schwer kontrollierbar und beeinträchtigen den Alltag.',
+    sofort_massnahmen: ['Psychoedukation: Angst erklären (Alarmanlage im Kopf)', 'Atemtechnik vermitteln (4-7-8 oder Box-Breathing)', 'Sorgenstunde einführen: 15 Min feste Sorgenzeit, sonst Stopp', 'Bewegung und Routine fördern'],
+    empfohlene_themen: ['stress-angst', 'emotionsregulation', 'achtsamkeit'],
+    wann_ueberweisen: 'Bei Score >8/12: Angsttherapie (KVT) empfehlen. Bei Schulvermeidung oder Panikattacken: Therapeut + ggf. Kinderarzt.'
+  },
+  'angst-sozial': {
+    was_bedeutet_auffaellig: 'Der Jugendliche hat massive Angst vor sozialen Situationen: Mündliche Prüfungen, Referate, Gruppengespräche, neue Menschen. Vermeidet aktiv soziale Kontakte.',
+    sofort_massnahmen: ['Nicht erzwingen (kein "Stell dich nicht so an")', 'Graduierte Exposition planen: Kleine Schritte', 'Positive soziale Erfahrungen schaffen (1:1 statt Gruppe)', 'Stärken betonen die nicht sozial sind (Kreativität, Sport, Wissen)'],
+    empfohlene_themen: ['stress-angst', 'freundschaften', 'kommunikation', 'selbstwertgefuehl'],
+    wann_ueberweisen: 'Bei Score >8/12 oder komplettem sozialem Rückzug: Angsttherapie empfehlen. Schulische Anpassungen prüfen.'
+  },
+  trauma: {
+    was_bedeutet_auffaellig: 'Es gibt Hinweise auf traumatische Erfahrungen und deren Folgen: Flashbacks, Albträume, Vermeidung, Übererregung, emotionale Taubheit. CAVE: Trauma-Inhalte NICHT vertiefen ohne therapeutische Anbindung.',
+    sofort_massnahmen: ['STABILISIERUNG vor Verarbeitung — kein Nachfragen nach Details!', 'Sicherheit herstellen: Ist der Jugendliche aktuell sicher?', 'Grounding-Techniken vermitteln (5-4-3-2-1 Methode)', 'Traumatherapie-Anbindung einleiten (EMDR, tf-KVT)'],
+    empfohlene_themen: ['trauma', 'krisenintervention', 'emotionsregulation'],
+    wann_ueberweisen: 'IMMER bei Trauma-Score über Cutoff: Traumatherapie empfehlen. Bezugsarbeit als Stabilisierung NEBEN Therapie.'
+  },
+  adhs: {
+    was_bedeutet_auffaellig: 'Hinweise auf Aufmerksamkeitsprobleme, Impulsivität und/oder Hyperaktivität. ADHS ist neurologisch bedingt — kein Erziehungsproblem und keine Frage des Willens.',
+    sofort_massnahmen: ['Klare Strukturen schaffen: Tagesplan, Routinen, kurze Einheiten', 'Bewegungspausen einplanen', 'Positive Verstärkung bei Aufmerksamkeit (nicht nur bei Fehlern eingreifen)', 'Aufgaben in kleine Schritte zerteilen'],
+    empfohlene_themen: ['impulskontrolle', 'emotionsregulation', 'selbststaendigkeit'],
+    wann_ueberweisen: 'Bei Verdacht auf ADHS: Kinder- und Jugendpsychiater für Diagnostik empfehlen. Nachteilsausgleich (Aménagements raisonnables) prüfen.'
+  },
+  conduct: {
+    was_bedeutet_auffaellig: 'Der Jugendliche zeigt wiederholtes dissoziales oder oppositionelles Verhalten: Regelverstöße, Aggression, Lügen, Sachbeschädigung. Unterscheide: Reaktiv (auf Stress/Trauma) vs. Proaktiv (instrumentell).',
+    sofort_massnahmen: ['Beziehung vor Intervention — Vertrauen aufbauen', 'Klare, konsistente Grenzen mit natürlichen Konsequenzen', 'Verhaltens-Tab der App nutzen → Konkrete Handlungsempfehlungen', 'Positive Verstärkung: 5:1 Ratio (5x Lob pro 1x Korrektur)'],
+    empfohlene_themen: ['impulskontrolle', 'wut-aggression', 'konfliktmanagement', 'grenzen-setzen'],
+    wann_ueberweisen: 'Bei schwerer Gewalt, Tierquälerei oder fehlender Empathie: Kinder- und Jugendpsychiatrie. Bei Delinquenz: PJ (Protection de la Jeunesse).'
+  },
+  selbstverletzung: {
+    was_bedeutet_auffaellig: '⚠️ KRISENRELEVANT. Der Jugendliche verletzt sich selbst (Ritzen, Kratzen, Verbrennen, Kopf schlagen). SVV ist ein Bewältigungsmechanismus — keine Manipulation und kein Suizidversuch (aber Suizidalität IMMER mitabklären!).',
+    sofort_massnahmen: ['Suizidalität direkt abklären (C-SSRS Fragen)', 'Wunden versorgen oder versorgen lassen', 'Krisenplan erstellen (Alternativen: Eiswürfel, rote Farbe, Sport)', 'Therapeutische Anbindung SOFORT einleiten'],
+    empfohlene_themen: ['selbstverletzung', 'emotionsregulation', 'krisenintervention'],
+    wann_ueberweisen: 'IMMER bei SVV: Therapeut + ggf. Psychiater. Bei tiefen Schnitten/Narben: Medizinische Versorgung. Bei Suizidalität: Krisenprotokoll.'
+  },
+  essstoerung: {
+    was_bedeutet_auffaellig: 'Hinweise auf gestörtes Essverhalten: Einschränkung, Erbrechen, Essanfälle, starke Gewichtsveränderung, exzessiver Sport. Essstörungen sind LEBENSGEFÄHRLICH und brauchen immer Fachbehandlung.',
+    sofort_massnahmen: ['Medizinische Abklärung einleiten (Kinderarzt: Gewicht, Labor)', 'Nicht auf Essen/Gewicht fokussieren sondern auf Gefühle dahinter', 'Keine Kommentare über Aussehen oder Essverhalten', 'Mahlzeiten-Struktur unterstützen (regelmäßig, nicht kontrollierend)'],
+    empfohlene_themen: ['essverhalten', 'koerperbild', 'selbstwertgefuehl'],
+    wann_ueberweisen: 'IMMER: Essstörungsspezifische Therapie empfehlen. Bei BMI <17 oder Erbrechen: DRINGEND Kinderarzt + Psychiater.'
+  },
+  substanz: {
+    was_bedeutet_auffaellig: 'Der Jugendliche konsumiert Alkohol, Cannabis, andere Substanzen oder zeigt Anzeichen problematischen Konsums (Regelmäßigkeit, Kontrollverlust, Funktionseinschränkung).',
+    sofort_massnahmen: ['Konsum erfragen OHNE zu moralisieren', 'Motivational Interviewing: Ambivalenz erforschen, nicht belehren', 'Harm Reduction: Risiken minimieren wenn Abstinenz unrealistisch', 'Alternative Bewältigungsstrategien aufbauen'],
+    empfohlene_themen: ['substanzkonsum', 'impulskontrolle', 'emotionsregulation'],
+    wann_ueberweisen: 'Bei täglichem Konsum oder Kontrollverlust: Suchtberatung (z.B. Impuls Lëtzebuerg). Bei Entzugssymptomen: Kinderarzt + Suchtmedizin.'
+  },
+  schlaf: {
+    was_bedeutet_auffaellig: 'Der Jugendliche hat Schlafprobleme: Einschlafstörung, Durchschlafstörung, zu wenig Schlaf, Albträume. Schlaf ist die Basis für emotionale Regulation — schlechter Schlaf verschlimmert ALLES andere.',
+    sofort_massnahmen: ['Schlafhygiene besprechen: Feste Zeiten, kein Handy im Bett, kühler Raum', 'Abend-Routine etablieren: 30 Min "Herunterfahren" vor dem Schlafen', 'Koffein, Zucker und Bildschirme ab 18 Uhr reduzieren', 'Entspannungstechnik für den Abend vermitteln (PMR, Bodyscan)'],
+    empfohlene_themen: ['schlaf', 'stress-angst', 'achtsamkeit'],
+    wann_ueberweisen: 'Bei Schlafstörung seit >4 Wochen trotz Schlafhygiene: Kinderarzt. Bei Albträumen nach Trauma: Traumatherapie.'
+  },
+  psychose: {
+    was_bedeutet_auffaellig: '⚠️ DRINGEND. Hinweise auf psychotisches Erleben: Stimmenhören, Verfolgungsideen, desorganisiertes Denken, bizarres Verhalten. Psychosen bei Jugendlichen sind IMMER ein psychiatrischer Notfall.',
+    sofort_massnahmen: ['Ruhig und nicht-konfrontativ bleiben', 'Wahnhafte Inhalte weder bestätigen noch widerlegen', 'Sicherheit gewährleisten: Ist der Jugendliche eine Gefahr für sich/andere?', 'SOFORT psychiatrische Anbindung einleiten'],
+    empfohlene_themen: ['krisenintervention'],
+    wann_ueberweisen: 'SOFORT: Kinder- und Jugendpsychiatrie. Psychosen sind psychiatrische Notfälle. Bezugsarbeit nur BEGLEITEND zur Psychiatrie.'
+  },
+  autismus: {
+    was_bedeutet_auffaellig: 'Hinweise auf Besonderheiten im Autismus-Spektrum: Schwierigkeiten in sozialer Kommunikation, repetitive Verhaltensweisen, sensorische Über-/Unterempfindlichkeit, Bedürfnis nach Routine.',
+    sofort_massnahmen: ['Klare, direkte Kommunikation (keine Ironie, kein "zwischen den Zeilen")', 'Vorhersehbarkeit schaffen: Feste Abläufe, Veränderungen ankündigen', 'Sensorische Bedürfnisse respektieren (Lautstärke, Licht, Berührung)', 'Spezialinteressen als Ressource nutzen, nicht als Problem sehen'],
+    empfohlene_themen: ['soziale-kompetenz', 'emotionserkennung', 'selbststaendigkeit'],
+    wann_ueberweisen: 'Bei Verdacht ohne Diagnose: Autismus-Diagnostik empfehlen (Kinder- und Jugendpsychiatrie). Bei Diagnose: Autismus-spezifische Förderung + Nachteilsausgleich.'
+  },
+  trennungsangst: {
+    was_bedeutet_auffaellig: 'Der Jugendliche hat übermäßige Angst vor Trennung von Bezugspersonen: Klammern, Weinen, körperliche Symptome bei Trennung, Weigerung alleine zu bleiben oder zur Schule zu gehen.',
+    sofort_massnahmen: ['Trennung nicht erzwingen — graduiert vorgehen', 'Vorhersehbarkeit schaffen: Wann gehst du? Wann kommst du wieder?', 'Übergangsobjekt einführen (Foto, Gegenstand der Bezugsperson)', 'Positive Trennungserfahrungen schaffen: Kurze, erfolgreiche Trennungen'],
+    empfohlene_themen: ['trennungsangst', 'stress-angst', 'bindungsstoerung'],
+    wann_ueberweisen: 'Bei Schulvermeidung >1 Woche oder Panikattacken bei Trennung: Angsttherapie empfehlen.'
+  },
+  mobbing: {
+    was_bedeutet_auffaellig: 'Der Jugendliche wird systematisch von Gleichaltrigen schikaniert: Ausgrenzung, Hänseln, Bedrohung, Cybermobbing. Mobbing ist KEIN normaler Konflikt und hört NICHT von alleine auf.',
+    sofort_massnahmen: ['Kind ernst nehmen: "Das ist nicht deine Schuld"', 'Schule informieren: Klassenlehrer, Schulsozialarbeiter', 'Sicherheitsplan: Sichere Orte, Vertrauenspersonen identifizieren', 'Bei Cybermobbing: Beweise sichern, Accounts schützen, ggf. BEE SECURE'],
+    empfohlene_themen: ['mobbing', 'cybermobbing', 'selbstwertgefuehl', 'soziale-kompetenz'],
+    wann_ueberweisen: 'Bei Depression/Suizidalität als Folge: Therapeut. Bei schwerer Gewalt: Polizei. BEE SECURE Helpline: 8002 1234.'
+  },
+  familie: {
+    was_bedeutet_auffaellig: 'Erhöhte familiäre Belastung: Häufige Konflikte, instabile Verhältnisse, mangelnde Unterstützung, Parentifizierung, Gewalt oder Vernachlässigung im häuslichen Umfeld.',
+    sofort_massnahmen: ['Sicherheit des Kindes an erster Stelle: Gibt es Gewalt oder Vernachlässigung?', 'Familiäre Ressourcen identifizieren: Wer in der Familie ist unterstützend?', 'Elterngespräch anbieten (nicht schuldzuweisend)', 'Entlastung für das Kind schaffen: Klare Zeiträume "nur für dich"'],
+    empfohlene_themen: ['eltern-kind-beziehung', 'familienzusammensetzung', 'parentifizierung'],
+    wann_ueberweisen: 'Bei Gewalt/Vernachlässigung: Kindeswohlgefährdungsmeldung (Jugendschutz). Bei schweren Konflikten: Familienberatung empfehlen.'
+  },
+  diskriminierung: {
+    was_bedeutet_auffaellig: 'Der Jugendliche erlebt Diskriminierung aufgrund von Herkunft, Hautfarbe, Religion, Geschlecht, sexueller Orientierung oder Behinderung. Diskriminierung ist ein chronischer Stressor mit gravierenden psychischen Folgen.',
+    sofort_massnahmen: ['Erfahrungen validieren: "Was du erlebst ist nicht OK und nicht deine Schuld"', 'Empowerment: Stärken und Identität stärken', 'Diskriminierung benennen — nicht bagatellisieren', 'Anlaufstellen zeigen: CEFIS, ASTI, LGBTQ+ Jugendgruppen in Luxemburg'],
+    empfohlene_themen: ['identitaet-kultur', 'selbstwertgefuehl', 'migration-flucht'],
+    wann_ueberweisen: 'Bei Hate Crime: Polizei + psychologische Betreuung. Bei chronischer Belastung: Therapeut mit interkultureller Kompetenz.'
+  },
+  'soziale-isolation': {
+    was_bedeutet_auffaellig: 'Der Jugendliche hat keine oder kaum Freundschaften, verbringt die meiste Zeit alleine, hat Schwierigkeiten soziale Kontakte aufzubauen oder zu halten.',
+    sofort_massnahmen: ['Ursache klären: Will nicht (Introversion) vs. Kann nicht (soziale Angst) vs. Darf nicht (elterliche Einschränkung)', 'Niederschwellige soziale Kontakte ermöglichen (AG, Sport, Jugendgruppe)', 'Soziale Kompetenz-Übungen in der Sitzung', 'Online ≠ alleine: Digitale soziale Kontakte als Ressource anerkennen'],
+    empfohlene_themen: ['freundschaften', 'soziale-kompetenz', 'kommunikation'],
+    wann_ueberweisen: 'Bei komplettem Rückzug >4 Wochen: Depression abklären. Bei sozialer Angst: Angsttherapie.'
+  },
+  zwang: {
+    was_bedeutet_auffaellig: 'Hinweise auf Zwangsgedanken (aufdringliche, wiederkehrende Gedanken) und/oder Zwangshandlungen (Rituale wie Waschen, Zählen, Kontrollieren). Zwangsstörungen sind quälend und brauchen spezifische Behandlung.',
+    sofort_massnahmen: ['Zwangsgedanken normalisieren: "Das sind Zwangsgedanken — sie sagen nichts über dich aus"', 'NICHT bei Ritualen mitmachen oder sie erleichtern', 'Nicht versuchen, Zwänge durch Willenskraft zu stoppen', 'Psychoedukation: Erklären was eine Zwangsstörung ist'],
+    empfohlene_themen: ['wiederkehrende-gedanken', 'stress-angst', 'achtsamkeit'],
+    wann_ueberweisen: 'IMMER bei Zwangsstörung: Therapeut mit ERP-Erfahrung (Exposition mit Reaktionsverhinderung). Bezugsarbeit begleitend.'
+  },
+  stimmungsextreme: {
+    was_bedeutet_auffaellig: 'Der Jugendliche zeigt extreme Stimmungsschwankungen: Euphorische Hochphasen, depressive Tiefphasen, schnelle Wechsel. Kann auf bipolare Störung, Borderline-Züge oder hormonelle Veränderungen hinweisen.',
+    sofort_massnahmen: ['Stimmungstagebuch einführen: Tägliche Stimmung 1-10 tracken', 'Stabilisierende Routinen aufbauen: Feste Zeiten, Schlaf, Bewegung', 'In Hochphasen: Keine großen Entscheidungen treffen lassen', 'In Tiefphasen: Aktivitätsaufbau, Suizidalität prüfen'],
+    empfohlene_themen: ['stimmungsextreme', 'emotionsregulation', 'impulskontrolle'],
+    wann_ueberweisen: 'Bei Verdacht auf bipolare Störung (Hochphasen mit reduziertem Schlafbedürfnis, Größenideen): Kinder- und Jugendpsychiatrie.'
+  },
+  psychosomatik: {
+    was_bedeutet_auffaellig: 'Wiederkehrende körperliche Beschwerden (Bauchschmerzen, Kopfschmerzen, Übelkeit) ohne ausreichende medizinische Erklärung. Der Körper drückt aus was der Mund nicht sagen kann.',
+    sofort_massnahmen: ['Beschwerden ERNST nehmen — das Kind simuliert nicht!', 'Medizinische Abklärung zuerst: Kinderarzt Körperliches ausschließen lassen', 'Zusammenhang Stress-Körper erforschen: "Wann wird es schlimmer?"', 'Entspannungstechniken vermitteln: PMR, Bauchatmung, Bodyscan'],
+    empfohlene_themen: ['psychosomatik', 'stress-angst', 'emotionserkennung'],
+    wann_ueberweisen: 'Bei Schulausfall >2 Wochen wegen Beschwerden: Kinderarzt + Psychotherapeut. Bei neuen Symptomen: Erneut medizinisch abklären.'
+  },
+  dissoziation: {
+    was_bedeutet_auffaellig: '⚠️ TRAUMA-INDIKATOR. Hinweise auf dissoziatives Erleben: "Wegtreten", Erinnerungslücken, Depersonalisation ("Ich fühle mich nicht real"), Derealisation ("Die Welt fühlt sich unwirklich an"). Fast immer Folge von Trauma.',
+    sofort_massnahmen: ['Grounding-Techniken vermitteln: 5-4-3-2-1, kaltes Wasser, starke Reize', 'KEINE Trauma-Exploration ohne therapeutische Anbindung!', 'Trigger identifizieren: Was löst Dissoziation aus?', 'Sicherheit und Stabilität als oberstes Ziel'],
+    empfohlene_themen: ['dissoziative-erfahrungen', 'trauma', 'krisenintervention'],
+    wann_ueberweisen: 'IMMER bei Dissoziation: Traumatherapie empfehlen. Dissoziation ist fast immer ein Zeichen für schwere Belastung/Trauma.'
+  },
+  resilienz: {
+    was_bedeutet_auffaellig: 'Niedrige Resilienz-Werte deuten auf wenige Schutzfaktoren hin: Mangelnde Unterstützung, fehlende Bewältigungsstrategien, geringes Selbstwertgefühl. ABER: Resilienz ist trainierbar!',
+    sofort_massnahmen: ['Vorhandene Stärken identifizieren und benennen (Stärken-Tab nutzen)', 'Mindestens 1 verlässliche Beziehung aufbauen (du bist sie!)', 'Selbstwirksamkeit stärken: Kleine Erfolge schaffen und feiern', 'Unterstützungsnetzwerk kartieren und erweitern'],
+    empfohlene_themen: ['selbstwertgefuehl', 'freude-wohlbefinden', 'soziales-netzwerk'],
+    wann_ueberweisen: 'Niedrige Resilienz allein ist keine Überweisungsindikation. Aber: Prüfe ob komorbide Belastungen vorliegen (Depression, Angst, Trauma).'
+  }
+};
+
+// ============================================================
+// GESPRÄCHSLEITFÄDEN — 6 durchgeskriptete Gesprächsanleitungen
+// ============================================================
+var GESPRAECHSLEITFAEDEN = [
+  {
+    id: 'elterngespraech',
+    titel: 'Elterngespräch',
+    icon: '👨‍👩‍👧',
+    farbe: '#3B82F6',
+    wann: 'Geplantes Gespräch mit Eltern/Erziehungsberechtigten – z.B. Erstgespräch, Standortbestimmung, nach Vorfall, Zielvereinbarung.',
+    vorbereitung: [
+      'Akte/Verlauf des Jugendlichen durchlesen – letzte 3 Sitzungen',
+      'Konkrete Beobachtungen notieren (Verhalten, Stärken, Fortschritte)',
+      'Gesprächsziel definieren: Was soll am Ende erreicht sein?',
+      'Ruhigen, ungestörten Raum reservieren (mind. 45 Min.)',
+      'Getränke bereitstellen – Signal: "Wir nehmen uns Zeit"',
+      'Bei Sprachbarriere: Dolmetscher organisieren (NICHT das Kind!)',
+      'Kulturelle Besonderheiten bedenken (Begrüßung, Blickkontakt, Hierarchie)'
+    ],
+    phasen: [
+      {
+        name: 'Ankommen & Rahmen setzen',
+        dauer: '0–5 Min.',
+        skripte: [
+          '"Schön, dass Sie sich die Zeit nehmen. Ich bin [Name], Bezugsperson von [Kind]."',
+          '"Bevor wir starten: Alles was wir besprechen bleibt vertraulich, außer es besteht eine Gefahr für Ihr Kind. In dem Fall bin ich verpflichtet, die zuständige Stelle zu informieren."',
+          '"Heute möchte ich mit Ihnen über [Thema] sprechen. Ich rechne mit ca. 45 Minuten. Passt das für Sie?"'
+        ],
+        tipps: [
+          'Eltern mit Namen ansprechen, nicht "Mama/Papa von..."',
+          'Sitzordnung: Nicht gegenüber (Konfrontation), lieber über Eck',
+          'Handy auf lautlos – für beide Seiten'
+        ]
+      },
+      {
+        name: 'Eltern-Perspektive einholen',
+        dauer: '5–15 Min.',
+        skripte: [
+          '"Wie geht es [Kind] aus Ihrer Sicht gerade zu Hause?"',
+          '"Was beschäftigt Sie im Moment am meisten in Bezug auf [Kind]?"',
+          '"Gibt es Veränderungen zu Hause, die ich wissen sollte?"',
+          '"Was klappt gut? Worauf sind Sie stolz?"'
+        ],
+        tipps: [
+          'ZUERST zuhören, dann eigene Beobachtungen teilen',
+          'Aktiv paraphrasieren: "Wenn ich Sie richtig verstehe..."',
+          'Nicht bewerten – auch wenn die Sichtweise anders ist als deine',
+          'Notizen machen ist OK, vorher ankündigen'
+        ]
+      },
+      {
+        name: 'Eigene Beobachtungen teilen',
+        dauer: '15–25 Min.',
+        skripte: [
+          '"Ich möchte Ihnen erzählen, was mir bei [Kind] aufgefallen ist..."',
+          '"[Kind] zeigt in den letzten Wochen [konkretes Verhalten]. Das sehe ich als [positive Deutung/Sorge]."',
+          '"Besonders positiv ist mir aufgefallen, dass [Kind] [Stärke/Fortschritt]."',
+          'Bei heiklen Themen: "Ich möchte etwas Schwieriges ansprechen. Es ist mir wichtig, offen mit Ihnen zu sein, weil ich möchte, dass wir gemeinsam für [Kind] arbeiten."'
+        ],
+        tipps: [
+          'IMMER mit etwas Positivem beginnen (Sandwich-Technik)',
+          'Konkret bleiben: Verhalten beschreiben, nicht bewerten ("Er schlägt" statt "Er ist aggressiv")',
+          'Stärken mindestens gleichwertig zu Sorgen benennen',
+          'Bei Widerstand: Nicht argumentieren, sondern validieren'
+        ]
+      },
+      {
+        name: 'Gemeinsame Planung',
+        dauer: '25–35 Min.',
+        skripte: [
+          '"Was wünschen Sie sich für [Kind] in den nächsten Wochen?"',
+          '"Wie können wir das gemeinsam unterstützen? Was können Sie zu Hause beitragen, was wir hier?"',
+          '"Ich schlage vor, dass wir [konkreter nächster Schritt] vereinbaren."',
+          '"Wer macht was bis wann? Ich fasse zusammen..."'
+        ],
+        tipps: [
+          'Maximal 2-3 konkrete Vereinbarungen – nicht überfordern',
+          'Eltern als Experten für ihr Kind anerkennen',
+          'Realistische Schritte – keine Utopien',
+          'Schriftlich festhalten (Kopie für Eltern)'
+        ]
+      },
+      {
+        name: 'Abschluss & Ausblick',
+        dauer: '35–45 Min.',
+        skripte: [
+          '"Lassen Sie mich zusammenfassen, was wir heute besprochen haben: [Zusammenfassung]."',
+          '"Unser nächstes Gespräch wäre am [Datum]. Passt das?"',
+          '"Wenn zwischendurch etwas ist: Sie erreichen mich unter [Kontakt]."',
+          '"Danke für Ihre Offenheit. Ich merke, dass Ihnen [Kind] sehr am Herzen liegt."'
+        ],
+        tipps: [
+          'Zusammenfassung immer mündlich UND schriftlich',
+          'Nächsten Termin direkt vereinbaren',
+          'Mit etwas Warmem enden – die Beziehung zu den Eltern ist Werkzeug'
+        ]
+      }
+    ],
+    dos: [
+      'Eltern als Partner behandeln, nicht als Problem',
+      'Konkrete Beobachtungen statt vage Eindrücke',
+      'Stärken des Kindes UND der Eltern benennen',
+      'Kulturelle Unterschiede respektieren',
+      'Gesprächsprotokoll führen (SOAP: Subjektiv = Eltern-Sicht)',
+      'Bei Konflikten: Deeskalieren, nicht recht haben wollen',
+      'Dolmetscher einsetzen bei Sprachbarrieren'
+    ],
+    donts: [
+      'Kind als Dolmetscher benutzen',
+      'Vorwürfe machen oder Schuld zuweisen',
+      'Fachbegriffe ohne Erklärung verwenden',
+      'Vergleiche mit anderen Kindern/Familien',
+      'Gespräch zwischen Tür und Angel führen',
+      'Eigene Erziehungsratschläge ungefragt geben',
+      'Versprechen machen, die du nicht halten kannst'
+    ],
+    nachbereitung: 'SOAP-Eintrag: S = Eltern-Perspektive, O = deine Beobachtungen im Gespräch (Mimik, Reaktionen), A = Einschätzung der Zusammenarbeit, P = Vereinbarungen + nächster Termin. Kopie der Vereinbarungen an Eltern senden.',
+    dokumentation: 'SOAP-Protokoll mit Fokus auf Vereinbarungen. In der Akte vermerken: Wer war anwesend, was wurde vereinbart, nächster Termin.'
+  },
+  {
+    id: 'krisengespraech',
+    titel: 'Krisengespräch',
+    icon: '🚨',
+    farbe: '#EF4444',
+    wann: 'Akute Krise: Suizidäußerungen, Selbstverletzung, akute Gewalt, schwere Dissoziation, psychotisches Erleben. IMMER wenn du denkst "Das ist nicht normal".',
+    vorbereitung: [
+      'Ruhe bewahren – deine Ruhe ist ansteckend',
+      'Sicherstellen: Bin ich allein mit dem Jugendlichen oder brauche ich Backup?',
+      'Gefährliche Gegenstände aus dem Raum entfernen (wenn möglich)',
+      'Notfallnummern griffbereit: 112, Kanner-Jugendtelefon 116 111, CePAS',
+      'Eigene Grenzen kennen: Ab wann muss ich Hilfe holen?',
+      'Dokumentation vorbereiten (wird NACH dem Gespräch ausgefüllt)'
+    ],
+    phasen: [
+      {
+        name: 'Sicherheit & Kontakt herstellen',
+        dauer: '0–10 Min.',
+        skripte: [
+          '"Ich bin hier. Du bist nicht allein."',
+          '"Ich sehe, dass es dir gerade sehr schlecht geht. Ich bleibe bei dir."',
+          '"Bist du gerade in Sicherheit? Hast du dich verletzt?"',
+          'Bei SVV: "Darf ich mir das ansehen? Ich möchte sicherstellen, dass du medizinisch versorgt bist."',
+          'Bei Suizidgedanken (DIREKT fragen!): "Hast du daran gedacht, dir das Leben zu nehmen?"'
+        ],
+        tipps: [
+          'NIEMALS um den heißen Brei reden – direkt nach Suizidalität fragen schadet NICHT',
+          'Physische Sicherheit zuerst: Wunde versorgen, gefährliche Gegenstände sichern',
+          'Ruhig, langsam, tief sprechen (dein Nervensystem reguliert seines mit)',
+          'Körperlich auf Augenhöhe: Hinsetzen wenn der Jugendliche sitzt',
+          'Nicht anfassen ohne Erlaubnis'
+        ]
+      },
+      {
+        name: 'Einschätzung der Akuität',
+        dauer: '10–20 Min.',
+        skripte: [
+          '"Kannst du mir erzählen, was passiert ist?"',
+          '"Wie lange fühlst du dich schon so?"',
+          'C-SSRS Kurzscreening: "Hast du den Wunsch, tot zu sein?" → "Hast du Gedanken daran, dich umzubringen?" → "Hast du einen Plan?" → "Hast du Vorbereitungen getroffen?" → "Hast du schon mal versucht, dir etwas anzutun?"',
+          '"Auf einer Skala von 0-10: Wie sicher fühlst du dich gerade, dass du dir heute Nacht nichts antust?"'
+        ],
+        tipps: [
+          'C-SSRS Fragen der Reihe nach stellen – bei "Ja" jeweils vertiefen',
+          'Suizidgedanken ≠ Suizidplan ≠ Suizidversuch → unterschiedliche Dringlichkeit',
+          'Bei Plan + Zugang zu Mitteln: SOFORT handeln (112, Psychiatrie)',
+          'Dissoziation erkennen: Glasiger Blick, nicht ansprechbar → Grounding (kaltes Wasser, 5-4-3-2-1)'
+        ]
+      },
+      {
+        name: 'Stabilisierung & Sicherheitsplan',
+        dauer: '20–40 Min.',
+        skripte: [
+          '"Was hat dir früher geholfen, wenn es dir so schlecht ging?"',
+          '"Wir machen jetzt zusammen einen Plan für die nächsten Stunden/Tage."',
+          '"Wen kannst du anrufen, wenn es schlimmer wird? Lass uns 3 Personen aufschreiben."',
+          '"Was sind Warnzeichen, dass es dir schlechter geht? Woran merkst du das?"',
+          '"Was kannst du tun, bevor du dich verletzt? Was könnte stattdessen helfen?"',
+          '"Bist du einverstanden, dass ich [Therapeut/Eltern/CePAS] informiere?"'
+        ],
+        tipps: [
+          'Sicherheitsplan schriftlich erstellen (Karte für Portemonnaie)',
+          'Sicherheitsplan: 1) Warnzeichen, 2) Eigene Strategien, 3) Personen die ablenken, 4) Personen die helfen, 5) Profis + Nummern, 6) Umgebung sicher machen',
+          'Mittel reduzieren: Medikamente wegschließen, Messer entfernen etc.',
+          'NICHT versprechen lassen "dass du nichts tust" – das funktioniert nicht'
+        ]
+      },
+      {
+        name: 'Übergabe & Nachsorge planen',
+        dauer: '40–50 Min.',
+        skripte: [
+          '"Ich möchte sicherstellen, dass du heute Nacht nicht allein bist. Wer kann bei dir sein?"',
+          '"Ich rufe jetzt [Person/Dienst] an. Ist das für dich OK?"',
+          '"Wir sehen uns morgen um [Uhrzeit]. Das ist fest."',
+          '"Du hast heute etwas sehr Mutiges gemacht: Du hast darüber gesprochen. Das zählt."'
+        ],
+        tipps: [
+          'Jugendlichen NIEMALS allein lassen wenn akut suizidal',
+          'Übergabe an Nachtdienst/Eltern persönlich + schriftlich',
+          'Folgetermin innerhalb von 24 Stunden',
+          'Eigene Belastung ernst nehmen: Nachbesprechung mit Kolleg:in/Leitung'
+        ]
+      }
+    ],
+    dos: [
+      'Direkt nach Suizidalität fragen — das rettet Leben',
+      'Ruhig bleiben — dein Nervensystem reguliert mit',
+      'Physische Sicherheit immer zuerst',
+      'Sicherheitsplan schriftlich erstellen',
+      'Folgetermin innerhalb von 24h',
+      'Dokumentieren (NACH dem Gespräch)',
+      'Eigene Belastung ernst nehmen und Supervision suchen'
+    ],
+    donts: [
+      '"Das wird schon wieder" oder ähnlich bagatellisieren',
+      '"Denk doch mal an deine Eltern" — Schuldgefühle verstärken Suizidalität',
+      'Allein den Helden spielen — Hilfe holen ist Stärke',
+      'Verschwiegenheit versprechen bei akuter Gefahr',
+      '"Versprich mir, dass du dir nichts antust" — wirkt nicht',
+      'Wunde/Narben bewerten ("Das ist ja gar nicht tief")',
+      'Details der Methode erfragen (kann triggern)'
+    ],
+    nachbereitung: 'SOFORT nach Gespräch: Übergabe an zuständige Stelle dokumentieren. SOAP-Eintrag mit Risiko-Einschätzung (C-SSRS Ergebnis), getroffene Maßnahmen, Sicherheitsplan, Folgetermin. Information an Leitung/Psychiatrie falls nötig.',
+    dokumentation: 'SOAP: S = Was der Jugendliche berichtet, O = C-SSRS Ergebnis + deine Beobachtungen (Affekt, SVV sichtbar?, Dissoziation?), A = Risikoeinschätzung (niedrig/mittel/hoch/akut), P = Sicherheitsplan + Folgetermin + wen informiert.'
+  },
+  {
+    id: 'motivationsgespraech',
+    titel: 'Motivationsgespräch (MI)',
+    icon: '💬',
+    farbe: '#10B981',
+    wann: 'Wenn der Jugendliche ambivalent ist: Weiß, dass etwas nicht gut läuft, aber will nichts ändern. Typisch bei: Substanzkonsum, Schulvermeidung, riskantes Verhalten, Therapie-Ablehnung.',
+    vorbereitung: [
+      'Eigene Agenda loslassen — DU willst die Veränderung, nicht unbedingt der Jugendliche',
+      'OARS-Technik verinnerlichen: Open questions, Affirmations, Reflections, Summaries',
+      'Veränderungs-Lineal vorbereiten (1-10 Skala)',
+      'Keine Ratschläge vorbereiten — der Jugendliche findet die Lösung selbst',
+      'Offene Haltung: Ambivalenz ist NORMAL, nicht Widerstand'
+    ],
+    phasen: [
+      {
+        name: 'Engagement & Beziehung',
+        dauer: '0–10 Min.',
+        skripte: [
+          '"Wie geht es dir? Was beschäftigt dich gerade?"',
+          '"Du bist heute hier, auch wenn du vielleicht nicht unbedingt wolltest. Was hat dich hergebracht?"',
+          '"Bevor wir über [Thema] sprechen — was ist DIR gerade wichtig?"',
+          'Affirmation: "Ich finde es gut, dass du hier bist. Das zeigt mir, dass dir [etwas] nicht egal ist."'
+        ],
+        tipps: [
+          'Der Jugendliche entscheidet worüber gesprochen wird',
+          'Widerstand ist Information, nicht Hindernis',
+          '"Rolling with resistance" — nicht gegen den Widerstand arbeiten',
+          'Autonomie betonen: "Du entscheidest"'
+        ]
+      },
+      {
+        name: 'Ambivalenz explorieren',
+        dauer: '10–25 Min.',
+        skripte: [
+          '"Was gefällt dir an [Verhalten]? Was ist gut daran?"',
+          '"Und was ist die andere Seite? Was stört dich manchmal?"',
+          '"Wie würde dein Leben in einem Jahr aussehen, wenn alles so weitergeht wie jetzt?"',
+          '"Und wie würde es aussehen, wenn sich etwas verändert hätte?"',
+          '"Auf einer Skala von 1-10: Wie wichtig ist dir eine Veränderung?" → "Warum nicht niedriger?" (NICHT: Warum nicht höher?)',
+          '"Was müsste passieren, damit du sagst: Jetzt reicht es?"'
+        ],
+        tipps: [
+          'Beide Seiten der Ambivalenz gleichwertig explorieren',
+          '"Warum nicht niedriger?" — aktiviert Change Talk automatisch',
+          'Wenn der Jugendliche Pro-Veränderungs-Aussagen macht: Verstärken!',
+          'Change Talk erkennen: "Eigentlich müsste ich...", "Manchmal denke ich...", "Meine Mutter hat recht dass..."'
+        ]
+      },
+      {
+        name: 'Change Talk verstärken',
+        dauer: '25–40 Min.',
+        skripte: [
+          'Reflektieren: "Du sagst, du merkst, dass [Verhalten] dich in der Schule runterzieht."',
+          'Vertiefen: "Erzähl mir mehr darüber. Was genau stört dich?"',
+          '"Welche Stärken hast du, die dir bei einer Veränderung helfen könnten?"',
+          '"Was wäre ein ganz kleiner erster Schritt?"',
+          '"Wenn du dich entscheiden würdest etwas zu ändern — was wäre es?"',
+          'Zusammenfassen: "Auf der einen Seite... auf der anderen Seite... und was ich besonders höre ist..."'
+        ],
+        tipps: [
+          'DARN-CAT: Desire, Ability, Reasons, Need → Commitment, Activation, Taking steps',
+          'Je mehr der Jugendliche selbst für Veränderung argumentiert, desto besser',
+          'NICHT den "Righting Reflex" ausleben — nicht belehren',
+          'Stille aushalten — in der Stille denkt der Jugendliche nach'
+        ]
+      },
+      {
+        name: 'Plan & Abschluss',
+        dauer: '40–50 Min.',
+        skripte: [
+          '"Was nimmst du aus diesem Gespräch mit?"',
+          '"Wenn du einen kleinen Schritt machen würdest diese Woche — welcher wäre es?"',
+          '"Was könnte dir dabei im Weg stehen? Wie gehst du damit um?"',
+          '"Ich bin beeindruckt von deiner Ehrlichkeit. Das braucht Mut."',
+          '"Nächstes Mal schauen wir, wie es dir mit [Schritt] ergangen ist — kein Druck."'
+        ],
+        tipps: [
+          'Plan muss vom Jugendlichen kommen, nicht von dir',
+          'Kleiner Schritt > großer Plan',
+          'Rückfälle sind normal — vorher normalisieren',
+          'Kein Druck: "Ich bin hier, egal was du entscheidest"'
+        ]
+      }
+    ],
+    dos: [
+      'OARS konsequent anwenden: Offene Fragen, Affirmation, Reflexion, Zusammenfassung',
+      'Autonomie des Jugendlichen respektieren',
+      'Change Talk verstärken, Sustain Talk nicht bekämpfen',
+      'Ambivalenz als normal würdigen',
+      'Stille aushalten — das ist produktive Zeit',
+      'Kleine Schritte feiern',
+      'Den MI-Spirit leben: Partnerschaft, Akzeptanz, Mitgefühl, Evokation'
+    ],
+    donts: [
+      'Belehren, überzeugen, argumentieren (= "Righting Reflex")',
+      '"Du musst..." / "Du solltest..." → erzeugt Gegenwehr',
+      'Für den Jugendlichen entscheiden',
+      'Ungefragte Ratschläge geben',
+      'Konfrontation oder Moralpredigten',
+      'Veränderung erzwingen wollen',
+      'Ungeduldig werden wenn keine sofortige Veränderung kommt'
+    ],
+    nachbereitung: 'SOAP: S = Wo steht der Jugendliche auf der Veränderungs-Skala? Was hat er gesagt? A = Einschätzung Stadium (Precontemplation, Contemplation, Preparation, Action). P = Vereinbarter Mini-Schritt + Folgetermin.',
+    dokumentation: 'Veränderungsmotivation dokumentieren (1-10), Change Talk notieren, Stadium nach Prochaska eintragen. KEIN Bewerten.'
+  },
+  {
+    id: 'schweigender-jugendlicher',
+    titel: 'Schweigender Jugendlicher',
+    icon: '🤐',
+    farbe: '#8B5CF6',
+    wann: 'Der Jugendliche spricht nicht, antwortet einsilbig, verweigert Kontakt. Typisch bei: Neuen Jugendlichen, nach Vertrauensbruch, bei Trauma, bei Zwangskontext (Justiz/Platzierung), kulturell bedingt.',
+    vorbereitung: [
+      'Erwartung loslassen, dass dieses Gespräch "produktiv" sein muss',
+      'Parallel-Aktivität vorbereiten (Spiel, Zeichnen, Spaziergang, Musik)',
+      'Raum angenehm gestalten: Nicht zu eng, Fluchtweg sichtbar, Getränk anbieten',
+      'Eigene Nervosität/Frustration wahrnehmen — Schweigen ist KEIN persönlicher Angriff',
+      'PVT-Brille aufsetzen: Schweigen = dorsal-vagale Schutzreaktion'
+    ],
+    phasen: [
+      {
+        name: 'Ankommen ohne Druck',
+        dauer: '0–10 Min.',
+        skripte: [
+          '"Hey. Schön, dass du da bist. Du musst heute nichts sagen, wenn du nicht willst."',
+          '"Ich hab uns [Tee/Wasser/Saft] geholt. Magst du?"',
+          '"Ich hab [Spiel/Stifte/Karten] mitgebracht, falls du Lust hast."',
+          'Stille aushalten. Einfach da sein.',
+          '"Du kannst auch zeichnen oder Musik hören. Ich bin einfach hier."'
+        ],
+        tipps: [
+          'Die ersten 10 Minuten: KEIN Gesprächsdruck',
+          'Parallel-Aktivitäten senken den PVT-Stress: Nebeneinander statt Gegenüber',
+          'Spaziergang draußen ist oft besser als Büro-Setting',
+          'Dein Körper sendet Signale: Entspannte Haltung, kein Starren, ruhige Atmung'
+        ]
+      },
+      {
+        name: 'Niedrigschwelliger Kontakt',
+        dauer: '10–25 Min.',
+        skripte: [
+          'Während Parallel-Aktivität: "Das Spiel kenn ich auch. Hast du sowas schon mal gespielt?"',
+          'Beobachtung teilen: "Cooler Hoodie. Ist das [Marke/Band]?"',
+          'Eigenes Erleben teilen: "Ich fand es als Jugendlicher auch ätzend, wenn Erwachsene reden wollten."',
+          '"Du musst nicht über das Schwere reden. Wir können auch über was anderes reden. Oder gar nicht."',
+          'Bei kompletter Verweigerung: "Ich komme morgen wieder. Gleiche Zeit, gleicher Ort."'
+        ],
+        tipps: [
+          'Alltagsthemen sind Gold: Musik, Gaming, Sport, Social Media, Essen',
+          'NICHT über "das Problem" reden — zuerst Beziehung',
+          'Ein Nicken oder Lächeln ist schon Kontakt — das zählt!',
+          'Konsistenz ist der Schlüssel: Immer kommen, auch wenn der Jugendliche schweigt',
+          'Manche Jugendliche brauchen 5-10 Sitzungen bis zum ersten Wort'
+        ]
+      },
+      {
+        name: 'Brücken bauen',
+        dauer: '25–40 Min.',
+        skripte: [
+          '"Weißt du, was ich an dir wahrnehme? [Positive Beobachtung]."',
+          '"Du wirkst heute [anders/müde/angespannt/fröhlicher]. Stimmt das?"',
+          '"Wenn du nicht reden willst, könntest du mir auch was aufschreiben? Oder ein Emoji schicken?"',
+          '"Es gibt Sachen, die sind leichter aufzuschreiben als auszusprechen. Hier ist Papier."',
+          'Skalenfrage: "Zeig mir mit Fingern: Wie geht es dir? 1 = richtig schlecht, 5 = ganz OK."'
+        ],
+        tipps: [
+          'Alternative Kommunikationswege anbieten: Schreiben, Zeichnen, Emojis, Skalen',
+          'Nicht enttäuscht sein wenn kein Durchbruch kommt',
+          'Jede Sitzung ohne Verschlechterung ist ein Erfolg',
+          'Beziehung aufbauen dauert — das ist der Job'
+        ]
+      },
+      {
+        name: 'Abschluss & Verlässlichkeit zeigen',
+        dauer: '40–45 Min.',
+        skripte: [
+          '"Unsere Zeit ist gleich um. Ich fand es gut, einfach mit dir hier zu sein."',
+          '"Morgen/Nächste Woche bin ich wieder da. [Uhrzeit], [Ort]. Ich komme, egal was."',
+          '"Wenn vorher was ist: Du weißt wo du mich findest."',
+          '"Danke, dass du da warst. Das war nicht selbstverständlich."'
+        ],
+        tipps: [
+          'IMMER nächsten Termin ankündigen — Verlässlichkeit ist alles',
+          'Auch wenn der Jugendliche "nichts" gesagt hat: Die Beziehungsarbeit hat stattgefunden',
+          'Keine Bewertung: "Das war heute aber schwierig" → vermeiden',
+          'Nach der Sitzung: Eigene Gefühle reflektieren (Frustration ist normal)'
+        ]
+      }
+    ],
+    dos: [
+      'Stille aushalten — das ist die wichtigste Kompetenz',
+      'Parallel-Aktivitäten anbieten (Spiel, Zeichnen, Spaziergang)',
+      'Konsistent erscheinen — immer, auch wenn der Jugendliche nicht kommt',
+      'Kleine Zeichen von Kontakt wertschätzen (Blick, Nicken, Lächeln)',
+      'Alternative Kommunikation anbieten (Schreiben, Zeigen, Emojis)',
+      'PVT verstehen: Schweigen = Schutz, nicht Aggression',
+      'Eigene Frustration in Supervision besprechen'
+    ],
+    donts: [
+      '"Du MUSST jetzt aber mal reden" — Druck verstärkt den Shutdown',
+      'Schweigen persönlich nehmen',
+      'Zu viele Fragen stellen — jede Frage erhöht den Druck',
+      'Drohen mit Konsequenzen fürs Nicht-Reden',
+      'Über den Jugendlichen reden als wäre er nicht da',
+      'Ungeduld zeigen (Seufzen, auf Uhr schauen)',
+      'Sitzung vorzeitig beenden ("Dann geh halt")'
+    ],
+    nachbereitung: 'SOAP: S = Entfällt (Jugendlicher hat nicht gesprochen), O = Nonverbale Beobachtungen (Körperhaltung, Mimik, Blickkontakt, Veränderungen), A = PVT-Einschätzung + Beziehungsentwicklung, P = Nächster Termin + Parallel-Aktivität planen.',
+    dokumentation: 'Nonverbale Kommunikation genau dokumentieren. Auch "nichts" ist relevant: "Jugendlicher saß 45 Min., hat Tee getrunken, 2x kurz Blickkontakt, kein Wort. Wirkte etwas entspannter als letzte Woche." → Das IST Fortschritt.'
+  },
+  {
+    id: 'uebergabegespraech',
+    titel: 'Übergabegespräch (Kolleg:in)',
+    icon: '🔄',
+    farbe: '#F59E0B',
+    wann: 'Bezugspersonwechsel, Urlaub/Krankheit, Schichtwechsel, Fallübergabe an andere Einrichtung. Immer wenn jemand anders die Verantwortung übernimmt.',
+    vorbereitung: [
+      'Fallakte vollständig aktualisieren (letzte Einträge, offene Themen)',
+      '5P-Formulierung auf aktuellem Stand?',
+      'SMART-Ziele: Was ist erreicht, was ist offen?',
+      'Screening-Ergebnisse zusammenfassen',
+      'Besondere Risiken/Trigger auflisten',
+      'Informierte Einwilligung des Jugendlichen einholen (wenn möglich)',
+      'Übergabeprotokoll-Vorlage vorbereiten'
+    ],
+    phasen: [
+      {
+        name: 'Strukturierte Fallvorstellung',
+        dauer: '0–15 Min.',
+        skripte: [
+          '"Ich übergebe dir den Fall [Name], [Alter] Jahre. Seit [Datum] in Betreuung, Zuweisungsgrund war [Grund]."',
+          '"Die aktuelle Fallformulierung (5P) sieht so aus: [Kernpunkte]."',
+          '"Diagnosen/Screening: [Ergebnisse]. Besonders auffällig: [Domain]."',
+          '"Die SMART-Ziele sind: [Ziele]. Davon erreicht: [X], offen: [Y]."',
+          '"Medikation: [Falls relevant]. Externe Anbindung: [Therapeut, Arzt, Schule]."'
+        ],
+        tipps: [
+          'Strukturiert vorgehen: Stammdaten → 5P → Screening → Ziele → Verlauf',
+          'Schriftliche Übergabe UND mündliche Besprechung',
+          'Nicht nur Probleme, auch Stärken und Ressourcen übergeben',
+          'Beziehungsqualität beschreiben: "Er braucht lange zum Vertrauen"'
+        ]
+      },
+      {
+        name: 'Beziehung & Besonderheiten',
+        dauer: '15–25 Min.',
+        skripte: [
+          '"Was wichtig ist zu wissen über die Beziehung: [Kind] braucht [X], reagiert empfindlich auf [Y]."',
+          '"Trigger sind: [Liste]. Wenn [Trigger], dann [typische Reaktion] und [was hilft]."',
+          '"Die Familie ist [kooperativ/schwierig/nicht erreichbar]. Ansprechpartner: [Person, Nummer]."',
+          '"Am besten funktioniert bei ihm/ihr: [Methode/Aktivität/Zugang]."',
+          '"Achtung bei: [Risiken, z.B. Suizidalität, Substanzen, Gewalt]."'
+        ],
+        tipps: [
+          'Die "weichen" Informationen sind oft wichtiger als die harten Fakten',
+          'Was hat funktioniert? Was nicht? → Erfahrungswissen weitergeben',
+          'PVT-Zustand beschreiben: "Ist meistens im [ventral/sympathisch/dorsal]"',
+          'Auch eigene Fehler teilen: "Ich habe zu früh X versucht, das hat nicht funktioniert"'
+        ]
+      },
+      {
+        name: 'Offene Baustellen & Fragen',
+        dauer: '25–35 Min.',
+        skripte: [
+          '"Aktuell offen ist: [1, 2, 3]."',
+          '"Nächste Schritte wären: [Was als nächstes ansteht]."',
+          '"Termine die feststehen: [Liste]."',
+          '"Hast du Fragen? Was brauchst du noch von mir?"',
+          '"Ich bin noch bis [Datum] erreichbar für Rückfragen."'
+        ],
+        tipps: [
+          'Klare Zuständigkeiten: Ab wann übernimmt wer?',
+          'Übergangszeitraum definieren (parallel arbeiten?)',
+          'Notfall-Kontakt für Rückfragen vereinbaren',
+          'Follow-up Termin: Wie lief die Übernahme?'
+        ]
+      },
+      {
+        name: 'Abschluss mit dem Jugendlichen',
+        dauer: '35–45 Min.',
+        skripte: [
+          'Mit dem Jugendlichen: "Ich möchte dir sagen, dass ab [Datum] [Name] deine Bezugsperson ist."',
+          '"Das heißt nicht, dass das was wir gemacht haben weg ist. Das bleibt."',
+          '"[Name] weiß Bescheid über [was der Jugendliche möchte dass übergeben wird]."',
+          '"Was möchtest du, dass [Name] über dich weiß? Was lieber nicht?"',
+          '"Ich habe gerne mit dir gearbeitet. [Konkretes was du wertschätzt]."'
+        ],
+        tipps: [
+          'Jugendlicher sollte mitentscheiden was übergeben wird',
+          'Abschied gestalten — nicht einfach verschwinden',
+          'Wenn möglich: Dreier-Gespräch (alt + neu + Jugendlicher)',
+          'Verlustangst ernst nehmen: "Es ist OK wenn du sauer/traurig bist"'
+        ]
+      }
+    ],
+    dos: [
+      'Schriftliches Übergabeprotokoll erstellen',
+      'Stärken UND Risiken übergeben',
+      'Beziehungswissen teilen (Trigger, was funktioniert)',
+      'Jugendlichen einbeziehen in die Übergabe',
+      'Übergangszeit planen',
+      'Abschied bewusst gestalten',
+      'Erreichbar bleiben für Rückfragen'
+    ],
+    donts: [
+      'Einfach verschwinden ohne Abschied',
+      'Nur die Akte übergeben ohne Gespräch',
+      'Eigene Bewertungen als Fakten darstellen',
+      'Jugendlichen überrumpeln mit Wechsel',
+      'Negative Prognosen abgeben ("Der ist eh schwierig")',
+      'Vertrauliches ohne Einverständnis weitergeben',
+      'Den Nachfolger mit Informationen überfluten (priorisieren!)'
+    ],
+    nachbereitung: 'Übergabeprotokoll in Akte ablegen. Follow-up nach 2 Wochen: Wie läuft es? Braucht die neue Bezugsperson noch Infos? Jugendlichen fragen wie er den Wechsel erlebt.',
+    dokumentation: 'Übergabeprotokoll enthält: Stammdaten, 5P-Zusammenfassung, aktuelle Ziele + Stand, Risikofaktoren, Schutzfaktoren, Medikation, externe Kontakte, Beziehungshinweise, offene Termine, nächste Schritte.'
+  },
+  {
+    id: 'konfliktgespraech',
+    titel: 'Konfliktgespräch mit Jugendlichem',
+    icon: '⚡',
+    farbe: '#F97316',
+    wann: 'Nach Regelverstoß, Eskalation, Gewaltvorfall, Diebstahl, Drogenkonsum, Ausreißen. Wenn etwas passiert ist und es besprochen werden muss — NICHT als Strafe, sondern zur Beziehungsreparatur.',
+    vorbereitung: [
+      'Eigene Emotionen regulieren — NICHT im Affekt das Gespräch führen',
+      'Mindestens 30 Minuten nach dem Vorfall warten (außer bei akuter Gefahr)',
+      'Fakten klären: Was ist genau passiert? (Augenzeugen, Berichte)',
+      'Eigene Haltung prüfen: Bin ich bereit zuzuhören oder will ich nur Recht haben?',
+      'Gespräch planen: Was ist das Ziel? (Verständnis, nicht Bestrafung)',
+      'Ruhigen Raum, genügend Zeit (mind. 30 Min.), keine Störungen'
+    ],
+    phasen: [
+      {
+        name: 'Beziehung zuerst',
+        dauer: '0–5 Min.',
+        skripte: [
+          '"Ich möchte mit dir über [Vorfall] reden. Nicht um dich fertig zu machen, sondern weil mir unsere Beziehung wichtig ist."',
+          '"Bevor wir anfangen: Wie geht es dir gerade? Bist du bereit dafür?"',
+          '"Wenn du noch nicht bereit bist, können wir auch [später/morgen]. Aber wir werden darüber reden."',
+          '"Ich bin nicht perfekt und ich versuche, das fair zu machen."'
+        ],
+        tipps: [
+          'Beziehungsbotschaft VOR Sachbotschaft',
+          'Wenn der Jugendliche noch im Sympathikus ist (aufgeregt, wütend): Erstmal regulieren',
+          'Dein Ton setzt den Rahmen — ruhig, ernst aber nicht strafend',
+          'Keine Zeugen/Publikum — Gespräch unter vier Augen'
+        ]
+      },
+      {
+        name: 'Perspektive des Jugendlichen',
+        dauer: '5–15 Min.',
+        skripte: [
+          '"Erzähl mir, was aus deiner Sicht passiert ist. Ich höre zu."',
+          '"Was ist vorher passiert? Was hat dazu geführt?"',
+          '"Wie hast du dich in dem Moment gefühlt?"',
+          '"Was wolltest du eigentlich erreichen?"',
+          'Paraphrasieren: "Wenn ich dich richtig verstehe, dann war es so: [Zusammenfassung]. Stimmt das?"'
+        ],
+        tipps: [
+          'ZUHÖREN. Nicht unterbrechen, nicht korrigieren.',
+          'Auch wenn die Version "falsch" ist — der Jugendliche hat sein Erleben',
+          'Gefühle validieren: "Ich kann verstehen, dass du wütend warst"',
+          'NICHT: "Ja, aber..." — das entkräftet alles vorher Gesagte'
+        ]
+      },
+      {
+        name: 'Deine Perspektive & Auswirkungen',
+        dauer: '15–25 Min.',
+        skripte: [
+          '"Jetzt möchte ich dir meine Sicht sagen. [Fakten beschreiben, nicht bewerten]."',
+          '"Was mich daran sorgt/beschäftigt, ist [Auswirkung]."',
+          '"Für [andere Person/Gruppe] war das [Auswirkung beschreiben]."',
+          '"Ich mache mir Sorgen, weil [konkreter Grund]."',
+          '"Die Regel, die gebrochen wurde, ist [Regel]. Die gibt es, weil [Sinn der Regel]."'
+        ],
+        tipps: [
+          'ICH-Botschaften statt DU-Botschaften ("Ich mache mir Sorgen" statt "Du hast...")',
+          'Verhalten und Person trennen: "Was du getan hast" ≠ "Was du bist"',
+          'Auswirkungen konkret benennen, nicht moralisieren',
+          'Sinn der Regel erklären — Jugendliche akzeptieren Regeln eher wenn sie den Sinn verstehen'
+        ]
+      },
+      {
+        name: 'Wiedergutmachung & Vereinbarung',
+        dauer: '25–35 Min.',
+        skripte: [
+          '"Was denkst du, was jetzt ein guter nächster Schritt wäre?"',
+          '"Wie könntest du das wiedergutmachen? Was wäre fair?"',
+          '"Ich schlage vor: [Konsequenz/Wiedergutmachung]. Was denkst du?"',
+          '"Was brauchst du, damit das nicht wieder passiert?"',
+          '"Wir vereinbaren: [Konkrete Abmachung]. Einverstanden?"'
+        ],
+        tipps: [
+          'Wiedergutmachung > Bestrafung (restorative statt punitive Ansatz)',
+          'Jugendlichen in die Lösung einbeziehen — Eigenverantwortung stärken',
+          'Konsequenzen müssen logisch zum Vorfall passen',
+          'Realistisch bleiben — kein Jugendlicher wird nach einem Gespräch perfekt'
+        ]
+      },
+      {
+        name: 'Beziehungsreparatur & Abschluss',
+        dauer: '35–40 Min.',
+        skripte: [
+          '"Wir haben das jetzt besprochen. Für mich ist die Sache damit [erledigt/auf dem Weg]."',
+          '"An unserer Beziehung ändert das nichts. Ich bin weiterhin für dich da."',
+          '"Ich schätze, dass du das Gespräch mitgemacht hast. Das war nicht einfach."',
+          '"Wenn du nachher nochmal drüber reden willst, komm einfach."',
+          '"Morgen ist ein neuer Tag."'
+        ],
+        tipps: [
+          'EXPLIZIT sagen: Die Beziehung ist nicht kaputt',
+          'Nicht nachtragen — wenn besprochen, dann abgeschlossen',
+          'Beim nächsten Kontakt normal verhalten — nicht distanziert/bestrafend',
+          'Fortschritte danach sehen und benennen'
+        ]
+      }
+    ],
+    dos: [
+      'Eigene Emotionen regulieren BEVOR das Gespräch startet',
+      'Beziehung betonen: "Ich rede mit dir, WEIL du mir wichtig bist"',
+      'Zuerst zuhören, dann eigene Perspektive',
+      'Wiedergutmachung statt Bestrafung',
+      'Verhalten und Person trennen',
+      'Nach dem Gespräch: Normal weiter, nicht nachtragen',
+      'Dokumentieren für Verlauf (SOAP)'
+    ],
+    donts: [
+      'Im Affekt das Gespräch führen',
+      'Vor anderen bloßstellen oder konfrontieren',
+      '"Immer machst du..." / "Nie kannst du..." — Generalisierungen',
+      'Vergleiche mit anderen Jugendlichen',
+      'Drohen oder einschüchtern',
+      'Das Gespräch als Machtkampf führen',
+      'Erwarten, dass der Jugendliche sich sofort entschuldigt'
+    ],
+    nachbereitung: 'SOAP: S = Perspektive des Jugendlichen zum Vorfall, O = Deine Beobachtungen (Einsicht? Affekt? Kooperation?), A = Einschätzung der Verantwortungsübernahme, P = Vereinbarte Wiedergutmachung + Folgetermin. Bei Bedarf: Information an Eltern/Leitung.',
+    dokumentation: 'Vorfall dokumentieren: Was, wann, wer beteiligt. Gespräch dokumentieren: Vereinbarungen, Konsequenzen, Folgetermin. Verlauf beobachten: Hält sich der Jugendliche an die Vereinbarung?'
+  }
+];
+
+// ============================================================
+// FALLBEISPIELE — 3 komplett durchgearbeitete Cases
+// ============================================================
+var FALLBEISPIELE = [
+  {
+    id: 'max',
+    titel: 'Max, 14 — Oppositionelles Verhalten + Depression',
+    icon: '🔥',
+    farbe: '#EF4444',
+    typ: 'Externalisierend',
+    vorstellung: 'Max, 14 Jahre, besucht die 8e am Lycée. Zugewiesen vom SCAS wegen wiederholter Konflikte mit Lehrern, Schulverweigerung (3-4 Tage/Monat) und einem Vorfall, bei dem er einen Stuhl geworfen hat. Lebt bei der Mutter (alleinerziehend), Vater hat vor 2 Jahren den Kontakt abgebrochen. Kleiner Bruder (9) lebt auch zu Hause. Mutter arbeitet Vollzeit, ist überfordert. Vorgeschichte: ADHS-Verdacht in der Grundschule (nie abgeklärt), häufige Schulwechsel.',
+    screening_ergebnis: {
+      auffaellig: [
+        { domain: 'depression', score: 7, cutoff: 5, text: 'PHQ-A: 7/10 — Erhöhter Score. Besonders: Freudlosigkeit, Schlafprobleme, "Ich bin sowieso zu nichts gut."' },
+        { domain: 'oppositionelles-verhalten', score: 8, cutoff: 5, text: 'ODD-Screen: 8/10 — Hoch. Regelverweigerung, Wutausbrüche, beschuldigt andere.' },
+        { domain: 'selbstwert', score: 3, cutoff: 5, text: 'Selbstwert-Skala: 3/10 — Stark reduziert. "Alle finden mich scheiße."' },
+        { domain: 'soziale-kompetenz', score: 4, cutoff: 5, text: 'Soziale Kompetenz: 4/10 — Unter Cutoff. Kaum Freunde, Konflikte dominieren.' }
+      ],
+      unauffaellig: ['angst-generalisiert', 'trauma', 'substanzen', 'suizidalitaet']
+    },
+    fivep: {
+      presenting: [
+        'Wiederholte aggressive Ausbrüche in der Schule (Stuhl werfen, Lehrer anschreien)',
+        'Schulverweigerung (3-4 Tage/Monat)',
+        'Depressive Symptome: Freudlosigkeit, Rückzug, "Ich bin zu nichts gut"'
+      ],
+      predisposing: [
+        'Unsichere Bindung: Vater hat Kontakt abgebrochen → Verlusterfahrung',
+        'Mögliche ADHS (nie abgeklärt) → chronische Frustration in der Schule',
+        'Häufige Schulwechsel → nie stabile Peer-Beziehungen aufgebaut'
+      ],
+      precipitating: [
+        'Vater hat vor 2 Jahren komplett den Kontakt abgebrochen',
+        'Neuer Lehrer, der sehr autoritär ist → Trigger für Kontrollverlust'
+      ],
+      perpetuating: [
+        'Negative Feedback-Schleifen: Aggression → Bestrafung → "Ich bin schlecht" → mehr Aggression',
+        'Mutter überfordert, reagiert mit Schreien → eskaliert weiter',
+        'Keine Freunde → Isolation → keine korrigierende Beziehungserfahrung'
+      ],
+      protective: [
+        'Max spielt gut Fußball → Selbstwirksamkeit im Sport',
+        'Mutter liebt ihn, auch wenn sie überfordert ist',
+        'Max hat einen Hund, der ihm wichtig ist → Bindungsfähigkeit vorhanden'
+      ],
+      hypothese: 'Max\' oppositionelles Verhalten ist ein Schrei nach Kontrolle in einer Welt, die ihm unkontrollierbar erscheint. Der Verlust des Vaters hat sein Grundvertrauen erschüttert ("Wenn mein eigener Vater mich verlässt, bin ich es nicht wert"). Die Depression ist die Kehrseite der Aggression — beides Ausdruck von Schmerz. Die ADHS-Problematik führt zu chronischem Schulversagen, was den Selbstwert weiter untergräbt.'
+    },
+    ziele: [
+      { smart: 'Max erkennt in den nächsten 6 Wochen 3 eigene Warnsignale für Wut und wendet mindestens 1 Deeskalationsstrategie pro Woche an.', bereich: 'Emotionsregulation' },
+      { smart: 'Max besucht in den nächsten 4 Wochen mindestens 4 von 5 Schultagen pro Woche.', bereich: 'Schulbesuch' },
+      { smart: 'Max benennt innerhalb von 8 Wochen 5 eigene Stärken und bewertet seinen Selbstwert auf mindestens 5/10.', bereich: 'Selbstwert' }
+    ],
+    intervention_verlauf: [
+      {
+        sitzung: 1,
+        thema: 'Beziehungsaufbau + Screening',
+        soap: {
+          s: 'Max: "Mir egal, ich muss hier halt hin." Verschränkte Arme, kein Blickkontakt. Nach 15 Min. Gespräch über Fußball: Etwas offener. "Mein Hund ist das Einzige was mich versteht."',
+          o: 'Max wirkt angespannt, PVT: Sympathikus (kampfbereit). Lehnt sich zurück, testet Grenzen. Nach Fußball-Thema: Leichte Entspannung, kurzer Blickkontakt. Screening durchgeführt: PHQ-A 7, ODD 8.',
+          a: 'Max zeigt klassisches oppositionelles Verhalten als Schutz. Darunter liegt vermutlich tiefer Schmerz (Vaterverlust, Selbstwertproblematik). Beziehungsaufbau möglich über Interessen (Fußball, Hund).',
+          p: 'Nächste Woche: 5P-Formulierung beginnen. Fußball als Einstieg nutzen. Nicht konfrontieren, sondern Beziehung priorisieren.'
+        },
+        pvt: 'sympathikus'
+      },
+      {
+        sitzung: 3,
+        thema: 'Wut-Warnsignale erkennen (Therapiemodul Emotionsregulation)',
+        soap: {
+          s: 'Max: "Letzte Woche hab ich den Lehrer wieder angeschrien. Aber ich hab danach gemerkt, dass mein Herz voll schnell geschlagen hat." → Erster Moment der Selbstreflexion!',
+          o: 'Max kann 2 Warnsignale benennen: Schneller Herzschlag, Fäuste ballen. Im Rollenspiel übt er "Pause-Taste": Raum verlassen, 10x atmen. Lacht dabei — gutes Zeichen. PVT: Wechsel zwischen sympathikus und ventral.',
+          a: 'Deutlicher Fortschritt: Max beginnt, sein eigenes Erleben zu beobachten statt nur zu reagieren. Die Beziehung trägt. Mutter berichtet: 1 Tag weniger gefehlt diese Woche.',
+          p: 'Pause-Taste weiter üben. Nächste Woche: Selbstwert-Modul. Mutter-Gespräch vereinbaren.'
+        },
+        pvt: 'sympathikus-ventral'
+      },
+      {
+        sitzung: 6,
+        thema: 'Selbstwert — Stärken-Profil (Therapiemodul Selbstwert)',
+        soap: {
+          s: 'Max: "Ich hab diese Woche keinen einzigen Tag gefehlt. Und der Lehrer hat gesagt, ich hab mich verbessert." Strahlt. "Meine Mutter hat geweint — vor Freude, hat sie gesagt."',
+          o: 'Max hat Stärken-Profil ausgefüllt: Fußball (8/10), Tiere (9/10), Humor (7/10), Kochen (6/10). Selbstwert aktuell: 5/10 (vorher 3). PVT: Vorwiegend ventral. Lacht, macht Witze, Blickkontakt stabil.',
+          a: 'Signifikante Verbesserung auf allen Ebenen. Schulbesuch normalisiert sich, aggressive Ausbrüche reduziert (1x in 2 Wochen statt 3x/Woche). Selbstwert steigt. Beziehung zur Mutter verbessert.',
+          p: 'ADHS-Abklärung beim Kinderarzt empfehlen (Mutter einverstanden). Soziale Kompetenz als nächstes Thema. Fußballverein als Ressource aktivieren.'
+        },
+        pvt: 'ventral'
+      }
+    ],
+    pvt_verlauf: [
+      { sitzung: 1, zustand: 'sympathikus', beschreibung: 'Kampfmodus: Arme verschränkt, testet Grenzen, kein Blickkontakt' },
+      { sitzung: 3, zustand: 'sympathikus-ventral', beschreibung: 'Wechselhaft: Phasen von Offenheit, dann wieder Rückzug. Lacht beim Rollenspiel.' },
+      { sitzung: 6, zustand: 'ventral', beschreibung: 'Sicher, entspannt, Blickkontakt, Humor, erzählt von sich aus. Co-Regulation gelungen.' }
+    ],
+    outcome: 'Nach 8 Wochen (10 Sitzungen): Schulbesuch von 60% auf 90%. Aggressive Ausbrüche von 3x/Woche auf 1x alle 2 Wochen. Selbstwert von 3/10 auf 6/10. ADHS-Abklärung eingeleitet. Max spielt wieder Fußball im Verein. Beziehung zur Mutter verbessert. Weiter in Phase 5 (Stabilisierung) mit Fokus auf soziale Kompetenz.'
+  },
+  {
+    id: 'leila',
+    titel: 'Leila, 12 — Rückzug + Schulvermeidung + Migration',
+    icon: '🌙',
+    farbe: '#6366F1',
+    typ: 'Internalisierend + kulturell',
+    vorstellung: 'Leila, 12 Jahre, 6e am Lycée. Familie vor 3 Jahren aus Syrien geflohen. Lebt mit Eltern und 2 jüngeren Geschwistern. Zugewiesen von der Schule: Leila fehlt seit 3 Wochen komplett, davor häufige Fehlzeiten. Wenn sie da ist, sitzt sie alleine, spricht kaum, weint manchmal. Gute Noten in Mathe, Sprachbarriere in Französisch. Vater arbeitet als Reinigungskraft, Mutter spricht kaum Französisch, bleibt zu Hause. Familie hat keinen festen Aufenthaltsstatus (in Prüfung).',
+    screening_ergebnis: {
+      auffaellig: [
+        { domain: 'angst-generalisiert', score: 7, cutoff: 4, text: 'GAD-7 adaptiert: 7/10 — Deutlich erhöht. Permanente Sorgen ("Was passiert mit meiner Familie?"), Schlafstörungen, Konzentrationsprobleme.' },
+        { domain: 'depression', score: 6, cutoff: 5, text: 'PHQ-A: 6/10 — Erhöht. Rückzug, Freudlosigkeit, Hoffnungslosigkeit. "Ich will einfach nur nach Hause."' },
+        { domain: 'trauma', score: 8, cutoff: 5, text: 'Trauma-Screen: 8/10 — Hoch. Flucht-Erlebnisse, Albträume, Schreckhaftigkeit, Vermeidung.' },
+        { domain: 'schulvermeidung', score: 8, cutoff: 4, text: 'Schulvermeidung: 8/10 — Stark. Angst vor sozialer Bewertung + Trennungsangst von der Mutter.' }
+      ],
+      unauffaellig: ['oppositionelles-verhalten', 'substanzen', 'selbstwert']
+    },
+    fivep: {
+      presenting: [
+        'Komplette Schulvermeidung seit 3 Wochen',
+        'Sozialer Rückzug: Spricht kaum, keine Peers, weint in der Schule',
+        'Angst + depressive Symptome: Sorgen um Familie, Schlafstörungen, Hoffnungslosigkeit'
+      ],
+      predisposing: [
+        'Flucht aus Syrien mit traumatischen Erlebnissen (Bombenangriffe, Trennung von Großeltern)',
+        'Unsicherer Aufenthaltsstatus → permanente existentielle Bedrohung',
+        'Kultureller Übergang: Verlust von Heimat, Sprache, sozialem Netzwerk'
+      ],
+      precipitating: [
+        'Brief vom Immigrationsamt: Aufenthalt in Prüfung → Angst vor Abschiebung',
+        'Mitschülerin hat Leila als "Ausländerin" beschimpft → soziale Traumatisierung'
+      ],
+      perpetuating: [
+        'Sprachbarriere verhindert Anschluss an Gleichaltrige',
+        'Mutter selbst ängstlich → kann Leila nicht regulieren',
+        'Soziale Isolation → keine korrigierende Erfahrung ("Es gibt auch nette Kinder")',
+        'Kulturelle Scham: "Über Gefühle spricht man nicht" → keine Entlastung'
+      ],
+      protective: [
+        'Leila ist kognitiv stark (gute Noten in Mathe trotz allem)',
+        'Enge Geschwisterbindung: Kümmert sich um die Kleinen',
+        'Familie ist trotz Belastung zusammen und unterstützend',
+        'Leila malt und zeichnet gerne — möglicher Zugang'
+      ],
+      hypothese: 'Leilas Rückzug und Schulvermeidung sind Ausdruck einer komplexen Belastung: Traumafolgen der Flucht, existentielle Angst (Aufenthaltsstatus) und soziale Ausgrenzung verstärken sich gegenseitig. Die Schulvermeidung ist eine Schutzreaktion — zu Hause bei der Mutter fühlt sie sich sicher. Die kulturelle Barriere verhindert, dass sie Hilfe sucht oder annimmt.'
+    },
+    ziele: [
+      { smart: 'Leila geht in den nächsten 4 Wochen an mindestens 3 von 5 Schultagen zur Schule, beginnend mit verkürzten Tagen (8:00-12:00).', bereich: 'Schulbesuch' },
+      { smart: 'Leila identifiziert in 6 Wochen 3 Grounding-Techniken und wendet sie bei Angst/Flashbacks selbstständig an.', bereich: 'Trauma-Stabilisierung' },
+      { smart: 'Leila hat bis in 8 Wochen mindestens 1 Peer-Kontakt (z.B. Mathe-Tandem, Zeichen-AG) aufgebaut.', bereich: 'Soziale Integration' }
+    ],
+    intervention_verlauf: [
+      {
+        sitzung: 1,
+        thema: 'Beziehungsaufbau — non-verbal (Zeichnen)',
+        soap: {
+          s: 'Leila spricht kaum. Nickt auf Fragen, flüstert vereinzelt. Nimmt Stifte an und beginnt zu zeichnen: Ein Haus mit Bergen im Hintergrund. "Das ist unser Haus in Syrien."',
+          o: 'Leila sitzt zusammengekauert, Blick gesenkt, zittert leicht. PVT: Dorsal-vagal (Shutdown). Beim Zeichnen: Leichte Entspannung, Atmung wird ruhiger. Zeichnung zeigt Sehnsucht nach Heimat. Kein Blickkontakt, aber akzeptiert Nähe (sitzt neben mir statt gegenüber).',
+          a: 'Schwere Traumafolgen + kulturelle Hemmung. Reden ist (noch) nicht der Zugang — kreative/non-verbale Methoden nutzen. Dorsal-vagaler Zustand erfordert sanfte Aktivierung, keine Konfrontation.',
+          p: 'Nächste Woche: Wieder zeichnen. Grounding einführen (5-4-3-2-1). Elterngespräch planen (mit Dolmetscher). Traumatherapie-Anbindung prüfen.'
+        },
+        pvt: 'dorsal'
+      },
+      {
+        sitzung: 4,
+        thema: 'Grounding-Techniken + Schulbesuch-Planung',
+        soap: {
+          s: 'Leila spricht heute in ganzen Sätzen (leise). "Wenn ich an die Schule denke, wird mir schlecht. Aber zu Hause ist es auch schlimm, weil Mama immer weint." Berichtet von Albträumen. Zeigt mir ihre Zeichnungen von zu Hause.',
+          o: 'Deutliche Verbesserung der Kommunikation. PVT: Wechsel dorsal → sympathikus (Angst wird spürbar statt Shutdown). 5-4-3-2-1 Grounding geübt: Leila kann es nach 2 Durchgängen alleine. Plan für Schulbesuch erstellt: 3 Tage/Woche, nur vormittags, Begleitperson am 1. Tag. Leila stimmt vorsichtig zu.',
+          a: 'Positiv: Leila kommt aus dem Shutdown heraus. Die Angst ist jetzt fühlbar — das ist ein Fortschritt (dorsal → sympathikus). Grounding funktioniert. Schulbesuch-Plan realistisch.',
+          p: 'Schulbesuch ab Montag (verkürzt). Lehrerin informieren. Grounding-Karte für die Tasche erstellen. Elterngespräch nächste Woche (Dolmetscher bestätigt).'
+        },
+        pvt: 'dorsal-sympathikus'
+      },
+      {
+        sitzung: 8,
+        thema: 'Soziale Integration + Stärken aktivieren',
+        soap: {
+          s: 'Leila: "Ich gehe jetzt jeden Tag. Mathe macht sogar Spaß. Sarah sitzt neben mir, die ist nett." Lächelt kurz. "Mama geht jetzt zum Français-Kurs. Papa hat gesagt, du hilfst uns."',
+          o: 'Leila sitzt aufrecht, Blickkontakt möglich (kurz). PVT: Überwiegend ventral mit sympathischen Momenten (bei Trauma-Themen). Geht seit 2 Wochen täglich zur Schule (ganzer Tag). Mathe-Tandem mit Sarah funktioniert. Zeichnet weniger düstere Bilder — bunt, mit Blumen.',
+          a: 'Signifikante Verbesserung. Schulbesuch normalisiert, erste Peer-Beziehung, Mutter wird aktiver (Sprachkurs). Trauma noch nicht aufgearbeitet (→ Traumatherapie), aber stabilisiert.',
+          p: 'Traumatherapie-Anbindung läuft (CHNP). Zeichen-AG als Ressource. Follow-Up mit Schule. Phase 5 beginnen.'
+        },
+        pvt: 'ventral-sympathikus'
+      }
+    ],
+    pvt_verlauf: [
+      { sitzung: 1, zustand: 'dorsal', beschreibung: 'Shutdown: Zusammengekauert, flüstert, zittert, kein Blickkontakt. Schutzreaktion.' },
+      { sitzung: 4, zustand: 'dorsal-sympathikus', beschreibung: 'Angst wird fühlbar, spricht in Sätzen, weint. Grounding hilft.' },
+      { sitzung: 8, zustand: 'ventral-sympathikus', beschreibung: 'Aufrecht, Blickkontakt, lächelt. Bei Trauma-Themen noch sympathisch.' }
+    ],
+    outcome: 'Nach 10 Wochen (12 Sitzungen): Schulbesuch von 0% auf 95%. Erste Freundschaft (Sarah). Mutter im Sprachkurs. Traumatherapie angebunden. Grounding-Techniken werden selbstständig angewendet. Aufenthaltsstatus: Noch in Prüfung, aber Familie wurde an Beratungsstelle vermittelt. Weiter in Phase 5 mit Fokus auf Trauma-Stabilisierung und soziale Kompetenz.'
+  },
+  {
+    id: 'tim',
+    titel: 'Tim, 16 — Selbstverletzung + familiäre Belastung',
+    icon: '🩹',
+    farbe: '#F59E0B',
+    typ: 'Krise + SVV',
+    vorstellung: 'Tim, 16 Jahre, 3e am Lycée technique. Eine Mitschülerin hat dem Klassenlehrer gesagt, dass Tim Schnittnarben am Unterarm hat. Tim lebt bei den Großeltern, seit die Eltern sich vor 3 Jahren getrennt haben (Rosenkrieg). Mutter hat eine Alkoholabhängigkeit, Vater lebt im Ausland. Tim ist ein ruhiger, höflicher Jugendlicher, der gute Noten hat und nie auffällt. Die Narben sind ein Schock für alle.',
+    screening_ergebnis: {
+      auffaellig: [
+        { domain: 'depression', score: 8, cutoff: 5, text: 'PHQ-A: 8/10 — Hoch. Schwere depressive Symptome: Hoffnungslosigkeit, Schlafstörungen, "Ich bin eine Last für alle."' },
+        { domain: 'suizidalitaet', score: 5, cutoff: 3, text: '⚠️ C-SSRS: Passive Suizidgedanken vorhanden. "Manchmal denke ich, es wäre besser wenn ich nicht da wäre." Kein aktiver Plan, keine Vorbereitung.' },
+        { domain: 'selbstverletzung', score: 7, cutoff: 3, text: '⚠️ SVV seit ca. 1 Jahr. 2-3x pro Woche Ritzen am Unterarm. Funktion: Emotionsregulation ("Dann spüre ich wenigstens was").' },
+        { domain: 'trauma', score: 6, cutoff: 5, text: 'Emotional neglect: Eltern im Trennungskrieg, Tim wurde "vergessen". Parentifizierung: Musste sich um die Mutter kümmern.' }
+      ],
+      unauffaellig: ['oppositionelles-verhalten', 'substanzen', 'angst-generalisiert']
+    },
+    fivep: {
+      presenting: [
+        'Selbstverletzung (Ritzen) seit ca. 1 Jahr, 2-3x/Woche',
+        'Passive Suizidgedanken: "Wäre besser wenn ich nicht da wäre"',
+        'Schwere Depression: Hoffnungslosigkeit, emotionale Taubheit, Schlafstörungen'
+      ],
+      predisposing: [
+        'Emotional vernachlässigt: Eltern im Trennungskrieg, Tim wurde "unsichtbar"',
+        'Parentifizierung: Musste sich um alkoholkranke Mutter kümmern (ab 13 Jahren)',
+        'Keine Erlaubnis für eigene Gefühle: "Ich muss funktionieren, damit alle zufrieden sind"'
+      ],
+      precipitating: [
+        'Mutter hatte vor 4 Monaten Alkoholrückfall → Tim musste sie vom Krankenhaus abholen',
+        'Vater hat Geburtstag vergessen → "Ich bin ihm egal"'
+      ],
+      perpetuating: [
+        'SVV als einzige Emotionsregulationsstrategie: "Ritzen ist das Einzige was hilft"',
+        'Fassade aufrechterhalten: Gute Noten, höflich → niemand merkt wie schlecht es ihm geht',
+        'Scham über SVV → verheimlicht es → keine Hilfe',
+        'Großeltern überfordert: "Die sind zu alt um das zu verstehen"'
+      ],
+      protective: [
+        'Tim ist intelligent und reflektiert — kann über Gefühle sprechen WENN man fragt',
+        'Gute schulische Leistungen trotz Belastung → hohe Resilienz',
+        'Hat einen besten Freund (Jonas) dem er vertraut',
+        'Großeltern sind stabil und liebevoll, auch wenn überfordert'
+      ],
+      hypothese: 'Tim hat gelernt, seine Gefühle zu unterdrücken um zu "funktionieren" — erst für die Eltern, dann für die Großeltern. Das Ritzen ist der einzige Moment, in dem er etwas fühlen darf. Die Suizidgedanken sind Ausdruck extremer Überlastung, nicht eines Todeswunsches. Er braucht: 1) Alternative Emotionsregulation, 2) Erlaubnis, Gefühle zu haben, 3) Entlastung von der Verantwortung für die Mutter.'
+    },
+    ziele: [
+      { smart: 'Tim reduziert SVV in den nächsten 6 Wochen auf max. 1x/Woche und lernt 3 alternative Strategien (Eiswürfel, rotes Gummiband, Wutball).', bereich: 'SVV-Reduktion' },
+      { smart: 'Tim benennt und drückt in den nächsten 4 Wochen mindestens 3 Gefühle pro Sitzung verbal aus (statt durch SVV).', bereich: 'Emotionsausdruck' },
+      { smart: 'Tim bespricht mit seiner Vertrauensperson (Jonas oder Großmutter) bis in 8 Wochen mindestens 1x seine Belastung.', bereich: 'Soziale Unterstützung' }
+    ],
+    intervention_verlauf: [
+      {
+        sitzung: 1,
+        thema: 'Krisengespräch + Sicherheitsplan',
+        soap: {
+          s: 'Tim (leise, kontrolliert): "Ich hätte nicht gewollt, dass es jemand sieht. Es ist meine Sache." Auf Nachfrage: "Ich mache das seit ungefähr einem Jahr. Es hilft mir, wenn alles zu viel wird." Suizidgedanken: "Manchmal denke ich, es wäre einfacher. Aber ich würde das meiner Oma nicht antun."',
+          o: 'Tim wirkt ruhig, fast zu ruhig. PVT: Dorsal-vagal (emotionaler Shutdown). Spricht sachlich über SVV, als ginge es um jemand anderen. C-SSRS: Passive Suizidgedanken, kein Plan, keine Vorbereitung, Schutzfaktor Großmutter. Narben am linken Unterarm: Oberflächlich, verheilt, 2 frischere Schnitte. Wundversorgung nicht nötig.',
+          a: 'Ernst, aber nicht akut lebensbedrohlich. Passive Suizidgedanken OHNE Plan + Schutzfaktor (Großmutter). SVV als Emotionsregulation, nicht als Suizidversuch. Tim braucht dringend Psychotherapie-Anbindung. Sicherheitsplan erstellt.',
+          p: 'Sicherheitsplan erstellt (Warnzeichen, Alternativen, Notfallnummern). Großeltern informieren (mit Tims Einverständnis). Psychotherapie-Anbindung einleiten. Nächster Termin in 2 Tagen.'
+        },
+        pvt: 'dorsal'
+      },
+      {
+        sitzung: 4,
+        thema: 'Emotionsregulation — Alternativen zu SVV',
+        soap: {
+          s: 'Tim: "Ich hab diese Woche nur einmal geritzt. Aber dafür hab ich das mit dem Eiswürfel probiert — das brennt auch, aber es bleiben keine Narben." Pause. "Meine Oma hat geweint, als ich es ihr erzählt habe. Ich dachte, sie ist sauer, aber sie hat mich einfach umarmt."',
+          o: 'Erster emotionaler Moment: Tim hat Tränen in den Augen als er von der Oma erzählt. PVT: Wechsel dorsal → ventral (kurz). Übt Eiswürfel-Technik, rotes Gummiband, Wutball. Kann Gefühle benennen: "Wut auf meinen Vater, Trauer über meine Mutter, Scham über die Narben."',
+          a: 'Durchbruch: Tim erlaubt sich zum ersten Mal Gefühle. Eiswürfel-Technik als SVV-Alternative funktioniert. Großmutter ist Ressource. SVV-Frequenz: von 2-3x/Woche auf 1x/Woche.',
+          p: 'Gefühlstagebuch einführen. Therapie-Termin steht (CHNP in 2 Wochen). Brief an Vater überlegen (nicht senden, nur schreiben). Jonas einbeziehen?'
+        },
+        pvt: 'dorsal-ventral'
+      },
+      {
+        sitzung: 8,
+        thema: 'Brief an den Vater (nicht gesendet) + Zukunftsplanung',
+        soap: {
+          s: 'Tim liest seinen Brief an den Vater vor (weint). "Lieber Papa, ich wollte dir schon lange sagen, dass es weh tut, dass du nicht da bist. Du hast meinen Geburtstag vergessen und ich hab so getan als wäre es egal. War es nicht." Pause. "Aber ich bin nicht mehr dafür verantwortlich, dass du mich liebst. Das muss von dir kommen."',
+          o: 'Tim zeigt starke Emotionen — weint offen, zum ersten Mal. PVT: Ventral (sicher genug um zu fühlen). Hat seit 10 Tagen nicht geritzt. Zeigt mir sein Gefühlstagebuch: Differenziert zwischen Wut, Trauer, Einsamkeit. Therapie bei Dr. Martin begonnen (CHNP).',
+          a: 'Signifikante Verbesserung. Tim hat gelernt, Gefühle zu fühlen und auszudrücken statt sie wegzuschneiden. SVV seit 10 Tagen gestoppt. Therapie-Anbindung gesichert. Der Brief war kathartisch.',
+          p: 'Stabilisierungsphase. Großeltern-Gespräch: Wie können sie Tim langfristig unterstützen? Mutter-Thema in der Therapie weiterbearbeiten. Follow-Up SVV-Monitoring.'
+        },
+        pvt: 'ventral'
+      }
+    ],
+    pvt_verlauf: [
+      { sitzung: 1, zustand: 'dorsal', beschreibung: 'Emotionaler Shutdown: Spricht sachlich über SVV, dissoziiert von Gefühlen.' },
+      { sitzung: 4, zustand: 'dorsal-ventral', beschreibung: 'Erste Gefühle brechen durch: Weint kurz bei Oma-Thema. Wechsel möglich.' },
+      { sitzung: 8, zustand: 'ventral', beschreibung: 'Weint offen, fühlt bewusst, kann Gefühle benennen und ausdrücken.' }
+    ],
+    outcome: 'Nach 10 Wochen (12 Sitzungen): SVV von 2-3x/Woche auf 0 (seit 3 Wochen SVV-frei). Passive Suizidgedanken nicht mehr vorhanden. Psychotherapie angebunden (CHNP). Kann Gefühle benennen und ausdrücken. Großeltern als Unterstützungssystem aktiviert. Jonas weiß Bescheid und ist Ansprechpartner. Gefühlstagebuch wird selbstständig geführt. Weiter in Phase 5, Therapie übernimmt Trauma-Arbeit (Mutter/Vater).'
+  }
+];
+
+// ============================================================
+// 5P KOMPLETT-BEISPIEL — Vollständig ausgefülltes 5P für "Max, 14"
+// ============================================================
+var FIVEP_BEISPIEL_KOMPLETT = {
+  titel: 'Komplett-Beispiel: Max, 14 Jahre — Oppositionelles Verhalten + Depression',
+  beschreibung: 'Ein vollständig ausgefülltes 5P-Fallformulierungsbeispiel. Zeigt wie alle 5 P\'s zusammenhängen und eine Hypothese bilden.',
+  presenting: [
+    { eintrag: 'Wiederholte aggressive Ausbrüche in der Schule (Stuhl werfen, Lehrer anschreien)', erklaerung: 'Hier steht das beobachtbare Verhalten, das zur Zuweisung geführt hat. Konkret und beschreibend, nicht bewertend.' },
+    { eintrag: 'Schulverweigerung: 3-4 Tage pro Monat Abwesenheit', erklaerung: 'Zweites Hauptsymptom. Quantifiziert (3-4 Tage), damit messbar.' },
+    { eintrag: 'Depressive Symptome: Freudlosigkeit, Rückzug, "Ich bin zu nichts gut"', erklaerung: 'Drittes Symptom. Zitat des Jugendlichen gibt Authentizität. Zeigt: Hinter der Aggression steckt Schmerz.' }
+  ],
+  predisposing: [
+    { eintrag: 'Unsichere Bindung: Vater hat Kontakt abgebrochen → Verlusterfahrung', erklaerung: 'Bindungsstörung als Grundlage. Der Vaterverlust hat das Vertrauen in Beziehungen erschüttert.' },
+    { eintrag: 'Mögliche ADHS (nie abgeklärt) → chronische Frustration in der Schule', erklaerung: 'Neurobiologischer Faktor, der schulisches Versagen erklären könnte. "Nie abgeklärt" ist wichtig — keine Diagnose, aber Hypothese.' },
+    { eintrag: 'Häufige Schulwechsel → nie stabile Peer-Beziehungen aufgebaut', erklaerung: 'Sozialer Faktor. Viele Wechsel = keine tiefen Freundschaften = Isolation.' }
+  ],
+  precipitating: [
+    { eintrag: 'Vater hat vor 2 Jahren komplett den Kontakt abgebrochen', erklaerung: 'DER auslösende Faktor. Zeitlich korreliert mit Beginn der Probleme. Rejection durch primäre Bezugsperson.' },
+    { eintrag: 'Neuer Lehrer, der sehr autoritär ist → Trigger für Kontrollverlust', erklaerung: 'Proximal trigger: Autoritärer Lehrer erinnert unbewusst an Kontrollverlust (Vater konnte er auch nicht kontrollieren).' }
+  ],
+  perpetuating: [
+    { eintrag: 'Negative Feedback-Schleifen: Aggression → Bestrafung → "Ich bin schlecht" → mehr Aggression', erklaerung: 'DER Teufelskreis. Die Bestrafung bestätigt sein Selbstbild und verstärkt das Verhalten.' },
+    { eintrag: 'Mutter überfordert, reagiert mit Schreien → eskaliert weiter', erklaerung: 'Systemischer Faktor: Auch die Mutter hat keine Regulationsstrategien → Co-Dysregulation.' },
+    { eintrag: 'Keine Freunde → Isolation → keine korrigierende Beziehungserfahrung', erklaerung: 'Ohne positive Peers fehlt das Korrektiv: "Andere mögen mich" → bleibt unbewiesen.' }
+  ],
+  protective: [
+    { eintrag: 'Max spielt gut Fußball → Selbstwirksamkeit im Sport', erklaerung: 'Kompetenzerleben. Hier ist er GUT — dieses Gefühl übertragen auf andere Bereiche.' },
+    { eintrag: 'Mutter liebt ihn, auch wenn sie überfordert ist', erklaerung: 'Trotz Dysfunktion: Es gibt eine liebende Bezugsperson. Basis für Elternarbeit.' },
+    { eintrag: 'Max hat einen Hund, der ihm wichtig ist → Bindungsfähigkeit vorhanden', erklaerung: 'Max KANN Bindung — er tut es nur nicht mit Menschen. Der Hund beweist: Die Fähigkeit ist da.' }
+  ],
+  hypothese: 'Max\' oppositionelles Verhalten ist ein Schrei nach Kontrolle in einer Welt, die ihm unkontrollierbar erscheint. Der Verlust des Vaters hat sein Grundvertrauen erschüttert ("Wenn mein eigener Vater mich verlässt, bin ich es nicht wert"). Die Depression ist die Kehrseite der Aggression — beides Ausdruck von Schmerz. Die ADHS-Problematik führt zu chronischem Schulversagen, was den Selbstwert weiter untergräbt. Der Teufelskreis (Aggression → Bestrafung → schlechtes Selbstbild → mehr Aggression) muss durchbrochen werden über: 1) Positive Beziehungserfahrung (Bezugsarbeit), 2) Emotionsregulation (Wut-Management), 3) Selbstwert-Aufbau (Stärken aktivieren, v.a. Fußball), 4) Systemarbeit (Mutter entlasten, Schule sensibilisieren).'
+};

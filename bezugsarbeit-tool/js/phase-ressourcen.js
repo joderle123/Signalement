@@ -128,6 +128,69 @@ function renderRessourcenPhase0() {
 
   html += '</div>';
 
+  // Sicherheits-Ersteinschätzung (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'sicherheit-ersteinschaetzung\')">' +
+      '<span class="phase-res-accordion-title">&#9888; Sicherheits-Ersteinschätzung — 5-Punkte-Check</span>' +
+      '<span class="phase-res-accordion-toggle" id="sicherheit-ersteinschaetzung-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="sicherheit-ersteinschaetzung">' +
+      '<div class="phase-res-tip phase-res-tip-red">' +
+        '<strong>VOR dem Erstgespräch abklären:</strong><br><br>' +
+        '<strong>1. Suizidalität?</strong> — Gibt es Hinweise auf Suizidgedanken oder -versuche in der Vorgeschichte? Wenn ja: C-SSRS vorbereiten, Krisenplan griffbereit.<br><br>' +
+        '<strong>2. Selbstverletzung (SVV)?</strong> — Sind Narben/Verletzungen bekannt? Wenn ja: Nicht dramatisieren, Wundversorgung klären.<br><br>' +
+        '<strong>3. Gewalt zu Hause?</strong> — Gibt es Hinweise auf häusliche Gewalt, Vernachlässigung, Missbrauch? Meldepflicht prüfen (Art. 7 Jugendschutzgesetz Luxemburg).<br><br>' +
+        '<strong>4. Substanzkonsum?</strong> — Alkohol, Cannabis, andere Substanzen? Akute Intoxikation erkennen können.<br><br>' +
+        '<strong>5. Fremdgefährdung?</strong> — Besteht Gefahr für andere (Gewalt, Waffen, Drohungen)? Sicherheitsmaßnahmen planen.' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-yellow">' +
+        '<strong>Merke:</strong> Bei Ja zu einer der 5 Fragen: NICHT alleine handeln. Leitung informieren, ggf. CePAS/Psychiatrie hinzuziehen. Sicherheit geht VOR Beziehungsaufbau.' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Einverständnis & Schweigepflicht (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'einverstaendnis-info\')">' +
+      '<span class="phase-res-accordion-title">&#128220; Einverständnis & Schweigepflicht — Was VOR dem Erstgespräch geklärt sein muss</span>' +
+      '<span class="phase-res-accordion-toggle" id="einverstaendnis-info-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="einverstaendnis-info">' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>Datenschutz:</strong> Dem Jugendlichen (und den Eltern) erklären: Wer hat Zugang zu den Daten? Was wird dokumentiert? Wer darf was lesen?<br><br>' +
+        '<strong>Schweigepflicht:</strong> &laquo;Alles bleibt zwischen uns — AUSSER es besteht Gefahr für dich oder jemand anderen. Dann MUSS ich handeln.&raquo;<br><br>' +
+        '<strong>Grenzen der Vertraulichkeit:</strong><br>' +
+        '&bull; Suizidalität / SVV → Krisenteam<br>' +
+        '&bull; Missbrauch / Misshandlung → Meldepflicht (OPJ)<br>' +
+        '&bull; Fremdgefährdung → Leitung + ggf. Polizei<br><br>' +
+        '<strong>Einverständnis:</strong> Schriftliche Einwilligung der Eltern für die Bezugsarbeit einholen (bei Minderjährigen). Ab 16: Jugendlicher kann selbst einwilligen (Loi du 22 août 2003).' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Vorbereitung Gespräch mit Zuweiser (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'zuweiser-vorbereitung\')">' +
+      '<span class="phase-res-accordion-title">&#128222; Vorbereitung — Was brauche ich vom Zuweiser?</span>' +
+      '<span class="phase-res-accordion-toggle" id="zuweiser-vorbereitung-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="zuweiser-vorbereitung">' +
+      '<div class="phase-res-tip phase-res-tip-green">' +
+        '<strong>Checkliste — Diese Infos vom SCAS/OPJ/Schule anfordern:</strong><br><br>' +
+        '&#9744; Zuweisungsgrund und Vorgeschichte<br>' +
+        '&#9744; Bisherige Maßnahmen (was wurde schon versucht?)<br>' +
+        '&#9744; Diagnosen / Befunde (falls vorhanden)<br>' +
+        '&#9744; Familiäre Situation (Sorgerecht, Kontaktregelung)<br>' +
+        '&#9744; Schulische Situation (Schule, Klasse, Probleme)<br>' +
+        '&#9744; Medikation (falls bekannt)<br>' +
+        '&#9744; Externe Anbindung (Therapeut, Arzt, andere Dienste)<br>' +
+        '&#9744; Besondere Risiken (Suizidalität, Gewalt, Sucht)<br>' +
+        '&#9744; Kontaktdaten der Eltern/Erziehungsberechtigten<br>' +
+        '&#9744; Was erwartet der Zuweiser von der Bezugsarbeit?' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
   return html;
 }
 
@@ -478,6 +541,74 @@ function renderRessourcenPhase3() {
       '<div class="phase-res-tip phase-res-tip-blue">' +
         '<strong>T</strong>erminiert — Bis wann?<br>' +
         '<em>&laquo;Bis Ende des Semesters&raquo; oder &laquo;In 4 Wochen&raquo;</em>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Ziel-Priorisierungsmatrix (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'ziel-priorisierung\')">' +
+      '<span class="phase-res-accordion-title">&#128200; Ziel-Priorisierungsmatrix: Dringend vs. Wichtig</span>' +
+      '<span class="phase-res-accordion-toggle" id="ziel-priorisierung-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="ziel-priorisierung">' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">' +
+        '<div style="background:#FEE2E2;border:2px solid #EF4444;border-radius:8px;padding:10px;"><strong style="color:#B91C1C;">&#128680; Dringend + Wichtig</strong><br><span style="font-size:11px;color:#991B1B;">SOFORT angehen<br>z.B. Suizidalität, akute Krise, SVV, Gewalt</span></div>' +
+        '<div style="background:#DBEAFE;border:2px solid #3B82F6;border-radius:8px;padding:10px;"><strong style="color:#1D4ED8;">&#128197; Wichtig, nicht dringend</strong><br><span style="font-size:11px;color:#1E40AF;">Planen und dranbleiben<br>z.B. Selbstwert, Beziehung, Schule, Emotionsregulation</span></div>' +
+        '<div style="background:#FEF9C3;border:2px solid #EAB308;border-radius:8px;padding:10px;"><strong style="color:#A16207;">&#9889; Dringend, nicht wichtig</strong><br><span style="font-size:11px;color:#92400E;">Delegieren/kurzfristig lösen<br>z.B. Konflikt mit Mitbewohner, organisatorische Probleme</span></div>' +
+        '<div style="background:#F3F4F6;border:2px solid #9CA3AF;border-radius:8px;padding:10px;"><strong style="color:#4B5563;">&#128274; Weder dringend noch wichtig</strong><br><span style="font-size:11px;color:#6B7280;">Bewusst weglassen<br>z.B. Wunsch-Themen die ablenken, &laquo;Nice to have&raquo;</span></div>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>Tipp:</strong> Max. 2-3 Ziele gleichzeitig. Priorisiere nach: 1) Sicherheit, 2) Stabilität, 3) Entwicklung. Nie mehr als 1 Ziel aus dem &laquo;Dringend+Wichtig&raquo;-Feld gleichzeitig bearbeiten.' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // MI Quick-Guide (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'mi-quickguide\')">' +
+      '<span class="phase-res-accordion-title">&#128172; Motivational Interviewing — Quick-Guide (OARS)</span>' +
+      '<span class="phase-res-accordion-toggle" id="mi-quickguide-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="mi-quickguide">' +
+      '<div class="phase-res-tip phase-res-tip-green">' +
+        '<strong>O — Open Questions (Offene Fragen)</strong><br>' +
+        '&laquo;Was wünschst du dir?&raquo; statt &laquo;Willst du das ändern?&raquo;<br>' +
+        '&laquo;Wie siehst du das?&raquo; statt &laquo;Findest du das gut?&raquo;' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>A — Affirmations (Bestätigungen)</strong><br>' +
+        '&laquo;Du bist heute trotz allem gekommen — das zeigt Stärke.&raquo;<br>' +
+        '&laquo;Dass du darüber nachdenkst, sagt mir viel über dich.&raquo;' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-purple">' +
+        '<strong>R — Reflections (Spiegeln)</strong><br>' +
+        'Einfach: &laquo;Du sagst, du willst aufhören, aber es fällt dir schwer.&raquo;<br>' +
+        'Komplex: &laquo;Es klingt so, als ob du hin- und hergerissen bist zwischen der Sicherheit des Alten und der Angst vor dem Neuen.&raquo;' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-yellow">' +
+        '<strong>S — Summaries (Zusammenfassungen)</strong><br>' +
+        '&laquo;Lass mich zusammenfassen: Einerseits ... andererseits ... Und was ich besonders höre ist...&raquo;<br>' +
+        'Immer den Change Talk am Ende betonen!' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Was wenn keine Ziele (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'keine-ziele\')">' +
+      '<span class="phase-res-accordion-title">&#129300; Was wenn der Jugendliche keine Ziele hat?</span>' +
+      '<span class="phase-res-accordion-toggle" id="keine-ziele-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="keine-ziele">' +
+      '<div class="phase-res-tip phase-res-tip-yellow">' +
+        '<strong>3-Schritte-Anleitung:</strong><br><br>' +
+        '<strong>Schritt 1: Normalisieren</strong><br>' +
+        '&laquo;Es ist total OK, wenn du gerade kein Ziel hast. Viele Jugendliche wissen am Anfang nicht, was sie wollen — das ist normal.&raquo;<br><br>' +
+        '<strong>Schritt 2: Indirekt fragen</strong><br>' +
+        'Statt &laquo;Was willst du erreichen?&raquo; → &laquo;Was nervt dich gerade am meisten?&raquo; oder &laquo;Wenn eine Fee dir einen Wunsch erfüllen könnte — was wäre das?&raquo; oder &laquo;Was soll in 3 Monaten anders sein?&raquo;<br><br>' +
+        '<strong>Schritt 3: Mikroziele setzen</strong><br>' +
+        'Wenn wirklich nichts kommt: Beziehungsziel setzen. &laquo;Unser Ziel für die nächsten 3 Wochen: Wir treffen uns 1x pro Woche und du entscheidest worüber wir reden.&raquo; Das IST ein valides Ziel.' +
       '</div>' +
     '</div>' +
   '</div>';
@@ -920,6 +1051,88 @@ function renderRessourcenPhase6() {
     '</div>';
   }
   html += '</div></div>';
+
+  // Abschlussgespräch-Leitfaden (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'abschluss-leitfaden\')">' +
+      '<span class="phase-res-accordion-title">&#128483; Abschlussgespräch-Leitfaden — 4 Schritte</span>' +
+      '<span class="phase-res-accordion-toggle" id="abschluss-leitfaden-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="abschluss-leitfaden">' +
+      '<div class="phase-res-tip phase-res-tip-green">' +
+        '<strong>Schritt 1: Rückblick (10 Min.)</strong><br>' +
+        '&laquo;Weißt du noch, wie es war, als wir angefangen haben? Was war damals das Thema?&raquo;<br>' +
+        '&laquo;Was hat sich seitdem verändert?&raquo;<br>' +
+        'Gemeinsam auf die Ziele schauen: Was wurde erreicht? Was nicht?' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>Schritt 2: Würdigung (10 Min.)</strong><br>' +
+        '&laquo;Was ich an dir bewundere ist...&raquo;<br>' +
+        '&laquo;Du hast [konkreter Fortschritt] geschafft — das war nicht einfach.&raquo;<br>' +
+        'Stärken benennen, die der Jugendliche vielleicht selbst nicht sieht.' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-purple">' +
+        '<strong>Schritt 3: Abschied (10 Min.)</strong><br>' +
+        '&laquo;Unsere gemeinsame Zeit endet jetzt. Das heißt nicht, dass das was du gelernt hast aufhört.&raquo;<br>' +
+        '&laquo;Was nimmst du mit von unserer Arbeit?&raquo;<br>' +
+        '&laquo;Gibt es etwas, das du mir noch sagen möchtest?&raquo;<br>' +
+        'Eigene Gefühle zeigen ist erlaubt: &laquo;Ich habe gerne mit dir gearbeitet.&raquo;' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-yellow">' +
+        '<strong>Schritt 4: Ausblick (10 Min.)</strong><br>' +
+        '&laquo;Was sind deine nächsten Schritte? Was willst du beibehalten?&raquo;<br>' +
+        '&laquo;Wenn es mal schwierig wird: Das ist dein Werkzeugkoffer [überreichen].&raquo;<br>' +
+        '&laquo;Du hast 3 Follow-Up Termine: [Termine]. Da schauen wir, wie es dir geht.&raquo;' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Übergangsplanung (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'uebergangsplanung\')">' +
+      '<span class="phase-res-accordion-title">&#128259; Übergangsplanung — Wenn der Fall weitergereicht wird</span>' +
+      '<span class="phase-res-accordion-toggle" id="uebergangsplanung-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="uebergangsplanung">' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>Checkliste Übergang:</strong><br><br>' +
+        '&#9744; Abschlussbericht geschrieben (SOAP-Zusammenfassung aller Sitzungen)<br>' +
+        '&#9744; 5P-Formulierung aktualisiert<br>' +
+        '&#9744; Offene Ziele dokumentiert + Empfehlung für Weiterarbeit<br>' +
+        '&#9744; Risikofaktoren und Schutzfaktoren aktuell dokumentiert<br>' +
+        '&#9744; Externe Kontakte übergeben (Therapeut, Arzt, Schule)<br>' +
+        '&#9744; Medikation dokumentiert<br>' +
+        '&#9744; Nächste Stelle informiert (persönlich + schriftlich)<br>' +
+        '&#9744; Jugendlicher über Wechsel informiert und vorbereitet<br>' +
+        '&#9744; Einverständnis für Datenweitergabe eingeholt<br>' +
+        '&#9744; Follow-Up Termine vereinbart' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Schwieriger Abschied (NEU)
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'schwieriger-abschied\')">' +
+      '<span class="phase-res-accordion-title">&#128148; Wenn der Jugendliche nicht gehen will</span>' +
+      '<span class="phase-res-accordion-toggle" id="schwieriger-abschied-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="schwieriger-abschied">' +
+      '<div class="phase-res-tip phase-res-tip-yellow">' +
+        '<strong>Warum ist der Abschied so schwer?</strong><br>' +
+        'Für Jugendliche mit Bindungsstörung, Verlusterfahrungen oder Traumata kann das Ende der Bezugsarbeit ein Trigger sein. Der Abschied reaktiviert alte Verlustängste.<br><br>' +
+        '<strong>Was hilft:</strong><br>' +
+        '&bull; <strong>Frühzeitig ankündigen:</strong> Mind. 4-6 Wochen vorher. Nicht überraschen.<br>' +
+        '&bull; <strong>Gefühle validieren:</strong> &laquo;Es ist OK, wenn dich das traurig oder wütend macht. Das zeigt, dass unsere Beziehung dir wichtig war.&raquo;<br>' +
+        '&bull; <strong>Abschied gestalten:</strong> Ritual schaffen (Brief, Foto, kleines Geschenk, gemeinsame Aktivität).<br>' +
+        '&bull; <strong>Übergang statt Abbruch:</strong> Ausschleichen statt harter Schnitt (von wöchentlich auf 2-wöchentlich auf monatlich).<br>' +
+        '&bull; <strong>Nachhaltigkeit betonen:</strong> &laquo;Was wir aufgebaut haben, nimmst du mit. Das verschwindet nicht.&raquo;<br>' +
+        '&bull; <strong>Follow-Up nutzen:</strong> Die 3 Follow-Up Termine sind besonders wichtig bei schwierigem Abschied.' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-red">' +
+        '<strong>Achtung:</strong> Wenn der Jugendliche kurz vor Abschluss regrediert (Symptome kommen zurück), ist das oft ein unbewusster Versuch, die Beziehung zu verlängern. Nicht sofort die Betreuung verlängern — stattdessen thematisieren: &laquo;Könnte es sein, dass die Rückkehr der Probleme mit unserem bevorstehenden Abschied zusammenhängt?&raquo;' +
+      '</div>' +
+    '</div>' +
+  '</div>';
 
   // Buttons
   html += '<div class="phase-res-links">' +

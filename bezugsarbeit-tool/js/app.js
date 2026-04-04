@@ -466,7 +466,7 @@ function openThemaPanel(katId, themaId) {
         </div>
         <div id="thema-notizen-liste">
           ${themaNotizen.length === 0
-            ? '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px;">Noch keine Notizen zu diesem Thema. Starte eine Sitzung um Fortschritte zu dokumentieren.</div>'
+            ? '<div style="text-align:center;padding:16px;"><div style="font-size:20px;margin-bottom:6px;">📝</div><div style="color:var(--text-muted);font-size:12px;line-height:1.5;">Noch keine Notizen zu diesem Thema.<br>Starte eine SOAP-Sitzung und verknüpfe sie mit diesem Thema um Fortschritte zu dokumentieren.</div></div>'
             : themaNotizen.map(n => renderNotizKarte(n)).join('')}
         </div>
         <div style="margin-top:12px;">
@@ -2549,6 +2549,8 @@ function renderDashboard() {
   renderDashTodo();
   renderWohlbefinden();
   renderNotizbuch();
+  renderGespraechsleitfaedenWidget();
+  renderFallbeispieleWidget();
 }
 
 // ---- DASHBOARD SUMMARY — "Alles auf einen Blick" ----
@@ -3827,7 +3829,10 @@ function renderFallformulierung() {
         <h3 style="margin:0;font-size:18px;">🧩 5P-Fallformulierung</h3>
         <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Klinische Fallkonzeption nach dem 5P-Modell</p>
       </div>
-      ${ff ? `<button class="btn btn-outline btn-sm" onclick="delete5P()">🗑 Zurücksetzen</button>` : ''}
+      <div style="display:flex;gap:8px;">
+        ${typeof FIVEP_BEISPIEL_KOMPLETT !== 'undefined' ? `<button class="btn btn-secondary btn-sm" onclick="open5PBeispiel()">📖 Komplett-Beispiel</button>` : ''}
+        ${ff ? `<button class="btn btn-outline btn-sm" onclick="delete5P()">🗑 Zurücksetzen</button>` : ''}
+      </div>
     </div>
 
     <div class="fivep-grid">
@@ -5406,6 +5411,7 @@ function renderScreeningErgebnis(scr) {
         <div class="scr-mini-bar"><div class="scr-mini-bar-fill" style="width:${pct}%;background:${d.farbe};"></div></div>
         ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:3px;">ICD-10: ${d.icd}</div>` : ''}
         <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
+        ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#3B82F6;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#F0F9FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1E40AF;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
       </div>`;
     }).join('') + '</div>'
     + '<div style="font-size:11px;color:#6B7280;padding:8px 12px;margin-top:8px;background:#F9FAFB;border-radius:6px;line-height:1.5;">ℹ️ <strong>Was bedeutet „auffällig"?</strong> Scores über dem Cutoff-Wert deuten auf erhöhte Belastung hin. Diese Bereiche sollten im Förderplan priorisiert und bei der 5P-Analyse als „Presenting" aufgenommen werden.</div>';
@@ -5928,7 +5934,7 @@ function renderSitzungenImThemenTab() {
           <button class="btn btn-primary btn-sm" onclick="showProfilTab('notizen')">+ Neue Notiz / Protokoll</button>
         </div>
         ${notizen.length === 0
-          ? '<div style="text-align:center;color:#9CA3AF;padding:16px;">Noch keine Sitzungen</div>'
+          ? '<div style="text-align:center;padding:24px 16px;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;">Noch keine Sitzungen dokumentiert</div><div style="font-size:12px;color:#6B7280;line-height:1.5;">Dokumentiere jede Sitzung mit dem SOAP-Format oben.<br>So entsteht ein vollständiger Verlauf der Bezugsarbeit.</div></div>'
           : notizen.slice(0, 5).map(n => renderNotizKarte(n)).join('') +
             (notizen.length > 5 ? `<div style="text-align:center;padding:8px;">
               <button class="btn btn-secondary btn-sm" onclick="showProfilTab('notizen')">
@@ -6296,4 +6302,309 @@ function renderGenogramm() {
       '<span style="font-size:10px;padding:2px 8px;border:' + v.border + ';border-radius:12px;color:' + v.farbe + ';">' + v.label + '</span>'
     ).join('')
     + '</div>';
+}
+
+// ============================================================
+// GESPRÄCHSLEITFÄDEN — Rendering
+// ============================================================
+var gespraechsleitfaedenOpen = {};
+
+function renderGespraechsleitfaedenWidget() {
+  var container = document.getElementById('gespraechsleitfaeden-widget');
+  if (!container || typeof GESPRAECHSLEITFAEDEN === 'undefined') return;
+
+  var html = '<div class="card" style="margin-top:16px;">';
+  html += '<div class="card-header" style="cursor:pointer;" onclick="toggleGespraechsleitfaedenWidget()">';
+  html += '<span>📋</span><div class="card-title">Gesprächsleitfäden</div>';
+  html += '<span style="font-size:12px;color:#6B7280;">6 Leitfäden für den Praxisalltag</span>';
+  html += '</div>';
+  html += '<div class="card-body" id="gespraechsleitfaeden-body">';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
+
+  GESPRAECHSLEITFAEDEN.forEach(function(g) {
+    html += '<div onclick="openGespraechsleitfaden(\'' + g.id + '\')" style="cursor:pointer;padding:14px;border-radius:10px;border:2px solid ' + g.farbe + '20;background:' + g.farbe + '08;transition:all 0.2s;" onmouseover="this.style.borderColor=\'' + g.farbe + '\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'' + g.farbe + '20\';this.style.transform=\'none\'">';
+    html += '<div style="font-size:28px;margin-bottom:6px;">' + g.icon + '</div>';
+    html += '<div style="font-weight:600;font-size:13px;color:#1E293B;">' + g.titel + '</div>';
+    html += '<div style="font-size:11px;color:#6B7280;margin-top:4px;line-height:1.4;">' + g.wann.substring(0, 80) + '...</div>';
+    html += '</div>';
+  });
+
+  html += '</div></div></div>';
+  container.innerHTML = html;
+}
+
+function toggleGespraechsleitfaedenWidget() {
+  var body = document.getElementById('gespraechsleitfaeden-body');
+  if (body) body.style.display = body.style.display === 'none' ? '' : 'none';
+}
+
+function openGespraechsleitfaden(id) {
+  var g = GESPRAECHSLEITFAEDEN.find(function(x) { return x.id === id; });
+  if (!g) return;
+
+  var html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove()">';
+  html += '<div style="background:white;border-radius:16px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;padding:0;" onclick="event.stopPropagation()">';
+  
+  // Header
+  html += '<div style="background:' + g.farbe + ';color:white;padding:24px;border-radius:16px 16px 0 0;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+  html += '<div><span style="font-size:36px;">' + g.icon + '</span>';
+  html += '<h2 style="margin:8px 0 4px;font-size:22px;">' + g.titel + '</h2>';
+  html += '<p style="margin:0;opacity:0.9;font-size:13px;">' + g.wann + '</p></div>';
+  html += '<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>';
+  html += '</div></div>';
+
+  html += '<div style="padding:24px;">';
+
+  // Vorbereitung
+  html += '<div style="background:#FEF3C7;border-radius:10px;padding:14px;margin-bottom:16px;">';
+  html += '<div style="font-weight:600;font-size:13px;color:#92400E;margin-bottom:8px;">📝 Vorbereitung</div>';
+  g.vorbereitung.forEach(function(v) {
+    html += '<div style="font-size:12px;color:#78350F;padding:3px 0;display:flex;gap:6px;"><span>☐</span><span>' + v + '</span></div>';
+  });
+  html += '</div>';
+
+  // Phasen
+  g.phasen.forEach(function(p, i) {
+    var isOpen = gespraechsleitfaedenOpen[g.id + '_phase_' + i];
+    html += '<div style="border:1px solid #E5E7EB;border-radius:10px;margin-bottom:10px;overflow:hidden;">';
+    html += '<div onclick="toggleGespraechsPhase(\'' + g.id + '\',' + i + ')" style="cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;background:#F9FAFB;">';
+    html += '<div><span style="display:inline-block;background:' + g.farbe + ';color:white;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-size:12px;font-weight:600;margin-right:8px;">' + (i + 1) + '</span>';
+    html += '<span style="font-weight:600;font-size:13px;">' + p.name + '</span></div>';
+    html += '<span style="font-size:11px;color:#6B7280;background:#F3F4F6;padding:2px 8px;border-radius:10px;">⏱ ' + p.dauer + '</span>';
+    html += '</div>';
+    html += '<div id="gespraechs-phase-' + g.id + '-' + i + '" style="display:' + (isOpen ? 'block' : 'none') + ';padding:14px;">';
+
+    // Skripte
+    html += '<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:600;color:#6B7280;margin-bottom:6px;">💬 Gesprächsskripte</div>';
+    p.skripte.forEach(function(s) {
+      html += '<div style="background:#EFF6FF;border-left:3px solid #3B82F6;padding:8px 10px;margin-bottom:4px;border-radius:0 6px 6px 0;font-size:12px;color:#1E40AF;font-style:italic;">' + s + '</div>';
+    });
+    html += '</div>';
+
+    // Tipps
+    html += '<div><div style="font-size:11px;font-weight:600;color:#6B7280;margin-bottom:6px;">💡 Praxis-Tipps</div>';
+    p.tipps.forEach(function(t) {
+      html += '<div style="font-size:12px;color:#374151;padding:3px 0;display:flex;gap:6px;"><span style="color:#10B981;">•</span><span>' + t + '</span></div>';
+    });
+    html += '</div>';
+
+    html += '</div></div>';
+  });
+
+  // Do's & Don'ts
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">';
+  html += '<div style="background:#ECFDF5;border-radius:10px;padding:14px;">';
+  html += '<div style="font-weight:600;font-size:13px;color:#065F46;margin-bottom:8px;">✅ Do\'s</div>';
+  g.dos.forEach(function(d) {
+    html += '<div style="font-size:12px;color:#047857;padding:3px 0;">✓ ' + d + '</div>';
+  });
+  html += '</div>';
+  html += '<div style="background:#FEF2F2;border-radius:10px;padding:14px;">';
+  html += '<div style="font-weight:600;font-size:13px;color:#991B1B;margin-bottom:8px;">❌ Don\'ts</div>';
+  g.donts.forEach(function(d) {
+    html += '<div style="font-size:12px;color:#B91C1C;padding:3px 0;">✗ ' + d + '</div>';
+  });
+  html += '</div></div>';
+
+  // Nachbereitung & Dokumentation
+  html += '<div style="background:#F0F9FF;border-radius:10px;padding:14px;margin-top:16px;">';
+  html += '<div style="font-weight:600;font-size:13px;color:#0C4A6E;margin-bottom:6px;">📄 Nachbereitung & Dokumentation</div>';
+  html += '<div style="font-size:12px;color:#0369A1;margin-bottom:6px;">' + g.nachbereitung + '</div>';
+  html += '<div style="font-size:11px;color:#6B7280;border-top:1px solid #BAE6FD;padding-top:6px;margin-top:6px;">📋 ' + g.dokumentation + '</div>';
+  html += '</div>';
+
+  html += '</div></div></div>';
+
+  var overlay = document.createElement('div');
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay.firstChild);
+}
+
+function toggleGespraechsPhase(gId, phaseIdx) {
+  var key = gId + '_phase_' + phaseIdx;
+  gespraechsleitfaedenOpen[key] = !gespraechsleitfaedenOpen[key];
+  var el = document.getElementById('gespraechs-phase-' + gId + '-' + phaseIdx);
+  if (el) el.style.display = gespraechsleitfaedenOpen[key] ? 'block' : 'none';
+}
+
+// ============================================================
+// FALLBEISPIELE — Rendering
+// ============================================================
+function renderFallbeispieleWidget() {
+  var container = document.getElementById('gespraechsleitfaeden-widget');
+  if (!container || typeof FALLBEISPIELE === 'undefined') return;
+
+  // Append after existing widget content
+  var html = '<div class="card" style="margin-top:16px;">';
+  html += '<div class="card-header" style="cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'\':\'none\'">';
+  html += '<span>📖</span><div class="card-title">Fallbeispiele</div>';
+  html += '<span style="font-size:12px;color:#6B7280;">3 komplett durchgearbeitete Fälle</span>';
+  html += '</div>';
+  html += '<div class="card-body">';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">';
+
+  FALLBEISPIELE.forEach(function(f) {
+    html += '<div onclick="openFallbeispiel(\'' + f.id + '\')" style="cursor:pointer;padding:14px;border-radius:10px;border:2px solid ' + f.farbe + '20;background:' + f.farbe + '08;transition:all 0.2s;" onmouseover="this.style.borderColor=\'' + f.farbe + '\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'' + f.farbe + '20\';this.style.transform=\'none\'">';
+    html += '<div style="font-size:28px;margin-bottom:6px;">' + f.icon + '</div>';
+    html += '<div style="font-weight:600;font-size:13px;color:#1E293B;">' + f.titel + '</div>';
+    html += '<div style="font-size:11px;color:#6B7280;margin-top:4px;"><span style="background:' + f.farbe + '20;color:' + f.farbe + ';padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;">' + f.typ + '</span></div>';
+    html += '</div>';
+  });
+
+  html += '</div></div></div>';
+  container.innerHTML += html;
+}
+
+function openFallbeispiel(id) {
+  var f = FALLBEISPIELE.find(function(x) { return x.id === id; });
+  if (!f) return;
+
+  var html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove()">';
+  html += '<div style="background:white;border-radius:16px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;padding:0;" onclick="event.stopPropagation()">';
+
+  // Header
+  html += '<div style="background:' + f.farbe + ';color:white;padding:24px;border-radius:16px 16px 0 0;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+  html += '<div><span style="font-size:36px;">' + f.icon + '</span>';
+  html += '<h2 style="margin:8px 0 4px;font-size:20px;">' + f.titel + '</h2>';
+  html += '<span style="background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;font-size:12px;">' + f.typ + '</span></div>';
+  html += '<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>';
+  html += '</div></div>';
+
+  html += '<div style="padding:24px;">';
+
+  // Fallvignette
+  html += '<div style="background:#F9FAFB;border-radius:10px;padding:14px;margin-bottom:16px;border-left:4px solid ' + f.farbe + ';">';
+  html += '<div style="font-weight:600;font-size:13px;margin-bottom:6px;">📋 Fallvignette</div>';
+  html += '<div style="font-size:12px;color:#374151;line-height:1.6;">' + f.vorstellung + '</div>';
+  html += '</div>';
+
+  // Screening-Ergebnis
+  html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🔍 Screening-Ergebnis</summary>';
+  html += '<div style="padding:8px 0;">';
+  f.screening_ergebnis.auffaellig.forEach(function(s) {
+    html += '<div style="background:#FEF2F2;border-left:3px solid #EF4444;padding:8px 10px;margin-bottom:6px;border-radius:0 6px 6px 0;">';
+    html += '<div style="font-weight:600;font-size:12px;color:#991B1B;">' + s.domain + ' — Score: ' + s.score + '/' + s.cutoff + ' (Cutoff)</div>';
+    html += '<div style="font-size:11px;color:#7F1D1D;margin-top:2px;">' + s.text + '</div></div>';
+  });
+  html += '<div style="font-size:11px;color:#6B7280;margin-top:6px;">Unauffällig: ' + f.screening_ergebnis.unauffaellig.join(', ') + '</div>';
+  html += '</div></details>';
+
+  // 5P-Formulierung
+  html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🧩 5P-Fallformulierung</summary>';
+  html += '<div style="padding:8px 0;">';
+  var pLabels = { presenting: '🔴 Presenting', predisposing: '🟡 Predisposing', precipitating: '🟠 Precipitating', perpetuating: '🔵 Perpetuating', protective: '🟢 Protective' };
+  ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(function(key) {
+    html += '<div style="margin-bottom:10px;"><div style="font-weight:600;font-size:12px;margin-bottom:4px;">' + pLabels[key] + '</div>';
+    f.fivep[key].forEach(function(item) {
+      html += '<div style="font-size:12px;color:#374151;padding:3px 0;">• ' + item + '</div>';
+    });
+    html += '</div>';
+  });
+  html += '<div style="background:#EFF6FF;border-radius:8px;padding:10px;margin-top:8px;"><div style="font-weight:600;font-size:12px;color:#1E40AF;margin-bottom:4px;">💡 Hypothese</div>';
+  html += '<div style="font-size:12px;color:#1E40AF;line-height:1.5;font-style:italic;">' + f.fivep.hypothese + '</div></div>';
+  html += '</div></details>';
+
+  // SMART-Ziele
+  html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🎯 SMART-Ziele</summary>';
+  html += '<div style="padding:8px 0;">';
+  f.ziele.forEach(function(z) {
+    html += '<div style="background:#ECFDF5;border-left:3px solid #10B981;padding:8px 10px;margin-bottom:6px;border-radius:0 6px 6px 0;">';
+    html += '<div style="font-size:11px;font-weight:600;color:#065F46;">' + z.bereich + '</div>';
+    html += '<div style="font-size:12px;color:#047857;margin-top:2px;">' + z.smart + '</div></div>';
+  });
+  html += '</div></details>';
+
+  // Sitzungsverlauf (SOAP)
+  html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">📝 Sitzungsverlauf (SOAP-Beispiele)</summary>';
+  html += '<div style="padding:8px 0;">';
+  f.intervention_verlauf.forEach(function(s) {
+    html += '<div style="border:1px solid #E5E7EB;border-radius:10px;padding:12px;margin-bottom:10px;">';
+    html += '<div style="display:flex;justify-content:space-between;margin-bottom:8px;">';
+    html += '<span style="font-weight:600;font-size:13px;">Sitzung ' + s.sitzung + ': ' + s.thema + '</span>';
+    var pvtColors = { dorsal: '#8B5CF6', sympathikus: '#EF4444', ventral: '#10B981', 'sympathikus-ventral': '#F59E0B', 'dorsal-sympathikus': '#F97316', 'dorsal-ventral': '#6366F1', 'ventral-sympathikus': '#14B8A6' };
+    html += '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:' + (pvtColors[s.pvt] || '#6B7280') + '20;color:' + (pvtColors[s.pvt] || '#6B7280') + ';font-weight:500;">' + s.pvt + '</span></div>';
+    ['s', 'o', 'a', 'p'].forEach(function(k) {
+      var labels = { s: 'S — Subjektiv', o: 'O — Objektiv', a: 'A — Assessment', p: 'P — Plan' };
+      var colors = { s: '#3B82F6', o: '#10B981', a: '#F59E0B', p: '#8B5CF6' };
+      html += '<div style="margin-bottom:6px;"><span style="font-size:10px;font-weight:600;color:' + colors[k] + ';">' + labels[k] + '</span>';
+      html += '<div style="font-size:11px;color:#374151;line-height:1.5;margin-top:2px;">' + s.soap[k] + '</div></div>';
+    });
+    html += '</div>';
+  });
+  html += '</div></details>';
+
+  // PVT-Verlauf
+  html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🧠 PVT-Verlauf</summary>';
+  html += '<div style="padding:8px 0;display:flex;gap:10px;flex-wrap:wrap;">';
+  f.pvt_verlauf.forEach(function(p) {
+    var pvtColors = { dorsal: '#8B5CF6', sympathikus: '#EF4444', ventral: '#10B981', 'sympathikus-ventral': '#F59E0B', 'dorsal-sympathikus': '#F97316', 'dorsal-ventral': '#6366F1', 'ventral-sympathikus': '#14B8A6' };
+    html += '<div style="flex:1;min-width:180px;background:' + (pvtColors[p.zustand] || '#6B7280') + '10;border:1px solid ' + (pvtColors[p.zustand] || '#6B7280') + '30;border-radius:8px;padding:10px;">';
+    html += '<div style="font-weight:600;font-size:12px;color:' + (pvtColors[p.zustand] || '#6B7280') + ';">Sitzung ' + p.sitzung + '</div>';
+    html += '<div style="font-size:11px;color:#374151;margin-top:4px;">' + p.beschreibung + '</div></div>';
+  });
+  html += '</div></details>';
+
+  // Outcome
+  html += '<div style="background:linear-gradient(135deg,#ECFDF5,#EFF6FF);border:1px solid #BBF7D0;border-radius:10px;padding:14px;">';
+  html += '<div style="font-weight:600;font-size:13px;color:#065F46;margin-bottom:6px;">🏆 Outcome</div>';
+  html += '<div style="font-size:12px;color:#047857;line-height:1.6;">' + f.outcome + '</div>';
+  html += '</div>';
+
+  html += '</div></div></div>';
+
+  var overlay = document.createElement('div');
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay.firstChild);
+}
+
+// ============================================================
+// 5P KOMPLETT-BEISPIEL — Button + Rendering
+// ============================================================
+function open5PBeispiel() {
+  if (typeof FIVEP_BEISPIEL_KOMPLETT === 'undefined') return;
+  var b = FIVEP_BEISPIEL_KOMPLETT;
+
+  var html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove()">';
+  html += '<div style="background:white;border-radius:16px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;padding:0;" onclick="event.stopPropagation()">';
+
+  html += '<div style="background:linear-gradient(135deg,#3B82F6,#6366F1);color:white;padding:24px;border-radius:16px 16px 0 0;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+  html += '<div><span style="font-size:36px;">📖</span>';
+  html += '<h2 style="margin:8px 0 4px;font-size:20px;">' + b.titel + '</h2>';
+  html += '<p style="margin:0;opacity:0.9;font-size:12px;">' + b.beschreibung + '</p></div>';
+  html += '<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>';
+  html += '</div></div>';
+
+  html += '<div style="padding:24px;">';
+
+  var sectionColors = { presenting: { bg: '#FEF2F2', border: '#EF4444', title: '🔴 Presenting — Was zeigt sich?' },
+    predisposing: { bg: '#FFFBEB', border: '#F59E0B', title: '🟡 Predisposing — Was macht anfällig?' },
+    precipitating: { bg: '#FFF7ED', border: '#F97316', title: '🟠 Precipitating — Was hat es ausgelöst?' },
+    perpetuating: { bg: '#EFF6FF', border: '#3B82F6', title: '🔵 Perpetuating — Was hält es aufrecht?' },
+    protective: { bg: '#ECFDF5', border: '#10B981', title: '🟢 Protective — Was schützt?' } };
+
+  ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(function(key) {
+    var sc = sectionColors[key];
+    html += '<div style="background:' + sc.bg + ';border-left:4px solid ' + sc.border + ';border-radius:0 10px 10px 0;padding:14px;margin-bottom:12px;">';
+    html += '<div style="font-weight:600;font-size:13px;color:#1E293B;margin-bottom:8px;">' + sc.title + '</div>';
+    b[key].forEach(function(item) {
+      html += '<div style="margin-bottom:8px;"><div style="font-size:12px;font-weight:500;color:#1F2937;">• ' + item.eintrag + '</div>';
+      html += '<div style="font-size:11px;color:#6B7280;margin-left:14px;margin-top:2px;font-style:italic;">→ ' + item.erklaerung + '</div></div>';
+    });
+    html += '</div>';
+  });
+
+  // Hypothese
+  html += '<div style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:2px solid #3B82F6;border-radius:10px;padding:16px;">';
+  html += '<div style="font-weight:600;font-size:14px;color:#1E40AF;margin-bottom:8px;">💡 Hypothese — So hängt alles zusammen</div>';
+  html += '<div style="font-size:12px;color:#1E40AF;line-height:1.7;">' + b.hypothese + '</div>';
+  html += '</div>';
+
+  html += '</div></div></div>';
+
+  var overlay = document.createElement('div');
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay.firstChild);
 }

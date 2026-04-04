@@ -1353,6 +1353,8 @@ function saveSchueler(schuelerId) {
     const neu = DB.createSchueler(daten);
     showToast('Schüler angelegt', 'success');
     showView('profil', neu.id);
+    // Onboarding-Wizard für neue Schüler
+    setTimeout(() => showOnboardingWizard(neu.id), 300);
   }
 
   closeModal('schueler-modal');
@@ -1937,6 +1939,122 @@ function uploadFoto(schuelerId) {
     reader.readAsDataURL(file);
   };
   input.click();
+}
+
+// ============================================================
+// ONBOARDING-WIZARD — Geführte erste Schritte nach Schüler-Erstellung
+// ============================================================
+
+function showOnboardingWizard(schuelerId) {
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) return;
+
+  let currentStep = 0;
+  const steps = [
+    {
+      nr: 1,
+      titel: 'Screening durchführen',
+      icon: '🔍',
+      beschreibung: 'Ein kurzes Screening (5 Min.) erfasst systematisch alle Entwicklungsbereiche und identifiziert Handlungsbedarf.',
+      aktion: 'Screening starten',
+      aktionFn: () => {
+        closeOnboardingWizard();
+        showProfilTab('screening');
+      }
+    },
+    {
+      nr: 2,
+      titel: '5P-Fallformulierung',
+      icon: '🧩',
+      beschreibung: 'Ordne die Befunde in das 5P-Modell ein: Presenting, Predisposing, Precipitating, Perpetuating, Protective.',
+      aktion: '5P-Analyse öffnen',
+      aktionFn: () => {
+        closeOnboardingWizard();
+        showProfilTab('fallformulierung');
+      }
+    },
+    {
+      nr: 3,
+      titel: 'Stärken erfassen',
+      icon: '💪',
+      beschreibung: 'Welche Stärken und Ressourcen bringt der Jugendliche mit? Diese bilden die Basis für die Förderung.',
+      aktion: 'Stärken bewerten',
+      aktionFn: () => {
+        closeOnboardingWizard();
+        showProfilTab('staerken');
+      }
+    },
+    {
+      nr: 4,
+      titel: 'Förderplan generieren',
+      icon: '🗺️',
+      beschreibung: 'Basierend auf dem Screening wird ein individueller Förderplan mit 7 Phasen erstellt — der rote Faden für die gesamte Begleitung.',
+      aktion: 'Förderplan erstellen',
+      aktionFn: () => {
+        closeOnboardingWizard();
+        showProfilTab('roadmap');
+      }
+    }
+  ];
+
+  function renderStep() {
+    const step = steps[currentStep];
+    const progressDots = steps.map((st, i) =>
+      `<span class="onboarding-dot ${i === currentStep ? 'active' : ''} ${i < currentStep ? 'done' : ''}">${i < currentStep ? '✓' : st.nr}</span>`
+    ).join('');
+
+    const overlay = document.getElementById('onboarding-overlay') || createOnboardingOverlay();
+    overlay.querySelector('.onboarding-content').innerHTML = `
+      <div class="onboarding-header">
+        <h3>Willkommen! Erste Schritte für ${s.vorname}</h3>
+        <button class="btn-icon" onclick="closeOnboardingWizard()" title="Schließen">&times;</button>
+      </div>
+      <div class="onboarding-progress">${progressDots}</div>
+      <div class="onboarding-step">
+        <div class="onboarding-step-icon">${step.icon}</div>
+        <h4>Schritt ${step.nr}/4: ${step.titel}</h4>
+        <p>${step.beschreibung}</p>
+      </div>
+      <div class="onboarding-actions">
+        <button class="btn btn-primary" onclick="onboardingAction()">${step.aktion}</button>
+        <button class="btn btn-secondary" onclick="onboardingSkip()">${currentStep < steps.length - 1 ? 'Überspringen' : 'Später erledigen'}</button>
+      </div>
+      <div class="onboarding-hint">
+        <small>Du kannst jeden Schritt jederzeit im Profil nachholen.</small>
+      </div>
+    `;
+    overlay.style.display = 'flex';
+  }
+
+  function createOnboardingOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'onboarding-overlay';
+    overlay.className = 'onboarding-overlay';
+    overlay.innerHTML = '<div class="onboarding-content"></div>';
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+
+  window.onboardingAction = () => {
+    steps[currentStep].aktionFn();
+  };
+
+  window.onboardingSkip = () => {
+    currentStep++;
+    if (currentStep >= steps.length) {
+      closeOnboardingWizard();
+      showToast('Onboarding abgeschlossen — alle Schritte sind jederzeit im Profil verfügbar', 'info');
+    } else {
+      renderStep();
+    }
+  };
+
+  window.closeOnboardingWizard = () => {
+    const overlay = document.getElementById('onboarding-overlay');
+    if (overlay) overlay.remove();
+  };
+
+  renderStep();
 }
 
 // ============================================================

@@ -445,20 +445,60 @@ function renderRessourcenPhase4() {
   html += renderPVTEmpfehlung(pvtFilter);
   html += '</div>';
 
-  // Aktive Themen + passende Arbeitsblätter
+  // Aktive Themen + passende Arbeitsblätter (PVT-gefiltert)
   if (themenIds.length > 0) {
+    var groundingIds = ['krisenintervention', 'trauma', 'emotionserkennung', 'stress-angst', 'impulskontrolle'];
+    var coregIds = ['emotionsregulation', 'stress-angst', 'impulskontrolle', 'wut', 'achtsamkeit', 'selbstfuersorge'];
+    var showAll = getPhaseData('pvtShowAll', false);
+
+    // PVT-Filter-Banner
+    if (pvtFilter === 'frozen' && !showAll) {
+      html += '<div class="phase-res-tip phase-res-tip-purple" style="margin-bottom:10px;">' +
+        '&#128995; <strong>Eingefroren</strong> — Nur Grounding-/Stabilisierungsthemen werden angezeigt. ' +
+        '<button class="btn btn-secondary btn-sm" style="margin-left:8px;font-size:10px;" ' +
+        'onclick="savePhaseData(\'pvtShowAll\',true);if(typeof renderRoadmap===\'function\')renderRoadmap();">' +
+        'Alle Themen anzeigen</button></div>';
+    } else if (pvtFilter === 'activated' && !showAll) {
+      html += '<div class="phase-res-tip phase-res-tip-yellow" style="margin-bottom:10px;">' +
+        '&#128993; <strong>Angespannt</strong> — Co-Regulation-Themen werden priorisiert. ' +
+        '<button class="btn btn-secondary btn-sm" style="margin-left:8px;font-size:10px;" ' +
+        'onclick="savePhaseData(\'pvtShowAll\',true);if(typeof renderRoadmap===\'function\')renderRoadmap();">' +
+        'Alle Themen anzeigen</button></div>';
+    }
+
+    // Themen sortieren/filtern nach PVT
+    var sortedThemen = themenIds.slice();
+    if (!showAll) {
+      if (pvtFilter === 'frozen') {
+        sortedThemen = sortedThemen.filter(function(tid) {
+          return groundingIds.indexOf(tid) !== -1;
+        });
+        // Falls keine Grounding-Themen in Phase → alle zeigen mit Hinweis
+        if (sortedThemen.length === 0) sortedThemen = themenIds.slice();
+      } else if (pvtFilter === 'activated') {
+        // Co-Reg zuerst, dann Rest
+        var coreg = sortedThemen.filter(function(tid) { return coregIds.indexOf(tid) !== -1; });
+        var rest = sortedThemen.filter(function(tid) { return coregIds.indexOf(tid) === -1; });
+        sortedThemen = coreg.concat(rest);
+      }
+    }
+
     html += '<div class="phase-res-section">' +
       '<label class="phase-res-label">&#128196; Arbeitsblätter für aktive Themen</label>' +
       '<div style="display:flex;flex-direction:column;gap:6px;">';
 
-    for (var t = 0; t < themenIds.length; t++) {
-      var tid = themenIds[t];
-      // Finde Domain mit passenden Worksheets
+    for (var t = 0; t < sortedThemen.length; t++) {
+      var tid = sortedThemen[t];
       var worksheets = findWorksheetsForThema(tid);
       if (worksheets.length > 0) {
         var themaLabel = findThemaLabel(tid);
-        html += '<div style="background:#fff;border:1px solid #E5E7EB;border-radius:6px;padding:8px 10px;">' +
-          '<div style="font-size:12px;font-weight:600;margin-bottom:4px;">' + themaLabel + '</div>' +
+        var isPriority = (pvtFilter === 'frozen' && groundingIds.indexOf(tid) !== -1) ||
+                         (pvtFilter === 'activated' && coregIds.indexOf(tid) !== -1);
+        var borderStyle = isPriority ? 'border-left:3px solid ' + (pvtFilter === 'frozen' ? '#7C3AED' : '#D97706') + ';' : '';
+        html += '<div style="background:#fff;border:1px solid #E5E7EB;border-radius:6px;padding:8px 10px;' + borderStyle + '">' +
+          '<div style="font-size:12px;font-weight:600;margin-bottom:4px;">' + themaLabel +
+          (isPriority ? ' <span style="font-size:10px;color:' + (pvtFilter === 'frozen' ? '#7C3AED' : '#D97706') + ';">&#9733; empfohlen</span>' : '') +
+          '</div>' +
           '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
         for (var w = 0; w < worksheets.length; w++) {
           var ws = worksheets[w];
@@ -534,6 +574,7 @@ function renderPVTEmpfehlung(state) {
 
 function setPhase4PVTFilter(state) {
   savePhaseData('pvtFilter', state);
+  savePhaseData('pvtShowAll', false);
   if (typeof renderRoadmap === 'function') renderRoadmap();
 }
 

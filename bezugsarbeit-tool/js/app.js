@@ -1191,12 +1191,14 @@ function toggle5PHilfe(key) {
   }
   const h = FIVEP_HILFE[key];
   if (!h) return;
-  box.innerHTML = '<div style="font-size:11px;padding:10px 12px;background:#F9FAFB;border-radius:8px;margin:0 8px 8px;line-height:1.6;">'
-    + '<div style="color:#374151;margin-bottom:6px;">' + h.erklaerung + '</div>'
-    + (h.abgrenzung ? '<div style="color:#D97706;font-weight:600;margin-bottom:6px;">' + h.abgrenzung + '</div>' : '')
+  box.innerHTML = '<div style="font-size:12px;padding:12px 14px;background:#F9FAFB;border-radius:10px;margin:0 8px 8px;line-height:1.7;">'
+    + '<div style="color:#374151;margin-bottom:8px;font-size:13px;">' + h.erklaerung + '</div>'
+    + (h.zweck ? '<div style="background:#EFF6FF;border-radius:6px;padding:8px 10px;margin-bottom:8px;color:#1E40AF;font-size:12px;"><strong>Zweck:</strong> ' + h.zweck + '</div>' : '')
+    + (h.abgrenzung ? '<div style="color:#D97706;font-weight:600;margin-bottom:8px;font-size:12px;">' + h.abgrenzung + '</div>' : '')
+    + (h.vorgehen ? '<div style="background:#F0FDF4;border-radius:6px;padding:8px 10px;margin-bottom:8px;color:#166534;font-size:12px;white-space:pre-line;">' + h.vorgehen + '</div>' : '')
     + '<div style="margin-bottom:4px;font-weight:600;color:#6B7280;">Beispiele:</div>'
     + '<ul style="margin:0;padding-left:16px;color:#374151;">' + h.beispiele.map(b => '<li>' + b + '</li>').join('') + '</ul>'
-    + (h.tipp ? '<div style="margin-top:6px;color:#3B82F6;">' + h.tipp + '</div>' : '')
+    + (h.tipp ? '<div style="margin-top:8px;color:#3B82F6;">' + h.tipp + '</div>' : '')
     + '</div>';
   box.style.display = 'block';
 }

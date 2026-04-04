@@ -464,7 +464,7 @@ function openThemaPanel(katId, themaId) {
         </div>
         <div id="thema-notizen-liste">
           ${themaNotizen.length === 0
-            ? '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px;">Noch keine Notizen</div>'
+            ? '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px;">Noch keine Notizen zu diesem Thema. Starte eine Sitzung um Fortschritte zu dokumentieren.</div>'
             : themaNotizen.map(n => renderNotizKarte(n)).join('')}
         </div>
         <div style="margin-top:12px;">
@@ -985,7 +985,11 @@ function renderNotizen() {
 
   const liste = document.getElementById('notizen-liste');
   if (notizen.length === 0) {
-    liste.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:30px;">Noch keine Notizen vorhanden</div>';
+    liste.innerHTML = '<div style="text-align:center;padding:24px 16px;">'
+      + '<div style="font-size:28px;margin-bottom:8px;">📝</div>'
+      + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;">Noch keine Sitzungsprotokolle</div>'
+      + '<div style="font-size:12px;color:var(--text-muted,#6B7280);line-height:1.5;">Sitzungsprotokolle dokumentieren den Verlauf und sichern die Qualität deiner Arbeit.<br>Nutze das SOAP-Format oben um die erste Sitzung zu dokumentieren.</div>'
+      + '</div>';
   } else {
     liste.innerHTML = notizen.map(n => renderNotizKarte(n)).join('');
   }
@@ -1120,6 +1124,44 @@ function addProtokoll() {
   showToast('Protokoll gespeichert (SOAP)', 'success');
 }
 
+// ---- SOAP Beispiel-Toggle ----
+function toggleSoapBeispiel(feld) {
+  const box = document.getElementById('soap-beispiel-' + feld);
+  if (!box) return;
+  if (box.style.display !== 'none') {
+    box.style.display = 'none';
+    return;
+  }
+  const data = SOAP_BEISPIELE[feld];
+  if (!data) return;
+  box.innerHTML = '<div style="font-size:11px;padding:10px 12px;background:#F0F7FF;border-radius:8px;border-left:3px solid #3B82F6;margin-bottom:6px;line-height:1.6;">'
+    + '<div style="font-weight:600;color:#3B82F6;margin-bottom:4px;">' + data.label + '</div>'
+    + '<div style="color:#6B7280;margin-bottom:6px;font-style:italic;">' + data.erklaerung + '</div>'
+    + '<div style="color:#374151;background:#fff;padding:8px;border-radius:6px;border:1px dashed #D1D5DB;white-space:pre-line;">' + data.beispiel + '</div>'
+    + '</div>';
+  box.style.display = 'block';
+}
+
+// ---- 5P Hilfe-Toggle ----
+function toggle5PHilfe(key) {
+  const box = document.getElementById('fivep-hilfe-' + key);
+  if (!box) return;
+  if (box.style.display !== 'none') {
+    box.style.display = 'none';
+    return;
+  }
+  const h = FIVEP_HILFE[key];
+  if (!h) return;
+  box.innerHTML = '<div style="font-size:11px;padding:10px 12px;background:#F9FAFB;border-radius:8px;margin:0 8px 8px;line-height:1.6;">'
+    + '<div style="color:#374151;margin-bottom:6px;">' + h.erklaerung + '</div>'
+    + (h.abgrenzung ? '<div style="color:#D97706;font-weight:600;margin-bottom:6px;">' + h.abgrenzung + '</div>' : '')
+    + '<div style="margin-bottom:4px;font-weight:600;color:#6B7280;">Beispiele:</div>'
+    + '<ul style="margin:0;padding-left:16px;color:#374151;">' + h.beispiele.map(b => '<li>' + b + '</li>').join('') + '</ul>'
+    + (h.tipp ? '<div style="margin-top:6px;color:#3B82F6;">' + h.tipp + '</div>' : '')
+    + '</div>';
+  box.style.display = 'block';
+}
+
 function selectProtStimmung(btn) {
   document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -1211,7 +1253,14 @@ function renderZiele() {
   const liste = document.getElementById('ziele-liste');
 
   if (ziele.length === 0) {
-    liste.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">Noch keine Ziele definiert</div>';
+    liste.innerHTML = '<div style="text-align:center;padding:24px 16px;">'
+      + '<div style="font-size:28px;margin-bottom:8px;">🎯</div>'
+      + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;">Noch keine Ziele definiert</div>'
+      + '<div style="font-size:12px;color:var(--text-muted,#6B7280);margin-bottom:14px;line-height:1.5;">Ziele machen Fortschritte sichtbar und geben dem Jugendlichen Orientierung.<br>Formuliere Ziele nach der SMART-Methode: Spezifisch, Messbar, Erreichbar, Relevant, Zeitgebunden.</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">'
+      + SMART_BEISPIELE.map(b => '<button class="btn btn-outline btn-sm" style="font-size:11px;" onclick="quickAddZiel(\'' + b.replace(/'/g, "\\'") + '\')">' + b + '</button>').join('')
+      + '</div>'
+      + '</div>';
     return;
   }
 
@@ -1249,6 +1298,15 @@ function renderZiele() {
         </div>`;
     }).join('')}
   `;
+}
+
+function quickAddZiel(text) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  ziele.push({ text, erledigt: false, fortschritt: 0, erstellt: new Date().toISOString() });
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  renderZiele();
+  showToast('Ziel hinzugefügt', 'success');
 }
 
 function addZiel() {
@@ -3618,11 +3676,15 @@ function renderFallformulierung() {
           <div class="fivep-column" style="border-top:3px solid ${p.farbe};">
             <div class="fivep-col-header" style="background:${p.bg};">
               <span class="fivep-col-dot" style="background:${p.farbe};"></span>
-              <div>
-                <strong>${p.label}</strong>
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <strong>${p.label}</strong>
+                  <button class="soap-beispiel-btn" onclick="toggle5PHilfe('${p.key}')" title="Erklärung & Beispiele" style="font-size:13px;line-height:1;">ℹ️</button>
+                </div>
                 <div class="fivep-col-desc">${p.desc}</div>
               </div>
             </div>
+            <div class="fivep-hilfe-box" id="fivep-hilfe-${p.key}" style="display:none;"></div>
             <div class="fivep-col-body">
               <div class="fivep-tags" id="fivep-tags-${p.key}">
                 ${items.map((item, i) => `
@@ -5157,15 +5219,35 @@ function renderScreeningErgebnis(scr) {
       const score = scr.scores[d.id] || 0;
       const max = d.items.length * 3;
       const pct = Math.round((score / max) * 100);
+      // Interpretation based on score above cutoff
+      const diff = score - d.cutoff;
+      const isKrise = d.id === 'selbstverletzung' || d.id === 'suizidalitaet' || d.id === 'psychose';
+      let interpretText = '';
+      let interpretColor = '';
+      if (isKrise && diff > 0) {
+        interpretText = '⚠️ Krisenrelevant — Krisenprotokoll prüfen, ggf. sofort handeln';
+        interpretColor = '#DC2626';
+      } else if (diff >= 5) {
+        interpretText = 'Stark erhöht — Dringender Handlungsbedarf, externe Fachstelle einbeziehen';
+        interpretColor = '#DC2626';
+      } else if (diff >= 3) {
+        interpretText = 'Deutlich erhöht — Im Förderplan priorisieren';
+        interpretColor = '#D97706';
+      } else {
+        interpretText = 'Leicht erhöht — Beobachten und im Förderplan berücksichtigen';
+        interpretColor = '#F59E0B';
+      }
       return `<div class="scr-flagged-chip" style="border-left:4px solid ${d.farbe};">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
           <span style="font-weight:600;font-size:13px;">${d.icon} ${d.label}</span>
           <span style="font-size:12px;color:${d.farbe};font-weight:700;">${score}/${max}</span>
         </div>
         <div class="scr-mini-bar"><div class="scr-mini-bar-fill" style="width:${pct}%;background:${d.farbe};"></div></div>
-        ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:4px;">ICD-10: ${d.icd}</div>` : ''}
+        ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:3px;">ICD-10: ${d.icd}</div>` : ''}
+        <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
       </div>`;
-    }).join('') + '</div>';
+    }).join('') + '</div>'
+    + '<div style="font-size:11px;color:#6B7280;padding:8px 12px;margin-top:8px;background:#F9FAFB;border-radius:6px;line-height:1.5;">ℹ️ <strong>Was bedeutet „auffällig"?</strong> Scores über dem Cutoff-Wert deuten auf erhöhte Belastung hin. Diese Bereiche sollten im Förderplan priorisiert und bei der 5P-Analyse als „Presenting" aufgenommen werden.</div>';
   } else {
     flaggedEl.innerHTML = '<div style="color:#22c55e;padding:12px;font-weight:500;">✅ Keine Bereiche über dem Cutoff-Wert.</div>';
   }

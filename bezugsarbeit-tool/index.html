@@ -332,25 +332,29 @@
             </select>
           </div>
 
-          <!-- SOAP-Felder -->
+          <!-- SOAP-Felder mit Beispiel-Buttons -->
           <div class="protokoll-soap">
             <div class="soap-section soap-s">
-              <div class="soap-header"><span class="soap-letter">S</span> Subjektiv — Was berichtet der Jugendliche?</div>
+              <div class="soap-header"><span class="soap-letter">S</span> Subjektiv — Was berichtet der Jugendliche? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('subjektiv')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-subjektiv" style="display:none;"></div>
               <textarea id="prot-subjektiv" class="notiz-textarea" rows="3"
                 placeholder="Eigene Aussagen, Sorgen, Wünsche, Themen die aufkamen..."></textarea>
             </div>
             <div class="soap-section soap-o">
-              <div class="soap-header"><span class="soap-letter">O</span> Objektiv — Was beobachtest du?</div>
+              <div class="soap-header"><span class="soap-letter">O</span> Objektiv — Was beobachtest du? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('objektiv')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-objektiv" style="display:none;"></div>
               <textarea id="prot-objektiv" class="notiz-textarea" rows="3"
                 placeholder="Verhalten, Stimmung, Körpersprache, Veränderungen..."></textarea>
             </div>
             <div class="soap-section soap-a">
-              <div class="soap-header"><span class="soap-letter">A</span> Assessment — Deine fachliche Einschätzung</div>
+              <div class="soap-header"><span class="soap-letter">A</span> Assessment — Deine fachliche Einschätzung <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('assessment')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-assessment" style="display:none;"></div>
               <textarea id="prot-assessment" class="notiz-textarea" rows="3"
                 placeholder="Einordnung, Hypothesen, Risiken, Fortschritte..."></textarea>
             </div>
             <div class="soap-section soap-p">
-              <div class="soap-header"><span class="soap-letter">P</span> Plan — Nächste Schritte</div>
+              <div class="soap-header"><span class="soap-letter">P</span> Plan — Nächste Schritte <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('plan')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-plan" style="display:none;"></div>
               <textarea id="prot-plan" class="notiz-textarea" rows="3"
                 placeholder="Vereinbarungen, Interventionen, Überweisungen, Ziele bis nächste Sitzung..."></textarea>
             </div>
@@ -424,8 +428,20 @@
           </div>
           <div class="card-body">
             <div id="ziele-liste" style="margin-bottom:16px;"></div>
+            <!-- SMART-Hilfe aufklappbar -->
+            <details class="smart-hilfe" style="margin-bottom:12px;">
+              <summary style="font-size:12px;color:#3B82F6;cursor:pointer;font-weight:600;">📐 SMART-Methode — Wie formuliere ich gute Ziele?</summary>
+              <div style="font-size:12px;color:#6B7280;padding:8px 12px;background:#F0F7FF;border-radius:8px;margin-top:6px;line-height:1.6;">
+                <strong>S</strong>pezifisch — Was genau soll erreicht werden?<br>
+                <strong>M</strong>essbar — Woran erkenne ich den Fortschritt?<br>
+                <strong>E</strong>rreichbar — Ist das Ziel realistisch für diesen Jugendlichen?<br>
+                <strong>R</strong>elevant — Passt es zu den identifizierten Problemen?<br>
+                <strong>T</strong>erminiert — Bis wann soll es erreicht sein?<br>
+                <em style="display:block;margin-top:6px;">Nicht: „Besser in der Schule" — Sondern: „In 4 Wochen kann Max 3x wöchentlich ohne Streit in der Pause spielen"</em>
+              </div>
+            </details>
             <div style="display:flex;gap:10px;">
-              <input type="text" id="neues-ziel-input" placeholder="Neues Ziel eingeben..."
+              <input type="text" id="neues-ziel-input" placeholder="z.B. In 4 Wochen kann Max 3x/Woche ohne Streit in der Pause spielen"
                 onkeydown="if(event.key==='Enter') addZiel()">
               <button class="btn btn-success btn-sm" onclick="addZiel()">+ Hinzufügen</button>
             </div>

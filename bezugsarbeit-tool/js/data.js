@@ -1634,6 +1634,71 @@ const STAERKEN_DIMENSIONEN = [
   { id: 'schulisch',      label: 'Schulische Stärken', icon: '📚', farbe: '#14B8A6', beschreibung: 'Fächer, Lernbereitschaft, kognitive Stärken' },
 ];
 
+// SOAP Beispiel-Einträge für Pädagogen
+const SOAP_BEISPIELE = {
+  subjektiv: {
+    label: 'S = Was der Jugendliche SAGT',
+    erklaerung: 'Eigene Worte des Schülers, berichtete Gefühle und Erlebnisse. Möglichst wörtlich zitieren.',
+    beispiel: 'Max sagt: „Ich hab keinen Bock mehr auf Schule, die anderen lachen mich immer aus." Er erzählt, dass er sich morgens nicht mehr aufraffen kann. Seit dem Streit mit seinem besten Freund letzte Woche fühlt er sich allein.',
+  },
+  objektiv: {
+    label: 'O = Was du BEOBACHTEST',
+    erklaerung: 'Deine Beobachtungen: Verhalten, Körpersprache, Stimmung, Veränderungen zur letzten Sitzung.',
+    beispiel: 'Blickkontakt vermieden, leise Stimme, zusammengekauerte Sitzhaltung. Stimmung deutlich niedergeschlagen (Stimmungsthermometer: 3/10, letzte Woche 5/10). Reagiert erst nach wiederholtem Ansprechen. Kleidung ungepflegt — Veränderung zu den Vorwochen.',
+  },
+  assessment: {
+    label: 'A = Deine fachliche EINORDNUNG',
+    erklaerung: 'Was bedeuten die Beobachtungen? Deine Hypothesen, Zusammenhänge, Risiken und Fortschritte. Hier ordnest du ein — nicht der Schüler.',
+    beispiel: 'Max zeigt zunehmende Rückzugstendenzen mit Anzeichen sozialer Isolation. Der Verlust der Freundschaft scheint der Auslöser. Screening-Bereich „Depressive Stimmung" war bereits auffällig (Score 8/15). Kein akutes Krisenrisiko, aber die Verschlechterung seit 2 Wochen erfordert engmaschigere Begleitung. Mögliche Verbindung zu niedrigem Selbstwert.',
+  },
+  plan: {
+    label: 'P = Konkrete NÄCHSTE SCHRITTE',
+    erklaerung: 'Was machst du bis zur nächsten Sitzung? Vereinbarungen, Interventionen, Überweisungen.',
+    beispiel: '1. Arbeitsblatt „Meine Stärken" bearbeiten (Selbstwert stärken)\n2. Nächste Sitzung: Thema „Freundschaften" — Soziale Kompetenz-Übung\n3. Elterngespräch vereinbaren (Rückzugsverhalten besprechen)\n4. Bei weiterer Verschlechterung: Beratungsstelle einbeziehen\n5. Nächste Sitzung in 5 Tagen statt 7 (engmaschiger)',
+  },
+};
+
+// 5P-Fallformulierung Hilfe mit Beispielen und Abgrenzung
+const FIVEP_HILFE = {
+  presenting: {
+    erklaerung: 'Was zeigt der Jugendliche JETZT? Aktuelle Symptome, Verhaltensauffälligkeiten und Probleme, die zur Anmeldung geführt haben.',
+    beispiele: ['Sozialer Rückzug seit 3 Monaten', 'Aggressives Verhalten gegenüber Mitschülern', 'Schulnoten stark verschlechtert', 'Schlafstörungen und Konzentrationsprobleme', 'Selbstverletzendes Verhalten'],
+    abgrenzung: 'Hier gehören nur AKTUELLE, beobachtbare Probleme — nicht Ursachen oder Hintergründe.',
+    tipp: '💡 Nutze „Screening → Presenting" um auffällige Bereiche automatisch zu übernehmen.',
+  },
+  predisposing: {
+    erklaerung: 'Was war VORHER schon da? Risikofaktoren die den Boden für die Probleme bereitet haben — oft aus der Vorgeschichte.',
+    beispiele: ['ADHS-Diagnose seit Kindheit', 'Trennung der Eltern vor 3 Jahren', 'Unsichere Bindung (häufige Beziehungsabbrüche)', 'Familiäre Belastung (psychisch kranker Elternteil)', 'Migrationshintergrund mit Sprachbarriere'],
+    abgrenzung: '⚡ Unterschied zu Precipitating: Predisposing = war LANGE VORHER da (Monate/Jahre). Precipitating = hat es KÜRZLICH ausgelöst (Tage/Wochen).',
+    tipp: '💡 Frage: „Was aus der Lebensgeschichte macht diesen Jugendlichen verletzlicher als andere?"',
+  },
+  precipitating: {
+    erklaerung: 'Was hat die aktuellen Probleme AUSGELÖST? Kürzliche Ereignisse oder Veränderungen.',
+    beispiele: ['Schulwechsel vor 4 Wochen', 'Tod des Großvaters letzten Monat', 'Streit mit bestem Freund', 'Cybermobbing seit Beginn des Schuljahres', 'Umzug in neue Stadt'],
+    abgrenzung: '⚡ Unterschied zu Predisposing: Precipitating = der konkrete AUSLÖSER der kürzlich passiert ist. Ohne dieses Ereignis wäre es (noch) nicht zu den Problemen gekommen.',
+    tipp: '💡 Frage: „Was ist in den letzten Wochen/Monaten passiert, das die Situation verschlechtert hat?"',
+  },
+  perpetuating: {
+    erklaerung: 'Was HÄLT die Probleme aufrecht? Faktoren die verhindern dass es besser wird.',
+    beispiele: ['Vermeidungsverhalten (geht Konflikten aus dem Weg)', 'Fehlende soziale Unterstützung', 'Negative Denkmuster („Ich bin nichts wert")', 'Sekundärer Krankheitsgewinn (bekommt Aufmerksamkeit)', 'Familiendynamik verstärkt Symptome'],
+    abgrenzung: 'Dies sind oft die besten HEBEL für Veränderung! Wenn du diese Faktoren identifizierst, weißt du wo die Intervention ansetzen muss.',
+    tipp: '💡 Frage: „Warum wird es nicht von alleine besser? Was hält den Kreislauf am Laufen?"',
+  },
+  protective: {
+    erklaerung: 'Was SCHÜTZT den Jugendlichen? Stärken und Ressourcen die bei der Förderung helfen.',
+    beispiele: ['Stabile Beziehung zur Mutter', 'Sportverein als Ausgleich', 'Hohe Intelligenz/gutes Auffassungsvermögen', 'Humor und Selbstironie', 'Einzelne gute Freundschaft'],
+    abgrenzung: 'Schutzfaktoren sind das FUNDAMENT deiner Arbeit. Ohne sie fehlt die Basis auf der du aufbauen kannst.',
+    tipp: '💡 Nutze „Stärken → Protective" um bewertete Stärken automatisch zu übernehmen.',
+  },
+};
+
+// SMART-Ziele Beispiele und Anleitung
+const SMART_BEISPIELE = [
+  'In 4 Wochen kann Max 3x pro Woche ohne Streit in der Pause spielen',
+  'Bis Ende des Monats schafft Lisa es, sich in 3 von 5 Schultagen selbst zu melden',
+  'In 6 Wochen besucht Tom regelmäßig den Sportverein (mind. 1x/Woche)',
+];
+
 // Rating-Anker für Stärken-Dimensionen (1-3 niedrig, 4-6 mittel, 7-10 hoch)
 const STAERKEN_ANKER = {
   kreativitaet: {

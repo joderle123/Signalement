@@ -1836,6 +1836,70 @@ const SMART_BEISPIELE = [
   'In 6 Wochen besucht Tom regelmäßig den Sportverein (mind. 1x/Woche)',
 ];
 
+// SMART-Zielvorschläge pro Screening-Domain (werden bei flagged Domains vorgeschlagen)
+const SMART_SCREENING_VORSCHLAEGE = {
+  depression: [
+    'In 3 Wochen nennt [Name] 3 Aktivitäten, die ihm/ihr Freude machen, und führt mind. 1x/Woche eine davon durch',
+    'In 4 Wochen bewertet [Name] seine Stimmung auf dem Stimmungsthermometer durchschnittlich um 2 Punkte höher als aktuell',
+  ],
+  'angst-generalisiert': [
+    'In 4 Wochen kann [Name] eine Entspannungstechnik (z.B. 4-4-4-Atmung) selbstständig bei Angst einsetzen',
+    'In 6 Wochen berichtet [Name] an mind. 3 von 5 Schultagen keine übermäßige Angst vor der Schule',
+  ],
+  'angst-sozial': [
+    'In 4 Wochen meldet sich [Name] mind. 2x pro Woche im Unterricht zu Wort',
+    'In 6 Wochen nimmt [Name] an einer Gruppenaktivität pro Woche teil (Kantine, AG, Sport)',
+  ],
+  trauma: [
+    'In 4 Wochen kann [Name] seine Grounding-Technik bei Flashbacks selbstständig einsetzen',
+    'In 6 Wochen berichtet [Name] weniger als 2 Albträume pro Woche',
+  ],
+  adhs: [
+    'In 4 Wochen verwendet [Name] einen Tagesplaner und erledigt mind. 3 von 5 täglichen Aufgaben selbstständig',
+    'In 6 Wochen bleibt [Name] für mind. 20 Minuten bei einer Aufgabe ohne Unterbrechung',
+  ],
+  conduct: [
+    'In 4 Wochen hat [Name] max. 1 Regelverstoß pro Woche (aktuell: [X]/Woche)',
+    'In 6 Wochen kann [Name] bei Wut die STOPP-Technik anwenden und den Raum verlassen statt zu eskalieren',
+  ],
+  selbstverletzung: [
+    'In 2 Wochen hat [Name] seinen Krisenplan bei sich und kennt 3 Alternativen zur Selbstverletzung',
+    'In 4 Wochen reduziert sich die Frequenz der Selbstverletzung um 50% (mit Skill-Einsatz)',
+  ],
+  essstoerung: [
+    'In 4 Wochen isst [Name] mind. 2 regelmäßige Mahlzeiten pro Tag',
+    'In 6 Wochen führt [Name] ein Esstagebuch und bespricht es wöchentlich',
+  ],
+  substanz: [
+    'In 4 Wochen reduziert [Name] den Konsum um 50% gegenüber dem aktuellen Level',
+    'In 6 Wochen kennt [Name] 3 alternative Bewältigungsstrategien und setzt mind. 1 ein',
+  ],
+  schlaf: [
+    'In 3 Wochen hält [Name] an 5 von 7 Tagen eine feste Schlafenszeit ein (±30 Min)',
+    'In 4 Wochen legt [Name] Handy/Bildschirm mind. 30 Min vor dem Schlafengehen weg',
+  ],
+  mobbing: [
+    'In 2 Wochen hat [Name] einen Schutzplan und kennt 2 Vertrauenspersonen die helfen können',
+    'In 4 Wochen berichtet [Name] mind. 3 sichere Orte in der Schule und nutzt mind. 1 täglich',
+  ],
+  familie: [
+    'In 4 Wochen kann [Name] in Familienkonflikten die Ich-Botschaft einsetzen statt zu eskalieren',
+    'In 6 Wochen finden mind. 2 positive Familienaktivitäten pro Woche statt',
+  ],
+  'soziale-isolation': [
+    'In 4 Wochen unternimmt [Name] mind. 1x/Woche etwas mit einem Gleichaltrigen',
+    'In 6 Wochen ist [Name] Mitglied in einem Verein/AG und nimmt regelmäßig teil',
+  ],
+  trennungsangst: [
+    'In 4 Wochen kann [Name] 2 Stunden von der Bezugsperson getrennt sein ohne Panik',
+    'In 6 Wochen besucht [Name] an mind. 4 von 5 Tagen die Schule ohne Trennungsszene',
+  ],
+  psychosomatik: [
+    'In 4 Wochen kann [Name] 3 Körpersignale benennen die auf Stress hinweisen',
+    'In 6 Wochen setzt [Name] bei Bauchschmerzen/Kopfschmerzen eine Entspannungstechnik ein statt zu fehlen',
+  ],
+};
+
 // Rating-Anker für Stärken-Dimensionen (1-3 niedrig, 4-6 mittel, 7-10 hoch)
 const STAERKEN_ANKER = {
   kreativitaet: {

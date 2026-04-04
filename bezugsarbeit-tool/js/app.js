@@ -367,7 +367,7 @@ function showProfilTab(tab) {
   if (tab === 'roadmap') renderRoadmap();
   if (tab === 'themen') { renderThemen(); renderSitzungenImThemenTab(); }
   if (tab === 'notizen') renderNotizen();
-  if (tab === 'ziele') renderZiele();
+  if (tab === 'ziele') { renderZiele(); renderScreeningZielVorschlaege(); }
   if (tab === 'staerken') renderStaerken();
   if (tab === 'fallformulierung') renderFallformulierung();
   if (tab === 'screening') renderScreeningEmbedded();
@@ -1339,6 +1339,38 @@ function renderZiele() {
         </div>`;
     }).join('')}
   `;
+}
+
+function renderScreeningZielVorschlaege() {
+  const container = document.getElementById('screening-ziel-vorschlaege');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const screenings = DB.getScreenings(sid).filter(s => s.abgeschlossen);
+  if (screenings.length === 0) { container.innerHTML = ''; return; }
+  const latest = screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+  const s = DB.getSchuelerById(sid);
+  const name = s ? s.name : '[Name]';
+
+  const vorschlaege = [];
+  for (const domId in latest.scores) {
+    const dom = SCREENING_DOMAINS.find(d => d.id === domId);
+    if (dom && !dom.invertiert && latest.scores[domId] >= dom.cutoff && SMART_SCREENING_VORSCHLAEGE[domId]) {
+      SMART_SCREENING_VORSCHLAEGE[domId].forEach(v => {
+        vorschlaege.push({ domain: dom, text: v.replace('[Name]', name) });
+      });
+    }
+  }
+  if (vorschlaege.length === 0) { container.innerHTML = ''; return; }
+
+  container.innerHTML = '<div style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:10px;padding:12px;margin-bottom:12px;">'
+    + '<div style="font-size:12px;font-weight:600;color:#0369A1;margin-bottom:8px;">💡 Zielvorschläge aus Screening-Ergebnissen</div>'
+    + '<div style="display:flex;flex-direction:column;gap:4px;">'
+    + vorschlaege.map(v =>
+      '<button class="btn btn-outline btn-sm" style="font-size:11px;text-align:left;white-space:normal;line-height:1.4;padding:6px 10px;border-color:' + v.domain.farbe + '40;" onclick="quickAddZiel(\'' + v.text.replace(/'/g, "\\'") + '\')">'
+      + '<span style="color:' + v.domain.farbe + ';font-weight:600;">' + v.domain.icon + ' ' + v.domain.label + ':</span> '
+      + v.text + '</button>'
+    ).join('')
+    + '</div></div>';
 }
 
 function quickAddZiel(text) {

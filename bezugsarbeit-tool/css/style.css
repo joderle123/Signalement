@@ -314,9 +314,9 @@ body {
   flex-shrink: 0;
 }
 
-.risiko-niedrig { background: #22C55E; }
-.risiko-mittel { background: #F59E0B; }
-.risiko-hoch { background: #EF4444; }
+.risiko-niedrig { background: var(--severity-ok); }
+.risiko-mittel { background: var(--severity-warn); }
+.risiko-hoch { background: var(--severity-danger); }
 
 .sidebar-footer {
   padding: 12px 18px;
@@ -3820,4 +3820,37 @@ select {
 }
 .suggestion-chip:active {
   transform: scale(0.96);
+}
+
+/* ========== Mobile: Smartphones (640px) ========== */
+@media (max-width: 640px) {
+  .fivep-grid { grid-template-columns: 1fr; gap: 10px; }
+  .fivep-analysis-body { flex-direction: column; gap: 16px; padding: 16px; }
+
+  .roadmap-phase { flex-direction: column; gap: 8px; }
+  .roadmap-phase-marker {
+    flex-direction: row;
+    width: auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .roadmap-phase-line { display: none; }
+  .roadmap-phase-dot { width: 32px; height: 32px; font-size: 12px; }
+  .roadmap-phase-content { margin-bottom: 8px; }
+  .roadmap-phase-header { padding: 10px 12px; flex-wrap: wrap; }
+  .roadmap-phase-header-right { width: 100%; justify-content: flex-end; margin-top: 6px; }
+
+  .roadmap-header { flex-direction: column; gap: 10px; }
+  .roadmap-header-actions { width: 100%; justify-content: flex-start; }
+
+  .berichte-grid { grid-template-columns: 1fr; }
+
+  .suggestion-chips { gap: 4px; }
+  .suggestion-chip { font-size: 10px; padding: 2px 8px; }
+
+  .card { padding: 12px; }
+  .card-body { padding: 12px; }
+
+  /* Sidebar wird bei 768px schon collapsed — hier nur Feinschliff */
+  .main-content { padding: 12px; }
 }

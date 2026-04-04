@@ -1210,15 +1210,45 @@ function renderZiele() {
   const ziele = s.ziele || [];
   const liste = document.getElementById('ziele-liste');
 
-  liste.innerHTML = ziele.length === 0
-    ? '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">Noch keine Ziele definiert</div>'
-    : ziele.map((z, i) => `
-      <div class="ziel-item">
-        <input type="checkbox" class="ziel-checkbox" ${z.erledigt ? 'checked' : ''}
-          onchange="toggleZiel(${i})">
-        <span class="ziel-text ${z.erledigt ? 'erledigt' : ''}">${escapeHtml(z.text)}</span>
-        <button class="btn-icon btn-sm" style="font-size:12px;" onclick="deleteZiel(${i})">🗑</button>
-      </div>`).join('');
+  if (ziele.length === 0) {
+    liste.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">Noch keine Ziele definiert</div>';
+    return;
+  }
+
+  // Gesamt-Fortschritt
+  const avgFortschritt = Math.round(ziele.reduce((sum, z) => sum + (z.fortschritt || (z.erledigt ? 100 : 0)), 0) / ziele.length);
+  const avgColor = avgFortschritt >= 70 ? '#22C55E' : (avgFortschritt >= 30 ? '#F59E0B' : '#EF4444');
+
+  liste.innerHTML = `
+    <div class="ziel-gesamt-fortschritt" style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Gesamt-Fortschritt</span>
+        <span style="font-size:14px;font-weight:700;color:${avgColor};">${avgFortschritt}%</span>
+      </div>
+      <div style="height:6px;background:#E5E7EB;border-radius:3px;overflow:hidden;">
+        <div style="height:100%;width:${avgFortschritt}%;background:${avgColor};border-radius:3px;transition:width 0.3s ease;"></div>
+      </div>
+    </div>
+    ${ziele.map((z, i) => {
+      const pct = z.fortschritt || (z.erledigt ? 100 : 0);
+      const farbe = pct >= 70 ? '#22C55E' : (pct >= 30 ? '#F59E0B' : '#EF4444');
+      return `
+        <div class="ziel-item-enhanced">
+          <div class="ziel-item-header">
+            <input type="checkbox" class="ziel-checkbox" ${pct >= 100 ? 'checked' : ''}
+              onchange="toggleZiel(${i})">
+            <span class="ziel-text ${pct >= 100 ? 'erledigt' : ''}">${escapeHtml(z.text)}</span>
+            <span class="ziel-pct" style="color:${farbe};">${pct}%</span>
+            <button class="btn-icon btn-sm" style="font-size:12px;" onclick="deleteZiel(${i})">🗑</button>
+          </div>
+          <div class="ziel-slider-row">
+            <input type="range" min="0" max="100" step="5" value="${pct}"
+              class="ziel-slider" style="--ziel-farbe:${farbe};"
+              oninput="updateZielFortschritt(${i}, this.value)">
+          </div>
+        </div>`;
+    }).join('')}
+  `;
 }
 
 function addZiel() {
@@ -1227,16 +1257,28 @@ function addZiel() {
   if (!text) return;
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   const ziele = s.ziele || [];
-  ziele.push({ text, erledigt: false, erstellt: new Date().toISOString() });
+  ziele.push({ text, erledigt: false, fortschritt: 0, erstellt: new Date().toISOString() });
   DB.updateSchueler(APP.currentSchuelerId, { ziele });
   input.value = '';
+  renderZiele();
+}
+
+function updateZielFortschritt(index, value) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  const pct = parseInt(value, 10);
+  ziele[index].fortschritt = pct;
+  ziele[index].erledigt = pct >= 100;
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
   renderZiele();
 }
 
 function toggleZiel(index) {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   const ziele = s.ziele || [];
-  ziele[index].erledigt = !ziele[index].erledigt;
+  const wasErledigt = ziele[index].erledigt;
+  ziele[index].erledigt = !wasErledigt;
+  ziele[index].fortschritt = wasErledigt ? 0 : 100;
   DB.updateSchueler(APP.currentSchuelerId, { ziele });
   renderZiele();
 }

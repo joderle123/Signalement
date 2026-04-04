@@ -290,6 +290,40 @@ function renderRessourcenPhase2() {
     }
   }
 
+  // Exploration-Arbeitsblätter: Wenn Screening vorhanden, passende Arbeitsblätter zu den auffälligen Bereichen zeigen
+  if (hasScreening) {
+    var latest2 = screenings.sort(function(a, b) { return new Date(b.datum) - new Date(a.datum); })[0];
+    var abFlagged = [];
+    for (var domId2 in latest2.scores) {
+      var dom2 = SCREENING_DOMAINS.find(function(d) { return d.id === domId2; });
+      if (dom2 && !dom2.invertiert && latest2.scores[domId2] >= dom2.cutoff) {
+        abFlagged.push({ id: domId2, domain: dom2 });
+      }
+    }
+    if (abFlagged.length > 0) {
+      html += '<div class="phase-res-section">' +
+        '<label class="phase-res-label">&#128196; Arbeitsblätter zum Kennenlernen der Problembereiche</label>' +
+        '<div style="font-size:11px;color:#6B7280;margin-bottom:8px;">Diese Arbeitsblätter helfen, die auffälligen Bereiche im Gespräch zu vertiefen — noch keine Intervention, sondern Exploration.</div>' +
+        '<div style="display:flex;flex-direction:column;gap:6px;">';
+      for (var ab = 0; ab < abFlagged.length; ab++) {
+        var abItem = abFlagged[ab];
+        var abWs = findWorksheetsForThema(abItem.id);
+        if (abWs.length > 0) {
+          html += '<div style="background:#fff;border:1px solid #E5E7EB;border-radius:6px;padding:8px 10px;">' +
+            '<div style="font-size:12px;font-weight:600;margin-bottom:4px;">' + abItem.domain.icon + ' ' + abItem.domain.label + '</div>' +
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+          for (var abw = 0; abw < abWs.length; abw++) {
+            html += '<a href="arbeitsblatter/' + abWs[abw] + '" target="_blank" ' +
+              'class="btn btn-secondary btn-sm phase-res-btn" style="font-size:11px;">' +
+              '&#128196; ' + abWs[abw].replace('.html', '').replace(/-/g, ' ') + '</a>';
+          }
+          html += '</div></div>';
+        }
+      }
+      html += '</div></div>';
+    }
+  }
+
   // Hinweis
   html += '<div class="phase-res-info phase-res-info-blue">' +
     '&#8505; <strong>Themen-Auswahl erst nach der 5P-Formulation.</strong> Erst verstehen, dann planen.' +

@@ -667,6 +667,57 @@ const THEMA_AKTIVITÄTEN = {
     { titel: 'Innere Sicherheit aufbauen', beschreibung: 'Was gibt mir Sicherheit, auch wenn andere Menschen nicht da sind? Liste erstellen.', dauer: '15 Min' },
     { titel: 'Grounding bei Trennungsangst', beschreibung: 'Übe 5-4-3-2-1: 5 sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken – jetzt, in diesem Moment.', dauer: '10 Min' },
   ],
+  // Neue Themen
+  'bindungsstoerung': [
+    { titel: 'Beziehungs-Landkarte', beschreibung: 'Zeichne eine Karte mit allen wichtigen Personen in deinem Leben. Wie nah oder weit weg sind sie?', dauer: '20 Min' },
+    { titel: 'Nähe-Distanz-Übung', beschreibung: 'Stell dich hin und zeige mit Abstand, wie nah verschiedene Personen an dich herankommen dürfen.', dauer: '15 Min' },
+    { titel: 'Brief an eine Bezugsperson', beschreibung: 'Schreibe einen Brief an jemanden, der dir wichtig ist – du musst ihn nicht abschicken.', dauer: '20 Min' },
+  ],
+  'cybermobbing': [
+    { titel: 'Screenshot-Übung', beschreibung: 'Übe: Wie sichere ich Beweise? Screenshot machen, Datum notieren, Vertrauensperson zeigen.', dauer: '10 Min' },
+    { titel: 'Online-Profil-Check', beschreibung: 'Gehe deine Social-Media-Profile durch: Was ist öffentlich? Was sollte privat sein?', dauer: '15 Min' },
+    { titel: 'Antwort oder Nicht-Antwort?', beschreibung: 'Sammle 5 fiese Online-Nachrichten. Überlege: Antworten, ignorieren oder melden? Warum?', dauer: '15 Min' },
+  ],
+  'schulverweigerung': [
+    { titel: 'Angst-Thermometer Schule', beschreibung: 'Bewerte verschiedene Schulsituationen auf einer Skala 0-10. Wo ist die Angst am größten?', dauer: '15 Min' },
+    { titel: 'Mein Schul-Stufenplan', beschreibung: 'Erstelle 5 kleine Schritte zurück in die Schule (z.B. Schulhof besuchen → 1 Stunde → halber Tag).', dauer: '20 Min' },
+    { titel: 'Morgenroutine-Plan', beschreibung: 'Gestalte einen realistischen Morgenplan, der den Schulstart erleichtert.', dauer: '10 Min' },
+  ],
+  'lernbehinderung': [
+    { titel: 'Mein Lern-Steckbrief', beschreibung: 'Wie lerne ich am besten? Hören, sehen, anfassen? Erstelle deinen persönlichen Lern-Steckbrief.', dauer: '15 Min' },
+    { titel: 'Stärken-Sonne', beschreibung: 'Zeichne eine Sonne: In der Mitte du, in den Strahlen alles was du gut kannst – nicht nur schulisch!', dauer: '15 Min' },
+    { titel: 'Nachteilsausgleich-Wunschliste', beschreibung: 'Was würde dir in der Schule helfen? Mehr Zeit? Vorlesen? Schreibe deine Wünsche auf.', dauer: '10 Min' },
+  ],
+  'psychoedukation': [
+    { titel: 'Meine Diagnose in eigenen Worten', beschreibung: 'Erkläre deine Diagnose so, als würdest du sie einem Freund erklären. Was weißt du? Was nicht?', dauer: '15 Min' },
+    { titel: 'Mythen vs. Fakten', beschreibung: 'Sammle Vorurteile über deine Diagnose und prüfe: Was stimmt wirklich? Was ist Unsinn?', dauer: '15 Min' },
+    { titel: 'Mein Behandlungs-Kompass', beschreibung: 'Was hilft mir? Was nicht? Was möchte ich ausprobieren? Erstelle deinen persönlichen Plan.', dauer: '15 Min' },
+  ],
+  'uebergaenge': [
+    { titel: 'Meine Übergangs-Timeline', beschreibung: 'Zeichne eine Zeitleiste deines Lebens und markiere alle großen Veränderungen. Was hast du gelernt?', dauer: '20 Min' },
+    { titel: 'Abschiedsbrief', beschreibung: 'Schreibe einen Brief an einen Ort, eine Person oder eine Lebensphase von der du dich verabschiedest.', dauer: '15 Min' },
+    { titel: 'Zukunfts-Ich', beschreibung: 'Stelle dir vor: Wo bist du in 1 Jahr? Was machst du? Wer ist bei dir? Male oder beschreibe es.', dauer: '15 Min' },
+  ],
+  'migration-flucht': [
+    { titel: 'Meine zwei Welten', beschreibung: 'Zeichne zwei Kreise: Herkunftsland und neues Land. Was vermisst du? Was gefällt dir hier?', dauer: '20 Min' },
+    { titel: 'Kultur-Brücke', beschreibung: 'Was aus deiner Kultur möchtest du behalten? Was aus der neuen Kultur möchtest du aufnehmen?', dauer: '15 Min' },
+    { titel: 'Mein Anker-Netzwerk', beschreibung: 'Wer hilft dir hier? Erstelle eine Liste von Personen, Orten und Dingen die dir Halt geben.', dauer: '10 Min' },
+  ],
+  'parentifizierung': [
+    { titel: 'Rollen-Karten', beschreibung: 'Schreibe auf Karten: Welche Aufgaben übernimmst du zu Hause? Welche davon gehören eigentlich Erwachsenen?', dauer: '15 Min' },
+    { titel: 'Was brauche ICH?', beschreibung: 'Schreibe 5 Dinge auf, die du brauchst, aber die zu kurz kommen. Was wünschst du dir?', dauer: '15 Min' },
+    { titel: 'Grenzen-Experiment', beschreibung: 'Übe zu sagen: „Das ist nicht meine Aufgabe" — in welchen Situationen könntest du das ausprobieren?', dauer: '10 Min' },
+  ],
+  'young-carers': [
+    { titel: 'Mein Pflegetag', beschreibung: 'Beschreibe einen typischen Tag mit deiner Pflegerolle. Was machst du? Wie viel Zeit nimmt es?', dauer: '15 Min' },
+    { titel: 'Gefühle-Rad', beschreibung: 'Welche Gefühle hast du wegen der Pflege? Stolz? Wut? Scham? Trauer? Alles darf sein.', dauer: '15 Min' },
+    { titel: 'Meine Freizeit-Wunschliste', beschreibung: 'Was würdest du tun, wenn du mehr freie Zeit hättest? Schreibe 10 Wünsche auf.', dauer: '10 Min' },
+  ],
+  'institutionserfahrung': [
+    { titel: 'Meine Stationen', beschreibung: 'Zeichne eine Landkarte deiner bisherigen Stationen (Zuhause, Heim, Pflegefamilie...). Wer war wichtig?', dauer: '20 Min' },
+    { titel: 'Brief an mein jüngeres Ich', beschreibung: 'Was würdest du deinem jüngeren Ich sagen? Was hast du geschafft trotz allem?', dauer: '15 Min' },
+    { titel: 'Vertrauens-Barometer', beschreibung: 'Bewerte: Wie leicht fällt es dir, neuen Personen zu vertrauen? Was brauchst du dafür?', dauer: '10 Min' },
+  ],
 };
 
 const THEMA_INTERVENTIONEN = {

@@ -213,6 +213,59 @@ function renderRessourcenPhase1() {
       '&#127384; Krisenplan-Vorlage</a>' +
   '</div>';
 
+  // Beziehungsarbeit: Konkrete Aktivitäten
+  html += '<div class="phase-res-accordion">' +
+    '<div class="phase-res-accordion-head" onclick="togglePhaseAccordion(\'beziehungsarbeit\')">' +
+      '<span class="phase-res-accordion-title">&#129309; Beziehungsarbeit — Kennenlern-Aktivitäten</span>' +
+      '<span class="phase-res-accordion-toggle" id="beziehungsarbeit-toggle">&#9660; Aufklappen</span>' +
+    '</div>' +
+    '<div class="phase-res-accordion-body" id="beziehungsarbeit">' +
+      '<div style="font-size:12px;color:#6B7280;margin-bottom:10px;line-height:1.6;">' +
+        'Beziehungsaufbau ist das Fundament. Ohne Vertrauen keine Veränderung. ' +
+        'Nutze diese Aktivitäten in den ersten Sitzungen — <strong>keine Arbeit an Problemen</strong>, nur Kennenlernen.' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-green">' +
+        '<strong>&#127922; Gemeinsames Spiel (15-20 Min)</strong><br>' +
+        'Kartenspiel, Brettspiel oder gemeinsam zeichnen. Keine therapeutische Absicht — einfach zusammen sein. ' +
+        'Zeigt dem Jugendlichen: &laquo;Du musst hier nicht funktionieren.&raquo;<br>' +
+        '<em>Geeignet für: Erste 1-3 Sitzungen</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-blue">' +
+        '<strong>&#128172; Interessen-Interview (10-15 Min)</strong><br>' +
+        '&laquo;Erzähl mir von dir — nicht von Problemen. Was machst du gerne? Musik? Gaming? Sport?&raquo;<br>' +
+        'Höre zu, frage nach, zeige echtes Interesse. Merke dir Details für spätere Sitzungen!<br>' +
+        '<em>Geeignet für: Sitzung 1-2</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-yellow">' +
+        '<strong>&#128694; Walking &amp; Talking (20-30 Min)</strong><br>' +
+        'Rausgehen, spazieren, nebeneinander laufen. Kein Augenkontaktzwang. ' +
+        'Viele Jugendliche öffnen sich leichter in Bewegung als am Tisch.<br>' +
+        '<em>Geeignet für: Jugendliche die Sitzen schwer finden (ADHS, Traumatisierte)</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-purple">' +
+        '<strong>&#127912; Kreativ-Zugang (15-20 Min)</strong><br>' +
+        'Gemeinsam eine Collage über Interessen machen, Playlist erstellen, oder ein kurzes Comic zeichnen. ' +
+        'Zugang über Kreativität statt Worte — besonders gut bei Sprachbarrieren oder Zurückhaltung.<br>' +
+        '<em>Geeignet für: Nonverbale Jugendliche, Migrations-Hintergrund</em>' +
+      '</div>' +
+      '<div class="phase-res-tip phase-res-tip-green">' +
+        '<strong>&#128203; Stärken-Spotlight (10 Min)</strong><br>' +
+        'Am Ende jeder Sitzung: &laquo;Was hat mich heute beeindruckt: [konkrete Stärke benennen].&raquo;<br>' +
+        'Beispiel: &laquo;Du hast heute mutig erzählt, wie es dir geht. Das zeigt Offenheit.&raquo;<br>' +
+        '<em>Geeignet für: Jede Sitzung in Phase 1</em>' +
+      '</div>' +
+      '<div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:10px;margin-top:8px;font-size:11px;color:#166534;line-height:1.5;">' +
+        '<strong>Beziehungsarbeit-Checkliste:</strong><br>' +
+        '&#10003; Ich komme pünktlich (Zuverlässigkeit)<br>' +
+        '&#10003; Ich halte Versprechen (Vorhersagbarkeit)<br>' +
+        '&#10003; Ich urteile nicht (Akzeptanz)<br>' +
+        '&#10003; Ich sage was ich tue und tue was ich sage (Transparenz)<br>' +
+        '&#10003; Ich frage nach Erlaubnis bevor ich Themen anspreche (Autonomie)<br>' +
+        '&#10003; Ich benenne was gut läuft (Stärkenorientierung)' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
   // Hinweis
   html += '<div class="phase-res-info phase-res-info-yellow">' +
     '&#9888; <strong>Noch keine Arbeitsblätter in dieser Phase</strong> — erst Beziehung aufbauen. ' +

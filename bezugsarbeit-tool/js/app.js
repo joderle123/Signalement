@@ -371,6 +371,7 @@ function showProfilTab(tab) {
   if (tab === 'staerken') renderStaerken();
   if (tab === 'fallformulierung') renderFallformulierung();
   if (tab === 'screening') renderScreeningEmbedded();
+  if (tab === 'verhalten') renderVerhalten();
   if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
   if (tab === 'genogramm') renderGenogramm();
@@ -5986,6 +5987,242 @@ function deleteGenogrammPerson(id) {
   const geno = getGenogramm().filter(p => p.id !== id);
   saveGenogramm(geno);
   renderGenogramm();
+}
+
+// ============================================================
+// VERHALTENSBEOBACHTUNG
+// ============================================================
+var verhaltensFilter = '';
+
+function renderVerhalten() {
+  var container = document.getElementById('verhalten-container');
+  if (!container) return;
+
+  var query = verhaltensFilter.toLowerCase().trim();
+
+  var html = '';
+
+  // Header
+  html += '<div style="margin-bottom:20px;">';
+  html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">';
+  html += '<h2 style="margin:0;font-size:22px;">👁️ Verhaltensbeobachtung & Handlungshilfen</h2>';
+  html += '<button onclick="showToolLegitimation(\'verhalten\')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Fachliche Grundlage</button>';
+  html += '</div>';
+  html += '<p style="color:#6B7280;margin:0 0 12px 0;font-size:14px;">Was tun wenn ein Kind herausforderndes Verhalten zeigt? Beobachten → Verstehen → Handeln. Jeder Eintrag gibt dir konkrete Skripte und Handlungsempfehlungen.</p>';
+
+  // Suchfeld
+  html += '<div style="position:relative;margin-bottom:16px;">';
+  html += '<input type="text" id="verhalten-suche" placeholder="🔍 Suche: z.B. oppositionell, Rückzug, Aggression, Schulvermeidung..." ';
+  html += 'value="' + escapeHtml(verhaltensFilter) + '" ';
+  html += 'oninput="verhaltensFilter=this.value;renderVerhalten()" ';
+  html += 'style="width:100%;padding:10px 14px;border:1px solid #D1D5DB;border-radius:8px;font-size:14px;box-sizing:border-box;">';
+  html += '</div>';
+
+  // Quick-Tags
+  html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">';
+  var quickTags = ['Oppositionell', 'Aggression', 'Rückzug', 'Angst', 'Selbstverletzung', 'Schulvermeidung', 'Dissoziation', 'Lügen'];
+  for (var t = 0; t < quickTags.length; t++) {
+    var tag = quickTags[t];
+    var isActive = query && tag.toLowerCase().indexOf(query) !== -1;
+    html += '<button onclick="verhaltensFilter=\'' + tag + '\';renderVerhalten();" style="padding:4px 12px;border-radius:16px;border:1px solid ' + (isActive ? '#3B82F6' : '#E5E7EB') + ';background:' + (isActive ? '#EFF6FF' : '#fff') + ';font-size:12px;cursor:pointer;color:' + (isActive ? '#2563EB' : '#6B7280') + ';">' + tag + '</button>';
+  }
+  if (query) {
+    html += '<button onclick="verhaltensFilter=\'\';renderVerhalten();" style="padding:4px 12px;border-radius:16px;border:1px solid #FCA5A5;background:#FEF2F2;font-size:12px;cursor:pointer;color:#DC2626;">✕ Filter löschen</button>';
+  }
+  html += '</div>';
+  html += '</div>';
+
+  // Kategorien
+  for (var k = 0; k < VERHALTENS_KATALOG.length; k++) {
+    var kat = VERHALTENS_KATALOG[k];
+    var filteredEntries = kat.eintraege.filter(function(e) {
+      if (!query) return true;
+      return e.titel.toLowerCase().indexOf(query) !== -1 ||
+             e.beschreibung.toLowerCase().indexOf(query) !== -1 ||
+             e.id.toLowerCase().indexOf(query) !== -1;
+    });
+
+    if (filteredEntries.length === 0) continue;
+
+    html += '<div class="card" style="margin-bottom:16px;border-left:4px solid ' + kat.farbe + ';">';
+    html += '<div class="card-header" style="cursor:pointer;" onclick="toggleVerhaltensKategorie(\'' + kat.kategorie + '\')">';
+    html += '<span>' + kat.icon + '</span>';
+    html += '<div class="card-title">' + kat.titel + ' <span style="font-size:12px;color:#9CA3AF;">(' + filteredEntries.length + ')</span></div>';
+    html += '<span style="font-size:18px;transition:transform 0.2s;" id="vk-chevron-' + kat.kategorie + '">▾</span>';
+    html += '</div>';
+    html += '<div class="card-body" id="vk-body-' + kat.kategorie + '">';
+
+    for (var e = 0; e < filteredEntries.length; e++) {
+      html += renderVerhaltensEintrag(filteredEntries[e], kat.farbe);
+    }
+
+    html += '</div></div>';
+  }
+
+  if (!html.includes('card-header')) {
+    html += '<div style="text-align:center;padding:40px;color:#9CA3AF;"><p>Keine Verhaltensweisen gefunden für "' + escapeHtml(query) + '"</p></div>';
+  }
+
+  container.innerHTML = html;
+
+  // Focus erhalten nach Re-Render
+  if (query) {
+    var inp = document.getElementById('verhalten-suche');
+    if (inp) { inp.focus(); inp.setSelectionRange(query.length, query.length); }
+  }
+}
+
+function renderVerhaltensEintrag(e, farbe) {
+  var html = '';
+  html += '<div style="border:1px solid #E5E7EB;border-radius:8px;margin-bottom:10px;overflow:hidden;">';
+
+  // Header (klappbar)
+  html += '<div style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;background:#FAFAFA;" onclick="toggleVerhaltensDetail(\'' + e.id + '\')">';
+  html += '<span style="font-size:18px;transition:transform 0.2s;" id="ve-chevron-' + e.id + '">▸</span>';
+  html += '<div style="flex:1;">';
+  html += '<div style="font-weight:600;font-size:15px;">' + e.titel + '</div>';
+  html += '<div style="font-size:12px;color:#6B7280;">' + e.beschreibung + '</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Detail (versteckt)
+  html += '<div id="ve-detail-' + e.id + '" style="display:none;padding:16px;border-top:1px solid #E5E7EB;">';
+
+  // Wie es aussieht
+  html += '<div style="margin-bottom:16px;">';
+  html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:' + farbe + ';">👁️ Wie es aussieht</h4>';
+  html += '<ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.8;">';
+  for (var i = 0; i < e.wie_es_aussieht.length; i++) {
+    html += '<li>' + e.wie_es_aussieht[i] + '</li>';
+  }
+  html += '</ul></div>';
+
+  // Was es bedeuten kann
+  html += '<div style="margin-bottom:16px;">';
+  html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:' + farbe + ';">🧠 Was es bedeuten kann</h4>';
+  for (var j = 0; j < e.was_es_bedeuten_kann.length; j++) {
+    var u = e.was_es_bedeuten_kann[j];
+    var pvtColor = u.pvt === 'ventral' ? '#059669' : (u.pvt === 'sympathikus' ? '#D97706' : '#7C3AED');
+    var pvtLabel = u.pvt === 'ventral' ? '🟢 Ventral' : (u.pvt === 'sympathikus' ? '🟡 Sympathikus' : '🟣 Dorsal');
+    html += '<div style="background:#F9FAFB;border-radius:6px;padding:10px 12px;margin-bottom:6px;">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">';
+    html += '<strong style="font-size:13px;">' + u.ursache + '</strong>';
+    html += '<span style="font-size:11px;color:' + pvtColor + ';background:' + pvtColor + '15;padding:2px 8px;border-radius:10px;">' + pvtLabel + '</span>';
+    html += '</div>';
+    html += '<p style="margin:0;font-size:12px;color:#4B5563;line-height:1.6;">' + u.erklaerung + '</p>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Do's
+  html += '<div style="margin-bottom:16px;">';
+  html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:#059669;">✅ Do\'s — So reagierst du richtig</h4>';
+  html += '<ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.8;">';
+  for (var d = 0; d < e.dos.length; d++) {
+    html += '<li>' + e.dos[d] + '</li>';
+  }
+  html += '</ul></div>';
+
+  // Don'ts
+  html += '<div style="margin-bottom:16px;">';
+  html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:#DC2626;">❌ Don\'ts — Das vermeiden</h4>';
+  html += '<ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.8;">';
+  for (var n = 0; n < e.donts.length; n++) {
+    html += '<li>' + e.donts[n] + '</li>';
+  }
+  html += '</ul></div>';
+
+  // Skripte
+  html += '<div style="margin-bottom:16px;">';
+  html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:' + farbe + ';">💬 Konkrete Gesprächsskripte</h4>';
+  for (var s = 0; s < e.skripte.length; s++) {
+    var sk = e.skripte[s];
+    html += '<div style="background:#F0F9FF;border-left:3px solid #3B82F6;border-radius:4px;padding:10px 12px;margin-bottom:8px;">';
+    html += '<div style="font-size:11px;font-weight:600;color:#1E40AF;margin-bottom:4px;">Situation: ' + sk.situation + '</div>';
+    html += '<div style="font-size:13px;color:#1E3A5F;font-style:italic;line-height:1.6;">' + sk.text + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Eskalation
+  html += '<div style="margin-bottom:16px;">';
+  html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:#DC2626;">🚨 Wann eskalieren?</h4>';
+  for (var x = 0; x < e.eskalation.length; x++) {
+    var es = e.eskalation[x];
+    html += '<div style="background:#FEF2F2;border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:13px;">';
+    html += '<strong style="color:#991B1B;">' + es.signal + '</strong>';
+    html += '<div style="color:#7F1D1D;margin-top:2px;">' + es.aktion + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Verknüpfungen
+  if (e.verwandte_themen && e.verwandte_themen.length > 0) {
+    html += '<div style="margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">';
+    html += '<span style="font-size:12px;color:#6B7280;">Verwandte Themen:</span>';
+    for (var v = 0; v < e.verwandte_themen.length; v++) {
+      html += '<span style="font-size:11px;background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:10px;cursor:pointer;" onclick="showProfilTab(\'themen\')">' + e.verwandte_themen[v] + '</span>';
+    }
+    html += '</div>';
+  }
+
+  // SOAP-Übernahme Button
+  html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid #E5E7EB;display:flex;gap:8px;flex-wrap:wrap;">';
+  var soapText = e.titel + ': ' + e.wie_es_aussieht.slice(0, 3).join('; ');
+  html += '<button onclick="uebernehmeInSOAP(\'' + soapText.replace(/'/g, "\\'").replace(/"/g, "&quot;") + '\')" style="font-size:12px;padding:4px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;">→ In SOAP-Objektiv übernehmen</button>';
+  html += '</div>';
+
+  html += '</div>'; // detail
+  html += '</div>'; // card
+  return html;
+}
+
+function toggleVerhaltensKategorie(katId) {
+  var body = document.getElementById('vk-body-' + katId);
+  var chevron = document.getElementById('vk-chevron-' + katId);
+  if (!body) return;
+  if (body.style.display === 'none') {
+    body.style.display = '';
+    if (chevron) chevron.textContent = '▾';
+  } else {
+    body.style.display = 'none';
+    if (chevron) chevron.textContent = '▸';
+  }
+}
+
+function toggleVerhaltensDetail(eId) {
+  var detail = document.getElementById('ve-detail-' + eId);
+  var chevron = document.getElementById('ve-chevron-' + eId);
+  if (!detail) return;
+  if (detail.style.display === 'none') {
+    detail.style.display = '';
+    if (chevron) chevron.textContent = '▾';
+  } else {
+    detail.style.display = 'none';
+    if (chevron) chevron.textContent = '▸';
+  }
+}
+
+function uebernehmeInSOAP(text) {
+  // Versuche den SOAP-Objektiv-Textarea zu finden und Text einzufügen
+  var textarea = document.getElementById('soap-objektiv');
+  if (textarea) {
+    var current = textarea.value.trim();
+    textarea.value = current ? current + '\n' + text : text;
+    textarea.dispatchEvent(new Event('change'));
+    showProfilTab('themen');
+    // Kurze Bestätigung
+    alert('✅ In SOAP-Objektiv übernommen:\n\n' + text);
+  } else {
+    // Wenn kein SOAP-Textarea offen ist, Text in Zwischenablage
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function() {
+        alert('📋 Text in Zwischenablage kopiert (kein SOAP-Protokoll offen):\n\n' + text);
+      });
+    } else {
+      alert('📋 Text zum Einfügen:\n\n' + text + '\n\nKopiere diesen Text in dein SOAP-Objektiv-Feld.');
+    }
+  }
 }
 
 function renderGenogramm() {

@@ -1759,6 +1759,14 @@ const TOOL_LEGITIMATION = {
     warum: 'Ohne systematisches Screening bleiben Problembereiche unentdeckt. Das Screening ersetzt kein diagnostisches Interview, aber es lenkt den Blick auf die richtigen Themen.',
     evidenz: 'Jede Domäne basiert auf klinisch validierten Instrumenten mit bekannter Sensitivität und Spezifität. Cutoff-Werte aus publizierten Normstichproben.',
   },
+  verhalten: {
+    name: 'Verhaltensbeobachtung & -einordnung',
+    quelle: 'Greene, R.W. (2014). Lost at School. Scribner. / Omer, H. (2015). Neue Autorität: Das Geheimnis starker Eltern. Vandenhoeck & Ruprecht. / Döpfner, M. et al. (2013). Verhaltenstherapiemanual für Kinder und Jugendliche. Springer.',
+    entwickler: 'Basierend auf CPS (Collaborative & Proactive Solutions, Greene), Neue Autorität (Omer) und verhaltenstherapeutischen Grundlagen (Döpfner)',
+    was: 'Systematische Beobachtung, Einordnung und evidenzbasierte Reaktion auf herausforderndes Verhalten bei Kindern und Jugendlichen. Verhaltensweisen werden nicht als "Störung" sondern als Ausdruck ungelöster Probleme verstanden.',
+    warum: 'Herausforderndes Verhalten ist der häufigste Anlass für Bezugsarbeit. Ohne systematische Einordnung reagieren Fachkräfte intuitiv — oft mit Machtkämpfen oder Hilflosigkeit. Der Katalog bietet evidenzbasierte Alternativen.',
+    evidenz: 'CPS (Greene) zeigt in RCTs signifikante Reduktion von oppositionellem Verhalten. Neue Autorität (Omer) ist in über 200 Studien evaluiert. Funktionale Verhaltensanalyse ist Goldstandard in der klinischen Kinder- und Jugendpsychologie.',
+  },
 };
 
 // SOAP Beispiel-Einträge für Pädagogen
@@ -12475,3 +12483,812 @@ const THEMA_MODULE = {
   },
 
 };
+
+// ============================================================
+// VERHALTENSBEOBACHTUNG — Katalog beobachtbarer Verhaltensweisen
+// ============================================================
+const VERHALTENS_KATALOG = [
+  {
+    kategorie: 'externalisierend',
+    titel: 'Externalisierende Verhaltensweisen',
+    icon: '⚡',
+    farbe: '#EF4444',
+    eintraege: [
+      {
+        id: 'oppositionell',
+        titel: 'Oppositionelles Verhalten',
+        beschreibung: 'Wiederholte Verweigerung, aktiver Widerstand gegen Anweisungen, Regelverstöße',
+        wie_es_aussieht: [
+          'Sagt "Nein" oder "Mach ich nicht" auf Aufforderungen',
+          'Diskutiert endlos über Regeln und Grenzen',
+          'Macht absichtlich das Gegenteil von dem was verlangt wird',
+          'Provoziert Erwachsene gezielt, testet Grenzen wiederholt',
+          'Beschuldigt andere für eigenes Fehlverhalten',
+          'Wird bei Konsequenzen wütend oder weinerlich'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Autonomiebedürfnis (gesund)', erklaerung: 'Das Kind entwickelt Selbstständigkeit und testet, wo seine Grenzen liegen. Besonders in der Pubertät normal und wichtig.', pvt: 'ventral' },
+          { ursache: 'Kontrollverlust-Erfahrung', erklaerung: 'Kinder die Kontrollverlust erlebt haben (Gewalt, Fremdunterbringung, Trennung) wehren sich gegen jede Fremdbestimmung als Schutzreaktion.', pvt: 'sympathikus' },
+          { ursache: 'Überforderung', erklaerung: 'Die Anforderung übersteigt die Fähigkeiten des Kindes. Opposition ist leichter als zuzugeben "Ich kann das nicht".', pvt: 'sympathikus' },
+          { ursache: 'Beziehungstest', erklaerung: 'Das Kind testet: "Bleibst du auch wenn ich schwierig bin?" Besonders bei Bindungsunsicherheit. Je stärker die Opposition, desto größer oft die Bindungsangst.', pvt: 'sympathikus' },
+          { ursache: 'Modelllernen', erklaerung: 'Kind hat gelernt, dass Widerstand funktioniert — Eltern geben nach, Lehrer weichen aus, Grenzen sind verhandelbar.', pvt: 'ventral' }
+        ],
+        dos: [
+          'Wahlmöglichkeiten anbieten statt Befehle: "Möchtest du zuerst X oder Y machen?"',
+          'Ich-Botschaften: "Ich brauche, dass..." statt "Du musst..."',
+          'Ruhig und berechenbar bleiben — deine Ruhe ist die Intervention',
+          'Natürliche Konsequenzen statt Strafen: "Wenn die Aufgabe nicht fertig wird, bleibt weniger Freizeit"',
+          'Kooperation würdigen: "Danke, dass du das gemacht hast" — auch Selbstverständliches',
+          'Private Gespräche statt öffentliche Konfrontation',
+          'Grenzen klar, kurz und freundlich kommunizieren'
+        ],
+        donts: [
+          'In den Machtkampf einsteigen — du verlierst immer (entweder die Kontrolle oder die Beziehung)',
+          'Vor der Gruppe bloßstellen oder beschämen',
+          'Drohungen aussprechen die du nicht durchsetzen kannst',
+          'Diskussionen über Regeln im Affekt führen',
+          'Vergeltung oder Sarkasmus zeigen ("Na, heute mal wieder bockig?")',
+          'Konsequenzen im Ärger festlegen — erst durchatmen'
+        ],
+        skripte: [
+          { situation: 'Kind verweigert Aufgabe', text: '"Ich sehe, dass du das gerade nicht machen möchtest. Das ist OK. Lass uns schauen — was daran ist schwierig für dich? Gibt es einen Teil, mit dem du anfangen könntest?"' },
+          { situation: 'Kind sagt "Nein, mach ich nicht"', text: '"Ich höre dein Nein. Ich zwinge dich nicht. Und gleichzeitig muss [X] gemacht werden. Wie können wir das lösen? Ich gebe dir 2 Minuten zum Nachdenken."' },
+          { situation: 'Kind provoziert gezielt', text: '"Ich merke, dass du gerade versuchst mich zu ärgern. Das wird nicht funktionieren — ich bleibe ruhig. Wenn du bereit bist zu reden, bin ich da."' },
+          { situation: 'Kind beschuldigt andere', text: '"Ich verstehe, dass du das anders siehst. Lass uns erstmal bei DIR bleiben — was ist passiert und was hättest du anders machen können?"' }
+        ],
+        eskalation: [
+          { signal: 'Opposition steigert sich zu Aggression (Schlagen, Werfen, Zerstören)', aktion: 'Situation entschärfen: Andere Kinder schützen, Raum geben, ggf. Krisenprotokoll' },
+          { signal: 'Verweigerung seit Wochen in ALLEN Lebensbereichen', aktion: 'Abklärung: Depression? Trauma? Überforderung? → Schulpsychologe/Therapeut einbeziehen' },
+          { signal: 'Kind zeigt keine Reue und kein Mitgefühl bei Grenzüberschreitungen', aktion: 'Conduct Disorder abklären → Kinder- und Jugendpsychiatrie empfehlen' }
+        ],
+        verwandte_themen: ['impulskontrolle', 'wut-aggression', 'grenzen-setzen'],
+        arbeitsblaetter: ['impulskontrolle.html', 'emotionsregulation.html', 'wut-aggression.html']
+      },
+      {
+        id: 'aggressiv',
+        titel: 'Aggressives Verhalten',
+        beschreibung: 'Verbale oder physische Gewalt gegen Personen oder Gegenstände',
+        wie_es_aussieht: [
+          'Schlagen, Treten, Beißen, Spucken (physisch)',
+          'Beleidigen, Drohen, Einschüchtern (verbal)',
+          'Gegenstände werfen, zerstören, gegen Wände schlagen',
+          'Wutausbrüche die plötzlich und heftig kommen',
+          'Einschüchternde Körpersprache: aufbäumen, Fäuste ballen, nah rangehen',
+          'Grausamkeit gegenüber Tieren oder Schwächeren'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Emotionale Überflutung', erklaerung: 'Das Kind wird von Gefühlen (Wut, Angst, Scham) überschwemmt und hat keine andere Strategie. Aggression ist der einzige Ausdruck den es kennt.', pvt: 'sympathikus' },
+          { ursache: 'Traumareaktion (Fight)', erklaerung: 'Bei traumatisierten Kindern kann Aggression eine Kampfreaktion des Nervensystems sein — der Körper reagiert auf eine wahrgenommene Bedrohung, auch wenn objektiv keine da ist.', pvt: 'sympathikus' },
+          { ursache: 'Modelllernen', erklaerung: 'Kind hat gelernt: Gewalt löst Probleme. Häusliche Gewalt, aggressive Vorbilder in der Familie oder Peer-Gruppe.', pvt: 'ventral' },
+          { ursache: 'Kommunikationsdefizit', erklaerung: 'Das Kind kann seine Bedürfnisse nicht verbal ausdrücken. Aggression ist der einzige Weg gehört zu werden.', pvt: 'sympathikus' },
+          { ursache: 'Impulskontrollstörung / ADHS', erklaerung: 'Neurologisch bedingte Schwierigkeit, Impulse zu hemmen. Das Kind will nicht aggressiv sein, kann sich aber nicht bremsen.', pvt: 'sympathikus' }
+        ],
+        dos: [
+          'SICHERHEIT ZUERST: Andere Kinder aus der Gefahrenzone bringen',
+          'Ruhig, langsam und leise sprechen — dein Nervensystem reguliert seins',
+          'Körperlichen Abstand halten (Armlänge), seitlich stehen statt frontal',
+          'Einfache, kurze Sätze: "Stopp. Ich bin hier. Du bist sicher."',
+          'NACH dem Ausbruch (nicht während!): Gemeinsam reflektieren was passiert ist',
+          'Wiedergutmachung ermöglichen statt bestrafen',
+          'Auslöser identifizieren: Was war 5 Minuten VOR dem Ausbruch?'
+        ],
+        donts: [
+          'Körperlich festhalten (nur bei akuter Fremd-/Selbstgefährdung!)',
+          'Zurückschreien oder drohen — eskaliert die Situation',
+          'Im Affekt Konsequenzen aussprechen',
+          'Das Kind vor anderen bloßstellen oder demütigen',
+          'Sofort "Warum hast du das gemacht?" fragen — Kind weiß es selbst oft nicht',
+          'Bagatellisieren ("Stell dich nicht so an") oder Moralisieren ("So benimmt man sich nicht")'
+        ],
+        skripte: [
+          { situation: 'Kind schreit und wirft Gegenstände', text: '"[Name], ich sehe dass du gerade sehr wütend bist. Das ist ein starkes Gefühl. Ich bleibe hier. Atme mit mir — ein... und aus... Du bist sicher."' },
+          { situation: 'Kind bedroht ein anderes Kind', text: '"Stopp. [Name], komm bitte zu mir. [Anderes Kind], geh bitte zu [Ort]. Wir klären das — aber zuerst wird niemand verletzt."' },
+          { situation: 'Nach dem Ausbruch, Kind beruhigt sich', text: '"Danke, dass du dich beruhigt hast. Das war nicht leicht. Magst du mir erzählen was passiert ist? Es gibt keinen Ärger — ich will nur verstehen."' },
+          { situation: 'Kind zeigt Reue nach Aggression', text: '"Es tut dir leid — das sehe ich. Das zeigt, dass du ein gutes Herz hast. Lass uns überlegen: Was könntest du nächstes Mal stattdessen tun?"' }
+        ],
+        eskalation: [
+          { signal: 'Akute Fremdgefährdung (Kind will jemanden ernsthaft verletzen)', aktion: '→ Krisenprotokoll: Raum räumen, Hilfe rufen, ggf. Polizei/Notarzt' },
+          { signal: 'Waffen oder gefährliche Gegenstände im Spiel', aktion: '→ Sofort: Nicht selbst entwaffnen, Raum verlassen, Polizei rufen' },
+          { signal: 'Regelmäßige schwere Aggression (mehrmals pro Woche)', aktion: '→ Kinder- und Jugendpsychiatrie empfehlen, Conduct Disorder / IED abklären' },
+          { signal: 'Aggression gegen Tiere oder deutlich Schwächere ohne Reue', aktion: '→ Dringend: Fachpsychologische Abklärung, Jugendschutz informieren' }
+        ],
+        verwandte_themen: ['wut-aggression', 'impulskontrolle', 'konfliktmanagement'],
+        arbeitsblaetter: ['wut-aggression.html', 'impulskontrolle.html', 'emotionsregulation.html']
+      },
+      {
+        id: 'impulsiv',
+        titel: 'Impulsives Verhalten',
+        beschreibung: 'Handeln ohne Nachdenken, Unterbrechen, Risikoverhalten, nicht warten können',
+        wie_es_aussieht: [
+          'Ruft Antworten rein bevor die Frage fertig gestellt ist',
+          'Kann nicht warten bis es an der Reihe ist',
+          'Beginnt Aufgaben ohne die Anleitung zu lesen/hören',
+          'Wechselt ständig zwischen Aktivitäten, bringt nichts zu Ende',
+          'Geht unnötige Risiken ein (springt von Höhen, rennt auf die Straße)',
+          'Trifft Entscheidungen die es sofort bereut'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'ADHS (Aufmerksamkeitsdefizit-Hyperaktivitätsstörung)', erklaerung: 'Neurologisch bedingte Schwierigkeit, Impulse zu hemmen. Betrifft ca. 5% aller Kinder. Keine Frage von Erziehung oder Willen.', pvt: 'sympathikus' },
+          { ursache: 'Entwicklungsbedingt (jüngere Kinder)', erklaerung: 'Impulshemmung reift bis ins junge Erwachsenenalter. Bei 8-10-Jährigen ist Impulsivität teilweise noch normal.', pvt: 'ventral' },
+          { ursache: 'Chronischer Stress / Übererregung', erklaerung: 'Dauerhaft aktiviertes Nervensystem (z.B. durch Gewalt zu Hause) macht es unmöglich, innezuhalten und nachzudenken.', pvt: 'sympathikus' },
+          { ursache: 'Fehlende Vorbilder für Impulskontrolle', erklaerung: 'Im Umfeld des Kindes reagiert jeder impulsiv. Kind hat nie gelernt: Pause → Nachdenken → Handeln.', pvt: 'ventral' }
+        ],
+        dos: [
+          'Klare, kurze Anweisungen geben (max. 1-2 Schritte auf einmal)',
+          'Wartezeiten visualisieren (Timer, Sanduhr)',
+          'Positive Verstärkung für Impulskontrolle: "Super, dass du gewartet hast!"',
+          '"Stopp-Denk-Handle"-Technik einüben (visuell mit Ampel)',
+          'Bewegungspausen einbauen — Impulsivität steigt bei Langeweile',
+          'Strukturen und Routinen schaffen — Vorhersehbarkeit hilft'
+        ],
+        donts: [
+          'Lange Erklärungen während das Kind schon abgelenkt ist',
+          'Bestrafen für etwas das das Kind nicht kontrollieren kann',
+          '"Konzentrier dich einfach" oder "Reiß dich zusammen" sagen',
+          'Erwarten dass das Kind 30+ Minuten stillsitzt'
+        ],
+        skripte: [
+          { situation: 'Kind unterbricht ständig', text: '"Ich höre, dass du etwas sagen möchtest. Das ist wichtig. Halte deinen Gedanken kurz fest — gleich bist du dran. Ich vergesse dich nicht."' },
+          { situation: 'Kind handelt ohne nachzudenken und bereut es', text: '"Du hast schnell reagiert und jetzt merkst du, dass es nicht gut war. Das passiert. Lass uns üben: Nächstes Mal — Stopp, Atmen, Denken. Erst dann handeln."' }
+        ],
+        eskalation: [
+          { signal: 'Impulsivität führt zu wiederholter Selbstgefährdung', aktion: '→ ADHS-Diagnostik empfehlen, ggf. Kinder- und Jugendpsychiater' },
+          { signal: 'Massive Beeinträchtigung des Schulalltags', aktion: '→ Schulpsychologe einbeziehen, Nachteilsausgleich prüfen' }
+        ],
+        verwandte_themen: ['impulskontrolle', 'emotionsregulation'],
+        arbeitsblaetter: ['impulskontrolle.html', 'emotionsregulation.html']
+      },
+      {
+        id: 'luegen-manipulieren',
+        titel: 'Lügen & Manipulieren',
+        beschreibung: 'Wiederholtes Lügen, Geschichten erfinden, andere gegeneinander ausspielen',
+        wie_es_aussieht: [
+          'Erzählt verschiedenen Personen verschiedene Versionen derselben Geschichte',
+          'Leugnet offensichtliche Tatsachen ("Das war ich nicht" obwohl es alle gesehen haben)',
+          'Erfindet Geschichten um Mitleid oder Aufmerksamkeit zu bekommen',
+          'Spielt Erwachsene gegeneinander aus ("Mama hat gesagt ich darf...")',
+          'Beschuldigt andere systematisch und inszeniert sich als Opfer',
+          'Nimmt Dinge ohne zu fragen und leugnet es'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Schutzstrategie vor Strafe', erklaerung: 'Kind hat gelernt: Wahrheit = Schmerz (Schläge, Liebesentzug). Lügen ist eine Überlebensstrategie aus einem unsicheren Umfeld.', pvt: 'sympathikus' },
+          { ursache: 'Scham und niedriger Selbstwert', erklaerung: 'Die Wahrheit über sich selbst ist zu schmerzhaft. Das Kind erfindet eine bessere Version von sich und seiner Realität.', pvt: 'dorsal' },
+          { ursache: 'Erlerntes Verhalten', erklaerung: 'In der Familie wird routinemäßig gelogen. Kind hat gelernt: So funktioniert Kommunikation.', pvt: 'ventral' },
+          { ursache: 'Aufmerksamkeits- und Bindungsbedürfnis', erklaerung: 'Dramatische Geschichten bringen Zuwendung. Kind weiß keinen anderen Weg, gesehen zu werden.', pvt: 'ventral' },
+          { ursache: 'Entwicklungsbedingt (unter 8 Jahre)', erklaerung: 'Fantasie und Realität vermischen sich noch. Das ist keine Lüge im engeren Sinn sondern ein normaler Entwicklungsschritt.', pvt: 'ventral' }
+        ],
+        dos: [
+          'Ruhig nachfragen: "Ich habe das anders gehört. Erzähl mir deine Version."',
+          'Ehrlichkeit positiv verstärken: "Danke, dass du mir die Wahrheit gesagt hast. Das war mutig."',
+          'Sicherheit schaffen: "Du bekommst keinen Ärger für die Wahrheit."',
+          'Muster erkennen: Wann wird gelogen? Bei welchen Themen? Vor welchen Personen?',
+          'Konsequenz auf das Lügen selbst minimieren — Fokus auf das zugrundeliegende Problem'
+        ],
+        donts: [
+          'Das Kind als "Lügner" bezeichnen — das wird zur Identität',
+          'Fangfragen stellen um das Kind beim Lügen zu ertappen',
+          'Härter bestrafen als für das tatsächliche Vergehen',
+          'Sagen "Ich kann dir nie wieder vertrauen"',
+          'Lügen vor anderen aufdecken und bloßstellen'
+        ],
+        skripte: [
+          { situation: 'Kind leugnet etwas Offensichtliches', text: '"Ich weiß, was passiert ist. Ich bin nicht böse. Aber ich brauche, dass du mir die Wahrheit sagst. Bei mir ist die Wahrheit sicher."' },
+          { situation: 'Kind erfindet dramatische Geschichten', text: '"Das klingt nach einer aufregenden Geschichte. Ich mag es, wenn du kreativ bist. Und ich mag es auch, wenn du mir erzählst wie es wirklich war — beides hat Platz."' },
+          { situation: 'Kind spielt Erwachsene gegeneinander aus', text: '"Ich werde das mit [Person] abklären. Es ist OK wenn du dir etwas wünschst — sag es mir direkt. Du brauchst keine Tricks bei mir."' }
+        ],
+        eskalation: [
+          { signal: 'Systematisches Lügen + fehlende Empathie + Grausamkeit', aktion: '→ Conduct Disorder abklären, Kinder- und Jugendpsychiatrie' },
+          { signal: 'Lügen über Misshandlung/Missbrauch', aktion: '→ IMMER ernst nehmen! Auch wenn das Kind „oft lügt" — Jugendschutz prüfen' }
+        ],
+        verwandte_themen: ['selbstwertgefuehl', 'kommunikation', 'grenzen-setzen'],
+        arbeitsblaetter: ['selbstwert.html', 'kommunikation.html']
+      },
+      {
+        id: 'delinquent',
+        titel: 'Delinquentes Verhalten',
+        beschreibung: 'Stehlen, Sachbeschädigung, Regelbrüche, Normverletzungen',
+        wie_es_aussieht: [
+          'Nimmt Dinge die ihm nicht gehören (Geld, Essen, Gegenstände)',
+          'Beschädigt absichtlich Eigentum anderer oder öffentliches Eigentum',
+          'Hält sich nicht an Gesetze oder gesellschaftliche Normen',
+          'Bleibt über Nacht weg ohne Erlaubnis',
+          'Konsumiert Alkohol, Drogen, Zigaretten',
+          'Schließt sich delinquenten Peer-Gruppen an'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Materielle Not', erklaerung: 'Kind stiehlt Essen oder Geld weil zu Hause nicht genug da ist. Das ist kein Verhaltensproblem sondern eine Notlage.', pvt: 'sympathikus' },
+          { ursache: 'Zugehörigkeitsbedürfnis', erklaerung: 'Delinquente Peer-Gruppe bietet Zugehörigkeit, Status und Schutz die das Kind anderswo nicht bekommt.', pvt: 'ventral' },
+          { ursache: 'Adrenalinkick / Reizsuche', erklaerung: 'Chronisch unterregulierte Kinder (oft ADHS, Trauma) suchen starke Reize. Stehlen und Risikoverhalten liefern den "Kick".', pvt: 'sympathikus' },
+          { ursache: 'Hilferuf', erklaerung: 'Manche Kinder begehen Straftaten um endlich "gesehen" zu werden — auch negative Aufmerksamkeit ist besser als keine.', pvt: 'sympathikus' }
+        ],
+        dos: [
+          'Unterscheide: Notlage (Hunger, Armut) vs. Verhaltensproblem — jeweils andere Intervention',
+          'Wiedergutmachung statt Strafe: "Was kannst du tun, um das wieder gut zu machen?"',
+          'Positive Peer-Gruppe fördern: Sport, Jugendgruppe, Mentoring',
+          'Stärken stärken: Was kann das Kind gut? Wo bekommt es positive Anerkennung?',
+          'Konsequenzen logisch und zeitnah: Direkter Zusammenhang zwischen Handlung und Folge'
+        ],
+        donts: [
+          'Kind als "Kriminellen" abstempeln',
+          'Ignorieren oder bagatellisieren',
+          'Nur bestrafen ohne die Ursache zu verstehen',
+          'Übermäßig moralisch werden ("Schämst du dich nicht?")'
+        ],
+        skripte: [
+          { situation: 'Kind hat gestohlen', text: '"Ich weiß, dass du [X] genommen hast. Ich bin nicht hier um dich zu bestrafen. Aber ich muss verstehen: Warum? Brauchst du etwas? Lass uns zusammen eine Lösung finden."' },
+          { situation: 'Kind hat etwas zerstört', text: '"Das ist kaputt und das können wir nicht ungeschehen machen. Was wir tun können: Es wieder in Ordnung bringen. Wie kannst du das schaffen?"' }
+        ],
+        eskalation: [
+          { signal: 'Wiederholte Straftaten, fehlende Reue', aktion: '→ Jugendgerichtshilfe / PJ (Protection de la Jeunesse) informieren' },
+          { signal: 'Beteiligung an organisierter Kriminalität oder Banden', aktion: '→ Polizei und Jugendschutz einbeziehen' },
+          { signal: 'Stehlen von Nahrung / Grundbedürfnis-Mangel', aktion: '→ Kindeswohlgefährdung prüfen, Jugendamt informieren' }
+        ],
+        verwandte_themen: ['impulskontrolle', 'grenzen-setzen', 'werte-ethik'],
+        arbeitsblaetter: ['impulskontrolle.html', 'werte-ethik.html']
+      }
+    ]
+  },
+  {
+    kategorie: 'internalisierend',
+    titel: 'Internalisierende Verhaltensweisen',
+    icon: '🌧️',
+    farbe: '#6366F1',
+    eintraege: [
+      {
+        id: 'sozialer-rueckzug',
+        titel: 'Sozialer Rückzug',
+        beschreibung: 'Isolation, kein Blickkontakt, einsilbige Antworten, Vermeidung von Kontakt',
+        wie_es_aussieht: [
+          'Sitzt alleine in der Pause, sucht keinen Kontakt',
+          'Antwortet nur einsilbig oder gar nicht',
+          'Vermeidet Blickkontakt, schaut auf den Boden',
+          'Zieht sich in die Kapuze/hinter Haare zurück',
+          'Lehnt Einladungen zu Aktivitäten ab',
+          'Ist physisch anwesend aber emotional "nicht da"',
+          'Nutzt Handy als Schutzschild gegen Kontakt'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Depression', erklaerung: 'Rückzug ist ein Kardinalsymptom der Depression. Das Kind hat keine Energie für soziale Kontakte und erlebt keine Freude mehr.', pvt: 'dorsal' },
+          { ursache: 'Soziale Angst', erklaerung: 'Angst vor Bewertung, Ablehnung oder Blamage. Rückzug ist Vermeidungsverhalten — es reduziert kurzfristig die Angst.', pvt: 'sympathikus' },
+          { ursache: 'Mobbing-Erfahrung', erklaerung: 'Kind hat gelernt: Kontakt = Gefahr. Rückzug ist Schutz vor weiterer Verletzung.', pvt: 'dorsal' },
+          { ursache: 'Traumafolge (Freeze/Shutdown)', erklaerung: 'Das Nervensystem ist im dorsal-vagalen Zustand: Erstarrung, Energielosigkeit, "Abschalten". Das Kind kann nicht — es will nicht nicht.', pvt: 'dorsal' },
+          { ursache: 'Überforderung / Reizüberflutung', erklaerung: 'Manche Kinder (HSP, Autismus-Spektrum) brauchen Rückzug um sich zu regulieren. Das ist kein Problem sondern ein Bedürfnis.', pvt: 'dorsal' }
+        ],
+        dos: [
+          'Kontaktangebote machen — aber ohne Druck: "Wenn du magst, kannst du dich zu uns setzen"',
+          'Parallel-Aktivitäten: Nebeneinander etwas tun ohne zu reden (Spazieren, Puzzle, Zeichnen)',
+          'Kleine Gesten der Zuwendung: Getränk hinstellen, Nachfragen ohne Antwort zu erwarten',
+          'Geduld: Vertrauen wächst langsam. Nicht aufgeben nach 2-3 Versuchen',
+          'Rückzugsmöglichkeiten respektieren: "Du brauchst gerade Ruhe? Das ist OK."',
+          'PVT-Check: Ist das Kind im Freeze (dorsal)? → Erst regulieren, dann Kontakt'
+        ],
+        donts: [
+          'In die Aktivität zwingen ("Jetzt setz dich zu den anderen!")',
+          'Den Rückzug bewerten ("Warum bist du immer so still?")',
+          'Über das Kind reden wenn es dabei ist ("Der redet ja nie")',
+          'Erwarten, dass das Kind sich öffnet wenn du es willst',
+          'Rückzug als Desinteresse oder Unhöflichkeit interpretieren'
+        ],
+        skripte: [
+          { situation: 'Kind sitzt alleine, reagiert nicht', text: '"Hey [Name]. Ich setze mich kurz zu dir — du musst nichts sagen. Ich bin einfach da." [Stille aushalten, 2-3 Minuten einfach da sein]' },
+          { situation: 'Kind lehnt Gesprächsangebot ab', text: '"Das ist OK. Ich frag morgen nochmal. Und wenn du von dir aus reden willst — ich bin da. Kein Druck."' },
+          { situation: 'Kind öffnet sich minimal', text: '"Danke, dass du mir das erzählt hast. Das war nicht leicht. Ich pass auf das auf was du mir sagst."' }
+        ],
+        eskalation: [
+          { signal: 'Vollständige Isolation seit mehr als 2 Wochen', aktion: '→ Depression abklären, ggf. Therapeut/Psychiater einbeziehen' },
+          { signal: 'Rückzug + Andeutungen von Hoffnungslosigkeit', aktion: '→ Suizidalität abklären (C-SSRS Fragen), Krisenprotokoll bereithalten' },
+          { signal: 'Plötzlicher Rückzug nach vorheriger Offenheit', aktion: '→ Auslöser suchen: Neues Trauma? Mobbing? Familiäre Krise?' }
+        ],
+        verwandte_themen: ['depressive-stimmungen', 'stress-angst', 'soziale-isolation', 'freundschaften'],
+        arbeitsblaetter: ['depression.html', 'soziale-kompetenz.html', 'emotionserkennung.html']
+      },
+      {
+        id: 'aengstlich',
+        titel: 'Ängstliches Verhalten',
+        beschreibung: 'Vermeidung von Situationen, Klammern an Bezugspersonen, körperliche Angstsymptome',
+        wie_es_aussieht: [
+          'Vermeidet neue Situationen, Orte oder Menschen',
+          'Klammert an Bezugsperson, will nicht alleine bleiben',
+          'Fragt ständig nach Bestätigung ("Ist das richtig?", "Bist du böse?")',
+          'Körperliche Symptome: Bauchschmerzen, Übelkeit, Herzrasen, Schwitzen',
+          'Weint oder erstarrt in neuen oder überfordernden Situationen',
+          'Kann nicht einschlafen, Albträume, Dunkelangst',
+          'Excessive Sorgen über Zukunft, Gesundheit, Familie'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Generalisierte Angststörung', erklaerung: 'Chronische, übertriebene Sorgen über viele verschiedene Lebensbereiche. Das Kind macht sich ständig Sorgen — über Schule, Gesundheit, Familie, Zukunft.', pvt: 'sympathikus' },
+          { ursache: 'Trennungsangst', erklaerung: 'Übermäßige Angst vor Trennung von Bezugspersonen. Häufig nach Verlusterfahrungen oder bei unsicherer Bindung.', pvt: 'sympathikus' },
+          { ursache: 'Soziale Phobie', erklaerung: 'Massive Angst vor sozialen Situationen und Bewertung durch andere. Mündliche Prüfungen, Referate, Gruppenarbeit werden zur Qual.', pvt: 'sympathikus' },
+          { ursache: 'Traumafolge (Hyperarousal)', erklaerung: 'Das Nervensystem ist dauerhaft in Alarmbereitschaft. Alles fühlt sich bedrohlich an.', pvt: 'sympathikus' },
+          { ursache: 'Perfektionismus', erklaerung: 'Angst vor Fehlern, die als katastrophal erlebt werden. Oft in Verbindung mit hohem Leistungsdruck.', pvt: 'sympathikus' }
+        ],
+        dos: [
+          'Ängste ernst nehmen: "Ich sehe, dass dir das Angst macht. Das ist ein echtes Gefühl."',
+          'Sicherheit signalisieren: Ruhige Stimme, langsame Bewegungen, Vorhersehbarkeit',
+          'Graduierte Exposition: Kleine Schritte in Richtung Angst — NIE überfluten',
+          'Atemübungen gemeinsam machen (4-7-8 Technik)',
+          'Angst externalisieren: "Wie sieht deine Angst aus? Gib ihr einen Namen."',
+          'Mut belohnen, nicht Angstfreiheit: "Du hattest Angst und hast es trotzdem gemacht!"'
+        ],
+        donts: [
+          '"Da brauchst du keine Angst zu haben" — das entwertet das Gefühl',
+          'Vermeidung unterstützen (z.B. Kind dauerhaft von Situationen befreien)',
+          'Ungeduldig werden: "Jetzt stell dich nicht so an"',
+          'Überraschungen und unangekündigte Veränderungen',
+          'Eigene Ängste auf das Kind übertragen'
+        ],
+        skripte: [
+          { situation: 'Kind will nicht in neue Situation', text: '"Ich verstehe, dass dir das Angst macht. Wir machen es zusammen. Wir gehen nur so weit wie du kannst. Und wenn es zu viel wird, können wir jederzeit aufhören."' },
+          { situation: 'Kind hat Panikattacke', text: '"[Name], schau mich an. Atme mit mir. Ein... zwei... drei... vier... aus... Du bist sicher. Ich bin hier. Es geht vorbei. Spür deine Füße auf dem Boden."' },
+          { situation: 'Kind vermeidet Schule wegen Angst', text: '"Die Schule macht dir gerade Angst. Das ist ok zu fühlen. Wir schauen zusammen, was genau dir Angst macht, und dann überlegen wir Schritt für Schritt."' }
+        ],
+        eskalation: [
+          { signal: 'Angst verhindert Schulbesuch seit mehr als 1 Woche', aktion: '→ Schulpsychologe + ggf. Therapeut einbeziehen' },
+          { signal: 'Panikattacken (Herzrasen, Atemnot, Todesangst)', aktion: '→ Kinderarzt zur Abklärung körperlicher Ursachen + Angsttherapie empfehlen' },
+          { signal: 'Kind spricht von Sterben oder "nicht mehr sein wollen" aus Angst', aktion: '→ Suizidalität abklären, Krisenprotokoll' }
+        ],
+        verwandte_themen: ['stress-angst', 'angstanfaelle', 'trennungsangst', 'schulverweigerung'],
+        arbeitsblaetter: ['angst.html', 'emotionsregulation.html', 'achtsamkeit.html']
+      },
+      {
+        id: 'depressiv',
+        titel: 'Depressives Verhalten',
+        beschreibung: 'Antriebslosigkeit, Traurigkeit, Interessenverlust, Hoffnungslosigkeit',
+        wie_es_aussieht: [
+          'Ist ständig müde, schläft viel oder kann nicht schlafen',
+          'Hat kein Interesse mehr an Dingen die früher Spaß gemacht haben',
+          'Isst deutlich mehr oder weniger als gewöhnlich',
+          'Sagt Dinge wie "Ist doch egal" oder "Mir ist alles egal"',
+          'Weint häufig oder wirkt dauerhaft traurig/leer',
+          'Vernachlässigt Körperpflege und Aussehen',
+          'Leistungseinbruch in der Schule ohne erkennbaren Grund'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Depression (klinisch)', erklaerung: 'Anhaltende depressive Episode — nicht nur "traurig sein". Betrifft 2-8% aller Kinder und Jugendlichen. Braucht professionelle Behandlung.', pvt: 'dorsal' },
+          { ursache: 'Trauerreaktion', erklaerung: 'Verlust einer wichtigen Person, eines Haustiers, eines Zuhauses. Trauer ist KEIN Krankheit — aber sie braucht Raum und Begleitung.', pvt: 'dorsal' },
+          { ursache: 'Erlernte Hilflosigkeit', erklaerung: 'Kind hat wiederholt erfahren: Egal was ich tue, es ändert sich nichts. Es gibt auf — nicht aus Faulheit, sondern aus Hoffnungslosigkeit.', pvt: 'dorsal' },
+          { ursache: 'Chronische Überforderung/Burnout', erklaerung: 'Zu viel Druck (Schule, Familie, Erwartungen) über zu lange Zeit. Der Körper schaltet ab.', pvt: 'dorsal' }
+        ],
+        dos: [
+          'Da sein — auch wenn das Kind nichts sagt. Schweigen aushalten.',
+          'Kleine Aktivitäten anbieten — nicht erwarten dass das Kind sich freut',
+          'Routine aufrechterhalten: Feste Zeiten, feste Abläufe geben Halt',
+          'Bewegung sanft fördern: "Lass uns kurz nach draußen gehen" — Bewegung hebt Stimmung',
+          'Direkt nach Suizidgedanken fragen (das Thema ansprechen macht es NICHT schlimmer)',
+          'Professionelle Hilfe empfehlen: "Das was du fühlst, ist behandelbar."'
+        ],
+        donts: [
+          '"Reiß dich zusammen" oder "Anderen geht es schlechter"',
+          'Zwang zu Fröhlichkeit: "Lach doch mal!"',
+          'Das Kind isoliert lassen ("Der will halt seine Ruhe")',
+          'Symptome als Faulheit interpretieren',
+          'Warten bis es "von alleine" besser wird'
+        ],
+        skripte: [
+          { situation: 'Kind wirkt dauerhaft traurig', text: '"Ich sehe, dass es dir gerade nicht gut geht. Du musst mir nicht erklären warum. Ich bin da. Und wenn du reden magst — ich höre zu."' },
+          { situation: 'Kind sagt "Mir ist alles egal"', text: '"Wenn einem alles egal wird, dann ist das oft ein Zeichen dass man ganz schön erschöpft ist. Das ist nicht deine Schuld. Darf ich fragen: Denkst du manchmal, dass es besser wäre nicht mehr da zu sein?"' },
+          { situation: 'Suizidgedanken angesprochen (Kind bejaht)', text: '"Danke, dass du mir das sagst. Das war sehr mutig. Ich bin froh, dass du noch hier bist. Wir werden jetzt zusammen dafür sorgen, dass du Hilfe bekommst. Du musst das nicht alleine tragen."' }
+        ],
+        eskalation: [
+          { signal: 'Suizidgedanken oder -äußerungen', aktion: '→ SOFORT: Krisenprotokoll, C-SSRS durchführen, Kind nicht allein lassen, Krisennummer 116 111' },
+          { signal: 'Depressive Symptome seit mehr als 2 Wochen', aktion: '→ Therapeut/Psychiater empfehlen — Depression ist behandelbar' },
+          { signal: 'Selbstverletzendes Verhalten', aktion: '→ Krisenprotokoll, professionelle Hilfe einleiten' }
+        ],
+        verwandte_themen: ['depressive-stimmungen', 'selbstwertgefuehl', 'trauer-verlust'],
+        arbeitsblaetter: ['depression.html', 'selbstwert.html', 'krisenplan.html']
+      },
+      {
+        id: 'selbstverletzend',
+        titel: 'Selbstverletzendes Verhalten',
+        beschreibung: 'Ritzen, Kratzen, Kopf schlagen, sich beißen, Verbrennen',
+        wie_es_aussieht: [
+          'Schnitte oder Kratzer an Armen, Beinen, Bauch (oft versteckt)',
+          'Trägt auch bei Hitze lange Ärmel oder Armbänder',
+          'Brandmale, Bissspuren, blaue Flecken die nicht zu Unfällen passen',
+          'Schlägt den Kopf gegen die Wand oder auf den Tisch',
+          'Zieht sich Haare aus (Trichotillomanie)',
+          'Reagiert aggressiv wenn man die Verletzungen anspricht'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Emotionsregulation', erklaerung: 'Physischer Schmerz übertönt emotionalen Schmerz. SVV funktioniert als "Ventil" für unerträgliche Gefühle wie Scham, Wut, Trauer.', pvt: 'dorsal' },
+          { ursache: 'Dissoziation beenden', erklaerung: 'Kind fühlt sich "taub" oder "nicht real". Selbstverletzung holt es zurück in den Körper — "Ich fühle also bin ich da."', pvt: 'dorsal' },
+          { ursache: 'Selbstbestrafung', erklaerung: 'Tiefer Selbsthass: "Ich verdiene Schmerz." Oft bei Missbrauchserfahrungen und chronischer Beschämung.', pvt: 'dorsal' },
+          { ursache: 'Kommunikation', erklaerung: 'SVV als Hilferuf: "Seht her, so schlecht geht es mir." Wenn alle anderen Wege gehört zu werden versagt haben.', pvt: 'sympathikus' }
+        ],
+        dos: [
+          'Ruhig reagieren — nicht schockiert, nicht wütend, nicht panisch',
+          'Ernst nehmen: "Ich sehe, dass du dich verletzt hast. Das macht mir Sorgen weil du mir wichtig bist."',
+          'Fragen: "Was passiert kurz bevor du dich verletzt? Was fühlst du da?"',
+          'Alternative Strategien anbieten: Eiswürfel, rote Farbe auf die Haut, Gummiband, Sport',
+          'Professionelle Hilfe einleiten — SVV kann man nicht "weggeben"',
+          'Wunden versorgen oder versorgen lassen'
+        ],
+        donts: [
+          'Panik zeigen oder weinen — das Kind muss DICH regulieren',
+          '"Hör einfach auf damit" — wenn es so einfach wäre, hätte das Kind schon aufgehört',
+          'Ultimaten stellen: "Wenn du das nochmal machst..."',
+          'Die Verletzungen ignorieren und hoffen es hört auf',
+          'Fotos machen oder andere Kinder informieren',
+          'SVV mit Suizidalität gleichsetzen — es IST oft nicht das gleiche, aber immer abklären'
+        ],
+        skripte: [
+          { situation: 'Du entdeckst Schnittwunden', text: '"Ich habe gesehen, dass du Verletzungen hast. Du musst mir nicht sofort alles erzählen. Aber ich mache mir Sorgen. Bist du gerade in Sicherheit?"' },
+          { situation: 'Kind zeigt dir von sich aus', text: '"Danke, dass du mir das zeigst. Das ist sehr mutig. Ich bin froh dass du zu mir kommst. Lass uns zusammen schauen was du brauchst."' },
+          { situation: 'Kind will nicht darüber reden', text: '"Das ist OK. Ich dränge dich nicht. Ich möchte nur, dass du weißt: Ich bin da wenn du bereit bist. Und ich würde gerne, dass wir zusammen jemanden finden der dir helfen kann."' }
+        ],
+        eskalation: [
+          { signal: 'Tiefe Schnitte, starke Blutung, Narbenbildung', aktion: '→ SOFORT medizinische Versorgung + Krisenprotokoll + Therapeut/Psychiater' },
+          { signal: 'SVV + Suizidäußerungen', aktion: '→ Krisenprotokoll, C-SSRS, Kind nicht allein lassen, Krisennummer' },
+          { signal: 'Erstes Auftreten oder plötzliche Zunahme', aktion: '→ Auslöser suchen + therapeutische Anbindung einleiten' }
+        ],
+        verwandte_themen: ['selbstverletzung', 'emotionsregulation', 'krisenintervention'],
+        arbeitsblaetter: ['selbstverletzung.html', 'krisenplan.html', 'emotionsregulation.html']
+      },
+      {
+        id: 'psychosomatisch',
+        titel: 'Psychosomatische Beschwerden',
+        beschreibung: 'Wiederkehrende Bauchschmerzen, Kopfschmerzen, Übelkeit ohne medizinischen Befund',
+        wie_es_aussieht: [
+          'Klagt regelmäßig über Bauchschmerzen, besonders morgens vor der Schule',
+          'Kopfschmerzen die kommen und gehen, oft in Stresssituationen',
+          'Übelkeit, Schwindel, "Mir ist schlecht" — Arzt findet nichts',
+          'Häufige Krankheitstage, immer wieder andere Beschwerden',
+          'Beschwerden verschwinden am Wochenende oder in den Ferien',
+          'Echte körperliche Symptome — das Kind simuliert NICHT'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Somatisierung von Stress', erklaerung: 'Der Körper drückt aus, was der Mund nicht sagen kann. Emotionaler Stress wird in körperliche Symptome umgewandelt.', pvt: 'sympathikus' },
+          { ursache: 'Schulangst / Vermeidung', erklaerung: 'Bauchschmerzen sind der sozial akzeptierte Weg, nicht in die Schule zu müssen. Das Kind macht das nicht absichtlich.', pvt: 'sympathikus' },
+          { ursache: 'Chronische Anspannung', erklaerung: 'Dauerhaft angespannte Muskeln (Nacken, Kiefer, Bauch) durch Stress führen zu echten Schmerzen.', pvt: 'sympathikus' },
+          { ursache: 'Trauma / Dissoziation', erklaerung: 'Unverarbeitete Traumata können sich als körperliche Symptome zeigen (Konversionsstörung). Der Körper erinnert sich.', pvt: 'dorsal' }
+        ],
+        dos: [
+          'Die Beschwerden ERNST nehmen — das Kind bildet sich die Schmerzen nicht ein',
+          'Medizinische Abklärung zuerst: Kinderarzt ausschließen lassen, dass es körperlich ist',
+          'Zusammenhang mit Stress erkunden: "Wann werden die Bauchschmerzen schlimmer?"',
+          'Körperwahrnehmungs-Übungen: Wo im Körper spürst du was?',
+          'Entspannungstechniken anbieten: Progressive Muskelrelaxation, Atemübungen'
+        ],
+        donts: [
+          '"Du bildest dir das ein" oder "Das ist psychisch" — das Kind fühlt echte Schmerzen',
+          'Symptome ignorieren um Vermeidung zu verhindern',
+          'Kind zwingen trotz Schmerzen in die Schule zu gehen (differenziert betrachten)',
+          'Zu viel Aufmerksamkeit auf die Symptome lenken (verstärkt sie)'
+        ],
+        skripte: [
+          { situation: 'Kind hat wieder Bauchschmerzen', text: '"Ich sehe dass du Bauchschmerzen hast. Die sind echt und tun weh. Lass uns mal schauen: Was glaubst du, macht dein Bauch gerade Sorgen? Manchmal hat der Bauch ein Gefühl bevor der Kopf es weiß."' },
+          { situation: 'Beschwerden vor Schule', text: '"Jeden Montag Kopfschmerzen — das fällt mir auf. Ich glaube dir dass es weh tut. Und ich frage mich: Gibt es in der Schule etwas, das dir Bauchgrummeln macht?"' }
+        ],
+        eskalation: [
+          { signal: 'Dauerhafter Schulausfall wegen Beschwerden', aktion: '→ Kinderarzt + Schulpsychologe + ggf. Kinder-Psychotherapeut' },
+          { signal: 'Neue oder sich verschlimmernde Symptome', aktion: '→ Erneute medizinische Abklärung, körperliche Ursachen ausschließen' }
+        ],
+        verwandte_themen: ['stress-angst', 'schulverweigerung', 'emotionsregulation', 'psychosomatik'],
+        arbeitsblaetter: ['psychosomatik.html', 'achtsamkeit.html', 'emotionserkennung.html']
+      }
+    ]
+  },
+  {
+    kategorie: 'beziehung',
+    titel: 'Beziehungs- & Interaktionsmuster',
+    icon: '🔗',
+    farbe: '#F59E0B',
+    eintraege: [
+      {
+        id: 'distanzlos',
+        titel: 'Distanzloses Verhalten',
+        beschreibung: 'Zu viel Nähe, keine Grenzen, vertraut Fremden sofort, sucht körperlichen Kontakt',
+        wie_es_aussieht: [
+          'Umarmt oder berührt Fremde oder Erwachsene die es kaum kennt',
+          'Erzählt intimste Details beim ersten Treffen',
+          'Will auf den Schoß, sich ankuscheln, an die Hand nehmen',
+          'Nennt Bezugspersonen nach kurzem Kennenlernen "Mama" oder "Papa"',
+          'Geht mit Fremden mit ohne zu zögern',
+          'Sucht ständig körperliche Nähe, kann Abstand nicht aushalten'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Bindungsstörung mit Enthemmung (F94.2)', erklaerung: 'Kinder mit frühen Bindungsabbrüchen, Vernachlässigung oder häufigem Betreuungswechsel haben kein "Fremden-Warnsystem" entwickelt. Sie suchen wahllos Nähe.', pvt: 'ventral' },
+          { ursache: 'Emotionale Vernachlässigung', erklaerung: 'Grundbedürfnis nach Nähe und Zuwendung wurde nie gestillt. Kind versucht bei JEDEM zu bekommen was es zu Hause nicht bekommt.', pvt: 'ventral' },
+          { ursache: 'Sexueller Missbrauch', erklaerung: 'Kind hat gelernt: Körperliche Nähe = Zuwendung. Grenzen zwischen angemessener und unangemessener Nähe sind verwischt. ⚠️ CAVE: Diesen Verdacht professionell abklären.', pvt: 'ventral' },
+          { ursache: 'Aufmerksamkeitssuche', erklaerung: 'Jede Zuwendung ist besser als keine. Kind hat gelernt: Körperliche Nähe bringt die schnellste Reaktion.', pvt: 'ventral' }
+        ],
+        dos: [
+          'Klare, freundliche Grenzen setzen: "Ich mag dich — und Umarmen machen wir nicht bei Leuten die wir kaum kennen."',
+          'Angemessenen Körperkontakt modellieren: Handschlag, High-Five, Fist-Bump',
+          'Nähe-Distanz-Kreise erklären: Innen (Familie), Mitte (Freunde), Außen (Bekannte/Fremde)',
+          'Dem Kind beibringen: "Nicht jeder der nett ist, meint es gut."',
+          'Eigene Grenzen als Modell vorleben: "Ich mag es wenn du fragst bevor du mich anfasst."'
+        ],
+        donts: [
+          'Die Nähe genießen und erwidern (auch wenn es sich gut anfühlt) — das verstärkt das Muster',
+          'Hart zurückweisen: "Fass mich nicht an!" — das retraumatisiert',
+          'Distanzlosigkeit als "anhänglich" oder "verschmust" verharmlosen',
+          'Ignorieren — das Kind braucht Grenz-Lernen, nicht Grenz-Strafe'
+        ],
+        skripte: [
+          { situation: 'Kind umarmt Fremde', text: '"[Name], ich sehe dass du [Person] magst. Umarmen ist für Menschen die wir gut kennen — Familie und enge Freunde. Bei neuen Leuten sagen wir Hallo und geben die Hand. Können wir das üben?"' },
+          { situation: 'Kind erzählt Fremden private Dinge', text: '"Das was du gerade erzählt hast, ist etwas Privates. Privat bedeutet: Nur für dich und Menschen denen du WIRKLICH vertraust. Lass uns üben: Was ist privat, was kann jeder wissen?"' }
+        ],
+        eskalation: [
+          { signal: 'Kind geht mit Fremden mit / Kind lässt sich von Fremden anfassen', aktion: '→ SOFORT: Kinderschutz, Missbrauch abklären, Sicherheitsplan erstellen' },
+          { signal: 'Sexualisiertes Verhalten bei Kindern unter 12', aktion: '→ Dringend: Sexuellen Missbrauch abklären, Jugendschutz informieren' }
+        ],
+        verwandte_themen: ['bindungsstoerung', 'grenzen-setzen', 'eltern-kind-beziehung'],
+        arbeitsblaetter: ['grenzen.html', 'soziale-kompetenz.html']
+      },
+      {
+        id: 'beziehungsvermeidend',
+        titel: 'Beziehungsvermeidendes Verhalten',
+        beschreibung: 'Abweisung von Hilfe und Nähe, "Brauch niemanden", Misstrauen',
+        wie_es_aussieht: [
+          'Lehnt Hilfsangebote konsequent ab: "Ich brauch keine Hilfe"',
+          'Zeigt keine Emotionen, wirkt "cool" oder "gleichgültig"',
+          'Vertraut niemandem, erwartet Enttäuschung',
+          'Beendet Beziehungen bevor der andere es tun kann',
+          'Testet Bezugspersonen: "Mir ist eh egal ob du gehst"',
+          'Wertet Beziehungen ab: "Die sind alle fake"'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Unsicher-vermeidende Bindung', erklaerung: 'Kind hat gelernt: Wenn ich Bedürfnisse zeige, werde ich enttäuscht. Also tue ich so als hätte ich keine. Unter der "coolen" Fassade ist ein Kind das sich nach Nähe sehnt.', pvt: 'dorsal' },
+          { ursache: 'Wiederholte Beziehungsabbrüche', erklaerung: 'Heimwechsel, Pflegefamilienwechsel, Bezugspersonenwechsel — Kind hat gelernt: Alle gehen. Warum also noch binden?', pvt: 'dorsal' },
+          { ursache: 'Schutz vor erneuter Verletzung', erklaerung: '"Lieber alleine als nochmal verlassen werden." Vermeidung ist eine kluge Schutzstrategie — die aber langfristig einsam macht.', pvt: 'dorsal' }
+        ],
+        dos: [
+          'Verlässlich und berechenbar sein — IMMER kommen, IMMER pünktlich, IMMER da sein',
+          'Keine Bedingungen an die Beziehung knüpfen: "Ich bin da — egal wie du dich verhältst"',
+          'Geduld: Es kann Monate dauern bis Vertrauen wächst. Das ist normal.',
+          'Beziehung über Tun statt Reden: Gemeinsam etwas machen, parallel arbeiten',
+          'Abschiede und Veränderungen frühzeitig ankündigen — keine Überraschungen',
+          'Kleine Gesten: Sich erinnern was das Kind letzte Woche gesagt hat, Lieblingsgetränk bereitstellen'
+        ],
+        donts: [
+          'Nähe erzwingen: "Komm, erzähl mir was dich bewegt"',
+          'Ablehnung persönlich nehmen: "Ich versuche dir zu helfen und du bist so undankbar"',
+          'Aufgeben nach Ablehnung — genau das erwartet das Kind',
+          'Inkonsequent sein: Mal da, mal nicht — bestätigt das Muster'
+        ],
+        skripte: [
+          { situation: 'Kind lehnt Hilfe ab', text: '"OK, du brauchst gerade keine Hilfe. Das ist fein. Ich bin trotzdem da — falls sich das ändert. Nächste Woche auch."' },
+          { situation: 'Kind sagt "Du bist wie alle anderen"', text: '"Ich verstehe warum du das denkst. Du hast schon oft erlebt, dass Menschen gehen. Ich kann dir nicht beweisen, dass ich bleibe — außer indem ich es tue. Woche für Woche."' },
+          { situation: 'Kind zeigt zum ersten Mal Verletzlichkeit', text: '[Nicht übertreiben! Kein "Toll dass du dich öffnest!" — das verschreckt.] "Danke, dass du mir das sagst." [Stille. Einfach da sein.]' }
+        ],
+        eskalation: [
+          { signal: 'Vollständige Kontaktverweigerung seit Wochen', aktion: '→ Niederschwellige Kontaktangebote beibehalten, aber Supervision suchen. Trauma abklären.' },
+          { signal: 'Kind zeigt Anzeichen von Verwahrlosung/Vernachlässigung', aktion: '→ Kindeswohlgefährdung prüfen, Jugendschutz einbeziehen' }
+        ],
+        verwandte_themen: ['bindungsstoerung', 'institutionserfahrung', 'pflegefamilie'],
+        arbeitsblaetter: ['grenzen.html', 'soziale-kompetenz.html', 'selbstwert.html']
+      },
+      {
+        id: 'parentifiziert',
+        titel: 'Parentifiziertes Verhalten',
+        beschreibung: 'Kind übernimmt Erwachsenenrolle, kümmert sich um Eltern oder Geschwister',
+        wie_es_aussieht: [
+          'Kümmert sich um jüngere Geschwister wie ein Elternteil',
+          'Tröstet und reguliert die Erwachsenen statt umgekehrt',
+          'Macht Hausarbeit, Einkaufen, Kochen in einem Ausmaß das nicht altersgerecht ist',
+          'Wirkt "zu reif" oder "zu vernünftig" für sein Alter',
+          'Kann sich nicht entspannen, ist ständig in "Verantwortungsmodus"',
+          'Fühlt sich schuldig wenn es etwas für sich selbst tut',
+          'Entschuldigt sich für das Verhalten der Eltern'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Rollenumkehr in der Familie', erklaerung: 'Ein Elternteil ist psychisch krank, suchtkrank, abwesend oder überfordert. Das Kind springt ein, weil sonst niemand da ist.', pvt: 'sympathikus' },
+          { ursache: 'Bindungssicherung', erklaerung: 'Das Kind übernimmt Verantwortung um die Bindung zum Elternteil zu sichern: "Wenn ich für Mama sorge, verlässt sie mich nicht."', pvt: 'sympathikus' },
+          { ursache: 'Kulturelle Erwartung', erklaerung: 'In manchen Kulturen ist Geschwisterfürsorge normal. Unterscheide: altersangemessene Mithilfe vs. Überforderung.', pvt: 'ventral' }
+        ],
+        dos: [
+          'Entlastung anbieten: "Du musst dich nicht um alles kümmern. Hier darfst du Kind sein."',
+          'Kindgerechte Aktivitäten aktiv anbieten — Spielen, Toben, Unsinn machen',
+          'Dem Kind erlauben, Bedürfnisse zu haben: "Was brauchst DU gerade?"',
+          'Verantwortungsgefühl wertschätzen ohne es zu fördern: "Du bist sehr fürsorglich — und du darfst auch mal an dich denken."',
+          'Elternarbeit: Unterstützung für die Eltern organisieren (damit das Kind entlastet wird)'
+        ],
+        donts: [
+          'Das Kind für seine Fürsorge loben ("Du bist so ein tolles kleines Helferlein!") — das verstärkt die Parentifizierung',
+          'Das Kind zur Informationsquelle über die Familie machen',
+          'Die Überforderung des Kindes ignorieren weil es "ja so gut funktioniert"',
+          'Eltern vor dem Kind kritisieren'
+        ],
+        skripte: [
+          { situation: 'Kind kümmert sich um weinende Mutter', text: '"[Name], ich sehe dass du dich um deine Mama kümmerst. Das ist lieb von dir. Und weißt du was? Es gibt Erwachsene die deiner Mama helfen können. DU musst das nicht alleine machen."' },
+          { situation: 'Kind kann nicht spielen/entspannen', text: '"Hier ist ein Ort wo du nichts tun MUSST. Kein Aufräumen, kein Aufpassen, kein Helfen. Was würdest du tun wenn du mal gar nichts müsstest?"' }
+        ],
+        eskalation: [
+          { signal: 'Kind versorgt Elternteil bei psychischer Erkrankung/Sucht allein', aktion: '→ Jugendschutz informieren, ambulante Familienhilfe empfehlen' },
+          { signal: 'Kind zeigt Erschöpfung, Schlafstörungen, somatische Beschwerden', aktion: '→ Entlastung DRINGEND, Kinderarzt + Therapeut einbeziehen' },
+          { signal: 'Kind versorgt sich und Geschwister weil Eltern nicht da sind', aktion: '→ Kindeswohlgefährdung → Jugendamt informieren' }
+        ],
+        verwandte_themen: ['parentifizierung', 'young-carers', 'eltern-kind-beziehung'],
+        arbeitsblaetter: ['familie.html', 'emotionsregulation.html', 'selbstwert.html']
+      },
+      {
+        id: 'aufmerksamkeitssuchend',
+        titel: 'Aufmerksamkeitssuchendes Verhalten',
+        beschreibung: 'Clown spielen, ständiges Stören, negative Aufmerksamkeit provozieren',
+        wie_es_aussieht: [
+          'Macht den Klassenclown, unterbricht Unterricht mit Witzen',
+          'Stört gezielt in Momenten wo die Aufmerksamkeit woanders ist',
+          'Übertreibt Verletzungen oder Probleme dramatisch',
+          'Erfindet Geschichten um im Mittelpunkt zu stehen',
+          'Wird laut, albern oder auffällig wenn es nicht beachtet wird',
+          'Verwickelt Erwachsene in endlose Gespräche/Diskussionen'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Emotionale Vernachlässigung', erklaerung: 'Negative Aufmerksamkeit ist besser als gar keine. Kind hat zu Hause gelernt: Nur wenn ich störe, wird mir zugehört.', pvt: 'sympathikus' },
+          { ursache: 'Unsichere Bindung', erklaerung: 'Kind ist nicht sicher ob die Bezugsperson verfügbar ist. Ständiges Aufmerksamkeitssuchen = ständiges Testen: "Bist du noch da?"', pvt: 'sympathikus' },
+          { ursache: 'Fehlende soziale Kompetenz', erklaerung: 'Kind weiß nicht, wie es positiv Aufmerksamkeit bekommt. Stören ist der einzige Weg den es kennt.', pvt: 'ventral' },
+          { ursache: 'ADHS', erklaerung: 'Impulsivität + Bewegungsdrang können wie Aufmerksamkeitssuche aussehen, sind aber neurologisch bedingt.', pvt: 'sympathikus' }
+        ],
+        dos: [
+          'Positive Aufmerksamkeit PROAKTIV geben — BEVOR das Kind stören muss',
+          'Erwünschtes Verhalten verstärken: "Ich finde toll wie konzentriert du gerade arbeitest"',
+          'Verantwortung übertragen: Helferfunktionen, Aufgaben die Aufmerksamkeit bringen (Tafel wischen, Austeilen)',
+          'Klare Zeiten für individuelle Aufmerksamkeit: "Um 10 Uhr hab ich 5 Minuten nur für dich"',
+          'Störendes Verhalten ignorieren wenn möglich, erwünschtes Verhalten belohnen'
+        ],
+        donts: [
+          'Jedes Stören mit Aufmerksamkeit belohnen (auch Schimpfen ist Aufmerksamkeit)',
+          'Das Kind als "Störenfried" abstempeln',
+          'Vor der Gruppe tadeln — das GIBT Aufmerksamkeit für Fehlverhalten',
+          'Erwarten dass das Kind sich "zusammenreißt" ohne Alternative anzubieten'
+        ],
+        skripte: [
+          { situation: 'Kind stört zum dritten Mal', text: '[Leise, privat:] "[Name], ich merke dass du gerade viel Energie hast. Lass uns einen Deal machen: Du arbeitest die nächsten 10 Minuten konzentriert, und danach hast du 5 Minuten meine volle Aufmerksamkeit. OK?"' },
+          { situation: 'Kind macht den Clown', text: '"Du bist lustig — das ist eine Stärke. Und es gibt Momente wo Humor super passt und Momente wo es andere stört. Können wir zusammen schauen wann was passt?"' }
+        ],
+        eskalation: [
+          { signal: 'Aufmerksamkeitssuche geht in Selbstgefährdung über', aktion: '→ Ernst nehmen, abklären ob Hilferuf dahintersteckt, Krisenprotokoll bei Bedarf' },
+          { signal: 'Keine Besserung trotz konsequenter Strategie', aktion: '→ ADHS abklären, ggf. tiefere emotionale Ursache (Vernachlässigung, Trauma)' }
+        ],
+        verwandte_themen: ['impulskontrolle', 'kommunikation', 'soziale-kompetenz'],
+        arbeitsblaetter: ['impulskontrolle.html', 'soziale-kompetenz.html', 'kommunikation.html']
+      }
+    ]
+  },
+  {
+    kategorie: 'schulbezogen',
+    titel: 'Schulbezogene Verhaltensweisen',
+    icon: '🏫',
+    farbe: '#14B8A6',
+    eintraege: [
+      {
+        id: 'schulvermeidung',
+        titel: 'Schulvermeidung',
+        beschreibung: 'Nicht zur Schule kommen, morgens krank sein, Schule schwänzen',
+        wie_es_aussieht: [
+          'Fehlt regelmäßig in der Schule (montags häufiger als freitags)',
+          'Klagt morgens über Bauchschmerzen/Kopfschmerzen die am Mittag verschwinden',
+          'Wird vor der Schule panisch, weint, klammert',
+          'Verlässt die Schule während des Unterrichts',
+          'Kommt zur Schule aber geht nicht in den Unterricht',
+          'Eltern melden das Kind häufig krank'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Schulangst (anxiety-based)', erklaerung: 'Echte Angst vor Schule — Prüfungen, Mitschüler, Lehrer, Lärm. Das Kind WILL in die Schule, KANN aber nicht. ≠ Schulschwänzen!', pvt: 'sympathikus' },
+          { ursache: 'Schulschwänzen (truancy)', erklaerung: 'Keine Angst, aber kein Interesse. Kind ist lieber woanders. Oft in Verbindung mit delinquenter Peer-Gruppe.', pvt: 'ventral' },
+          { ursache: 'Trennungsangst', erklaerung: 'Angst von Bezugsperson getrennt zu sein. Häufig nach Verlust, Trennung der Eltern, Umzug.', pvt: 'sympathikus' },
+          { ursache: 'Mobbing', erklaerung: 'Kind meidet die Schule weil es dort systematisch schikaniert wird. Schulvermeidung ist dann eine Schutzreaktion.', pvt: 'sympathikus' },
+          { ursache: 'Überforderung / Lernschwierigkeit', erklaerung: 'Tägliches Versagen ist unerträglich. Fernbleiben schützt den letzten Rest Selbstwert.', pvt: 'dorsal' },
+          { ursache: 'Familiäre Funktion', erklaerung: 'Kind bleibt zu Hause um kranke/depressive Eltern zu versorgen (Parentifizierung) oder weil die Familie es braucht.', pvt: 'ventral' }
+        ],
+        dos: [
+          'ZUERST UNTERSCHEIDEN: Schulangst vs. Schulschwänzen — komplett verschiedene Interventionen!',
+          'Bei Schulangst: Graduierte Rückführung — Schritt für Schritt, nicht von 0 auf 100',
+          'Bei Schulschwänzen: Klare Struktur, Konsequenzen, attraktive Alternativen in der Schule schaffen',
+          'Kooperation mit Schule: Lehrer, Schulsozialarbeiter, Schulpsychologe einbeziehen',
+          'Morgenroutine strukturieren: Feste Abläufe reduzieren den Entscheidungskampf',
+          'Ursache behandeln, nicht das Symptom: Mobbing stoppen, Lernschwäche diagnostizieren, etc.'
+        ],
+        donts: [
+          'Kind mit Gewalt in die Schule zwingen — verschlimmert Angst',
+          'Zu lange warten ("Das gibt sich schon") — je länger die Absenz, desto schwerer die Rückkehr',
+          'Eltern beschuldigen ("Ihre Erziehung ist schuld")',
+          'Schulangst und Schulschwänzen gleich behandeln'
+        ],
+        skripte: [
+          { situation: 'Kind will morgens nicht in die Schule', text: '"Ich sehe dass dir der Gedanke an die Schule gerade schwerfällt. Was genau macht dir Sorgen? Lass uns zusammen schauen, ob wir einen ersten kleinen Schritt finden."' },
+          { situation: 'Kind schwänzt regelmäßig', text: '"Mir fällt auf dass du oft nicht in der Schule bist. Ich bin nicht hier um dich zu bestrafen — ich möchte verstehen was los ist. Was müsste sich ändern, damit Schule für dich OK wird?"' },
+          { situation: 'Rückkehr nach langer Absenz', text: '"Der erste Tag zurück ist der schwerste. Wir haben einen Plan: Heute nur 2 Stunden. Ich bin erreichbar. Morgen schauen wir weiter. Schritt für Schritt."' }
+        ],
+        eskalation: [
+          { signal: 'Absenz länger als 2 Wochen', aktion: '→ DRINGEND: Schulpsychologe, Reintegrationsplan, ggf. CePAS Luxembourg einbeziehen' },
+          { signal: 'Schulvermeidung + Suizidäußerungen', aktion: '→ Krisenprotokoll, Therapeut/Psychiater, Kind nicht allein lassen' },
+          { signal: 'Eltern unterstützen das Fernbleiben aktiv', aktion: '→ Elterngespräch, ggf. Jugendschutz informieren (Schulpflicht)' }
+        ],
+        verwandte_themen: ['schulverweigerung', 'stress-angst', 'trennungsangst', 'mobbing'],
+        arbeitsblaetter: ['angst.html', 'schulverweigerung.html', 'emotionsregulation.html']
+      },
+      {
+        id: 'leistungsverweigerung',
+        titel: 'Leistungsverweigerung',
+        beschreibung: 'Kann aber will nicht, Arbeitsverweigerung, "Ist mir egal"-Haltung bei Schulaufgaben',
+        wie_es_aussieht: [
+          'Weigert sich Aufgaben zu beginnen: "Mach ich nicht"',
+          'Gibt leere Blätter ab oder schreibt bewusst Unsinn',
+          'Hat die Fähigkeiten aber setzt sie nicht ein',
+          'Sagt "Ist mir egal" bei schlechten Noten',
+          'Stört lieber als mitzuarbeiten',
+          'Macht Hausaufgaben grundsätzlich nicht'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Versagensangst / Perfektionismus', erklaerung: '"Wenn ich es nicht versuche, kann ich nicht versagen." Leistungsverweigerung schützt den Selbstwert.', pvt: 'dorsal' },
+          { ursache: 'Unerkannte Lernschwierigkeit', erklaerung: 'Kind KANN es tatsächlich nicht, schämt sich aber zu sagen "Ich verstehe das nicht." Verweigerung ist weniger beschämend als Versagen.', pvt: 'dorsal' },
+          { ursache: 'Depression / Antriebslosigkeit', erklaerung: 'Keine Energie, keine Motivation, alles fühlt sich sinnlos an.', pvt: 'dorsal' },
+          { ursache: 'Protest / Machtkampf', erklaerung: 'Verweigerung als Kontrolle: "Das Einzige was ich kontrollieren kann, ist ob ich mitmache."', pvt: 'sympathikus' },
+          { ursache: 'Fehlende Relevanz', erklaerung: 'Kind sieht keinen Sinn in der Aufgabe. "Wofür brauche ich das?" ist manchmal eine berechtigte Frage.', pvt: 'ventral' }
+        ],
+        dos: [
+          'Ursache herausfinden: Kann nicht oder will nicht? → Komplett verschiedene Interventionen',
+          'Wahlmöglichkeiten: "Welche Aufgabe möchtest du zuerst?" statt "Mach jetzt alles"',
+          'Aufgaben aufteilen: Kleine, machbare Schritte statt überwältigende Gesamtaufgabe',
+          'Relevanz herstellen: "Das brauchst du für [konkretes Ziel des Kindes]"',
+          'Erfolge feiern — auch kleine: "Die ersten 3 Aufgaben hast du super gemacht!"',
+          'Bei Versagensangst: Fehler normalisieren, Prozess loben statt Ergebnis'
+        ],
+        donts: [
+          '"Du bist einfach nur faul" — das ist fast nie die Wahrheit',
+          'Mehr Druck aufbauen — Druck verstärkt Verweigerung',
+          'Strafen die den Selbstwert weiter senken',
+          'Aufgeben: "Wenn er nicht will, soll er halt nicht"'
+        ],
+        skripte: [
+          { situation: 'Kind verweigert Aufgabe', text: '"Ich sehe dass du das nicht machen willst. Darf ich fragen: Ist es zu schwer, zu langweilig, oder etwas anderes? Ich möchte dir helfen einen Weg zu finden."' },
+          { situation: 'Kind sagt "Ist mir egal"', text: '"Wenn dir etwas egal ist, dann schützt das manchmal davor, enttäuscht zu werden. Ich frage anders: Wenn es dir NICHT egal wäre — was würdest du dir wünschen?"' }
+        ],
+        eskalation: [
+          { signal: 'Komplette Verweigerung in allen Fächern seit Wochen', aktion: '→ Depression abklären, Lernschwäche testen, Schulpsychologe einbeziehen' },
+          { signal: 'Verweigerung + aggressives Verhalten', aktion: '→ Funktionale Analyse: Was löst die Verweigerung aus? Unterforderung? Überforderung? Trauma?' }
+        ],
+        verwandte_themen: ['impulskontrolle', 'depressive-stimmungen', 'lernbehinderung', 'selbstwertgefuehl'],
+        arbeitsblaetter: ['selbstwert.html', 'impulskontrolle.html', 'depression.html']
+      },
+      {
+        id: 'dissoziation',
+        titel: 'Dissoziation im Unterricht',
+        beschreibung: 'Abwesend wirken, "träumen", nicht reagieren, Erinnerungslücken',
+        wie_es_aussieht: [
+          'Starrer Blick, schaut "durch dich hindurch"',
+          'Reagiert nicht auf Ansprache, braucht mehrere Versuche',
+          'Wirkt "weg", als ob es in einer anderen Welt ist',
+          'Kann sich nicht erinnern was gerade besprochen wurde',
+          'Plötzliche Persönlichkeitsveränderung (z.B. plötzlich sehr kindlich)',
+          'Schmerzunempfindlichkeit: Verletzt sich ohne es zu merken'
+        ],
+        was_es_bedeuten_kann: [
+          { ursache: 'Trauma-Dissoziation', erklaerung: 'Das Nervensystem schaltet ab zum Selbstschutz. Dissoziation = der Notausgang wenn Kampf und Flucht nicht möglich sind. HÄUFIG bei Kindern mit Missbrauch, Gewalt oder Vernachlässigung.', pvt: 'dorsal' },
+          { ursache: 'Trigger im Umfeld', erklaerung: 'Etwas in der Umgebung erinnert unbewusst an das Trauma: Geruch, Stimme, Situation. Das Kind "reist" in die Vergangenheit.', pvt: 'dorsal' },
+          { ursache: 'Überforderung / Reizüberflutung', erklaerung: 'Zu viel Input, zu laut, zu schnell — das System fährt herunter. Häufig bei Autismus-Spektrum, HSP oder nach Schlafmangel.', pvt: 'dorsal' },
+          { ursache: 'Tagträumen / ADHS', erklaerung: 'ADHS Typ unaufmerksam: Kind driftet ab, nicht wegen Trauma sondern wegen Aufmerksamkeitsproblemen. Unterscheidung wichtig!', pvt: 'ventral' }
+        ],
+        dos: [
+          'Sanft ansprechen: Name sagen, ruhige Stimme, Blickkontakt suchen',
+          'Grounding-Techniken: "Spür deine Füße auf dem Boden. Nenn mir 5 Dinge die du siehst."',
+          'Sensorische Reize: Kaltes Wasser an den Händen, Eiswürfel, starker Geruch (Pfefferminzöl)',
+          'NACH der Episode: "Du warst gerade kurz weg. Das passiert manchmal. Alles OK?"',
+          'Trigger identifizieren: Was passierte DIREKT vorher?',
+          'Professionelle Hilfe einleiten — Dissoziation ist fast immer ein Zeichen für Trauma'
+        ],
+        donts: [
+          'Laut rufen oder anfassen — kann die Dissoziation verschlimmern',
+          'Schimpfen: "Hör auf zu träumen!" — das Kind kann nichts dafür',
+          'Vor der Klasse ansprechen — private Nachfrage',
+          'Die Episode ignorieren ("Der träumt halt")',
+          'Das Kind sofort nach dem Trauma fragen — erst stabilisieren'
+        ],
+        skripte: [
+          { situation: 'Kind dissoziiert (starrer Blick)', text: '[Ruhig, leise, auf Augenhöhe] "[Name]... [Name]... Ich bins, [dein Name]. Du bist hier in [Ort]. Es ist [Uhrzeit]. Du bist sicher. Schau mich an. Spür den Stuhl unter dir."' },
+          { situation: 'Kind kommt aus Dissoziation zurück', text: '"Hey, da bist du wieder. Alles gut. Du warst kurz weg — das passiert manchmal. Brauchst du einen Moment? Möchtest du Wasser?"' },
+          { situation: 'Kind dissoziiert häufig', text: '"Mir fällt auf, dass du manchmal so \'weggehst\'. Das ist nichts wofür du dich schämen musst — dein Kopf macht das um dich zu schützen. Ich möchte gerne, dass wir zusammen jemanden finden der dir damit helfen kann."' }
+        ],
+        eskalation: [
+          { signal: 'Häufige Dissoziation (mehrmals pro Woche)', aktion: '→ DRINGEND: Traumatherapie empfehlen, Ursache (Missbrauch, Gewalt) abklären' },
+          { signal: 'Dissoziation + Selbstverletzung', aktion: '→ Krisenprotokoll, sofort therapeutische Anbindung' },
+          { signal: 'Erstmalige oder plötzliche Dissoziation', aktion: '→ Auslöser suchen: Neues Trauma? Trigger identifiziert? Medizinische Ursache ausschließen (Epilepsie)' }
+        ],
+        verwandte_themen: ['trauma', 'dissoziative-erfahrungen', 'krisenintervention'],
+        arbeitsblaetter: ['trauma-stabilisierung.html', 'achtsamkeit.html', 'krisenplan.html']
+      }
+    ]
+  }
+];

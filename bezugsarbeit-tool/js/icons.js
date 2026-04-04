@@ -61,3 +61,10 @@ function icon(name, size, cls) {
   var classAttr = cls ? ' class="' + cls + '"' : '';
   return svg.replace('<svg ', '<svg ' + sizeAttr + classAttr + ' ');
 }
+
+// Helper: Rendert Icon-Key als SVG oder gibt Emoji zurück (Fallback)
+function renderIcon(val, size) {
+  if (!val) return '';
+  if (ICONS[val]) return icon(val, size || 18);
+  return val; // Emoji oder anderer String
+}

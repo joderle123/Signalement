@@ -3375,6 +3375,14 @@ select {
   gap: 10px;
 }
 .fivep-col-icon { font-size: 20px; margin-top: 1px; }
+.fivep-col-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+}
 .fivep-col-header strong { font-size: 13px; color: var(--text); letter-spacing: -0.2px; }
 .fivep-col-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
 .fivep-col-body {

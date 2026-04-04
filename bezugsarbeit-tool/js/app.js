@@ -392,7 +392,7 @@ function renderThemen() {
     return `
     <div class="kategorie-section">
       <div class="kategorie-header">
-        <div class="kategorie-icon" style="background:${kat.farbe}22;">${kat.icon}</div>
+        <div class="kategorie-icon" style="background:${kat.farbe}22;">${renderIcon(kat.icon)}</div>
         <div class="kategorie-titel">${kat.titel}</div>
         <div class="kategorie-progress">${done}/${total} abgeschlossen</div>
       </div>
@@ -437,7 +437,7 @@ function openThemaPanel(katId, themaId) {
   panel.className = 'thema-panel';
   panel.innerHTML = `
     <div class="thema-panel-header" style="background:${kat.farbe}18;border-bottom:2px solid ${kat.farbe}30;">
-      <span style="font-size:22px;">${kat.icon}</span>
+      <span style="font-size:22px;">${renderIcon(kat.icon)}</span>
       <div class="thema-panel-title">${thema.titel}</div>
       <button class="btn-icon" onclick="document.getElementById('thema-panel').remove()">✕</button>
     </div>
@@ -996,7 +996,7 @@ function renderNotizKarte(notiz) {
   return `
     <div class="notiz-karte" style="border-left-color:${kat.farbe};">
       <div class="notiz-karte-header">
-        <span class="notiz-badge" style="background:${kat.farbe}22;color:${kat.farbe};">${kat.icon} ${kat.label}</span>
+        <span class="notiz-badge" style="background:${kat.farbe}22;color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.label}</span>
         ${notiz.themaId ? `<span class="notiz-badge" style="background:#EBF5FB;color:#2980B9;">📌 Thema</span>` : ''}
         <span class="notiz-datum">${formatDatum(notiz.datum)}</span>
         <button class="notiz-delete" onclick="deleteNotiz('${notiz.id}')">🗑</button>
@@ -1169,7 +1169,7 @@ function populateProtThemen() {
   const current = sel.value;
   sel.innerHTML = '<option value="">— Kein Thema verknüpft —</option>' +
     THEMEN_KATEGORIEN.map(kat =>
-      `<optgroup label="${kat.icon} ${kat.titel}">
+      `<optgroup label="${renderIcon(kat.icon)} ${kat.titel}">
         ${kat.themen.map(t => `<option value="${t.id}">${t.titel}</option>`).join('')}
       </optgroup>`
     ).join('');
@@ -1618,7 +1618,7 @@ function druckeProfilbericht(schuelerId) {
     const themenMitStatus = kat.themen.filter(t => topicStatus[t.id] && topicStatus[t.id] !== 'nicht-begonnen');
     if (themenMitStatus.length === 0) return '';
     return `<div style="margin-bottom:12px;">
-      <div style="font-size:12px;font-weight:700;color:#2C5F8A;margin-bottom:4px;">${kat.icon} ${kat.titel}</div>
+      <div style="font-size:12px;font-weight:700;color:#2C5F8A;margin-bottom:4px;">${renderIcon(kat.icon)} ${kat.titel}</div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;">
         ${themenMitStatus.map(t => {
           const farbe = getStatusFarbe(topicStatus[t.id]);
@@ -1684,7 +1684,7 @@ function druckeProfilbericht(schuelerId) {
           const def = ROADMAP_PHASEN[idx];
           const statusLabel = phase.status === 'aktiv' ? '▶ Aktiv' : phase.status === 'erledigt' ? '✓ Erledigt' : '○ Offen';
           return `<div style="margin-bottom:10px;padding:8px 10px;border-left:4px solid ${def.farbe};background:#F9FAFB;border-radius:0 6px 6px 0;">
-            <div style="font-size:12px;font-weight:700;color:${def.farbe};">${def.icon} Phase ${def.nr}: ${def.label} <span style="font-weight:400;color:#6B7280;font-size:10px;">(${statusLabel})</span></div>
+            <div style="font-size:12px;font-weight:700;color:${def.farbe};">${renderIcon(def.icon)} Phase ${def.nr}: ${def.label} <span style="font-weight:400;color:#6B7280;font-size:10px;">(${statusLabel})</span></div>
             ${phase.themen.length > 0 ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">
               ${phase.themen.map(t => `<span style="font-size:10px;padding:1px 6px;border-radius:8px;background:${t.status==='abgeschlossen'?'#DCFCE7':'#F3F4F6'};color:${t.status==='abgeschlossen'?'#166534':'#374151'};">${t.status==='abgeschlossen'?'✓':' '} ${getThemaTitel(t.id)}</span>`).join('')}
             </div>` : ''}
@@ -1718,7 +1718,7 @@ function druckeProfilbericht(schuelerId) {
     const kat = NOTIZ_KATEGORIEN[n.kategorie] || NOTIZ_KATEGORIEN.session;
     return `<div style="border-left:3px solid ${kat.farbe};padding:6px 10px;margin-bottom:6px;background:#F9FAFB;border-radius:0 4px 4px 0;">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
-        <span style="font-size:10px;font-weight:700;color:${kat.farbe};">${kat.icon} ${kat.label}</span>
+        <span style="font-size:10px;font-weight:700;color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.label}</span>
         <span style="font-size:10px;color:#95A5A6;margin-left:auto;">${formatDatum(n.datum)}</span>
       </div>
       <div style="font-size:11px;white-space:pre-wrap;line-height:1.5;">${escapeHtml(n.inhalt)}</div>
@@ -2092,7 +2092,7 @@ function renderNaechsteSchritte() {
               border:1px solid ${p.done ? '#BBF7D0' : '#E5E7EB'};
               color:${p.done ? '#15803D' : '#6B7280'};
             ">
-              <span style="font-size:13px;">${p.done ? '✅' : p.icon}</span>
+              <span style="font-size:13px;">${p.done ? icon('check-circle', 16) : renderIcon(p.icon, 16)}</span>
               ${p.label}
             </div>
           `).join('')}
@@ -2896,11 +2896,11 @@ function renderFallformulierung() {
   let ff = DB.getFallformulierung(sid);
 
   const pDefs = [
-    { key: 'presenting',     label: 'Presenting',     icon: '🔴', farbe: '#EF4444', bg: '#FEF2F2', desc: 'Aktuelle Symptome & Probleme' },
-    { key: 'predisposing',   label: 'Predisposing',   icon: '🟠', farbe: '#F97316', bg: '#FFF7ED', desc: 'Vorbestehende Risikofaktoren' },
-    { key: 'precipitating',  label: 'Precipitating',  icon: '🟡', farbe: '#EAB308', bg: '#FEFCE8', desc: 'Auslösende Ereignisse' },
-    { key: 'perpetuating',   label: 'Perpetuating',   icon: '🔵', farbe: '#3B82F6', bg: '#EFF6FF', desc: 'Aufrechterhaltende Faktoren' },
-    { key: 'protective',     label: 'Protective',     icon: '🟢', farbe: '#22C55E', bg: '#F0FDF4', desc: 'Schutzfaktoren & Ressourcen' },
+    { key: 'presenting',     label: 'Presenting',     farbe: '#EF4444', bg: '#FEF2F2', desc: 'Aktuelle Symptome & Probleme' },
+    { key: 'predisposing',   label: 'Predisposing',   farbe: '#F97316', bg: '#FFF7ED', desc: 'Vorbestehende Risikofaktoren' },
+    { key: 'precipitating',  label: 'Precipitating',  farbe: '#EAB308', bg: '#FEFCE8', desc: 'Auslösende Ereignisse' },
+    { key: 'perpetuating',   label: 'Perpetuating',   farbe: '#3B82F6', bg: '#EFF6FF', desc: 'Aufrechterhaltende Faktoren' },
+    { key: 'protective',     label: 'Protective',     farbe: '#22C55E', bg: '#F0FDF4', desc: 'Schutzfaktoren & Ressourcen' },
   ];
 
   container.innerHTML = `
@@ -2918,7 +2918,7 @@ function renderFallformulierung() {
         return `
           <div class="fivep-column" style="border-top:3px solid ${p.farbe};">
             <div class="fivep-col-header" style="background:${p.bg};">
-              <span class="fivep-col-icon">${p.icon}</span>
+              <span class="fivep-col-dot" style="background:${p.farbe};"></span>
               <div>
                 <strong>${p.label}</strong>
                 <div class="fivep-col-desc">${p.desc}</div>
@@ -3671,7 +3671,7 @@ function renderRoadmapPhase(roadmap, phase, idx) {
       <div class="roadmap-phase-content">
         <div class="roadmap-phase-header" onclick="toggleRoadmapPhase(${phase.nr})">
           <div class="roadmap-phase-header-left">
-            <span class="roadmap-phase-icon">${def.icon}</span>
+            <span class="roadmap-phase-icon">${renderIcon(def.icon)}</span>
             <div>
               <div class="roadmap-phase-label">Phase ${def.nr}: ${def.label}</div>
               <div class="roadmap-phase-desc">${def.beschreibung}</div>
@@ -3715,7 +3715,7 @@ function renderRoadmapPhase(roadmap, phase, idx) {
                     </button>
                     <div class="roadmap-thema-info">
                       <span class="roadmap-thema-titel">${getThemaTitel(t.id)}</span>
-                      ${kat ? `<span class="roadmap-thema-kat" style="color:${kat.farbe};">${kat.icon} ${kat.titel}</span>` : ''}
+                      ${kat ? `<span class="roadmap-thema-kat" style="color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.titel}</span>` : ''}
                     </div>
                     <div class="roadmap-thema-actions">
                       <button class="btn-icon btn-xs" title="Thema öffnen" onclick="openRoadmapThema('${t.id}')">📋</button>
@@ -3730,7 +3730,7 @@ function renderRoadmapPhase(roadmap, phase, idx) {
             <select id="roadmap-add-select-${phase.nr}" class="roadmap-select">
               <option value="">+ Thema hinzufügen...</option>
               ${THEMEN_KATEGORIEN.map(kat =>
-                `<optgroup label="${kat.icon} ${kat.titel}">
+                `<optgroup label="${renderIcon(kat.icon)} ${kat.titel}">
                   ${kat.themen.map(t =>
                     `<option value="${t.id}">${t.titel}</option>`
                   ).join('')}
@@ -4009,7 +4009,7 @@ function druckeRoadmap() {
         <div class="phase-header">
           <div class="phase-dot" style="background:${def.farbe};">${def.nr}</div>
           <div>
-            <div class="phase-label">${def.icon} Phase ${def.nr}: ${def.label}</div>
+            <div class="phase-label">${renderIcon(def.icon)} Phase ${def.nr}: ${def.label}</div>
             <div class="phase-desc">${def.beschreibung} · ${def.dauer}
               ${phase.startDatum ? ` · Start: ${new Date(phase.startDatum).toLocaleDateString('de-DE')}` : ''}
               ${phase.endDatum ? ` · Ende: ${new Date(phase.endDatum).toLocaleDateString('de-DE')}` : ''}

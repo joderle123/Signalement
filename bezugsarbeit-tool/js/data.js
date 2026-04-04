@@ -1031,7 +1031,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'familie',
     titel: 'Familie & Soziales Umfeld',
-    icon: '🏠',
+    icon: 'home',
     farbe: '#4A90D9',
     themen: [
       { id: 'familienzusammensetzung', titel: 'Familienzusammensetzung', beschreibung: 'Eltern, Geschwister, Patchwork, Alleinerziehend' },
@@ -1050,7 +1050,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'emotionen',
     titel: 'Emotionen & Wohlbefinden',
-    icon: '💙',
+    icon: 'heart',
     farbe: '#7B5EA7',
     themen: [
       { id: 'emotionserkennung', titel: 'Emotionserkennung', beschreibung: 'Gefühle benennen, Körpersignale verstehen' },
@@ -1070,7 +1070,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'soziale-kompetenzen',
     titel: 'Soziale Kompetenzen',
-    icon: '🤝',
+    icon: 'users',
     farbe: '#27AE60',
     themen: [
       { id: 'freundschaften', titel: 'Freundschaften', beschreibung: 'Freundschaften aufbauen & pflegen' },
@@ -1089,7 +1089,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'konsum',
     titel: 'Konsum & Risikoverhalten',
-    icon: '⚠️',
+    icon: 'exclamation',
     farbe: '#E67E22',
     themen: [
       { id: 'alkohol', titel: 'Alkohol', beschreibung: 'Konsum, Risiken, Sucht, Prävention' },
@@ -1104,7 +1104,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'schule-zukunft',
     titel: 'Schule & Zukunft',
-    icon: '📚',
+    icon: 'academic-cap',
     farbe: '#2980B9',
     themen: [
       { id: 'schulisches-engagement', titel: 'Schulisches Engagement', beschreibung: 'Motivation, Anwesenheit, Beteiligung' },
@@ -1122,7 +1122,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'gesundheit',
     titel: 'Gesundheit & Körper',
-    icon: '💪',
+    icon: 'shield',
     farbe: '#16A085',
     themen: [
       { id: 'schlaf', titel: 'Schlaf & Erholung', beschreibung: 'Schlafroutine, Schlafqualität, Chronotyp' },
@@ -1140,7 +1140,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'alltag-mobilitaet',
     titel: 'Alltag & Mobilität',
-    icon: '🚌',
+    icon: 'map',
     farbe: '#8E44AD',
     themen: [
       { id: 'transport', titel: 'Transport & Mobilität', beschreibung: 'Öffentlicher Transport, Führerschein, Fahrrad' },
@@ -1155,7 +1155,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'recht-gesellschaft',
     titel: 'Recht & Gesellschaft',
-    icon: '⚖️',
+    icon: 'document',
     farbe: '#C0392B',
     themen: [
       { id: 'jugendrecht', titel: 'Jugendrecht & Gesetze', beschreibung: 'Rechtliche Grundlagen für Jugendliche in Luxemburg' },
@@ -1169,7 +1169,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'identitaet',
     titel: 'Identität & Werte',
-    icon: '🌟',
+    icon: 'sparkles',
     farbe: '#F39C12',
     themen: [
       { id: 'selbstbild', titel: 'Selbstbild & Identität', beschreibung: 'Wer bin ich? Selbstkonzept, Rollen' },
@@ -1185,7 +1185,7 @@ const THEMEN_KATEGORIEN = [
   {
     id: 'krise-trauma',
     titel: 'Krisen & Trauma',
-    icon: '🆘',
+    icon: 'bolt',
     farbe: '#E74C3C',
     themen: [
       { id: 'krisenintervention', titel: 'Krisenintervention', beschreibung: 'Akute Krisen erkennen und stabilisieren' },
@@ -1595,25 +1595,25 @@ const SCREENING_THEMA_MAP = {
 
 // Roadmap-Phasen-Definitionen
 const ROADMAP_PHASEN = [
-  { nr: 0, label: 'Vorbereitung', farbe: '#6B7280', icon: '📋',
+  { nr: 0, label: 'Vorbereitung', farbe: '#6B7280', icon: 'clipboard',
     beschreibung: 'Daten sammeln, Screening, 5P-Analyse, Stärken erfassen',
     dauer: '1–2 Wochen', schwerpunkt: ['emotionserkennung', 'soziale-wahrnehmung', 'familienzusammensetzung'] },
-  { nr: 1, label: 'Sicherheit & Beziehung', farbe: '#DC2626', icon: '🛡️',
+  { nr: 1, label: 'Sicherheit & Beziehung', farbe: '#DC2626', icon: 'shield',
     beschreibung: 'Vertrauen aufbauen, akute Krisen stabilisieren, Sicherheit schaffen',
     dauer: '2–4 Wochen', schwerpunkt: ['krisenintervention', 'suizidpraevention', 'selbstverletzung', 'trauma'] },
-  { nr: 2, label: 'Exploration', farbe: '#D97706', icon: '🔍',
+  { nr: 2, label: 'Exploration', farbe: '#D97706', icon: 'eye',
     beschreibung: 'Probleme verstehen, Stärken erkennen, Muster identifizieren',
     dauer: '2–3 Wochen', schwerpunkt: ['selbstwertgefuehl', 'emotionsregulation', 'selbstbild'] },
-  { nr: 3, label: 'Ziele & Plan', farbe: '#2563EB', icon: '🎯',
+  { nr: 3, label: 'Ziele & Plan', farbe: '#2563EB', icon: 'target',
     beschreibung: 'Gemeinsame Ziele definieren, Förderplan konkretisieren',
     dauer: '1–2 Wochen', schwerpunkt: ['zukunftsplanung', 'motivation', 'lernstrategien'] },
-  { nr: 4, label: 'Intervention', farbe: '#7C3AED', icon: '🔧',
+  { nr: 4, label: 'Intervention', farbe: '#7C3AED', icon: 'wrench',
     beschreibung: 'Kernthemen bearbeiten, Kompetenzen aufbauen, Interventionen durchführen',
     dauer: '6–12 Wochen', schwerpunkt: [] },
-  { nr: 5, label: 'Konsolidierung', farbe: '#059669', icon: '🌿',
+  { nr: 5, label: 'Konsolidierung', farbe: '#059669', icon: 'leaf',
     beschreibung: 'Gelerntes festigen, Rückfallprävention, Erfolge sichern',
     dauer: '2–4 Wochen', schwerpunkt: ['resilienz', 'soziales-netzwerk', 'lebenssinn'] },
-  { nr: 6, label: 'Abschluss', farbe: '#0EA5E9', icon: '🎓',
+  { nr: 6, label: 'Abschluss', farbe: '#0EA5E9', icon: 'academic-cap',
     beschreibung: 'Transfer in den Alltag, Abschied gestalten, Nachsorge planen',
     dauer: '1–2 Wochen', schwerpunkt: ['zukunftsplanung', 'berufsorientierung'] },
 ];

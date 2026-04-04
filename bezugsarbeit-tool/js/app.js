@@ -2365,12 +2365,216 @@ function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
   renderQuickEntry('quick-entry-dashboard');
+  renderSitzungsvorschlag();
+  renderPhaseTransitionPrompt();
   renderNaechsteSchritte();
   renderRueckschrittAlert();
   renderDashKalender();
   renderDashTodo();
   renderWohlbefinden();
   renderNotizbuch();
+}
+
+// ---- SITZUNGSVORSCHLAG — "Heute empfohlen" ----
+function renderSitzungsvorschlag() {
+  const container = document.getElementById('sitzungsvorschlag-widget');
+  if (!container) return;
+
+  const sid = APP.currentSchuelerId;
+  const roadmap = DB.getRoadmap(sid);
+  if (!roadmap) { container.innerHTML = ''; return; }
+
+  // Letzten PVT-Zustand ermitteln
+  const notizen = DB.getNotizen(sid)
+    .filter(n => n.soap && n.soap.pvt)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const lastPVT = notizen.length > 0 ? notizen[0].soap.pvt : null;
+
+  // Aktive Phase finden
+  const aktivePhase = roadmap.phasen.find(p => p.status === 'aktiv');
+  if (!aktivePhase) { container.innerHTML = ''; return; }
+
+  // PVT-Override: Bei "frozen" immer Grounding empfehlen
+  const pvtLabels = { safe: '🟢 Sicher & offen', activated: '🟡 Angespannt', frozen: '🟣 Eingefroren' };
+  const groundingThemen = ['krisenintervention', 'trauma', 'emotionserkennung', 'stress-angst'];
+  const coregThemen = ['emotionsregulation', 'stress-angst', 'impulskontrolle', 'wut'];
+
+  let empfohlenesThema = null;
+  let empfGrund = '';
+  let pvtOverride = false;
+
+  if (lastPVT === 'frozen') {
+    // Grounding-Thema empfehlen
+    pvtOverride = true;
+    for (const tid of groundingThemen) {
+      const found = findThemaInKategorien(tid);
+      if (found) { empfohlenesThema = found; break; }
+    }
+    empfGrund = 'PVT-Zustand: Eingefroren — Grounding/Stabilisierung empfohlen';
+  } else if (lastPVT === 'activated') {
+    // Co-Regulation prüfen, aber Phase-Thema bevorzugen wenn vorhanden
+    const phaseThema = findNextPhaseThema(aktivePhase, sid);
+    if (phaseThema) {
+      empfohlenesThema = phaseThema;
+      empfGrund = `Nächstes Thema aus Phase ${aktivePhase.nr} (${aktivePhase.titel || ROADMAP_PHASEN[aktivePhase.nr]?.titel || ''})`;
+    } else {
+      for (const tid of coregThemen) {
+        const found = findThemaInKategorien(tid);
+        if (found) { empfohlenesThema = found; break; }
+      }
+      empfGrund = 'PVT-Zustand: Angespannt — Co-Regulation empfohlen';
+      pvtOverride = true;
+    }
+  } else {
+    // Normal: nächstes Phase-Thema
+    const phaseThema = findNextPhaseThema(aktivePhase, sid);
+    if (phaseThema) {
+      empfohlenesThema = phaseThema;
+      empfGrund = `Nächstes Thema aus Phase ${aktivePhase.nr} (${aktivePhase.titel || ROADMAP_PHASEN[aktivePhase.nr]?.titel || ''})`;
+    }
+  }
+
+  if (!empfohlenesThema) { container.innerHTML = ''; return; }
+
+  const pvtBadge = lastPVT ? `<span class="sitzungsvorschlag-pvt">${pvtLabels[lastPVT] || lastPVT}</span>` : '';
+  const overrideHint = pvtOverride
+    ? `<div class="sitzungsvorschlag-pvt-hint">Basierend auf dem letzten Nervensystem-Zustand wird ein angepasstes Thema vorgeschlagen.</div>`
+    : '';
+
+  container.innerHTML = `
+    <div class="card sitzungsvorschlag-card ${pvtOverride ? 'pvt-override' : ''}">
+      <div class="card-body" style="display:flex;align-items:center;gap:14px;padding:14px 18px;">
+        <div class="sitzungsvorschlag-icon">💡</div>
+        <div style="flex:1;">
+          <div class="sitzungsvorschlag-label">Heute empfohlen ${pvtBadge}</div>
+          <div class="sitzungsvorschlag-thema">${empfohlenesThema.titel}</div>
+          <div class="sitzungsvorschlag-grund">${empfGrund}</div>
+          ${overrideHint}
+        </div>
+        <div class="sitzungsvorschlag-actions">
+          <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">
+            Sitzung starten
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="showQuickEntryPanel('${empfohlenesThema.id}', '${empfohlenesThema.katId || ''}')">
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Hilfsfunktion: Nächstes nicht-abgeschlossenes Thema aus einer Phase
+function findNextPhaseThema(phase, schuelerId) {
+  if (!phase.themen || !phase.themen.length) return null;
+  const s = DB.getSchuelerById(schuelerId);
+  const topicStatus = (s && s.topicStatus) || {};
+
+  for (const t of phase.themen) {
+    const tid = typeof t === 'string' ? t : t.id;
+    const status = topicStatus[tid] || 'nicht-begonnen';
+    if (status !== 'abgeschlossen') {
+      const found = findThemaInKategorien(tid);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+// Hilfsfunktion: Thema-Objekt aus THEMEN_KATEGORIEN finden
+function findThemaInKategorien(themaId) {
+  for (const kat of THEMEN_KATEGORIEN) {
+    const t = kat.themen.find(th => th.id === themaId);
+    if (t) return { ...t, katId: kat.id, katTitel: kat.titel, farbe: kat.farbe };
+  }
+  return null;
+}
+
+// ---- PHASE-TRANSITION-PROMPT ----
+function renderPhaseTransitionPrompt() {
+  let el = document.getElementById('phase-transition-prompt');
+  if (!el) {
+    const ref = document.getElementById('sitzungsvorschlag-widget');
+    if (!ref) return;
+    el = document.createElement('div');
+    el.id = 'phase-transition-prompt';
+    ref.after(el);
+  }
+
+  const sid = APP.currentSchuelerId;
+  const roadmap = DB.getRoadmap(sid);
+  if (!roadmap) { el.innerHTML = ''; return; }
+
+  const aktivePhase = roadmap.phasen.find(p => p.status === 'aktiv');
+  if (!aktivePhase || !aktivePhase.themen || !aktivePhase.themen.length) { el.innerHTML = ''; return; }
+
+  const s = DB.getSchuelerById(sid);
+  const topicStatus = (s && s.topicStatus) || {};
+  const total = aktivePhase.themen.length;
+  const done = aktivePhase.themen.filter(t => {
+    const tid = typeof t === 'string' ? t : t.id;
+    return topicStatus[tid] === 'abgeschlossen';
+  }).length;
+  const pct = Math.round((done / total) * 100);
+
+  // Nur anzeigen wenn ≥ 80%
+  if (pct < 80) { el.innerHTML = ''; return; }
+
+  const nextPhaseNr = aktivePhase.nr + 1;
+  const nextPhaseDef = ROADMAP_PHASEN[nextPhaseNr];
+  if (!nextPhaseDef) { el.innerHTML = ''; return; }
+
+  // Dauer berechnen
+  const startDatum = aktivePhase.startDatum ? new Date(aktivePhase.startDatum) : null;
+  const wochen = startDatum ? Math.round((Date.now() - startDatum.getTime()) / (7 * 24 * 60 * 60 * 1000)) : null;
+  const dauerText = wochen !== null ? ` und seit ${wochen} Woche${wochen !== 1 ? 'n' : ''} aktiv` : '';
+
+  el.innerHTML = `
+    <div class="card phase-transition-card">
+      <div class="card-body" style="display:flex;align-items:flex-start;gap:12px;padding:14px 18px;">
+        <span style="font-size:24px;">🎯</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;">
+            Phase ${aktivePhase.nr} ist zu ${pct}% abgeschlossen
+          </div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
+            ${done} von ${total} Themen erledigt${dauerText}. Bereit für Phase ${nextPhaseNr} (${nextPhaseDef.titel})?
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary btn-sm" onclick="advancePhase(${aktivePhase.nr})">
+              Phase abschließen & weiter
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('phase-transition-prompt').innerHTML=''">
+              Noch nicht
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function advancePhase(currentPhaseNr) {
+  const sid = APP.currentSchuelerId;
+  const roadmap = DB.getRoadmap(sid);
+  if (!roadmap) return;
+
+  const current = roadmap.phasen.find(p => p.nr === currentPhaseNr);
+  if (current) {
+    current.status = 'abgeschlossen';
+    current.endDatum = new Date().toISOString().split('T')[0];
+  }
+
+  const next = roadmap.phasen.find(p => p.nr === currentPhaseNr + 1);
+  if (next) {
+    next.status = 'aktiv';
+    next.startDatum = new Date().toISOString().split('T')[0];
+  }
+
+  DB.saveRoadmap(roadmap);
+  showToast(`Phase ${currentPhaseNr} abgeschlossen — Phase ${currentPhaseNr + 1} gestartet`, 'success');
+  renderDashboard();
+  renderRoadmap();
 }
 
 // ---- RÜCKSCHRITT-PROTOKOLL (SRS < 25 in letzten 3 Sitzungen) ----

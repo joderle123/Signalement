@@ -16038,5 +16038,1214 @@ var WIKI_ARTIKEL = [
     verhaltens_ids: ['parentifiziert'],
     leitfaden_ids: ['elterngespraech'],
     quellen: ['Boszormenyi-Nagy, I. & Spark, G.M. (1973). Invisible Loyalties. Routledge.', 'Hooper, L.M. (2007). The Application of Attachment Theory and Family Systems Theory to the Phenomena of Parentification. The Family Journal.', 'Leu, A. & Becker, S. (2017). Young Carers. In: Becker, F. et al. (Eds.), Young Carers in Europe.']
-  }
+  },
+  // --- Psychose & Schizophrenie ---
+  {
+    id: 'psychose',
+    titel: 'Psychose & Schizophrenie',
+    aliases: ['Psychotisch', 'Schizophrenie', 'Wahn', 'Halluzinationen', 'Stimmenhören', 'Realitätsverlust'],
+    kategorie: 'stoerungsbilder',
+    icon: '🌀',
+    farbe: '#4C1D95',
+    definition: 'Psychose bezeichnet einen Zustand, in dem der Bezug zur Realität verloren geht. Hauptsymptome: Halluzinationen (v.a. Stimmenhören), Wahnideen (Verfolgung, Größe, Beziehung), desorganisiertes Denken und Verhalten. Schizophrenie ist die bekannteste psychotische Störung. Erstmanifestation häufig im Jugendalter (15-25 Jahre). Frühes Erkennen und Behandeln verbessert die Prognose MASSIV.',
+    altersgruppe: 'Erstmanifestation meist 15-25 Jahre. Prodromalphase oft schon ab 12-14 Jahren erkennbar.',
+    praevalenz: 'Schizophrenie: 1% Lebenszeitprävalenz. Psychotische Erlebnisse (subklinisch): Bis 15% der Jugendlichen berichten Stimmenhören.',
+    icd10: { code: 'F20-F29', label: 'Schizophrenie, schizotype und wahnhafte Störungen' },
+    icd11: { code: '6A20-6A2Z', label: 'Schizophrenia and other primary psychotic disorders' },
+    erscheinungsbild: [
+      'Positivsymptome: Halluzinationen (Stimmen, Visionen), Wahnideen (Verfolgung, Gedankenlesen), desorganisierte Sprache',
+      'Negativsymptome: Affektverflachung, Antriebslosigkeit, sozialer Rückzug, Sprachverarmung, Anhedonie',
+      'Kognitive Symptome: Aufmerksamkeitsstörung, Arbeitsgedächtnisdefizite, eingeschränkte exekutive Funktionen',
+      'Prodromalphase: Monate bis Jahre VOR der ersten Psychose: Rückzug, Leistungsknick, seltsame Ideen, Misstrauen, Schlafstörungen, Konzentrationsprobleme',
+      'Desorganisation: Zerfahrene Sprache, unverständliche Gedankensprünge, bizarres Verhalten, inadäquater Affekt',
+      'Katatonie: Bewegungsstarre, Negativismus, Erregungszustände — selten bei Jugendlichen aber NOTFALL'
+    ],
+    ursachen: [
+      { faktor: 'Vulnerabilitäts-Stress-Modell', text: 'Genetische Vulnerabilität (Heritabilität 80%) + Umweltstressoren (Trauma, Cannabis, Migration, Urbanität) = Psychose. Gene laden die Waffe, Umwelt drückt ab.' },
+      { faktor: 'Neurobiologisch', text: 'Dopamin-Hypothese: Überschuss im mesolimbischen System (Positivsymptome), Mangel im präfrontalen Cortex (Negativsymptome). Glutamat-Dysregulation. Neurodevelopmentale Störung.' },
+      { faktor: 'Cannabis', text: 'THC erhöht Psychose-Risiko um Faktor 2-5, besonders bei frühem Beginn (<15 Jahre) und hoher Potenz. Bei genetischer Vulnerabilität: Deutlich höheres Risiko.' },
+      { faktor: 'Trauma', text: 'Kindheitstrauma erhöht Psychose-Risiko 3-fach. Dissoziative Symptome können in Psychose übergehen. Stimmenhören oft traumaassoziiert.' },
+      { faktor: 'PVT-Perspektive', text: 'Chronische Sympathikus-Überaktivierung → Neuroception massiv gestört: Alles wird als Bedrohung wahrgenommen → Wahnhaftes Erleben als "Erklärung" für die ständige Angst.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Dissoziation', unterschied: 'Dissoziation: Weiß "etwas stimmt nicht". Psychose: Volle Überzeugung der Realität des Erlebten. Stimmenhören kommt bei beiden vor!' },
+      { was: 'Substanzinduzierte Psychose', unterschied: 'Cannabis/Amphetamine/LSD können Psychose auslösen. Klingt nach Absetzen ab (Tage-Wochen). Wenn >1 Monat: V.a. primäre Psychose.' },
+      { was: 'Bipolare Störung', unterschied: 'Manie: Grandiosität, Hyperaktivität, reduziertes Schlafbedürfnis. Kann psychotische Symptome haben. Stimmung ist das Leitsymptom, nicht der Wahn.' },
+      { was: 'PTBS', unterschied: 'Flashbacks können halluzinationsartig sein. Aber: Trauma-Kontext bekannt, kein systematischer Wahn.' }
+    ],
+    komorbiditaeten: ['Depression (50%)', 'Substanzmissbrauch (40-50%)', 'Angststörungen (30%)', 'Suizidalität (5-10% Suizidrate!)', 'PTBS (30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Antipsychotika', evidenz: '★★★', beschreibung: 'Medikamentöse Behandlung ist ESSENTIELL. Atypische Antipsychotika (Risperidon, Aripiprazol) als First-Line. Bei Jugendlichen: Niedrig dosieren, langsam steigern.' },
+      { methode: 'Kognitive Therapie für Psychosen (CBTp)', evidenz: '★★★', beschreibung: 'Wahnüberzeugungen sanft hinterfragen, alternative Erklärungen explorieren, Umgang mit Stimmen lernen. NICHT konfrontativ!' },
+      { methode: 'Familienintervention', evidenz: '★★★', beschreibung: 'Psychoedukation für Familie, Expressed Emotion reduzieren. Reduziert Rückfallrate um 50%. Familie ist entscheidend.' },
+      { methode: 'Frühintervention', evidenz: '★★★', beschreibung: 'Spezialisierte Frühinterventionsprogramme (TIPS, OPUS) bei Erstpsychose: Besser Prognose, weniger Rückfälle, bessere Funktion.' }
+    ],
+    praxis_tipps: [
+      'NICHT die Wahnideen diskutieren oder "ausreden". Auch NICHT bestätigen. Stattdessen: "Ich sehe, dass dich das belastet"',
+      'Prodromalsymptome erkennen: Plötzlicher Leistungsknick + sozialer Rückzug + seltsame Ideen bei 15-25-Jährigen → SOFORT abklären!',
+      'Cannabis-Psychose: Wenn Jugendlicher nach Cannabis-Konsum "komisch" wird → nicht abwarten → Psychiatrie',
+      'Stimmenhören allein ist KEINE Psychose: 15% gesunder Jugendlicher hören Stimmen. Erst in Kombination mit Leidensdruck + Funktionseinschränkung pathologisch',
+      'Suizidalität systematisch abfragen: Suizidrate bei Schizophrenie 5-10%. Besonders in der Erholungsphase!',
+      'Medikamenten-Compliance unterstützen: Nebenwirkungen ernst nehmen, gemeinsam mit Psychiater Lösungen finden',
+      'Reizreduktion: Ruhige Umgebung, klare Strukturen, wenig Stimulation bei akuter Psychose'
+    ],
+    wann_ueberweisen: 'BEI JEDEM VERDACHT sofort Kinder-/Jugendpsychiater. Psychose ist ein psychiatrischer NOTFALL. Nicht abwarten. Nicht selbst behandeln. DOP (Duration of Untreated Psychosis) so kurz wie möglich!',
+    luxemburg_spezifisch: 'CHL: Kinder- und Jugendpsychiatrische Notaufnahme. CHNP Ettelbréck: Stationäre Psychose-Behandlung. SOS Détresse: 45 45 45. Urgences psychiatriques CHL: 4411-6262.',
+    verwandte_wiki: ['dissoziation', 'substanzkonsum', 'depression'],
+    screening_domains: ['psychose'],
+    themen_ids: ['realitaetswahrnehmung', 'medikation'],
+    verhaltens_ids: ['psychotisch'],
+    leitfaden_ids: [],
+    quellen: ['NICE (2014). Psychosis and Schizophrenia in Children and Young People. National Institute for Health and Care Excellence.', 'Remschmidt, H. (2011). Schizophrene Erkrankungen im Kindes- und Jugendalter. Springer.', 'Fusar-Poli, P. et al. (2013). The Psychosis High-Risk State. JAMA Psychiatry.']
+  },
+  // --- Borderline ---
+  {
+    id: 'borderline',
+    titel: 'Borderline-Persönlichkeitsstörung (Emotional instabile PS)',
+    aliases: ['BPS', 'Borderline', 'Emotional instabil', 'EIPS', 'Persönlichkeitsstörung'],
+    kategorie: 'stoerungsbilder',
+    icon: '🌊',
+    farbe: '#EC4899',
+    definition: 'Die Borderline-Persönlichkeitsstörung (BPS) ist gekennzeichnet durch ein tiefgreifendes Muster von Instabilität in zwischenmenschlichen Beziehungen, im Selbstbild und in den Affekten sowie durch deutliche Impulsivität. Bei Jugendlichen spricht man von "BPS-Zügen" oder "Emerging BPS" — die volle Diagnose wird erst ab 16-18 Jahren gestellt, aber Frühintervention ist ENTSCHEIDEND.',
+    altersgruppe: 'Diagnose ab 16-18 Jahre. BPS-Züge erkennbar ab 12-14 Jahre. Frühes Erkennen verbessert Prognose massiv.',
+    praevalenz: '1-3% der Allgemeinbevölkerung. Bei stationären Jugendpsychiatrie-Patienten: 30-50%. 75% weiblich diagnostiziert (bei Jungen: mehr externalisierend → oft als CD diagnostiziert).',
+    icd10: { code: 'F60.31', label: 'Emotional instabile Persönlichkeitsstörung, Borderline-Typ' },
+    icd11: { code: '6D10', label: 'Personality Disorder with Borderline Pattern' },
+    erscheinungsbild: [
+      'Emotionale Instabilität: Rasche, intensive Stimmungswechsel (Minuten bis Stunden), chronische Leere',
+      'Beziehungsinstabilität: Idealisierung → Entwertung ("Ich liebe dich / Ich hasse dich"), Verlassensangst',
+      'Identitätsstörung: "Wer bin ich?", wechselnde Werte, Ziele, Geschmack, Freundeskreis',
+      'Impulsivität: SVV, Substanzen, riskantes Sexualverhalten, Essanfälle, Geldausgeben, Wutausbrüche',
+      'Selbstverletzung & Suizidalität: 70-80% SVV, 10% Suizid. IMMER ernst nehmen!',
+      'Dissoziative Symptome: Unter Stress: Depersonalisation, Derealisation, paranoide Ideen',
+      'Chronische Leere: "Ich fühle nichts", "Da ist ein Loch in mir", "Ich existiere nicht richtig"'
+    ],
+    ursachen: [
+      { faktor: 'Biosazialer Ansatz (Linehan)', text: 'Emotionale Vulnerabilität (biologisch: hochsensibles Nervensystem) + invalidierendes Umfeld ("Stell dich nicht so an", "Das ist doch nicht so schlimm") = BPS.' },
+      { faktor: 'Trauma', text: '70% berichten Kindheitstrauma (Missbrauch, Vernachlässigung, sexuelle Gewalt). Aber: Trauma ist weder notwendig noch hinreichend — auch ohne Trauma möglich.' },
+      { faktor: 'Genetisch', text: 'Heritabilität 40-60%. Genetische Vulnerabilität für emotionale Dysregulation und Impulsivität.' },
+      { faktor: 'Neurobiologisch', text: 'Überaktive Amygdala, reduzierter präfrontaler Cortex, gestörte Serotonin-Regulation. Das Gehirn ist "emotional hochgetaktet" bei gleichzeitig schwacher Bremse.' },
+      { faktor: 'PVT-Perspektive', text: 'Chronisch instabile Neuroception: Ständiges Schwanken zwischen Sympathikus (Wut, Panik) und dorsalem Vagus (Leere, Dissoziation). Ventraler Vagus (Sicherheit, Verbindung) kaum erreichbar.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Bipolare Störung', unterschied: 'Bipolar: Stimmungswechsel über Wochen/Monate. BPS: Stimmungswechsel in Minuten/Stunden, situationsabhängig.' },
+      { was: 'ADHS', unterschied: 'ADHS: Impulsivität ohne Verlassensangst/Identitätsstörung. 30% Komorbidität!' },
+      { was: 'PTBS', unterschied: 'Massive Überlappung (70% Komorbidität). Traumafokussierte Behandlung oft parallel nötig.' },
+      { was: 'Normale Adoleszenz', unterschied: 'Pubertät: Identitätssuche, Stimmungsschwankungen normal. BPS: Intensität, Dauer, Funktionseinschränkung überschreiten Normalbereich deutlich.' }
+    ],
+    komorbiditaeten: ['Depression (80%)', 'PTBS (55%)', 'Angststörungen (50%)', 'Essstörungen (25%)', 'Substanzmissbrauch (35%)', 'ADHS (30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'DBT-A (Dialektisch-Behaviorale Therapie für Adoleszente)', evidenz: '★★★', beschreibung: 'Goldstandard. Skills-Training (Achtsamkeit, Stresstoleranz, Emotionsregulation, zwischenmenschliche Fertigkeiten) + Einzeltherapie + Telefoncoaching. Manualisiert für 12-18-Jährige.' },
+      { methode: 'MBT-A (Mentalisierungsbasierte Therapie für Adoleszente)', evidenz: '★★★', beschreibung: 'Fähigkeit fördern, eigenes und fremdes Verhalten in Bezug auf innere Zustände zu verstehen. Besonders wirksam bei Beziehungsproblemen.' },
+      { methode: 'STEPPS (Systems Training for Emotional Predictability)', evidenz: '★★☆', beschreibung: 'Gruppenbasiert, 20 Wochen. Kombination aus KVT + Skills + Systemarbeit. Ergänzt Einzeltherapie.' },
+      { methode: 'Schematherapie', evidenz: '★★☆', beschreibung: 'Frühe maladaptive Schemata (z.B. Verlassenheit, Defektivität) bearbeiten. Modi-Arbeit: "Welcher Teil von dir spricht gerade?"' }
+    ],
+    praxis_tipps: [
+      'Validieren, validieren, validieren: "Deine Gefühle sind verständlich" — das ist die Basis JEDER Intervention',
+      'Grenzen setzen MIT Beziehungsangebot: "Ich kann jetzt nicht telefonieren UND ich bin morgen um 10 für dich da"',
+      'Spaltung (Splitting) im Team erkennen: "Sie sagt Ihnen, ich bin der Böse" — Teamkommunikation ist ESSENTIELL',
+      'SVV nicht dramatisieren, nicht ignorieren: Sachlich versorgen, dann Skills-Alternative besprechen',
+      'Notfallplan erstellen: Stufenplan bei Krise (1. Skills, 2. Bezugsperson anrufen, 3. Notdienst)',
+      'Eigene Grenzen kennen: BPS-Klienten triggern heftige Gegenübertragung. Supervision ist PFLICHT',
+      'Hoffnung vermitteln: BPS hat GUTE Prognose — 85% erreichen nach 10 Jahren Remission. Frühintervention verkürzt den Leidensweg.'
+    ],
+    wann_ueberweisen: 'Bei BPS-Verdacht: IMMER spezialisierte Diagnostik und Therapie (DBT-A oder MBT-A). Bei akuter Suizidalität: Psychiatrischer Notdienst. Nicht selbst therapieren ohne DBT-Ausbildung!',
+    luxemburg_spezifisch: 'CHL Kinder-/Jugendpsychiatrie: DBT-Angebote. CHNP: Stationäre BPS-Behandlung. SOS Détresse: 45 45 45. DBT-Fortbildungen über FEDAS.',
+    verwandte_wiki: ['selbstverletzung', 'suizidalitaet', 'emotionsregulation', 'dissoziation', 'trauma-ptbs'],
+    screening_domains: ['emotion', 'selbstverletzung'],
+    themen_ids: ['emotionsregulation', 'selbstwert', 'beziehungsgestaltung', 'impulskontrolle'],
+    verhaltens_ids: ['emotional-dysreguliert', 'selbstverletzend'],
+    leitfaden_ids: ['sorgengespraech'],
+    quellen: ['Linehan, M.M. (2015). DBT Skills Training Manual. Guilford.', 'Kaess, M. et al. (2014). Borderline-Persönlichkeitsstörung im Jugendalter. Kohlhammer.', 'Bateman, A. & Fonagy, P. (2016). Mentalization-Based Treatment for Personality Disorders. Oxford.']
+  },
+  // --- Schizoide Persönlichkeitsstörung ---
+  {
+    id: 'schizoide-ps',
+    titel: 'Schizoide Persönlichkeitsstörung',
+    aliases: ['Schizoid', 'Einzelgänger', 'Emotionale Kälte', 'Kontaktvermeidung', 'Introversion extrem'],
+    kategorie: 'stoerungsbilder',
+    icon: '🧊',
+    farbe: '#64748B',
+    definition: 'Tiefgreifendes Muster von Distanziertheit in sozialen Beziehungen und eingeschränkter emotionaler Ausdrucksfähigkeit. Schizoide Personen wirken gleichgültig gegenüber Lob und Kritik, haben wenig Interesse an sozialen Kontakten und bevorzugen Einzelaktivitäten. WICHTIG: Nicht verwechseln mit Autismus, sozialer Angst oder Depression! Bei Jugendlichen selten als volle PS diagnostiziert — eher als "schizoide Züge".',
+    altersgruppe: 'Volldiagnose ab 18 Jahre. Schizoide Züge erkennbar ab 14-16 Jahre. Häufiger bei Jungen.',
+    praevalenz: '1-3% der Allgemeinbevölkerung. In der Jugendhilfe selten als Primärdiagnose.',
+    icd10: { code: 'F60.1', label: 'Schizoide Persönlichkeitsstörung' },
+    icd11: { code: '6D10', label: 'Personality Disorder with Detachment pattern' },
+    erscheinungsbild: [
+      'Wenig bis kein Wunsch nach sozialen Beziehungen — "Ich brauche niemanden"',
+      'Bevorzugt Einzelaktivitäten: Computerspiele, Lesen, Einzelsport',
+      'Eingeschränkter Affekt: Flacher Gesichtsausdruck, monotone Stimme, wenig Emotionen zeigend',
+      'Gleichgültigkeit gegenüber Lob und Kritik anderer',
+      'Wenig Interesse an sexuellen Erfahrungen (bei Jugendlichen: auffällig im Peer-Vergleich)',
+      'Reiche innere Fantasiewelt — oft kreativ, aber teilt wenig davon mit',
+      'Kein Leidensdruck durch die Isolation (anders als bei sozialer Angst!)'
+    ],
+    ursachen: [
+      { faktor: 'Genetisch', text: 'Häufiger bei Verwandten von Schizophrenie-Patienten. Möglicher Zusammenhang mit Schizophrenie-Spektrum, aber OHNE Psychose.' },
+      { faktor: 'Bindung', text: 'Extremes vermeidendes Bindungsmuster: Kind hat gelernt, dass emotionale Nähe gefährlich oder sinnlos ist. Totale emotionale Selbstgenügsamkeit als Überlebensstrategie.' },
+      { faktor: 'Neurobiologisch', text: 'Möglicherweise reduzierte Oxytozin-Reaktivität, veränderte Belohnungsverarbeitung bei sozialen Reizen.' },
+      { faktor: 'PVT-Perspektive', text: 'Chronischer dorsaler Vagus-Zustand: Shutdown des sozialen Engagements. Das Nervensystem hat "aufgegeben", andere Menschen als Quelle von Sicherheit zu nutzen.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Soziale Angst', unterschied: 'Soziale Angst: WILL Kontakt, KANN aber nicht (Angst). Schizoid: WILL keinen Kontakt, hat kein Bedürfnis danach.' },
+      { was: 'Autismus (ASS)', unterschied: 'ASS: Defizit in sozialer Kognition (Theory of Mind). Schizoid: Soziale Kognition intakt, aber kein INTERESSE. Überlappung möglich!' },
+      { was: 'Depression', unterschied: 'Depression: Sozialer Rückzug als SYMPTOM (vorher anders). Schizoid: Immer so gewesen, kein Leidensdruck.' },
+      { was: 'Schizotypie', unterschied: 'Schizotypie: Exzentrisches Denken, magisches Denken, Beziehungsideen. Schizoid: "Normal" denkend, nur emotional distanziert.' }
+    ],
+    komorbiditaeten: ['Depression (30%)', 'Schizotypie (Spektrum)', 'Angststörungen (20%)', 'Substanzmissbrauch (als Selbstmedikation)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Langzeit-Psychotherapie', evidenz: '★★☆', beschreibung: 'Beziehungsaufbau extrem langsam und vorsichtig. Therapeutische Beziehung als korrigierende Erfahrung. Keine schnellen Erfolge erwarten.' },
+      { methode: 'Gruppentherapie', evidenz: '★★☆', beschreibung: 'Paradoxerweise wirksam: Soziale Fertigkeiten in geschütztem Rahmen üben. Niedrige Intensität, kein Druck.' },
+      { methode: 'Schematherapie', evidenz: '★★☆', beschreibung: 'Schema "Emotionale Deprivation" und "Isolation" bearbeiten. Zugang über Imagination oft leichter als über Gespräch.' },
+      { methode: 'Kreativtherapien', evidenz: '★☆☆', beschreibung: 'Kunst-/Musiktherapie: Emotionaler Ausdruck über nonverbale Medien. Weniger bedrohlich als direktes Gespräch.' }
+    ],
+    praxis_tipps: [
+      'NICHT zum Kontakt zwingen: Jeder Zwang zur Gruppenaktivität verstärkt den Rückzug',
+      'Parallel-Kontakt: Gemeinsam etwas TUN (basteln, spazieren, spielen) statt gegenüber REDEN',
+      'Wenig Druck, viel Geduld: Beziehungsaufbau dauert Monate bis Jahre',
+      'Interesse an der Innenwelt zeigen: "Worüber denkst du gerne nach?" — oft reiche Fantasien',
+      'Rückzug respektieren: Eigenes Zimmer als sicherer Raum, feste Rückzugszeiten erlauben',
+      'NICHT pathologisieren wenn kein Leidensdruck: Manche Menschen sind einfach introvertiert — erst bei BEEINTRÄCHTIGUNG ist es eine Störung'
+    ],
+    wann_ueberweisen: 'Bei Verdacht auf schizoide PS: Psychiatrische Diagnostik (Differentialdiagnose ASS, Depression, Schizotypie). Bei zunehmendem Rückzug + seltsamen Ideen: Prodromal-Psychose ausschließen!',
+    luxemburg_spezifisch: 'CHL Kinder-/Jugendpsychiatrie: Diagnostik. CePAS: Schulische Begleitung für isolierte Jugendliche.',
+    verwandte_wiki: ['schizotype-stoerung', 'autismus', 'soziale-angst', 'psychose'],
+    screening_domains: ['sozial'],
+    themen_ids: ['sozialkompetenz', 'beziehungsgestaltung'],
+    verhaltens_ids: ['sozialer-rueckzug'],
+    leitfaden_ids: [],
+    quellen: ['Esterberg, M.L. et al. (2010). Schizotypal Personality Disorder in Adolescents. Schizophrenia Bulletin.', 'Triebwasser, J. et al. (2012). Schizoid Personality Disorder. Journal of Personality Disorders.']
+  },
+  // --- Schizotype Störung ---
+  {
+    id: 'schizotype-stoerung',
+    titel: 'Schizotype Störung',
+    aliases: ['Schizotypie', 'Schizotypisch', 'Magisches Denken', 'Exzentrisch', 'Beziehungsideen'],
+    kategorie: 'stoerungsbilder',
+    icon: '🔮',
+    farbe: '#7C3AED',
+    definition: 'Die schizotype Störung liegt im Spektrum zwischen normaler Persönlichkeit und Schizophrenie. Gekennzeichnet durch exzentrisches Verhalten, ungewöhnliche Wahrnehmungserlebnisse, magisches Denken und soziale Defizite. Anders als bei Schizophrenie: KEINE anhaltenden Halluzinationen oder Wahn. 10-25% entwickeln später eine Schizophrenie — daher ist Monitoring wichtig.',
+    altersgruppe: 'Auffälligkeiten ab Kindheit/Jugend. Im ICD-10 als Störung (F21), nicht als Persönlichkeitsstörung klassifiziert.',
+    praevalenz: '3-5% der Allgemeinbevölkerung (Spektrum). Vollbild: Ca. 1-2%.',
+    icd10: { code: 'F21', label: 'Schizotype Störung' },
+    icd11: { code: '6A22', label: 'Schizotypal Disorder' },
+    erscheinungsbild: [
+      'Magisches Denken: Glaube an Telepathie, "sechsten Sinn", Vorahnungen, übernatürliche Kräfte',
+      'Beziehungsideen: "Die Leute reden über mich", "Das Lied im Radio war eine Botschaft an mich" — OHNE volle Wahnüberzeugung',
+      'Ungewöhnliche Wahrnehmungen: "Ich spüre Präsenzen", Schatten sehen, Geräusche hören — flüchtig, nicht anhaltend',
+      'Exzentrische Erscheinung: Ungewöhnliche Kleidung, seltsame Sprechweise, inadäquater Affekt',
+      'Soziale Angst: Aber NICHT besser werdend bei Vertrautheit (anders als soziale Phobie)',
+      'Vages, metaphorisches Denken: Umständlich, ausschweifend, manchmal schwer zu folgen',
+      'Misstrauen: Argwohn gegenüber anderen, aber keine paranoiden Wahnideen'
+    ],
+    ursachen: [
+      { faktor: 'Genetisch', text: 'Starke genetische Überlappung mit Schizophrenie. Verwandte 1. Grades von Schizophrenie-Patienten haben 10-fach erhöhtes Risiko für Schizotypie.' },
+      { faktor: 'Neurobiologisch', text: 'Ähnliche (aber mildere) Dopamin-Dysregulation wie bei Schizophrenie. Reduziertes Volumen im Temporallappen.' },
+      { faktor: 'Umwelt', text: 'Kindheitstrauma, soziale Isolation, Urbanität erhöhen das Risiko — wie bei Schizophrenie.' },
+      { faktor: 'PVT-Perspektive', text: 'Neuroception chronisch fehlkalibriert: Die Umwelt wird als subtil bedrohlich/bedeutungsvoll wahrgenommen. Sozialer Rückzug als Schutz vor der "überladenen" Wahrnehmung.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Schizophrenie', unterschied: 'Schizophrenie: Voller Wahn, anhaltende Halluzinationen, schwere Desorganisation. Schizotypie: Abgeschwächte Form, Realitätsprüfung weitgehend intakt.' },
+      { was: 'Schizoide PS', unterschied: 'Schizoid: Nur emotional distanziert, KEIN magisches Denken, KEINE exzentrischen Überzeugungen. Schizotypie: Kognitive Eigenheiten sind das Kernsymptom.' },
+      { was: 'Autismus (ASS)', unterschied: 'ASS: Soziale Defizite + repetitive Verhaltensweisen, OHNE magisches Denken. Schizotypie: Exzentrisches DENKEN im Vordergrund.' },
+      { was: 'Normale Adoleszenz', unterschied: 'Jugendliche können spirituelle/magische Phasen haben. Pathologisch erst bei: Funktionseinschränkung + soziale Isolation + Chronizität.' }
+    ],
+    komorbiditaeten: ['Depression (50%)', 'Soziale Angst (40%)', 'Schizophrenie-Übergang (10-25%)', 'Substanzmissbrauch (20%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'KVT', evidenz: '★★☆', beschreibung: 'Kognitive Umstrukturierung bei Beziehungsideen und magischem Denken. Sanft, nicht konfrontativ. Realitätsprüfung als gemeinsames Experiment.' },
+      { methode: 'Soziale Fertigkeitstraining', evidenz: '★★☆', beschreibung: 'Konkretes Üben sozialer Interaktionen. Nonverbale Kommunikation, Small Talk, Perspektivenübernahme.' },
+      { methode: 'Niedrig dosierte Antipsychotika', evidenz: '★★☆', beschreibung: 'Bei starkem Leidensdruck/ausgeprägten Symptomen. Nicht als Standardbehandlung, nur bei Bedarf.' },
+      { methode: 'Monitoring auf Psychose-Übergang', evidenz: '★★★', beschreibung: 'Regelmäßige Abklärung: Werden die Symptome stärker? Halluzinationen anhaltender? Wahn ausgeprägter? → Frühintervention!' }
+    ],
+    praxis_tipps: [
+      'Magisches Denken NICHT lächerlich machen: "Erzähl mir mehr darüber" statt "Das gibt es nicht"',
+      'Exzentrizität respektieren: Nicht alles ist pathologisch. Manche Eigenheiten sind einfach Persönlichkeit',
+      'Monitoring: Werden die Symptome STÄRKER? Neue Symptome? → Psychiatrische Re-Evaluation',
+      'Sozialen Kontakt sanft fördern: Kleingruppen, strukturierte Aktivitäten, kein Zwang',
+      'Cannabis-Konsum thematisieren: Cannabis + Schizotypie = deutlich erhöhtes Psychose-Risiko!',
+      'Familie einbeziehen: Psychoedukation über Schizophrenie-Spektrum, Frühwarnzeichen einer Psychose'
+    ],
+    wann_ueberweisen: 'Bei V.a. Schizotypie: Immer psychiatrische Diagnostik! Wegen Psychose-Risiko regelmäßiges Monitoring. Bei Zunahme der Symptome oder Cannabis-Konsum: Sofort Psychiatrie.',
+    luxemburg_spezifisch: 'CHL Kinder-/Jugendpsychiatrie: Diagnostik und Frühintervention. CHNP: Monitoring-Programme.',
+    verwandte_wiki: ['schizoide-ps', 'psychose', 'soziale-angst'],
+    screening_domains: ['psychose', 'sozial'],
+    themen_ids: ['realitaetswahrnehmung', 'sozialkompetenz'],
+    verhaltens_ids: ['sozialer-rueckzug'],
+    leitfaden_ids: [],
+    quellen: ['Raine, A. (2006). Schizotypal Personality. Schizophrenia Bulletin.', 'Debbané, M. & Barrantes-Vidal, N. (2015). Schizotypy from a Developmental Perspective. Schizophrenia Bulletin.']
+  },
+  // --- Narzisstische PS ---
+  {
+    id: 'narzisstische-ps',
+    titel: 'Narzisstische Persönlichkeitsstörung',
+    aliases: ['Narzissmus', 'NPS', 'Grandiosität', 'Empathiemangel', 'Selbstüberschätzung'],
+    kategorie: 'stoerungsbilder',
+    icon: '👑',
+    farbe: '#D97706',
+    definition: 'Tiefgreifendes Muster von Grandiosität (in Fantasie oder Verhalten), Bedürfnis nach Bewunderung und Mangel an Empathie. WICHTIG: Narzisstische Züge in der Adoleszenz sind NORMAL (Identitätsentwicklung). Die Störung liegt erst vor wenn: Chronisch, rigide, funktionsbeeinträchtigend, und VOR ALLEM: Leidensdruck (oft verdeckt). Hinter der grandiosen Fassade: Extrem fragiles Selbstwertgefühl.',
+    altersgruppe: 'Volldiagnose ab 18 Jahre. Narzisstische Züge in der Pubertät sind NORMAL. Pathologisch erst bei Chronizität + Funktionsbeeinträchtigung.',
+    praevalenz: '0.5-1% (volle PS). Narzisstische Züge: Deutlich häufiger, besonders in der Adoleszenz. 75% männlich diagnostiziert.',
+    icd10: { code: 'F60.81', label: 'Narzisstische Persönlichkeitsstörung (im ICD-10 unter Sonstige)' },
+    icd11: { code: '6D10', label: 'Personality Disorder (Trait: Negative Affectivity, Antagonism)' },
+    erscheinungsbild: [
+      'Grandiosität: Übertriebenes Gefühl eigener Wichtigkeit, Fantasien von Macht/Erfolg/Schönheit',
+      'Bewunderungsbedürfnis: Ständige Bestätigung nötig, empfindlich bei ausbleibender Anerkennung',
+      'Empathiemangel: Schwierigkeiten, sich in andere hineinzuversetzen, nutzt andere für eigene Ziele',
+      'Neid: Neidisch auf andere ODER glaubt, andere seien neidisch auf ihn/sie',
+      'Arrogantes Verhalten: Herablassend, anspruchsvoll, erwartet Sonderbehandlung',
+      'Vulnerabler Narzissmus (versteckt): Überempfindlich, depressiv, sozialer Rückzug, Scham — hinter der Fassade',
+      'Bei Jugendlichen: "Ich bin besser als alle", Mobbing von "Schwächeren", Wutausbrüche bei Kritik, ABER: Oft extrem unsicher dahinter'
+    ],
+    ursachen: [
+      { faktor: 'Parentale Überbewertung', text: 'Eltern vermitteln: "Du bist besonders, besser als andere." Kind lernt: Mein Wert hängt von meiner Überlegenheit ab. ODER: Emotionale Vernachlässigung → Grandiosität als Kompensation.' },
+      { faktor: 'Bindung', text: 'Unsichere Bindung: Kind wird für LEISTUNG geliebt, nicht für sein SEIN. Bedingungslose Liebe fehlt → Selbstwert muss ständig durch Externe bestätigt werden.' },
+      { faktor: 'Neurobiologisch', text: 'Reduzierte Aktivität in der Insula (Empathie-Zentrum). Veränderte Cortisol-Reaktivität bei narzisstischer Kränkung.' },
+      { faktor: 'PVT-Perspektive', text: 'Grandioses Selbstbild als Sympathikus-Schutzstrategie: "Wenn ich stark und überlegen bin, kann mich niemand verletzen." Die Fassade schützt ein extrem verletzliches Nervensystem.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Adoleszenz', unterschied: 'Pubertät: Vorübergehende Egozentrik, normal. NPS: Chronisch, rigide, funktionsbeeinträchtigend, keine Fähigkeit zur Perspektivenübernahme.' },
+      { was: 'Antisoziale PS', unterschied: 'Antisozial: Regelbruch + Täuschung ohne Scham. NPS: Grandiosität + Bewunderungsbedürfnis. Überlappung möglich.' },
+      { was: 'Bipolare Manie', unterschied: 'Manie: Episodisch (Wochen), mit Schlafveränderung. NPS: Chronisch, stabil über Jahre.' }
+    ],
+    komorbiditaeten: ['Depression (50%, v.a. bei Kränkung)', 'Substanzmissbrauch (25%)', 'Andere Persönlichkeitsstörungen (30%)', 'Angststörungen (30%)', 'Essstörungen (v.a. bei Frauen)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Schematherapie', evidenz: '★★★', beschreibung: 'Modi-Arbeit: "Verwöhntes Kind", "Fordernder Elternteil", "Verletzliches Kind" unter der Fassade erreichen. Fokus auf emotionale Bedürfnisse.' },
+      { methode: 'Übertragungsfokussierte Psychotherapie (TFP)', evidenz: '★★☆', beschreibung: 'Kernow: In der therapeutischen Beziehung narzisstische Muster erleben und reflektieren.' },
+      { methode: 'MBT (Mentalisierungsbasiert)', evidenz: '★★☆', beschreibung: 'Fähigkeit zur Perspektivenübernahme und Empathie fördern. Eigene und fremde innere Zustände erkennen.' },
+      { methode: 'Gruppentherapie', evidenz: '★★☆', beschreibung: 'Konfrontation mit Peer-Feedback in geschütztem Rahmen. Wirkungsvoller als Einzeltherapie, weil andere zurückmelden.' }
+    ],
+    praxis_tipps: [
+      'Die Fassade nicht angreifen: Direkte Konfrontation führt zu narzisstischer Wut oder Abbruch',
+      'Das verletzliche Kind HINTER der Fassade sehen: "Was wäre, wenn du NICHT der Beste sein müsstest?"',
+      'Empathie MODELLIEREN, nicht einfordern: "Wie könnte Lisa sich gefühlt haben?" — als Experiment, nicht als Vorwurf',
+      'Narzisstische Kränkungen antizipieren: Situationen, in denen der Jugendliche "verliert" oder kritisiert wird → vorher begleiten',
+      'Stärken anerkennen UND begrenzen: "Du bist gut in X — UND andere sind auch gut in Sachen"',
+      'Im Team: Nicht spalten lassen — narzisstische Jugendliche triangulieren gerne ("Aber Herr X hat gesagt...")'
+    ],
+    wann_ueberweisen: 'Bei V.a. narzisstische PS: Psychiatrische Diagnostik erst ab 16-18. Bei narzisstischer Krise (Depression nach Kränkung): Suizidalität abklären! Bei Mobbing/Gewalt: Intervention sofort.',
+    luxemburg_spezifisch: 'CHL Kinder-/Jugendpsychiatrie: Diagnostik. Schematherapie-Ausbildung über IST-L (Institut für Schematherapie).',
+    verwandte_wiki: ['borderline', 'conduct-disorder', 'depression'],
+    screening_domains: ['sozial'],
+    themen_ids: ['selbstwert', 'sozialkompetenz', 'empathie'],
+    verhaltens_ids: ['aggressiv', 'manipulativ'],
+    leitfaden_ids: ['konfliktgespraech'],
+    quellen: ['Kernberg, O.F. (2016). Narcissistic Personality Disorder. Oxford.', 'Ronningstam, E. (2005). Identifying and Understanding the Narcissistic Personality. Oxford.', 'Young, J.E. et al. (2003). Schema Therapy. Guilford.']
+  },
+  // --- Autismus-Spektrum-Störung ---
+  {
+    id: 'autismus',
+    titel: 'Autismus-Spektrum-Störung (ASS)',
+    aliases: ['Autismus', 'Asperger', 'ASS', 'Neurodivergenz', 'Spektrum', 'ASD'],
+    kategorie: 'stoerungsbilder',
+    icon: '🧩',
+    farbe: '#6366F1',
+    definition: 'Neurodevelopmentale Störung mit Schwierigkeiten in der sozialen Kommunikation/Interaktion und eingeschränkten, repetitiven Verhaltensweisen/Interessen. ASS ist ein SPEKTRUM: Von Menschen mit hohem Unterstützungsbedarf bis zu solchen mit "unsichtbarem" Autismus (ehem. Asperger). KEINE Krankheit, sondern eine andere Art der Wahrnehmung und Informationsverarbeitung. "Asperger-Syndrom" wird seit ICD-11 nicht mehr separat diagnostiziert.',
+    altersgruppe: 'Lebenslang. Diagnose idealerweise in Kindheit, aber viele (v.a. Mädchen!) werden erst in der Adoleszenz oder als Erwachsene diagnostiziert.',
+    praevalenz: '1-2% der Bevölkerung. Jungen 3-4x häufiger diagnostiziert (Mädchen werden oft übersehen: "Masking"). Zunehmende Diagnoserate durch bessere Erkennung.',
+    icd10: { code: 'F84', label: 'Tiefgreifende Entwicklungsstörungen (F84.0 Autismus, F84.5 Asperger)' },
+    icd11: { code: '6A02', label: 'Autism Spectrum Disorder' },
+    erscheinungsbild: [
+      'Soziale Kommunikation: Schwierigkeiten mit Blickkontakt, Mimik lesen, Ironie/Sarkasmus verstehen, Small Talk',
+      'Soziale Interaktion: Probleme Freundschaften aufzubauen/zu halten, "ungeschriebene Regeln" verstehen, Gruppendynamik',
+      'Eingeschränkte Interessen: Intensive Spezialinteressen (Züge, Dinosaurier, Programmieren...), Wissensinsel',
+      'Repetitives Verhalten: Stimming (Handflattern, Schaukeln, Summen), Rituale, Routinen-Bedürfnis',
+      'Sensorische Besonderheiten: Überempfindlichkeit (Geräusche, Texturen, Licht) ODER Unterempfindlichkeit',
+      'Meltdowns/Shutdowns: Reizüberflutung → Zusammenbruch (Meltdown: nach außen) oder Rückzug (Shutdown: nach innen)',
+      'Masking (v.a. Mädchen): "Normales" Verhalten kopieren → extrem erschöpfend, führt zu Burnout',
+      'Stärken: Ehrlichkeit, Detailblick, Expertenwissen, Gerechtigkeitssinn, logisches Denken'
+    ],
+    ursachen: [
+      { faktor: 'Genetisch', text: 'Heritabilität 80-90%. Polygenetisch — hunderte Gene beteiligt. Familiencluster häufig.' },
+      { faktor: 'Neurobiologisch', text: 'Andere Vernetzung im Gehirn: Stärkere lokale, schwächere globale Konnektivität. Veränderte sensorische Verarbeitung. Andere "Default Mode Network" Aktivierung.' },
+      { faktor: 'Neurodiversität', text: 'Paradigmenwechsel: ASS nicht als "Defekt" sondern als neurologische Variante. Das Problem ist oft die fehlende Passung zwischen Person und Umwelt ("Person-Environment Fit").' },
+      { faktor: 'PVT-Perspektive', text: 'Andere Neuroception: Soziale Signale werden anders verarbeitet. Sensorische Überflutung → chronischer Sympathikus-Stress. Meltdowns = Nervensystem-Überflutung, KEIN Fehlverhalten.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Soziale Angst', unterschied: 'Soziale Angst: Soziale Regeln KENNEN, aber Angst haben. ASS: Soziale Regeln nicht intuitiv VERSTEHEN.' },
+      { was: 'ADHS', unterschied: 'ADHS: Ablenkbar bei ALLEM. ASS: Hyperfokussiert auf Spezialinteresse. 30-50% Komorbidität!' },
+      { was: 'Schizoide PS', unterschied: 'Schizoid: Kein INTERESSE an Kontakt. ASS: Oft WUNSCH nach Kontakt, aber Schwierigkeiten in der Umsetzung.' },
+      { was: 'Intellektuelle Beeinträchtigung', unterschied: 'IB: Globale kognitive Einschränkung. ASS: Oft normale bis überdurchschnittliche Intelligenz, aber ungleiches Profil.' }
+    ],
+    komorbiditaeten: ['Angststörungen (40-50%)', 'Depression (30-40%)', 'ADHS (30-50%)', 'Schlafstörungen (50%)', 'Essprobleme (sensorisch bedingt)', 'Epilepsie (10-30% je nach Schweregrad)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Umweltanpassung', evidenz: '★★★', beschreibung: 'NICHT das Kind anpassen, sondern die Umwelt: Reizreduktion, klare Strukturen, visuelle Hilfen, Rückzugsräume. Aménagements raisonnables in der Schule!' },
+      { methode: 'TEACCH', evidenz: '★★★', beschreibung: 'Strukturierung: Visuelle Zeitpläne, Aufgabenorganisation, räumliche Struktur. Nutzung der visuellen Stärken.' },
+      { methode: 'Soziale Kompetenz-Gruppen', evidenz: '★★☆', beschreibung: 'Explizites Lehren sozialer Regeln: "Wenn jemand das sagt, meint er..." Rollenspiele, Comic Strip Conversations (Gray).' },
+      { methode: 'Sensorische Integration', evidenz: '★★☆', beschreibung: 'Ergotherapie: Sensorische Diät, Desensibilisierung, sensorische Hilfsmittel (Noise-Cancelling, Gewichtsdecke).' }
+    ],
+    praxis_tipps: [
+      'Klar und direkt kommunizieren: Kein Sarkasmus, keine Doppeldeutigkeit, keine "versteckten Botschaften"',
+      'Vorankündigen: "In 10 Minuten gehen wir" — Übergänge sind schwierig, Vorbereitung hilft',
+      'Spezialinteressen NUTZEN statt verbieten: Motivation über das Interesse aufbauen',
+      'Stimming NICHT unterbinden: Es ist Selbstregulation! Nur eingreifen wenn selbstschädigend',
+      'Sensorische Bedürfnisse ernst nehmen: "Zu laut" IST zu laut — nicht "stell dich nicht so an"',
+      'Masking erkennen (v.a. bei Mädchen): "Gutes Benehmen" ≠ kein Problem. Fragen: "Wie erschöpft bist du?"',
+      'Identität stärken: "Dein Gehirn arbeitet anders — das ist eine Stärke UND eine Herausforderung"',
+      'Meltdowns: Reize reduzieren, nicht ansprechen, sicheren Ort bieten, NICHT bestrafen!'
+    ],
+    wann_ueberweisen: 'Bei V.a. ASS: Spezialisierte Diagnostik (ADOS-2, ADI-R). Dauert oft Monate — früh anmelden! Bei komorbider Depression/Angst: Therapie adaptiert an ASS. Bei Schulkrise: Aménagements raisonnables beantragen.',
+    luxemburg_spezifisch: 'Fondation Autisme Luxembourg (FAL): Diagnostik, Beratung, Begleitung. CHL: Diagnostik über Kinder-/Jugendpsychiatrie. SREA: Frühförderung. Autisme Luxembourg asbl: Elternvereinigung. Info-Handicap: Beratung zu Rechten.',
+    verwandte_wiki: ['adhs', 'soziale-angst', 'schizoide-ps', 'amenagements-raisonnables'],
+    screening_domains: ['sozial', 'entwicklung'],
+    themen_ids: ['sozialkompetenz', 'emotionsregulation', 'sensorik'],
+    verhaltens_ids: ['sozialer-rueckzug'],
+    leitfaden_ids: [],
+    quellen: ['Lord, C. et al. (2018). Autism Spectrum Disorder. Lancet.', 'Attwood, T. (2015). The Complete Guide to Asperger\'s Syndrome. Jessica Kingsley.', 'Hull, L. et al. (2017). Putting on My Best Normal: Camouflaging in Autism. Journal of Autism and Developmental Disorders.']
+  },
+  // --- Zwangsstörung ---
+  {
+    id: 'zwangsstoerung',
+    titel: 'Zwangsstörung (OCD)',
+    aliases: ['OCD', 'Zwangsgedanken', 'Zwangshandlungen', 'Kontrollzwang', 'Waschzwang', 'Ordnungszwang'],
+    kategorie: 'stoerungsbilder',
+    icon: '🔄',
+    farbe: '#0891B2',
+    definition: 'Wiederkehrende, ungewollte Gedanken (Obsessionen) und/oder repetitive Verhaltensweisen (Kompulsionen), die der Betroffene als sinnlos oder übertrieben erkennt, aber nicht unterlassen kann. Der Zwangszyklus: Intrusiver Gedanke → Angst/Unbehagen → Zwangshandlung → kurzfristige Erleichterung → Gedanke kehrt zurück. OCD ist KEINE Marotte — es ist extrem quälend und zeitaufwendig.',
+    altersgruppe: 'Zwei Häufigkeitsgipfel: 8-12 Jahre und 18-25 Jahre. Bei Kindern: Oft Wasch-/Kontrollzwänge. Jungen: Früherer Beginn.',
+    praevalenz: '1-3% der Kinder und Jugendlichen. Oft 7-10 Jahre bis zur Diagnose! Hohe Dunkelziffer wegen Scham.',
+    icd10: { code: 'F42', label: 'Zwangsstörung' },
+    icd11: { code: '6B20', label: 'Obsessive-Compulsive Disorder' },
+    erscheinungsbild: [
+      'Kontamination: Angst vor Keimen/Schmutz → exzessives Waschen, Desinfizieren, Vermeidung',
+      'Kontrollieren: "Ist der Herd aus?" → Stundenlang kontrollieren, fotografieren, andere fragen',
+      'Symmetrie/Ordnung: Alles muss "richtig" sein → Ordnen, Zählen, Wiederholen bis "es sich richtig anfühlt"',
+      'Verbotene Gedanken: Aggressive, sexuelle oder blasphemische Intrusionen → Extreme Scham, Neutralisieren',
+      'Magisches Denken: "Wenn ich nicht 3x tippe, stirbt meine Mutter" — besonders bei Kindern',
+      'Hoarding (Sammeln): Unfähigkeit, Dinge wegzuwerfen, auch wertlose',
+      'Bei Jugendlichen: Verdeckung, Rituale im Verborgenen, lange Badezimmer-Zeiten, Verspätungen, Leistungsabfall'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Überaktiver cortico-striato-thalamischer Kreislauf. Serotonin-Dysregulation. Das Gehirn hat Schwierigkeiten, "fertig" zu signalisieren.' },
+      { faktor: 'Genetisch', text: 'Heritabilität 40-50%. Familiäre Häufung. Überlappung mit Tic-Störungen genetisch.' },
+      { faktor: 'Kognitiv', text: 'Übermäßiges Verantwortungsgefühl, Gedanken-Handlungs-Fusion ("Wenn ich es denke, wird es passieren"), Perfektionismus, Intoleranz gegenüber Unsicherheit.' },
+      { faktor: 'PANDAS/PANS', text: 'Bei plötzlichem Beginn nach Streptokokken-Infektion: Autoimmun-vermittelte Neuroinflammation → akute OCD-Symptome. Selten, aber wichtig zu kennen!' },
+      { faktor: 'PVT-Perspektive', text: 'Chronische Sympathikus-Aktivierung: Das Nervensystem kann nicht "sicher" signalisieren. Zwangshandlung = Versuch, Sicherheit herzustellen. Kurzfristig funktioniert es (Erleichterung), langfristig: Teufelskreis.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Rituale', unterschied: 'Kinder (2-8 J.): Rituale sind entwicklungsnormal (Bettzeit-Rituale, Sammlungen). OCD: Ego-dyston, zeitaufwendig (>1h/Tag), quälend.' },
+      { was: 'Autismus', unterschied: 'ASS: Repetitives Verhalten ist ego-synton (fühlt sich gut an). OCD: Zwangshandlungen sind ego-dyston (will es NICHT tun, muss aber).' },
+      { was: 'Angststörung', unterschied: 'Angst: Fokus auf reale Bedrohungen. OCD: Fokus auf intrusive Gedanken + Rituale als Bewältigung.' },
+      { was: 'Tic-Störung', unterschied: 'Tics: Unwillkürliche Bewegungen. Zwänge: Willentliche Handlungen (um Angst zu reduzieren). 30% Komorbidität!' }
+    ],
+    komorbiditaeten: ['Depression (60%)', 'Angststörungen (50%)', 'Tic-Störungen (30%)', 'ADHS (25%)', 'Essstörungen (15%)', 'ASS (10-20%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'ERP (Exposition mit Reaktionsverhinderung)', evidenz: '★★★', beschreibung: 'Goldstandard: Sich dem Auslöser aussetzen (Exposition) OHNE die Zwangshandlung auszuführen (Reaktionsverhinderung). Die Angst steigt → geht von alleine runter (Habituation). 60-80% Erfolgsrate.' },
+      { methode: 'SSRI-Medikation', evidenz: '★★★', beschreibung: 'Serotonin-Wiederaufnahmehemmer (Fluoxetin, Sertralin). Oft höhere Dosen als bei Depression nötig. Kombination ERP + SSRI: Beste Ergebnisse.' },
+      { methode: 'KVT ohne ERP', evidenz: '★★☆', beschreibung: 'Kognitive Umstrukturierung: Gedanken-Handlungs-Fusion hinterfragen, Verantwortungs-Pie-Chart, Metakognitive Therapie.' },
+      { methode: 'Familienbasierte Intervention', evidenz: '★★★', beschreibung: 'Familie lernt: NICHT beim Zwang mitmachen (Accommodation reduzieren). "Ich wasche deine Hände nicht noch einmal — ich glaube an dich, dass du es aushalten kannst."' }
+    ],
+    praxis_tipps: [
+      'Zwänge NICHT mitmachen (Accommodation): Fragen beantworten, Rituale unterstützen → hält den Zwang am Leben',
+      'Aber: Nicht konfrontativ verweigern! "Ich weiß, die Angst ist real. Aber das Händewaschen hilft dir langfristig nicht."',
+      'Externalisierung: "Das ist nicht DU — das ist der OCD-Monster/Zwangs-Wurm." Distanz zum Zwang schaffen',
+      'Scham reduzieren: "Viele Menschen haben solche Gedanken — sie machen dich nicht zu einem schlechten Menschen"',
+      'Bei "verbotenen Gedanken": NIE schockiert reagieren! "Solche Gedanken zu HABEN bedeutet nicht, dass du sie TUN willst"',
+      'Zeit-Tracking: Wie viel Zeit verbringt der Zwang? >1h/Tag = klinisch bedeutsam',
+      'Keine Rückversicherung geben: "Bin ich schlecht?" → NICHT antworten! Stattdessen: "Was sagt der Zwang? Was sagst DU?"'
+    ],
+    wann_ueberweisen: 'IMMER an OCD-spezialisierte Therapeut:in (ERP-Ausbildung). Bei Nicht-Ansprechen auf ERP: Psychiater:in (SSRI-Medikation). Bei PANDAS-Verdacht (akuter Beginn nach Infektion): Sofort Kinderarzt + Neurologie.',
+    luxemburg_spezifisch: 'CHL Kinder-/Jugendpsychiatrie: Diagnostik und Behandlung. Wenige OCD-spezialisierte Therapeut:innen in Luxemburg — ggf. grenzüberschreitend (Trier, Metz). KVT-Therapeuten-Liste über CePAS.',
+    verwandte_wiki: ['angststoerungen', 'tic-stoerungen', 'autismus', 'depression'],
+    screening_domains: ['zwang'],
+    themen_ids: ['emotionsregulation', 'angstbewaeltigung'],
+    verhaltens_ids: ['zwanghaft'],
+    leitfaden_ids: [],
+    quellen: ['March, J.S. & Mulle, K. (2013). OCD in Children and Adolescents. Guilford.', 'NICE (2005). Obsessive-Compulsive Disorder and Body Dysmorphic Disorder. National Institute for Health and Care Excellence.', 'Abramowitz, J.S. et al. (2009). Obsessive-Compulsive Disorder. Lancet.']
+  },
+  // --- Bipolare Störung ---
+  {
+    id: 'bipolare-stoerung',
+    titel: 'Bipolare Störung',
+    aliases: ['Bipolar', 'Manie', 'Manisch-depressiv', 'Hypomanie', 'Bipolar I', 'Bipolar II'],
+    kategorie: 'stoerungsbilder',
+    icon: '🎢',
+    farbe: '#F59E0B',
+    definition: 'Affektive Störung mit Episoden von Manie/Hypomanie und Depression. Bipolar I: Mindestens eine manische Episode (Größenideen, reduziertes Schlafbedürfnis, Rededrang, Impulsivität). Bipolar II: Hypomanie (abgeschwächte Manie) + Depression. Bei Jugendlichen: Oft atypisch, rapid cycling, gemischte Episoden — daher schwer zu diagnostizieren.',
+    altersgruppe: 'Erstmanifestation häufig 15-25 Jahre. Bei Kindern <12: Kontrovers diskutiert. Prodromalphase in Adoleszenz.',
+    praevalenz: 'Bipolar I: 0.5-1%. Bipolar II: 1-2%. Bipolar-Spektrum: Bis 5%. Durchschnittlich 8-10 Jahre bis zur korrekten Diagnose!',
+    icd10: { code: 'F31', label: 'Bipolare affektive Störung' },
+    icd11: { code: '6A60-6A62', label: 'Bipolar or Related Disorders' },
+    erscheinungsbild: [
+      'Manie: Euphorie ODER Reizbarkeit, Größenideen, Rededrang, reduziertes Schlafbedürfnis (3-4h reichen), Ideenflucht, riskantes Verhalten',
+      'Hypomanie: Wie Manie, aber kürzer (4 Tage) und weniger schwer, KEINE Psychose, Funktionsfähigkeit erhalten',
+      'Depression: Wie unipolare Depression, aber oft atypisch (Hypersomnie, Bleierne Schwere, Stimmungsreaktivität)',
+      'Gemischte Episode: Gleichzeitig manisch UND depressiv — besonders gefährlich (hohe Suizidalität!)',
+      'Rapid Cycling: ≥4 Episoden pro Jahr. Bei Jugendlichen häufiger als bei Erwachsenen',
+      'Bei Jugendlichen: Oft als "Verhaltensauffälligkeit" fehlinterpretiert: Wutausbrüche, Risikoverhaltens, Schulversagen, Drogenkonsum'
+    ],
+    ursachen: [
+      { faktor: 'Genetisch', text: 'Heritabilität 80-85% — höchste aller psychischen Störungen. Risiko bei einem betroffenen Elternteil: 10-25%.' },
+      { faktor: 'Neurobiologisch', text: 'Dysregulation von Serotonin, Noradrenalin und Dopamin. Veränderte zirkadiane Rhythmen. Mitochondriale Dysfunktion.' },
+      { faktor: 'Circadiane Rhythmik', text: 'Schlaf-Wach-Rhythmus besonders vulnerabel. Schlafentzug kann Manie auslösen! Schichtarbeit, Jetlag, chaotischer Schlafrhythmus als Trigger.' },
+      { faktor: 'PVT-Perspektive', text: 'Manie: Sympathikus auf Höchststufe — "Gas ohne Bremse". Depression: Dorsaler Vagus — Shutdown. Regulation zwischen den Extremen gelingt nicht.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ADHS', unterschied: 'ADHS: Chronisch, keine Episoden. Bipolar: Episodisch (Phasen kommen und gehen). 30% Komorbidität!' },
+      { was: 'Unipolare Depression', unterschied: 'Bei erster depressiver Episode: Immer Bipolar ausschließen! Fragen: Gab es Phasen von ungewöhnlicher Energie/Hochstimmung?' },
+      { was: 'BPS', unterschied: 'BPS: Stimmungswechsel in Minuten/Stunden, situationsabhängig. Bipolar: Episoden über Tage/Wochen, NICHT situationsabhängig.' },
+      { was: 'Substanzinduziert', unterschied: 'Amphetamine/Kokain können manische Symptome imitieren. Immer Substanzanamnese!' }
+    ],
+    komorbiditaeten: ['Angststörungen (50%)', 'ADHS (30%)', 'Substanzmissbrauch (40%)', 'Suizidalität (25-50% Suizidversuche!)', 'Essstörungen (15%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Stimmungsstabilisierer', evidenz: '★★★', beschreibung: 'Lithium (Goldstandard), Valproat, Lamotrigin. Medikation ist bei Bipolar ESSENTIELL — anders als bei vielen anderen Störungen.' },
+      { methode: 'Psychoedukation', evidenz: '★★★', beschreibung: 'Krankheitswissen, Frühwarnzeichen erkennen, Lebensstil-Management (Schlaf!), Medikamenten-Compliance. Stärkster Rückfall-Schutz.' },
+      { methode: 'Familientherapie (FFT)', evidenz: '★★★', beschreibung: 'Family-Focused Therapy: Psychoedukation + Kommunikationstraining + Problemlösen. Reduziert Rückfallrate signifikant bei Adoleszenten.' },
+      { methode: 'IPSRT (Interpersonal and Social Rhythm Therapy)', evidenz: '★★★', beschreibung: 'Stabilisierung des Tagesrhythmus: Gleiche Aufsteh-/Schlafenszeit, regelmäßige Mahlzeiten, Aktivitäten. Rhythmus = Stimmungsstabilität.' }
+    ],
+    praxis_tipps: [
+      'Schlafrhythmus ist ALLES: Regelmäßiger Schlaf-Wach-Rhythmus, kein Schlafentzug, kein chaotischer Alltag',
+      'Frühwarnzeichen kennen: Weniger Schlaf, mehr Energie, Reizbarkeit, Geldausgeben, sexuelle Enthemmung → Manie kommt!',
+      'Medikamenten-Compliance unterstützen: In der Manie fühlt man sich "gut" → Tendenz Medikamente abzusetzen → RÜCKFALL',
+      'Substanzen: Alkohol, Cannabis, Stimulanzien destabilisieren den Verlauf massiv',
+      'Suizidalität: 25-50% machen Suizidversuch. Besonders gefährlich: Gemischte Episoden und depressive Phase',
+      'Antidepressiva bei Bipolar: NUR mit Stimmungsstabilisierer! Antidepressiva allein können Manie auslösen ("Switch")'
+    ],
+    wann_ueberweisen: 'BEI JEDEM VERDACHT: Kinder-/Jugendpsychiater. Bipolar braucht IMMER medikamentöse Behandlung. Bei manischer Episode: Psychiatrischer Notfall!',
+    luxemburg_spezifisch: 'CHL Kinder-/Jugendpsychiatrie: Diagnostik und Medikation. CHNP Ettelbréck: Stationäre Behandlung. Lithium-Monitoring: Regelmäßige Blutspiegel-Kontrollen.',
+    verwandte_wiki: ['depression', 'adhs', 'psychose', 'substanzkonsum'],
+    screening_domains: ['stimmung', 'manie'],
+    themen_ids: ['emotionsregulation', 'schlaf', 'medikation'],
+    verhaltens_ids: ['emotional-dysreguliert'],
+    leitfaden_ids: [],
+    quellen: ['Miklowitz, D.J. (2019). Bipolar Disorder: A Family-Focused Treatment Approach. Guilford.', 'Berk, M. et al. (2020). Bipolar Disorder. Lancet.', 'NICE (2014). Bipolar Disorder: Assessment and Management. CG185.']
+  },
+  // --- Tic-Störungen & Tourette ---
+  {
+    id: 'tic-stoerungen',
+    titel: 'Tic-Störungen & Tourette-Syndrom',
+    aliases: ['Tourette', 'Tics', 'Motorische Tics', 'Vokale Tics', 'Koprolalie'],
+    kategorie: 'stoerungsbilder',
+    icon: '⚡',
+    farbe: '#14B8A6',
+    definition: 'Tics sind plötzliche, schnelle, wiederkehrende, nicht-rhythmische motorische Bewegungen oder Lautäußerungen. Tourette-Syndrom: Multiple motorische + mindestens ein vokaler Tic, >1 Jahr Dauer, Beginn <18 Jahre. WICHTIG: Koprolalie (unwillkürliches Fluchen) kommt nur bei 10-15% der Tourette-Patienten vor — es ist NICHT das Hauptsymptom!',
+    altersgruppe: 'Beginn meist 4-8 Jahre. Maximum der Schwere 10-12 Jahre. Bei 50-70% deutliche Besserung bis Erwachsenenalter.',
+    praevalenz: 'Transiente Tics: 10-20% aller Kinder. Chronische Tic-Störung: 3-5%. Tourette: 0.5-1%. Jungen 3-4x häufiger.',
+    icd10: { code: 'F95', label: 'Ticstörungen (F95.2 Tourette-Syndrom)' },
+    icd11: { code: '8A05', label: 'Tourette Syndrome / Primary Tic Disorder' },
+    erscheinungsbild: [
+      'Einfache motorische Tics: Blinzeln, Grimassieren, Kopfrucken, Schulterzucken',
+      'Komplexe motorische Tics: Hüpfen, Berühren, Imitieren von Bewegungen (Echopraxie)',
+      'Einfache vokale Tics: Räuspern, Schnüffeln, Grunzen, Pfeifen',
+      'Komplexe vokale Tics: Worte/Sätze wiederholen (Echolalie), eigene Worte wiederholen (Palilalie), Fluchen (Koprolalie)',
+      'Vorgefühl (Premonitory Urge): Unangenehmes Spannungsgefühl VOR dem Tic, Erleichterung NACH dem Tic',
+      'Zunahme bei: Stress, Aufregung, Müdigkeit. Abnahme bei: Konzentration, Entspannung, Schlaf',
+      '"Tic attacks": Phasen mit sehr häufigen, intensiven Tics — sehr belastend'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Basalganglien-Dysfunktion: Gestörte Dopamin-Transmission im cortico-striato-thalamischen Kreislauf. Das Gehirn hat Schwierigkeiten, Bewegungsimpulse zu unterdrücken.' },
+      { faktor: 'Genetisch', text: 'Heritabilität 70-80%. Komplex polygenetisch. Familiäre Häufung von Tics, OCD und ADHS.' },
+      { faktor: 'PANDAS/PANS', text: 'Seltener: Autoimmun-Reaktion nach Streptokokken-Infektion → plötzlicher Tic-Beginn. Bei abruptem Beginn: Immer abklären!' },
+      { faktor: 'PVT-Perspektive', text: 'Tics verstärken sich bei Sympathikus-Aktivierung (Stress). Sichere Umgebung + Co-Regulation → Tics nehmen ab. Das Nervensystem reguliert die Tic-Intensität mit.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Stereotypien (ASS)', unterschied: 'Stereotypien: Rhythmisch, vorhersagbar, beginnen <3 Jahre. Tics: Nicht-rhythmisch, wechselnd, beginnen >4 Jahre.' },
+      { was: 'Zwangsstörung', unterschied: 'Zwangshandlung: Absichtlich, zur Angstreduktion, komplexe Rituale. Tic: Unwillkürlich, durch Vorgefühl (Premonitory Urge). 30% Komorbidität!' },
+      { was: 'Myoklonus/Epilepsie', unterschied: 'Myoklonus: Nicht unterdrückbar, kein Vorgefühl, EEG-Auffälligkeiten. Tics: Kurz unterdrückbar, mit Vorgefühl.' }
+    ],
+    komorbiditaeten: ['ADHS (50-70%!)', 'OCD (30-50%)', 'Angststörungen (30%)', 'Depression (20%)', 'Lernstörungen (25%)', 'Wutausbrüche/Rage Attacks (25%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'HRT (Habit Reversal Training)', evidenz: '★★★', beschreibung: 'Goldstandard: 1) Tic-Bewusstsein (Tic erkennen), 2) Competing Response (Gegenbewegung üben), 3) Generalisierung. 50-60% Reduktion.' },
+      { methode: 'CBIT (Comprehensive Behavioral Intervention for Tics)', evidenz: '★★★', beschreibung: 'Erweitertes HRT: + Funktionsanalyse (Was verstärkt Tics?) + Relaxation + Familienarbeit. Manualisiert.' },
+      { methode: 'Medikation', evidenz: '★★☆', beschreibung: 'Bei schweren Tics: Tiaprid, Aripiprazol, Clonidin. Bei komorbider ADHS: Methylphenidat (verschlimmert Tics NICHT, Mythos!). Bei komorbider OCD: SSRIs.' },
+      { methode: 'Psychoedukation', evidenz: '★★★', beschreibung: 'IMMER: Familie, Schule, Peers aufklären. "Er macht das nicht absichtlich!" Entstigmatisierung ist oft die wichtigste Intervention.' }
+    ],
+    praxis_tipps: [
+      'Tics NICHT kommentieren oder auffordern aufzuhören: "Hör auf damit!" → Verschlimmerung durch Stress und Scham',
+      'Unterdrückung kostet enorm: Nach bewusstem Unterdrücken (z.B. in der Schule) → "Tic-Rebound" zu Hause. Das ist normal!',
+      'Häufigste Komorbidität: ADHS, NICHT die Tics, verursacht die meisten Probleme. ADHS behandeln!',
+      'Peer-Edukation: Mitschüler:innen aufklären (MIT Einverständnis des Kindes). Reduziert Mobbing dramatisch',
+      'Aménagements: Extra Zeit bei Prüfungen, separater Raum, Erlaubnis den Raum zu verlassen',
+      'Stärken betonen: Viele Menschen mit Tourette sind überdurchschnittlich kreativ und energetisch'
+    ],
+    wann_ueberweisen: 'Bei tics >1 Jahr oder Tourette-Verdacht: Kinder-/Jugendpsychiater oder Neuropädiater. Bei ADHS-Komorbidität: Medikamentöse Abklärung. Bei Schulproblemen: Aménagements beantragen.',
+    luxemburg_spezifisch: 'CHL Kinder-/Jugendpsychiatrie und Neuropädiatrie: Diagnostik. Wenige CBIT/HRT-Spezialisten in Luxemburg — ggf. grenzüberschreitend.',
+    verwandte_wiki: ['adhs', 'zwangsstoerung', 'autismus'],
+    screening_domains: ['tics'],
+    themen_ids: ['impulskontrolle', 'stressmanagement'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Pringsheim, T. et al. (2019). Practice Guideline for Tic Disorders. Neurology.', 'Müller-Vahl, K. (2014). Tourette-Syndrom und andere Tic-Erkrankungen. Medizinisch Wissenschaftliche Verlagsgesellschaft.']
+  },
+  // --- Selektiver Mutismus ---
+  {
+    id: 'selektiver-mutismus',
+    titel: 'Selektiver Mutismus',
+    aliases: ['Mutismus', 'Elektiver Mutismus', 'Schweigekind', 'Sprechhemmung'],
+    kategorie: 'stoerungsbilder',
+    icon: '🤐',
+    farbe: '#8B5CF6',
+    definition: 'Anhaltende Unfähigkeit, in bestimmten sozialen Situationen zu sprechen (z.B. Schule), obwohl das Kind in anderen Situationen (z.B. zu Hause) normal spricht. KEIN Trotz oder Verweigerung — das Kind KANN in diesen Situationen nicht sprechen, es steckt buchstäblich fest. Selektiver Mutismus ist eine ANGSTSTÖRUNG, keine Sprachstörung.',
+    altersgruppe: 'Beginn meist 3-5 Jahre (bei Kita/Schulbeginn). Wird oft erst spät erkannt (Kind wird als "schüchtern" abgetan). Mädchen etwas häufiger.',
+    praevalenz: '0.5-0.8% der Kinder. In der Praxis stark unterschätzt. Bei mehrsprachigen Kindern: Häufiger, aber NICHT nur durch die Sprachbarriere erklärbar.',
+    icd10: { code: 'F94.0', label: 'Elektiver Mutismus' },
+    icd11: { code: '6B06', label: 'Selective Mutism' },
+    erscheinungsbild: [
+      'Zu Hause: Redet normal, lacht, ist lebhaft — manchmal sogar besonders laut',
+      'In der Schule/öffentlich: Schweigt komplett, bewegt sich kaum, erstarrter Gesichtsausdruck, vermeidet Blickkontakt',
+      'Übergangsformen: Flüstert mit einem Freund, nickt/schüttelt Kopf, zeigt auf Antworten, schreibt',
+      'Vermeidungsverhalten: Geht nicht auf Toilette in der Schule, isst nicht, bittet nicht um Hilfe',
+      'Körpersprache: Erstarrt, "eingefrorener" Gesichtsausdruck, steife Körperhaltung — sieht aus wie Freeze',
+      'Begleitend oft: Soziale Angst, Trennungsangst, Perfektionismus, Sensibilität'
+    ],
+    ursachen: [
+      { faktor: 'Angststörung', text: 'SM ist im Kern eine extreme soziale Angst. Die Angst "überflutet" den Sprechapparat → das Kind erstarrt, kann den Mund buchstäblich nicht öffnen.' },
+      { faktor: 'Temperament', text: 'Behavioral Inhibition (gehemmtes Temperament): Angeborene Tendenz, auf Neues mit Rückzug zu reagieren. Stärkster Risikofaktor.' },
+      { faktor: 'Genetisch', text: 'Familiäre Häufung von Angststörungen und sozialer Schüchternheit. Eltern oft selbst sozial ängstlich.' },
+      { faktor: 'Mehrsprachigkeit', text: 'Mehrsprachige Kinder: Erhöhtes Risiko, aber SM ist NICHT "nur Sprachproblem". Wenn das Kind auch in der Muttersprache schweigt → SM.' },
+      { faktor: 'PVT-Perspektive', text: 'Klassischer Freeze-Response: Dorsaler Vagus blockiert den Sprechapparat. Das Kind WILL sprechen, aber das Nervensystem sagt "STOP". Der soziale Kontext wird als Bedrohung wahrgenommen.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Schüchternheit', unterschied: 'Schüchternheit: Anfangs still, wärmt auf, spricht dann. SM: Spricht auch nach Wochen/Monaten NICHT. Keine Aufwärmphase.' },
+      { was: 'Autismus', unterschied: 'ASS: Sprachdefizite in ALLEN Situationen. SM: Spricht zu Hause NORMAL. Sprache intakt, nur kontextabhängig blockiert.' },
+      { was: 'Sprachstörung', unterschied: 'Sprachstörung: Spricht wenig in ALLEN Kontexten. SM: Redet zu Hause den Eltern die Ohren ab.' },
+      { was: 'Trauma', unterschied: 'Traumatisches Verstummen: Plötzlicher Beginn NACH Trauma, alle Situationen betroffen. SM: Schleichender Beginn, situationsabhängig.' }
+    ],
+    komorbiditaeten: ['Soziale Angst (90%!)', 'Trennungsangst (40%)', 'Spezifische Phobien (30%)', 'Sprachentwicklungsverzögerung (30%)', 'Enuresis (20%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Defocused Communication', evidenz: '★★★', beschreibung: 'NICHT direkt ansprechen/fragen! Stattdessen: Neben dem Kind spielen, Selbstgespräch führen, keine Sprecherwartung. "Keinen Druck aufbauen."' },
+      { methode: 'Stimulus Fading / Sliding In', evidenz: '★★★', beschreibung: 'Kind spricht zuerst mit Vertrauensperson → neuer Mensch wird LANGSAM dazugenommen (erst im Nebenzimmer, dann an der Tür, dann im Raum...). Sehr graduell.' },
+      { methode: 'Brave Talking (KVT)', evidenz: '★★★', beschreibung: 'Stufen-Expositionsplan: Von nonverbal (Nicken) → Flüstern → leise Stimme → normale Stimme → mit Fremden. Jede Stufe wird belohnt.' },
+      { methode: 'SSRI-Medikation', evidenz: '★★☆', beschreibung: 'Bei schweren Fällen oder Nicht-Ansprechen auf KVT: Fluoxetin. Senkt die Angst-Schwelle, erleichtert die Exposition.' }
+    ],
+    praxis_tipps: [
+      'NIEMALS zwingen zu sprechen: "Sag doch mal Hallo!" → Verschlimmert die Angst massiv',
+      'KEINEN Blickkontakt erzwingen — auch das ist für SM-Kinder extrem schwierig',
+      'Nebenbei-Kontakt: Gemeinsam spielen, malen, bauen — ohne Sprecherwartung',
+      'Wahlmöglichkeiten anbieten: "Zeig mir" oder "Nick, wenn ja" — alternative Kommunikation akzeptieren',
+      'Schulkooperation: Lehrkräfte aufklären: "Er KANN nicht, er WILL nicht nicht." Aménagements beantragen',
+      'Fortschritte feiern: Jedes Nicken, Zeigen, Flüstern ist ein RIESIGER Erfolg — entsprechend wertschätzen',
+      'Eltern einbeziehen: Sliding-In über die Eltern als Brücke. Eltern zu Beginn im Raum, dann langsam rausschleichen'
+    ],
+    wann_ueberweisen: 'Bei SM >4 Wochen in Kita/Schule: Kinder-/Jugendpsychotherapeut mit SM-Erfahrung. Logopädie wenn zusätzlich Sprachstörung. Bei Schulverweigerung: Sofort handeln!',
+    luxemburg_spezifisch: 'CePAS: Erstberatung. CHL Kinder-/Jugendpsychiatrie: Diagnostik. SREA: Frühförderung bei Kleinkindern. Logopädie über ALSH (Association Luxembourgeoise des Orthophonistes).',
+    verwandte_wiki: ['soziale-angst', 'trennungsangst', 'angststoerungen'],
+    screening_domains: ['sozial', 'sprache'],
+    themen_ids: ['sozialkompetenz', 'angstbewaeltigung'],
+    verhaltens_ids: ['sozialer-rueckzug'],
+    leitfaden_ids: [],
+    quellen: ['Johnson, M. & Wintgens, A. (2016). The Selective Mutism Resource Manual. Routledge.', 'Muris, P. & Ollendick, T.H. (2015). Children Who are Anxious in Silence. Clinical Child and Family Psychology Review.']
+  },
+  // --- Trennungsangst ---
+  {
+    id: 'trennungsangst',
+    titel: 'Trennungsangst',
+    aliases: ['Separation Anxiety', 'Trennungsangststörung', 'Schulangst', 'Klammerverhalten', 'Anhänglichkeit'],
+    kategorie: 'stoerungsbilder',
+    icon: '😰',
+    farbe: '#F97316',
+    definition: 'Übermäßige, entwicklungsunangemessene Angst vor der Trennung von Bezugspersonen. Das Kind befürchtet, dass den Eltern oder ihm selbst etwas Schreckliches passiert (Unfall, Entführung, Tod). NICHT verwechseln mit normaler Trennungsangst bei Kleinkindern (8 Monate - 2 Jahre)! Pathologisch wenn: Übermäßig für das Alter, >4 Wochen, funktionsbeeinträchtigend.',
+    altersgruppe: 'Häufigste Angststörung bei Kindern <12 Jahre. Peak: 7-9 Jahre. Bei Jugendlichen: Seltener, aber schwerer.',
+    praevalenz: '3-5% der Kinder, 1-2% der Jugendlichen.',
+    icd10: { code: 'F93.0', label: 'Emotionale Störung mit Trennungsangst des Kindesalters' },
+    icd11: { code: '6B05', label: 'Separation Anxiety Disorder' },
+    erscheinungsbild: [
+      'Exzessives Weinen, Klammern, Schreien bei Trennung oder Ankündigung der Trennung',
+      'Weigerung, zur Schule/Kita zu gehen, bei Freunden zu übernachten, allein zu sein',
+      'Ständige Sorgen: "Was wenn Mama einen Unfall hat?" "Was wenn ich entführt werde?"',
+      'Körperliche Symptome: Bauchschmerzen, Kopfschmerzen, Übelkeit — VOR der Trennung (Sonntagabend-Syndrom)',
+      'Schlafprobleme: Kann nicht allein einschlafen, Albträume über Trennung/Verlust',
+      'Telefonkontrollen: Ständig anrufen, um sicher zu sein, dass Eltern ok sind',
+      'Bei Jugendlichen: Versteckter — "Ich hab Bauchweh" statt "Ich hab Angst, dass du stirbst"'
+    ],
+    ursachen: [
+      { faktor: 'Bindung', text: 'Unsicher-ambivalente Bindung: Unvorhersagbare Verfügbarkeit der Bezugsperson → Kind "überwacht" ständig deren Anwesenheit.' },
+      { faktor: 'Auslöser', text: 'Oft nach konkretem Ereignis: Umzug, Schulwechsel, Krankheit/Tod in der Familie, Trennung der Eltern, eigene Krankheit.' },
+      { faktor: 'Elterliches Verhalten', text: 'Überbehütung, eigene Ängstlichkeit der Eltern, Schwierigkeiten loszulassen. "Separation Anxiety" ist oft eine Familienstörung.' },
+      { faktor: 'PVT-Perspektive', text: 'Das Nervensystem hat gelernt: "Ohne die Bezugsperson bin ich in Gefahr." Neuroception: "Allein = unsicher." Trennung aktiviert Sympathikus (Panik) oder dorsalen Vagus (Erstarren).' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale Trennungsangst', unterschied: 'Normal: 8 Monate - 2 Jahre, geht vorüber. Pathologisch: Über das Alter hinaus, >4 Wochen, Funktionsbeeinträchtigung.' },
+      { was: 'Schulvermeidung (andere Ursachen)', unterschied: 'Trennungsangst: Will nicht WEG von den Eltern. Soziale Angst/Mobbing: Will nicht IN die Schule. Entscheidend: WAS macht Angst?' },
+      { was: 'Generalisierte Angst', unterschied: 'GAD: Sorgen um VIELE Themen. Trennungsangst: Sorgen SPEZIFISCH um Trennung/Verlust der Bezugsperson.' }
+    ],
+    komorbiditaeten: ['Generalisierte Angst (40%)', 'Soziale Angst (30%)', 'Spezifische Phobien (25%)', 'Depression (20%)', 'Schulvermeidung (häufig!)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'KVT (Coping Cat / FRIENDS)', evidenz: '★★★', beschreibung: 'Goldstandard: Psychoedukation, kognitive Umstrukturierung, graduierte Exposition, Bewältigungsstrategien. 60-80% Erfolgsrate.' },
+      { methode: 'Graduierte Exposition', evidenz: '★★★', beschreibung: 'Stufenweise Trennung üben: 5 Min allein → 30 Min → 1 Stunde → Übernachtung. Jede Stufe bis Angst nachlässt.' },
+      { methode: 'Elterntraining', evidenz: '★★★', beschreibung: 'Eltern lernen: Kurzer, fester Abschied. Nicht zurückkommen. Nicht extra trösten VOR der Trennung (verstärkt Angst). Vertrauen signalisieren.' },
+      { methode: 'SSRI', evidenz: '★★☆', beschreibung: 'Bei schweren Fällen: Sertralin oder Fluoxetin. Immer kombiniert mit KVT. Nicht als Monotherapie.' }
+    ],
+    praxis_tipps: [
+      'Abschied KURZ und VORHERSAGBAR: "Ich gehe jetzt. Ich komme um 16 Uhr. Du schaffst das." NICHT: Langes Trösten, Zurückkommen',
+      'Nicht heimlich wegschleichen: Das verstärkt das Misstrauen! Immer verabschieden',
+      'Übergangsobjekt: Foto der Eltern, Kuscheltier, etwas das nach Mama riecht',
+      'Erfolgserlebnisse schaffen: Kurze Trennungen erfolgreich → "Siehst du, es hat geklappt!" → Selbstwirksamkeit',
+      'Körperliche Symptome ernst nehmen: "Dein Bauch tut weh, weil dein Körper Angst hat. Die Angst geht vorbei."',
+      'Eltern stärken: "Es ist RICHTIG, zu gehen, auch wenn Ihr Kind weint. Das ist kein Zeichen, dass es Ihnen schlecht geht."'
+    ],
+    wann_ueberweisen: 'Bei >4 Wochen Trennungsangst mit Funktionsbeeinträchtigung: KVT-Therapeut:in. Bei Schulvermeidung: Sofort handeln — je länger, desto schwieriger. Bei Eltern mit eigener Angst: Elternberatung/Therapie.',
+    luxemburg_spezifisch: 'CePAS: Schulische Unterstützung. CHL Kinder-/Jugendpsychiatrie: Diagnostik bei schweren Fällen. ALUPSE: Beratung nach Trennungsereignissen.',
+    verwandte_wiki: ['angststoerungen', 'schulvermeidung', 'selektiver-mutismus', 'bindungstheorie'],
+    screening_domains: ['angst', 'trennung'],
+    themen_ids: ['angstbewaeltigung', 'bindung', 'autonomie'],
+    verhaltens_ids: ['aengstlich', 'klammernd'],
+    leitfaden_ids: ['elterngespraech'],
+    quellen: ['Ehrenreich-May, J. et al. (2017). Unified Protocols for Transdiagnostic Treatment of Emotional Disorders in Children. Oxford.', 'Silverman, W.K. & Albano, A.M. (1996). Anxiety Disorders Interview Schedule for DSM-IV. Oxford.']
+  },
+  // --- Panikstörung & Agoraphobie ---
+  {
+    id: 'panikstoerung',
+    titel: 'Panikstörung & Agoraphobie',
+    aliases: ['Panikattacke', 'Panik', 'Agoraphobie', 'Platzangst', 'Herzrasen', 'Erstickungsangst'],
+    kategorie: 'stoerungsbilder',
+    icon: '💓',
+    farbe: '#EF4444',
+    definition: 'Panikstörung: Wiederkehrende, unerwartete Panikattacken + anhaltende Sorge vor weiteren Attacken ("Angst vor der Angst"). Panikattacke: Plötzliche Welle intensiver Angst mit körperlichen Symptomen (Herzrasen, Atemnot, Schwindel, Todesangst), Peak nach 10 Minuten. Agoraphobie: Angst vor Situationen, aus denen Flucht schwierig wäre (Menschenmengen, öffentliche Verkehrsmittel, weite Plätze).',
+    altersgruppe: 'Panikstörung: Selten vor der Pubertät, häufiger ab 15-16 Jahre. Agoraphobie: Kann in jedem Alter beginnen.',
+    praevalenz: 'Panikstörung: 1-3% der Jugendlichen. Panikattacken (ohne volle Störung): 10-15%. Agoraphobie: 1-2%.',
+    icd10: { code: 'F41.0/F40.0', label: 'Panikstörung / Agoraphobie' },
+    icd11: { code: '6B01/6B02', label: 'Panic Disorder / Agoraphobia' },
+    erscheinungsbild: [
+      'Panikattacke: Herzrasen, Brustschmerzen, Atemnot, Schwindel, Schwitzen, Zittern, Taubheitsgefühle',
+      'Kognitive Symptome: "Ich sterbe!", "Ich werde verrückt!", "Ich verliere die Kontrolle!", Derealisationsgefühle',
+      'Angst vor der Angst: Ständige Hypervigilanz auf Körpersignale, Vermeidung von Auslösern',
+      'Agoraphobie: Meidet Busse, Kino, Supermarkt, Aufzüge, Brücken — geht nur noch in "sicherer" Begleitung',
+      'Notaufnahme-Besuche: Viele Jugendliche kommen mit "Herzproblemen" in die Notaufnahme — somatisch unauffällig',
+      'Schulvermeidung: Angst vor Attacke in der Schule → bleibt zu Hause'
+    ],
+    ursachen: [
+      { faktor: 'Kognitives Modell (Clark)', text: 'Katastrophisierende Fehlinterpretation normaler Körpersignale: Herzklopfen → "Herzinfarkt!" → mehr Angst → mehr Herzklopfen → Teufelskreis.' },
+      { faktor: 'Neurobiologisch', text: 'Überempfindliches Alarmsystem: Amygdala reagiert auf geringe Reize bereits mit voller Angstreaktion. CO2-Überempfindlichkeit → Erstickungsangst.' },
+      { faktor: 'Genetisch', text: 'Heritabilität 30-40%. Familiäre Häufung von Angststörungen.' },
+      { faktor: 'PVT-Perspektive', text: 'Panikattacke = massiver Sympathikus-Overload: Kampf/Flucht ohne reale Bedrohung. Agoraphobie = gelernte dorsal-vagale Vermeidung: "Dort wurde es gefährlich, dort gehe ich nicht mehr hin."' }
+    ],
+    differentialdiagnose: [
+      { was: 'Somatische Ursachen', unterschied: 'IMMER ausschließen: Schilddrüse, Herzrhythmusstörungen, Asthma, Epilepsie, Phäochromozytom. Mindestens einmal somatisch abklären!' },
+      { was: 'Generalisierte Angst', unterschied: 'GAD: Chronische Sorgen, OHNE plötzliche Attacken. Panikstörung: Plötzliche, intensive Attacken + Angst vor Wiederholung.' },
+      { was: 'PTBS', unterschied: 'PTBS: Panik durch Trauma-Trigger (spezifisch). Panikstörung: Attacken "aus heiterem Himmel" (unspezifisch).' }
+    ],
+    komorbiditaeten: ['Agoraphobie (50%)', 'Depression (40%)', 'Generalisierte Angst (30%)', 'Soziale Angst (25%)', 'Substanzmissbrauch (20%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'KVT', evidenz: '★★★', beschreibung: 'Goldstandard: Psychoedukation (Teufelskreis-Modell), kognitive Umstrukturierung (Körpersignale entkatastrophisieren), interozeptive Exposition (Symptome absichtlich auslösen).' },
+      { methode: 'Interozeptive Exposition', evidenz: '★★★', beschreibung: 'Absichtlich Panik-Symptome auslösen: Hyperventilieren, durch Strohhalm atmen, auf der Stelle drehen → lernen: "Die Symptome sind unangenehm, aber UNGEFÄHRLICH."' },
+      { methode: 'In-vivo-Exposition (Agoraphobie)', evidenz: '★★★', beschreibung: 'Graduiert vermiedene Situationen aufsuchen: Erst kleine Geschäfte → Supermarkt → Bus → Menschenmenge. Mit therapeutischer Begleitung.' },
+      { methode: 'SSRI', evidenz: '★★☆', beschreibung: 'Bei schweren Fällen: Sertralin, Fluoxetin. Keine Benzodiazepine bei Jugendlichen (Abhängigkeitsrisiko!).' }
+    ],
+    praxis_tipps: [
+      'Bei akuter Panikattacke: Ruhig bleiben, validieren ("Das ist eine Panikattacke, sie geht vorbei"), Bauchatmung anleiten',
+      'Entkatastrophisieren: "Dein Herz rast, weil dein Körper denkt, du bist in Gefahr. Du bist es nicht. Es geht vorbei."',
+      'NICHT vermeiden lassen: Jede Vermeidung bestätigt die Angst. "Es IST schwer, aber wir gehen trotzdem in den Bus."',
+      'Atemtechnik: 4 Sekunden einatmen, 7 Sekunden ausatmen — aktiviert den Vagusnerv',
+      'Somatische Abklärung EINMAL: Dann: "Dein Herz ist gesund. Was du spürst, ist Angst." Nicht 10x zum Kardiologen',
+      'Panik-Tagebuch: Wann, wo, wie stark (0-10), was davor, was danach → Muster erkennen'
+    ],
+    wann_ueberweisen: 'Bei wiederholten Panikattacken: KVT-Therapeut:in. Bei Agoraphobie mit starker Vermeidung: Sofort, bevor sich die Vermeidung verfestigt. Bei V.a. somatische Ursachen: Einmalige Abklärung.',
+    luxemburg_spezifisch: 'CHL: Somatische Abklärung + Kinder-/Jugendpsychiatrie. KVT-Therapeuten über CePAS. SOS Détresse: 45 45 45.',
+    verwandte_wiki: ['angststoerungen', 'soziale-angst', 'depression'],
+    screening_domains: ['angst', 'panik'],
+    themen_ids: ['angstbewaeltigung', 'koerperwahrnehmung'],
+    verhaltens_ids: ['aengstlich'],
+    leitfaden_ids: [],
+    quellen: ['Clark, D.M. (1986). A Cognitive Approach to Panic. Behaviour Research and Therapy.', 'Craske, M.G. et al. (2014). Panic Disorder. Lancet.']
+  },
+  // --- Spezifische Phobien ---
+  {
+    id: 'spezifische-phobien',
+    titel: 'Spezifische Phobien',
+    aliases: ['Phobie', 'Angst vor', 'Spinnenangst', 'Höhenangst', 'Blutphobie', 'Prüfungsangst', 'Nadelphobie'],
+    kategorie: 'stoerungsbilder',
+    icon: '🕷️',
+    farbe: '#A855F7',
+    definition: 'Ausgeprägte, unverhältnismäßige Angst vor einem spezifischen Objekt oder einer Situation: Tiere, Naturereignisse, Blut/Verletzung/Spritzen, situativ (Höhen, Flugzeug, enge Räume), andere (Erbrechen, Ersticken, Kostüme). Das Angstobjekt wird vermieden oder unter extremem Leid ertragen. Die häufigste aller Angststörungen, aber oft trivialisiert.',
+    altersgruppe: 'Tierphobien: Beginn 5-9 Jahre. Blutphobie: 7-12 Jahre. Situative: Jugend/frühes Erwachsenenalter.',
+    praevalenz: '5-10% der Kinder und Jugendlichen. Am häufigsten: Tierphobien, Dunkelheit, Naturereignisse.',
+    icd10: { code: 'F40.2', label: 'Spezifische (isolierte) Phobien' },
+    icd11: { code: '6B03', label: 'Specific Phobia' },
+    erscheinungsbild: [
+      'Intensive Angst/Panik bei Konfrontation mit dem phobischen Reiz',
+      'Vermeidung: Geht nicht in den Keller (Spinnen), nicht zum Arzt (Nadeln), nicht auf den Turm (Höhe)',
+      'Antizipatorische Angst: Schon der GEDANKE an die Situation löst Angst aus',
+      'Bei Kindern: Weinen, Wutanfälle, Erstarren, Klammern — oft als "Trotz" fehlinterpretiert',
+      'Blut-/Verletzungsphobie: Einzige Phobie mit OHNMACHT statt Panik (vasovagale Reaktion)',
+      'Emetophobie (Angst vor Erbrechen): Häufig bei Jugendlichen, stark einschränkend, oft zu Essstörung fehldiagnostiziert'
+    ],
+    ursachen: [
+      { faktor: 'Konditionierung', text: 'Klassisch: Traumatische Erfahrung (Hundebiss → Hundephobie). Modell: Beobachten, wie jemand Angst hat. Instruktion: "Hunde sind gefährlich!" gesagt bekommen.' },
+      { faktor: 'Evolutionär', text: 'Prepared Learning (Seligman): Bestimmte Phobien sind "vorprogrammiert" — Spinnen, Schlangen, Höhen, Dunkelheit waren evolutionär gefährlich. Deshalb häufiger als "moderne" Ängste.' },
+      { faktor: 'Temperament', text: 'Behavioral Inhibition erhöht Risiko für alle Angststörungen, auch spezifische Phobien.' },
+      { faktor: 'PVT-Perspektive', text: 'Neuroception: Der spezifische Reiz wird als "Lebensgefahr" erkannt → volle Sympathikus-Aktivierung oder Freeze. Exposition trainiert die Neuroception um: "Spinne = ungefährlich."' }
+    ],
+    differentialdiagnose: [
+      { was: 'Normale kindliche Ängste', unterschied: 'Normal: Dunkelheit (2-5J), Monster (4-7J), Verletzung (7-12J). Pathologisch: Über das Alter hinaus, intensiv, funktionsbeeinträchtigend.' },
+      { was: 'Soziale Angst', unterschied: 'Soziale Angst: Angst vor Bewertung durch MENSCHEN. Spezifische Phobie: Angst vor konkretem OBJEKT/SITUATION.' },
+      { was: 'PTBS', unterschied: 'PTBS: Angst bezogen auf traumatisches Erlebnis + Intrusionen. Phobie: Angst vor spezifischem Reiz ohne notwendiges Trauma.' }
+    ],
+    komorbiditaeten: ['Andere Angststörungen (50%)', 'Depression (25%)', 'Andere Phobien (40%)', 'Substanzmissbrauch (bei Erwachsenen)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Exposition in vivo', evidenz: '★★★', beschreibung: 'Goldstandard: Graduell oder intensiv (Flooding) dem phobischen Reiz aussetzen. 1-5 Sitzungen können reichen! Höchste Effektstärke aller KVT-Interventionen.' },
+      { methode: 'One-Session Treatment (Öst)', evidenz: '★★★', beschreibung: 'Eine einzige 3-Stunden-Sitzung mit intensiver Exposition. 80-90% Erfolgsrate bei spezifischen Phobien! Besonders bei Tierphobien.' },
+      { methode: 'Angewandte Anspannung (Blutphobie)', evidenz: '★★★', beschreibung: 'Spezifisch für Blut-/Verletzungsphobie: Muskeln anspannen statt entspannen (verhindert Ohnmacht). Technick von Öst.' },
+      { methode: 'VR-Exposition', evidenz: '★★☆', beschreibung: 'Virtual Reality Exposition: Für Phobien, bei denen In-vivo schwierig ist (Fliegen, Höhen, Spinnen). Zunehmend verfügbar.' }
+    ],
+    praxis_tipps: [
+      'Vermeidung NICHT unterstützen: "Dann gehen wir halt einen anderen Weg" (wegen Hund) → hält die Phobie am Leben',
+      'Exposition sanft einleiten: Bilder → Videos → Entfernung → Nähe → Berührung. NICHT: "Stell dich nicht an!"',
+      'Mut belohnen: "Du hast den Hund angeguckt — das war richtig mutig!" — Verstärkung jedes kleinen Schritts',
+      'Bei Emetophobie: Ernst nehmen! Nicht "das ist doch nicht so schlimm". Oft massive Einschränkung (Essen, Schule, soziale Aktivitäten)',
+      'Blutphobie: Applied Tension VORHER üben — z.B. vor Blutabnahme. Funktioniert zuverlässig'
+    ],
+    wann_ueberweisen: 'Bei starker Vermeidung/Funktionsbeeinträchtigung: KVT-Therapeut:in (Expositionstherapie). Oft reichen 1-5 Sitzungen! Bei Emetophobie: Spezialisierte Behandlung nötig.',
+    luxemburg_spezifisch: 'KVT-Therapeut:innen über CePAS oder Association Luxembourgeoise de Psychologie (ALP). VR-Exposition noch wenig verfügbar in Luxemburg.',
+    verwandte_wiki: ['angststoerungen', 'panikstoerung', 'soziale-angst'],
+    screening_domains: ['angst'],
+    themen_ids: ['angstbewaeltigung'],
+    verhaltens_ids: ['aengstlich'],
+    leitfaden_ids: [],
+    quellen: ['Öst, L.-G. (1989). One-Session Treatment for Specific Phobias. Behaviour Research and Therapy.', 'Ollendick, T.H. et al. (2009). One-Session Treatment of Specific Phobias in Youth. Journal of Consulting and Clinical Psychology.']
+  },
+  // --- Anpassungsstörung ---
+  {
+    id: 'anpassungsstoerung',
+    titel: 'Anpassungsstörung',
+    aliases: ['Adjustment Disorder', 'Belastungsreaktion', 'Überforderung', 'Lebensereignis', 'Krise'],
+    kategorie: 'stoerungsbilder',
+    icon: '🔀',
+    farbe: '#64748B',
+    definition: 'Emotionale oder Verhaltenssymptome als Reaktion auf ein identifizierbares belastendes Ereignis (Umzug, Trennung, Schulwechsel, Verlust, Krankheit). Symptome innerhalb von 3 Monaten nach dem Ereignis, nicht länger als 6 Monate nach Ende des Stressors. Die "Restkategorie" — wenn die Symptome nicht die Kriterien für Depression, Angst oder PTBS erfüllen, aber dennoch klinisch bedeutsam sind.',
+    altersgruppe: 'Alle Altersgruppen. Bei Jugendlichen häufig nach: Schulwechsel, Trennung der Eltern, Freundschaftsbruch, Migration.',
+    praevalenz: '5-20% aller ambulanten psychiatrischen Patienten. Sehr häufige Diagnose in der Jugendhilfe.',
+    icd10: { code: 'F43.2', label: 'Anpassungsstörungen' },
+    icd11: { code: '6B43', label: 'Adjustment Disorder' },
+    erscheinungsbild: [
+      'Mit depressiver Stimmung: Traurigkeit, Hoffnungslosigkeit, Weinen, Interessenverlust',
+      'Mit Angst: Nervosität, Sorgen, Unruhe, Trennungsangst',
+      'Mit Störung des Sozialverhaltens: Regelverstöße, Aggression, Schulschwänzen — als Reaktion auf Belastung',
+      'Gemischt: Kombination aus Depression, Angst und Verhaltensauffälligkeiten',
+      'Zeitlicher Zusammenhang: Symptome klar nach einem Ereignis, vorher nicht vorhanden',
+      'Funktionsbeeinträchtigung: Schulleistung sinkt, Freundschaften leiden, Familienklima belastet'
+    ],
+    ursachen: [
+      { faktor: 'Belastendes Ereignis', text: 'Identifizierbarer Stressor: Umzug, Trennung, Schulwechsel, Krankheit, Verlust, Migration, Mobbing. JEDES Ereignis, das die Bewältigungskapazität übersteigt.' },
+      { faktor: 'Individuelle Vulnerabilität', text: 'Nicht jeder reagiert gleich auf denselben Stressor. Temperament, Resilienzfaktoren, Vorerfahrungen, Unterstützungssystem entscheiden mit.' },
+      { faktor: 'Coping-Ressourcen', text: 'Wenig soziale Unterstützung, geringe Problemlösekompetenz, fehlendes Netzwerk → höheres Risiko.' },
+      { faktor: 'PVT-Perspektive', text: 'Das Nervensystem ist vorübergehend aus dem "Window of Tolerance" gefallen. Mit ausreichend Unterstützung und Co-Regulation: Rückkehr in den ventralen Vagus-Zustand möglich.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Depression', unterschied: 'Depression: Erfüllt volle Kriterien (Dauer, Anzahl Symptome). Anpassungsstörung: Subthreshold — belastend, aber nicht "voll" depressiv.' },
+      { was: 'PTBS', unterschied: 'PTBS: Nach Trauma mit Lebensgefahr + Intrusionen/Flashbacks. Anpassungsstörung: Nach "normalen" Stressoren, ohne Intrusionen.' },
+      { was: 'Normale Trauerreaktion', unterschied: 'Trauer nach Verlust ist NORMAL und KEINE Diagnose. Erst bei ungewöhnlicher Intensität/Dauer → Anpassungsstörung.' }
+    ],
+    komorbiditaeten: ['Depression (wenn Chronifizierung)', 'Angststörungen (20%)', 'Substanzmissbrauch (Jugendliche)', 'Suizidalität (besonders bei Jugendlichen unterschätzt!)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Supportive Beratung', evidenz: '★★★', beschreibung: 'Zuhören, validieren, Orientierung geben, Coping-Strategien stärken. Oft reicht dies — die natürlichen Anpassungsprozesse unterstützen.' },
+      { methode: 'Problemlösetraining', evidenz: '★★☆', beschreibung: 'Konkrete Lösungsschritte für den Stressor erarbeiten. "Was genau ist das Problem? Welche Optionen gibt es? Was wäre der erste Schritt?"' },
+      { methode: 'Kurz-KVT', evidenz: '★★☆', beschreibung: '6-8 Sitzungen: Kognitive Umstrukturierung, Aktivitätenplanung, Stressmanagement. Reicht oft aus.' },
+      { methode: 'Ressourcenaktivierung', evidenz: '★★☆', beschreibung: 'Soziales Netzwerk aktivieren, Hobbies wiederaufnehmen, Routine herstellen. Die Person an ihre eigenen Stärken erinnern.' }
+    ],
+    praxis_tipps: [
+      'NICHT pathologisieren: Anpassungsstörung ist eine NORMALE Reaktion auf eine ABNORMALE Situation',
+      'Stressor identifizieren: "Was hat sich verändert?" — den Zusammenhang herstellen hilft bereits',
+      'Zeitlicher Rahmen: "Das wird besser. Die meisten Menschen passen sich innerhalb von Wochen-Monaten an."',
+      'Coping stärken: "Was hat dir in früheren schwierigen Situationen geholfen?" — an eigene Ressourcen erinnern',
+      'Suizidalität nicht unterschätzen: Anpassungsstörung klingt "harmlos", aber 25% der Suizide in der Psychiatrie!',
+      'Bei Chronifizierung: Wenn nach 6 Monaten keine Besserung → Re-Diagnostik (Depression? Angst?)'
+    ],
+    wann_ueberweisen: 'Bei >6 Monaten ohne Besserung: Psychiatrische Re-Evaluation. Bei Suizidalität: Sofort! Bei schwerem Funktionsverlust (Schulabbruch, sozialer Rückzug): Psychotherapie.',
+    luxemburg_spezifisch: 'CePAS: Schulische Krisenbegleitung. SCAS: Bei familiären Stressoren. SOS Détresse: 45 45 45.',
+    verwandte_wiki: ['depression', 'trauer', 'akute-belastungsreaktion', 'resilienz'],
+    screening_domains: ['stimmung', 'angst'],
+    themen_ids: ['stressmanagement', 'problemloesung', 'veraenderung'],
+    verhaltens_ids: [],
+    leitfaden_ids: ['sorgengespraech'],
+    quellen: ['Casey, P. & Bailey, S. (2011). Adjustment Disorders: The State of the Art. World Psychiatry.', 'Strain, J.J. & Diefenbacher, A. (2008). The Adjustment Disorders. The American Journal of Psychiatry.']
+  },
+  // --- Somatoforme Störungen ---
+  {
+    id: 'somatoforme-stoerungen',
+    titel: 'Somatoforme Störungen / Psychosomatik',
+    aliases: ['Psychosomatik', 'Funktionelle Beschwerden', 'Somatisierung', 'Konversionsstörung', 'Bauchschmerzen ohne Befund'],
+    kategorie: 'stoerungsbilder',
+    icon: '🤕',
+    farbe: '#EA580C',
+    definition: 'Körperliche Symptome, die nicht oder nicht ausreichend durch eine organische Erkrankung erklärbar sind, aber erhebliches Leid verursachen. Die Symptome sind REAL — nicht eingebildet, nicht simuliert! Der Körper "spricht", was die Psyche nicht ausdrücken kann. Häufigste Symptome bei Jugendlichen: Bauchschmerzen, Kopfschmerzen, Übelkeit, Schwindel, Erschöpfung.',
+    altersgruppe: 'Funktionelle Bauchschmerzen: Bereits ab 4-5 Jahre. Konversionsstörung: Häufiger in Adoleszenz. Mädchen häufiger betroffen.',
+    praevalenz: 'Funktionelle Beschwerden: 10-25% aller Kinder-/Jugendarztbesuche. Chronische Schmerzen ohne Befund: 5-10% der Jugendlichen.',
+    icd10: { code: 'F45', label: 'Somatoforme Störungen (F45.0 Somatisierungsstörung, F44 Konversion)' },
+    icd11: { code: '6C20', label: 'Bodily Distress Disorder' },
+    erscheinungsbild: [
+      'Bauchschmerzen: Häufigste funktionelle Beschwerde bei Kindern. Oft morgens vor der Schule, am Wochenende besser',
+      'Kopfschmerzen: Spannungskopfschmerz, "Helm-Gefühl", schlimmer bei Stress',
+      'Übelkeit/Erbrechen: Ohne gastrointestinale Ursache, oft vor belastenden Situationen',
+      'Schwindel: "Mir wird schwarz vor Augen", orthostatisch, bei Stress',
+      'Erschöpfung/Fatigue: Extreme Müdigkeit trotz ausreichend Schlaf — manchmal als CFS fehldiagnostiziert',
+      'Konversionsstörung: Pseudoepileptische Anfälle, Lähmungen, Blindheit, Stimmverlust — OHNE neurologischen Befund',
+      'Doctor Shopping: Viele Arztbesuche, viele Untersuchungen, keine Diagnose → Frustration bei allen Beteiligten'
+    ],
+    ursachen: [
+      { faktor: 'Psychodynamisch', text: 'Der Körper drückt aus, was der Mund nicht sagen kann. Unbewusste Konflikte, unterdrückte Emotionen → "Konversion" in körperliche Symptome.' },
+      { faktor: 'Lerntheoretisch', text: 'Symptome werden verstärkt: Bauchschmerzen → kein Schulbesuch → Vermeidung der belastenden Situation. Sekundärer Krankheitsgewinn (nicht absichtlich!).' },
+      { faktor: 'Alexithymie', text: 'Schwierigkeiten, Emotionen zu erkennen und zu benennen. Was nicht gefühlt werden kann → wird körperlich erlebt.' },
+      { faktor: 'Familiär', text: 'Familien mit hohem Somatisierungsniveau: Eltern mit häufigen körperlichen Beschwerden → Kind lernt: "Wenn ich Schmerzen habe, bekomme ich Aufmerksamkeit/Fürsorge."' },
+      { faktor: 'PVT-Perspektive', text: 'Chronische autonome Dysregulation: Das Nervensystem ist im Überlebensmodus → der Körper produziert reale Symptome (Muskelanspannung → Schmerzen, Hyperventilation → Schwindel, Darmmotilitätsstörung → Bauchschmerzen).' }
+    ],
+    differentialdiagnose: [
+      { was: 'Organische Erkrankung', unterschied: 'IMMER erst somatisch abklären! Aber: NICHT endlos untersuchen. Eine gründliche Basisdiagnostik, dann: Psychosomatische Erklärung anbieten.' },
+      { was: 'Simulation/Aggravation', unterschied: 'Simulation: Bewusst, absichtlich, für externen Gewinn. Somatoforme Störung: UNBEWUSST, die Person LEIDET wirklich!' },
+      { was: 'Depression/Angst', unterschied: 'Depression und Angst können körperliche Symptome verursachen. Wenn die Hauptbeschwerde körperlich ist: Eher somatoforme Störung.' }
+    ],
+    komorbiditaeten: ['Angststörungen (50%)', 'Depression (40%)', 'Schulvermeidung (häufig!)', 'Trennungsangst (bei Kindern)', 'Trauma/PTBS (30%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Psychoedukation', evidenz: '★★★', beschreibung: '"Deine Schmerzen sind REAL. Und: Dein Gehirn und dein Körper sprechen die gleiche Sprache. Stress kann echte Schmerzen verursachen." Das bio-psycho-soziale Modell erklären.' },
+      { methode: 'KVT', evidenz: '★★★', beschreibung: 'Zusammenhang Gedanken-Gefühle-Körper erkennen. Schmerzmanagement. Aktivitätenaufbau trotz Symptome. Angst-Vermeidungs-Zyklus durchbrechen.' },
+      { methode: 'Biofeedback', evidenz: '★★☆', beschreibung: 'Sichtbar machen: "Schau, wenn du dich anspannst, steigt die Muskelspannung → Schmerz." Körperbewusstsein und Kontrolle fördern.' },
+      { methode: 'Familienintervention', evidenz: '★★★', beschreibung: 'Eltern lernen: Symptome NICHT verstärken (nicht bei jedem Bauchschmerz zu Hause lassen), ABER: Validieren. Graduelle Aktivierung unterstützen.' }
+    ],
+    praxis_tipps: [
+      'NIEMALS sagen "Du hast nichts" oder "Das bildest du dir ein" — die Schmerzen sind REAL!',
+      'Stattdessen: "Dein Körper reagiert auf Stress mit Bauchschmerzen. Das ist normal und veränderbar."',
+      'Nicht verstärken: Bei Bauchschmerzen morgens → trotzdem Schule (wenn medizinisch abgeklärt). Warm anziehen, Wärmflasche mitnehmen, aber gehen.',
+      'Stressoren identifizieren: "Was war in der Woche bevor die Bauchschmerzen angefangen haben?"',
+      'Emotionsvokabular aufbauen: "Was fühlst du — NEBEN den Bauchschmerzen?" Oft: "Ich weiß nicht" → Alexithymie-Arbeit',
+      'Sport und Bewegung: Oft die wirksamste Intervention. Bringt das Nervensystem in Regulation.'
+    ],
+    wann_ueberweisen: 'Somatische Basisdiagnostik einmal gründlich. Bei V.a. psychosomatische Ursache: Psychotherapeut:in (KVT). Bei Konversionsstörung (Pseudoepilepsie, Lähmung): Neurologie + Psychotherapie. Bei Schulvermeidung: Sofort handeln.',
+    luxemburg_spezifisch: 'CHL Pädiatrie: Somatische Abklärung. CHL Kinder-/Jugendpsychiatrie: Psychosomatik-Liaison. CePAS: Schulische Begleitung bei Schulvermeidung.',
+    verwandte_wiki: ['angststoerungen', 'depression', 'schulvermeidung', 'dissoziation'],
+    screening_domains: ['somatisierung'],
+    themen_ids: ['koerperwahrnehmung', 'emotionsregulation', 'stressmanagement'],
+    verhaltens_ids: ['somatisierend'],
+    leitfaden_ids: ['sorgengespraech'],
+    quellen: ['Henningsen, P. et al. (2018). Persistent Physical Symptoms. Lancet.', 'Campo, J.V. (2012). Annual Research Review: Functional Somatic Symptoms and Disorders in Children. Journal of Child Psychology and Psychiatry.']
+  },
+  // --- Enuresis & Enkopresis ---
+  {
+    id: 'enuresis-enkopresis',
+    titel: 'Enuresis & Enkopresis',
+    aliases: ['Einnässen', 'Einkoten', 'Bettnässen', 'Harninkontinenz', 'Stuhlinkontinenz'],
+    kategorie: 'stoerungsbilder',
+    icon: '💧',
+    farbe: '#0EA5E9',
+    definition: 'Enuresis: Unwillkürliches Einnässen ab dem Alter von 5 Jahren (mindestens 2x/Woche für 3 Monate). Primär: Noch nie trocken gewesen. Sekundär: Nach mindestens 6 Monaten Kontinenz erneut einnässen. Enkopresis: Unwillkürliches/willkürliches Einkoten ab 4 Jahren an unangemessenen Stellen. KEINE Willenssache — kein Kind nässt/kotet absichtlich ein!',
+    altersgruppe: 'Enuresis: 5+ Jahre (10% der 7-Jährigen, 5% der 10-Jährigen, 1-2% der Jugendlichen). Enkopresis: 4+ Jahre (1-3% der Schulkinder).',
+    praevalenz: 'Enuresis nocturna: 10-15% der 5-Jährigen, 5% der 10-Jährigen. Enkopresis: 1-3%. Jungen 2-3x häufiger. Spontanremission 15%/Jahr.',
+    icd10: { code: 'F98.0/F98.1', label: 'Nichtorganische Enuresis / Nichtorganische Enkopresis' },
+    icd11: { code: '6C00/6C01', label: 'Enuresis / Encopresis' },
+    erscheinungsbild: [
+      'Enuresis nocturna: Bettnässen in der Nacht (häufigste Form), tiefes Schlafen, Weckprobleme',
+      'Enuresis diurna: Tagsüber einnässen — oft durch Aufschub ("Ich hab keine Zeit aufs Klo")',
+      'Enkopresis mit Verstopfung: 80% der Fälle — chronische Obstipation → Überlauf-Inkontinenz',
+      'Enkopresis ohne Verstopfung: Seltener, oft psychisch bedingt (Stress, Trauma, Trotz)',
+      'Psychosoziale Folgen: MASSIVE Scham, Isolation, Mobbing-Risiko, keine Übernachtungen, geringes Selbstwertgefühl',
+      'Sekundäre Enuresis: Nach Periode der Kontinenz → IMMER an Stressor denken (Trauma, Trennung, Geburt Geschwister)'
+    ],
+    ursachen: [
+      { faktor: 'Reifungsverzögerung', text: 'Primäre Enuresis: Meist Reifungsverzögerung der Blasenkontrolle. Genetisch: 77% wenn beide Eltern betroffen, 44% wenn ein Elternteil.' },
+      { faktor: 'Organisch', text: 'Immer ausschließen: Harnwegsinfekte, Diabetes, Fehlbildungen, Obstipation (bei Enkopresis). Somatische Basisdiagnostik!' },
+      { faktor: 'Psychisch', text: 'Sekundäre Formen: Stress, Trauma, Vernachlässigung, familiäre Belastung. CAVE: Sexueller Missbrauch kann Enkopresis auslösen!' },
+      { faktor: 'PVT-Perspektive', text: 'Blasen-/Darm-Kontrolle erfordert ventral-vagale Regulation. Bei chronischem Stress: Autonomes Nervensystem priorisiert Überleben → "niedrige" Funktionen (Ausscheidung) werden vernachlässigt.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Organische Ursachen', unterschied: 'Harnwegsinfektion, Diabetes mellitus/insipidus, Obstipation, Morbus Hirschsprung → somatisch abklären!' },
+      { was: 'Normale Variation', unterschied: 'Einnässen bis 5 Jahre ist NORMAL. Gelegentliches Einnässen bis 7-8 Jahre: Noch im Normbereich.' },
+      { was: 'Trauma/Missbrauch', unterschied: 'Bei sekundärer Enuresis/Enkopresis: IMMER an Trauma/Missbrauch denken! Besonders bei plötzlichem Beginn.' }
+    ],
+    komorbiditaeten: ['ADHS (20-30%)', 'Verhaltensauffälligkeiten (25%)', 'Angststörungen (20%)', 'Depression (bei Jugendlichen mit Enuresis)', 'Enuresis + Enkopresis oft komorbid'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Klingelmatte (Enuresis)', evidenz: '★★★', beschreibung: 'Goldstandard bei Bettnässen: Feuchtigkeitssensor im Bett → Alarm → Kind wacht auf. 65-75% Erfolgsrate. Braucht 2-3 Monate Geduld.' },
+      { methode: 'Desmopressin (Enuresis)', evidenz: '★★★', beschreibung: 'Medikament: Reduziert Urinproduktion nachts. Wirkt schnell, aber: Hohe Rückfallrate nach Absetzen. Gut für Übernachtungen/Klassenfahrten.' },
+      { methode: 'Toilettentraining + Obstipationsbehandlung (Enkopresis)', evidenz: '★★★', beschreibung: 'Erst den Darm entleeren (Macrogol), dann: Regelmäßiges Toiletten-Sitzen nach Mahlzeiten (5-10 Min), Belohnungssystem, Ernährungsberatung.' },
+      { methode: 'Psychoedukation + Entstigmatisierung', evidenz: '★★★', beschreibung: '"Du bist nicht allein — VIELE Kinder haben das Problem. Es ist NICHT deine Schuld. Und es wird besser!" Scham reduzieren ist die halbe Miete.' }
+    ],
+    praxis_tipps: [
+      'NIEMALS bestrafen oder beschämen: "Du bist doch kein Baby mehr!" → Verschlimmerung garantiert',
+      'Normalisieren: "10 von 100 Kindern in deinem Alter nässen noch ein. Das ist nichts, wofür man sich schämen muss."',
+      'Trinken NICHT einschränken! Das hilft NICHT und kann schaden. Normal trinken, letzte Stunde vor dem Schlafen reduzieren.',
+      'Bei Enkopresis: Verstopfung behandeln ist der ERSTE Schritt. Ohne Stuhlregulation keine Kontinenz.',
+      'Übernachtungen ermöglichen: Diskreter Plan (Pull-Ups, Extra-Wäsche mitnehmen). Soziale Teilhabe ist wichtig!',
+      'Sekundäre Enuresis: Stress-Exploration, Trauma-Anamnese, familiäre Veränderungen erfragen'
+    ],
+    wann_ueberweisen: 'Somatische Abklärung beim Kinderarzt immer zuerst. Bei Nicht-Ansprechen auf Klingelmatte nach 3 Monaten: Spezialambulanz. Bei sekundärer Form: Psychologische Diagnostik. Bei V.a. Missbrauch: SCAS/Polizei.',
+    luxemburg_spezifisch: 'CHL Pädiatrie: Somatische Diagnostik. Kinderurologen: Über CHL. CePAS: Psychologische Begleitung bei Schulproblemen durch Enuresis.',
+    verwandte_wiki: ['adhs', 'angststoerungen', 'trauma-ptbs'],
+    screening_domains: ['entwicklung'],
+    themen_ids: ['koerperwahrnehmung', 'selbstwert'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['NICE (2010). Nocturnal Enuresis: Management. CG111.', 'von Gontard, A. (2013). Enkopresis und Enuresis. Hogrefe.']
+  },
+  // --- Schlafstörungen ---
+  {
+    id: 'schlafstoerungen',
+    titel: 'Schlafstörungen bei Jugendlichen',
+    aliases: ['Insomnie', 'Schlafprobleme', 'Schlaflosigkeit', 'Circadiane Rhythmusstörung', 'Albträume', 'Schlafhygiene'],
+    kategorie: 'stoerungsbilder',
+    icon: '🌙',
+    farbe: '#312E81',
+    definition: 'Schlafstörungen bei Jugendlichen umfassen Einschlafprobleme (Insomnie), Durchschlafstörungen, verzögertes Schlafphasensyndrom (Delayed Sleep Phase), Parasomnien (Albträume, Schlafwandeln) und Hypersomnien (übermäßige Schläfrigkeit). Jugendliche brauchen 8-10 Stunden Schlaf, bekommen aber durchschnittlich nur 6-7. Chronischer Schlafmangel ist eine "stille Epidemie" mit massiven Folgen.',
+    altersgruppe: 'Schlafprobleme bei 25-40% aller Jugendlichen. Delayed Sleep Phase besonders häufig 13-19 Jahre.',
+    praevalenz: 'Insomnie: 10-30% der Jugendlichen. Delayed Sleep Phase: 7-16%. Albträume: 5-10%. Restless Legs: 2%.',
+    icd10: { code: 'F51', label: 'Nichtorganische Schlafstörungen' },
+    icd11: { code: '7A00-7A2Z', label: 'Sleep-Wake Disorders' },
+    erscheinungsbild: [
+      'Einschlafinsomnie: Liegt stundenlang wach, Grübeln, kann nicht abschalten, Handy im Bett',
+      'Delayed Sleep Phase: Kann erst um 2-3 Uhr einschlafen, wird morgens nicht wach — biologische Uhr verschoben',
+      'Chronischer Schlafmangel: Müde tagsüber, Konzentrationsprobleme, Reizbarkeit, Leistungsabfall',
+      'Albträume: Wiederkehrend, oft traumaassoziiert, Angst vor dem Einschlafen',
+      'Schlafwandeln/Night Terrors: Aus dem Tiefschlaf, keine Erinnerung, 10% der Kinder',
+      'Sekundäre Effekte: Depression, Angst, ADHS-ähnliche Symptome, Gewichtszunahme, Immunschwäche — ALLES durch Schlafmangel!'
+    ],
+    ursachen: [
+      { faktor: 'Biologisch', text: 'Pubertät verschiebt die Melatonin-Ausschüttung um 1-3 Stunden nach hinten → Jugendliche sind BIOLOGISCH Nachteulen. Früher Schulbeginn → chronischer Schlafmangel.' },
+      { faktor: 'Bildschirme', text: 'Blaues Licht von Handy/Tablet unterdrückt Melatonin. Social Media vor dem Schlafen: Emotionale Aktivierung → Einschlafverzögerung.' },
+      { faktor: 'Psychisch', text: 'Angst, Depression, PTBS, Grübeln → Insomnie. Insomnie verschlimmert psychische Probleme → Teufelskreis.' },
+      { faktor: 'PVT-Perspektive', text: 'Einschlafen erfordert ventral-vagalen Zustand: Sicherheit, Entspannung. Chronischer Stress/Trauma: Das Nervensystem bleibt im Sympathikus → kann nicht "herunterfahren". Hypervigilanz verhindert Schlaf.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Depression', unterschied: 'Depression: Schlafstörung als SYMPTOM (Ein- und Durchschlafstörung ODER Hypersomnie). Primäre Insomnie: OHNE depressive Grunderkrankung.' },
+      { was: 'Substanzwirkung', unterschied: 'Koffein, Cannabis, Amphetamine, Energy Drinks → Schlafstörung. Substanzanamnese!' },
+      { was: 'Schlafapnoe', unterschied: 'Bei adipösen Jugendlichen + Schnarchen + Tagesmüdigkeit: Schlafapnoe ausschließen (Schlaflabor).' }
+    ],
+    komorbiditaeten: ['Depression (60% bei chronischer Insomnie)', 'Angststörungen (40%)', 'ADHS (Schlafprobleme bei 70% der ADHS-Kinder)', 'Substanzmissbrauch', 'Übergewicht'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Schlafhygiene', evidenz: '★★★', beschreibung: 'Regelmäßige Zeiten, kein Bildschirm 1h vor Schlafen, kühles dunkles Zimmer, kein Koffein ab 14 Uhr, Bett nur zum Schlafen.' },
+      { methode: 'KVT-I (KVT bei Insomnie)', evidenz: '★★★', beschreibung: 'Goldstandard bei Insomnie: Stimulus-Kontrolle, Schlafrestriktion, kognitive Umstrukturierung. 4-8 Sitzungen. Wirksamer als Schlafmittel!' },
+      { methode: 'Chronotherapie', evidenz: '★★☆', beschreibung: 'Bei Delayed Sleep Phase: Lichttherapie morgens (10000 Lux), Melatonin abends (0.5-3mg), graduelle Vorverlegung der Schlafzeit.' },
+      { methode: 'Imagery Rehearsal Therapy (Albträume)', evidenz: '★★★', beschreibung: 'Albtraum tagsüber aufschreiben → Ende umschreiben → neues Ende vor dem Einschlafen "üben". 70% Reduktion der Albträume.' }
+    ],
+    praxis_tipps: [
+      'Schlaf ist NICHT Luxus sondern Grundbedürfnis: 8-10 Stunden für Jugendliche, nicht verhandelbar',
+      'Bildschirm-Regel: Handy/Tablet 1 Stunde vor dem Schlafen aus dem Zimmer. Wecker statt Handy als Wecker.',
+      'Nicht zum Schlafen zwingen: "Geh ins Bett!" funktioniert nicht. Stattdessen: Entspannungsroutine aufbauen',
+      'Bei Delayed Sleep Phase: NICHT bestrafen ("Er ist einfach faul!"). Es ist BIOLOGISCH. Chronotherapie hilft.',
+      'Bei Albträumen: Trauma-Screening! Wiederkehrende Albträume sind oft ein PTBS-Symptom.',
+      'Koffein-Inventar: Energy Drinks, Cola, Eistee — Jugendliche unterschätzen ihren Koffein-Konsum massiv'
+    ],
+    wann_ueberweisen: 'Bei chronischer Insomnie >3 Monate: KVT-I-Therapeut:in. Bei V.a. Schlafapnoe: Schlaflabor. Bei Narkolepsie-Verdacht: Neurologie. Bei Albträumen + PTBS: Traumatherapie.',
+    luxemburg_spezifisch: 'CHL: Schlaflabor für Kinder und Jugendliche. Melatonin in Luxemburg rezeptfrei in Apotheken (niedrig dosiert). CePAS: Beratung bei schulischen Folgen von Schlafmangel.',
+    verwandte_wiki: ['depression', 'angststoerungen', 'adhs', 'trauma-ptbs'],
+    screening_domains: ['schlaf'],
+    themen_ids: ['schlaf', 'medienkonsum', 'stressmanagement'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Owens, J. (2014). Insufficient Sleep in Adolescents and Young Adults. Pediatrics.', 'Harvey, A.G. (2016). Cognitive Behavioral Treatment of Insomnia. Oxford.', 'Carskadon, M.A. (2011). Sleep in Adolescents: The Perfect Storm. Pediatric Clinics of North America.']
+  },
+  // --- Lernstörungen ---
+  {
+    id: 'lernstoerungen',
+    titel: 'Lernstörungen (Legasthenie, Dyskalkulie)',
+    aliases: ['Legasthenie', 'Dyskalkulie', 'LRS', 'Lese-Rechtschreib-Schwäche', 'Rechenschwäche', 'Dyslexie'],
+    kategorie: 'stoerungsbilder',
+    icon: '📖',
+    farbe: '#059669',
+    definition: 'Umschriebene Entwicklungsstörungen schulischer Fertigkeiten bei mindestens durchschnittlicher Intelligenz. Legasthenie/LRS: Erhebliche Schwierigkeiten beim Lesen und/oder Rechtschreiben. Dyskalkulie: Erhebliche Schwierigkeiten im mathematischen Bereich. KEIN Intelligenzproblem — das Gehirn verarbeitet bestimmte Informationen anders.',
+    altersgruppe: 'Erkennbar ab Schulbeginn (6-7 Jahre). Oft erst in 2.-3. Klasse diagnostiziert. Lebenslang, aber kompensierbar.',
+    praevalenz: 'Legasthenie/LRS: 5-10%. Dyskalkulie: 3-6%. Komorbidität LRS+Dyskalkulie: Häufig.',
+    icd10: { code: 'F81', label: 'Umschriebene Entwicklungsstörungen schulischer Fertigkeiten' },
+    icd11: { code: '6A03', label: 'Developmental Learning Disorder' },
+    erscheinungsbild: [
+      'LRS-Lesen: Langsames, stockendes Lesen, Buchstaben verwechseln (b/d, p/q), Zeile verlieren, Sinn nicht erfassen',
+      'LRS-Schreiben: Viele Rechtschreibfehler, Buchstabenauslassungen, phonologische Fehler, unleserliche Handschrift',
+      'Dyskalkulie: Zählen mit Fingern, Zahlendreher, kein Mengenbegriff, Einmaleins nicht automatisiert, Textaufgaben unmöglich',
+      'Sekundäre Folgen: Schulangst, Verweigerung, Bauchschmerzen, "Ich bin dumm"-Überzeugung, Selbstwertprobleme',
+      'Kompensation: Intelligente Kinder kompensieren oft jahrelang → werden erst spät erkannt wenn Anforderungen steigen',
+      'Stärken: Oft überdurchschnittliche Intelligenz in anderen Bereichen, kreativ, gutes räumliches Denken'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'LRS: Veränderte Verarbeitung im linken Temporallappen (phonologische Bewusstheit). Dyskalkulie: Veränderungen im intraparietalen Sulcus (Mengenverarbeitung).' },
+      { faktor: 'Genetisch', text: 'Heritabilität 50-70%. Familiäre Häufung: "Papa konnte auch nicht lesen." Mehrere Risiko-Gene identifiziert.' },
+      { faktor: 'Umwelt', text: 'NICHT verursacht durch: Faulheit, schlechten Unterricht, mangelnde Übung. ABER: Ungünstige Lernbedingungen verschärfen das Problem.' },
+      { faktor: 'PVT-Perspektive', text: 'Chronische Überforderung in der Schule → Sympathikus-Daueraktivierung → Schulangst, Verweigerung, Bauchschmerzen. Das Kind ist nicht faul — sein Nervensystem ist im Überlebensmodus.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Intelligenzminderung', unterschied: 'Intelligenzminderung: Globale Defizite. Lernstörung: Umschrieben (nur Lesen/Schreiben/Rechnen), bei normaler Intelligenz.' },
+      { was: 'ADHS', unterschied: 'ADHS: Unaufmerksamkeit bei ALLEN Aufgaben. Lernstörung: Spezifische Schwäche in einem Bereich. 30-50% Komorbidität!' },
+      { was: 'Schulische Unterversorgung', unterschied: 'Zu wenig Förderung, häufige Schulwechsel, Sprachbarriere → können Lernrückstände verursachen, die keine Lernstörung sind.' }
+    ],
+    komorbiditaeten: ['ADHS (30-50%)', 'Angststörungen (25%)', 'Depression (20%)', 'Schulvermeidung', 'Verhaltensauffälligkeiten (Frustration)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Evidenzbasierte Förderung (LRS)', evidenz: '★★★', beschreibung: 'Phonologische Bewusstheit trainieren (Lautanalyse, Silben), morphematisches Training, Leseflüssigkeit (Tandemlesen). Regelmäßig, mindestens 3x/Woche.' },
+      { methode: 'Evidenzbasierte Förderung (Dyskalkulie)', evidenz: '★★★', beschreibung: 'Mengenverständnis aufbauen (konkret → bildlich → abstrakt), Zahlraum strukturieren, Rechenstrategien explizit lehren.' },
+      { methode: 'Aménagements raisonnables', evidenz: '★★★', beschreibung: 'Nachteilsausgleich in der Schule: Mehr Zeit, Vorlesen der Aufgaben, Laptop statt Handschrift, Bewertung anpassen. RECHT des Kindes!' },
+      { methode: 'Selbstwertarbeit', evidenz: '★★☆', beschreibung: 'Stärken identifizieren und fördern: "Du liest langsamer — UND du bist der beste Konstrukteur in der Klasse." Positive Identität aufbauen.' }
+    ],
+    praxis_tipps: [
+      '"Du bist nicht dumm — dein Gehirn verarbeitet bestimmte Dinge anders." Diese Botschaft ist GOLD wert.',
+      'Aménagements AKTIV beantragen: Viele Kinder in der Jugendhilfe haben Anspruch aber keine Diagnose!',
+      'Stärken-Fokus: Was KANN das Kind gut? Sport, Kunst, Technik, soziale Kompetenz? Dort investieren.',
+      'Hausaufgaben: Nicht stundenlang üben lassen. Qualität vor Quantität. Kurze Einheiten mit Pausen.',
+      'Technische Hilfsmittel: Text-to-Speech-Software, Hörbücher, Taschenrechner — das sind KEINE Betrugsmittel!',
+      'Eltern entlasten: "Ihr Kind übt nicht zu wenig. Es braucht andere Methoden, nicht mehr vom Gleichen."'
+    ],
+    wann_ueberweisen: 'Bei V.a. Lernstörung: Schulpsychologie oder CePAS für standardisierte Diagnostik. Wenn komorbide ADHS: Psychiatrische Abklärung. Aménagements über CAR beantragen.',
+    luxemburg_spezifisch: 'CePAS: Diagnostik und Beratung. CAR (Commission des Aménagements Raisonnables): Antrag auf Nachteilsausgleich. SREA: Frühförderung. Dyslexie-Verband Luxemburg (ADPL). Logopädie-Verordnung über Kinderarzt.',
+    verwandte_wiki: ['adhs', 'amenagements-raisonnables', 'schulvermeidung', 'intelligenzminderung'],
+    screening_domains: ['schule', 'lernen'],
+    themen_ids: ['lernen', 'selbstwert', 'schule'],
+    verhaltens_ids: [],
+    leitfaden_ids: ['elterngespraech'],
+    quellen: ['Schulte-Körne, G. (2014). Lese-Rechtschreibstörung. Deutsches Ärzteblatt.', 'Landerl, K. et al. (2017). Dyskalkulie. UTB.']
+  },
+  // --- Intelligenzminderung ---
+  {
+    id: 'intelligenzminderung',
+    titel: 'Intellektuelle Beeinträchtigung',
+    aliases: ['Intelligenzminderung', 'Geistige Behinderung', 'Intellectual Disability', 'IB', 'Lernbehinderung'],
+    kategorie: 'stoerungsbilder',
+    icon: '🧠',
+    farbe: '#6B7280',
+    definition: 'Signifikant unterdurchschnittliche intellektuelle Funktionsfähigkeit (IQ <70) mit Einschränkungen in adaptiven Verhaltensweisen (Alltag, Soziales, Konzeptuelles), Beginn in der Entwicklungsperiode. WICHTIG: Der IQ allein definiert NICHT die Person. Entscheidend ist der Unterstützungsbedarf. Seit ICD-11: "Disorders of Intellectual Development" — weg von der stigmatisierenden Bezeichnung.',
+    altersgruppe: 'Lebenslang. Diagnose idealerweise in Kindheit. Leichte IB wird oft erst in der Schule erkannt.',
+    praevalenz: '1-3% der Bevölkerung. Leicht (IQ 50-69): 85%. Mittel (IQ 35-49): 10%. Schwer (IQ 20-34): 3-4%. Schwerst (<20): 1-2%.',
+    icd10: { code: 'F70-F79', label: 'Intelligenzminderung' },
+    icd11: { code: '6A00', label: 'Disorders of Intellectual Development' },
+    erscheinungsbild: [
+      'Leichte IB: Selbstständige Lebensführung möglich, lesen/schreiben eingeschränkt, braucht Unterstützung bei komplexen Entscheidungen',
+      'Mittlere IB: Alltägliche Verrichtungen mit Unterstützung, eingeschränkte Kommunikation, braucht strukturierte Umgebung',
+      'Schwere/Schwerste IB: Umfassende Unterstützung in allen Bereichen, oft nonverbal, Pflegebedarf',
+      'Verhaltensphänotypen: Down-Syndrom (freundlich, sozial), Williams-Syndrom (verbal stark, visuell-räumlich schwach), Fragiles-X (Angst, Vermeidung)',
+      'Komorbide psychische Störungen: 3-4x häufiger! Werden MASSIV unterdiagnostiziert ("Diagnostic Overshadowing")',
+      'Stärken: Emotionale Intelligenz, Zuverlässigkeit, Routineliebe, Herzlichkeit — oft unterschätzt'
+    ],
+    ursachen: [
+      { faktor: 'Genetisch', text: 'Down-Syndrom (Trisomie 21), Fragiles-X-Syndrom, Mikrodeletionen, über 1000 genetische Ursachen bekannt. 30-50% aller Fälle.' },
+      { faktor: 'Pränatal', text: 'FASD, Infektionen (Röteln, CMV, Toxoplasmose), Medikamente, Mangelernährung, Strahlung.' },
+      { faktor: 'Perinatal', text: 'Sauerstoffmangel, Frühgeburt, Hirnblutung, Meningitis.' },
+      { faktor: 'Postnatal', text: 'Schädel-Hirn-Trauma, Meningitis/Enzephalitis, extreme Deprivation/Vernachlässigung.' },
+      { faktor: 'Unbekannt', text: 'In 30-50% der Fälle keine identifizierbare Ursache, v.a. bei leichter IB.' }
+    ],
+    differentialdiagnose: [
+      { was: 'Lernstörung', unterschied: 'Lernstörung: Umschrieben (nur Lesen/Rechnen), IQ normal. IB: Globale Einschränkung, IQ <70.' },
+      { was: 'ASS', unterschied: 'ASS: Ungleichmäßiges Profil (Stärken + Schwächen). IB: Gleichmäßig reduziertes Profil. CAVE: Häufige Komorbidität!' },
+      { was: 'Deprivation', unterschied: 'Schwere Vernachlässigung kann IB-ähnliche Symptome verursachen. Bei Verbesserung der Umgebung: Nachholentwicklung möglich.' }
+    ],
+    komorbiditaeten: ['Psychische Störungen (30-50%!)', 'Epilepsie (20-30%)', 'ASS (10-30%)', 'ADHS (20%)', 'Angst/Depression (oft übersehen!)', 'Verhaltensstörungen (20-40%)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Individueller Förderplan', evidenz: '★★★', beschreibung: 'Stärkenbasiert: Was KANN die Person? Wo braucht sie Unterstützung? Realistische, messbare Ziele in kleinen Schritten.' },
+      { methode: 'Unterstützte Kommunikation', evidenz: '★★★', beschreibung: 'Bei eingeschränkter Sprache: Gebärden, Bildkarten, Kommunikations-Apps (PECS, GoTalk). Kommunikation ist ein GRUNDRECHT.' },
+      { methode: 'Applied Behavior Analysis (ABA)', evidenz: '★★★', beschreibung: 'Strukturiertes Lernen: Aufgaben zerlegen, Verstärkung, Shaping. Kontrovers diskutiert, aber evidenzbasiert bei schwerem Unterstützungsbedarf.' },
+      { methode: 'Inklusion + Empowerment', evidenz: '★★★', beschreibung: 'UN-BRK Art. 19: Recht auf selbstbestimmtes Leben in der Gemeinschaft. Unterstützte Beschäftigung, Wohnformen, Freizeit.' }
+    ],
+    praxis_tipps: [
+      'Person ZUERST: "Mensch mit intellektueller Beeinträchtigung", NICHT "Behinderter" oder "geistig Behinderter"',
+      'Einfache Sprache: Kurze Sätze, konkret, Bilder nutzen, nachfragen ob verstanden',
+      'Psychische Störungen erkennen: Verhaltensänderung bei IB = IMMER psychisches Problem ausschließen! Diagnostic Overshadowing vermeiden.',
+      'Selbstbestimmung: Auch bei IB: So viel Autonomie wie möglich. Entscheidungen ANBIETEN, nicht abnehmen.',
+      'Übergänge begleiten: Schulwechsel, Berufseinstieg, Auszug → besonders sensible Phasen',
+      'Sexualität nicht tabuisieren: Menschen mit IB haben ein RECHT auf sexuelle Aufklärung und Selbstbestimmung'
+    ],
+    wann_ueberweisen: 'Diagnostik: Kinder-/Jugendpsychiater oder Psychologe (standardisierte IQ-Tests + adaptive Verhaltensskalen). Bei V.a. genetische Ursache: Humangenetik. Bei komorbiden psychischen Störungen: Psychiatrie mit IB-Expertise.',
+    luxemburg_spezifisch: 'SREA: Frühförderung. Éducation différenciée: Spezialisierte Schulen. Info-Handicap: Beratung. Trisomie 21 asbl Luxembourg. APEMH (Association des Parents d\'Enfants Mentalement Handicapés).',
+    verwandte_wiki: ['autismus', 'fasd', 'lernstoerungen', 'amenagements-raisonnables'],
+    screening_domains: ['entwicklung', 'kognitiv'],
+    themen_ids: ['lernen', 'selbststaendigkeit', 'inklusion'],
+    verhaltens_ids: [],
+    leitfaden_ids: [],
+    quellen: ['Schalock, R.L. et al. (2010). Intellectual Disability: Definition, Classification, and Systems of Supports. 11th ed. AAIDD.', 'Salvador-Carulla, L. et al. (2011). Intellectual Developmental Disorders. Lancet.']
+  },
+  // --- Gaming Disorder ---
+  {
+    id: 'gaming-disorder',
+    titel: 'Gaming Disorder / Internetsucht',
+    aliases: ['Gaming Sucht', 'Internetsucht', 'Social Media Sucht', 'Bildschirmsucht', 'Online-Abhängigkeit', 'Mediensucht'],
+    kategorie: 'stoerungsbilder',
+    icon: '🎮',
+    farbe: '#7C3AED',
+    definition: 'Gaming Disorder (seit ICD-11): Anhaltendes oder wiederkehrendes Gaming-Verhalten mit Kontrollverlust, Priorisierung gegenüber anderen Aktivitäten und Fortsetzung trotz negativer Konsequenzen, für mindestens 12 Monate. Internetsucht/Social-Media-Sucht sind noch nicht formal im ICD, aber klinisch zunehmend relevant. WICHTIG: Viel spielen ≠ süchtig! Entscheidend: Kontrollverlust + Funktionsbeeinträchtigung.',
+    altersgruppe: 'Hauptrisikogruppe: 12-25 Jahre, männlich. Social-Media-Problematik: Eher weiblich, ab 10 Jahre.',
+    praevalenz: 'Gaming Disorder: 1-5% der Gamer. Problematische Internetnutzung: 5-15% der Jugendlichen.',
+    icd10: { code: 'F63.0', label: 'Pathologisches Spielen (noch nicht spezifisch für Gaming)' },
+    icd11: { code: '6C51', label: 'Gaming Disorder' },
+    erscheinungsbild: [
+      'Kontrollverlust: "Nur noch eine Runde" → 5 Stunden später noch dran. Kann nicht aufhören trotz Vorsatz',
+      'Priorisierung: Gaming/Social Media wird wichtiger als Schule, Freunde, Familie, Hygiene, Schlaf',
+      'Entzugssymptome: Reizbarkeit, Unruhe, Aggression wenn kein Zugang zum Gerät',
+      'Toleranzentwicklung: Braucht mehr Spielzeit für gleiche Befriedigung',
+      'Funktionsbeeinträchtigung: Schulversagen, sozialer Rückzug (real), Schlafmangel, Konflikte in Familie',
+      'Social Media spezifisch: Ständiges Checken, FOMO (Fear of Missing Out), Selbstwert abhängig von Likes, Cybermobbing',
+      'Flucht-Motiv: Gaming/Internet als Bewältigung von Einsamkeit, Depression, Angst, Langeweile'
+    ],
+    ursachen: [
+      { faktor: 'Neurobiologisch', text: 'Dopamin-System: Gaming aktiviert das Belohnungssystem ähnlich wie Substanzen. Variable Verstärkung (Loot Boxes, Likes) ist besonders süchtigend.' },
+      { faktor: 'Psychisch', text: 'Depression, Angst, ADHS, soziale Angst → erhöhtes Risiko. Gaming als Selbstmedikation: "Nur im Spiel fühle ich mich kompetent und verbunden."' },
+      { faktor: 'Design', text: 'Spiele/Apps sind ABSICHTLICH süchtig-machend designt: Endlose Scrolls, variable Belohnungen, soziale Verpflichtungen, FOMO-Mechanismen.' },
+      { faktor: 'Sozial', text: 'Online-Freundschaften können echte Beziehungen ersetzen. Besonders bei sozialer Angst: Online ist "sicherer" als offline.' },
+      { faktor: 'PVT-Perspektive', text: 'Gaming bietet ventral-vagale Regulation: Vorhersagbarkeit, Kontrolle, soziale Verbindung (in Multiplayer), Erfolgserlebnisse. Das reale Leben bietet das oft NICHT → Gaming als "sicherer Hafen".' }
+    ],
+    differentialdiagnose: [
+      { was: 'Leidenschaftliches Gaming', unterschied: 'Leidenschaft: Kann aufhören, vernachlässigt andere Bereiche NICHT, Freude. Sucht: Kontrollverlust, Funktionseinschränkung, Weitermachen trotz negativer Folgen.' },
+      { was: 'Depression mit Rückzug', unterschied: 'Primäre Depression: Rückzug in Gaming als SYMPTOM. Gaming Disorder: Gaming als URSACHE der Probleme. Oft Henne-Ei-Problem.' },
+      { was: 'ASS', unterschied: 'ASS: Intensives Interesse an Spielen (Spezialinteresse). NICHT automatisch Sucht. Nur wenn Kontrollverlust + Funktionseinschränkung.' }
+    ],
+    komorbiditaeten: ['Depression (50%)', 'ADHS (30%)', 'Soziale Angst (25%)', 'Schlafstörungen (60%)', 'Schulvermeidung (häufig)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'KVT', evidenz: '★★★', beschreibung: 'Funktionsanalyse: WARUM spielt der Jugendliche? Was gibt das Gaming, was das reale Leben nicht gibt? Dann: Alternativen aufbauen.' },
+      { methode: 'Motivational Interviewing', evidenz: '★★☆', beschreibung: '"Was gefällt dir am Gaming? Was nervt dich daran?" Ambivalenz explorieren, nicht moralisieren.' },
+      { methode: 'Aktivitätenaufbau', evidenz: '★★☆', beschreibung: 'Das reale Leben attraktiver machen: Sport, Hobbies, soziale Kontakte offline. Gaming nicht verbieten sondern ERSETZEN.' },
+      { methode: 'Familienintervention', evidenz: '★★☆', beschreibung: 'Gemeinsame Medienregeln, Eltern als Vorbild, Screen-Free-Times, Kontrolle OHNE Machtkampf.' }
+    ],
+    praxis_tipps: [
+      'NICHT moralisieren: "Du zockst zu viel!" → Widerstand. Stattdessen: "Was gibt dir das Spielen?"',
+      'Gaming NICHT komplett verbieten: Führt zu Eskalation und Vertrauensverlust. Stattdessen: Gemeinsam Regeln vereinbaren',
+      'Die FUNKTION verstehen: Ist Gaming Flucht vor Depression? Soziale Angst? Langeweile? ADHS? → Die Ursache behandeln!',
+      'Offline-Alternativen aufbauen: Sport, Musik, Freunde treffen — das reale Leben muss attraktiver werden',
+      'Bildschirmzeit allein ist kein guter Indikator: 3 Stunden kreatives Programmieren ≠ 3 Stunden Doom-Scrolling',
+      'BEE SECURE nutzen: Beratung für Medienkompetenz, auch für Eltern'
+    ],
+    wann_ueberweisen: 'Bei Kontrollverlust + Funktionsbeeinträchtigung >12 Monate: Spezialisierte Suchtberatung. Bei komorbider Depression/Angst: Psychotherapie. Bei Schulvermeidung: Sofort handeln.',
+    luxemburg_spezifisch: 'BEE SECURE: Helpline 8002-1234, Medienkompetenz. Impuls (Centre de Prévention des Addictions): Beratung auch zu Verhaltenssüchten. CePAS: Schulische Begleitung.',
+    verwandte_wiki: ['depression', 'adhs', 'soziale-angst', 'schlafstoerungen', 'mediensozialisation'],
+    screening_domains: ['medien', 'sucht'],
+    themen_ids: ['medienkonsum', 'impulskontrolle', 'sozialkompetenz'],
+    verhaltens_ids: ['medienabhaengig'],
+    leitfaden_ids: ['motivationsgespraech'],
+    quellen: ['WHO (2018). ICD-11: Gaming Disorder.', 'Paulus, F.W. et al. (2018). Internet Gaming Disorder in Children and Adolescents. Journal of Clinical Medicine.']
+  },
+  // --- FASD ---
+  {
+    id: 'fasd',
+    titel: 'Fetales Alkoholsyndrom (FASD)',
+    aliases: ['FAS', 'FASD', 'Alkoholembryopathie', 'Fetale Alkoholspektrumstörung', 'Alkohol Schwangerschaft'],
+    kategorie: 'stoerungsbilder',
+    icon: '🍷',
+    farbe: '#9F1239',
+    definition: 'FASD (Fetal Alcohol Spectrum Disorders) umfasst die lebenslangen Schädigungen durch pränatale Alkoholexposition. Das vollständige Fetale Alkoholsyndrom (FAS) umfasst: Gesichtsauffälligkeiten, Wachstumsstörungen und ZNS-Schädigungen. FASD ist die HÄUFIGSTE vermeidbare Ursache von Intelligenzminderung und Entwicklungsstörungen. Es gibt KEINE sichere Alkoholmenge in der Schwangerschaft.',
+    altersgruppe: 'Lebenslang. Gesichtsauffälligkeiten am deutlichsten bei 2-10 Jahren. Verhaltensprobleme: Am auffälligsten in Schule und Adoleszenz.',
+    praevalenz: 'FASD gesamt: 2-5% aller Geburten (oft unterschätzt!). Volles FAS: 0.1-0.5%. In Jugendhilfe/Pflegefamilien: Deutlich höher (geschätzt 30-40%).',
+    icd10: { code: 'Q86.0', label: 'Alkohol-Embryopathie (Dysmorphie)' },
+    icd11: { code: 'LD2F.00', label: 'Fetal Alcohol Spectrum Disorder' },
+    erscheinungsbild: [
+      'Gesicht (nicht immer vorhanden!): Schmale Lidspalten, verstrichenes Philtrum, dünne Oberlippe, flaches Mittelgesicht',
+      'Wachstum: Minderwuchs, Untergewicht (pränatal und postnatal), Mikrozephalie',
+      'ZNS: Intelligenzminderung (IQ 65-85 typisch), Lernstörungen, ADHS-ähnliche Symptome, Gedächtnisprobleme',
+      'Exekutive Funktionen: MASSIV beeinträchtigt: Planung, Organisation, Impulskontrolle, flexible Anpassung. DAS ist das Kernproblem!',
+      'Verhalten: Impulsiv, regelverletzend (NICHT absichtlich!), sozial naiv, leicht verführbar, Schwierigkeiten aus Konsequenzen zu lernen',
+      'Sozial: "Keine Fremden kennen" (distanzgemindert), soziale Naivität, leicht ausnutzbar',
+      'Sekundärschäden: Schulversagen, Delinquenz, Substanzmissbrauch, psychische Störungen — oft durch fehlendes Wissen über FASD verursacht!'
+    ],
+    ursachen: [
+      { faktor: 'Alkohol als Teratogen', text: 'Alkohol passiert die Plazenta ungehindert. Fetaler Alkoholspiegel = mütterlicher Spiegel. Der Fetus kann Alkohol kaum abbauen. Schädigung in JEDEM Trimester möglich.' },
+      { faktor: 'ZNS-Schädigung', text: 'Alkohol schädigt die neuronale Migration, Synaptogenese, Myelinisierung. Besonders betroffen: Corpus Callosum, Cerebellum, Frontallappen → exekutive Dysfunktion.' },
+      { faktor: 'Dosis und Timing', text: 'Kein sicherer Schwellenwert! Binge Drinking besonders schädigend. 1. Trimester: Organschäden, Gesicht. 2./3. Trimester: ZNS-Schäden, Wachstum.' },
+      { faktor: 'PVT-Perspektive', text: 'Geschädigtes Nervensystem: Kann Regulation STRUKTURELL nicht leisten. Das Kind WILL kooperieren, KANN es aber nicht. Konsequenzen-basierte Erziehung funktioniert NICHT, weil Ursache-Wirkung-Verständnis beeinträchtigt.' }
+    ],
+    differentialdiagnose: [
+      { was: 'ADHS', unterschied: 'ADHS: Aufmerksamkeitsprobleme + Hyperaktivität. FASD: Zusätzlich exekutive Dysfunktion, soziale Naivität, Gesichtsmerkmale. 80% der FASD-Kinder werden initial als ADHS diagnostiziert!' },
+      { was: 'Intelligenzminderung', unterschied: 'IB: Globale Minderung. FASD: Ungleichmäßiges Profil — verbale Fähigkeiten oft besser als Handlung. "Spricht besser als er handeln kann."' },
+      { was: 'Bindungsstörung', unterschied: 'Viele FASD-Kinder leben in Pflegefamilien → Bindungsprobleme. FASD + Bindungsstörung: Häufige Komorbidität, verstärkt sich gegenseitig.' }
+    ],
+    komorbiditaeten: ['ADHS (60-80%)', 'Schlafstörungen (50%)', 'Depression (40%)', 'Angst (30%)', 'Bindungsstörung (bei Pflegekindern)', 'Substanzmissbrauch (als Jugendliche 5x erhöht)'],
+    evidenzbasierte_interventionen: [
+      { methode: 'Externe Hirnstruktur', evidenz: '★★★', beschreibung: 'FASD-Kinder brauchen eine "externe Festplatte": Visuelle Zeitpläne, Timer, Checklisten, Routinen, Erinnerungshilfen. Was das Gehirn nicht kann → externe Struktur bieten.' },
+      { methode: 'Eltern/Betreuerschulung', evidenz: '★★★', beschreibung: 'Paradigmenwechsel: "Kann nicht" statt "Will nicht". Erwartungen an die Hirnschädigung anpassen. Konsequenzen-basierte Erziehung = wirkungslos. Stattdessen: Umgebung anpassen.' },
+      { methode: 'Medikation', evidenz: '★★☆', beschreibung: 'Methylphenidat bei ADHS-Symptomen (wirkt bei FASD weniger gut). Melatonin bei Schlafstörungen. Keine FASD-spezifische Medikation.' },
+      { methode: 'Social Skills Training', evidenz: '★★☆', beschreibung: 'Explizites Lehren sozialer Regeln: Konkret, wiederholend, mit visueller Unterstützung. "Wenn jemand das macht, bedeutet das..."' }
+    ],
+    praxis_tipps: [
+      'Paradigmenwechsel #1: "Kann nicht" statt "Will nicht". Das Kind ist hirngeschädigt, NICHT bösartig.',
+      'Erwartungen anpassen: Ein 14-Jähriger mit FASD funktioniert exekutiv oft wie ein 8-Jähriger. Altersentsprechende Erwartungen → Scheitern → Frust',
+      'Konsequenzen FUNKTIONIEREN NICHT: Ursache-Wirkung-Verständnis ist beeinträchtigt. Statt Strafe: Umgebung anpassen.',
+      'Routine, Routine, Routine: Vorhersagbare Tagesstruktur. Jede Veränderung VOR ankündigen.',
+      'Konkret kommunizieren: "Räum dein Zimmer auf" ist zu abstrakt. "Leg die Bücher auf das Regal" ist konkret.',
+      '10-Sekunden-Regel: Nach einer Anweisung 10 Sekunden warten. FASD-Gehirne brauchen länger zum Verarbeiten.',
+      'Sekundärschäden verhindern: FASD ist nicht heilbar, aber Sekundärschäden (Delinquenz, Sucht) sind vermeidbar durch frühes Erkennen und angepasste Unterstützung.'
+    ],
+    wann_ueberweisen: 'Bei V.a. FASD: Spezialisierte Diagnostik (FASD-Zentrum oder erfahrener Neuropädiater). Diagnose erleichtert Zugang zu Hilfen und Aménagements. Bei JEDEM "schwierigen" Pflegekind: An FASD denken!',
+    luxemburg_spezifisch: 'CHL Neuropädiatrie: FASD-Diagnostik. Info-Handicap: Beratung zu Rechten und Unterstützung. Kein spezialisiertes FASD-Zentrum in Luxemburg — ggf. Charité Berlin, Universitätsklinikum Münster.',
+    verwandte_wiki: ['adhs', 'intelligenzminderung', 'bindungsstoerung', 'conduct-disorder'],
+    screening_domains: ['entwicklung', 'conduct'],
+    themen_ids: ['impulskontrolle', 'lernen', 'alltagskompetenzen'],
+    verhaltens_ids: ['impulsiv'],
+    leitfaden_ids: ['elterngespraech'],
+    quellen: ['Landgraf, M.N. & Heinen, F. (2017). S3-Leitlinie FASD. Springer.', 'Streissguth, A.P. et al. (2004). Risk Factors for Adverse Life Outcomes in FASD. Journal of Developmental and Behavioral Pediatrics.']
+  },
 ];

@@ -1762,6 +1762,7 @@ const DB = {
       inhalt: daten.inhalt || '',
       kategorie: daten.kategorie || 'session',
       themaId: daten.themaId || null,
+      soap: daten.soap || null,
       erstellt: new Date().toISOString(),
     };
     alle.push(neu);

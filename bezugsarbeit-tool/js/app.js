@@ -1804,12 +1804,16 @@ function renderHypothesen(hypothesen) {
     return;
   }
 
-  // Aufteilen: Risiko/Differenzial vs. Schutz
-  const risiken = hypothesen.filter(h => h.typ !== 'schutz');
-  const schutz = hypothesen.filter(h => h.typ === 'schutz');
+  // Ebenen-Konfiguration
+  const EBENEN = [
+    { id: 'einzelfaktor', label: 'Einzelfaktor', icon: '🔹', beschreibung: 'Einzelne Anamnese-Daten lösen aus' },
+    { id: 'kombination', label: 'Kombinationen', icon: '🔗', beschreibung: 'Mehrere Anamnese-Faktoren kombiniert' },
+    { id: 'dynamisch', label: 'Dynamisch', icon: '⚡', beschreibung: 'Anamnese + Screening kreuzreferenziert' },
+    { id: 'schutz', label: 'Schutzfaktoren', icon: '🛡️', beschreibung: 'Protektive Gegenhypothesen' },
+    { id: 'differenzial', label: 'Differenzial', icon: '🔀', beschreibung: 'Differenzialdiagnostische Abgrenzung' },
+  ];
 
   function hypotheseCard(h) {
-    // Farbe bestimmen
     let borderColor, badgeBg, badgeText;
     if (h.typ === 'schutz') {
       borderColor = '#22C55E'; badgeBg = '#F0FDF4'; badgeText = '#166534';
@@ -1831,7 +1835,7 @@ function renderHypothesen(hypothesen) {
     const daten = h._ausloesendeDaten || [];
 
     return `
-      <div class="hypothese-card" style="border-left:4px solid ${borderColor}">
+      <div class="hypothese-card" data-ebene="${h.ebene || ''}" data-staerke="${h.staerkeWert}" data-typ="${h.typ}" style="border-left:4px solid ${borderColor}">
         <div class="hypothese-header">
           <span class="hypothese-titel">${typIcon} ${h.titel}</span>
           <span class="hypothese-badge" style="background:${badgeBg};color:${badgeText}">${staerkeLabel}</span>
@@ -1860,6 +1864,34 @@ function renderHypothesen(hypothesen) {
     `;
   }
 
+  // Gruppiert nach Ebene
+  const gruppiertHtml = EBENEN.map(eb => {
+    const items = hypothesen.filter(h => h.ebene === eb.id);
+    if (items.length === 0) return '';
+    return `
+      <div class="hypothesen-ebene-gruppe">
+        <div class="hypothesen-ebene-header">
+          <span class="hypothesen-ebene-icon">${eb.icon}</span>
+          <span class="hypothesen-ebene-titel">${eb.label}</span>
+          <span class="hypothesen-ebene-count">${items.length}</span>
+          <span class="hypothesen-ebene-desc">${eb.beschreibung}</span>
+        </div>
+        <div class="hypothesen-ebene-cards">
+          ${items.map(hypotheseCard).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Flat view (sortiert nach Stärke)
+  const flatHtml = hypothesen.map(hypotheseCard).join('');
+
+  // Zähler pro Ebene für Filterleiste
+  const ebeneCounts = EBENEN.map(eb => {
+    const count = hypothesen.filter(h => h.ebene === eb.id).length;
+    return { ...eb, count };
+  }).filter(eb => eb.count > 0);
+
   el.innerHTML = `
     <div class="card" style="margin-bottom:16px;">
       <div class="card-header">
@@ -1868,17 +1900,25 @@ function renderHypothesen(hypothesen) {
         <span style="font-size:12px;color:var(--text-muted);margin-left:auto;">${hypothesen.length} aktiv</span>
       </div>
       <div class="card-body">
-        ${risiken.length > 0 ? `
-          <div class="hypothesen-section">
-            ${risiken.map(hypotheseCard).join('')}
+        <div class="hypothesen-controls">
+          <div class="hypothesen-ansicht-toggle">
+            <button class="hypothesen-ansicht-btn active" data-ansicht="ebenen" onclick="toggleHypothesenAnsicht('ebenen')">📊 Nach Ebenen</button>
+            <button class="hypothesen-ansicht-btn" data-ansicht="flat" onclick="toggleHypothesenAnsicht('flat')">📋 Alle (nach Stärke)</button>
           </div>
-        ` : ''}
-        ${schutz.length > 0 ? `
-          <div class="hypothesen-section hypothesen-schutz">
-            <div class="hypothesen-schutz-header">🛡️ Schutzfaktoren</div>
-            ${schutz.map(hypotheseCard).join('')}
+          <div class="hypothesen-filter-bar">
+            ${ebeneCounts.map(eb => `
+              <button class="hypothesen-filter-chip active" data-filter-ebene="${eb.id}" onclick="toggleHypothesenFilter('${eb.id}')">
+                ${eb.icon} ${eb.label} <span class="hypothesen-filter-count">${eb.count}</span>
+              </button>
+            `).join('')}
           </div>
-        ` : ''}
+        </div>
+        <div id="hypothesen-ansicht-ebenen" class="hypothesen-ansicht">
+          ${gruppiertHtml}
+        </div>
+        <div id="hypothesen-ansicht-flat" class="hypothesen-ansicht" style="display:none;">
+          ${flatHtml}
+        </div>
         <div style="text-align:center;margin-top:12px;">
           <button class="btn btn-sm btn-primary" onclick="openHypothesen5PModal()">
             🔀 Hypothesen → 5P-Analyse übernehmen
@@ -1890,6 +1930,32 @@ function renderHypothesen(hypothesen) {
       </div>
     </div>
   `;
+}
+
+// Hypothesen-Ansicht umschalten (Ebenen vs. Flat)
+function toggleHypothesenAnsicht(ansicht) {
+  document.querySelectorAll('.hypothesen-ansicht-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.ansicht === ansicht);
+  });
+  document.getElementById('hypothesen-ansicht-ebenen').style.display = ansicht === 'ebenen' ? '' : 'none';
+  document.getElementById('hypothesen-ansicht-flat').style.display = ansicht === 'flat' ? '' : 'none';
+}
+
+// Hypothesen-Filter nach Ebene ein-/ausschalten
+function toggleHypothesenFilter(ebene) {
+  const btn = document.querySelector(`[data-filter-ebene="${ebene}"]`);
+  if (!btn) return;
+  btn.classList.toggle('active');
+  const isActive = btn.classList.contains('active');
+  // Karten in beiden Ansichten ein-/ausblenden
+  document.querySelectorAll(`.hypothese-card[data-ebene="${ebene}"]`).forEach(card => {
+    card.style.display = isActive ? '' : 'none';
+  });
+  // Ebene-Gruppen-Header auch ausblenden wenn leer
+  document.querySelectorAll('.hypothesen-ebene-gruppe').forEach(grp => {
+    const visibleCards = grp.querySelectorAll('.hypothese-card:not([style*="display: none"])');
+    grp.style.display = visibleCards.length > 0 ? '' : 'none';
+  });
 }
 
 // ============================================================

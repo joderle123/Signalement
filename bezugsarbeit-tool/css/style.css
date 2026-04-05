@@ -4644,6 +4644,114 @@ select {
   line-height: 1.4;
 }
 
+/* Hypothesen Controls */
+.hypothesen-controls {
+  margin-bottom: 16px;
+}
+.hypothesen-ansicht-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  background: #F3F4F6;
+  border-radius: 8px;
+  padding: 3px;
+}
+.hypothesen-ansicht-btn {
+  flex: 1;
+  padding: 6px 12px;
+  font-size: 12px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.hypothesen-ansicht-btn.active {
+  background: #fff;
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 600;
+}
+.hypothesen-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.hypothesen-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.hypothesen-filter-chip.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.hypothesen-filter-chip:not(.active) {
+  opacity: 0.5;
+}
+.hypothesen-filter-count {
+  background: rgba(255,255,255,0.3);
+  padding: 0 5px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.hypothesen-filter-chip.active .hypothesen-filter-count {
+  background: rgba(255,255,255,0.25);
+}
+
+/* Ebenen-Gruppierung */
+.hypothesen-ebene-gruppe {
+  margin-bottom: 16px;
+}
+.hypothesen-ebene-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #F9FAFB;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #F3F4F6;
+}
+.hypothesen-ebene-icon {
+  font-size: 16px;
+}
+.hypothesen-ebene-titel {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.hypothesen-ebene-count {
+  background: var(--primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+.hypothesen-ebene-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.hypothesen-ebene-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 8px;
+}
+
 /* Dashboard Hypothesen Widget */
 .dash-hypo-count {
   font-size: 12px;

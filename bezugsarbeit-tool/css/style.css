@@ -4677,3 +4677,20 @@ select {
   text-align: center;
   padding: 4px;
 }
+
+/* Anamnese Felder (Single/Multi-Select) */
+.anamnese-feld {
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+.anamnese-feld-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.anamnese-feld-hint {
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--text-muted);
+}

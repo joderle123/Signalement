@@ -1522,23 +1522,62 @@ function renderInfo() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   const anamnese = s.anamnese || [];
 
-  // Anamnese-Kategorien mit klickbaren Chips
   const container = document.getElementById('anamnese-container');
   container.innerHTML = ANAMNESE_KATEGORIEN.map(kat => {
-    const activeCount = kat.items.filter(it => anamnese.includes(it.id)).length;
+    if (kat.felder) {
+      // Neue felder-basierte Kategorie
+      return renderAnamneseFelder(kat, anamnese);
+    } else if (kat.items) {
+      // Alte multi-select Chips
+      return renderAnamneseChips(kat, anamnese);
+    }
+    return '';
+  }).join('');
+
+  renderAnamneseZusammenfassung(s);
+
+  const hypothesen = generateHypothesen(APP.currentSchuelerId);
+  renderHypothesen(hypothesen);
+
+  const notizEl = document.getElementById('info-allgemein');
+  if (notizEl) notizEl.value = s.allgemeineNotizen || '';
+}
+
+function renderAnamneseChips(kat, anamnese) {
+  const activeCount = kat.items.filter(it => anamnese.includes(it.id)).length;
+  return `
+    <div class="anamnese-kategorie">
+      <div class="anamnese-kategorie-header" style="border-left:4px solid ${kat.farbe}">
+        <span>${kat.icon} ${kat.label}</span>
+        <span class="anamnese-count">${activeCount > 0 ? activeCount + ' ausgewählt' : ''}</span>
+      </div>
+      <div class="anamnese-chips">
+        ${kat.items.map(item => `
+          <div class="anamnese-chip ${anamnese.includes(item.id) ? 'active' : ''}"
+               style="--chip-color:${kat.farbe}"
+               onclick="toggleAnamneseItem('${item.id}')"
+               title="${item.evidenz}">
+            ${item.label}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderAnamneseFelder(kat, anamnese) {
+  const felderHtml = kat.felder.map(feld => {
+    const isMulti = feld.typ === 'multi';
     return `
-      <div class="anamnese-kategorie">
-        <div class="anamnese-kategorie-header" style="border-left:4px solid ${kat.farbe}">
-          <span>${kat.icon} ${kat.label}</span>
-          <span class="anamnese-count">${activeCount > 0 ? activeCount + ' ausgewählt' : ''}</span>
-        </div>
+      <div class="anamnese-feld">
+        <div class="anamnese-feld-label">${feld.label}${!isMulti ? ' <span class="anamnese-feld-hint">(eines wählen)</span>' : ''}</div>
         <div class="anamnese-chips">
-          ${kat.items.map(item => `
-            <div class="anamnese-chip ${anamnese.includes(item.id) ? 'active' : ''}"
+          ${feld.optionen.map(opt => `
+            <div class="anamnese-chip ${anamnese.includes(opt.id) ? 'active' : ''}"
                  style="--chip-color:${kat.farbe}"
-                 onclick="toggleAnamneseItem('${item.id}')"
-                 title="${item.evidenz}">
-              ${item.label}
+                 onclick="toggleAnamneseItem('${opt.id}', '${feld.id}', '${feld.typ}')"
+                 title="${opt.evidenz || ''}">
+              ${opt.label}
             </div>
           `).join('')}
         </div>
@@ -1546,29 +1585,58 @@ function renderInfo() {
     `;
   }).join('');
 
-  // Zusammenfassung rendern
-  renderAnamneseZusammenfassung(s);
-
-  // Hypothesen generieren und anzeigen
-  const hypothesen = generateHypothesen(APP.currentSchuelerId);
-  renderHypothesen(hypothesen);
-
-  // Notizfeld befüllen
-  const notizEl = document.getElementById('info-allgemein');
-  if (notizEl) notizEl.value = s.allgemeineNotizen || '';
+  return `
+    <div class="anamnese-kategorie">
+      <div class="anamnese-kategorie-header" style="border-left:4px solid ${kat.farbe}">
+        <span>${kat.icon} ${kat.label}</span>
+      </div>
+      ${felderHtml}
+    </div>
+  `;
 }
 
-function toggleAnamneseItem(itemId) {
+function toggleAnamneseItem(itemId, feldId, feldTyp) {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   const anamnese = s.anamnese || [];
-  const idx = anamnese.indexOf(itemId);
-  if (idx === -1) {
-    anamnese.push(itemId);
+
+  if (feldTyp === 'single' && feldId) {
+    // Single-select: entferne alle anderen Optionen desselben Felds
+    const feld = findFeld(feldId);
+    if (feld) {
+      const feldOptionIds = feld.optionen.map(o => o.id);
+      // Entferne alle Optionen dieses Felds
+      for (let i = anamnese.length - 1; i >= 0; i--) {
+        if (feldOptionIds.includes(anamnese[i])) {
+          anamnese.splice(i, 1);
+        }
+      }
+    }
+    // Wenn das Item nicht schon ausgewählt war, hinzufügen (sonst: deselect)
+    if (!s.anamnese || !s.anamnese.includes(itemId)) {
+      anamnese.push(itemId);
+    }
   } else {
-    anamnese.splice(idx, 1);
+    // Multi-select: toggle
+    const idx = anamnese.indexOf(itemId);
+    if (idx === -1) {
+      anamnese.push(itemId);
+    } else {
+      anamnese.splice(idx, 1);
+    }
   }
+
   DB.updateSchueler(APP.currentSchuelerId, { anamnese });
   renderInfo();
+}
+
+function findFeld(feldId) {
+  for (const kat of ANAMNESE_KATEGORIEN) {
+    if (kat.felder) {
+      const feld = kat.felder.find(f => f.id === feldId);
+      if (feld) return feld;
+    }
+  }
+  return null;
 }
 
 function renderAnamneseZusammenfassung(s) {
@@ -1587,13 +1655,17 @@ function renderAnamneseZusammenfassung(s) {
     return;
   }
 
-  // Alle Items flach sammeln
-  const alleItems = ANAMNESE_KATEGORIEN.flatMap(k => k.items);
+  // Alle Items/Optionen flach sammeln (beide Formate)
+  const alleItems = ANAMNESE_KATEGORIEN.flatMap(k => {
+    if (k.items) return k.items;
+    if (k.felder) return k.felder.flatMap(f => f.optionen);
+    return [];
+  });
   const aktiveItems = alleItems.filter(it => anamnese.includes(it.id));
 
   // ACE-Score (nur ACE-Kategorie)
   const aceKat = ANAMNESE_KATEGORIEN.find(k => k.id === 'ace');
-  const aceItems = aceKat ? aceKat.items.filter(it => anamnese.includes(it.id)) : [];
+  const aceItems = aceKat ? (aceKat.items || []).filter(it => anamnese.includes(it.id)) : [];
   const aceScore = aceItems.length;
 
   // Risikofaktoren (gewicht > 0) und Schutzfaktoren (gewicht < 0)

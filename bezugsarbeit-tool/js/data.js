@@ -1713,20 +1713,71 @@ const STAERKEN_DIMENSIONEN = [
 const ANAMNESE_KATEGORIEN = [
   {
     id: 'familie',
-    label: 'Familie & Herkunft',
+    label: 'Familiensituation',
     icon: '👨‍👩‍👧',
     farbe: '#6366F1',
-    items: [
-      { id: 'alleinerziehend', label: 'Alleinerziehender Elternteil', gewicht: 2, evidenz: 'Kinder alleinerziehender Eltern zeigen erhöhtes Risiko für Verhaltensauffälligkeiten und emotionale Probleme (Amato 2005, Journal of Marriage and Family)' },
-      { id: 'kein_vater', label: 'Kein Vaterkontakt', gewicht: 2, evidenz: 'Vaterabwesenheit korreliert mit erhöhtem Risiko für externalisierende Störungen, Schulabbruch und Substanzmissbrauch (McLanahan & Sandefur 1994; Harper & McLanahan 2004)' },
-      { id: 'kein_mutter', label: 'Kein Mutterkontakt', gewicht: 3, evidenz: 'Mütterliche Abwesenheit in der frühen Kindheit ist ein starker Prädiktor für Bindungsstörungen (Bowlby 1969; Rutter 1981)' },
-      { id: 'scheidung', label: 'Scheidung / Trennung der Eltern', gewicht: 1, evidenz: 'Scheidungskinder zeigen 2-3x höheres Risiko für psychische Auffälligkeiten, v.a. bei hochkonflikthafter Trennung (Amato 2001, Psychological Bulletin)' },
-      { id: 'patchwork', label: 'Patchwork-/Stieffamilie', gewicht: 1, evidenz: 'Stieffamilien-Konstellationen können Loyalitätskonflikte und Identitätsprobleme auslösen (Hetherington & Kelly 2002)' },
-      { id: 'pflegefamilie', label: 'Pflegefamilie / Fremdplatzierung', gewicht: 2, evidenz: 'Fremdplatzierte Kinder haben 3-7x höheres Risiko für psychische Störungen (Tarren-Sweeney 2008; Ford et al. 2007)' },
-      { id: 'heim', label: 'Heimunterbringung', gewicht: 3, evidenz: 'Heimkinder zeigen signifikant erhöhte Raten von Bindungsstörungen, PTBS und Verhaltensauffälligkeiten (Schmid et al. 2008; Dozier et al. 2012)' },
-      { id: 'migration', label: 'Migrationshintergrund', gewicht: 1, evidenz: 'Migration kann Identitätskonflikte, Diskriminierungserfahrungen und Akkulturationsstress verursachen (Berry 2006; Pumariega et al. 2005)' },
-      { id: 'flucht', label: 'Flucht-/Asylhintergrund', gewicht: 2, evidenz: 'Geflüchtete Kinder zeigen erhöhte PTBS-Raten (40-50%) und Depressionsprävalenz (Fazel et al. 2005, Lancet)' },
-      { id: 'viele_geschwister', label: 'Grosse Geschwisterzahl (4+)', gewicht: 1, evidenz: 'Grosse Familien mit begrenzten Ressourcen korrelieren mit geringerer individueller Aufmerksamkeit und Bildungschancen (Downey 2001)' },
+    felder: [
+      {
+        id: 'elternkonstellation', label: 'Elternkonstellation', typ: 'single',
+        optionen: [
+          { id: 'eltern_beide', label: 'Beide Eltern', gewicht: 0, evidenz: '' },
+          { id: 'alleinerziehend', label: 'Alleinerziehend Mutter', gewicht: 2, evidenz: 'Kinder alleinerziehender Eltern zeigen erhöhtes Risiko für Verhaltensauffälligkeiten und emotionale Probleme (Amato 2005)' },
+          { id: 'alleinerziehend_vater', label: 'Alleinerziehend Vater', gewicht: 2, evidenz: 'Alleinerziehende Väter zeigen ähnliche Risikoprofile wie alleinerziehende Mütter (Amato 2005)' },
+          { id: 'patchwork', label: 'Patchwork-/Stieffamilie', gewicht: 1, evidenz: 'Stieffamilien-Konstellationen können Loyalitätskonflikte und Identitätsprobleme auslösen (Hetherington & Kelly 2002)' },
+          { id: 'pflegefamilie', label: 'Pflegefamilie', gewicht: 2, evidenz: 'Fremdplatzierte Kinder haben 3-7x höheres Risiko für psychische Störungen (Tarren-Sweeney 2008)' },
+          { id: 'heim', label: 'Heim / Institution', gewicht: 3, evidenz: 'Heimkinder zeigen signifikant erhöhte Raten von Bindungsstörungen und PTBS (Schmid et al. 2008)' },
+          { id: 'grosseltern', label: 'Grosseltern', gewicht: 1, evidenz: 'Grosseltern-Betreuung kann protektiv sein, deutet aber oft auf Eltern-Ausfall hin (Dunifon 2013)' },
+          { id: 'eltern_andere', label: 'Andere', gewicht: 1, evidenz: '' },
+        ]
+      },
+      {
+        id: 'vater_praesent', label: 'Vater präsent', typ: 'single',
+        optionen: [
+          { id: 'vater_ja', label: 'Ja', gewicht: 0, evidenz: '' },
+          { id: 'kein_vater', label: 'Nein', gewicht: 2, evidenz: 'Vaterabwesenheit korreliert mit erhöhtem Risiko für externalisierende Störungen und Substanzmissbrauch (McLanahan & Sandefur 1994)' },
+          { id: 'vater_sporadisch', label: 'Sporadisch', gewicht: 1, evidenz: 'Unzuverlässiger Kontakt kann belastender sein als klare Abwesenheit (Amato 2001)' },
+          { id: 'vater_verstorben', label: 'Verstorben', gewicht: 3, evidenz: 'Elternverlust in der Kindheit ist starker Risikofaktor für Depression und komplizierte Trauer (Melhem et al. 2011)' },
+          { id: 'vater_unbekannt', label: 'Unbekannt', gewicht: 1, evidenz: '' },
+        ]
+      },
+      {
+        id: 'mutter_praesent', label: 'Mutter präsent', typ: 'single',
+        optionen: [
+          { id: 'mutter_ja', label: 'Ja', gewicht: 0, evidenz: '' },
+          { id: 'kein_mutter', label: 'Nein', gewicht: 3, evidenz: 'Mütterliche Abwesenheit in der frühen Kindheit ist ein starker Prädiktor für Bindungsstörungen (Bowlby 1969; Rutter 1981)' },
+          { id: 'mutter_sporadisch', label: 'Sporadisch', gewicht: 2, evidenz: 'Inkonsistente mütterliche Verfügbarkeit kann desorganisierte Bindung fördern (Main & Hesse 1990)' },
+          { id: 'mutter_verstorben', label: 'Verstorben', gewicht: 3, evidenz: 'Verlust der Mutter ist der stärkste Einzelprädiktor für Bindungsstörung (Bowlby 1969)' },
+          { id: 'mutter_unbekannt', label: 'Unbekannt', gewicht: 1, evidenz: '' },
+        ]
+      },
+      {
+        id: 'geschwister', label: 'Geschwister', typ: 'single',
+        optionen: [
+          { id: 'geschwister_keine', label: 'Keine', gewicht: 0, evidenz: '' },
+          { id: 'geschwister_1', label: '1', gewicht: 0, evidenz: '' },
+          { id: 'geschwister_2', label: '2', gewicht: 0, evidenz: '' },
+          { id: 'viele_geschwister', label: '3+', gewicht: 1, evidenz: 'Grosse Familien mit begrenzten Ressourcen korrelieren mit geringerer individueller Aufmerksamkeit (Downey 2001)' },
+          { id: 'halbgeschwister', label: 'Halbgeschwister', gewicht: 0, evidenz: '' },
+          { id: 'stiefgeschwister', label: 'Stiefgeschwister', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'wohnstabilitaet', label: 'Umzüge / Instabilität', typ: 'single',
+        optionen: [
+          { id: 'wohnung_stabil', label: 'Stabile Wohnsituation', gewicht: 0, evidenz: '' },
+          { id: 'umzuege_wenige', label: '1-2 Umzüge', gewicht: 0, evidenz: '' },
+          { id: 'haeufige_umzuege', label: '3+ Umzüge', gewicht: 2, evidenz: 'Häufige Wohnortwechsel destabilisieren soziale Netzwerke und korrelieren mit Verhaltensauffälligkeiten (Jelleyman & Spencer 2008)' },
+          { id: 'schulwechsel_haeufig', label: 'Häufige Schulwechsel', gewicht: 2, evidenz: 'Häufige Schulwechsel destabilisieren Peer-Beziehungen (Mehana & Reynolds 2004)' },
+        ]
+      },
+      {
+        id: 'familie_weiteres', label: 'Weitere familiäre Faktoren', typ: 'multi',
+        optionen: [
+          { id: 'scheidung', label: 'Scheidung / Trennung der Eltern', gewicht: 1, evidenz: 'Scheidungskinder zeigen 2-3x höheres Risiko für psychische Auffälligkeiten (Amato 2001)' },
+          { id: 'migration', label: 'Migrationshintergrund', gewicht: 1, evidenz: 'Migration kann Identitätskonflikte und Akkulturationsstress verursachen (Berry 2006)' },
+          { id: 'flucht', label: 'Flucht-/Asylhintergrund', gewicht: 2, evidenz: 'Geflüchtete Kinder zeigen erhöhte PTBS-Raten (40-50%) (Fazel et al. 2005)' },
+        ]
+      },
     ]
   },
   {
@@ -1749,32 +1800,105 @@ const ANAMNESE_KATEGORIEN = [
   },
   {
     id: 'schule',
-    label: 'Schule & Leistung',
+    label: 'Schulgeschichte',
     icon: '🏫',
     farbe: '#F59E0B',
-    items: [
-      { id: 'klassenwiederholung', label: 'Klassenwiederholung', gewicht: 1, evidenz: 'Klassenwiederholung korreliert mit niedrigerem Selbstwert und erhöhtem Schulabbruchrisiko (Jimerson et al. 2002; OECD 2012)' },
-      { id: 'schulwechsel_haeufig', label: 'Häufige Schulwechsel (2+)', gewicht: 2, evidenz: 'Häufige Schulwechsel destabilisieren Peer-Beziehungen und korrelieren mit Verhaltensauffälligkeiten (Mehana & Reynolds 2004)' },
-      { id: 'sonderpaedagogik', label: 'Sonderpädagogischer Förderbedarf', gewicht: 1, evidenz: 'Sonderpädagogischer Förderbedarf korreliert mit erhöhtem Stigmatisierungsrisiko und niedrigerem Selbstwert (Norwich 2014)' },
-      { id: 'absentismus', label: 'Schulabsentismus / Schulverweigerung', gewicht: 2, evidenz: 'Schulabsentismus ist starker Prädiktor für Schulabbruch, Delinquenz und spätere Arbeitslosigkeit (Kearney 2008; Maynard et al. 2015)' },
-      { id: 'mobbing_opfer', label: 'Mobbing-Opfer', gewicht: 2, evidenz: 'Mobbing-Opfer zeigen erhöhtes Risiko für Depression, Angst, Suizidalität und psychosomatische Beschwerden (Olweus 1993; Arseneault et al. 2010)' },
-      { id: 'mobbing_taeter', label: 'Mobbing-Täter', gewicht: 2, evidenz: 'Mobbing-Täterschaft korreliert mit erhöhtem Risiko für antisoziale Persönlichkeitsentwicklung und Delinquenz (Olweus 1993; Ttofi et al. 2012)' },
-      { id: 'lernbehinderung', label: 'Lernbehinderung / Teilleistungsstörung', gewicht: 1, evidenz: 'Unerkannte Lernstörungen führen zu sekundären emotionalen Problemen wie Angst und Depression (Willcutt & Pennington 2000)' },
-      { id: 'hochbegabung', label: 'Hochbegabung / Unterforderung', gewicht: 1, evidenz: 'Hochbegabte Kinder zeigen bei Unterforderung erhöhtes Risiko für Underachievement und soziale Isolation (Reis & McCoach 2000)' },
+    felder: [
+      {
+        id: 'schulleistung', label: 'Schulleistung aktuell', typ: 'single',
+        optionen: [
+          { id: 'leistung_gut', label: 'Gut', gewicht: 0, evidenz: '' },
+          { id: 'leistung_durchschnitt', label: 'Durchschnittlich', gewicht: 0, evidenz: '' },
+          { id: 'leistung_schwach', label: 'Schwach', gewicht: 1, evidenz: 'Schwache Schulleistungen korrelieren mit niedrigem Selbstwert und erhöhtem Dropout-Risiko (Jimerson et al. 2002)' },
+          { id: 'leistung_sehr_schwach', label: 'Sehr schwach', gewicht: 2, evidenz: 'Massive Schulleistungsprobleme sind Prädiktor für Schulabbruch und spätere Arbeitslosigkeit (Rumberger 2011)' },
+          { id: 'leistung_abbruch', label: 'Schulabbruch-Risiko', gewicht: 3, evidenz: 'Schulabbruch erhöht Risiko für Arbeitslosigkeit, Armut und psychische Erkrankungen um Faktor 2-4 (Rumberger 2011)' },
+        ]
+      },
+      {
+        id: 'fehlzeiten', label: 'Fehlzeiten', typ: 'single',
+        optionen: [
+          { id: 'fehlzeiten_selten', label: 'Selten', gewicht: 0, evidenz: '' },
+          { id: 'fehlzeiten_gelegentlich', label: 'Gelegentlich', gewicht: 0, evidenz: '' },
+          { id: 'absentismus', label: 'Häufig (>10%)', gewicht: 2, evidenz: 'Schulabsentismus >10% ist starker Prädiktor für Schulabbruch und Delinquenz (Kearney 2008)' },
+          { id: 'fehlzeiten_massiv', label: 'Massiv (>30%)', gewicht: 3, evidenz: 'Massiver Absentismus erfordert sofortige Intervention — Chronifizierungsrisiko sehr hoch (Maynard et al. 2015)' },
+        ]
+      },
+      {
+        id: 'schulwechsel_anz', label: 'Schulwechsel', typ: 'single',
+        optionen: [
+          { id: 'sw_0', label: '0', gewicht: 0, evidenz: '' },
+          { id: 'sw_1', label: '1', gewicht: 0, evidenz: '' },
+          { id: 'sw_2', label: '2', gewicht: 1, evidenz: 'Mehrfache Schulwechsel destabilisieren Peer-Beziehungen (Mehana & Reynolds 2004)' },
+          { id: 'schulwechsel_haeufig', label: '3+', gewicht: 2, evidenz: 'Häufige Schulwechsel korrelieren mit Verhaltensauffälligkeiten (Mehana & Reynolds 2004)' },
+        ]
+      },
+      {
+        id: 'lehrer_verhaeltnis', label: 'Verhältnis zu Lehrpersonen', typ: 'single',
+        optionen: [
+          { id: 'lehrer_positiv', label: 'Positiv', gewicht: -1, evidenz: 'Positive Lehrer-Schüler-Beziehung ist protektiver Faktor (Hamre & Pianta 2001)' },
+          { id: 'lehrer_neutral', label: 'Neutral', gewicht: 0, evidenz: '' },
+          { id: 'lehrer_konflikt', label: 'Konfliktreich', gewicht: 1, evidenz: 'Konflikte mit Lehrern korrelieren mit schlechterer Schulanpassung (Hamre & Pianta 2001)' },
+          { id: 'lehrer_autoritaet', label: 'Autoritätsprobleme', gewicht: 2, evidenz: 'Autoritätsprobleme deuten auf externalisierende Problematik oder Bindungsstörung hin (Greene 2014)' },
+          { id: 'lehrer_rueckzug', label: 'Rückzug', gewicht: 1, evidenz: 'Rückzug von Lehrern kann auf internalisierende Problematik hindeuten (Hamre & Pianta 2001)' },
+        ]
+      },
+      {
+        id: 'schule_weiteres', label: 'Weitere schulische Faktoren', typ: 'multi',
+        optionen: [
+          { id: 'klassenwiederholung', label: 'Klassenwiederholung', gewicht: 1, evidenz: 'Klassenwiederholung korreliert mit niedrigerem Selbstwert (Jimerson et al. 2002)' },
+          { id: 'sonderpaedagogik', label: 'Sonderpädagogischer Förderbedarf', gewicht: 1, evidenz: 'Sonderpädagogischer Förderbedarf korreliert mit erhöhtem Stigmatisierungsrisiko (Norwich 2014)' },
+          { id: 'mobbing_opfer', label: 'Mobbing-Opfer', gewicht: 2, evidenz: 'Mobbing-Opfer zeigen erhöhtes Risiko für Depression und Suizidalität (Olweus 1993)' },
+          { id: 'mobbing_taeter', label: 'Mobbing-Täter', gewicht: 2, evidenz: 'Mobbing-Täterschaft korreliert mit antisozialem Verhalten (Ttofi et al. 2012)' },
+          { id: 'lernbehinderung', label: 'Lernbehinderung / Teilleistungsstörung', gewicht: 1, evidenz: 'Unerkannte Lernstörungen führen zu sekundären emotionalen Problemen (Willcutt & Pennington 2000)' },
+          { id: 'hochbegabung', label: 'Hochbegabung / Unterforderung', gewicht: 1, evidenz: 'Hochbegabte Kinder zeigen bei Unterforderung erhöhtes Risiko für Underachievement (Reis & McCoach 2000)' },
+        ]
+      },
     ]
   },
   {
     id: 'soziales',
-    label: 'Soziales Umfeld',
+    label: 'Soziales (Peers)',
     icon: '👥',
     farbe: '#8B5CF6',
-    items: [
-      { id: 'soziale_isolation', label: 'Soziale Isolation / keine Freunde', gewicht: 2, evidenz: 'Soziale Isolation in der Kindheit ist starker Prädiktor für Depression, Angst und erhöhte Mortalität im Erwachsenenalter (Caspi et al. 2006; Qualter et al. 2015)' },
-      { id: 'negativer_peer_einfluss', label: 'Negativer Peer-Einfluss / deviante Peers', gewicht: 2, evidenz: 'Assoziation mit devianten Peers ist stärkster Prädiktor für Delinquenz im Jugendalter (Dishion & Tipsord 2011; Patterson et al. 1992)' },
-      { id: 'gang', label: 'Gang-/Bandenzugehörigkeit', gewicht: 3, evidenz: 'Gangmitgliedschaft erhöht Gewaltrisiko um Faktor 3-5 und Risiko für Substanzmissbrauch (Thornberry et al. 2003)' },
-      { id: 'kein_stabiler_erwachsener', label: 'Kein stabiler Erwachsener als Bezugsperson', gewicht: 3, evidenz: 'Mindestens eine stabile Bezugsperson ist der wichtigste Resilienzfaktor — Fehlen korreliert mit schlechterer Prognose (Werner & Smith 1992; Masten 2001)' },
-      { id: 'cybermobbing', label: 'Cybermobbing', gewicht: 2, evidenz: 'Cybermobbing-Opfer zeigen 2.3x erhöhtes Suizidrisiko und höhere Depressionsraten als bei traditionellem Mobbing (Hinduja & Patchin 2010; Kowalski et al. 2014)' },
-      { id: 'diskriminierung', label: 'Diskriminierungserfahrungen (Rassismus, Homophobie)', gewicht: 2, evidenz: 'Diskriminierungserfahrungen korrelieren mit erhöhtem Stress, Depression und niedrigerem Selbstwert (Williams & Mohammed 2009; Meyer 2003)' },
+    felder: [
+      {
+        id: 'freundschaften', label: 'Freundschaften', typ: 'single',
+        optionen: [
+          { id: 'peers_stabil', label: 'Stabile Freundschaften', gewicht: -1, evidenz: 'Stabile Freundschaften sind signifikanter Schutzfaktor (Bukowski et al. 1996)' },
+          { id: 'peers_wenige', label: 'Wenige aber stabile Kontakte', gewicht: 0, evidenz: '' },
+          { id: 'soziale_isolation', label: 'Sozial isoliert', gewicht: 2, evidenz: 'Soziale Isolation ist starker Prädiktor für Depression und Angst (Caspi et al. 2006)' },
+          { id: 'peers_wechselnd', label: 'Wechselnde Kontakte', gewicht: 1, evidenz: 'Instabile Peer-Beziehungen können auf Bindungsprobleme hindeuten (Sroufe et al. 2005)' },
+          { id: 'peers_online', label: 'Ausschliesslich Online', gewicht: 1, evidenz: 'Rein online-basierte Kontakte korrelieren mit erhöhter Einsamkeit (Twenge et al. 2018)' },
+        ]
+      },
+      {
+        id: 'mobbing_erfahrung', label: 'Mobbingerfahrung', typ: 'single',
+        optionen: [
+          { id: 'mobbing_keine', label: 'Keine', gewicht: 0, evidenz: '' },
+          { id: 'mobbing_opfer', label: 'Opfer', gewicht: 2, evidenz: 'Mobbing-Opfer zeigen erhöhtes Risiko für Depression und Suizidalität (Olweus 1993)' },
+          { id: 'mobbing_taeter', label: 'Täter', gewicht: 2, evidenz: 'Mobbing-Täterschaft korreliert mit antisozialem Verhalten (Ttofi et al. 2012)' },
+          { id: 'mobbing_beides', label: 'Beides (Täter-Opfer)', gewicht: 3, evidenz: 'Täter-Opfer zeigen das höchste Risiko für psychische Störungen aller Mobbing-Beteiligten (Haynie et al. 2001)' },
+        ]
+      },
+      {
+        id: 'romantik', label: 'Romantische Beziehungen', typ: 'single',
+        optionen: [
+          { id: 'romantik_keine', label: 'Keine', gewicht: 0, evidenz: '' },
+          { id: 'romantik_stabil', label: 'Aktuelle Beziehung', gewicht: 0, evidenz: '' },
+          { id: 'romantik_wechselnd', label: 'Häufig wechselnde', gewicht: 1, evidenz: 'Häufig wechselnde Beziehungen bei Jugendlichen können auf Bindungsunsicherheit hindeuten (Furman & Wehner 1997)' },
+          { id: 'romantik_toxisch', label: 'Toxische Muster', gewicht: 2, evidenz: 'Toxische Beziehungsmuster im Jugendalter sind Risikofaktor für spätere Partnerschaftsgewalt (Wolfe et al. 2004)' },
+        ]
+      },
+      {
+        id: 'soziales_weiteres', label: 'Weitere soziale Faktoren', typ: 'multi',
+        optionen: [
+          { id: 'negativer_peer_einfluss', label: 'Negativer Peer-Einfluss', gewicht: 2, evidenz: 'Deviante Peers sind stärkster Prädiktor für Delinquenz (Dishion & Tipsord 2011)' },
+          { id: 'gang', label: 'Gang-/Bandenzugehörigkeit', gewicht: 3, evidenz: 'Gangmitgliedschaft erhöht Gewaltrisiko um Faktor 3-5 (Thornberry et al. 2003)' },
+          { id: 'kein_stabiler_erwachsener', label: 'Kein stabiler Erwachsener', gewicht: 3, evidenz: 'Fehlen einer stabilen Bezugsperson korreliert mit schlechterer Prognose (Werner & Smith 1992)' },
+          { id: 'cybermobbing', label: 'Cybermobbing', gewicht: 2, evidenz: 'Cybermobbing-Opfer zeigen 2.3x erhöhtes Suizidrisiko (Hinduja & Patchin 2010)' },
+          { id: 'diskriminierung', label: 'Diskriminierung', gewicht: 2, evidenz: 'Diskriminierung korreliert mit erhöhtem Stress und Depression (Williams & Mohammed 2009)' },
+        ]
+      },
     ]
   },
   {
@@ -1816,6 +1940,93 @@ const ANAMNESE_KATEGORIEN = [
       { id: 'verschuldung', label: 'Familiäre Verschuldung', gewicht: 1, evidenz: 'Überschuldung erzeugt chronischen Familienstress, der Erziehungsqualität mindert (Conger & Donnellan 2007)' },
       { id: 'bildungsferne', label: 'Bildungsfernes Elternhaus', gewicht: 1, evidenz: 'Niedriges Bildungsniveau der Eltern korreliert mit geringerer kognitiver Stimulation und schlechteren Bildungsergebnissen (Hoff 2003; Hart & Risley 1995)' },
       { id: 'soziale_benachteiligung', label: 'Kumulative soziale Benachteiligung', gewicht: 2, evidenz: 'Kumulation von Armut + niedriger Bildung + Migration zeigt multiplikative Effekte auf Entwicklungsrisiken (Rutter 1979; Sameroff et al. 1993)' },
+    ]
+  },
+  {
+    id: 'entwicklung',
+    label: 'Frühkindliche Entwicklung',
+    icon: '👶',
+    farbe: '#EC4899',
+    felder: [
+      {
+        id: 'sprachentwicklung', label: 'Sprachentwicklung', typ: 'single',
+        optionen: [
+          { id: 'sprache_unauffaellig', label: 'Unauffällig', gewicht: 0, evidenz: '' },
+          { id: 'sprache_verzoegert', label: 'Verzögert', gewicht: 1, evidenz: 'Sprachentwicklungsverzögerung ist Prädiktor für spätere Lern- und Verhaltensprobleme (Shonkoff & Phillips 2000)' },
+          { id: 'sprache_unbekannt', label: 'Unbekannt', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'motorik', label: 'Motorische Entwicklung', typ: 'single',
+        optionen: [
+          { id: 'motorik_unauffaellig', label: 'Unauffällig', gewicht: 0, evidenz: '' },
+          { id: 'motorik_verzoegert', label: 'Verzögert', gewicht: 1, evidenz: 'Motorische Verzögerung kann auf neurologische Auffälligkeiten hindeuten (Shonkoff & Phillips 2000)' },
+          { id: 'motorik_unbekannt', label: 'Unbekannt', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'fruehe_bindung', label: 'Frühe Bindungserfahrung (Einschätzung)', typ: 'single',
+        optionen: [
+          { id: 'bindung_sicher', label: 'Sicher', gewicht: -1, evidenz: 'Sichere Bindung ist stärkster Schutzfaktor für psychische Gesundheit (Sroufe et al. 2005)' },
+          { id: 'bindung_unsicher', label: 'Eher unsicher', gewicht: 2, evidenz: 'Unsichere Bindung erhöht Risiko für psychische Störungen um Faktor 2-3 (Groh et al. 2012)' },
+          { id: 'bindung_trennungen', label: 'Häufige Trennungen früh', gewicht: 2, evidenz: 'Frühe Trennungen von Bezugspersonen erhöhen Risiko für desorganisierte Bindung (Bowlby 1973)' },
+          { id: 'bindung_unbekannt', label: 'Unbekannt', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'kindergarten', label: 'Kindergarten / Krippe', typ: 'single',
+        optionen: [
+          { id: 'kiga_problemlos', label: 'Problemlos', gewicht: 0, evidenz: '' },
+          { id: 'kiga_schwierig', label: 'Schwierige Eingewöhnung', gewicht: 1, evidenz: 'Schwierige Eingewöhnung kann auf Trennungsangst oder unsichere Bindung hindeuten (Ahnert et al. 2004)' },
+          { id: 'kiga_nicht_besucht', label: 'Nicht besucht', gewicht: 1, evidenz: 'Fehlender Kita-Besuch kann auf familiäre Isolation oder kulturelle Faktoren hindeuten' },
+          { id: 'kiga_wechsel', label: 'Häufige Wechsel', gewicht: 1, evidenz: 'Häufige Betreuungswechsel destabilisieren Bindungserfahrungen (Howes & Hamilton 1993)' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'psych_vorgeschichte',
+    label: 'Vorgeschichte psychische Gesundheit',
+    icon: '🧠',
+    farbe: '#7C3AED',
+    felder: [
+      {
+        id: 'fruehere_behandlung', label: 'Frühere Behandlungen', typ: 'multi',
+        optionen: [
+          { id: 'behandlung_keine', label: 'Keine', gewicht: 0, evidenz: '' },
+          { id: 'behandlung_psychotherapie', label: 'Psychotherapie', gewicht: 0, evidenz: 'Therapieerfahrung kann Beziehungsaufbau erleichtern, aber auch negative Übertragungen auslösen' },
+          { id: 'behandlung_psychiatrie', label: 'Psychiatrie', gewicht: 1, evidenz: 'Psychiatrische Vorbehandlung deutet auf höheren Schweregrad hin' },
+          { id: 'behandlung_medikation', label: 'Medikation', gewicht: 1, evidenz: 'Psychopharmakologische Vorbehandlung indiziert diagnostizierte Störung' },
+          { id: 'behandlung_klinik', label: 'Klinikaufenthalt', gewicht: 2, evidenz: 'Stationäre psychiatrische Vorbehandlung deutet auf schwere Krise oder Störung hin' },
+        ]
+      },
+      {
+        id: 'bekannte_diagnosen', label: 'Bekannte Diagnosen', typ: 'multi',
+        optionen: [
+          { id: 'diagnose_keine', label: 'Keine', gewicht: 0, evidenz: '' },
+          { id: 'diagnose_adhs', label: 'ADHS', gewicht: 1, evidenz: 'ADHS-Diagnose erfordert angepasste pädagogische Strategien (Barkley 2015)' },
+          { id: 'diagnose_depression', label: 'Depression', gewicht: 1, evidenz: 'Diagnostizierte Depression erhöht Rückfallrisiko — Monitoring wichtig (Birmaher et al. 2004)' },
+          { id: 'diagnose_angst', label: 'Angststörung', gewicht: 1, evidenz: 'Angststörungen neigen zur Chronifizierung ohne Behandlung (Pine 2007)' },
+          { id: 'diagnose_trauma', label: 'Trauma / PTBS', gewicht: 2, evidenz: 'PTBS-Diagnose erfordert traumasensible Grundhaltung in allen Kontexten (van der Kolk 2014)' },
+          { id: 'diagnose_essstoerung', label: 'Essstörung', gewicht: 2, evidenz: 'Essstörungen haben die höchste Mortalitätsrate aller psychischen Störungen (Arcelus et al. 2011)' },
+        ]
+      },
+      {
+        id: 'suizid_vorgeschichte', label: 'Suizidversuch in Vorgeschichte', typ: 'single',
+        optionen: [
+          { id: 'suizid_nein', label: 'Nein', gewicht: 0, evidenz: '' },
+          { id: 'suizid_ja', label: 'Ja', gewicht: 3, evidenz: 'Früherer Suizidversuch ist stärkster Prädiktor für erneuten Versuch — OR 30-40 (Hawton et al. 2012)' },
+          { id: 'suizid_unbekannt', label: 'Unbekannt', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'svv_vorgeschichte', label: 'Selbstverletzung in Vorgeschichte', typ: 'single',
+        optionen: [
+          { id: 'svv_nein', label: 'Nein', gewicht: 0, evidenz: '' },
+          { id: 'svv_aktiv', label: 'Ja, aktiv', gewicht: 3, evidenz: 'Aktive Selbstverletzung erfordert sofortige Risikobewertung und Sicherheitsplan (Nock 2010)' },
+          { id: 'svv_vergangenheit', label: 'Ja, Vergangenheit', gewicht: 1, evidenz: 'Frühere Selbstverletzung erhöht Rückfallrisiko — Monitoring angezeigt (Hawton et al. 2012)' },
+        ]
+      },
     ]
   },
   {

@@ -2137,15 +2137,18 @@ const HYPOTHESEN_REGELN = [
     staerke: 'hinweis',
     staerkeWert: 1,
     icd10: ['Z62.0'],
-    bedingung: (ctx) => ctx.anamnese.includes('kein_vater') && (ctx.anamnese.includes('alleinerziehend') || ctx.anamnese.includes('pflegefamilie')),
+    bedingung: (ctx) => (ctx.anamnese.includes('kein_vater') || ctx.anamnese.includes('vater_verstorben') || ctx.anamnese.includes('vater_sporadisch')) && (ctx.anamnese.includes('alleinerziehend') || ctx.anamnese.includes('pflegefamilie') || ctx.anamnese.includes('heim')),
     erklaerung: 'Fehlende väterliche Bindungserfahrung korreliert mit erhöhter Wahrscheinlichkeit für Schwierigkeiten mit männlichen Autoritätspersonen, Identitätsentwicklung und Emotionsregulation.',
     evidenz: 'Väterliche Abwesenheit erhöht das Risiko für externalisierende Verhaltensprobleme bei Jungen um Faktor 2-3 und für internalisierende Probleme bei Mädchen (Fthenakis 1999; McLanahan & Sandefur 1994).',
     quelle: 'Fthenakis (1999); McLanahan & Sandefur (1994); Harper & McLanahan (2004)',
     ausloesendeDaten: (ctx) => {
       const d = [];
       if (ctx.anamnese.includes('kein_vater')) d.push('Kein Vaterkontakt');
+      if (ctx.anamnese.includes('vater_verstorben')) d.push('Vater verstorben');
+      if (ctx.anamnese.includes('vater_sporadisch')) d.push('Sporadischer Vaterkontakt');
       if (ctx.anamnese.includes('alleinerziehend')) d.push('Alleinerziehend');
       if (ctx.anamnese.includes('pflegefamilie')) d.push('Pflegefamilie');
+      if (ctx.anamnese.includes('heim')) d.push('Heimunterbringung');
       return d;
     },
     gegenHypothese: 'Falls ein stabiler männlicher Mentor oder Bezugsperson vorhanden ist (z.B. Grossvater, Trainer, Lehrer), kann dies die väterliche Abwesenheit teilweise kompensieren.',
@@ -2160,14 +2163,18 @@ const HYPOTHESEN_REGELN = [
     staerke: 'wahrscheinlich',
     staerkeWert: 2,
     icd10: ['F94.1', 'F94.2'],
-    bedingung: (ctx) => ctx.anamnese.includes('kein_mutter') && (ctx.anamnese.includes('heim') || ctx.anamnese.includes('pflegefamilie')),
+    bedingung: (ctx) => (ctx.anamnese.includes('kein_mutter') || ctx.anamnese.includes('mutter_verstorben') || ctx.anamnese.includes('mutter_sporadisch')) && (ctx.anamnese.includes('heim') || ctx.anamnese.includes('pflegefamilie') || ctx.anamnese.includes('alleinerziehend_vater')),
     erklaerung: 'Fehlende mütterliche Bezugsperson kombiniert mit Fremdplatzierung deutet auf massive Bindungsunterbrechung in der frühen Kindheit hin.',
     evidenz: 'Mütterliche Abwesenheit in den ersten 3 Lebensjahren ist der stärkste Einzelprädiktor für desorganisierte Bindung. Fremdplatzierte Kinder zeigen 3-7x höheres Risiko für Bindungsstörungen (Bowlby 1969; Dozier et al. 2012).',
     quelle: 'Bowlby (1969); Rutter (1981); Dozier et al. (2012)',
     ausloesendeDaten: (ctx) => {
-      const d = ['Kein Mutterkontakt'];
+      const d = [];
+      if (ctx.anamnese.includes('kein_mutter')) d.push('Kein Mutterkontakt');
+      if (ctx.anamnese.includes('mutter_verstorben')) d.push('Mutter verstorben');
+      if (ctx.anamnese.includes('mutter_sporadisch')) d.push('Sporadischer Mutterkontakt');
       if (ctx.anamnese.includes('heim')) d.push('Heimunterbringung');
       if (ctx.anamnese.includes('pflegefamilie')) d.push('Pflegefamilie');
+      if (ctx.anamnese.includes('alleinerziehend_vater')) d.push('Alleinerziehend Vater');
       return d;
     },
     gegenHypothese: 'Falls eine stabile Ersatz-Bezugsperson (Pflegemutter, Grossmutter) seit früher Kindheit vorhanden ist, kann sichere Bindung trotzdem entstanden sein.',

@@ -3865,6 +3865,10 @@ const DB = {
       risiko: daten.risiko || 'niedrig',
       anamnese: daten.anamnese || [],
       ziele: daten.ziele || [],
+      // Dynamische Hypothesen: Verlauf über Zeit
+      hypothesenVerlauf: daten.hypothesenVerlauf || [],
+      // Treatment-Response: welche Themen wirken
+      treatmentResponse: daten.treatmentResponse || [],
       erstellt: new Date().toISOString(),
       geaendert: new Date().toISOString(),
     };

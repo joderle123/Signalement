@@ -4777,6 +4777,122 @@ select {
   border-color: var(--primary);
 }
 
+/* Dynamische Hypothesen-Verlauf */
+.hypothese-hochgestuft {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #DC2626;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  padding: 2px 8px;
+  border-radius: 12px;
+  animation: pulse-glow 2s infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.2); }
+  50% { box-shadow: 0 0 8px 2px rgba(220,38,38,0.15); }
+}
+.hypothese-verlauf-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--text-muted);
+  background: #F3F4F6;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* Treatment-Response */
+.treatment-gesamt-trend {
+  padding: 8px 12px;
+  background: #F9FAFB;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.treatment-empfehlung {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #F0FDF4, #ECFDF5);
+  border: 1px solid #BBF7D0;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  color: #166534;
+}
+.treatment-themen-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.treatment-thema-card {
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #F3F4F6;
+  border-radius: 8px;
+}
+.treatment-thema-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.treatment-thema-label {
+  font-weight: 600;
+  font-size: 13px;
+}
+.treatment-thema-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: #F3F4F6;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+.treatment-thema-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.treatment-srs-mini {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.treatment-srs-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Screening-Verlauf */
+.screening-verlauf-delta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #F9FAFB;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.screening-verlauf-bar {
+  flex: 1;
+  height: 6px;
+  background: #E5E7EB;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.screening-verlauf-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s;
+}
+
 /* Dashboard Hypothesen Widget */
 .dash-hypo-count {
   font-size: 12px;

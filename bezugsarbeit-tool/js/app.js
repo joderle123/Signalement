@@ -1538,6 +1538,8 @@ function renderInfo() {
 
   const hypothesen = generateHypothesen(APP.currentSchuelerId);
   renderHypothesen(hypothesen);
+  renderTreatmentResponse(APP.currentSchuelerId);
+  renderScreeningVerlauf(APP.currentSchuelerId);
 
   const notizEl = document.getElementById('info-allgemein');
   if (notizEl) notizEl.value = s.allgemeineNotizen || '';
@@ -1788,6 +1790,56 @@ function generateHypothesen(schuelerId) {
     }
   }
 
+  // ── Dynamische Stärke: Verlauf über Zeit ──────────────────
+  const verlauf = s.hypothesenVerlauf || [];
+  const jetzt = new Date().toISOString();
+  const heuteKey = jetzt.split('T')[0]; // YYYY-MM-DD
+
+  // Aktuellen Snapshot speichern (max 1x pro Tag)
+  const heuteSchonGespeichert = verlauf.some(v => v.datum.startsWith(heuteKey));
+  if (!heuteSchonGespeichert && aktive.length > 0) {
+    verlauf.push({
+      datum: jetzt,
+      hypothesenIds: aktive.map(h => h.id),
+      datenPunkte: aktive.reduce((acc, h) => {
+        acc[h.id] = (h._ausloesendeDaten || []).length;
+        return acc;
+      }, {}),
+    });
+    // Max 50 Einträge behalten
+    while (verlauf.length > 50) verlauf.shift();
+    DB.updateSchueler(s.id, { hypothesenVerlauf: verlauf });
+  }
+
+  // Dynamische Hochstufung: Hypothese über mehrere Zeitpunkte bestätigt
+  for (const h of aktive) {
+    const auftritte = verlauf.filter(v => v.hypothesenIds.includes(h.id));
+    const anzahlAuftritte = auftritte.length;
+    const aktDatenPunkte = (h._ausloesendeDaten || []).length;
+
+    // Prüfe ob Datenpunkte gewachsen sind seit erstem Auftreten
+    let datenGewachsen = false;
+    if (auftritte.length > 0) {
+      const ersteDaten = auftritte[0].datenPunkte?.[h.id] || 0;
+      datenGewachsen = aktDatenPunkte > ersteDaten;
+    }
+
+    // Hochstufung: mind. 3 Zeitpunkte ODER Datenpunkte gewachsen + mind. 2 Zeitpunkte
+    if ((anzahlAuftritte >= 3 || (datenGewachsen && anzahlAuftritte >= 2)) && h.staerkeWert < 4) {
+      h._dynamischHochgestuft = true;
+      h._originalStaerke = h.staerke;
+      h._originalStaerkeWert = h.staerkeWert;
+      h._auftritte = anzahlAuftritte;
+      h.staerkeWert = Math.min(h.staerkeWert + 1, 4);
+      h.staerke = h.staerkeWert >= 4 ? 'sehr-wahrscheinlich'
+        : h.staerkeWert >= 2 ? 'wahrscheinlich' : 'hinweis';
+    }
+
+    // Verlaufsdaten für UI anhängen
+    h._verlaufAnzahl = anzahlAuftritte;
+    h._erstesAuftreten = auftritte.length > 0 ? auftritte[0].datum : null;
+  }
+
   // Sortieren: staerkeWert desc, dann risiko vor schutz vor differenzial
   const typRang = { risiko: 0, differenzial: 1, schutz: 2 };
   aktive.sort((a, b) => b.staerkeWert - a.staerkeWert || (typRang[a.typ] || 0) - (typRang[b.typ] || 0));
@@ -1834,10 +1886,22 @@ function renderHypothesen(hypothesen) {
 
     const daten = h._ausloesendeDaten || [];
 
+    // Dynamische Verlaufs-Info
+    let verlaufHtml = '';
+    if (h._dynamischHochgestuft) {
+      const originalLabel = h._originalStaerke === 'sehr-wahrscheinlich' ? 'Sehr wahrsch.'
+        : h._originalStaerke === 'wahrscheinlich' ? 'Wahrsch.' : 'Hinweis';
+      verlaufHtml = `<span class="hypothese-hochgestuft" title="Dynamisch hochgestuft: ${h._auftritte} Bestätigungen über Zeit">📈 ${originalLabel} → ${staerkeLabel}</span>`;
+    } else if (h._verlaufAnzahl > 1) {
+      const seit = h._erstesAuftreten ? new Date(h._erstesAuftreten).toLocaleDateString('de-CH') : '';
+      verlaufHtml = `<span class="hypothese-verlauf-info" title="Seit ${seit} in ${h._verlaufAnzahl} Auswertungen bestätigt">🔄 ${h._verlaufAnzahl}x bestätigt</span>`;
+    }
+
     return `
       <div class="hypothese-card" data-ebene="${h.ebene || ''}" data-staerke="${h.staerkeWert}" data-typ="${h.typ}" style="border-left:4px solid ${borderColor}">
         <div class="hypothese-header">
           <span class="hypothese-titel">${typIcon} ${h.titel}</span>
+          ${verlaufHtml}
           <span class="hypothese-badge" style="background:${badgeBg};color:${badgeText}">${staerkeLabel}</span>
         </div>
         ${daten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${daten.join(' · ')}</div>` : ''}
@@ -1931,6 +1995,277 @@ function renderHypothesen(hypothesen) {
         <div class="hypothesen-disclaimer">
           Diese Hypothesen sind Arbeitshilfen für Fachkräfte — kein Ersatz für klinische Diagnostik. Alle Angaben basieren auf den eingegebenen Daten.
         </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// TREATMENT-RESPONSE-TRACKING
+// ============================================================
+function analyzeTreatmentResponse(schuelerId) {
+  const notizen = DB.getNotizen(schuelerId).filter(n => n.kategorie === 'session' && n.themaId && n.soap?.srs?.total != null);
+  if (notizen.length === 0) return { themen: [], gesamtTrend: null, bestesThema: null };
+
+  // Nach Thema gruppieren
+  const themaMap = {};
+  for (const n of notizen) {
+    if (!themaMap[n.themaId]) themaMap[n.themaId] = [];
+    themaMap[n.themaId].push({
+      datum: n.datum,
+      srsTotal: n.soap.srs.total,
+      srsDetails: n.soap.srs,
+    });
+  }
+
+  // Thema-Labels aus THEMEN_KATEGORIEN holen
+  const allThemen = typeof THEMEN_KATEGORIEN !== 'undefined'
+    ? THEMEN_KATEGORIEN.flatMap(k => k.themen || []) : [];
+
+  const themenAnalyse = Object.entries(themaMap).map(([themaId, sitzungen]) => {
+    sitzungen.sort((a, b) => a.datum.localeCompare(b.datum));
+    const srsWerte = sitzungen.map(s => s.srsTotal);
+    const durchschnitt = srsWerte.reduce((a, b) => a + b, 0) / srsWerte.length;
+    const guteSitzungen = srsWerte.filter(v => v >= 30).length;
+    const responseRate = guteSitzungen / srsWerte.length;
+
+    // Trend berechnen (letzte vs. erste Hälfte)
+    let trend = 'stabil';
+    if (srsWerte.length >= 2) {
+      const mitte = Math.floor(srsWerte.length / 2);
+      const ersteHaelfte = srsWerte.slice(0, mitte).reduce((a, b) => a + b, 0) / mitte;
+      const zweiteHaelfte = srsWerte.slice(mitte).reduce((a, b) => a + b, 0) / (srsWerte.length - mitte);
+      if (zweiteHaelfte - ersteHaelfte > 2) trend = 'steigend';
+      else if (ersteHaelfte - zweiteHaelfte > 2) trend = 'fallend';
+    }
+
+    const themaInfo = allThemen.find(t => t.id === themaId);
+
+    return {
+      themaId,
+      label: themaInfo?.titel || themaId,
+      anzahl: srsWerte.length,
+      durchschnittSrs: Math.round(durchschnitt * 10) / 10,
+      responseRate: Math.round(responseRate * 100),
+      trend,
+      guteSitzungen,
+      srsWerte,
+    };
+  });
+
+  // Sortieren nach Response-Rate
+  themenAnalyse.sort((a, b) => b.responseRate - a.responseRate || b.durchschnittSrs - a.durchschnittSrs);
+
+  const bestesThema = themenAnalyse.length > 0 && themenAnalyse[0].responseRate >= 60 ? themenAnalyse[0] : null;
+
+  // Gesamttrend über alle SRS-Werte
+  const alleSrs = notizen.sort((a, b) => a.datum.localeCompare(b.datum)).map(n => n.soap.srs.total);
+  let gesamtTrend = null;
+  if (alleSrs.length >= 3) {
+    const mitte = Math.floor(alleSrs.length / 2);
+    const erste = alleSrs.slice(0, mitte).reduce((a, b) => a + b, 0) / mitte;
+    const zweite = alleSrs.slice(mitte).reduce((a, b) => a + b, 0) / (alleSrs.length - mitte);
+    const diff = zweite - erste;
+    if (diff > 2) gesamtTrend = { richtung: 'positiv', diff: Math.round(diff * 10) / 10 };
+    else if (diff < -2) gesamtTrend = { richtung: 'negativ', diff: Math.round(diff * 10) / 10 };
+    else gesamtTrend = { richtung: 'stabil', diff: Math.round(diff * 10) / 10 };
+  }
+
+  return { themen: themenAnalyse, gesamtTrend, bestesThema };
+}
+
+function renderTreatmentResponse(schuelerId) {
+  const el = document.getElementById('treatment-response-container');
+  if (!el) return;
+
+  const analyse = analyzeTreatmentResponse(schuelerId);
+  if (analyse.themen.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+
+  const trendIcon = (t) => t === 'steigend' ? '📈' : t === 'fallend' ? '📉' : '➡️';
+  const trendColor = (t) => t === 'steigend' ? '#22C55E' : t === 'fallend' ? '#EF4444' : '#9CA3AF';
+  const responseColor = (r) => r >= 75 ? '#22C55E' : r >= 50 ? '#F59E0B' : '#EF4444';
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-header">
+        <span>💊</span>
+        <div class="card-title">Treatment-Response-Analyse</div>
+        <span style="font-size:12px;color:var(--text-muted);margin-left:auto;">${analyse.themen.reduce((a, t) => a + t.anzahl, 0)} Sitzungen</span>
+      </div>
+      <div class="card-body">
+        ${analyse.gesamtTrend ? `
+          <div class="treatment-gesamt-trend" style="border-left:3px solid ${trendColor(analyse.gesamtTrend.richtung)}">
+            ${trendIcon(analyse.gesamtTrend.richtung)} Gesamttrend SRS: <strong>${analyse.gesamtTrend.richtung}</strong>
+            (${analyse.gesamtTrend.diff > 0 ? '+' : ''}${analyse.gesamtTrend.diff} Punkte)
+          </div>
+        ` : ''}
+        ${analyse.bestesThema ? `
+          <div class="treatment-empfehlung">
+            ✨ <strong>Dieser Schüler respondiert gut auf: ${analyse.bestesThema.label}</strong>
+            (${analyse.bestesThema.responseRate}% gute Sitzungen, Ø SRS ${analyse.bestesThema.durchschnittSrs})
+          </div>
+        ` : ''}
+        <div class="treatment-themen-grid">
+          ${analyse.themen.map(t => `
+            <div class="treatment-thema-card">
+              <div class="treatment-thema-header">
+                <span class="treatment-thema-label">${t.label}</span>
+                <span class="treatment-thema-count">${t.anzahl}x</span>
+              </div>
+              <div class="treatment-thema-stats">
+                <span style="color:${responseColor(t.responseRate)}">
+                  ${t.responseRate}% Response
+                </span>
+                <span>Ø ${t.durchschnittSrs}/40 SRS</span>
+                <span style="color:${trendColor(t.trend)}">
+                  ${trendIcon(t.trend)} ${t.trend}
+                </span>
+              </div>
+              <div class="treatment-srs-mini">
+                ${t.srsWerte.map(v => `<span class="treatment-srs-dot" style="background:${v >= 30 ? '#22C55E' : v >= 20 ? '#F59E0B' : '#EF4444'}" title="SRS: ${v}/40"></span>`).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// T1/T2/T3 SCREENING-VERLAUF
+// ============================================================
+function renderScreeningVerlauf(schuelerId) {
+  const el = document.getElementById('screening-verlauf-container');
+  if (!el) return;
+
+  const screenings = DB.getScreenings(schuelerId).filter(s => s.abgeschlossen);
+  if (screenings.length < 2) {
+    el.innerHTML = '';
+    return;
+  }
+
+  // Chronologisch sortieren
+  screenings.sort((a, b) => a.erstellt.localeCompare(b.erstellt));
+
+  // Screening-Domains aus Konfiguration
+  const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+
+  // Zeitpunkte benennen (T1, T2, T3, ...)
+  const zeitpunkte = screenings.map((s, i) => ({
+    label: `T${i + 1}`,
+    datum: new Date(s.erstellt).toLocaleDateString('de-CH'),
+    scores: s.scores || {},
+    flagged: s.flaggedAreas || [],
+  }));
+
+  // Alle Domains sammeln die in mindestens einem Screening vorkommen
+  const alleDomainIds = [...new Set(screenings.flatMap(s => Object.keys(s.scores || {})))];
+
+  // Delta berechnen zwischen jedem aufeinanderfolgenden Zeitpunkt
+  const deltas = [];
+  for (let i = 1; i < zeitpunkte.length; i++) {
+    const vorher = zeitpunkte[i - 1];
+    const aktuell = zeitpunkte[i];
+    const domainDeltas = alleDomainIds.map(domId => {
+      const domain = domains.find(d => d.id === domId);
+      const scoreVorher = vorher.scores[domId] || 0;
+      const scoreAktuell = aktuell.scores[domId] || 0;
+      const diff = scoreAktuell - scoreVorher;
+      const prozent = scoreVorher > 0 ? Math.round((diff / scoreVorher) * 100) : 0;
+      const cutoff = domain?.cutoff || 0;
+      const maxScore = (domain?.items?.length || 5) * 3;
+      return {
+        domainId: domId,
+        label: domain?.label || domId,
+        farbe: domain?.farbe || '#9CA3AF',
+        scoreVorher,
+        scoreAktuell,
+        diff,
+        prozent,
+        cutoff,
+        maxScore,
+        ueberCutoff: scoreAktuell >= cutoff,
+      };
+    }).filter(d => d.scoreVorher > 0 || d.scoreAktuell > 0);
+
+    deltas.push({
+      von: vorher.label,
+      bis: aktuell.label,
+      vonDatum: vorher.datum,
+      bisDatum: aktuell.datum,
+      domains: domainDeltas,
+    });
+  }
+
+  // Automatische Kommentare generieren
+  function generiereKommentar(delta) {
+    const verbessert = delta.domains.filter(d => d.diff < 0 && Math.abs(d.prozent) >= 15);
+    const verschlechtert = delta.domains.filter(d => d.diff > 0 && d.prozent >= 15);
+    const kommentare = [];
+
+    for (const d of verbessert) {
+      kommentare.push(`<span style="color:#22C55E">↓ ${d.label}-Score gesunken um ${Math.abs(d.prozent)}% seit ${delta.von}</span>`);
+    }
+    for (const d of verschlechtert) {
+      kommentare.push(`<span style="color:#EF4444">↑ ${d.label}-Score gestiegen um ${d.prozent}% seit ${delta.von}</span>`);
+    }
+
+    // Cutoff-Wechsel
+    for (const d of delta.domains) {
+      const vorherDomain = deltas.length > 0 ? null : null; // simplified
+      if (d.scoreVorher >= d.cutoff && d.scoreAktuell < d.cutoff) {
+        kommentare.push(`<span style="color:#22C55E">✓ ${d.label} unter klinischem Cutoff gefallen</span>`);
+      } else if (d.scoreVorher < d.cutoff && d.scoreAktuell >= d.cutoff) {
+        kommentare.push(`<span style="color:#EF4444">⚠ ${d.label} über klinischen Cutoff gestiegen</span>`);
+      }
+    }
+
+    return kommentare;
+  }
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-header">
+        <span>📊</span>
+        <div class="card-title">Screening-Verlauf (${zeitpunkte.map(z => z.label).join(' → ')})</div>
+        <span style="font-size:12px;color:var(--text-muted);margin-left:auto;">${screenings.length} Zeitpunkte</span>
+      </div>
+      <div class="card-body">
+        ${deltas.map(delta => {
+          const kommentare = generiereKommentar(delta);
+          return `
+            <div style="margin-bottom:16px;">
+              <div style="font-weight:600;font-size:13px;margin-bottom:8px;">
+                ${delta.von} (${delta.vonDatum}) → ${delta.bis} (${delta.bisDatum})
+              </div>
+              ${kommentare.length > 0 ? `
+                <div style="margin-bottom:8px;display:flex;flex-direction:column;gap:4px;font-size:12px;">
+                  ${kommentare.join('')}
+                </div>
+              ` : '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Keine signifikanten Veränderungen.</div>'}
+              ${delta.domains.map(d => {
+                const fillVorher = Math.min(100, (d.scoreVorher / d.maxScore) * 100);
+                const fillAktuell = Math.min(100, (d.scoreAktuell / d.maxScore) * 100);
+                const diffLabel = d.diff > 0 ? `+${d.diff}` : d.diff < 0 ? `${d.diff}` : '±0';
+                const diffColor = d.diff < 0 ? '#22C55E' : d.diff > 0 ? '#EF4444' : '#9CA3AF';
+                return `
+                  <div class="screening-verlauf-delta">
+                    <span style="min-width:120px;font-size:11px;">${d.label}</span>
+                    <div class="screening-verlauf-bar">
+                      <div class="screening-verlauf-fill" style="width:${fillAktuell}%;background:${d.farbe}"></div>
+                    </div>
+                    <span style="min-width:40px;text-align:right;font-size:11px;">${d.scoreAktuell}</span>
+                    <span style="min-width:45px;text-align:right;font-size:11px;font-weight:600;color:${diffColor}">${diffLabel}</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        }).join('')}
       </div>
     </div>
   `;

@@ -4869,6 +4869,49 @@ select {
   display: inline-block;
 }
 
+/* Therapeutischer Ansatz-Vergleich */
+.treatment-ansatz-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.treatment-ansatz-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.treatment-ansatz-label {
+  min-width: 130px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.treatment-ansatz-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #E5E7EB;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.treatment-ansatz-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s;
+}
+.treatment-ansatz-value {
+  min-width: 35px;
+  text-align: right;
+  font-weight: 600;
+}
+.treatment-ansatz-count {
+  min-width: 45px;
+  text-align: right;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
 /* Screening-Verlauf */
 .screening-verlauf-delta {
   display: flex;
@@ -4938,6 +4981,50 @@ select {
   background: #F0F9FF;
   color: #0C4A6E;
   border: 1px solid #BAE6FD;
+}
+
+/* Hypothesen-Diff */
+.hypothesen-diff {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 8px;
+}
+.hypothesen-diff-header {
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: #92400E;
+}
+.hypothesen-diff-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.diff-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+}
+.diff-chip-neu {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+.diff-chip-weg {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+  text-decoration: line-through;
+}
+.diff-chip-hoch {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  font-weight: 600;
 }
 
 /* Hypothesen-Zeitstrahl */

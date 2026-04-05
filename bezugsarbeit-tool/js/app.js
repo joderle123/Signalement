@@ -1857,6 +1857,42 @@ function renderHypothesen(hypothesen) {
     return;
   }
 
+  // ── Hypothesen-Diff: Was hat sich verändert? ──
+  let diffHtml = '';
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  if (s) {
+    const verlauf = s.hypothesenVerlauf || [];
+    if (verlauf.length >= 2) {
+      const vorletzter = verlauf[verlauf.length - 2];
+      const aktuelleIds = hypothesen.map(h => h.id);
+      const vorherigeIds = vorletzter.hypothesenIds || [];
+
+      const neueIds = aktuelleIds.filter(id => !vorherigeIds.includes(id));
+      const verschwundenIds = vorherigeIds.filter(id => !aktuelleIds.includes(id));
+      const hochgestuft = hypothesen.filter(h => h._dynamischHochgestuft);
+
+      if (neueIds.length > 0 || verschwundenIds.length > 0 || hochgestuft.length > 0) {
+        const regelMap = {};
+        for (const r of HYPOTHESEN_REGELN) regelMap[r.id] = r.titel;
+
+        diffHtml = `
+          <div class="hypothesen-diff">
+            <div class="hypothesen-diff-header">🔄 Veränderungen seit letzter Auswertung</div>
+            ${neueIds.length > 0 ? `<div class="hypothesen-diff-section diff-neu">
+              ${neueIds.map(id => `<span class="diff-chip diff-chip-neu">+ ${regelMap[id] || id}</span>`).join('')}
+            </div>` : ''}
+            ${verschwundenIds.length > 0 ? `<div class="hypothesen-diff-section diff-weg">
+              ${verschwundenIds.map(id => `<span class="diff-chip diff-chip-weg">- ${regelMap[id] || id}</span>`).join('')}
+            </div>` : ''}
+            ${hochgestuft.length > 0 ? `<div class="hypothesen-diff-section diff-hoch">
+              ${hochgestuft.map(h => `<span class="diff-chip diff-chip-hoch">📈 ${h.titel} (${h._originalStaerke} → ${h.staerke})</span>`).join('')}
+            </div>` : ''}
+          </div>
+        `;
+      }
+    }
+  }
+
   // Ebenen-Konfiguration
   const EBENEN = [
     { id: 'einzelfaktor', label: 'Einzelfaktor', icon: '🔹', beschreibung: 'Einzelne Anamnese-Daten lösen aus' },
@@ -1982,6 +2018,7 @@ function renderHypothesen(hypothesen) {
             </button>
           </div>
         </div>
+        ${diffHtml}
         <div id="hypothesen-ansicht-ebenen" class="hypothesen-ansicht">
           ${gruppiertHtml}
         </div>
@@ -2075,7 +2112,38 @@ function analyzeTreatmentResponse(schuelerId) {
     else gesamtTrend = { richtung: 'stabil', diff: Math.round(diff * 10) / 10 };
   }
 
-  return { themen: themenAnalyse, gesamtTrend, bestesThema };
+  // ── Ansatz-Analyse: welcher therapeutische Ansatz wirkt? ──
+  const ansatzMap = {};
+  if (typeof THEMA_INTERVENTIONEN !== 'undefined') {
+    for (const [themaId, sitzungen] of Object.entries(themaMap)) {
+      const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
+      const ansaetze = [...new Set(interventionen.map(i => i.ansatz).filter(Boolean))];
+      for (const ansatz of ansaetze) {
+        if (!ansatzMap[ansatz]) ansatzMap[ansatz] = { srsWerte: [], themen: new Set() };
+        ansatzMap[ansatz].srsWerte.push(...sitzungen.map(s => s.srsTotal));
+        ansatzMap[ansatz].themen.add(themaId);
+      }
+    }
+  }
+
+  const ansatzAnalyse = Object.entries(ansatzMap)
+    .filter(([, data]) => data.srsWerte.length >= 2)
+    .map(([ansatz, data]) => {
+      const durchschnitt = data.srsWerte.reduce((a, b) => a + b, 0) / data.srsWerte.length;
+      const guteRate = data.srsWerte.filter(v => v >= 30).length / data.srsWerte.length;
+      return {
+        ansatz,
+        durchschnittSrs: Math.round(durchschnitt * 10) / 10,
+        responseRate: Math.round(guteRate * 100),
+        anzahl: data.srsWerte.length,
+        themenCount: data.themen.size,
+      };
+    })
+    .sort((a, b) => b.responseRate - a.responseRate);
+
+  const besterAnsatz = ansatzAnalyse.length > 0 && ansatzAnalyse[0].responseRate >= 60 ? ansatzAnalyse[0] : null;
+
+  return { themen: themenAnalyse, gesamtTrend, bestesThema, ansatzAnalyse, besterAnsatz };
 }
 
 function renderTreatmentResponse(schuelerId) {
@@ -2134,6 +2202,33 @@ function renderTreatmentResponse(schuelerId) {
             </div>
           `).join('')}
         </div>
+        ${analyse.ansatzAnalyse.length > 0 ? `
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid #F3F4F6;">
+            <div style="font-weight:600;font-size:12px;margin-bottom:8px;">🧪 Therapeutischer Ansatz-Vergleich</div>
+            ${analyse.besterAnsatz ? `
+              <div class="treatment-empfehlung" style="margin-bottom:8px;">
+                ✨ <strong>Bester Ansatz: ${analyse.besterAnsatz.ansatz}</strong>
+                (${analyse.besterAnsatz.responseRate}% Response, Ø SRS ${analyse.besterAnsatz.durchschnittSrs}/40)
+              </div>
+            ` : ''}
+            <div class="treatment-ansatz-grid">
+              ${analyse.ansatzAnalyse.map(a => {
+                const barWidth = Math.min(100, a.responseRate);
+                const barColor = a.responseRate >= 75 ? '#22C55E' : a.responseRate >= 50 ? '#F59E0B' : '#EF4444';
+                return `
+                  <div class="treatment-ansatz-row">
+                    <span class="treatment-ansatz-label">${a.ansatz}</span>
+                    <div class="treatment-ansatz-bar-bg">
+                      <div class="treatment-ansatz-bar-fill" style="width:${barWidth}%;background:${barColor}"></div>
+                    </div>
+                    <span class="treatment-ansatz-value">${a.responseRate}%</span>
+                    <span class="treatment-ansatz-count">${a.anzahl} Sitz.</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
       </div>
     </div>
   `;

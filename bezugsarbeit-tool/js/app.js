@@ -2356,6 +2356,13 @@ function generateHypothesenBericht() {
           ${trAnalyse.themen.map(t => `
             <div class="screening-row">${t.label}: ${t.anzahl} Sitzungen, ${t.responseRate}% Response, Trend: ${t.trend}</div>
           `).join('')}
+          ${trAnalyse.ansatzAnalyse && trAnalyse.ansatzAnalyse.length > 0 ? `
+            <h3>\uD83E\uDDEA Therapeutischer Ansatz-Vergleich</h3>
+            ${trAnalyse.besterAnsatz ? `<div class="treatment"><strong>Bester Ansatz:</strong> ${trAnalyse.besterAnsatz.ansatz} (${trAnalyse.besterAnsatz.responseRate}% Response)</div>` : ''}
+            ${trAnalyse.ansatzAnalyse.map(a => `
+              <div class="screening-row">${a.ansatz}: ${a.responseRate}% Response, ${a.anzahl} Sitzungen, ${a.themenCount} Themen</div>
+            `).join('')}
+          ` : ''}
         </div>
       ` : ''}
 
@@ -3969,6 +3976,11 @@ function renderDashboardTreatmentResponse() {
         ${analyse.gesamtTrend ? `
           <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">
             Gesamt-SRS: ${analyse.gesamtTrend.richtung} (${analyse.gesamtTrend.diff > 0 ? '+' : ''}${analyse.gesamtTrend.diff})
+          </div>
+        ` : ''}
+        ${analyse.besterAnsatz ? `
+          <div style="font-size:11px;margin-top:6px;padding:4px 8px;background:#F0F9FF;border-radius:4px;color:#0C4A6E;">
+            🧪 Bester Ansatz: <strong>${analyse.besterAnsatz.ansatz}</strong> (${analyse.besterAnsatz.responseRate}%)
           </div>
         ` : ''}
       </div>

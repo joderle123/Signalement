@@ -3775,6 +3775,123 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Suchtspezifische Prävention. Psychoedukation über transgenerationale Muster. Motivierende Gesprächsführung.',
     wiki_ids: ['substanzkonsum'],
   },
+
+  // ── Gruppe 16: Verhalten × Screening × Anamnese ──────────────
+  {
+    id: 'thema-abgebrochen-verschlechterung',
+    gruppe: 'Dynamisch',
+    titel: 'Thema abgebrochen + Verschlechterung im Screening',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'hinweis',
+    staerkeWert: 2,
+    icd10: [],
+    bedingung: (ctx) => {
+      // Prüfe ob ein Thema auf 'abgebrochen' steht und gleichzeitig Screening-Flags vorliegen
+      const abgebrochene = Object.entries(ctx.verhalten || {}).filter(([, st]) => st === 'abgebrochen').map(([id]) => id);
+      return abgebrochene.length > 0 && ctx.screening.flaggedAreas.length >= 2;
+    },
+    erklaerung: 'Abbruch einer therapeutischen Arbeit kombiniert mit erhöhten Screening-Werten kann auf Vermeidung, Überforderung oder fehlende therapeutische Allianz hindeuten.',
+    evidenz: 'Therapieabbruch ist assoziiert mit schlechteren Outcomes; frühe Identifikation von Abbruchrisiken ermöglicht Gegensteuerung (Swift & Greenberg 2012).',
+    quelle: 'Swift & Greenberg (2012)',
+    ausloesendeDaten: (ctx) => {
+      const d = Object.entries(ctx.verhalten || {}).filter(([, st]) => st === 'abgebrochen').map(([id]) => 'Thema abgebrochen: ' + id);
+      d.push(`${ctx.screening.flaggedAreas.length} erhöhte Screening-Bereiche`);
+      return d;
+    },
+    gegenHypothese: 'Abbruch kann auch Zeichen von Fortschritt sein — das Thema ist nicht mehr relevant.',
+    empfehlung: 'Abbruchgründe explorieren. Therapeutische Allianz stärken. Ggf. Thema anpassen.',
+    wiki_ids: [],
+  },
+  {
+    id: 'viele-themen-offen',
+    gruppe: 'Dynamisch',
+    titel: 'Viele offene Themen ohne Fortschritt',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: [],
+    bedingung: (ctx) => {
+      const offene = Object.entries(ctx.verhalten || {}).filter(([, st]) => st === 'offen' || st === 'in-bearbeitung');
+      return offene.length >= 5;
+    },
+    erklaerung: 'Fünf oder mehr gleichzeitig offene Themen können auf fehlende Fokussierung hindeuten — zu viele Baustellen gleichzeitig gefährden den Fortschritt.',
+    evidenz: 'Therapieforschung zeigt, dass fokussierte Arbeit an wenigen Kernthemen effektiver ist als parallele Bearbeitung vieler Themen (Lambert 2013).',
+    quelle: 'Lambert (2013)',
+    ausloesendeDaten: (ctx) => {
+      const offene = Object.entries(ctx.verhalten || {}).filter(([, st]) => st === 'offen' || st === 'in-bearbeitung');
+      return [`${offene.length} Themen gleichzeitig offen/in Bearbeitung`];
+    },
+    gegenHypothese: 'Bei komplexen Fällen kann parallele Arbeit an mehreren Themen sinnvoll sein.',
+    empfehlung: 'Priorisierung mit Schüler besprechen. Max. 2-3 aktive Themen. Roadmap aktualisieren.',
+    wiki_ids: [],
+  },
+  {
+    id: 'psych-eltern-plus-kind-internalisierend',
+    gruppe: 'Internalisierend',
+    titel: 'Elterliche psychische Erkrankung + Kind internalisierend',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F32', 'F41', 'Z63.7'],
+    bedingung: (ctx) => ctx.anamnese.includes('psych_erkrankung_eltern') && (ctx.screening.flaggedAreas.includes('depression') || ctx.screening.flaggedAreas.includes('angst-generalisiert')),
+    erklaerung: 'Kinder psychisch erkrankter Eltern haben ein 3-4fach erhöhtes Risiko, selbst zu erkranken — genetische Vulnerabilität + Umgebungseffekte wirken zusammen.',
+    evidenz: 'Elterliche Depression erhöht das Risiko für kindliche Depression um Faktor 3-4; die Transmission erfolgt über Genetik, Modelllernen und eingeschränkte Erziehungsfähigkeit (Goodman & Gotlib 1999; Weissman et al. 2006).',
+    quelle: 'Goodman & Gotlib (1999); Weissman et al. (2006)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Psychische Erkrankung der Eltern'];
+      if (ctx.screening.flaggedAreas.includes('depression')) d.push('Screening: Depression erhöht');
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Angst erhöht');
+      return d;
+    },
+    gegenHypothese: 'Offene Kommunikation über elterliche Erkrankung und gute Behandlung der Eltern kann protektiv wirken.',
+    empfehlung: 'Psychoedukation: "Deine Eltern sind krank, nicht du bist schuld." Children of Mentally Ill Parents (CHIMPS) Ansatz.',
+    wiki_ids: ['depression', 'angst'],
+  },
+  {
+    id: 'motorik-verzoegert-schule',
+    gruppe: 'Entwicklung',
+    titel: 'Motorische Verzögerung + schulische Schwierigkeiten',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 2,
+    icd10: ['F82', 'F81'],
+    bedingung: (ctx) => ctx.anamnese.includes('motorik_verzoegert') && (ctx.anamnese.includes('klassenwiederholung') || ctx.anamnese.includes('sonderpaedagogik') || ctx.anamnese.includes('lernbehinderung')),
+    erklaerung: 'Motorische Entwicklungsverzögerung kombiniert mit schulischen Schwierigkeiten kann auf umfassendere neuropsychologische Defizite hindeuten.',
+    evidenz: 'Motorische Entwicklungsverzögerungen korrelieren mit Lernschwierigkeiten und ADHS; gemeinsames Auftreten erhöht den Förderbedarf (Dewey et al. 2002; Kadesjo & Gillberg 1999).',
+    quelle: 'Dewey et al. (2002); Kadesjo & Gillberg (1999)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Motorik: Verzögert'];
+      if (ctx.anamnese.includes('klassenwiederholung')) d.push('Klassenwiederholung');
+      if (ctx.anamnese.includes('sonderpaedagogik')) d.push('Sonderpädagogik');
+      if (ctx.anamnese.includes('lernbehinderung')) d.push('Lernbehinderung');
+      return d;
+    },
+    gegenHypothese: 'Isolierte motorische Verzögerung ohne kognitive Defizite hat oft gute Prognose.',
+    empfehlung: 'Neuropsychologische Abklärung. Ergotherapie prüfen. Schulische Förderung.',
+    wiki_ids: ['entwicklung'],
+  },
+  {
+    id: 'schutz-stabile-bezugsperson-allein',
+    gruppe: 'Schutzfaktoren',
+    titel: 'Stabile Bezugsperson vorhanden',
+    typ: 'schutz',
+    ebene: 'einzelfaktor',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('stabile_bezugsperson'),
+    erklaerung: 'Eine verlässliche Bezugsperson ist der wichtigste einzelne Schutzfaktor — sie kann multiple Risiken abpuffern.',
+    evidenz: 'Der konsistenteste Befund der Resilienzforschung: Eine stabile, warmherzige Bezugsperson kann die Auswirkungen von Armut, Trauma und familiärer Dysfunktion signifikant abmildern (Werner & Smith 1992; Masten 2001; Luthar 2006).',
+    quelle: 'Werner & Smith (1992); Masten (2001); Luthar (2006)',
+    ausloesendeDaten: (ctx) => ['Mind. eine stabile Bezugsperson'],
+    gegenHypothese: '',
+    empfehlung: 'Bezugsperson identifizieren und in die Arbeit einbeziehen. Beziehung stärken.',
+    wiki_ids: ['resilienz', 'bindungstheorie'],
+  },
 ];
 
 // ============================================================

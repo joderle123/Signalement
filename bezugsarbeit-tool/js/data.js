@@ -2602,6 +2602,198 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Trauma-Anamnese VOR ADHS-Diagnostik. Wenn Trauma vorhanden: erst Stabilisierung, dann ADHS-Abklärung.',
     wiki_ids: ['adhs', 'trauma'],
   },
+
+  // ── GRUPPE 7: Neue Regeln für detaillierte Anamnese-Felder ──
+  {
+    id: 'unsichere-bindung-frueh',
+    titel: 'Unsichere Bindungsorganisation — frühkindliche Hinweise',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F94.1', 'F94.2'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      return a.includes('bindung_unsicher') || a.includes('bindung_trennungen');
+    },
+    erklaerung: 'Einschätzung der frühen Bindung als unsicher oder durch häufige Trennungen belastet deutet auf ein unsicheres Bindungsmuster hin, das aktuelle Beziehungsgestaltung prägt.',
+    evidenz: 'Unsichere Bindung in den ersten 3 Lebensjahren hat einen OR von 2.3 für spätere psychische Störungen. Der Zusammenhang ist besonders stark für internalisierende Störungen (Groh et al. 2012; Fearon et al. 2010).',
+    quelle: 'Groh et al. (2012); Fearon et al. (2010); Sroufe et al. (2005)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('bindung_unsicher')) d.push('Frühe Bindung: Eher unsicher');
+      if (ctx.anamnese.includes('bindung_trennungen')) d.push('Frühe Bindung: Häufige Trennungen');
+      return d;
+    },
+    gegenHypothese: 'Bindungsqualität kann sich im Verlauf verändern — eine spätere sichere Bezugsperson kann korrigierend wirken (earned security).',
+    empfehlung: 'Beziehungskontinuität sicherstellen. Verlässlichkeit betonen. Keine abrupten Beziehungsabbrüche.',
+    wiki_ids: ['bindungsstoerung'],
+  },
+  {
+    id: 'suizid-vorgeschichte',
+    titel: 'Suizidversuch in Vorgeschichte — höchste Risikostufe',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['X71-X83', 'Z91.5'],
+    bedingung: (ctx) => ctx.anamnese.includes('suizid_ja'),
+    erklaerung: 'Ein früherer Suizidversuch ist der stärkste bekannte Einzelprädiktor für einen erneuten Suizidversuch. Dies erfordert kontinuierliches Monitoring und einen aktuellen Sicherheitsplan.',
+    evidenz: 'Das Risiko für einen erneuten Suizidversuch nach einem Erstversuch beträgt OR 30-40 im ersten Jahr. 50% der vollendeten Suizide bei Jugendlichen hatten einen früheren Versuch (Hawton et al. 2012; Bridge et al. 2006).',
+    quelle: 'Hawton et al. (2012); Bridge et al. (2006); Nock et al. (2008)',
+    ausloesendeDaten: (ctx) => ['Suizidversuch in Vorgeschichte: Ja'],
+    gegenHypothese: 'Zeitlicher Abstand und erfolgreiche Behandlung können das Risiko senken — aber Monitoring bleibt langfristig wichtig.',
+    empfehlung: 'Sicherheitsplan sofort erstellen/aktualisieren. Krisentelefon bekannt? Fachärztliche Anbindung sicherstellen. Regelmässige Suizidalitäts-Checks.',
+    wiki_ids: ['suizidalitaet'],
+  },
+  {
+    id: 'svv-aktiv',
+    titel: 'Aktive Selbstverletzung — Krisenintervention',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['X78', 'Z91.5'],
+    bedingung: (ctx) => ctx.anamnese.includes('svv_aktiv'),
+    erklaerung: 'Aktive Selbstverletzung signalisiert akute emotionale Überforderung und fehlende Emotionsregulationsstrategien. Erfordert sofortige Risikobewertung und Interventionsplan.',
+    evidenz: 'Aktive Selbstverletzung erhöht das Suizidrisiko um OR 6-10. Bei Jugendlichen ist SVV der stärkste Prädiktor für Suizidversuche innerhalb des nächsten Jahres (Hawton et al. 2012; Klonsky et al. 2016).',
+    quelle: 'Hawton et al. (2012); Klonsky et al. (2016); Nock (2010)',
+    ausloesendeDaten: (ctx) => ['Selbstverletzung: Ja, aktiv'],
+    gegenHypothese: 'Selbstverletzung dient oft der Emotionsregulation ohne suizidale Intention — dennoch immer Suizidalität abklären.',
+    empfehlung: 'Suizidalitätsabklärung sofort. Sicherheitsplan. Alternative Regulationsstrategien erarbeiten. Skills-Koffer (DBT-basiert).',
+    wiki_ids: ['selbstverletzung', 'suizidalitaet'],
+  },
+  {
+    id: 'autoritaetsprobleme-schule',
+    titel: 'Autoritätsprobleme in der Schule',
+    typ: 'risiko',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F91.3'],
+    bedingung: (ctx) => {
+      return ctx.anamnese.includes('lehrer_autoritaet') && (ctx.anamnese.includes('kein_vater') || ctx.anamnese.includes('alleinerziehend'));
+    },
+    erklaerung: 'Autoritätsprobleme mit Lehrpersonen bei gleichzeitig fehlender Vaterfigur deuten auf eine Übertragungsdynamik hin — das Kind kann Autoritätsfiguren nicht einordnen.',
+    evidenz: 'Fehlende väterliche Bezugsperson korreliert mit Schwierigkeiten im Umgang mit männlichen Autoritätspersonen. Die Übertragungsdynamik ist besonders bei Jungen ausgeprägt (Fthenakis 1999; Kindler 2002).',
+    quelle: 'Fthenakis (1999); Kindler (2002); Lamb (2010)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Verhältnis zu Lehrern: Autoritätsprobleme'];
+      if (ctx.anamnese.includes('kein_vater')) d.push('Kein Vaterkontakt');
+      if (ctx.anamnese.includes('alleinerziehend')) d.push('Alleinerziehend');
+      return d;
+    },
+    gegenHypothese: 'Autoritätsprobleme können auch Ausdruck von ADHS-Impulsivität oder oppositionellem Verhalten sein.',
+    empfehlung: 'Beziehungsarbeit mit männlichen Bezugspersonen. Reflektierte Autorität statt Macht. Übertragung thematisieren.',
+    wiki_ids: ['oppositionelles-verhalten', 'bindungsstoerung'],
+  },
+  {
+    id: 'schulverweigerung-angst',
+    titel: 'Angstbasierte Schulverweigerung',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F93.0', 'F40.1'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      return (a.includes('absentismus') || a.includes('fehlzeiten_massiv'))
+        && (a.includes('mobbing_opfer') || a.includes('mobbing_beides'))
+        && a.includes('soziale_isolation');
+    },
+    erklaerung: 'Massive Fehlzeiten + Mobbing-Opfer + soziale Isolation bilden die klassische Trias für angstbasierte Schulverweigerung — das Kind vermeidet die Schule aus Angst.',
+    evidenz: 'Bei 50-70% der schulverweigernden Kinder liegt eine Angststörung zugrunde. Die Kombination mit Mobbing und Isolation weist eindeutig auf die angstmotivierte Variante hin (Kearney 2008; Egger et al. 2003).',
+    quelle: 'Kearney (2008); Egger et al. (2003); Last et al. (1998)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('fehlzeiten_massiv')) d.push('Fehlzeiten: Massiv (>30%)');
+      if (ctx.anamnese.includes('absentismus')) d.push('Fehlzeiten: Häufig (>10%)');
+      if (ctx.anamnese.includes('mobbing_opfer')) d.push('Mobbing: Opfer');
+      if (ctx.anamnese.includes('mobbing_beides')) d.push('Mobbing: Täter-Opfer');
+      if (ctx.anamnese.includes('soziale_isolation')) d.push('Sozial isoliert');
+      return d;
+    },
+    gegenHypothese: 'Schulvermeidung kann auch familiär bedingt sein (Parentifizierung, mangelnde Aufsicht).',
+    empfehlung: 'Angstbehandlung priorisieren. Schrittweise Reintegration. Anti-Mobbing-Intervention. Lehrpersonen einbeziehen.',
+    wiki_ids: ['schulabsentismus', 'angststoerung'],
+  },
+  {
+    id: 'klinik-vorgeschichte',
+    titel: 'Psychiatrische Klinikvorgeschichte — erhöhter Schweregrad',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('behandlung_klinik'),
+    erklaerung: 'Ein früherer stationärer Psychiatrie-Aufenthalt deutet auf eine schwere Krise oder Störung in der Vorgeschichte hin. Dies erfordert erhöhte Aufmerksamkeit für Rückfälle.',
+    evidenz: 'Jugendliche mit stationärer psychiatrischer Vorbehandlung haben ein 3-4x erhöhtes Risiko für erneute Krisen im Folgejahr. Transition von Klinik zu ambulant ist besonders vulnerabel (Fontanella et al. 2015).',
+    quelle: 'Fontanella et al. (2015); James et al. (2010)',
+    ausloesendeDaten: (ctx) => ['Frühere Behandlung: Klinikaufenthalt'],
+    gegenHypothese: 'Erfolgreiche stationäre Behandlung kann auch stabilisierend gewirkt haben.',
+    empfehlung: 'Entlassungsbericht einholen. Krisenplan aktualisieren. Engmaschiges Monitoring. Fachärztliche Anbindung sicherstellen.',
+    wiki_ids: [],
+  },
+  {
+    id: 'sichere-bindung-schutz',
+    titel: 'Sichere frühe Bindungserfahrung — protektiv',
+    typ: 'schutz',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('bindung_sicher'),
+    erklaerung: 'Eine als sicher eingeschätzte frühe Bindungserfahrung ist der stärkste entwicklungspsychologische Schutzfaktor — sie bildet die Grundlage für Emotionsregulation, Beziehungsfähigkeit und Resilienz.',
+    evidenz: 'Sichere Bindung in der frühen Kindheit reduziert das Risiko für psychische Störungen um 50-70% und fördert kognitive und soziale Entwicklung (Sroufe et al. 2005; Groh et al. 2014).',
+    quelle: 'Sroufe et al. (2005); Groh et al. (2014); Bowlby (1988)',
+    ausloesendeDaten: (ctx) => ['Frühe Bindung: Sicher'],
+    gegenHypothese: '',
+    empfehlung: 'Auf diese Ressource aufbauen. Bindungssicherheit als Basis für therapeutische Arbeit nutzen.',
+    wiki_ids: ['bindungsstoerung', 'resilienz'],
+  },
+  {
+    id: 'toxische-beziehungsmuster',
+    titel: 'Toxische Beziehungsmuster — Wiederholung familiärer Dynamiken',
+    typ: 'risiko',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z62.8'],
+    bedingung: (ctx) => {
+      return ctx.anamnese.includes('romantik_toxisch') && ctx.anamnese.includes('haeusliche_gewalt');
+    },
+    erklaerung: 'Toxische Beziehungsmuster bei gleichzeitiger häuslicher Gewalterfahrung deuten auf transgenerationale Weitergabe von Beziehungsgewalt hin.',
+    evidenz: 'Kinder die häusliche Gewalt erlebten haben ein 3-6x erhöhtes Risiko, selbst Opfer oder Täter in Partnerbeziehungen zu werden (Wolfe et al. 2004; Ehrensaft et al. 2003).',
+    quelle: 'Wolfe et al. (2004); Ehrensaft et al. (2003); Widom et al. (2014)',
+    ausloesendeDaten: (ctx) => ['Romantische Beziehungen: Toxische Muster', 'Häusliche Gewalt erlebt'],
+    gegenHypothese: 'Nicht jede toxische Beziehung ist Folge häuslicher Gewalt — Peer-Einfluss und Entwicklungsphase beachten.',
+    empfehlung: 'Psychoedukation über gesunde Beziehungen. Gewaltkreislauf thematisieren. Grenzen setzen üben.',
+    wiki_ids: ['trauma'],
+  },
+  {
+    id: 'schutz-therapieerfahrung',
+    titel: 'Therapieerfahrung vorhanden — erleichtert Zugang',
+    typ: 'schutz',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('behandlung_psychotherapie'),
+    erklaerung: 'Bestehende Psychotherapie-Erfahrung deutet auf Behandlungsbereitschaft hin und erleichtert den Beziehungsaufbau — das Setting ist vertraut.',
+    evidenz: 'Therapieerfahrung reduziert Stigmatisierungseffekte und erhöht die Bereitschaft zur aktiven Mitarbeit (Lambert 2013).',
+    quelle: 'Lambert (2013)',
+    ausloesendeDaten: (ctx) => ['Frühere Behandlung: Psychotherapie'],
+    gegenHypothese: 'Negative Therapieerfahrungen können auch Widerstand erzeugen.',
+    empfehlung: 'Frühere Therapieerfahrung explorieren (positiv/negativ?). Auf Bewährtem aufbauen.',
+    wiki_ids: [],
+  },
+  {
+    id: 'schutz-lehrer-positiv',
+    titel: 'Positive Lehrer-Beziehung — schulischer Schutzfaktor',
+    typ: 'schutz',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('lehrer_positiv'),
+    erklaerung: 'Eine positive Beziehung zu Lehrpersonen ist ein bedeutsamer Schutzfaktor im schulischen Kontext — sie kann familiäre Risiken teilweise kompensieren.',
+    evidenz: 'Positive Lehrer-Schüler-Beziehungen reduzieren Verhaltensprobleme und fördern schulischen Erfolg, besonders bei Kindern aus Risikokontexten (Hamre & Pianta 2001; Sabol & Pianta 2012).',
+    quelle: 'Hamre & Pianta (2001); Sabol & Pianta (2012)',
+    ausloesendeDaten: (ctx) => ['Verhältnis zu Lehrpersonen: Positiv'],
+    gegenHypothese: '',
+    empfehlung: 'Diese Ressource nutzen. Lehrperson als Verbündete in die Arbeit einbeziehen.',
+    wiki_ids: ['resilienz'],
+  },
 ];
 
 // ============================================================

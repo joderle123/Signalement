@@ -1868,6 +1868,30 @@ function generateHypothesen(schuelerId) {
     h._erstesAuftreten = auftritte.length > 0 ? auftritte[0].datum : null;
   }
 
+  // ── Konfidenz-Score berechnen (0-100%) ──────────────────────
+  for (const h of aktive) {
+    let konfidenz = 0;
+
+    // Basis: Stärke (20-40 Punkte)
+    konfidenz += Math.min(h.staerkeWert * 10, 40);
+
+    // Datenpunkte: je mehr auslösende Daten, desto höher (max 20)
+    const dp = (h._ausloesendeDaten || []).length;
+    konfidenz += Math.min(dp * 5, 20);
+
+    // Verlauf: Bestätigungen über Zeit (max 20)
+    konfidenz += Math.min((h._verlaufAnzahl || 0) * 5, 20);
+
+    // Screening-Übereinstimmung: wenn Screening-Daten involviert (10)
+    const hatScreeningDaten = (h._ausloesendeDaten || []).some(d => d.includes('Screening:'));
+    if (hatScreeningDaten) konfidenz += 10;
+
+    // Dynamisch hochgestuft: +10
+    if (h._dynamischHochgestuft) konfidenz += 10;
+
+    h._konfidenz = Math.min(konfidenz, 100);
+  }
+
   // Sortieren: staerkeWert desc, dann risiko vor schutz vor differenzial
   const typRang = { risiko: 0, differenzial: 1, schutz: 2 };
   aktive.sort((a, b) => b.staerkeWert - a.staerkeWert || (typRang[a.typ] || 0) - (typRang[b.typ] || 0));
@@ -1970,6 +1994,7 @@ function renderHypothesen(hypothesen) {
         <div class="hypothese-header">
           <span class="hypothese-titel">${typIcon} ${h.titel}</span>
           ${verlaufHtml}
+          ${h._konfidenz != null ? `<span class="hypothese-konfidenz" title="Konfidenz: ${h._konfidenz}% — basierend auf Datenpunkten, Verlauf und Screening">${h._konfidenz}%</span>` : ''}
           <span class="hypothese-badge" style="background:${badgeBg};color:${badgeText}">${staerkeLabel}</span>
         </div>
         ${daten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${daten.join(' · ')}</div>` : ''}
@@ -2677,6 +2702,34 @@ function toggleHypothesenFilter(ebene) {
     const visibleCards = grp.querySelectorAll('.hypothese-card:not([style*="display: none"])');
     grp.style.display = visibleCards.length > 0 ? '' : 'none';
   });
+}
+
+// Screening-Domain → Hypothesen verlinken: scrollt und highlighted
+function scrollToHypothesenForDomain(domainId) {
+  // Zeige Info-Tab
+  const infoTab = document.querySelector('[data-profil-tab="info"]');
+  if (infoTab) infoTab.click();
+
+  setTimeout(() => {
+    // Alle Hypothesen-Karten durchgehen und die relevanten highlighten
+    const cards = document.querySelectorAll('.hypothese-card');
+    let firstMatch = null;
+    cards.forEach(card => {
+      card.classList.remove('hypothese-highlight');
+      const datenEl = card.querySelector('.hypothese-daten');
+      if (datenEl && datenEl.textContent.toLowerCase().includes(domainId.toLowerCase())) {
+        card.classList.add('hypothese-highlight');
+        if (!firstMatch) firstMatch = card;
+      }
+    });
+    if (firstMatch) {
+      firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Highlight nach 3s entfernen
+      setTimeout(() => {
+        document.querySelectorAll('.hypothese-highlight').forEach(c => c.classList.remove('hypothese-highlight'));
+      }, 3000);
+    }
+  }, 200);
 }
 
 // Hypothesen-Sortierung umschalten
@@ -6098,7 +6151,8 @@ function generateUeberweisungsschreiben() {
   if (latestScr && latestScr.flaggedAreas && latestScr.flaggedAreas.length > 0) {
     auffaellig = latestScr.flaggedAreas.map(a => {
       const dom = SCREENING_DOMAINS.find(d => d.id === a);
-      return dom ? dom.label : a;
+      const label = dom ? dom.label : a;
+      return `<span class="screening-hypo-link" onclick="scrollToHypothesenForDomain('${label}')" title="Verknüpfte Hypothesen anzeigen">${label}</span>`;
     }).join(', ');
   }
 

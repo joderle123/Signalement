@@ -4983,6 +4983,44 @@ select {
   border: 1px solid #BAE6FD;
 }
 
+/* Screening → Hypothesen Verlinkung */
+.screening-hypo-link {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  color: var(--primary);
+  transition: color 0.2s;
+}
+.screening-hypo-link:hover {
+  color: var(--primary-dark, #4338CA);
+  text-decoration-style: solid;
+}
+
+/* Hypothese Highlight (von Screening verlinkt) */
+.hypothese-highlight {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  animation: highlight-fade 3s ease-out;
+}
+@keyframes highlight-fade {
+  0% { background: rgba(99,102,241,0.1); }
+  100% { background: transparent; }
+}
+
+/* Konfidenz-Score */
+.hypothese-konfidenz {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: #F3F4F6;
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 30px;
+  text-align: center;
+}
+
 /* Eskalations-Alert */
 .hypothese-eskalation {
   background: #FEF2F2 !important;

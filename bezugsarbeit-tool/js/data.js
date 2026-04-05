@@ -4045,6 +4045,347 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Sofortige Krisenintervention. Multiprofessionelles Team einberufen. Sicherheitsplan erstellen. Engmaschiges Monitoring.',
     wiki_ids: ['krisenintervention'],
   },
+  // ── GRUPPE 19: Erweiterte Kombinations-Hypothesen ──────────
+  {
+    id: 'patchwork-loyalitaet',
+    titel: 'Patchwork-Familie — Loyalitätskonflikte',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z62.8', 'Z63.5'],
+    bedingung: (ctx) => ctx.anamnese.includes('patchwork') && (ctx.anamnese.includes('scheidung') || ctx.anamnese.includes('trennung')),
+    erklaerung: 'Kinder in Patchwork-Familien erleben häufig Loyalitätskonflikte zwischen leiblichen und Stiefeltern. Dies kann zu Identitätsproblemen, Verhaltensauffälligkeiten und emotionaler Belastung führen.',
+    evidenz: 'Stieffamilien-Konstellationen können Loyalitätskonflikte und Identitätsprobleme auslösen. Kinder zeigen in den ersten 2-3 Jahren nach Neugründung erhöhte Anpassungsprobleme (Hetherington & Kelly 2002; Ganong & Coleman 2004).',
+    quelle: 'Hetherington & Kelly (2002); Ganong & Coleman (2004); Pryor & Rodgers (2001)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('patchwork')) d.push('Patchwork-Familie');
+      if (ctx.anamnese.includes('scheidung')) d.push('Scheidung');
+      return d;
+    },
+    gegenHypothese: 'Falls die Patchwork-Situation stabil ist (>3 Jahre) und gute Beziehungsqualität zum Stiefelternteil besteht, sinkt das Risiko deutlich.',
+    empfehlung: 'Loyalitätskonflikte explorieren. Beziehungsqualität zu allen Elternfiguren erfassen. Familiensystemische Perspektive einnehmen.',
+    wiki_ids: ['familie', 'bindung'],
+  },
+  {
+    id: 'hochbegabung-underachievement',
+    titel: 'Hochbegabung + Underachievement',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z55.8'],
+    bedingung: (ctx) => ctx.anamnese.includes('hochbegabung') && (ctx.anamnese.includes('leistung_schwach') || ctx.anamnese.includes('leistung_sehr_schwach') || ctx.anamnese.includes('absentismus')),
+    erklaerung: 'Hochbegabte Kinder mit schwachen Schulleistungen zeigen häufig Underachievement — eine Diskrepanz zwischen Potenzial und Leistung, oft begleitet von Frustration, Langeweile und Verhaltensauffälligkeiten.',
+    evidenz: 'Underachievement bei Hochbegabten betrifft 15-50% der identifizierten Hochbegabten. Ursachen umfassen mangelnde Passung, Motivationsverlust und soziale Isolation (Reis & McCoach 2000; Preckel & Vock 2013).',
+    quelle: 'Reis & McCoach (2000); Preckel & Vock (2013); Siegle & McCoach (2018)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Hochbegabung / Unterforderung'];
+      if (ctx.anamnese.includes('leistung_schwach')) d.push('Schwache Schulleistung');
+      if (ctx.anamnese.includes('leistung_sehr_schwach')) d.push('Sehr schwache Schulleistung');
+      if (ctx.anamnese.includes('absentismus')) d.push('Häufige Fehlzeiten');
+      return d;
+    },
+    gegenHypothese: 'Falls Leistungsschwäche auf eine Lernstörung (z.B. Legasthenie) zurückzuführen ist, liegt kein klassisches Underachievement vor.',
+    empfehlung: 'Begabungsdiagnostik anregen. Differenzierung/Enrichment in der Schule besprechen. Motivation und Passung explorieren.',
+    wiki_ids: ['schule', 'depression'],
+  },
+  {
+    id: 'alleinerziehend-belastung',
+    titel: 'Alleinerziehend + kumulative Belastung',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z59.6', 'Z63.7'],
+    bedingung: (ctx) => (ctx.anamnese.includes('alleinerziehend') || ctx.anamnese.includes('alleinerziehend_vater')) && (ctx.anamnese.includes('finanzen_belastet') || ctx.anamnese.includes('finanzen_prekear') || ctx.anamnese.includes('soziale_benachteiligung')),
+    erklaerung: 'Alleinerziehende Elternteile unter finanzieller Belastung haben weniger Ressourcen für emotionale Verfügbarkeit. Kinder zeigen erhöhtes Risiko für internalisierende und externalisierende Probleme.',
+    evidenz: 'Kinder alleinerziehender Eltern in Armut zeigen 2-3x höhere Raten psychischer Auffälligkeiten. Der Effekt wird primär über elterlichen Stress und reduzierte Erziehungsqualität vermittelt (Amato 2005; McLanahan & Sandefur 1994).',
+    quelle: 'Amato (2005); McLanahan & Sandefur (1994); Nieuwenhuis & Maldonado (2018)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('alleinerziehend')) d.push('Alleinerziehend Mutter');
+      if (ctx.anamnese.includes('alleinerziehend_vater')) d.push('Alleinerziehend Vater');
+      if (ctx.anamnese.includes('finanzen_belastet')) d.push('Finanzielle Belastung');
+      if (ctx.anamnese.includes('finanzen_prekear')) d.push('Prekäre Finanzlage');
+      if (ctx.anamnese.includes('soziale_benachteiligung')) d.push('Soziale Benachteiligung');
+      return d;
+    },
+    gegenHypothese: 'Falls ein gutes soziales Netz (Grosseltern, Nachbarn, Verein) vorhanden ist, können die Risiken deutlich abgefedert werden.',
+    empfehlung: 'Soziales Unterstützungsnetz erfassen. Entlastungsangebote für Elternteil identifizieren. Finanzielle Beratung vermitteln.',
+    wiki_ids: ['familie', 'soziales'],
+  },
+  {
+    id: 'online-isolation',
+    titel: 'Digitale Isolation — nur Online-Kontakte',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z60.2'],
+    bedingung: (ctx) => ctx.anamnese.includes('peers_online') && (ctx.anamnese.includes('soziale_isolation') || (ctx.screening?.flaggedAreas || []).includes('soziale_angst')),
+    erklaerung: 'Ausschliesslich online-basierte Sozialkontakte in Kombination mit sozialer Isolation deuten auf Vermeidungsverhalten und erhöhtes Einsamkeitsrisiko hin.',
+    evidenz: 'Jugendliche mit ausschliesslich online-basierten Kontakten zeigen höhere Einsamkeitswerte und mehr depressive Symptome. Online-Kontakte kompensieren fehlende Face-to-Face-Beziehungen nur bedingt (Twenge et al. 2018; Primack et al. 2017).',
+    quelle: 'Twenge et al. (2018); Primack et al. (2017); Orben & Przybylski (2019)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Nur Online-Kontakte'];
+      if (ctx.anamnese.includes('soziale_isolation')) d.push('Sozial isoliert');
+      if ((ctx.screening?.flaggedAreas || []).includes('soziale_angst')) d.push('Screening: Soziale Angst');
+      return d;
+    },
+    gegenHypothese: 'Falls die Online-Kontakte stabil und unterstützend sind (z.B. Gaming-Community mit echten Freundschaften), kann die protektive Wirkung unterschätzt werden.',
+    empfehlung: 'Qualität der Online-Beziehungen explorieren. Schrittweise Face-to-Face-Kontakte aufbauen. Soziale Angst abklären.',
+    wiki_ids: ['soziale-angst', 'soziales'],
+  },
+  {
+    id: 'schulabbruch-risiko',
+    titel: 'Akutes Schulabbruch-Risiko',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['Z55.4'],
+    bedingung: (ctx) => (ctx.anamnese.includes('leistung_abbruch') || ctx.anamnese.includes('leistung_sehr_schwach')) && (ctx.anamnese.includes('fehlzeiten_massiv') || ctx.anamnese.includes('absentismus')),
+    erklaerung: 'Die Kombination von sehr schwachen Leistungen und massivem Absentismus ist der stärkste Prädiktor für Schulabbruch. Ohne Intervention chronifiziert sich das Muster innerhalb von Monaten.',
+    evidenz: 'Schulabbruch erhöht das Risiko für Arbeitslosigkeit, Armut und psychische Erkrankungen um Faktor 2-4. Fehlzeiten >30% in Kombination mit Leistungsversagen führen ohne Intervention in 60-80% der Fälle zum Abbruch (Rumberger 2011; Maynard et al. 2015).',
+    quelle: 'Rumberger (2011); Maynard et al. (2015); Jimerson et al. (2002)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('leistung_abbruch')) d.push('Schulabbruch-Risiko');
+      if (ctx.anamnese.includes('leistung_sehr_schwach')) d.push('Sehr schwache Leistung');
+      if (ctx.anamnese.includes('fehlzeiten_massiv')) d.push('Massive Fehlzeiten (>30%)');
+      if (ctx.anamnese.includes('absentismus')) d.push('Häufige Fehlzeiten (>10%)');
+      return d;
+    },
+    gegenHypothese: 'Falls der Absentismus primär krankheitsbedingt ist (chronische Erkrankung), liegt ein anderes Interventionsmuster vor.',
+    empfehlung: 'Sofortige Vernetzung mit Schule. Reintegrations-Plan erstellen. Ursachen für Absentismus klären (Angst vs. Opposition vs. Überforderung).',
+    wiki_ids: ['schulabsentismus'],
+  },
+  {
+    id: 'medikation-monitoring',
+    titel: 'Psychiatrische Medikation — Monitoring empfohlen',
+    typ: 'risiko',
+    ebene: 'einzelfaktor',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z92.2'],
+    bedingung: (ctx) => ctx.anamnese.includes('medikation_psycho') && (ctx.anamnese.includes('psych_erkrankung_eltern') || ctx.anamnese.includes('klinik_ja')),
+    erklaerung: 'Jugendliche unter Psychopharmaka mit psychiatrischer Familienbelastung oder eigener Klinikgeschichte benötigen engmaschiges Monitoring der Wirkung und Nebenwirkungen.',
+    evidenz: 'Psychopharmaka-Verschreibung bei Jugendlichen hat sich in 20 Jahren verdreifacht. Monitoring der Adhärenz und Nebenwirkungen verbessert Outcomes signifikant (Zito et al. 2008; Olfson et al. 2015).',
+    quelle: 'Zito et al. (2008); Olfson et al. (2015); Correll et al. (2009)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Psychiatrische Medikation'];
+      if (ctx.anamnese.includes('psych_erkrankung_eltern')) d.push('Psychische Erkrankung Eltern');
+      if (ctx.anamnese.includes('klinik_ja')) d.push('Klinikvorgeschichte');
+      return d;
+    },
+    gegenHypothese: 'Falls die Medikation stabil eingestellt ist und regelmässige psychiatrische Kontrollen stattfinden, ist das Risiko geringer.',
+    empfehlung: 'Medikamenten-Adhärenz regelmässig thematisieren. Nebenwirkungen beobachten. Kontakt zum verschreibenden Arzt sicherstellen.',
+    wiki_ids: ['psychopharmaka'],
+  },
+  {
+    id: 'wechselnde-peers-bindung',
+    titel: 'Instabile Peer-Beziehungen — Bindungsmuster',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F94.2'],
+    bedingung: (ctx) => ctx.anamnese.includes('peers_wechselnd') && (ctx.anamnese.includes('haeufige_umzuege') || ctx.anamnese.includes('schulwechsel_haeufig') || ctx.anamnese.includes('bindung_unsicher')),
+    erklaerung: 'Wechselnde Peer-Kontakte in Kombination mit häufigen Umzügen oder unsicherer Bindung deuten auf ein Muster instabiler Beziehungsgestaltung hin, das sich ohne Intervention chronifizieren kann.',
+    evidenz: 'Instabile Peer-Beziehungen in der Adoleszenz sind Prädiktor für spätere Beziehungsprobleme. Bei unsicherer Bindung ist die Fähigkeit zur Aufrechterhaltung von Freundschaften eingeschränkt (Sroufe et al. 2005; Rubin et al. 2006).',
+    quelle: 'Sroufe et al. (2005); Rubin et al. (2006); Bagwell & Schmidt (2011)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Wechselnde Peer-Kontakte'];
+      if (ctx.anamnese.includes('haeufige_umzuege')) d.push('Häufige Umzüge');
+      if (ctx.anamnese.includes('schulwechsel_haeufig')) d.push('Häufige Schulwechsel');
+      if (ctx.anamnese.includes('bindung_unsicher')) d.push('Unsichere Bindung');
+      return d;
+    },
+    gegenHypothese: 'Falls die wechselnden Kontakte auf externe Faktoren zurückzuführen sind (Umzüge) und das Kind grundsätzlich beziehungsfähig ist, ist die Prognose besser.',
+    empfehlung: 'Bindungsstil explorieren. Soziale Kompetenzen fördern. Stabile Bezugsperson identifizieren.',
+    wiki_ids: ['bindung', 'soziales'],
+  },
+  {
+    id: 'toxische-romantik-jugend',
+    titel: 'Toxische Beziehungsmuster im Jugendalter',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['Z62.8', 'T74.1'],
+    bedingung: (ctx) => ctx.anamnese.includes('romantik_toxisch') && (ctx.anamnese.includes('haeusliche_gewalt') || ctx.anamnese.includes('misshandlung_physisch') || ctx.anamnese.includes('misshandlung_emotional')),
+    erklaerung: 'Toxische Beziehungsmuster bei Jugendlichen, die selbst häusliche Gewalt erlebt haben, deuten auf transgenerationale Übertragung von Beziehungsgewalt hin.',
+    evidenz: 'Kinder die häusliche Gewalt erlebten haben ein 3-6x erhöhtes Risiko, selbst in gewalthaltige Partnerschaften zu geraten. Frühes Eingreifen durchbricht den Kreislauf (Wolfe et al. 2004; Ehrensaft et al. 2003).',
+    quelle: 'Wolfe et al. (2004); Ehrensaft et al. (2003); Exner-Cortens et al. (2013)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Toxische Beziehungsmuster'];
+      if (ctx.anamnese.includes('haeusliche_gewalt')) d.push('Häusliche Gewalt erlebt');
+      if (ctx.anamnese.includes('misshandlung_physisch')) d.push('Physische Misshandlung');
+      if (ctx.anamnese.includes('misshandlung_emotional')) d.push('Emotionale Misshandlung');
+      return d;
+    },
+    gegenHypothese: 'Falls das toxische Muster situativ begrenzt ist (eine einzelne Beziehung) und keine familiäre Gewaltgeschichte vorliegt, ist das Wiederholungsrisiko geringer.',
+    empfehlung: 'Psychoedukation zu gesunden Beziehungen. Gewaltdynamiken explorieren. Safety-Planning bei akuter Bedrohung.',
+    wiki_ids: ['familie', 'trauma'],
+  },
+  {
+    id: 'lernbehinderung-emotional',
+    titel: 'Lernbehinderung + sekundäre emotionale Probleme',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F81', 'F32.0'],
+    bedingung: (ctx) => ctx.anamnese.includes('lernbehinderung') && ((ctx.screening?.flaggedAreas || []).includes('depression') || (ctx.screening?.flaggedAreas || []).includes('selbstwert')),
+    erklaerung: 'Unerkannte oder unzureichend behandelte Lernstörungen führen häufig zu Frustration, niedrigem Selbstwert und sekundärer Depression.',
+    evidenz: 'Kinder mit Lernstörungen zeigen 2-3x höhere Raten von Depression und Angst. Die emotionalen Probleme sind meist sekundär und bilden sich bei adäquater Lernförderung zurück (Willcutt & Pennington 2000; Mugnaini et al. 2009).',
+    quelle: 'Willcutt & Pennington (2000); Mugnaini et al. (2009); Goldston et al. (2007)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Lernbehinderung / Teilleistungsstörung'];
+      if ((ctx.screening?.flaggedAreas || []).includes('depression')) d.push('Screening: Depression');
+      if ((ctx.screening?.flaggedAreas || []).includes('selbstwert')) d.push('Screening: Niedriger Selbstwert');
+      return d;
+    },
+    gegenHypothese: 'Falls die Depression primär (familiär bedingt) ist und die Lernprobleme Folge der Depression sind, kehrt sich die Kausalität um.',
+    empfehlung: 'Lerndiagnostik anregen falls nicht vorhanden. Nachteilsausgleich prüfen. Selbstwert-Arbeit parallel zur Lernförderung.',
+    wiki_ids: ['schule', 'depression'],
+  },
+  {
+    id: 'klassenwiederholung-selbstwert',
+    titel: 'Klassenwiederholung + Selbstwert-Risiko',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z55.4'],
+    bedingung: (ctx) => ctx.anamnese.includes('klassenwiederholung') && (ctx.anamnese.includes('leistung_schwach') || ctx.anamnese.includes('leistung_sehr_schwach') || ctx.anamnese.includes('mobbing_opfer')),
+    erklaerung: 'Klassenwiederholung kombiniert mit anhaltend schwachen Leistungen oder Mobbing deutet auf chronisches schulisches Versagen mit erheblicher Selbstwert-Problematik hin.',
+    evidenz: 'Klassenwiederholung ist assoziiert mit niedrigerem Selbstwert, geringerer Motivation und erhöhtem Schulabbruch-Risiko. Der Effekt ist besonders stark bei komorbiden sozialen Problemen (Jimerson et al. 2002; Martin 2011).',
+    quelle: 'Jimerson et al. (2002); Martin (2011); Holmes (1989)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Klassenwiederholung'];
+      if (ctx.anamnese.includes('leistung_schwach')) d.push('Schwache Schulleistung');
+      if (ctx.anamnese.includes('leistung_sehr_schwach')) d.push('Sehr schwache Schulleistung');
+      if (ctx.anamnese.includes('mobbing_opfer')) d.push('Mobbing-Opfer');
+      return d;
+    },
+    gegenHypothese: 'Falls die Wiederholung zu einer Verbesserung geführt hat und das Kind sich im neuen Klassenverband wohlfühlt, kann der Effekt positiv sein.',
+    empfehlung: 'Schulische Selbstwirksamkeit gezielt stärken. Erfolgserlebnisse ermöglichen. Peer-Integration in neuer Klasse beobachten.',
+    wiki_ids: ['schule', 'depression'],
+  },
+  {
+    id: 'grosseltern-betreuung',
+    titel: 'Grosseltern-Betreuung — Elternausfall-Indikator',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z63.3'],
+    bedingung: (ctx) => ctx.anamnese.includes('grosseltern') && (ctx.anamnese.includes('sucht_haushalt') || ctx.anamnese.includes('psych_erkrankung_eltern') || ctx.anamnese.includes('inhaftierung_elternteil')),
+    erklaerung: 'Grosseltern-Betreuung in Kombination mit elterlicher Belastung (Sucht, psych. Erkrankung, Inhaftierung) deutet auf Elternausfall hin. Das Kind erlebt oft Scham, Trauer und Loyalitätskonflikte.',
+    evidenz: 'Kinder in Grosseltern-Betreuung aufgrund von Elternausfall zeigen erhöhte Raten von Verlusterfahrung, Bindungsunsicherheit und internalisierenden Problemen (Dunifon 2013; Smith & Palmieri 2007).',
+    quelle: 'Dunifon (2013); Smith & Palmieri (2007); Hayslip & Kaminski (2005)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Grosseltern-Betreuung'];
+      if (ctx.anamnese.includes('sucht_haushalt')) d.push('Sucht im Haushalt');
+      if (ctx.anamnese.includes('psych_erkrankung_eltern')) d.push('Psych. Erkrankung Eltern');
+      if (ctx.anamnese.includes('inhaftierung_elternteil')) d.push('Inhaftierung Elternteil');
+      return d;
+    },
+    gegenHypothese: 'Falls die Grosseltern-Betreuung gewählt und nicht erzwungen ist, und die Beziehung warmherzig-stabil, kann sie hochprotektiv wirken.',
+    empfehlung: 'Verlusterfahrung bezüglich Eltern explorieren. Beziehungsqualität zu Grosseltern erfassen. Altersangemessene Aufklärung über Elternsituation.',
+    wiki_ids: ['familie', 'trauer'],
+  },
+  {
+    id: 'viele-geschwister-ressourcen',
+    titel: 'Grosse Familie + finanzielle Belastung',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z59.6', 'Z63.7'],
+    bedingung: (ctx) => ctx.anamnese.includes('viele_geschwister') && (ctx.anamnese.includes('finanzen_belastet') || ctx.anamnese.includes('finanzen_prekear') || ctx.anamnese.includes('wohnung_beengt')),
+    erklaerung: 'Grosse Familien mit begrenzten finanziellen Ressourcen haben weniger individuelle Aufmerksamkeit und materielle Versorgung pro Kind. Dies kann zu Parentifizierung älterer Kinder führen.',
+    evidenz: 'Familiengrösse in Kombination mit Armut korreliert mit geringerer kognitiver Stimulation und weniger individueller Zuwendung pro Kind. Der Effekt ist besonders stark bei >3 Kindern und Armut (Downey 2001; Blake 1989).',
+    quelle: 'Downey (2001); Blake (1989); Conley & Glauber (2006)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['3+ Geschwister'];
+      if (ctx.anamnese.includes('finanzen_belastet')) d.push('Finanzielle Belastung');
+      if (ctx.anamnese.includes('finanzen_prekear')) d.push('Prekäre Finanzlage');
+      if (ctx.anamnese.includes('wohnung_beengt')) d.push('Beengte Wohnverhältnisse');
+      return d;
+    },
+    gegenHypothese: 'Falls die Familie trotz Grösse gut organisiert ist und ältere Geschwister eine unterstützende (nicht parentifizierte) Rolle spielen, wirkt die Geschwistergruppe protektiv.',
+    empfehlung: 'Individuelle Aufmerksamkeit in der Beziehungsarbeit sicherstellen. Parentifizierung prüfen. Ressourcen-Beratung für Familie.',
+    wiki_ids: ['familie', 'soziales'],
+  },
+  {
+    id: 'haeufige-schulwechsel-sozial',
+    titel: 'Häufige Schulwechsel + soziale Destabilisierung',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z60.3'],
+    bedingung: (ctx) => (ctx.anamnese.includes('schulwechsel_haeufig') || ctx.anamnese.includes('haeufige_umzuege')) && (ctx.anamnese.includes('peers_wechselnd') || ctx.anamnese.includes('soziale_isolation')),
+    erklaerung: 'Häufige Schul- oder Wohnortwechsel destabilisieren soziale Netzwerke. Kinder verlieren Freundschaften und müssen sich wiederholt in neue Gruppen integrieren.',
+    evidenz: 'Häufige Schulwechsel (3+) korrelieren mit Verhaltensauffälligkeiten, schlechteren Noten und erhöhter sozialer Isolation. Der kumulative Effekt verstärkt sich mit jedem Wechsel (Mehana & Reynolds 2004; Jelleyman & Spencer 2008).',
+    quelle: 'Mehana & Reynolds (2004); Jelleyman & Spencer (2008); Rumberger (2015)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('schulwechsel_haeufig')) d.push('Häufige Schulwechsel');
+      if (ctx.anamnese.includes('haeufige_umzuege')) d.push('Häufige Umzüge');
+      if (ctx.anamnese.includes('peers_wechselnd')) d.push('Wechselnde Peer-Kontakte');
+      if (ctx.anamnese.includes('soziale_isolation')) d.push('Soziale Isolation');
+      return d;
+    },
+    gegenHypothese: 'Falls das Kind hohe soziale Kompetenz und schnelle Anpassungsfähigkeit zeigt, kann die Auswirkung geringer sein.',
+    empfehlung: 'Soziale Integration aktiv fördern. Peer-Kontakte in der aktuellen Schule aufbauen. Stabilität im Beziehungsangebot betonen.',
+    wiki_ids: ['soziales', 'schule'],
+  },
+  {
+    id: 'chronische-erkrankung-psychisch',
+    titel: 'Chronische Erkrankung — psychosoziale Belastung',
+    typ: 'risiko',
+    ebene: 'einzelfaktor',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F43.2'],
+    bedingung: (ctx) => ctx.anamnese.includes('chronische_erkrankung') && !ctx.anamnese.includes('autismus_spektrum'),
+    erklaerung: 'Chronisch kranke Kinder und Jugendliche haben ein erhöhtes Risiko für psychische Komorbidität, insbesondere Depression und Angst. Die Krankheit selbst, aber auch Stigma und Einschränkungen belasten.',
+    evidenz: 'Kinder mit chronischen Erkrankungen zeigen 2-3x erhöhte Raten psychischer Störungen. Die psychische Belastung verschlechtert auch den somatischen Verlauf (Pinquart & Shen 2011; Compas et al. 2012).',
+    quelle: 'Pinquart & Shen (2011); Compas et al. (2012); LeBlanc et al. (2003)',
+    ausloesendeDaten: (ctx) => {
+      return ['Chronische Erkrankung'];
+    },
+    gegenHypothese: 'Falls die Erkrankung gut eingestellt ist, die Familie unterstützend und das Kind gut informiert, sinkt das psychische Risiko deutlich.',
+    empfehlung: 'Krankheitsverarbeitung explorieren. Psychoedukation anbieten. Kontakt zu Selbsthilfegruppen vermitteln.',
+    wiki_ids: ['gesundheit'],
+  },
+  {
+    id: 'schlafprobleme-solo',
+    titel: 'Chronische Schlafprobleme — Screening-Indikator',
+    typ: 'risiko',
+    ebene: 'einzelfaktor',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F51.0'],
+    bedingung: (ctx) => ctx.anamnese.includes('schlaf_probleme') || ctx.anamnese.includes('schlaf_schwer'),
+    erklaerung: 'Chronische Schlafprobleme sind sowohl Symptom als auch Risikofaktor für psychische Störungen. Sie können ADHS-Symptome imitieren und Depression verstärken.',
+    evidenz: 'Schlafstörungen sind unabhängiger Risikofaktor für Verhaltensprobleme, kognitive Einschränkungen und emotionale Dysregulation. 25-40% der Kinder mit psychischen Störungen haben komorbide Schlafprobleme (Gregory & Sadeh 2012; Owens 2009).',
+    quelle: 'Gregory & Sadeh (2012); Owens (2009); Mindell & Owens (2015)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('schlaf_probleme')) d.push('Schlafprobleme');
+      if (ctx.anamnese.includes('schlaf_schwer')) d.push('Schwere Schlafstörung');
+      return d;
+    },
+    gegenHypothese: 'Falls die Schlafprobleme situativ bedingt sind (Lärm, Schichtarbeit der Eltern, Bildschirmzeit), können sie durch Schlafhygiene-Massnahmen behoben werden.',
+    empfehlung: 'Schlafhygiene erfassen. Bildschirmzeit vor dem Schlafen reduzieren. Bei Persistenz ärztliche Abklärung empfehlen.',
+    wiki_ids: ['gesundheit'],
+  },
 ];
 
 // ============================================================

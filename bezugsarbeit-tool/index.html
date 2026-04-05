@@ -548,34 +548,21 @@
         </div>
       </div>
 
-      <!-- INFO -->
+      <!-- ANAMNESE / AUFNAHME -->
       <div class="profil-tab-content" data-tab="info">
-        <div class="card">
-          <div class="card-header">
-            <span>ℹ️</span>
-            <div class="card-title">Allgemeine Informationen</div>
-          </div>
-          <div class="card-body">
-            <div class="form-grid">
-              <div class="form-group full">
-                <label>Allgemeine Notizen / Hintergrundinfos</label>
-                <textarea id="info-allgemein" rows="6"
-                  placeholder="Familienhintergrund, Besonderheiten, Anamnese..."></textarea>
-              </div>
-              <div class="form-group">
-                <label>Risikoeinschätzung</label>
-                <select id="info-risiko">
-                  <option value="niedrig">🟢 Niedrig</option>
-                  <option value="mittel">🟡 Mittel</option>
-                  <option value="hoch">🔴 Hoch</option>
-                </select>
+        <div id="anamnese-zusammenfassung"></div>
+        <div id="anamnese-container"></div>
+        <details class="anamnese-notizen-details" style="margin-top:16px;">
+          <summary style="cursor:pointer;font-size:13px;color:var(--text-muted);">📝 Zusätzliche Notizen (optional)</summary>
+          <div class="card" style="margin-top:8px;">
+            <div class="card-body">
+              <textarea id="info-allgemein" rows="3" placeholder="Ergänzende Freitextnotizen..."></textarea>
+              <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                <button class="btn btn-sm btn-primary" onclick="saveInfo()">💾 Speichern</button>
               </div>
             </div>
-            <div style="display:flex;justify-content:flex-end;margin-top:16px;">
-              <button class="btn btn-primary" onclick="saveInfo()">💾 Speichern</button>
-            </div>
           </div>
-        </div>
+        </details>
       </div>
 
     </div><!-- end content -->

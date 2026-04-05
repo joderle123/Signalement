@@ -1516,22 +1516,156 @@ function deleteZiel(index) {
 }
 
 // ============================================================
-// INFO TAB
+// INFO TAB — Strukturierte Anamnese
 // ============================================================
 function renderInfo() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
-  document.getElementById('info-allgemein').value = s.allgemeineNotizen || '';
-  document.getElementById('info-risiko').value = s.risiko || 'niedrig';
+  const anamnese = s.anamnese || [];
+
+  // Anamnese-Kategorien mit klickbaren Chips
+  const container = document.getElementById('anamnese-container');
+  container.innerHTML = ANAMNESE_KATEGORIEN.map(kat => {
+    const activeCount = kat.items.filter(it => anamnese.includes(it.id)).length;
+    return `
+      <div class="anamnese-kategorie">
+        <div class="anamnese-kategorie-header" style="border-left:4px solid ${kat.farbe}">
+          <span>${kat.icon} ${kat.label}</span>
+          <span class="anamnese-count">${activeCount > 0 ? activeCount + ' ausgewählt' : ''}</span>
+        </div>
+        <div class="anamnese-chips">
+          ${kat.items.map(item => `
+            <div class="anamnese-chip ${anamnese.includes(item.id) ? 'active' : ''}"
+                 style="--chip-color:${kat.farbe}"
+                 onclick="toggleAnamneseItem('${item.id}')"
+                 title="${item.evidenz}">
+              ${item.label}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Zusammenfassung rendern
+  renderAnamneseZusammenfassung(s);
+
+  // Notizfeld befüllen
+  const notizEl = document.getElementById('info-allgemein');
+  if (notizEl) notizEl.value = s.allgemeineNotizen || '';
+}
+
+function toggleAnamneseItem(itemId) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const anamnese = s.anamnese || [];
+  const idx = anamnese.indexOf(itemId);
+  if (idx === -1) {
+    anamnese.push(itemId);
+  } else {
+    anamnese.splice(idx, 1);
+  }
+  DB.updateSchueler(APP.currentSchuelerId, { anamnese });
+  renderInfo();
+}
+
+function renderAnamneseZusammenfassung(s) {
+  const anamnese = s.anamnese || [];
+  const el = document.getElementById('anamnese-zusammenfassung');
+  if (!el) return;
+
+  if (anamnese.length === 0) {
+    el.innerHTML = `
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-body" style="text-align:center;color:var(--text-muted);padding:24px;">
+          <div style="font-size:32px;margin-bottom:8px;">📋</div>
+          <div>Wähle unten relevante Anamnese-Punkte aus, um eine Risiko-Zusammenfassung zu erhalten.</div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Alle Items flach sammeln
+  const alleItems = ANAMNESE_KATEGORIEN.flatMap(k => k.items);
+  const aktiveItems = alleItems.filter(it => anamnese.includes(it.id));
+
+  // ACE-Score (nur ACE-Kategorie)
+  const aceKat = ANAMNESE_KATEGORIEN.find(k => k.id === 'ace');
+  const aceItems = aceKat ? aceKat.items.filter(it => anamnese.includes(it.id)) : [];
+  const aceScore = aceItems.length;
+
+  // Risikofaktoren (gewicht > 0) und Schutzfaktoren (gewicht < 0)
+  const risiken = aktiveItems.filter(it => it.gewicht > 0).sort((a, b) => b.gewicht - a.gewicht);
+  const schutz = aktiveItems.filter(it => it.gewicht < 0);
+  const risikoScore = aktiveItems.reduce((sum, it) => sum + it.gewicht, 0);
+
+  // Ampel-Farbe
+  let ampel, ampelLabel;
+  if (risikoScore >= 8) { ampel = '#DC2626'; ampelLabel = 'Hoch'; }
+  else if (risikoScore >= 4) { ampel = '#F59E0B'; ampelLabel = 'Mittel'; }
+  else if (risikoScore > 0) { ampel = '#6B7280'; ampelLabel = 'Niedrig'; }
+  else { ampel = '#22C55E'; ampelLabel = 'Geschützt'; }
+
+  // ACE-Warnung
+  let aceWarnung = '';
+  if (aceScore >= 4) {
+    aceWarnung = `<div class="anamnese-ace-warnung">
+      ⚠️ <strong>ACE-Score ${aceScore}/10</strong> — Felitti et al. (1998): Ab 4 ACEs steigt das Risiko für Herzerkrankungen um 200%, Suizidversuche um 1200%, Substanzabhängigkeit um 500%.
+    </div>`;
+  } else if (aceScore >= 1) {
+    aceWarnung = `<div class="anamnese-ace-info">
+      ℹ️ <strong>ACE-Score ${aceScore}/10</strong> — Jede zusätzliche belastende Kindheitserfahrung erhöht kumulativ das Risiko für psychische und physische Erkrankungen (Felitti et al. 1998).
+    </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="card anamnese-summary-card" style="margin-bottom:16px;">
+      <div class="card-header">
+        <span>🧠</span>
+        <div class="card-title">Anamnese-Zusammenfassung</div>
+        <div class="anamnese-ampel" style="background:${ampel}">${ampelLabel}</div>
+      </div>
+      <div class="card-body">
+        ${aceWarnung}
+        <div class="anamnese-summary-grid">
+          <div class="anamnese-summary-stat">
+            <div class="anamnese-summary-number" style="color:${ampel}">${risiken.length}</div>
+            <div class="anamnese-summary-label">Risikofaktoren</div>
+          </div>
+          <div class="anamnese-summary-stat">
+            <div class="anamnese-summary-number" style="color:#22C55E">${schutz.length}</div>
+            <div class="anamnese-summary-label">Schutzfaktoren</div>
+          </div>
+          <div class="anamnese-summary-stat">
+            <div class="anamnese-summary-number" style="color:#DC2626">${aceScore}</div>
+            <div class="anamnese-summary-label">ACE-Score</div>
+          </div>
+        </div>
+        ${risiken.length > 0 ? `
+          <div class="anamnese-top-risiken">
+            <strong>Top-Risikofaktoren:</strong>
+            ${risiken.slice(0, 5).map(r => `
+              <div class="anamnese-risiko-item">
+                <span class="anamnese-risiko-dot" style="background:${r.gewicht >= 3 ? '#DC2626' : r.gewicht >= 2 ? '#F59E0B' : '#6B7280'}"></span>
+                <span>${r.label}</span>
+                <span class="anamnese-risiko-evidenz" title="${r.evidenz}">📖</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        ${schutz.length > 0 ? `
+          <div class="anamnese-schutz-liste">
+            <strong>Schutzfaktoren:</strong>
+            ${schutz.map(s => `<span class="anamnese-schutz-tag">🛡️ ${s.label}</span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+    </div>`;
 }
 
 function saveInfo() {
   DB.updateSchueler(APP.currentSchuelerId, {
     allgemeineNotizen: document.getElementById('info-allgemein').value,
-    risiko: document.getElementById('info-risiko').value,
   });
-  renderProfil(APP.currentSchuelerId);
-  renderSidebar();
-  showToast('Informationen gespeichert', 'success');
+  showToast('Notizen gespeichert', 'success');
 }
 
 // ============================================================

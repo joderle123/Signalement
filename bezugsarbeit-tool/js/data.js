@@ -1708,6 +1708,136 @@ const STAERKEN_DIMENSIONEN = [
 ];
 
 // ============================================================
+// STRUKTURIERTE ANAMNESE — Kategorien & Items
+// ============================================================
+const ANAMNESE_KATEGORIEN = [
+  {
+    id: 'familie',
+    label: 'Familie & Herkunft',
+    icon: '👨‍👩‍👧',
+    farbe: '#6366F1',
+    items: [
+      { id: 'alleinerziehend', label: 'Alleinerziehender Elternteil', gewicht: 2, evidenz: 'Kinder alleinerziehender Eltern zeigen erhöhtes Risiko für Verhaltensauffälligkeiten und emotionale Probleme (Amato 2005, Journal of Marriage and Family)' },
+      { id: 'kein_vater', label: 'Kein Vaterkontakt', gewicht: 2, evidenz: 'Vaterabwesenheit korreliert mit erhöhtem Risiko für externalisierende Störungen, Schulabbruch und Substanzmissbrauch (McLanahan & Sandefur 1994; Harper & McLanahan 2004)' },
+      { id: 'kein_mutter', label: 'Kein Mutterkontakt', gewicht: 3, evidenz: 'Mütterliche Abwesenheit in der frühen Kindheit ist ein starker Prädiktor für Bindungsstörungen (Bowlby 1969; Rutter 1981)' },
+      { id: 'scheidung', label: 'Scheidung / Trennung der Eltern', gewicht: 1, evidenz: 'Scheidungskinder zeigen 2-3x höheres Risiko für psychische Auffälligkeiten, v.a. bei hochkonflikthafter Trennung (Amato 2001, Psychological Bulletin)' },
+      { id: 'patchwork', label: 'Patchwork-/Stieffamilie', gewicht: 1, evidenz: 'Stieffamilien-Konstellationen können Loyalitätskonflikte und Identitätsprobleme auslösen (Hetherington & Kelly 2002)' },
+      { id: 'pflegefamilie', label: 'Pflegefamilie / Fremdplatzierung', gewicht: 2, evidenz: 'Fremdplatzierte Kinder haben 3-7x höheres Risiko für psychische Störungen (Tarren-Sweeney 2008; Ford et al. 2007)' },
+      { id: 'heim', label: 'Heimunterbringung', gewicht: 3, evidenz: 'Heimkinder zeigen signifikant erhöhte Raten von Bindungsstörungen, PTBS und Verhaltensauffälligkeiten (Schmid et al. 2008; Dozier et al. 2012)' },
+      { id: 'migration', label: 'Migrationshintergrund', gewicht: 1, evidenz: 'Migration kann Identitätskonflikte, Diskriminierungserfahrungen und Akkulturationsstress verursachen (Berry 2006; Pumariega et al. 2005)' },
+      { id: 'flucht', label: 'Flucht-/Asylhintergrund', gewicht: 2, evidenz: 'Geflüchtete Kinder zeigen erhöhte PTBS-Raten (40-50%) und Depressionsprävalenz (Fazel et al. 2005, Lancet)' },
+      { id: 'viele_geschwister', label: 'Grosse Geschwisterzahl (4+)', gewicht: 1, evidenz: 'Grosse Familien mit begrenzten Ressourcen korrelieren mit geringerer individueller Aufmerksamkeit und Bildungschancen (Downey 2001)' },
+    ]
+  },
+  {
+    id: 'ace',
+    label: 'Belastende Kindheitserfahrungen (ACE)',
+    icon: '⚠️',
+    farbe: '#DC2626',
+    items: [
+      { id: 'vernachlaessigung_emotional', label: 'Emotionale Vernachlässigung', gewicht: 3, evidenz: 'ACE-Studie: Emotionale Vernachlässigung erhöht Risiko für Depression um Faktor 2.7 und Suizidversuche um Faktor 3.4 (Felitti et al. 1998)' },
+      { id: 'vernachlaessigung_physisch', label: 'Physische Vernachlässigung', gewicht: 3, evidenz: 'Physische Vernachlässigung korreliert mit Entwicklungsverzögerungen, kognitive Defizite und erhöhter Mortalität (Norman et al. 2012, Pediatrics)' },
+      { id: 'misshandlung_physisch', label: 'Physische Misshandlung', gewicht: 3, evidenz: 'Physisch misshandelte Kinder zeigen 2x höheres Risiko für externalisierende Störungen (Cicchetti & Toth 2005; WHO 2006)' },
+      { id: 'missbrauch_sexuell', label: 'Sexueller Missbrauch', gewicht: 3, evidenz: 'Sexueller Missbrauch ist stärkster Einzelprädiktor für PTBS und dissoziative Störungen im Kindesalter (Putnam 2003; Kendall-Tackett et al. 1993)' },
+      { id: 'misshandlung_emotional', label: 'Emotionale Misshandlung / Psychischer Missbrauch', gewicht: 3, evidenz: 'Emotionale Misshandlung hat vergleichbare oder stärkere Auswirkungen als physische Misshandlung auf psychische Gesundheit (Teicher & Samson 2016, Neuroscience)' },
+      { id: 'sucht_haushalt', label: 'Sucht im Haushalt (Alkohol/Drogen)', gewicht: 2, evidenz: 'Kinder suchtkranker Eltern haben 3-4x höheres Eigenes Suchtrisiko und erhöhtes Risiko für Parentifizierung (Sher 1997; Zobel 2006)' },
+      { id: 'psych_erkrankung_eltern', label: 'Psychische Erkrankung eines Elternteils', gewicht: 2, evidenz: 'Kinder psychisch kranker Eltern haben 50% Lebenszeitrisiko für eigene psychische Störung (Beardslee et al. 2011; Mattejat & Remschmidt 2008)' },
+      { id: 'haeusliche_gewalt', label: 'Häusliche Gewalt (Zeuge)', gewicht: 3, evidenz: 'Miterleben häuslicher Gewalt hat ähnliche Auswirkungen wie direkte Misshandlung — erhöhtes Trauma- und Angstrisiko (Wolfe et al. 2003; Kitzmann et al. 2003)' },
+      { id: 'inhaftierung_elternteil', label: 'Inhaftierung eines Elternteils', gewicht: 2, evidenz: 'Kinder inhaftierter Eltern zeigen erhöhte Raten von Angst, Depression und antisozialem Verhalten (Murray & Farrington 2008)' },
+      { id: 'tod_elternteil', label: 'Tod eines Elternteils / naher Bezugsperson', gewicht: 3, evidenz: 'Elternverlust in der Kindheit ist starker Risikofaktor für Depression und komplizierte Trauer (Melhem et al. 2011; Cerel et al. 2006)' },
+    ]
+  },
+  {
+    id: 'schule',
+    label: 'Schule & Leistung',
+    icon: '🏫',
+    farbe: '#F59E0B',
+    items: [
+      { id: 'klassenwiederholung', label: 'Klassenwiederholung', gewicht: 1, evidenz: 'Klassenwiederholung korreliert mit niedrigerem Selbstwert und erhöhtem Schulabbruchrisiko (Jimerson et al. 2002; OECD 2012)' },
+      { id: 'schulwechsel_haeufig', label: 'Häufige Schulwechsel (2+)', gewicht: 2, evidenz: 'Häufige Schulwechsel destabilisieren Peer-Beziehungen und korrelieren mit Verhaltensauffälligkeiten (Mehana & Reynolds 2004)' },
+      { id: 'sonderpaedagogik', label: 'Sonderpädagogischer Förderbedarf', gewicht: 1, evidenz: 'Sonderpädagogischer Förderbedarf korreliert mit erhöhtem Stigmatisierungsrisiko und niedrigerem Selbstwert (Norwich 2014)' },
+      { id: 'absentismus', label: 'Schulabsentismus / Schulverweigerung', gewicht: 2, evidenz: 'Schulabsentismus ist starker Prädiktor für Schulabbruch, Delinquenz und spätere Arbeitslosigkeit (Kearney 2008; Maynard et al. 2015)' },
+      { id: 'mobbing_opfer', label: 'Mobbing-Opfer', gewicht: 2, evidenz: 'Mobbing-Opfer zeigen erhöhtes Risiko für Depression, Angst, Suizidalität und psychosomatische Beschwerden (Olweus 1993; Arseneault et al. 2010)' },
+      { id: 'mobbing_taeter', label: 'Mobbing-Täter', gewicht: 2, evidenz: 'Mobbing-Täterschaft korreliert mit erhöhtem Risiko für antisoziale Persönlichkeitsentwicklung und Delinquenz (Olweus 1993; Ttofi et al. 2012)' },
+      { id: 'lernbehinderung', label: 'Lernbehinderung / Teilleistungsstörung', gewicht: 1, evidenz: 'Unerkannte Lernstörungen führen zu sekundären emotionalen Problemen wie Angst und Depression (Willcutt & Pennington 2000)' },
+      { id: 'hochbegabung', label: 'Hochbegabung / Unterforderung', gewicht: 1, evidenz: 'Hochbegabte Kinder zeigen bei Unterforderung erhöhtes Risiko für Underachievement und soziale Isolation (Reis & McCoach 2000)' },
+    ]
+  },
+  {
+    id: 'soziales',
+    label: 'Soziales Umfeld',
+    icon: '👥',
+    farbe: '#8B5CF6',
+    items: [
+      { id: 'soziale_isolation', label: 'Soziale Isolation / keine Freunde', gewicht: 2, evidenz: 'Soziale Isolation in der Kindheit ist starker Prädiktor für Depression, Angst und erhöhte Mortalität im Erwachsenenalter (Caspi et al. 2006; Qualter et al. 2015)' },
+      { id: 'negativer_peer_einfluss', label: 'Negativer Peer-Einfluss / deviante Peers', gewicht: 2, evidenz: 'Assoziation mit devianten Peers ist stärkster Prädiktor für Delinquenz im Jugendalter (Dishion & Tipsord 2011; Patterson et al. 1992)' },
+      { id: 'gang', label: 'Gang-/Bandenzugehörigkeit', gewicht: 3, evidenz: 'Gangmitgliedschaft erhöht Gewaltrisiko um Faktor 3-5 und Risiko für Substanzmissbrauch (Thornberry et al. 2003)' },
+      { id: 'kein_stabiler_erwachsener', label: 'Kein stabiler Erwachsener als Bezugsperson', gewicht: 3, evidenz: 'Mindestens eine stabile Bezugsperson ist der wichtigste Resilienzfaktor — Fehlen korreliert mit schlechterer Prognose (Werner & Smith 1992; Masten 2001)' },
+      { id: 'cybermobbing', label: 'Cybermobbing', gewicht: 2, evidenz: 'Cybermobbing-Opfer zeigen 2.3x erhöhtes Suizidrisiko und höhere Depressionsraten als bei traditionellem Mobbing (Hinduja & Patchin 2010; Kowalski et al. 2014)' },
+      { id: 'diskriminierung', label: 'Diskriminierungserfahrungen (Rassismus, Homophobie)', gewicht: 2, evidenz: 'Diskriminierungserfahrungen korrelieren mit erhöhtem Stress, Depression und niedrigerem Selbstwert (Williams & Mohammed 2009; Meyer 2003)' },
+    ]
+  },
+  {
+    id: 'gesundheit',
+    label: 'Gesundheit & Entwicklung',
+    icon: '🏥',
+    farbe: '#10B981',
+    items: [
+      { id: 'chronische_erkrankung', label: 'Chronische Erkrankung', gewicht: 1, evidenz: 'Chronisch kranke Kinder haben 2-3x erhöhtes Risiko für psychische Störungen (Pinquart & Shen 2011)' },
+      { id: 'medikation_psycho', label: 'Psychotrope Medikation', gewicht: 1, evidenz: 'Psychotrope Medikation deutet auf vorbestehende Diagnose hin — Nebenwirkungen und Compliance sind eigenständige Risikofaktoren (Zito et al. 2008)' },
+      { id: 'fruehgeburt', label: 'Frühgeburt / perinatale Komplikationen', gewicht: 1, evidenz: 'Frühgeburt korreliert mit erhöhtem ADHS-Risiko (2-3x) und kognitiven Entwicklungsverzögerungen (Johnson & Marlow 2011)' },
+      { id: 'entwicklungsverzoegerung', label: 'Entwicklungsverzögerung (Sprache/Motorik)', gewicht: 2, evidenz: 'Frühe Entwicklungsverzögerungen sind Prädiktoren für spätere Lern- und Verhaltensprobleme (Shonkoff & Phillips 2000)' },
+      { id: 'autismus_spektrum', label: 'Autismus-Spektrum-Störung', gewicht: 2, evidenz: 'ASS erhöht Risiko für komorbide Angst (40%), Depression (30%) und Mobbing-Erfahrungen (Simonoff et al. 2008; Mayes et al. 2011)' },
+      { id: 'schlafprobleme', label: 'Chronische Schlafprobleme', gewicht: 1, evidenz: 'Chronischer Schlafmangel beeinträchtigt kognitive Funktionen, Emotionsregulation und erhöht Aggressivität (Gregory & Sadeh 2012)' },
+      { id: 'essstoerung', label: 'Auffälliges Essverhalten / Essstörung', gewicht: 2, evidenz: 'Essstörungen haben die höchste Mortalitätsrate aller psychischen Störungen — frühes Erkennen ist entscheidend (Arcelus et al. 2011)' },
+    ]
+  },
+  {
+    id: 'wohnsituation',
+    label: 'Wohnsituation & Stabilität',
+    icon: '🏠',
+    farbe: '#0EA5E9',
+    items: [
+      { id: 'haeufige_umzuege', label: 'Häufige Umzüge (3+ in 5 Jahren)', gewicht: 2, evidenz: 'Häufige Wohnortwechsel destabilisieren soziale Netzwerke und korrelieren mit Verhaltensauffälligkeiten (Jelleyman & Spencer 2008)' },
+      { id: 'obdachlosigkeit', label: 'Obdachlosigkeit / instabile Wohnverhältnisse', gewicht: 3, evidenz: 'Obdachlose Kinder zeigen 3-6x höhere Raten psychischer Störungen und Entwicklungsverzögerungen (Bassuk et al. 2015)' },
+      { id: 'beengte_verhaeltnisse', label: 'Beengte Wohnverhältnisse / Überbelegung', gewicht: 1, evidenz: 'Wohnungsüberbelegung korreliert mit erhöhtem Stresslevel, Schlafproblemen und Konzentrationsstörungen (Evans 2006)' },
+      { id: 'unsichere_nachbarschaft', label: 'Unsichere Nachbarschaft / Gewaltexposition', gewicht: 2, evidenz: 'Aufwachsen in gewaltbelasteten Nachbarschaften erhöht PTBS-Risiko und normalisiert Aggression (Fowler et al. 2009)' },
+      { id: 'pendeln_elternteile', label: 'Pendeln zwischen Elternteilen', gewicht: 1, evidenz: 'Häufiges Pendeln kann bei hochkonflikthaften Trennungen Stressreaktionen und Loyalitätskonflikte verstärken (McIntosh et al. 2010)' },
+    ]
+  },
+  {
+    id: 'finanzen',
+    label: 'Finanzen & Sozialstatus',
+    icon: '💰',
+    farbe: '#78716C',
+    items: [
+      { id: 'armut', label: 'Armut / Sozialhilfe', gewicht: 2, evidenz: 'Kinderarmut korreliert mit 2-3x erhöhtem Risiko für psychische Störungen, kognitive Defizite und schlechtere Gesundheit (Bradley & Corwyn 2002; Duncan & Magnuson 2012)' },
+      { id: 'arbeitslosigkeit_eltern', label: 'Arbeitslosigkeit der Eltern', gewicht: 1, evidenz: 'Elterliche Arbeitslosigkeit erhöht familiären Stress und korreliert mit erhöhten Verhaltensauffälligkeiten bei Kindern (Conger et al. 2002)' },
+      { id: 'verschuldung', label: 'Familiäre Verschuldung', gewicht: 1, evidenz: 'Überschuldung erzeugt chronischen Familienstress, der Erziehungsqualität mindert (Conger & Donnellan 2007)' },
+      { id: 'bildungsferne', label: 'Bildungsfernes Elternhaus', gewicht: 1, evidenz: 'Niedriges Bildungsniveau der Eltern korreliert mit geringerer kognitiver Stimulation und schlechteren Bildungsergebnissen (Hoff 2003; Hart & Risley 1995)' },
+      { id: 'soziale_benachteiligung', label: 'Kumulative soziale Benachteiligung', gewicht: 2, evidenz: 'Kumulation von Armut + niedriger Bildung + Migration zeigt multiplikative Effekte auf Entwicklungsrisiken (Rutter 1979; Sameroff et al. 1993)' },
+    ]
+  },
+  {
+    id: 'schutzfaktoren',
+    label: 'Schutzfaktoren',
+    icon: '🛡️',
+    farbe: '#22C55E',
+    items: [
+      { id: 'stabile_bezugsperson', label: 'Mind. eine stabile Bezugsperson', gewicht: -3, evidenz: 'Wichtigster Resilienzfaktor: Eine verlässliche, warmherzige Bezugsperson kann negative Effekte multipler Risiken abpuffern (Werner & Smith 1992; Masten 2001)' },
+      { id: 'vereinsmitgliedschaft', label: 'Vereinsmitgliedschaft / organisierte Aktivität', gewicht: -2, evidenz: 'Strukturierte Freizeitaktivitäten fördern Sozialkompetenzen, Selbstwert und wirken protektiv gegen Delinquenz (Mahoney et al. 2005; Fredricks & Eccles 2006)' },
+      { id: 'religiose_gemeinschaft', label: 'Religiöse/spirituelle Gemeinschaft', gewicht: -1, evidenz: 'Religionszugehörigkeit korreliert mit geringerem Substanzmissbrauch und besserem psychischen Wohlbefinden bei Jugendlichen (Cotton et al. 2006)' },
+      { id: 'hobby', label: 'Engagiertes Hobby / Leidenschaft', gewicht: -2, evidenz: 'Ein Hobby fördert Flow-Erleben, Selbstwirksamkeit und bietet Bewältigungsressource bei Stress (Csikszentmihalyi 1990; Larson 2000)' },
+      { id: 'gute_schulleistung', label: 'Gute Schulleistungen', gewicht: -2, evidenz: 'Schulischer Erfolg ist protektiver Faktor für Selbstwert und reduziert Risiko für Schulabbruch und Delinquenz (Masten et al. 2005)' },
+      { id: 'freundschaft', label: 'Mindestens eine enge Freundschaft', gewicht: -2, evidenz: 'Eine enge Freundschaft puffert Stress, reduziert Einsamkeit und stärkt soziale Kompetenz (Bukowski et al. 1996; Ladd 1999)' },
+      { id: 'gute_elternbeziehung', label: 'Gute Beziehung zu mind. einem Elternteil', gewicht: -2, evidenz: 'Positive Eltern-Kind-Beziehung ist einer der stärksten Schutzfaktoren gegen psychische Störungen (Luthar 2006)' },
+      { id: 'selbstwirksamkeit', label: 'Hohe Selbstwirksamkeitserwartung', gewicht: -2, evidenz: 'Selbstwirksamkeit ist zentraler Resilienzfaktor und mediiert den Zusammenhang zwischen Risiko und Anpassung (Bandura 1997; Rutter 2012)' },
+      { id: 'prosoziales_verhalten', label: 'Prosoziales Verhalten / Hilfsbereitschaft', gewicht: -1, evidenz: 'Prosoziales Verhalten korreliert mit besserer sozialer Integration und geringerem Risiko für externalisierende Störungen (Eisenberg et al. 2006)' },
+    ]
+  },
+];
+
+// ============================================================
 // FACHLITERARISCHE LEGITIMATION DER TOOLS
 // ============================================================
 const TOOL_LEGITIMATION = {
@@ -2078,6 +2208,7 @@ const DB = {
       topicStatus: {},
       topicNotizen: {},
       risiko: daten.risiko || 'niedrig',
+      anamnese: daten.anamnese || [],
       ziele: daten.ziele || [],
       erstellt: new Date().toISOString(),
       geaendert: new Date().toISOString(),

@@ -1807,6 +1807,11 @@ function renderHypothesen(hypothesen) {
             ${schutz.map(hypotheseCard).join('')}
           </div>
         ` : ''}
+        <div style="text-align:center;margin-top:12px;">
+          <button class="btn btn-sm btn-primary" onclick="openHypothesen5PModal()">
+            🔀 Hypothesen → 5P-Analyse übernehmen
+          </button>
+        </div>
         <div class="hypothesen-disclaimer">
           Diese Hypothesen sind Arbeitshilfen für Fachkräfte — kein Ersatz für klinische Diagnostik. Alle Angaben basieren auf den eingegebenen Daten.
         </div>
@@ -2925,6 +2930,104 @@ function renderDashboard() {
   renderGespraechsleitfaedenWidget();
   renderFallbeispieleWidget();
   renderWikiTeaserWidget();
+}
+
+// ---- HYPOTHESEN → 5P ÜBERTRAGUNG ----
+function openHypothesen5PModal() {
+  const hypothesen = generateHypothesen(APP.currentSchuelerId);
+  if (hypothesen.length === 0) {
+    showToast('Keine aktiven Hypothesen vorhanden', 'warning');
+    return;
+  }
+
+  // 5P-Mapping: welcher Hypothesen-Typ → welches 5P-Feld
+  const typMapping = {
+    risiko: { primary: 'predisposing', label: 'Predisposing (Vulnerabilität)' },
+    schutz: { primary: 'protective', label: 'Protective (Schutzfaktoren)' },
+    differenzial: { primary: 'presenting', label: 'Presenting (Aktuelles Bild)' },
+  };
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'hypothesen-5p-modal';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:600px;max-height:80vh;">
+      <div class="modal-header">
+        <span>🔀</span>
+        <span>Hypothesen → 5P-Analyse übernehmen</span>
+        <button class="modal-close" onclick="document.getElementById('hypothesen-5p-modal').remove()">✕</button>
+      </div>
+      <div class="modal-body" style="overflow-y:auto;max-height:55vh;">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+          Wähle die Hypothesen aus, die in die 5P-Fallformulierung übernommen werden sollen.
+          Risiko-Hypothesen → Predisposing, Schutzfaktoren → Protective, Differenzial → Presenting.
+        </p>
+        ${hypothesen.map((h, i) => {
+          const mapping = typMapping[h.typ] || typMapping.risiko;
+          const icon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
+          return `
+            <label class="hypo-5p-item" style="display:flex;gap:10px;padding:8px;border-radius:6px;cursor:pointer;margin-bottom:4px;border:1px solid var(--border);">
+              <input type="checkbox" value="${i}" class="hypo-5p-check" data-typ="${h.typ}" checked>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:500;">${icon} ${h.titel}</div>
+                <div style="font-size:11px;color:var(--text-muted);">→ ${mapping.label}</div>
+              </div>
+              <select class="hypo-5p-ziel" data-idx="${i}" style="font-size:11px;padding:2px 6px;border-radius:4px;border:1px solid var(--border);">
+                <option value="presenting" ${h.typ === 'differenzial' ? 'selected' : ''}>Presenting</option>
+                <option value="predisposing" ${h.typ === 'risiko' ? 'selected' : ''}>Predisposing</option>
+                <option value="precipitating">Precipitating</option>
+                <option value="perpetuating">Perpetuating</option>
+                <option value="protective" ${h.typ === 'schutz' ? 'selected' : ''}>Protective</option>
+              </select>
+            </label>
+          `;
+        }).join('')}
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;padding:16px;">
+        <button class="btn btn-secondary" onclick="document.getElementById('hypothesen-5p-modal').remove()">Abbrechen</button>
+        <button class="btn btn-primary" onclick="transferHypothesen5P()">✓ Übernehmen</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function transferHypothesen5P() {
+  const hypothesen = generateHypothesen(APP.currentSchuelerId);
+  const checks = document.querySelectorAll('.hypo-5p-check:checked');
+  if (checks.length === 0) {
+    showToast('Keine Hypothesen ausgewählt', 'warning');
+    return;
+  }
+
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) {
+    ff = DB.createFallformulierung(sid);
+  }
+
+  let count = 0;
+  checks.forEach(cb => {
+    const idx = parseInt(cb.value);
+    const h = hypothesen[idx];
+    if (!h) return;
+
+    const zielSelect = document.querySelector(`.hypo-5p-ziel[data-idx="${idx}"]`);
+    const ziel = zielSelect ? zielSelect.value : 'predisposing';
+
+    if (!ff[ziel]) ff[ziel] = [];
+
+    // Nicht doppelt einfügen
+    const text = h.titel;
+    if (!ff[ziel].includes(text)) {
+      ff[ziel].push(text);
+      count++;
+    }
+  });
+
+  DB.saveFallformulierung(ff);
+  document.getElementById('hypothesen-5p-modal').remove();
+  showToast(`${count} Hypothese${count !== 1 ? 'n' : ''} in 5P-Analyse übernommen`, 'success');
 }
 
 // ---- DASHBOARD HYPOTHESEN — Kompakte Übersicht ----

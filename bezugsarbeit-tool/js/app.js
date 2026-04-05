@@ -2913,6 +2913,7 @@ function renderDashboard() {
   if (!s) return;
   renderQuickEntry('quick-entry-dashboard');
   renderDashboardSummary();
+  renderDashboardHypothesen();
   renderSitzungsvorschlag();
   renderPhaseTransitionPrompt();
   renderNaechsteSchritte();
@@ -2924,6 +2925,63 @@ function renderDashboard() {
   renderGespraechsleitfaedenWidget();
   renderFallbeispieleWidget();
   renderWikiTeaserWidget();
+}
+
+// ---- DASHBOARD HYPOTHESEN — Kompakte Übersicht ----
+function renderDashboardHypothesen() {
+  const container = document.getElementById('dashboard-hypothesen-widget');
+  if (!container) return;
+
+  const hypothesen = generateHypothesen(APP.currentSchuelerId);
+  if (hypothesen.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const risiken = hypothesen.filter(h => h.typ === 'risiko');
+  const schutz = hypothesen.filter(h => h.typ === 'schutz');
+  const differenzial = hypothesen.filter(h => h.typ === 'differenzial');
+  const kritisch = risiken.filter(h => h.staerkeWert >= 3);
+
+  function miniCard(h) {
+    let borderColor;
+    if (h.typ === 'schutz') borderColor = '#22C55E';
+    else if (h.typ === 'differenzial') borderColor = '#8B5CF6';
+    else if (h.staerkeWert >= 3) borderColor = '#EF4444';
+    else if (h.staerkeWert >= 2) borderColor = '#F59E0B';
+    else borderColor = '#9CA3AF';
+
+    const icon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : h.staerkeWert >= 3 ? '🔴' : h.staerkeWert >= 2 ? '🟡' : '⚪';
+
+    return `<div class="dash-hypo-mini" style="border-left:3px solid ${borderColor}" title="${h.erklaerung}">${icon} ${h.titel}</div>`;
+  }
+
+  container.innerHTML = `
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-header">
+        <span>🧠</span>
+        <div class="card-title">Klinische Hypothesen</div>
+        <span class="dash-hypo-count">${hypothesen.length} aktiv</span>
+      </div>
+      <div class="card-body">
+        ${kritisch.length > 0 ? `
+          <div class="dash-hypo-alert">
+            ⚠️ <strong>${kritisch.length} kritische Hypothese${kritisch.length > 1 ? 'n' : ''}:</strong>
+            ${kritisch.map(h => h.titel).join(', ')}
+          </div>
+        ` : ''}
+        <div class="dash-hypo-grid">
+          ${hypothesen.slice(0, 6).map(miniCard).join('')}
+          ${hypothesen.length > 6 ? `<div class="dash-hypo-more">+ ${hypothesen.length - 6} weitere</div>` : ''}
+        </div>
+        <div style="text-align:center;margin-top:10px;">
+          <button class="btn btn-sm btn-secondary" onclick="showPhase('erfassen');setTimeout(()=>showSubTab('info'),100)">
+            Alle Hypothesen ansehen →
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ---- DASHBOARD SUMMARY — "Alles auf einen Blick" ----

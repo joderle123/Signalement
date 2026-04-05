@@ -1906,14 +1906,45 @@ const ANAMNESE_KATEGORIEN = [
     label: 'Gesundheit & Entwicklung',
     icon: '🏥',
     farbe: '#10B981',
-    items: [
-      { id: 'chronische_erkrankung', label: 'Chronische Erkrankung', gewicht: 1, evidenz: 'Chronisch kranke Kinder haben 2-3x erhöhtes Risiko für psychische Störungen (Pinquart & Shen 2011)' },
-      { id: 'medikation_psycho', label: 'Psychotrope Medikation', gewicht: 1, evidenz: 'Psychotrope Medikation deutet auf vorbestehende Diagnose hin — Nebenwirkungen und Compliance sind eigenständige Risikofaktoren (Zito et al. 2008)' },
-      { id: 'fruehgeburt', label: 'Frühgeburt / perinatale Komplikationen', gewicht: 1, evidenz: 'Frühgeburt korreliert mit erhöhtem ADHS-Risiko (2-3x) und kognitiven Entwicklungsverzögerungen (Johnson & Marlow 2011)' },
-      { id: 'entwicklungsverzoegerung', label: 'Entwicklungsverzögerung (Sprache/Motorik)', gewicht: 2, evidenz: 'Frühe Entwicklungsverzögerungen sind Prädiktoren für spätere Lern- und Verhaltensprobleme (Shonkoff & Phillips 2000)' },
-      { id: 'autismus_spektrum', label: 'Autismus-Spektrum-Störung', gewicht: 2, evidenz: 'ASS erhöht Risiko für komorbide Angst (40%), Depression (30%) und Mobbing-Erfahrungen (Simonoff et al. 2008; Mayes et al. 2011)' },
-      { id: 'schlafprobleme', label: 'Chronische Schlafprobleme', gewicht: 1, evidenz: 'Chronischer Schlafmangel beeinträchtigt kognitive Funktionen, Emotionsregulation und erhöht Aggressivität (Gregory & Sadeh 2012)' },
-      { id: 'essstoerung', label: 'Auffälliges Essverhalten / Essstörung', gewicht: 2, evidenz: 'Essstörungen haben die höchste Mortalitätsrate aller psychischen Störungen — frühes Erkennen ist entscheidend (Arcelus et al. 2011)' },
+    felder: [
+      {
+        id: 'geburt', label: 'Geburt & frühe Gesundheit', typ: 'single',
+        optionen: [
+          { id: 'geburt_unauffaellig', label: 'Unauffällig', gewicht: 0, evidenz: '' },
+          { id: 'fruehgeburt', label: 'Frühgeburt / perinatale Komplikationen', gewicht: 1, evidenz: 'Frühgeburt korreliert mit erhöhtem ADHS-Risiko (2-3x) und kognitiven Entwicklungsverzögerungen (Johnson & Marlow 2011)' },
+          { id: 'geburt_unbekannt', label: 'Unbekannt', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'chronisch', label: 'Chronische Erkrankungen', typ: 'multi',
+        optionen: [
+          { id: 'chronische_erkrankung', label: 'Chronische Erkrankung', gewicht: 1, evidenz: 'Chronisch kranke Kinder haben 2-3x erhöhtes Risiko für psychische Störungen (Pinquart & Shen 2011)' },
+          { id: 'autismus_spektrum', label: 'Autismus-Spektrum-Störung', gewicht: 2, evidenz: 'ASS erhöht Risiko für komorbide Angst (40%), Depression (30%) und Mobbing-Erfahrungen (Simonoff et al. 2008; Mayes et al. 2011)' },
+          { id: 'essstoerung', label: 'Auffälliges Essverhalten / Essstörung', gewicht: 2, evidenz: 'Essstörungen haben die höchste Mortalitätsrate aller psychischen Störungen — frühes Erkennen ist entscheidend (Arcelus et al. 2011)' },
+        ]
+      },
+      {
+        id: 'medikation', label: 'Aktuelle Medikation', typ: 'single',
+        optionen: [
+          { id: 'medikation_keine', label: 'Keine', gewicht: 0, evidenz: '' },
+          { id: 'medikation_psycho', label: 'Psychotrope Medikation', gewicht: 1, evidenz: 'Psychotrope Medikation deutet auf vorbestehende Diagnose hin — Nebenwirkungen und Compliance sind eigenständige Risikofaktoren (Zito et al. 2008)' },
+          { id: 'medikation_somatisch', label: 'Somatische Dauermedikation', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'schlaf', label: 'Schlafverhalten', typ: 'single',
+        optionen: [
+          { id: 'schlaf_normal', label: 'Unauffällig', gewicht: 0, evidenz: '' },
+          { id: 'schlafprobleme', label: 'Chronische Schlafprobleme', gewicht: 1, evidenz: 'Chronischer Schlafmangel beeinträchtigt kognitive Funktionen, Emotionsregulation und erhöht Aggressivität (Gregory & Sadeh 2012)' },
+          { id: 'schlaf_unbekannt', label: 'Unbekannt', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'entwicklung_allg', label: 'Allgemeine Entwicklung', typ: 'multi',
+        optionen: [
+          { id: 'entwicklungsverzoegerung', label: 'Entwicklungsverzögerung', gewicht: 2, evidenz: 'Frühe Entwicklungsverzögerungen sind Prädiktoren für spätere Lern- und Verhaltensprobleme (Shonkoff & Phillips 2000)' },
+        ]
+      },
     ]
   },
   {
@@ -1921,12 +1952,31 @@ const ANAMNESE_KATEGORIEN = [
     label: 'Wohnsituation & Stabilität',
     icon: '🏠',
     farbe: '#0EA5E9',
-    items: [
-      { id: 'haeufige_umzuege', label: 'Häufige Umzüge (3+ in 5 Jahren)', gewicht: 2, evidenz: 'Häufige Wohnortwechsel destabilisieren soziale Netzwerke und korrelieren mit Verhaltensauffälligkeiten (Jelleyman & Spencer 2008)' },
-      { id: 'obdachlosigkeit', label: 'Obdachlosigkeit / instabile Wohnverhältnisse', gewicht: 3, evidenz: 'Obdachlose Kinder zeigen 3-6x höhere Raten psychischer Störungen und Entwicklungsverzögerungen (Bassuk et al. 2015)' },
-      { id: 'beengte_verhaeltnisse', label: 'Beengte Wohnverhältnisse / Überbelegung', gewicht: 1, evidenz: 'Wohnungsüberbelegung korreliert mit erhöhtem Stresslevel, Schlafproblemen und Konzentrationsstörungen (Evans 2006)' },
-      { id: 'unsichere_nachbarschaft', label: 'Unsichere Nachbarschaft / Gewaltexposition', gewicht: 2, evidenz: 'Aufwachsen in gewaltbelasteten Nachbarschaften erhöht PTBS-Risiko und normalisiert Aggression (Fowler et al. 2009)' },
-      { id: 'pendeln_elternteile', label: 'Pendeln zwischen Elternteilen', gewicht: 1, evidenz: 'Häufiges Pendeln kann bei hochkonflikthaften Trennungen Stressreaktionen und Loyalitätskonflikte verstärken (McIntosh et al. 2010)' },
+    felder: [
+      {
+        id: 'wohnstabilitaet', label: 'Wohnstabilität', typ: 'single',
+        optionen: [
+          { id: 'wohnung_stabil', label: 'Stabil', gewicht: 0, evidenz: '' },
+          { id: 'haeufige_umzuege', label: 'Häufige Umzüge (3+ in 5 Jahren)', gewicht: 2, evidenz: 'Häufige Wohnortwechsel destabilisieren soziale Netzwerke und korrelieren mit Verhaltensauffälligkeiten (Jelleyman & Spencer 2008)' },
+          { id: 'umzuege_wenige', label: 'Wenige Umzüge (1-2)', gewicht: 0, evidenz: '' },
+          { id: 'obdachlosigkeit', label: 'Obdachlosigkeit / instabil', gewicht: 3, evidenz: 'Obdachlose Kinder zeigen 3-6x höhere Raten psychischer Störungen und Entwicklungsverzögerungen (Bassuk et al. 2015)' },
+        ]
+      },
+      {
+        id: 'wohnqualitaet', label: 'Wohnqualität', typ: 'single',
+        optionen: [
+          { id: 'wohnung_angemessen', label: 'Angemessen', gewicht: 0, evidenz: '' },
+          { id: 'beengte_verhaeltnisse', label: 'Beengt / Überbelegung', gewicht: 1, evidenz: 'Wohnungsüberbelegung korreliert mit erhöhtem Stresslevel, Schlafproblemen und Konzentrationsstörungen (Evans 2006)' },
+          { id: 'unsichere_nachbarschaft', label: 'Unsichere Nachbarschaft', gewicht: 2, evidenz: 'Aufwachsen in gewaltbelasteten Nachbarschaften erhöht PTBS-Risiko und normalisiert Aggression (Fowler et al. 2009)' },
+        ]
+      },
+      {
+        id: 'pendelmodell', label: 'Wechselmodell / Pendeln', typ: 'single',
+        optionen: [
+          { id: 'pendeln_nein', label: 'Nein / Nicht zutreffend', gewicht: 0, evidenz: '' },
+          { id: 'pendeln_elternteile', label: 'Pendeln zwischen Elternteilen', gewicht: 1, evidenz: 'Häufiges Pendeln kann bei hochkonflikthaften Trennungen Stressreaktionen und Loyalitätskonflikte verstärken (McIntosh et al. 2010)' },
+        ]
+      },
     ]
   },
   {
@@ -1934,12 +1984,38 @@ const ANAMNESE_KATEGORIEN = [
     label: 'Finanzen & Sozialstatus',
     icon: '💰',
     farbe: '#78716C',
-    items: [
-      { id: 'armut', label: 'Armut / Sozialhilfe', gewicht: 2, evidenz: 'Kinderarmut korreliert mit 2-3x erhöhtem Risiko für psychische Störungen, kognitive Defizite und schlechtere Gesundheit (Bradley & Corwyn 2002; Duncan & Magnuson 2012)' },
-      { id: 'arbeitslosigkeit_eltern', label: 'Arbeitslosigkeit der Eltern', gewicht: 1, evidenz: 'Elterliche Arbeitslosigkeit erhöht familiären Stress und korreliert mit erhöhten Verhaltensauffälligkeiten bei Kindern (Conger et al. 2002)' },
-      { id: 'verschuldung', label: 'Familiäre Verschuldung', gewicht: 1, evidenz: 'Überschuldung erzeugt chronischen Familienstress, der Erziehungsqualität mindert (Conger & Donnellan 2007)' },
-      { id: 'bildungsferne', label: 'Bildungsfernes Elternhaus', gewicht: 1, evidenz: 'Niedriges Bildungsniveau der Eltern korreliert mit geringerer kognitiver Stimulation und schlechteren Bildungsergebnissen (Hoff 2003; Hart & Risley 1995)' },
-      { id: 'soziale_benachteiligung', label: 'Kumulative soziale Benachteiligung', gewicht: 2, evidenz: 'Kumulation von Armut + niedriger Bildung + Migration zeigt multiplikative Effekte auf Entwicklungsrisiken (Rutter 1979; Sameroff et al. 1993)' },
+    felder: [
+      {
+        id: 'finanzielle_lage', label: 'Finanzielle Situation', typ: 'single',
+        optionen: [
+          { id: 'finanzen_stabil', label: 'Stabil', gewicht: 0, evidenz: '' },
+          { id: 'armut', label: 'Armut / Sozialhilfe', gewicht: 2, evidenz: 'Kinderarmut korreliert mit 2-3x erhöhtem Risiko für psychische Störungen, kognitive Defizite und schlechtere Gesundheit (Bradley & Corwyn 2002; Duncan & Magnuson 2012)' },
+          { id: 'verschuldung', label: 'Familiäre Verschuldung', gewicht: 1, evidenz: 'Überschuldung erzeugt chronischen Familienstress, der Erziehungsqualität mindert (Conger & Donnellan 2007)' },
+        ]
+      },
+      {
+        id: 'erwerbstaetigkeit', label: 'Erwerbstätigkeit der Eltern', typ: 'single',
+        optionen: [
+          { id: 'eltern_berufstaetig', label: 'Berufstätig', gewicht: 0, evidenz: '' },
+          { id: 'arbeitslosigkeit_eltern', label: 'Arbeitslos', gewicht: 1, evidenz: 'Elterliche Arbeitslosigkeit erhöht familiären Stress und korreliert mit erhöhten Verhaltensauffälligkeiten bei Kindern (Conger et al. 2002)' },
+          { id: 'eltern_teilzeit', label: 'Teilzeit / prekär', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'bildungsniveau', label: 'Bildungsniveau der Eltern', typ: 'single',
+        optionen: [
+          { id: 'bildung_mittel_hoch', label: 'Mittel / Hoch', gewicht: 0, evidenz: '' },
+          { id: 'bildungsferne', label: 'Bildungsfern', gewicht: 1, evidenz: 'Niedriges Bildungsniveau der Eltern korreliert mit geringerer kognitiver Stimulation und schlechteren Bildungsergebnissen (Hoff 2003; Hart & Risley 1995)' },
+          { id: 'bildung_unbekannt', label: 'Unbekannt', gewicht: 0, evidenz: '' },
+        ]
+      },
+      {
+        id: 'kumulative_belastung', label: 'Kumulative Belastung', typ: 'multi',
+        optionen: [
+          { id: 'soziale_benachteiligung', label: 'Kumulative soziale Benachteiligung', gewicht: 2, evidenz: 'Kumulation von Armut + niedriger Bildung + Migration zeigt multiplikative Effekte auf Entwicklungsrisiken (Rutter 1979; Sameroff et al. 1993)' },
+          { id: 'migration', label: 'Migrationshintergrund', gewicht: 0, evidenz: 'Migration allein ist kein Risikofaktor — erst in Kombination mit Diskriminierung oder Isolation (Berry et al. 2006)' },
+        ]
+      },
     ]
   },
   {

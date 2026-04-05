@@ -4283,6 +4283,33 @@ function renderSitzungsvorschlag() {
 
   if (!empfohlenesThema) { container.innerHTML = ''; return; }
 
+  // ── Hypothesen-basierte Themen-Empfehlung ──
+  let hypothesenHint = '';
+  if (!pvtOverride) {
+    try {
+      const hypothesen = generateHypothesen(sid);
+      const topHypo = hypothesen.find(h => h.typ === 'risiko' && h.wiki_ids && h.wiki_ids.length > 0);
+      if (topHypo && typeof HYPOTHESEN_THEMA_MAP !== 'undefined') {
+        const empfThemen = [];
+        for (const wid of topHypo.wiki_ids) {
+          const mapped = HYPOTHESEN_THEMA_MAP[wid] || [];
+          for (const tid of mapped) {
+            if (!empfThemen.find(t => t.id === tid)) {
+              const found = findThemaInKategorien(tid);
+              if (found) empfThemen.push(found);
+            }
+          }
+        }
+        if (empfThemen.length > 0) {
+          const chips = empfThemen.slice(0, 3).map(t =>
+            `<button class="btn btn-xs btn-outline-primary" onclick="quickStartSession('${t.id}')" style="margin:2px;">${t.titel}</button>`
+          ).join('');
+          hypothesenHint = `<div class="sitzungsvorschlag-response-hint info" style="margin-top:6px;">🧠 Hypothese <em>"${topHypo.titel}"</em> empfiehlt: ${chips}</div>`;
+        }
+      }
+    } catch(e) { /* silent */ }
+  }
+
   // ── Treatment-Response-Empfehlung einblenden ──
   const trAnalyse = analyzeTreatmentResponse(sid);
   let treatmentHint = '';
@@ -4317,6 +4344,7 @@ function renderSitzungsvorschlag() {
           <div class="sitzungsvorschlag-grund">${empfGrund}</div>
           ${overrideHint}
           ${treatmentHint}
+          ${hypothesenHint}
         </div>
         <div class="sitzungsvorschlag-actions">
           <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">

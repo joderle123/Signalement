@@ -3490,6 +3490,148 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Als Ressource respektieren und einbeziehen. Nicht pathologisieren.',
     wiki_ids: ['resilienz'],
   },
+
+  // ── Gruppe 14: Komorbidität & komplexe Muster ─────────────────
+  {
+    id: 'trauma-diagnose-svv',
+    gruppe: 'Trauma/Krise',
+    titel: 'Trauma-Diagnose + aktive Selbstverletzung',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: ['F43.1', 'X78'],
+    bedingung: (ctx) => ctx.anamnese.includes('diagnose_trauma') && ctx.anamnese.includes('svv_aktiv'),
+    erklaerung: 'Traumatisierung kombiniert mit aktiver Selbstverletzung stellt ein Hochrisikoprofil dar — SVV dient oft als Affektregulation bei traumabedingter Übererregung.',
+    evidenz: 'Trauma-PTBS und SVV treten hochkomorbid auf; SVV ist häufigste Copingstrategie bei dissoziativen Zuständen nach Trauma (Nock & Prinstein 2004; van der Kolk 2014).',
+    quelle: 'Nock & Prinstein (2004); van der Kolk (2014)',
+    ausloesendeDaten: (ctx) => ['Diagnose: Trauma/PTBS', 'Selbstverletzung: Aktiv'],
+    gegenHypothese: 'SVV kann auch ohne Trauma auftreten (z.B. bei Borderline-Persönlichkeitsentwicklung).',
+    empfehlung: 'Sofortiger Sicherheitsplan. Traumatherapie priorisieren. Affektregulationsstrategien erarbeiten.',
+    wiki_ids: ['trauma', 'selbstverletzung'],
+  },
+  {
+    id: 'soziale-benachteiligung-multi',
+    gruppe: 'Sozioökonomie',
+    titel: 'Kumulative soziale Benachteiligung',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['Z59', 'Z55', 'Z60'],
+    bedingung: (ctx) => {
+      let count = 0;
+      if (ctx.anamnese.includes('armut')) count++;
+      if (ctx.anamnese.includes('bildungsferne')) count++;
+      if (ctx.anamnese.includes('migration')) count++;
+      if (ctx.anamnese.includes('arbeitslosigkeit_eltern')) count++;
+      if (ctx.anamnese.includes('beengte_verhaeltnisse')) count++;
+      return count >= 3;
+    },
+    erklaerung: 'Drei oder mehr sozioökonomische Risikofaktoren wirken nicht additiv, sondern multiplikativ — die Belastung steigt exponentiell.',
+    evidenz: 'Rutter (1979) zeigte, dass kumulative Risikofaktoren zu exponentiell steigendem Störungsrisiko führen; 4+ Faktoren = 10x erhöhtes Risiko (Sameroff et al. 1993).',
+    quelle: 'Rutter (1979); Sameroff et al. (1993)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('armut')) d.push('Armut');
+      if (ctx.anamnese.includes('bildungsferne')) d.push('Bildungsfern');
+      if (ctx.anamnese.includes('migration')) d.push('Migration');
+      if (ctx.anamnese.includes('arbeitslosigkeit_eltern')) d.push('Arbeitslosigkeit');
+      if (ctx.anamnese.includes('beengte_verhaeltnisse')) d.push('Beengte Wohnung');
+      return d;
+    },
+    gegenHypothese: 'Starke familiäre Kohäsion und Community-Unterstützung können kumulative Benachteiligung mildern.',
+    empfehlung: 'Multiprofessionelle Vernetzung. Soziale Dienste einbeziehen. Niederschwellige Angebote.',
+    wiki_ids: ['soziales'],
+  },
+  {
+    id: 'scheidung-internalisierend',
+    gruppe: 'Internalisierend',
+    titel: 'Scheidung/Trennung + internalisierende Symptome',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'hinweis',
+    staerkeWert: 2,
+    icd10: ['F43.2', 'Z63.5'],
+    bedingung: (ctx) => ctx.anamnese.includes('scheidung') && (ctx.screening.flaggedAreas.includes('depression') || ctx.screening.flaggedAreas.includes('angst-generalisiert')),
+    erklaerung: 'Elterliche Trennung/Scheidung kann bei Kindern Loyalitätskonflikte, Trauer und Angst auslösen — besonders wenn das Kind in den Elternkonflikt involviert wird.',
+    evidenz: 'Kinder aus Scheidungsfamilien zeigen 1.5-2x erhöhte Raten internalisierender Probleme, besonders in den ersten 2 Jahren (Amato 2001; Hetherington 2003).',
+    quelle: 'Amato (2001); Hetherington (2003)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Scheidung/Trennung'];
+      if (ctx.screening.flaggedAreas.includes('depression')) d.push('Screening: Depression erhöht');
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Angst erhöht');
+      return d;
+    },
+    gegenHypothese: 'Gut begleitete Trennung mit kooperativen Eltern kann adaptiv bewältigt werden.',
+    empfehlung: 'Elternkonstellation explorieren. Ggf. Mediationsangebot. Loyalitätskonflikte thematisieren.',
+    wiki_ids: ['familie'],
+  },
+  {
+    id: 'psychiatrie-plus-medikation',
+    gruppe: 'Entwicklung',
+    titel: 'Psychiatrische Vorbehandlung + Medikation',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['Z86.5'],
+    bedingung: (ctx) => ctx.anamnese.includes('behandlung_psychiatrie') && ctx.anamnese.includes('behandlung_medikation'),
+    erklaerung: 'Psychiatrische Behandlung plus Medikation deutet auf einen höheren Schweregrad der Grundproblematik hin — Compliance und Nebenwirkungen sind eigenständige Faktoren.',
+    evidenz: 'Jugendliche mit psychiatrischer Vorbehandlung + Psychopharmaka zeigen häufiger schwere oder chronische Verläufe (Zito et al. 2008; Olfson et al. 2015).',
+    quelle: 'Zito et al. (2008); Olfson et al. (2015)',
+    ausloesendeDaten: (ctx) => ['Psychiatrie', 'Medikation'],
+    gegenHypothese: 'Medikation + Therapie kann auch Zeichen eines gut behandelten Zustands sein.',
+    empfehlung: 'Aktuelle Medikation erfragen. Compliance prüfen. Behandlungsgeschichte dokumentieren.',
+    wiki_ids: ['psychopharmaka'],
+  },
+  {
+    id: 'svv-vergangenheit-plus-krise',
+    gruppe: 'Trauma/Krise',
+    titel: 'SVV in Vorgeschichte + aktuelle Krise',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['X78', 'F43.0'],
+    bedingung: (ctx) => ctx.anamnese.includes('svv_vergangenheit') && (ctx.screening.flaggedAreas.includes('depression') || ctx.screening.flaggedAreas.includes('trauma')),
+    erklaerung: 'Frühere Selbstverletzung kombiniert mit aktuellen Belastungssymptomen erhöht das Rückfallrisiko erheblich.',
+    evidenz: 'Frühere SVV ist stärkster Prädiktor für erneute SVV, besonders unter erneutem Stress; Rückfallrate 50-80% innerhalb eines Jahres (Hawton et al. 2012).',
+    quelle: 'Hawton et al. (2012)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['SVV in Vorgeschichte'];
+      if (ctx.screening.flaggedAreas.includes('depression')) d.push('Screening: Depression erhöht');
+      if (ctx.screening.flaggedAreas.includes('trauma')) d.push('Screening: Trauma erhöht');
+      return d;
+    },
+    gegenHypothese: 'Gut aufgebaute Coping-Strategien aus früherer Therapie können Rückfall verhindern.',
+    empfehlung: 'Alten Sicherheitsplan reaktivieren. Coping-Skills prüfen. Engmaschiges Monitoring.',
+    wiki_ids: ['selbstverletzung'],
+  },
+  {
+    id: 'mobbing-taeter-externalisierend',
+    gruppe: 'Externalisierend',
+    titel: 'Mobbing-Täter + externalisierendes Verhalten',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F91', 'Z65.4'],
+    bedingung: (ctx) => (ctx.anamnese.includes('mobbing_taeter') || ctx.anamnese.includes('mobbing_beides')) && ctx.screening.flaggedAreas.includes('verhaltensauffaelligkeiten'),
+    erklaerung: 'Mobbing-Täterverhalten kombiniert mit breiten Verhaltensauffälligkeiten deutet auf externalisierende Störung hin — nicht nur "böses Kind", sondern Symptom.',
+    evidenz: 'Mobbing-Täter zeigen häufig komorbide Störungen des Sozialverhaltens; frühes Eingreifen verhindert Chronifizierung (Olweus 2013; Sourander et al. 2007).',
+    quelle: 'Olweus (2013); Sourander et al. (2007)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('mobbing_taeter')) d.push('Mobbing-Täter');
+      if (ctx.anamnese.includes('mobbing_beides')) d.push('Mobbing: Täter-Opfer');
+      d.push('Screening: Verhaltensauffälligkeiten erhöht');
+      return d;
+    },
+    gegenHypothese: 'Situatives Täterverhalten kann auch reaktiv sein (z.B. auf eigene Opfererfahrung).',
+    empfehlung: 'Funktionale Verhaltensanalyse. Soziales Kompetenztraining. Systemische Intervention im Umfeld.',
+    wiki_ids: ['mobbing', 'conduct-disorder'],
+  },
 ];
 
 // ============================================================

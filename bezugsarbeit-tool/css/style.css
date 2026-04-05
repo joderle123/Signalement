@@ -4893,6 +4893,29 @@ select {
   transition: width 0.5s;
 }
 
+/* Dashboard Treatment & Screening Chips */
+.dash-treatment-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  background: #fff;
+  border: 1px solid #F3F4F6;
+  border-radius: 6px;
+}
+.dash-treatment-chip small {
+  color: var(--text-muted);
+}
+.dash-screening-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #F3F4F6;
+}
+
 /* Dashboard Hypothesen Widget */
 .dash-hypo-count {
   font-size: 12px;

@@ -3419,6 +3419,8 @@ function renderDashboard() {
   renderQuickEntry('quick-entry-dashboard');
   renderDashboardSummary();
   renderDashboardHypothesen();
+  renderDashboardTreatmentResponse();
+  renderDashboardScreeningDelta();
   renderSitzungsvorschlag();
   renderPhaseTransitionPrompt();
   renderNaechsteSchritte();
@@ -3581,6 +3583,114 @@ function renderDashboardHypothesen() {
           <button class="btn btn-sm btn-secondary" onclick="showPhase('erfassen');setTimeout(()=>showSubTab('info'),100)">
             Alle Hypothesen ansehen →
           </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- DASHBOARD: TREATMENT-RESPONSE KOMPAKT ----
+function renderDashboardTreatmentResponse() {
+  const el = document.getElementById('dashboard-treatment-widget');
+  if (!el) return;
+
+  const analyse = analyzeTreatmentResponse(APP.currentSchuelerId);
+  if (analyse.themen.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+
+  const trendIcon = (t) => t === 'steigend' ? '📈' : t === 'fallend' ? '📉' : '➡️';
+  const responseColor = (r) => r >= 75 ? '#22C55E' : r >= 50 ? '#F59E0B' : '#EF4444';
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header">
+        <span>💊</span>
+        <div class="card-title">Treatment-Response</div>
+      </div>
+      <div class="card-body" style="padding:10px 14px;">
+        ${analyse.bestesThema ? `
+          <div style="font-size:12px;margin-bottom:8px;padding:6px 10px;background:#F0FDF4;border-radius:6px;color:#166534;">
+            ✨ <strong>Respondiert gut auf: ${analyse.bestesThema.label}</strong> (${analyse.bestesThema.responseRate}%)
+          </div>
+        ` : ''}
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${analyse.themen.slice(0, 5).map(t => `
+            <span class="dash-treatment-chip" style="border-left:3px solid ${responseColor(t.responseRate)}">
+              ${t.label} <small>${t.responseRate}% ${trendIcon(t.trend)}</small>
+            </span>
+          `).join('')}
+        </div>
+        ${analyse.gesamtTrend ? `
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">
+            Gesamt-SRS: ${analyse.gesamtTrend.richtung} (${analyse.gesamtTrend.diff > 0 ? '+' : ''}${analyse.gesamtTrend.diff})
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// ---- DASHBOARD: SCREENING-DELTA KOMPAKT ----
+function renderDashboardScreeningDelta() {
+  const el = document.getElementById('dashboard-screening-delta-widget');
+  if (!el) return;
+
+  const screenings = DB.getScreenings(APP.currentSchuelerId).filter(s => s.abgeschlossen);
+  if (screenings.length < 2) {
+    el.innerHTML = '';
+    return;
+  }
+
+  screenings.sort((a, b) => a.erstellt.localeCompare(b.erstellt));
+  const erstes = screenings[0];
+  const letztes = screenings[screenings.length - 1];
+  const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+
+  const alleDomainIds = [...new Set([...Object.keys(erstes.scores || {}), ...Object.keys(letztes.scores || {})])];
+
+  const deltas = alleDomainIds.map(domId => {
+    const domain = domains.find(d => d.id === domId);
+    const s1 = (erstes.scores || {})[domId] || 0;
+    const s2 = (letztes.scores || {})[domId] || 0;
+    const diff = s2 - s1;
+    const prozent = s1 > 0 ? Math.round((diff / s1) * 100) : 0;
+    return { domId, label: domain?.label || domId, s1, s2, diff, prozent, farbe: domain?.farbe || '#9CA3AF' };
+  }).filter(d => d.s1 > 0 || d.s2 > 0);
+
+  const signifikant = deltas.filter(d => Math.abs(d.prozent) >= 15);
+  if (signifikant.length === 0 && deltas.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+
+  const t1Label = `T1 (${new Date(erstes.erstellt).toLocaleDateString('de-CH')})`;
+  const tNLabel = `T${screenings.length} (${new Date(letztes.erstellt).toLocaleDateString('de-CH')})`;
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header">
+        <span>📊</span>
+        <div class="card-title">Screening-Delta</div>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">${t1Label} → ${tNLabel}</span>
+      </div>
+      <div class="card-body" style="padding:10px 14px;">
+        ${signifikant.length > 0 ? `
+          <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:6px;">
+            ${signifikant.map(d => {
+              const icon = d.diff < 0 ? '↓' : '↑';
+              const color = d.diff < 0 ? '#22C55E' : '#EF4444';
+              return `<span style="font-size:12px;color:${color}">${icon} ${d.label}: ${d.diff < 0 ? '' : '+'}${d.prozent}%</span>`;
+            }).join('')}
+          </div>
+        ` : ''}
+        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+          ${deltas.map(d => {
+            const diffLabel = d.diff > 0 ? `+${d.diff}` : `${d.diff}`;
+            const bg = d.diff < 0 ? '#F0FDF4' : d.diff > 0 ? '#FEF2F2' : '#F9FAFB';
+            return `<span class="dash-screening-chip" style="background:${bg};border-left:2px solid ${d.farbe}">${d.label}: ${d.s2} (${diffLabel})</span>`;
+          }).join('')}
         </div>
       </div>
     </div>

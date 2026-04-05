@@ -4014,11 +4014,45 @@ function renderDashboardHypothesen() {
           ${hypothesen.slice(0, 6).map(miniCard).join('')}
           ${hypothesen.length > 6 ? `<div class="dash-hypo-more">+ ${hypothesen.length - 6} weitere</div>` : ''}
         </div>
+        ${renderDashboardHypoThemen(hypothesen)}
         <div style="text-align:center;margin-top:10px;">
           <button class="btn btn-sm btn-secondary" onclick="showPhase('erfassen');setTimeout(()=>showSubTab('info'),100)">
             Alle Hypothesen ansehen →
           </button>
         </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderDashboardHypoThemen(hypothesen) {
+  if (typeof HYPOTHESEN_THEMA_MAP === 'undefined') return '';
+  const topRisiken = hypothesen.filter(h => h.typ === 'risiko' && h.wiki_ids).slice(0, 3);
+  if (topRisiken.length === 0) return '';
+
+  const themenSet = new Set();
+  const themen = [];
+  for (const h of topRisiken) {
+    for (const wid of h.wiki_ids) {
+      const mapped = HYPOTHESEN_THEMA_MAP[wid] || [];
+      for (const tid of mapped) {
+        if (!themenSet.has(tid)) {
+          themenSet.add(tid);
+          const found = findThemaInKategorien(tid);
+          if (found) themen.push(found);
+        }
+      }
+    }
+  }
+  if (themen.length === 0) return '';
+
+  return `
+    <div style="margin-top:10px;padding:8px 10px;background:var(--bg-elevated);border-radius:8px;border:1px dashed var(--primary);">
+      <div style="font-size:11px;font-weight:600;color:var(--primary);margin-bottom:6px;">🎯 Empfohlene Themen aus Hypothesen</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;">
+        ${themen.slice(0, 5).map(t =>
+          `<button class="btn btn-xs btn-outline-primary" onclick="quickStartSession('${t.id}')" style="font-size:11px;">${t.titel}</button>`
+        ).join('')}
       </div>
     </div>
   `;
@@ -5609,13 +5643,28 @@ function render5PSuggestions(key, existingTags) {
       'Therapie/Beratung', 'Familiärer Zusammenhalt'],
   };
 
-  const chips = (suggestions[key] || []).filter(s => !existingTags.includes(s));
-  if (chips.length === 0) return '';
+  // ── Hypothesen-basierte Vorschläge priorisieren ──
+  let hypoChips = [];
+  try {
+    const hypothesen = generateHypothesen(APP.currentSchuelerId);
+    const typToKey = { risiko: 'predisposing', schutz: 'protective', differenzial: 'presenting' };
+    const hypoForKey = hypothesen.filter(h => typToKey[h.typ] === key);
+    hypoChips = hypoForKey
+      .map(h => h.titel)
+      .filter(t => !existingTags.includes(t));
+  } catch(e) { /* silent */ }
+
+  const staticChips = (suggestions[key] || []).filter(s => !existingTags.includes(s) && !hypoChips.includes(s));
+  const allChips = [...hypoChips, ...staticChips];
+  if (allChips.length === 0) return '';
 
   return '<div class="suggestion-chips" style="margin-top:6px;">' +
-    chips.slice(0, 6).map(c =>
-      `<button type="button" class="suggestion-chip" onclick="add5PTagDirect('${key}','${c.replace(/'/g, "\\'")}')">${c}</button>`
-    ).join('') + '</div>';
+    allChips.slice(0, 8).map((c, i) => {
+      const isHypo = i < hypoChips.length;
+      const style = isHypo ? 'style="border-color:var(--primary);font-weight:500;"' : '';
+      const prefix = isHypo ? '🧠 ' : '';
+      return `<button type="button" class="suggestion-chip" ${style} onclick="add5PTagDirect('${key}','${c.replace(/'/g, "\\'")}')">${prefix}${c}</button>`;
+    }).join('') + '</div>';
 }
 
 function add5PTagDirect(key, value) {
@@ -6545,6 +6594,24 @@ function generateRoadmapFromScreening(screeningId) {
       themaScores[themaId] = Math.max(themaScores[themaId] || 0, weight);
     });
   });
+
+  // ── Hypothesen-basierte Themen hinzufügen ──
+  try {
+    const hypothesen = generateHypothesen(APP.currentSchuelerId);
+    if (typeof HYPOTHESEN_THEMA_MAP !== 'undefined') {
+      hypothesen.forEach(h => {
+        if (!h.wiki_ids) return;
+        const weight = h.typ === 'risiko' ? (h.staerkeWert * 0.2) : (h.typ === 'schutz' ? 0.15 : 0.25);
+        h.wiki_ids.forEach(wid => {
+          const mapped = HYPOTHESEN_THEMA_MAP[wid] || [];
+          mapped.forEach((tid, idx) => {
+            const w = weight * (1 - idx * 0.15);
+            themaScores[tid] = Math.max(themaScores[tid] || 0, w);
+          });
+        });
+      });
+    }
+  } catch(e) { /* silent */ }
 
   // Sort themes by score
   const sortedThemen = Object.entries(themaScores)

@@ -111,6 +111,15 @@ const ARBEITSBLÄTTER = {
   'dissoziative-erfahrungen':[{ titel: 'Dissoziative Erfahrungen & Erdung',              datei: 'dissoziative-erfahrungen.html' }],
   'wahrnehmungsveraenderungen': [{ titel: 'Wahrnehmungsveränderungen & Gedankenklarheit', datei: 'wahrnehmungsveraenderungen.html' }],
   'koerperbeschwerden':      [{ titel: 'Körperliche Beschwerden & Stress',               datei: 'koerperbeschwerden.html' }],
+  'parentifizierung':        [{ titel: 'Wenn ich für andere sorgen muss',                datei: 'parentifizierung.html' }],
+  'young-carers':            [{ titel: 'Pflege in der Familie — Young Carers',           datei: 'young-carers.html' }],
+  'institutionserfahrung':   [{ titel: 'Mein Weg — Leben in Institutionen',              datei: 'institutionserfahrung.html' }],
+  'schulverweigerung':       [{ titel: 'Schule vermeiden — Schule schaffen',             datei: 'schulverweigerung.html' }],
+  'lernbehinderung':         [{ titel: 'Lernen mit Hindernissen — meine Stärken',        datei: 'lernbehinderung.html' }],
+  'psychoedukation':         [{ titel: 'Mein Gehirn & Ich — Psychoedukation',           datei: 'psychoedukation.html' }],
+  'uebergaenge':             [{ titel: 'Übergänge meistern — Veränderung gestalten',     datei: 'uebergaenge.html' }],
+  'migration-flucht':        [{ titel: 'Meine zwei Welten — Migration & Flucht',         datei: 'migration-flucht.html' }],
+  'bindungsstoerung':        [{ titel: 'Nähe & Distanz — Beziehung verstehen',           datei: 'bindungsstoerung.html' }],
 };
 
 // ============================================================
@@ -717,6 +726,71 @@ const THEMA_AKTIVITÄTEN = {
     { titel: 'Meine Stationen', beschreibung: 'Zeichne eine Landkarte deiner bisherigen Stationen (Zuhause, Heim, Pflegefamilie...). Wer war wichtig?', dauer: '20 Min' },
     { titel: 'Brief an mein jüngeres Ich', beschreibung: 'Was würdest du deinem jüngeren Ich sagen? Was hast du geschafft trotz allem?', dauer: '15 Min' },
     { titel: 'Vertrauens-Barometer', beschreibung: 'Bewerte: Wie leicht fällt es dir, neuen Personen zu vertrauen? Was brauchst du dafür?', dauer: '10 Min' },
+  ],
+  'angstanfaelle': [
+    { titel: 'Mein Angstkreis', beschreibung: 'Zeichne den Kreislauf: Gedanke → Körperreaktion → Verhalten → Gedanke. Wo kannst du eingreifen?', dauer: '15 Min' },
+    { titel: 'Panik-Notfallkarte', beschreibung: 'Erstelle eine Karte für die Hosentasche: 3 Atemübungen, 3 Grounding-Sätze, 1 Notfallkontakt.', dauer: '10 Min' },
+    { titel: 'Meine Angst-Hierarchie', beschreibung: 'Ordne Situationen von 0 (keine Angst) bis 100 (Panik). Welche kleine Stufe kannst du als nächstes üben?', dauer: '15 Min' },
+  ],
+  'wiederkehrende-gedanken': [
+    { titel: 'Gedanken-Sortiermaschine', beschreibung: 'Schreibe Gedanken auf Zettel. Sortiere: Hilfreich / Unhilfreich / Neutral. Was fällt dir auf?', dauer: '15 Min' },
+    { titel: 'Der Gedanken-Beobachter', beschreibung: 'Setze dich 5 Minuten hin und beobachte deine Gedanken wie Wolken am Himmel. Notiere was kommt.', dauer: '10 Min' },
+    { titel: 'Alternativ-Gedanken finden', beschreibung: 'Für jeden negativen Gedanken: Was würde ein guter Freund sagen? Schreibe es daneben.', dauer: '15 Min' },
+  ],
+  'stimmungsextreme': [
+    { titel: 'Mein Stimmungs-Wetterbericht', beschreibung: 'Beschreibe deine Stimmung als Wetter: Sturm, Regen, Sonne, Nebel? Wie schnell wechselt es?', dauer: '10 Min' },
+    { titel: 'Notfall-Koffer bei Hochs und Tiefs', beschreibung: 'Was hilft bei extremem Tief? Was bremst bei extremem Hoch? Erstelle zwei Listen.', dauer: '15 Min' },
+    { titel: 'TIPP-Skills', beschreibung: 'Übe: Temperatur (kaltes Wasser), Intensive Bewegung, Paced Breathing, Progressive Muskelentspannung.', dauer: '15 Min' },
+  ],
+  'impulskontrolle': [
+    { titel: 'Mein Ampel-System', beschreibung: 'Rot = Stopp! Gelb = Nachdenken. Grün = Überlegte Reaktion. Übe mit 3 typischen Situationen.', dauer: '15 Min' },
+    { titel: 'Impuls-Tagebuch', beschreibung: 'Notiere eine Woche lang: Wann war ich impulsiv? Was war der Auslöser? Was wäre besser gewesen?', dauer: '5 Min täglich' },
+    { titel: 'Alternative Ventile', beschreibung: 'Erstelle eine Liste: 5 Dinge die ich tun kann STATT impulsiv zu reagieren.', dauer: '10 Min' },
+  ],
+  'einsamkeit': [
+    { titel: 'Mein Kontakt-Barometer', beschreibung: 'Wie oft siehst du andere Menschen? Wie fühlst du dich dabei? Welche Kontakte fehlen?', dauer: '10 Min' },
+    { titel: 'Kleine Schritte nach draussen', beschreibung: 'Plane eine winzige soziale Aktivität pro Woche. Nichts Grosses — nur ein kleiner Kontakt.', dauer: '10 Min' },
+    { titel: 'Was ich zu bieten habe', beschreibung: 'Schreibe 5 Dinge auf, die dich als Freund/Freundin wertvoll machen.', dauer: '10 Min' },
+  ],
+  'soziale-wahrnehmung': [
+    { titel: 'Gesichter lesen', beschreibung: 'Schau dir Fotos an: Welche Emotion zeigt diese Person? Woran erkennst du das? Übe mit 10 Bildern.', dauer: '15 Min' },
+    { titel: 'Perspektivenwechsel', beschreibung: 'Beschreibe eine Situation aus 3 Perspektiven: Deine, die einer anderen Person, die eines Beobachters.', dauer: '15 Min' },
+    { titel: 'Körpersprache-Detective', beschreibung: 'Beobachte Menschen (z.B. im Bus) 5 Minuten lang. Was sagt ihre Körpersprache? Notiere.', dauer: '10 Min' },
+  ],
+  'konzentration-aufmerksamkeit': [
+    { titel: 'Mein Fokus-Experiment', beschreibung: 'Teste: Wie lange kannst du fokussiert arbeiten? 5, 10, 15, 20 Minuten? Finde deinen Rhythmus.', dauer: '15 Min' },
+    { titel: 'Ablenkungen-Kartei', beschreibung: 'Liste alle Ablenkungen auf. Für jede: Kann ich sie vermeiden? Wie? Erstelle einen Plan.', dauer: '15 Min' },
+    { titel: 'Belohnungs-System', beschreibung: 'Nach X Minuten Fokus bekomme ich Y Belohnung. Definiere dein persönliches System.', dauer: '10 Min' },
+  ],
+  'essverhalten': [
+    { titel: 'Hunger vs. Appetit', beschreibung: 'Lerne den Unterschied: Echten Hunger spürst du im Bauch. Appetit kommt vom Kopf. Übe eine Woche lang.', dauer: '10 Min' },
+    { titel: 'Mein Ess-Tagebuch', beschreibung: 'Notiere 3 Tage: Was, wann, warum, wie fühlst du dich dabei? Ohne Wertung — nur beobachten.', dauer: '5 Min/Tag' },
+    { titel: 'Essen und Gefühle', beschreibung: 'Wann esse ich aus Langeweile? Stress? Trauer? Finde andere Wege für diese Gefühle.', dauer: '15 Min' },
+  ],
+  'koerperbeschwerden': [
+    { titel: 'Mein Körper-Tagebuch', beschreibung: 'Notiere 1 Woche: Wo tut es weh? Wann? Was war vorher? Gibt es ein Muster?', dauer: '5 Min/Tag' },
+    { titel: 'Körper-Scan Übung', beschreibung: 'Lege dich hin und gehe systematisch durch deinen Körper. Wo ist Anspannung? Atme dort hin.', dauer: '10 Min' },
+    { titel: 'Stress → Körper Landkarte', beschreibung: 'Zeichne einen Körperumriss. Markiere: Wo spürst du Angst? Wut? Trauer? Freude?', dauer: '15 Min' },
+  ],
+  'trauma': [
+    { titel: 'Mein sicherer Ort', beschreibung: 'Stell dir einen Ort vor, an dem du dich absolut sicher fühlst. Beschreibe ihn mit allen Sinnen.', dauer: '15 Min' },
+    { titel: 'Mein Ressourcen-Koffer', beschreibung: 'Was hilft mir wenn es mir schlecht geht? Sammle mindestens 10 Strategien in einem „Koffer".', dauer: '15 Min' },
+    { titel: 'Grounding-Notfallplan', beschreibung: '5 Dinge sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken. Übe bis es automatisch geht.', dauer: '10 Min' },
+  ],
+  'dissoziative-erfahrungen': [
+    { titel: 'Was ist Dissoziation?', beschreibung: 'Dein Gehirn schaltet auf Autopilot wenn es zu viel wird. Das ist ein Schutzmechanismus — kein Fehler.', dauer: '10 Min' },
+    { titel: 'Meine Anker', beschreibung: 'Finde 5 Dinge die dich sofort ins Hier-und-Jetzt bringen: Geruch, Geschmack, Berührung, Klang, Bild.', dauer: '15 Min' },
+    { titel: 'Mein Signal-System', beschreibung: 'Woran merkst du, dass du „abdriftest"? Erstelle eine Checkliste deiner Frühwarnsignale.', dauer: '15 Min' },
+  ],
+  'wahrnehmungsveraenderungen': [
+    { titel: 'Realitäts-Check', beschreibung: 'Wenn sich etwas komisch anfühlt: Sehen andere das auch? Bin ich müde? Hatte ich genug zu essen?', dauer: '10 Min' },
+    { titel: 'Mein Stress-Barometer', beschreibung: 'Wie hoch ist mein Stress gerade (1-10)? Ab welchem Level kommen die komischen Wahrnehmungen?', dauer: '10 Min' },
+    { titel: 'Mein Vertrauensnetz', beschreibung: 'Wem sage ich Bescheid wenn etwas Ungewöhnliches passiert? Erstelle eine Notfall-Kontaktliste.', dauer: '10 Min' },
+  ],
+  'selbstverletzung': [
+    { titel: 'Meine Auslöser kennen', beschreibung: 'Wann ist der Drang am stärksten? Was passiert vorher? Finde Muster ohne dich zu verurteilen.', dauer: '15 Min' },
+    { titel: 'Alternativen-Box', beschreibung: 'Eiswürfel, rote Farbe, Gummiband, Chili — alles was intensive Empfindung OHNE Verletzung bringt.', dauer: '15 Min' },
+    { titel: 'Mein Sicherheitsplan', beschreibung: 'Wenn der Drang kommt: 1) Warte 15 Min 2) Rufe X an 3) Gehe zu Y. Erstelle deinen Plan.', dauer: '15 Min' },
   ],
 };
 

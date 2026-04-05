@@ -1539,6 +1539,7 @@ function renderInfo() {
   const hypothesen = generateHypothesen(APP.currentSchuelerId);
   renderHypothesen(hypothesen);
   renderTreatmentResponse(APP.currentSchuelerId);
+  renderHypothesenZeitstrahl(APP.currentSchuelerId);
   renderScreeningVerlauf(APP.currentSchuelerId);
 
   const notizEl = document.getElementById('info-allgemein');
@@ -2129,6 +2130,102 @@ function renderTreatmentResponse(schuelerId) {
               </div>
             </div>
           `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// HYPOTHESEN-ZEITSTRAHL
+// ============================================================
+function renderHypothesenZeitstrahl(schuelerId) {
+  const el = document.getElementById('hypothesen-zeitstrahl');
+  if (!el) return;
+
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) return;
+
+  const verlauf = s.hypothesenVerlauf || [];
+  if (verlauf.length < 2) {
+    el.innerHTML = '';
+    return;
+  }
+
+  // Alle Hypothesen-IDs die je aufgetaucht sind
+  const alleIds = [...new Set(verlauf.flatMap(v => v.hypothesenIds))];
+
+  // Regel-Titel nachschlagen
+  const regelMap = {};
+  for (const r of HYPOTHESEN_REGELN) {
+    regelMap[r.id] = { titel: r.titel, typ: r.typ, staerkeWert: r.staerkeWert };
+  }
+
+  // Matrix: Zeitpunkt × Hypothese
+  const zeitpunkte = verlauf.map(v => ({
+    datum: new Date(v.datum).toLocaleDateString('de-CH'),
+    datumRaw: v.datum,
+    ids: v.hypothesenIds,
+    datenPunkte: v.datenPunkte || {},
+  }));
+
+  // Hypothesen-Zeilen: nur die mit mind. 2 Auftritte oder aktuelle
+  const aktuelleIds = zeitpunkte[zeitpunkte.length - 1].ids;
+  const relevanteIds = alleIds.filter(id => {
+    const auftritte = zeitpunkte.filter(z => z.ids.includes(id)).length;
+    return auftritte >= 2 || aktuelleIds.includes(id);
+  });
+
+  // Typ-Farben
+  const typFarbe = (id) => {
+    const r = regelMap[id];
+    if (!r) return '#9CA3AF';
+    if (r.typ === 'schutz') return '#22C55E';
+    if (r.typ === 'differenzial') return '#8B5CF6';
+    if (r.staerkeWert >= 3) return '#EF4444';
+    if (r.staerkeWert >= 2) return '#F59E0B';
+    return '#9CA3AF';
+  };
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-header">
+        <span>📈</span>
+        <div class="card-title">Hypothesen-Zeitstrahl</div>
+        <span style="font-size:12px;color:var(--text-muted);margin-left:auto;">${zeitpunkte.length} Zeitpunkte</span>
+      </div>
+      <div class="card-body">
+        <div class="hypo-zeitstrahl-container">
+          <div class="hypo-zeitstrahl-header">
+            <div class="hypo-zeitstrahl-label-col"></div>
+            ${zeitpunkte.map((z, i) => `<div class="hypo-zeitstrahl-datum">${i === 0 ? 'Start' : i === zeitpunkte.length - 1 ? 'Aktuell' : z.datum}</div>`).join('')}
+          </div>
+          ${relevanteIds.map(id => {
+            const info = regelMap[id] || { titel: id, typ: 'risiko' };
+            const farbe = typFarbe(id);
+            return `
+              <div class="hypo-zeitstrahl-row">
+                <div class="hypo-zeitstrahl-label" title="${info.titel}">
+                  <span class="hypo-zeitstrahl-dot" style="background:${farbe}"></span>
+                  ${info.titel.length > 30 ? info.titel.substring(0, 28) + '...' : info.titel}
+                </div>
+                ${zeitpunkte.map(z => {
+                  const aktiv = z.ids.includes(id);
+                  const dp = z.datenPunkte[id] || 0;
+                  return `<div class="hypo-zeitstrahl-cell">
+                    ${aktiv ? `<span class="hypo-zeitstrahl-mark" style="background:${farbe};opacity:${0.4 + (dp * 0.15)}" title="${dp} Datenpunkte"></span>` : '<span class="hypo-zeitstrahl-empty"></span>'}
+                  </div>`;
+                }).join('')}
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div class="hypo-zeitstrahl-legende">
+          <span><span class="hypo-zeitstrahl-dot" style="background:#EF4444"></span> Hohes Risiko</span>
+          <span><span class="hypo-zeitstrahl-dot" style="background:#F59E0B"></span> Mittleres Risiko</span>
+          <span><span class="hypo-zeitstrahl-dot" style="background:#22C55E"></span> Schutzfaktor</span>
+          <span><span class="hypo-zeitstrahl-dot" style="background:#8B5CF6"></span> Differenzial</span>
+          <span style="color:var(--text-muted);font-size:10px;">Intensität = Anzahl Datenpunkte</span>
         </div>
       </div>
     </div>
@@ -3843,6 +3940,25 @@ function renderSitzungsvorschlag() {
 
   if (!empfohlenesThema) { container.innerHTML = ''; return; }
 
+  // ── Treatment-Response-Empfehlung einblenden ──
+  const trAnalyse = analyzeTreatmentResponse(sid);
+  let treatmentHint = '';
+  if (trAnalyse.bestesThema && !pvtOverride) {
+    const empfId = empfohlenesThema.id;
+    const besteId = trAnalyse.bestesThema.themaId;
+    if (empfId === besteId) {
+      treatmentHint = `<div class="sitzungsvorschlag-response-hint positiv">✨ Bestätigt: ${trAnalyse.bestesThema.responseRate}% Response-Rate bei diesem Thema</div>`;
+    } else {
+      // Prüfe ob das empfohlene Thema schlechte Response hat
+      const empfResponse = trAnalyse.themen.find(t => t.themaId === empfId);
+      if (empfResponse && empfResponse.responseRate < 40 && empfResponse.anzahl >= 2) {
+        treatmentHint = `<div class="sitzungsvorschlag-response-hint warnung">⚠️ Niedrige Response (${empfResponse.responseRate}%) bei diesem Thema. Alternative: <strong>${trAnalyse.bestesThema.label}</strong> (${trAnalyse.bestesThema.responseRate}% Response) <button class="btn btn-xs btn-secondary" onclick="quickStartSession('${besteId}')" style="margin-left:6px;">Stattdessen starten</button></div>`;
+      } else if (trAnalyse.bestesThema.responseRate >= 70) {
+        treatmentHint = `<div class="sitzungsvorschlag-response-hint info">💊 Höchste Response: ${trAnalyse.bestesThema.label} (${trAnalyse.bestesThema.responseRate}%)</div>`;
+      }
+    }
+  }
+
   const pvtBadge = lastPVT ? `<span class="sitzungsvorschlag-pvt">${pvtLabels[lastPVT] || lastPVT}</span>` : '';
   const overrideHint = pvtOverride
     ? `<div class="sitzungsvorschlag-pvt-hint">Basierend auf dem letzten Nervensystem-Zustand wird ein angepasstes Thema vorgeschlagen.</div>`
@@ -3857,6 +3973,7 @@ function renderSitzungsvorschlag() {
           <div class="sitzungsvorschlag-thema">${empfohlenesThema.titel}</div>
           <div class="sitzungsvorschlag-grund">${empfGrund}</div>
           ${overrideHint}
+          ${treatmentHint}
         </div>
         <div class="sitzungsvorschlag-actions">
           <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">

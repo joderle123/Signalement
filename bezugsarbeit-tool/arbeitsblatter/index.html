@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbeitsblatt-Übersicht – CDSE</title>
+  <style>
+    :root {
+      --primary: #2C5F8A;
+      --primary-dark: #1E4468;
+      --bg: #EEF2F7;
+      --card: #fff;
+      --border: #DDE3EA;
+      --text: #111827;
+      --muted: #6B7280;
+      --radius: 10px;
+      --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Topbar */
+    .topbar {
+      background: linear-gradient(135deg, #1E4468 0%, #2C5F8A 100%);
+      color: white;
+      padding: 15px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .topbar-title { font-size: 17px; font-weight: 700; flex: 1; letter-spacing: -0.2px; }
+    .topbar a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 13px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 7px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .topbar a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+    /* Suchleiste */
+    .suche-leiste {
+      background: white;
+      padding: 14px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .suche-input {
+      flex: 1;
+      padding: 8px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      max-width: 360px;
+      transition: border-color 0.15s;
+      color: var(--text);
+    }
+    .suche-input:focus { border-color: var(--primary); }
+    .suche-input::placeholder { color: #9CA3AF; }
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip {
+      padding: 4px 11px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--muted);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .chip:hover { border-color: #B0BAC4; color: var(--text); }
+    .chip.aktiv { border-color: var(--primary); background: var(--primary); color: white; }
+
+    /* Content */
+    .content { padding: 24px 32px 40px; }
+
+    .kategorie-titel {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 28px 0 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      letter-spacing: -0.2px;
+    }
+    .kategorie-titel:first-child { margin-top: 0; }
+    .kategorie-zaehler {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 4px;
+      background: #F3F4F6;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* Karten-Grid */
+    .ab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .ab-karte {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1.5px solid transparent;
+      overflow: hidden;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .ab-karte:hover {
+      border-color: var(--akzent, var(--primary));
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .ab-karte-kopf {
+      padding: 13px 15px 9px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ab-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+    .ab-titel { font-size: 13px; font-weight: 700; line-height: 1.35; letter-spacing: -0.1px; }
+
+    .ab-karte-body { padding: 9px 15px 13px; flex: 1; display: flex; flex-direction: column; }
+    .ab-beschreibung { font-size: 11.5px; color: var(--muted); line-height: 1.55; margin-bottom: 9px; flex: 1; }
+
+    .ab-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+    .ab-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: #F3F4F6;
+      color: #6B7280;
+      border: 1px solid #E5E7EB;
+    }
+
+    .ab-open-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+      padding: 8px;
+      background: var(--akzent, var(--primary));
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .ab-open-btn:hover { opacity: 0.88; }
+
+    /* Leer-Zustand */
+    .leer {
+      text-align: center;
+      color: var(--muted);
+      padding: 48px 20px;
+      font-size: 14px;
+      grid-column: 1 / -1;
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    /* Tabs */
+    .tabs-leiste {
+      background: white;
+      border-bottom: 2px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+    }
+    .tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tab:hover { color: var(--primary); }
+    .tab.aktiv { color: var(--primary); border-bottom-color: var(--primary); }
+
+    @media (max-width: 700px) {
+      .topbar, .suche-leiste, .content { padding-left: 16px; padding-right: 16px; }
+      .ab-grid { grid-template-columns: 1fr; }
+      .filter-chips { display: none; }
+      .tabs-leiste { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span style="font-size:22px;">📋</span>
+  <div class="topbar-title">Materialien & Methoden – CDSE Bezugsarbeit</div>
+  <a href="../index.html">← Zur App</a>
+</div>
+
+<div class="tabs-leiste">
+  <div class="tab aktiv" id="tab-ab" onclick="wechselTab('ab')">📋 Arbeitsblätter</div>
+  <div class="tab" id="tab-akt" onclick="wechselTab('akt')">🎯 Aktivitäten</div>
+  <div class="tab" id="tab-int" onclick="wechselTab('int')">🧠 Therapeutische Interventionen</div>
+</div>
+
+<div class="suche-leiste">
+  <input type="text" class="suche-input" id="suche" placeholder="🔍  Suchen…" oninput="filtern()">
+  <div class="filter-chips" id="filter-chips"></div>
+</div>
+
+<div class="content">
+  <div id="ab-container"></div>
+</div>
+
+<script>
+const ARBEITSBLÄTTER = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    blaetter: [
+      {
+        titel: 'Meine Gefühle kennenlernen',
+        datei: 'emotionserkennung.html',
+        beschreibung: 'Grundemotionen, Körperkarte, S-G-F-V-Kette, Gefühlstagebuch, Emotions-Rad, gemischte Gefühle',
+        tags: ['Emotionen', 'Körper', 'KVT'],
+        seiten: 3,
+      },
+      {
+        titel: 'Meine Gefühle regulieren',
+        datei: 'emotionsregulation.html',
+        beschreibung: 'STOP-Technik, 4-7-8-Atmung, Notfallkoffer, 5-4-3-2-1 Grounding',
+        tags: ['DBT', 'Regulation', 'Achtsamkeit'],
+        seiten: 2,
+      },
+      {
+        titel: 'Meine Wut verstehen & steuern',
+        datei: 'wut-aggression.html',
+        beschreibung: 'Wutthermometer, Auslöser, Primäremotionen, Wutbrief, Notfallkoffer, Eisberg-Modell',
+        tags: ['Wut', 'Aggression', 'Impulskontrolle'],
+        seiten: 3,
+      },
+      {
+        titel: 'Stress & Angst verstehen',
+        datei: 'stress-angst.html',
+        beschreibung: 'Stressoren, Stress-Ampel, Progressive Muskelentspannung, Sorgenzeit, Stress-Tagebuch, Angst-Exposition',
+        tags: ['Stress', 'Angst', 'Entspannung', 'Exposition'],
+        seiten: 3,
+      },
+      {
+        titel: 'Mein Selbstwertgefühl stärken',
+        datei: 'selbstwertgefuehl.html',
+        beschreibung: 'Stärken, innerer Kritiker vs. Freund, Barometer, Brief an sich selbst, Selbstmitgefühl, 21-Tage-Challenge',
+        tags: ['Selbstwert', 'Ressourcen', 'Selbstmitgefühl'],
+        seiten: 3,
+      },
+      {
+        titel: 'Trauer & Verlust',
+        datei: 'trauer-verlust.html',
+        beschreibung: 'Verlustarten, Trauerphasen (Kübler-Ross), Erinnerungsraum, Trauerbegleiter, Wellenbild',
+        tags: ['Trauer', 'Verlust', 'Trauerprozess', 'Ressourcen'],
+        seiten: 2,
+      },
+      {
+        titel: 'Wenn alles grau ist – Depressive Stimmungen',
+        datei: 'depressive-stimmungen.html',
+        beschreibung: 'Stimmungscheck, Stimmungskurve, Einfluss-Faktoren, Behavioral Activation, Gedanken umstrukturieren',
+        tags: ['Depression', 'Stimmung', 'Behavioral Activation', 'KVT'],
+        seiten: 3,
+      },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    blaetter: [
+      {
+        titel: 'Freundschaft & Konflikte',
+        datei: 'freundschaft-konflikte.html',
+        beschreibung: 'Soziogramm, WIN-WIN Konfliktmodell, Ich-Botschaften, Grenzen setzen',
+        tags: ['Freundschaft', 'Konflikt', 'GFK'],
+        seiten: 2,
+      },
+      {
+        titel: 'Kommunikation & Grenzen setzen',
+        datei: 'kommunikation-grenzen.html',
+        beschreibung: 'Kommunikationsstile, Ich-Botschaften (GFK), Grenzen in 4 Bereichen, Nein sagen üben',
+        tags: ['Kommunikation', 'Grenzen', 'Assertivität', 'GFK'],
+        seiten: 2,
+      },
+      {
+        titel: 'Mobbing & Cybermobbing',
+        datei: 'mobbing-cybermobbing.html',
+        beschreibung: 'Mobbingformen, Rollensystem (Olweus), Handlungsplan, BEE SECURE, Notfallkontakte',
+        tags: ['Mobbing', 'Cybermobbing', 'Prävention', 'BEE SECURE'],
+        seiten: 2,
+      },
+      {
+        titel: 'Romantische Beziehungen & Liebe',
+        datei: 'romantische-beziehungen.html',
+        beschreibung: 'Wünsche & No-Gos, Red Flags, 5 Liebessprachen (Chapman), Trennung verarbeiten',
+        tags: ['Beziehungen', 'Liebe', 'Red Flags', 'Liebessprachen'],
+        seiten: 2,
+      },
+      {
+        titel: 'Empathie – In den Schuhen anderer gehen',
+        datei: 'empathie.html',
+        beschreibung: 'Empathie-Selbstcheck, Perspektivenwechsel, aktives Zuhören, Empathie-Formel, Wochenaufgaben',
+        tags: ['Empathie', 'Perspektivenwechsel', 'Kommunikation', 'Soziale Kompetenz'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    blaetter: [
+      {
+        titel: 'Meine Familie verstehen',
+        datei: 'familie.html',
+        beschreibung: 'Familienbild, Beziehungsqualitäten, Regeln & Muster, Ressourcen',
+        tags: ['Familie', 'Genogramm', 'Systemisch'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    blaetter: [
+      {
+        titel: 'Alkohol – Was ich wirklich wissen sollte',
+        datei: 'konsum-alkohol.html',
+        beschreibung: 'Konsummuster, Risikocheck, Bilanz, Umgang mit Gruppendruck',
+        tags: ['Alkohol', 'MI', 'Prävention'],
+        seiten: 2,
+      },
+      {
+        titel: 'Tabak & E-Zigarette',
+        datei: 'konsum-tabak.html',
+        beschreibung: 'Mythen-Quiz, Konsumprotokoll, Kostenrechner, Motive, Ausstiegsplan & Tabaktelefon Luxemburg',
+        tags: ['Tabak', 'Rauchen', 'E-Zigarette', 'Nikotin'],
+        seiten: 2,
+      },
+      {
+        titel: 'Cannabis & Konsum – Fakten & Motive',
+        datei: 'konsum-cannabis.html',
+        beschreibung: 'Konsummotive, Vor-/Nachteile, Konsummuster, Reduktionsplan',
+        tags: ['Cannabis', 'MI', 'Harm Reduction'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    blaetter: [
+      {
+        titel: 'Meine Zukunft – Wer will ich werden?',
+        datei: 'zukunftsplanung.html',
+        beschreibung: 'Traumwelt, Stärken-Kompass, Zielleiter, Hindernisse & Ressourcen',
+        tags: ['Beruf', 'Ziele', 'Motivation'],
+        seiten: 2,
+      },
+      {
+        titel: 'Lernstrategien & Schule',
+        datei: 'lernstrategien-schule.html',
+        beschreibung: 'Lerntypen, Lernhemmnisse, Pomodoro, Karteikarten, Feynman-Methode, Wochenplan',
+        tags: ['Lernen', 'Schule', 'Organisation', 'Motivation'],
+        seiten: 2,
+      },
+      {
+        titel: 'Prüfungsangst – Verstehen, Vorbereiten, Bestehen',
+        datei: 'pruefungsangst.html',
+        beschreibung: 'Körper-Gedanken-Verhalten, Realitätscheck, 4-7-8 Atemtechnik, Prüfungsritual, Lernplan',
+        tags: ['Prüfungsangst', 'Angst', 'Schule', 'Entspannung'],
+        seiten: 3,
+      },
+      {
+        titel: 'Motivation & Antrieb – Was bewegt mich?',
+        datei: 'motivation.html',
+        beschreibung: 'Motivations-Check, Flow-Erlebnisse, SMART-Ziele, Motivations-Killer & Gegenstrategien',
+        tags: ['Motivation', 'Ziele', 'Antrieb', 'SMART'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    blaetter: [
+      {
+        titel: 'Schlaf, Gesundheit & Energie',
+        datei: 'schlaf-gesundheit.html',
+        beschreibung: 'Schlaftagebuch, Schlafräuber, Energie-Bilanz, Schlaf-Routine, Body Scan',
+        tags: ['Schlaf', 'Gesundheit', 'Routine'],
+        seiten: 2,
+      },
+      {
+        titel: 'Körper, Pubertät & Sexualität',
+        datei: 'koerperbild-sexualitaet.html',
+        beschreibung: 'Körperbild, Medienideale, Sexualität & Fragen, Consent, Geschlechtsidentität',
+        tags: ['Körperbild', 'Sexualität', 'Pubertät', 'Consent'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    blaetter: [
+      {
+        titel: 'Wer bin ich? – Meine Identität',
+        datei: 'identitaet.html',
+        beschreibung: 'Identitätsrad, Rollen, Werte, Prägungen, Lebensmotto',
+        tags: ['Identität', 'Werte', 'Entwicklung'],
+        seiten: 2,
+      },
+      {
+        titel: 'Resilienz & Stärken',
+        datei: 'resilienz-staerken.html',
+        beschreibung: 'Stärken-Inventur, bewältigte Schwierigkeiten, 7 Resilienz-Säulen, Ressourcen & Resilienzplan',
+        tags: ['Resilienz', 'Stärken', 'Ressourcen', 'Schutzfaktoren'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    blaetter: [
+      {
+        titel: 'Mein Sicherheitsplan',
+        datei: 'krisenplan.html',
+        beschreibung: 'Warnzeichen, Selbsthilfe, Ablenkung, Notfallkontakte Luxemburg, Gründe zu leben',
+        tags: ['Krise', 'Suizidprävention', 'Sicherheit'],
+        seiten: 2,
+      },
+      {
+        titel: 'Trauma verstehen & Stabilität finden',
+        datei: 'trauma-stabilisierung.html',
+        beschreibung: 'Sicherer Ort, Anker & Grounding, Ampelmodell (Toleranzfenster), Schutzfaktoren',
+        tags: ['Trauma', 'Stabilisierung', 'Grounding', 'EMDR'],
+        seiten: 2,
+      },
+      {
+        titel: 'Gewalt & Schutz',
+        datei: 'gewalt-schutz.html',
+        beschreibung: 'Formen von Gewalt (körperlich, psychisch, digital, sexualisiert), Körpersignale, Schutz-Netz, Notfallkontakte Luxemburg',
+        tags: ['Gewalt', 'Missbrauch', 'Schutz', 'Sicherheit', 'Red Flags'],
+        seiten: 2,
+      },
+      {
+        titel: 'Selbstverletzung – Verstehen & Alternativen finden',
+        datei: 'selbstverletzung.html',
+        beschreibung: 'Muster analysieren, Funktionen benennen, DBT-Alternativen, Notfallplan, Notfallkontakte Luxemburg',
+        tags: ['Selbstverletzung', 'NSSV', 'DBT', 'Emotionsregulation', 'Krise'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    blaetter: [
+      {
+        titel: 'Soziale Medien & Gaming',
+        datei: 'soziale-medien-gaming.html',
+        beschreibung: 'Nutzungsaudit, Vergleichsfalle, Gaming-Warnsignale, digitaler Grenzplan',
+        tags: ['Social Media', 'Gaming', 'Medien', 'Sucht'],
+        seiten: 2,
+      },
+      {
+        titel: 'Finanzen & Geld',
+        datei: 'finanzen-geld.html',
+        beschreibung: 'Persönliches Budget, Bedarf vs. Wunsch, Sparziel-Thermometer, Schulden-Falle & Beratungsstellen Luxemburg',
+        tags: ['Finanzen', 'Budget', 'Schulden', 'Sparen'],
+        seiten: 2,
+      },
+    ]
+  },
+  {
+    kategorie: 'Recht & Gesellschaft',
+    icon: '⚖️',
+    farbe: '#C0392B',
+    blaetter: [
+      {
+        titel: 'Diskriminierung – Erkennen, Benennen, Handeln',
+        datei: 'diskriminierung.html',
+        beschreibung: 'Formen der Diskriminierung, eigene Erfahrungen, 5D-Methode, Anlaufstellen Luxemburg',
+        tags: ['Diskriminierung', 'Rassismus', 'Rechte', 'Empowerment'],
+        seiten: 2,
+      },
+    ]
+  },
+];
+
+let aktiverFilter = 'Alle';
+let aktiverTab = 'ab'; // 'ab' | 'akt' | 'int'
+
+function wechselTab(tab) {
+  aktiverTab = tab;
+  aktiverFilter = 'Alle';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('aktiv'));
+  document.getElementById('tab-' + tab).classList.add('aktiv');
+  document.getElementById('suche').value = '';
+  init();
+}
+
+function init() {
+  const chips = document.getElementById('filter-chips');
+  const quelle = aktiverTab === 'ab' ? ARBEITSBLÄTTER : aktiverTab === 'akt' ? AKTIVITÄTEN : INTERVENTIONEN;
+  const kategorien = ['Alle', ...quelle.map(k => k.kategorie)];
+  chips.innerHTML = kategorien.map(k =>
+    `<div class="chip ${k === 'Alle' ? 'aktiv' : ''}" onclick="setFilter('${k}')">${k === 'Alle' ? 'Alle' : k.split(' ')[0]}</div>`
+  ).join('');
+  render();
+}
+
+function setFilter(f) {
+  aktiverFilter = f;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('aktiv'));
+  document.querySelectorAll('.chip').forEach(c => {
+    if (c.textContent.trim() === (f === 'Alle' ? 'Alle' : f.split(' ')[0])) c.classList.add('aktiv');
+  });
+  render();
+}
+
+function filtern() { render(); }
+
+function render() {
+  if (aktiverTab === 'ab') renderArbeitsblätter();
+  else if (aktiverTab === 'akt') renderAktivitäten();
+  else renderInterventionen();
+}
+
+function renderArbeitsblätter() {
+  const suche = document.getElementById('suche').value.toLowerCase();
+  const container = document.getElementById('ab-container');
+  let html = '';
+  let gesamt = 0;
+
+  ARBEITSBLÄTTER.forEach(kat => {
+    if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
+    const gefiltert = kat.blaetter.filter(b =>
+      !suche || b.titel.toLowerCase().includes(suche) ||
+      b.beschreibung.toLowerCase().includes(suche) ||
+      b.tags.some(t => t.toLowerCase().includes(suche))
+    );
+    if (gefiltert.length === 0) return;
+    gesamt += gefiltert.length;
+    html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span class="kategorie-zaehler">${gefiltert.length}</span></div>`;
+    html += `<div class="ab-grid">`;
+    gefiltert.forEach(b => {
+      html += `
+        <a class="ab-karte" href="${b.datei}" target="_blank" style="--akzent:${kat.farbe};">
+          <div class="ab-karte-kopf">
+            <div class="ab-icon" style="background:${kat.farbe}20;">${kat.icon}</div>
+            <div class="ab-titel">${b.titel}</div>
+          </div>
+          <div class="ab-karte-body">
+            <div class="ab-beschreibung">${b.beschreibung}</div>
+            <div class="ab-tags">
+              ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+              <span class="ab-tag">📄 ${b.seiten} Seiten</span>
+            </div>
+            <div class="ab-open-btn" style="background:${kat.farbe};">📋 Öffnen & Drucken</div>
+          </div>
+        </a>`;
+    });
+    html += `</div>`;
+  });
+  if (gesamt === 0) html = `<div class="leer">Keine Arbeitsblätter gefunden für „${document.getElementById('suche').value}"</div>`;
+  container.innerHTML = html;
+}
+
+function renderAktivitäten() {
+  container_render(AKTIVITÄTEN, (b, farbe) => `
+    <div class="ab-karte" style="--akzent:${farbe}; cursor:default;">
+      <div class="ab-karte-kopf">
+        <div class="ab-icon" style="background:${farbe}20;">🎯</div>
+        <div class="ab-titel">${b.titel}</div>
+      </div>
+      <div class="ab-karte-body">
+        <div class="ab-beschreibung">${b.beschreibung}</div>
+        <div class="ab-tags">
+          ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+          <span class="ab-tag">⏱ ${b.dauer}</span>
+        </div>
+      </div>
+    </div>`
+  , 'Keine Aktivitäten gefunden');
+}
+
+function renderInterventionen() {
+  container_render(INTERVENTIONEN, (b, farbe) => `
+    <div class="ab-karte" style="--akzent:${farbe}; cursor:default;">
+      <div class="ab-karte-kopf">
+        <div class="ab-icon" style="background:${farbe}20;">🧠</div>
+        <div class="ab-titel">${b.titel}</div>
+      </div>
+      <div class="ab-karte-body">
+        <div class="ab-beschreibung"><strong>${b.ansatz}</strong> — ${b.beschreibung}</div>
+        <div style="font-size:11px;color:#6B7280;margin:5px 0 8px;line-height:1.45;">📌 ${b.indikation}</div>
+        <div class="ab-tags">
+          ${b.tags.map(t => `<span class="ab-tag">${t}</span>`).join('')}
+          <span class="ab-tag">⏱ ${b.dauer}</span>
+        </div>
+      </div>
+    </div>`
+  , 'Keine Interventionen gefunden');
+}
+
+function container_render(quelle, karteHtml, leerText) {
+  const suche = document.getElementById('suche').value.toLowerCase();
+  const container = document.getElementById('ab-container');
+  let html = '';
+  let gesamt = 0;
+  quelle.forEach(kat => {
+    if (aktiverFilter !== 'Alle' && kat.kategorie !== aktiverFilter) return;
+    const gefiltert = kat.eintraege.filter(b =>
+      !suche || b.titel.toLowerCase().includes(suche) ||
+      b.beschreibung.toLowerCase().includes(suche) ||
+      b.tags.some(t => t.toLowerCase().includes(suche))
+    );
+    if (gefiltert.length === 0) return;
+    gesamt += gefiltert.length;
+    html += `<div class="kategorie-titel"><span>${kat.icon}</span> ${kat.kategorie} <span class="kategorie-zaehler">${gefiltert.length}</span></div>`;
+    html += `<div class="ab-grid">`;
+    gefiltert.forEach(b => { html += karteHtml(b, kat.farbe); });
+    html += `</div>`;
+  });
+  if (gesamt === 0) html = `<div class="leer">${leerText}</div>`;
+  container.innerHTML = html;
+}
+
+const AKTIVITÄTEN = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    eintraege: [
+      { titel: 'Gefühle-Pantomime', beschreibung: 'Jugendliche zieht eine Gefühlskarte und stellt die Emotion körperlich dar – ohne Worte. Die Fachperson oder ein Mitspieler rät. Fördert Körperwahrnehmung und Emotionserkennung.', dauer: '15–20 Min', tags: ['Körper', 'Emotion', 'Gruppe'] },
+      { titel: 'Stimmungscollage', beschreibung: 'Aus Zeitschriften Bilder, Farben und Wörter ausschneiden, die ein bestimmtes Gefühl darstellen. Gut als Einstieg in ein Gefühlsthema oder zur Ressourcenarbeit.', dauer: '20–30 Min', tags: ['Kreativ', 'Ressourcen', 'Achtsamkeit'] },
+      { titel: 'Gefühls-Würfel', beschreibung: 'Würfel werfen – jede Zahl entspricht einer Situation (z. B. "Letzte Woche warst du wütend – was war der Auslöser?"). Niedrigschwelliger Einstieg ins Gespräch.', dauer: '10–15 Min', tags: ['Spiel', 'Einstieg', 'Emotion'] },
+      { titel: 'Körper-Landkarte', beschreibung: 'Körperumriss auf Papier: Schüler zeichnet oder schreibt, wo er ein bestimmtes Gefühl im Körper spürt (Angst im Magen, Wut in den Fäusten). Stärkt Körperbewusstsein.', dauer: '15 Min', tags: ['Körper', 'Achtsamkeit', 'Emotion'] },
+      { titel: 'Notfallkoffer basteln', beschreibung: 'Gemeinsam eine kleine Schachtel oder einen Umschlag mit Kärtchen füllen: Atemübung, Lieblingsmusik, Notfallkontakt, Mutmach-Satz. Konkretes Take-Home-Material.', dauer: '20–25 Min', tags: ['Krisenprävention', 'Ressourcen', 'Selbsthilfe'] },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    eintraege: [
+      { titel: 'Konflikt-Rollenspiel', beschreibung: 'Alltägliche Konfliktsituation (z. B. jemand wird übergangen bei der Gruppenarbeit) wird gespielt – mit Rollentausch. Danach Reflexion: Wie hat sich das angefühlt? Was hätte geholfen?', dauer: '20–25 Min', tags: ['Rollenspiel', 'Konflikt', 'Perspektivenwechsel'] },
+      { titel: 'Grenzen-Seile', beschreibung: 'Zwei Seile oder Klebebandstreifen auf dem Boden: Eine Person steht in der Mitte. Wie nah darf wer kommen? Körperliche Erfahrung von persönlichen Grenzen.', dauer: '10 Min', tags: ['Grenzen', 'Körper', 'Assertivität'] },
+      { titel: '"Ich"-Botschaft üben', beschreibung: 'Situationskarten vorlesen ("Dein Freund kommt immer zu spät") – Schüler übt die GFK-Formel: Ich sehe… ich fühle… ich brauche… ich bitte dich… Variante: als Dialog spielen.', dauer: '15–20 Min', tags: ['GFK', 'Kommunikation', 'Übung'] },
+      { titel: 'Empathie-Detektiv', beschreibung: 'Fotos oder Zeichnungen von Gesichtern + Situationen zeigen. Aufgabe: Was könnte diese Person fühlen? Was braucht sie gerade? Was würdest du sagen?', dauer: '15 Min', tags: ['Empathie', 'Perspektive', 'Emotion'] },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    eintraege: [
+      { titel: 'Familien-Skulptur', beschreibung: 'Figuren, Steine oder andere Objekte auf einem Tisch aufstellen als Symbol für Familienmitglieder. Wo stehen sie zueinander? Wer ist nah, wer weit? Systemische Methode ohne viel Worte.', dauer: '20–30 Min', tags: ['Systemisch', 'Familie', 'Symbol'] },
+      { titel: 'Unterstützungsnetz zeichnen', beschreibung: 'Konzentrische Kreise auf Papier: Schüler in der Mitte, dann: enge Vertraute → Bekannte → Institutionen. Wer ist wirklich da? Wo gibt es Lücken?', dauer: '15–20 Min', tags: ['Ressourcen', 'Familie', 'Soziales Netz'] },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    eintraege: [
+      { titel: 'Waage der Entscheidung', beschreibung: 'Eine gezeichnete Waage: Links die Vorteile des Konsums, rechts die Nachteile. Dann: Was kommt auf die andere Seite, wenn ich weniger konsumiere? Motivational-Interviewing-Methode.', dauer: '15–20 Min', tags: ['MI', 'Entscheidung', 'Reflektion'] },
+      { titel: 'Werbung dekonstruieren', beschreibung: 'Alkohol- oder Tabakwerbung analysieren: Welches Bild wird gezeigt? Welche Emotionen werden angesprochen? Was wird verschwiegen? Kritisches Denken fördern.', dauer: '20 Min', tags: ['Medien', 'Prävention', 'Kritisches Denken'] },
+      { titel: 'Trigger-Landkarte', beschreibung: 'Schüler zeichnet eine persönliche Karte: Welche Situationen, Orte, Menschen, Gefühle lösen den Konsumdrang aus? Welche Alternativen gibt es für jeden Trigger?', dauer: '20–25 Min', tags: ['Rückfall', 'Prävention', 'Selbstreflexion'] },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    eintraege: [
+      { titel: 'Mein Lebens-Kompass', beschreibung: 'Großer Kreis mit 8 Bereichen (Familie, Freunde, Schule, Hobby, Gesundheit, …): Schüler bewertet von 1–10, wie zufrieden er ist. Visualisiert Ungleichgewichte und Ressourcen.', dauer: '15–20 Min', tags: ['Ziele', 'Selbstreflexion', 'Ressourcen'] },
+      { titel: 'Brief aus der Zukunft', beschreibung: 'Schüler schreibt einen Brief an sich selbst aus der Perspektive in 5 Jahren: Was hat er erreicht? Wie fühlt er sich? Was hat ihm geholfen? Aktiviert Motivation und Hoffnung.', dauer: '20–30 Min', tags: ['Zukunft', 'Motivation', 'Kreativ'] },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    eintraege: [
+      { titel: 'Body-Scan-Reise', beschreibung: 'Geführte Achtsamkeitsübung im Sitzen: Aufmerksamkeit wandert von den Füßen bis zum Kopf. Fördert Körperbewusstsein und Entspannung. Kann als Audio eingespielt werden.', dauer: '10–15 Min', tags: ['Achtsamkeit', 'Körper', 'Entspannung'] },
+      { titel: 'Energie-Tagebuch (1 Woche)', beschreibung: 'Tägliches Eintragen: Schlaf, Essen, Bewegung, Bildschirmzeit, Stimmung auf einer Skala 1–10. Nach einer Woche gemeinsam Muster erkennen.', dauer: '5 Min/Tag + 20 Min Auswertung', tags: ['Schlaf', 'Routine', 'Gesundheit'] },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Werte-Kartenspiel', beschreibung: 'Karten mit Werten (Freiheit, Gerechtigkeit, Familie, Erfolg, …) sortieren: Die 5 wichtigsten oben. Dann reflektieren: Lebe ich meine Werte? Wo gibt es Konflikte?', dauer: '20–25 Min', tags: ['Werte', 'Identität', 'ACT'] },
+      { titel: 'Stärken-Interview', beschreibung: 'Die Fachperson interviewt den Schüler gezielt nach Stärken: "Erzähl mir von einem Moment, wo du stolz warst." Schüler formuliert 3 Stärken als "Ich bin jemand, der…"', dauer: '15–20 Min', tags: ['Ressourcen', 'Selbstwert', 'Stärken'] },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Sicherer-Ort-Imagination', beschreibung: 'Geführte Visualisierung: Schüler stellt sich einen sicheren Ort vor (real oder imaginär), beschreibt ihn mit allen Sinnen. Wird als Ankertechnik gespeichert. Grundlage jeder Traumaarbeit.', dauer: '15–20 Min', tags: ['Stabilisierung', 'Trauma', 'Imagination'] },
+      { titel: 'Ressourcen-Mobile', beschreibung: 'Kleine Papierstreifen mit persönlichen Ressourcen (Menschen, Aktivitäten, Eigenschaften) werden an einem selbst gebastelten Mobile befestigt. Sichtbare Erinnerung an vorhandene Stärken.', dauer: '25–30 Min', tags: ['Ressourcen', 'Kreativ', 'Stabilisierung'] },
+      { titel: 'Brief an das jüngere Ich', beschreibung: 'Schüler schreibt einen Brief an sich selbst in einem schwierigen Moment der Vergangenheit: Was hättest du damals gebraucht? Was würdest du dir sagen? Fördert Selbstmitgefühl.', dauer: '20–30 Min', tags: ['Selbstmitgefühl', 'Trauma', 'Kreativ'] },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    eintraege: [
+      { titel: 'Screen-Time-Audit', beschreibung: 'Schüler zieht die Bildschirmzeit-Statistik seines Handys heraus. Gemeinsam analysieren: Welche Apps? Wann? Wie fühlt er sich danach? Kein Moralisieren – Neugier wecken.', dauer: '15 Min', tags: ['Medien', 'Achtsamkeit', 'Reflektion'] },
+      { titel: 'Digitaler Grenzplan', beschreibung: 'Gemeinsam realistische Regeln für die Mediennutzung entwickeln (nicht verordnen). Was ist machbar? Wann ist handy-freie Zeit sinnvoll? Plan wird schriftlich festgehalten.', dauer: '20 Min', tags: ['Medien', 'Grenzen', 'Ziele'] },
+    ]
+  },
+];
+const INTERVENTIONEN = [
+  {
+    kategorie: 'Emotionen & Wohlbefinden',
+    icon: '💙',
+    farbe: '#7B5EA7',
+    eintraege: [
+      { titel: 'Kognitive Umstrukturierung', ansatz: 'KVT', beschreibung: 'Automatische negative Gedanken aufdecken und hinterfragen: Was ist die Evidenz? Gibt es eine andere Sichtweise? Realistischer Alternativgedanke formulieren.', indikation: 'Grübeln, Katastrophisieren, negatives Selbstbild', dauer: '20–30 Min', tags: ['KVT', 'Gedanken', 'Reframing'] },
+      { titel: 'TIPP-Skill', ansatz: 'DBT', beschreibung: 'Temperature (kaltes Wasser ins Gesicht), Intense exercise (kurzes intensives Training), Paced breathing (Ausatmen länger als Einatmen), Progressive relaxation. Sofortmassnahme bei extremer Anspannung.', indikation: 'Akute emotionale Dysregulation, Krisenmomente', dauer: '5–10 Min', tags: ['DBT', 'Krisenintervention', 'Körper'] },
+      { titel: 'Defusion (ACT)', ansatz: 'ACT', beschreibung: 'Abstand vom Gedanken schaffen: "Ich habe den Gedanken, dass ich wertlos bin" statt "Ich bin wertlos." Techniken: Gedanken als Blätter auf einem Bach, Gedanken benennen ("Da ist wieder Angst").', indikation: 'Fusion mit negativen Gedanken, Grübeln, Angst', dauer: '10–15 Min', tags: ['ACT', 'Achtsamkeit', 'Gedanken'] },
+      { titel: '5-4-3-2-1 Grounding', ansatz: 'Stabilisierung', beschreibung: '5 Dinge sehen – 4 anfassen – 3 hören – 2 riechen – 1 schmecken. Bringt den Fokus in den Moment. Einfach zu erlernen und jederzeit anwendbar.', indikation: 'Dissoziation, Panik, Überwältigung', dauer: '3–5 Min', tags: ['Grounding', 'Trauma', 'Achtsamkeit'] },
+      { titel: 'Impact-Technik: Steingewicht', ansatz: 'Impact', beschreibung: 'Schüler hält einen schweren Stein/Gegenstand und beschreibt das Gewicht. Metapher: "Das ist das Gewicht, das du jeden Tag mit dir trägst." Dann: Was erleichtert? Was legt Gewicht ab?', indikation: 'Emotionale Erschöpfung, Gefühl der Überlastung', dauer: '10–15 Min', tags: ['Impact', 'Metapher', 'Körper'] },
+    ]
+  },
+  {
+    kategorie: 'Soziale Kompetenzen',
+    icon: '🤝',
+    farbe: '#059669',
+    eintraege: [
+      { titel: 'GFK – Gewaltfreie Kommunikation', ansatz: 'GFK (Rosenberg)', beschreibung: 'Vierschritt: Beobachtung (ohne Bewertung) → Gefühl → Bedürfnis → Bitte. Wird in konkreten Situationen des Schülers geübt bis es flüssig wirkt.', indikation: 'Konflikte, Aggression, Schwierigkeiten Grenzen zu kommunizieren', dauer: '20–30 Min', tags: ['GFK', 'Kommunikation', 'Assertivität'] },
+      { titel: 'Assertivitätstraining', ansatz: 'Verhaltenstherapie', beschreibung: 'Direkte, respektvolle Kommunikation üben: Nein sagen, Wünsche äußern, Kritik annehmen und geben. Stufenweise Exposition (erst in Rollenspielen, dann im Alltag).', indikation: 'Unterordnung, Angst vor Ablehnung, aggressiver Kommunikationsstil', dauer: '20–30 Min', tags: ['Assertivität', 'Rollenspiel', 'Exposition'] },
+      { titel: 'Impact-Technik: Grenzen mit Seilen', ansatz: 'Impact', beschreibung: 'Seil oder Klebeband auf dem Boden markiert persönlichen Raum. Verschiedene Situationen durchspielen: Wer darf wie nah? Was passiert wenn die Grenze überschritten wird? Sehr konkret und körperlich.', indikation: 'Grenzsetzungsprobleme, Opfer von Mobbing oder Grenzverletzungen', dauer: '15–20 Min', tags: ['Impact', 'Grenzen', 'Körper'] },
+    ]
+  },
+  {
+    kategorie: 'Familie & Soziales Umfeld',
+    icon: '🏠',
+    farbe: '#4A90D9',
+    eintraege: [
+      { titel: 'Zirkuläres Fragen', ansatz: 'Systemisch', beschreibung: 'Perspektive anderer Familienmitglieder einnehmen: "Was glaubst du, würde dein Vater sagen, wenn ich ihn fragen würde, was er sich von dir wünscht?" Öffnet neue Sichtweisen ohne Konfrontation.', indikation: 'Familienkonflikte, festgefahrene Muster, mangelnde Kommunikation', dauer: '15–25 Min', tags: ['Systemisch', 'Familie', 'Perspektive'] },
+      { titel: 'Reframing', ansatz: 'Systemisch / KVT', beschreibung: 'Verhalten oder Eigenschaft in einem anderen Rahmen deuten: "Deine Sturheit könnte auch Durchhaltevermögen sein." Vorsichtig einsetzen – nicht verharmlosend.', indikation: 'Negative Selbst- oder Fremdwahrnehmung, Schuldgefühle', dauer: '10–15 Min', tags: ['Systemisch', 'Reframing', 'Perspektive'] },
+    ]
+  },
+  {
+    kategorie: 'Konsum & Risikoverhalten',
+    icon: '⚠️',
+    farbe: '#D97706',
+    eintraege: [
+      { titel: 'Motivational Interviewing (MI)', ansatz: 'MI', beschreibung: 'OARS: Open questions, Affirmations, Reflections, Summaries. Kein Druck, kein Moralisieren. Ambivalenz erkunden: "Was spricht für eine Veränderung? Was dagegen?" Change Talk fördern.', indikation: 'Ambivalenz gegenüber Konsum, Widerstand, Riskoverhalten', dauer: '30–45 Min', tags: ['MI', 'Motivation', 'Ambivalenz'] },
+      { titel: 'Funktionsanalyse (KVT)', ansatz: 'KVT', beschreibung: 'SORKC-Schema: Stimulus – Organismus – Reaktion – Konsequenz (kurz/lang). Was löst den Konsum aus? Was hält ihn aufrecht? Verstehen ohne zu verurteilen.', indikation: 'Alle Formen von Risiko- oder Problemverhalten', dauer: '20–30 Min', tags: ['KVT', 'Verhaltensanalyse', 'Konsum'] },
+      { titel: 'Rückfallprävention', ansatz: 'RP (Marlatt)', beschreibung: 'Hochrisikosituationen identifizieren, Bewältigungsstrategien vorbereiten, Ausrutscher vs. Rückfall unterscheiden. Konkreter schriftlicher Plan.', indikation: 'Nach Entschluss zur Reduktion/Abstinenz', dauer: '25–30 Min', tags: ['Rückfall', 'Prävention', 'Konsum'] },
+    ]
+  },
+  {
+    kategorie: 'Schule & Zukunft',
+    icon: '📚',
+    farbe: '#2563EB',
+    eintraege: [
+      { titel: 'Werte-Klärung (ACT)', ansatz: 'ACT', beschreibung: 'Was ist dem Schüler wirklich wichtig – nicht was er will (Ziele), sondern wie er sein will (Werte)? Frage: "Wenn niemand zuschaut, woran merkst du, dass du richtig lebst?" Zukunftsmotivation aufbauen.', indikation: 'Orientierungslosigkeit, Motivationsmangel, Sinnfragen', dauer: '20–30 Min', tags: ['ACT', 'Werte', 'Motivation'] },
+      { titel: 'Problemlösetraining', ansatz: 'KVT', beschreibung: 'D-E-F-O-S: Definition – Erzeugen von Lösungen (Brainstorming) – Folgen abschätzen – Optimale Lösung wählen – Schritte planen. Strukturiertes Vorgehen bei konkreten Problemen.', indikation: 'Vermeidungsverhalten, Entscheidungsschwierigkeiten, Überforderung', dauer: '20–30 Min', tags: ['KVT', 'Problemlösen', 'Planung'] },
+    ]
+  },
+  {
+    kategorie: 'Gesundheit & Körper',
+    icon: '💪',
+    farbe: '#0891B2',
+    eintraege: [
+      { titel: 'Progressive Muskelentspannung (PME)', ansatz: 'Entspannung (Jacobson)', beschreibung: 'Muskelgruppen nacheinander anspannen (7 Sek.) und loslassen (20 Sek.). Aufmerksamkeit auf den Unterschied. Kann als Kurzform (6 Gruppen) in 10 Min durchgeführt werden.', indikation: 'Chronischer Stress, Schlafprobleme, körperliche Anspannung', dauer: '10–20 Min', tags: ['Entspannung', 'Körper', 'Stress'] },
+      { titel: 'Achtsamkeitsbasierte Körperarbeit', ansatz: 'MBSR-Elemente', beschreibung: 'Kurze Körper-Scan-Übungen: Wo spüre ich Spannung? Was nehme ich wahr ohne es zu verändern? Fördert Selbstwahrnehmung und Stressregulation.', indikation: 'Körperfremde Jugendliche, Dissoziation, Stress', dauer: '10–15 Min', tags: ['Achtsamkeit', 'Körper', 'MBSR'] },
+    ]
+  },
+  {
+    kategorie: 'Identität & Werte',
+    icon: '🌟',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'Narrative Therapie: Umstorying', ansatz: 'Narrativ', beschreibung: 'Dominante Problemerzählung identifizieren ("Ich bin ein Versager") und alternative Geschichte herausarbeiten: Wann war das nicht so? Was sagt das über dich? Neue Erzählung stärken.', indikation: 'Negatives Selbstbild, einschränkende Überzeugungen', dauer: '25–35 Min', tags: ['Narrativ', 'Identität', 'Selbstbild'] },
+      { titel: 'Ressourcenaktivierung', ansatz: 'Ressourcenorientiert', beschreibung: 'Gezielte Fragen nach bereits vorhandenen Stärken und Erfolgen: "Was hat dir geholfen, das bisher zu schaffen?" Erfahrungen in Ressourcen übersetzen, die auf neue Situationen übertragbar sind.', indikation: 'Hilflosigkeit, niedriger Selbstwert, Depression', dauer: '15–20 Min', tags: ['Ressourcen', 'Stärken', 'Selbstwert'] },
+    ]
+  },
+  {
+    kategorie: 'Krisen & Trauma',
+    icon: '🛡️',
+    farbe: '#7C3AED',
+    eintraege: [
+      { titel: 'EMDR – Stabilisierungsphase', ansatz: 'EMDR', beschreibung: 'Vor der Traumaverarbeitung: Sicherer Ort (Imagination + bilaterale Stimulation), Tresor-Technik (Belastendes wegschließen), Lichtstrahl-Übung. Nur durch ausgebildete Fachkraft in Phase 2 anzuwenden.', indikation: 'Traumatisierte Jugendliche – als Vorbereitung auf Verarbeitung', dauer: '20–30 Min', tags: ['EMDR', 'Trauma', 'Stabilisierung'] },
+      { titel: 'Tresor-Technik', ansatz: 'Stabilisierung / EMDR', beschreibung: 'Jugendliche stellen sich einen unzerstörbaren Tresor vor und legen belastende Erinnerungen gedanklich hinein – mit Schloss. Kann jederzeit benutzt werden, um Distanz zu schaffen.', indikation: 'Intrusionen, Flashbacks, Überwältigung durch Erinnerungen', dauer: '10–15 Min', tags: ['EMDR', 'Stabilisierung', 'Distanz'] },
+      { titel: 'Exposition in sensu (KVT)', ansatz: 'KVT / Exposition', beschreibung: 'Schrittweise Annäherung an angstauslösende Vorstellungen oder Erinnerungen in der Imagination – mit Begleitung. Angst darf steigen und sinken. Nie ohne Stabilisierungsbasis.', indikation: 'PTBS, Phobien, Angststörungen – nach sorgfältiger Vorbereitung', dauer: '30–50 Min', tags: ['Exposition', 'Angst', 'Trauma', 'KVT'] },
+      { titel: 'Exposition in vivo', ansatz: 'Verhaltenstherapie / Exposition', beschreibung: 'Reale, schrittweise Konfrontation mit angstauslösenden Situationen (Angsthierarchie von 0–10 erstellen, dann von unten beginnen). Angst hält nicht für immer an – Erfahrung des Lernens.', indikation: 'Phobien, Soziale Angst, Vermeidungsverhalten', dauer: 'Mehrere Sitzungen', tags: ['Exposition', 'Angst', 'Verhaltenstherapie'] },
+      { titel: 'Impact-Technik: Schutzwall', ansatz: 'Impact', beschreibung: 'Bücher oder Ordner aufstapeln als "Schutzwall" zwischen Schüler und einer Situation/Person. Körperlich erfahren wie es sich anfühlt, geschützt zu sein vs. ungeschützt. Dann: Was braucht es, damit der Wall bleibt?', indikation: 'Grenzverletzungen, Missbrauch, Sicherheitsgefühl fehlt', dauer: '15–20 Min', tags: ['Impact', 'Schutz', 'Grenzen', 'Körper'] },
+      { titel: 'DBT – Krisenüberlebensplan', ansatz: 'DBT', beschreibung: 'ACCEPTS: Activities, Contributing, Comparisons, Emotions, Push away, Thoughts, Sensations. Konkrete Liste erstellen, was in einer Krise hilft. Self-Soothe: 5 Sinne bewusst einsetzen.', indikation: 'Wiederholte Krisen, Suizidgedanken, Selbstverletzung', dauer: '20–30 Min', tags: ['DBT', 'Krise', 'Suizidprävention'] },
+    ]
+  },
+  {
+    kategorie: 'Alltag & Digitales',
+    icon: '📱',
+    farbe: '#0EA5E9',
+    eintraege: [
+      { titel: 'Verhaltensanalyse Medienkonsum', ansatz: 'KVT', beschreibung: 'SORKC auf Mediennutzung anwenden: Was sind die Auslöser? Was folgt danach (kurzfristig / langfristig)? Keine Verurteilung, sondern Verständnis aufbauen für das eigene Verhalten.', indikation: 'Problematische Mediennutzung, Gaming, Social-Media-Abhängigkeit', dauer: '20–25 Min', tags: ['KVT', 'Medien', 'Verhaltensanalyse'] },
+      { titel: 'ACT: Werte vs. Ablenkung', ansatz: 'ACT', beschreibung: 'Kontrast erarbeiten: Was sind echte Werte (Verbundenheit, Kreativität) vs. was ist Vermeidung durch Medien? Nicht Verzicht, sondern bewusste Wahl fördern.', indikation: 'Selbstregulationsprobleme, sinnloser Konsum als Vermeidung', dauer: '20 Min', tags: ['ACT', 'Werte', 'Medien'] },
+    ]
+  },
+];
+
+init();
+</script>
+</body>
+</html>

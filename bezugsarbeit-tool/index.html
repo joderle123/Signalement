@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDSE – Bezugsarbeit Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR
+     ============================================================ -->
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🎓</div>
+      <div class="sidebar-title">Bezugsarbeit Tool</div>
+    </div>
+    <div class="sidebar-subtitle">CDSE Luxembourg</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-item active" id="nav-home" onclick="showView('home')">
+      <span class="nav-item-icon">🏠</span> Übersicht
+    </div>
+    <div class="nav-item" id="nav-kalender" onclick="showView('kalender')">
+      <span class="nav-item-icon">📅</span> Kalender
+    </div>
+    <a class="nav-item" href="arbeitsblatter/index.html" target="_blank">
+      <span class="nav-item-icon">📋</span> Alle Arbeitsblätter
+    </a>
+    <div class="sidebar-sync-section">
+      <div class="sidebar-sync-label">Datenaustausch</div>
+      <div class="nav-item nav-item-sync" onclick="exportDaten()" title="Alle Daten als JSON-Datei speichern">
+        <span class="nav-item-icon">📤</span> Exportieren
+      </div>
+      <div class="nav-item nav-item-sync" onclick="document.getElementById('import-input').click()" title="JSON-Datei einer Kollegin / eines Kollegen importieren">
+        <span class="nav-item-icon">📥</span> Importieren
+      </div>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
+    </div>
+  </nav>
+
+  <div class="sidebar-schueler-section">
+    <div class="sidebar-schueler-header">
+      Schüler
+      <button class="btn-add-schueler" onclick="openSchuelerModal()">+ Neu</button>
+    </div>
+    <div class="schueler-liste" id="schueler-sidebar-liste"></div>
+  </div>
+
+  <div class="sidebar-footer">CDSE · Spezialisierte Beschulung</div>
+</aside>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main id="main">
+
+  <!-- ---- HOME VIEW ---- -->
+  <div class="view active" id="view-home">
+    <div class="topbar">
+      <div class="topbar-title">Schülerübersicht</div>
+      <div class="topbar-actions">
+        <div class="search-input">
+          <span>🔍</span>
+          <input type="text" id="home-suche" placeholder="Schüler suchen..." oninput="renderHome()">
+        </div>
+        <button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuer Schüler</button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="home-stats" id="home-stats"></div>
+      <div id="ampelsystem"></div>
+      <div class="home-grid" id="home-grid"></div>
+    </div>
+  </div>
+
+  <!-- ---- PROFIL VIEW ---- -->
+  <div class="view" id="view-profil">
+    <!-- Header -->
+    <div class="profil-header">
+      <div class="profil-avatar" id="profil-avatar" onclick="uploadFoto(APP.currentSchuelerId)">
+        <!-- Wird dynamisch gefüllt -->
+      </div>
+      <div class="profil-info">
+        <div class="profil-name" id="profil-name"></div>
+        <div class="profil-meta">
+          <div class="profil-meta-item">🎓 <span id="profil-klasse"></span></div>
+          <div class="profil-meta-item">🎂 <span id="profil-alter"></span></div>
+          <div class="profil-meta-item">📅 <span id="profil-seit"></span></div>
+          <div id="profil-risiko" class="risiko-indicator niedrig"></div>
+        </div>
+      </div>
+      <div class="profil-actions">
+        <button class="btn btn-secondary btn-sm" onclick="openSchuelerModal(APP.currentSchuelerId)">✏️ Bearbeiten</button>
+        <button class="btn btn-secondary btn-sm" onclick="druckeProfilbericht(APP.currentSchuelerId)">🖨️ Bericht drucken</button>
+        <button class="btn btn-secondary btn-sm" onclick="showView('home')">← Zurück</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteSchueler(APP.currentSchuelerId)">🗑 Löschen</button>
+      </div>
+    </div>
+
+    <!-- Phasen-Navigation -->
+    <div class="profil-tabs-main">
+      <div class="profil-main-tab active" data-phase="uebersicht" onclick="showPhase('uebersicht')">
+        <span class="phase-icon">🏠</span> Übersicht
+      </div>
+      <div class="profil-main-tab" data-phase="erfassen" onclick="showPhase('erfassen')">
+        <span class="phase-icon">📋</span> Erfassen
+      </div>
+      <div class="profil-main-tab" data-phase="analysieren" onclick="showPhase('analysieren')">
+        <span class="phase-icon">🔎</span> Analysieren
+      </div>
+      <div class="profil-main-tab" data-phase="handeln" onclick="showPhase('handeln')">
+        <span class="phase-icon">🎯</span> Handeln
+      </div>
+      <div class="profil-main-tab" data-phase="berichte" onclick="showPhase('berichte')">
+        <span class="phase-icon">📄</span> Berichte
+      </div>
+    </div>
+    <div class="profil-tabs-sub" id="profil-tabs-sub"></div>
+
+    <!-- Tab-Inhalte -->
+    <div class="content" style="flex:1;overflow-y:auto;">
+
+      <!-- DASHBOARD -->
+      <div class="profil-tab-content active" data-tab="dashboard">
+        <!-- Quick-Entry: Akutes Thema -->
+        <div id="quick-entry-dashboard"></div>
+
+        <!-- Visuelles Summary: Alles auf einen Blick -->
+        <div id="dashboard-summary-widget"></div>
+
+        <!-- Klinische Hypothesen (auto-generiert) -->
+        <div id="dashboard-hypothesen-widget"></div>
+
+        <!-- Treatment-Response + Screening-Delta -->
+        <div id="dashboard-treatment-widget"></div>
+        <div id="dashboard-screening-delta-widget"></div>
+
+        <!-- Sitzungsvorschlag: Heute empfohlen -->
+        <div id="sitzungsvorschlag-widget"></div>
+
+        <!-- Nächste Schritte & Fortschritt -->
+        <div id="naechste-schritte-widget"></div>
+
+        <div class="dashboard-grid">
+
+          <!-- Mini-Kalender -->
+          <div class="card dashboard-card-kalender">
+            <div class="card-header">
+              <span>📅</span>
+              <div class="card-title">Kalender</div>
+              <div class="dash-kal-nav">
+                <button class="btn-icon" onclick="navigateDashKalender(-1)">‹</button>
+                <span id="dash-kalender-monat" class="dash-kal-monat"></span>
+                <button class="btn-icon" onclick="navigateDashKalender(1)">›</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="dash-kalender-grid"></div>
+              <div id="dash-kalender-notiz-form" class="dash-kal-form" style="display:none;">
+                <div class="dash-kal-form-datum" id="dash-kal-form-datum"></div>
+                <textarea id="dash-kalender-notiz-text" placeholder="Notiz für diesen Tag..."></textarea>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                  <button class="btn btn-primary btn-sm" onclick="saveDashKalenderNotiz()">Speichern</button>
+                  <button class="btn btn-secondary btn-sm" onclick="closeDashKalenderNotiz()">Abbrechen</button>
+                </div>
+              </div>
+              <div id="dash-kalender-notizen-liste"></div>
+            </div>
+          </div>
+
+          <!-- To-Do -->
+          <div class="card dashboard-card-todo">
+            <div class="card-header">
+              <span>✅</span>
+              <div class="card-title">To-Do</div>
+            </div>
+            <div class="card-body">
+              <div id="dash-todo-liste"></div>
+              <div class="todo-add-row">
+                <input type="text" id="dash-todo-input" placeholder="Neue Aufgabe..."
+                  onkeydown="if(event.key==='Enter') addDashTodo()">
+                <button class="btn btn-primary btn-sm" onclick="addDashTodo()">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wohlbefinden -->
+          <div class="card dashboard-card-wohlbefinden">
+            <div class="card-header">
+              <span>📈</span>
+              <div class="card-title">Wohlbefinden</div>
+            </div>
+            <div class="card-body">
+              <div class="wohlbefinden-eingabe">
+                <div class="wohlbefinden-skala" id="wohlbefinden-skala"></div>
+                <input type="text" id="wohlbefinden-notiz" placeholder="Kurze Notiz (optional)..."
+                  onkeydown="if(event.key==='Enter') saveWohlbefinden()">
+              </div>
+              <div class="wohlbefinden-chart-container">
+                <canvas id="wohlbefinden-chart" height="120"></canvas>
+              </div>
+              <div id="wohlbefinden-historie"></div>
+            </div>
+          </div>
+
+        </div><!-- end dashboard-grid -->
+
+        <!-- Notizbuch (OneNote-Stil) -->
+        <div class="card dashboard-notizbuch">
+          <div class="card-header">
+            <span>📓</span>
+            <div class="card-title">Notizbuch</div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div class="notizbuch-tabs" id="notizbuch-tabs"></div>
+            <div class="notizbuch-inhalt" id="notizbuch-inhalt"></div>
+          </div>
+        </div>
+
+        <!-- Gesprächsleitfäden Widget -->
+        <div id="gespraechsleitfaeden-widget"></div>
+
+      </div><!-- end dashboard tab -->
+
+      <!-- SCREENING (eingebettet) -->
+      <div class="profil-tab-content" data-tab="screening">
+        <div id="screening-embedded-container"></div>
+      </div>
+
+      <!-- VERHALTENSBEOBACHTUNG -->
+      <div class="profil-tab-content" data-tab="verhalten">
+        <div id="verhalten-container"></div>
+      </div>
+
+      <!-- FÖRDERPLAN / ROADMAP (inkl. Ziele) -->
+      <div class="profil-tab-content" data-tab="roadmap">
+        <div id="roadmap-container"></div>
+        <div id="roadmap-ziele-section" style="margin-top:24px;">
+          <div class="card">
+            <div class="card-header">
+              <span>🎯</span>
+              <div class="card-title">Ziele & Fortschritte</div>
+            </div>
+            <div class="card-body">
+              <div id="screening-ziel-vorschlaege"></div>
+              <div id="ziele-liste" style="margin-bottom:16px;"></div>
+              <details class="smart-hilfe" style="margin-bottom:12px;">
+                <summary style="font-size:12px;color:#3B82F6;cursor:pointer;font-weight:600;">📐 SMART-Methode — Wie formuliere ich gute Ziele? <span onclick="event.stopPropagation();showToolLegitimation('smart')" style="margin-left:8px;color:#6B7280;font-weight:400;text-decoration:underline;cursor:pointer;">📚 Evidenz</span></summary>
+                <div style="font-size:12px;color:#6B7280;padding:8px 12px;background:#F0F7FF;border-radius:8px;margin-top:6px;line-height:1.6;">
+                  <strong>S</strong>pezifisch — Was genau soll erreicht werden?<br>
+                  <strong>M</strong>essbar — Woran erkenne ich den Fortschritt?<br>
+                  <strong>E</strong>rreichbar — Ist das Ziel realistisch für diesen Jugendlichen?<br>
+                  <strong>R</strong>elevant — Passt es zu den identifizierten Problemen?<br>
+                  <strong>T</strong>erminiert — Bis wann soll es erreicht sein?<br>
+                  <em style="display:block;margin-top:6px;">Nicht: „Besser in der Schule" — Sondern: „In 4 Wochen kann Max 3x wöchentlich ohne Streit in der Pause spielen"</em>
+                </div>
+              </details>
+              <div style="display:flex;gap:10px;">
+                <input type="text" id="neues-ziel-input" placeholder="z.B. In 4 Wochen kann Max 3x/Woche ohne Streit in der Pause spielen"
+                  onkeydown="if(event.key==='Enter') addZiel()">
+                <button class="btn btn-success btn-sm" onclick="addZiel()">+ Hinzufügen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THEMEN & SITZUNGEN (zusammengelegt) -->
+      <div class="profil-tab-content" data-tab="themen">
+        <div id="themen-container"></div>
+        <div id="sitzungen-im-themen-tab" style="margin-top:24px;"></div>
+      </div>
+
+      <!-- NOTIZEN (kein eigener Tab, aber über showProfilTab('notizen') erreichbar) -->
+      <div class="profil-tab-content" data-tab="notizen">
+
+        <!-- Modus-Toggle -->
+        <div class="segmented-control" id="notiz-toggle">
+          <button class="seg-btn active" id="btn-freie-notiz" onclick="toggleNotizModus('frei')">✏️ Freie Notiz</button>
+          <button class="seg-btn" id="btn-protokoll" onclick="toggleNotizModus('protokoll')">📋 Sitzungsprotokoll</button>
+        </div>
+
+        <!-- Freie Notiz -->
+        <div id="notiz-modus-frei" class="notiz-form">
+          <div class="notiz-form-row">
+            <select id="neue-notiz-kategorie" style="width:160px;">
+              <option value="session">💬 Sitzung</option>
+              <option value="beobachtung">👁 Beobachtung</option>
+              <option value="wichtig">⚠️ Wichtig</option>
+              <option value="fortschritt">📈 Fortschritt</option>
+              <option value="elternkontakt">📞 Elternkontakt</option>
+            </select>
+            <input type="date" id="neue-notiz-datum" style="width:160px;">
+            <button class="btn btn-primary btn-sm" onclick="addNotiz()" style="margin-left:auto;">+ Speichern</button>
+          </div>
+          <textarea id="neue-notiz-text" class="notiz-textarea"
+            placeholder="Notiz, Beobachtung oder Protokoll eingeben..."></textarea>
+        </div>
+
+        <!-- Sitzungsprotokoll-Template (SOAP) -->
+        <div id="notiz-modus-protokoll" class="notiz-form" style="display:none;">
+          <div class="protokoll-titel">📋 Sitzungsprotokoll (SOAP)</div>
+
+          <!-- Meta -->
+          <div class="protokoll-meta-grid">
+            <div class="form-group">
+              <label>Datum</label>
+              <input type="date" id="prot-datum">
+            </div>
+            <div class="form-group">
+              <label>Dauer</label>
+              <select id="prot-dauer">
+                <option value="15">15 Min.</option>
+                <option value="30">30 Min.</option>
+                <option value="45" selected>45 Min.</option>
+                <option value="60">60 Min.</option>
+                <option value="90">90 Min.</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Setting</label>
+              <select id="prot-setting">
+                <option>Einzelgespräch</option>
+                <option>Gruppengespräch</option>
+                <option>Elterngespräch</option>
+                <option>Telefon</option>
+                <option>Außenaktivität</option>
+                <option>Krisenintervention</option>
+                <option>Hausbesuch</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Sitzungsnr.</label>
+              <input type="number" id="prot-nr" min="1" placeholder="#" style="width:70px;">
+            </div>
+          </div>
+
+          <!-- Stimmung -->
+          <div class="prot-stimmung-row">
+            <label>Stimmung des Jugendlichen:</label>
+            <div class="prot-stimmung-btns" id="prot-stimmung-btns">
+              <button class="prot-stimmung-btn" data-val="sehr-schlecht" onclick="selectProtStimmung(this)">😫<span>Sehr schlecht</span></button>
+              <button class="prot-stimmung-btn" data-val="schlecht" onclick="selectProtStimmung(this)">😞<span>Schlecht</span></button>
+              <button class="prot-stimmung-btn" data-val="neutral" onclick="selectProtStimmung(this)">😐<span>Neutral</span></button>
+              <button class="prot-stimmung-btn" data-val="gut" onclick="selectProtStimmung(this)">🙂<span>Gut</span></button>
+              <button class="prot-stimmung-btn" data-val="sehr-gut" onclick="selectProtStimmung(this)">😄<span>Sehr gut</span></button>
+            </div>
+          </div>
+
+          <!-- Polyvagal Check-in -->
+          <div class="pvt-checkin">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <label class="pvt-label">🧠 Polyvagal Check-in — Wo ist der Jugendliche heute?</label>
+              <button onclick="showToolLegitimation('pvt')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist PVT?</button>
+            </div>
+            <div class="pvt-cards" id="pvt-cards">
+              <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVT(this)">
+                <span class="pvt-dot" style="background:#22C55E;"></span>
+                <span class="pvt-card-titel">Sicher & offen</span>
+                <span class="pvt-card-desc">Entspannt, neugierig, Augenkontakt, bereit zu arbeiten</span>
+              </button>
+              <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVT(this)">
+                <span class="pvt-dot" style="background:#F59E0B;"></span>
+                <span class="pvt-card-titel">Angespannt / unruhig</span>
+                <span class="pvt-card-desc">Nervös, ausweichend, Körper angespannt, schwer erreichbar</span>
+              </button>
+              <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVT(this)">
+                <span class="pvt-dot" style="background:#8B5CF6;"></span>
+                <span class="pvt-card-titel">Eingefroren / abwesend</span>
+                <span class="pvt-card-desc">Leer, einsilbig, kein Kontakt, dissoziiert wirkend</span>
+              </button>
+            </div>
+            <div id="pvt-empfehlung" class="pvt-empfehlung" style="display:none;"></div>
+          </div>
+
+          <!-- Themen-Verknüpfung -->
+          <div class="form-group">
+            <label>Bearbeitetes Thema</label>
+            <select id="prot-thema-id">
+              <option value="">— Kein Thema verknüpft —</option>
+            </select>
+          </div>
+
+          <!-- SOAP-Felder mit Beispiel-Buttons -->
+          <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+            <button onclick="showToolLegitimation('soap')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist SOAP?</button>
+          </div>
+          <div class="protokoll-soap">
+            <div class="soap-section soap-s">
+              <div class="soap-header"><span class="soap-letter">S</span> Subjektiv — Was berichtet der Jugendliche? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('subjektiv')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-subjektiv" style="display:none;"></div>
+              <textarea id="prot-subjektiv" class="notiz-textarea" rows="3"
+                placeholder="Eigene Aussagen, Sorgen, Wünsche, Themen die aufkamen..."></textarea>
+            </div>
+            <div class="soap-section soap-o">
+              <div class="soap-header"><span class="soap-letter">O</span> Objektiv — Was beobachtest du? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('objektiv')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-objektiv" style="display:none;"></div>
+              <textarea id="prot-objektiv" class="notiz-textarea" rows="3"
+                placeholder="Verhalten, Stimmung, Körpersprache, Veränderungen..."></textarea>
+            </div>
+            <div class="soap-section soap-a">
+              <div class="soap-header"><span class="soap-letter">A</span> Assessment — Deine fachliche Einschätzung <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('assessment')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-assessment" style="display:none;"></div>
+              <textarea id="prot-assessment" class="notiz-textarea" rows="3"
+                placeholder="Einordnung, Hypothesen, Risiken, Fortschritte..."></textarea>
+            </div>
+            <div class="soap-section soap-p">
+              <div class="soap-header"><span class="soap-letter">P</span> Plan — Nächste Schritte <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('plan')" title="Beispiel anzeigen">💡</button></div>
+              <div class="soap-beispiel-box" id="soap-beispiel-plan" style="display:none;"></div>
+              <textarea id="prot-plan" class="notiz-textarea" rows="3"
+                placeholder="Vereinbarungen, Interventionen, Überweisungen, Ziele bis nächste Sitzung..."></textarea>
+            </div>
+          </div>
+
+          <!-- Zusatzinfos -->
+          <div class="protokoll-zusatz">
+            <div class="form-group">
+              <label>Eingesetzte Materialien / Methoden</label>
+              <input type="text" id="prot-materialien" placeholder="z.B. Arbeitsblatt Emotionen, Rollenspiel, Genogramm...">
+            </div>
+          </div>
+
+          <!-- SRS Session Rating Scale -->
+          <div class="srs-section">
+            <div class="srs-header">📊 Sitzungsbewertung <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span> <button onclick="showToolLegitimation('srs')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist SRS?</button></div>
+            <div class="srs-sliders">
+              <div class="srs-row">
+                <label>Beziehung <span>— Ich fühlte mich gehört und verstanden</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-relationship" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-relationship">7</span>
+                </div>
+              </div>
+              <div class="srs-row">
+                <label>Ziele & Themen <span>— Wir haben an dem gearbeitet was wichtig war</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-goals" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-goals">7</span>
+                </div>
+              </div>
+              <div class="srs-row">
+                <label>Ansatz & Methode <span>— Die Vorgehensweise hat gepasst</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-approach" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-approach">7</span>
+                </div>
+              </div>
+              <div class="srs-row">
+                <label>Gesamteindruck <span>— Insgesamt war diese Sitzung gut für mich</span></label>
+                <div class="srs-slider-wrap">
+                  <input type="range" min="0" max="10" value="7" id="srs-overall" class="srs-range" oninput="updateSRS()">
+                  <span class="srs-val" id="srs-val-overall">7</span>
+                </div>
+              </div>
+            </div>
+            <div class="srs-total">
+              <span class="srs-total-zahl" id="srs-total-zahl">28</span>
+              <span class="srs-total-text">von 40 Punkten</span>
+            </div>
+            <div id="srs-alert" class="srs-alert" style="display:none;">
+              ⚠️ <strong>Score unter 25 — Reflexion empfohlen.</strong><br>
+              Mögliche Fragen: Was könnte die Beziehung belastet haben? War das Thema zu früh? War der Schüler reguliert genug?
+            </div>
+          </div>
+
+          <div class="protokoll-footer">
+            <button class="btn btn-primary" onclick="addProtokoll()">📋 Protokoll speichern</button>
+          </div>
+        </div>
+
+        <div id="notizen-liste"></div>
+      </div>
+
+      <!-- Ziele jetzt in Förderplan integriert -->
+
+      <!-- STÄRKEN-PROFIL -->
+      <div class="profil-tab-content" data-tab="staerken">
+        <div id="staerken-container"></div>
+      </div>
+
+      <!-- 5P-FALLFORMULIERUNG -->
+      <div class="profil-tab-content" data-tab="fallformulierung">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button onclick="showToolLegitimation('fivep')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;">📚 Was ist die 5P-Fallformulierung?</button>
+        </div>
+        <div id="fallformulierung-container"></div>
+      </div>
+
+      <!-- Wiki jetzt als Floating Panel -->
+
+      <!-- BERICHTE -->
+      <div class="profil-tab-content" data-tab="berichte">
+        <div id="berichte-container"></div>
+      </div>
+
+      <!-- GENOGRAMM -->
+      <div class="profil-tab-content" data-tab="genogramm">
+        <div class="card">
+          <div class="card-header">
+            <span>👨‍👩‍👧</span>
+            <div class="card-title">Familien-Genogramm</div>
+          </div>
+          <div class="card-body">
+            <div style="font-size:12px;color:#6B7280;margin-bottom:12px;line-height:1.5;">
+              Erfasse die wichtigsten Bezugspersonen und Familienmitglieder. Das Genogramm hilft, Familienstrukturen,
+              Beziehungsqualitäten und systemische Muster auf einen Blick zu sehen.
+            </div>
+            <div id="genogramm-visual" style="min-height:120px;margin-bottom:14px;"></div>
+            <div id="genogramm-liste" style="margin-bottom:14px;"></div>
+            <div style="background:#F9FAFB;border-radius:10px;padding:12px;border:1px solid #E5E7EB;">
+              <div style="font-size:12px;font-weight:600;margin-bottom:8px;">Person hinzufügen</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                <input type="text" id="geno-name" placeholder="Name" style="font-size:13px;">
+                <select id="geno-rolle" style="font-size:13px;">
+                  <option value="mutter">Mutter</option>
+                  <option value="vater">Vater</option>
+                  <option value="stiefmutter">Stiefmutter</option>
+                  <option value="stiefvater">Stiefvater</option>
+                  <option value="schwester">Schwester</option>
+                  <option value="bruder">Bruder</option>
+                  <option value="halbgeschwister">Halbgeschwister</option>
+                  <option value="grossmutter">Großmutter</option>
+                  <option value="grossvater">Großvater</option>
+                  <option value="pflegemutter">Pflegemutter</option>
+                  <option value="pflegevater">Pflegevater</option>
+                  <option value="tante-onkel">Tante/Onkel</option>
+                  <option value="partner-in">Partner/in</option>
+                  <option value="freund-in">Freund/in</option>
+                  <option value="betreuer-in">Betreuer/in</option>
+                  <option value="lehrer-in">Lehrer/in</option>
+                  <option value="sonstige">Sonstige</option>
+                </select>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                <select id="geno-beziehung" style="font-size:13px;">
+                  <option value="eng">🟢 Enge Beziehung</option>
+                  <option value="normal">🔵 Normale Beziehung</option>
+                  <option value="distanziert">🟡 Distanziert</option>
+                  <option value="konflikt">🔴 Konfliktbelastet</option>
+                  <option value="abbruch">⚫ Kontaktabbruch</option>
+                  <option value="ambivalent">🟠 Ambivalent (Nähe+Konflikt)</option>
+                </select>
+                <input type="text" id="geno-notiz" placeholder="Notiz (optional)" style="font-size:13px;">
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="addGenogrammPerson()">+ Person hinzufügen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANAMNESE / AUFNAHME -->
+      <div class="profil-tab-content" data-tab="info">
+        <div id="anamnese-zusammenfassung"></div>
+        <div id="hypothesen-container"></div>
+        <div id="treatment-response-container"></div>
+        <div id="hypothesen-zeitstrahl"></div>
+        <div id="screening-verlauf-container"></div>
+        <div id="anamnese-container"></div>
+        <details class="anamnese-notizen-details" style="margin-top:16px;">
+          <summary style="cursor:pointer;font-size:13px;color:var(--text-muted);">📝 Zusätzliche Notizen (optional)</summary>
+          <div class="card" style="margin-top:8px;">
+            <div class="card-body">
+              <textarea id="info-allgemein" rows="3" placeholder="Ergänzende Freitextnotizen..."></textarea>
+              <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                <button class="btn btn-sm btn-primary" onclick="saveInfo()">💾 Speichern</button>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </div><!-- end content -->
+  </div><!-- end profil view -->
+
+  <!-- ---- KALENDER VIEW ---- -->
+  <div class="view" id="view-kalender">
+    <div class="topbar">
+      <div class="topbar-title">Kalender</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary" onclick="openTerminModal()">+ Neuer Termin</button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="kalender-wrapper">
+        <!-- Kalenderbereich -->
+        <div>
+          <div class="kalender-nav">
+            <button class="btn-icon" onclick="kalenderZurueck()">◀</button>
+            <div class="kalender-monat" id="kalender-monat-label"></div>
+            <button class="btn-icon" onclick="kalenderVor()">▶</button>
+          </div>
+          <div class="kalender-grid">
+            <div class="kalender-wochentage">
+              <div class="kalender-wochentag">Mo</div>
+              <div class="kalender-wochentag">Di</div>
+              <div class="kalender-wochentag">Mi</div>
+              <div class="kalender-wochentag">Do</div>
+              <div class="kalender-wochentag">Fr</div>
+              <div class="kalender-wochentag">Sa</div>
+              <div class="kalender-wochentag">So</div>
+            </div>
+            <div class="kalender-tage" id="kalender-tage"></div>
+          </div>
+        </div>
+
+        <!-- Sidebar: Nächste Termine -->
+        <div class="termin-liste-sidebar">
+          <div class="card-header">
+            <span>📋</span>
+            <div class="card-title">Nächste Termine</div>
+          </div>
+          <div id="naechste-termine"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- SCREENING VIEW ---- -->
+  <div class="view" id="view-screening">
+    <div class="topbar">
+      <div class="topbar-title" id="screening-topbar-titel">Screening</div>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary btn-sm" onclick="showView('profil', APP.currentSchuelerId)">← Zurück zum Profil</button>
+      </div>
+    </div>
+
+    <!-- Screening-Alarm Banner (hidden by default) -->
+    <div id="screening-alert-banner" class="screening-alert-banner" style="display:none;">
+      <span class="screening-alert-icon">🚨</span>
+      <div>
+        <strong>Wichtiger Sicherheitshinweis</strong> – Antworten deuten auf akute Selbstverletzung oder Suizidgedanken hin.
+        Bitte direkt ansprechen und ggf. Krisenprotokoll einleiten.
+      </div>
+      <button onclick="document.getElementById('screening-alert-banner').style.display='none'">✕</button>
+    </div>
+
+    <div class="content">
+
+      <!-- Screening-Liste (wenn kein aktives Screening) -->
+      <div id="screening-liste-container">
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header">
+            <span>🔍</span>
+            <div class="card-title">Screenings</div>
+            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="neuesScreeningStarten()">+ Neues Screening</button>
+          </div>
+          <div class="card-body">
+            <div id="screening-historie"></div>
+          </div>
+        </div>
+        <div class="screening-disclaimer">
+          <strong>⚠️ Hinweis:</strong> Dieses Screening-Tool ist kein diagnostisches Instrument und ersetzt keine klinische Diagnose.
+          Es liefert <em>Hinweise auf mögliche Belastungsbereiche</em> für den pädagogischen Kontext.
+          Für klinische Diagnosen ist eine psychiatrische Fachkraft zuständig.
+        </div>
+      </div>
+
+      <!-- Aktives Screening Formular -->
+      <div id="screening-formular-container" style="display:none;">
+
+        <!-- Progress Bar -->
+        <div class="screening-progress-wrap">
+          <div class="screening-progress-info">
+            <span id="scr-domain-label">Domain</span>
+            <span id="scr-step-info">Schritt 1 / 18</span>
+          </div>
+          <div class="screening-progress-bar">
+            <div class="screening-progress-fill" id="scr-progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Fragebogen Karte -->
+        <div class="card screening-frage-card">
+          <div class="card-header" id="scr-domain-header">
+            <span id="scr-domain-icon">🔍</span>
+            <div>
+              <div class="card-title" id="scr-domain-name"></div>
+              <div class="card-subtitle" id="scr-domain-icd"></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="screening-skala-legende">
+              <span class="skala-0">0 = Nie / gar nicht</span>
+              <span class="skala-1">1 = Selten / manchmal</span>
+              <span class="skala-2">2 = Oft</span>
+              <span class="skala-3">3 = Fast immer / sehr stark</span>
+            </div>
+            <div id="scr-items-liste"></div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="screening-nav-buttons">
+          <button class="btn btn-secondary" id="scr-btn-zurueck" onclick="screeningZurueck()">← Zurück</button>
+          <button class="btn btn-primary" id="scr-btn-weiter" onclick="screeningWeiter()">Weiter →</button>
+        </div>
+      </div>
+
+      <!-- Screening Ergebnis (3 Tabs) -->
+      <div id="screening-ergebnis-container" style="display:none;">
+
+        <!-- Ergebnis-Tabs -->
+        <div class="profil-tabs" id="screening-ergebnis-tabs" style="margin-bottom:0;">
+          <div class="profil-tab active" data-scrtab="risikoprofil" onclick="showScrTab('risikoprofil')">📊 Risikoprofil</div>
+          <div class="profil-tab" data-scrtab="empfehlungen" onclick="showScrTab('empfehlungen')">📋 Empfehlungen</div>
+          <div class="profil-tab" data-scrtab="verlauf" onclick="showScrTab('verlauf')">📈 Verlauf</div>
+        </div>
+
+        <!-- TAB: Risikoprofil -->
+        <div class="screening-ergebnis-tab active" data-scrtab="risikoprofil">
+
+          <!-- Severity Badge + Meta -->
+          <div class="scr-meta-row">
+            <div id="scr-severity-badge" class="scr-severity-badge"></div>
+            <div id="scr-datum-info" class="scr-datum-info"></div>
+            <div style="margin-left:auto;display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="screeningBearbeiten()">✏️ Bearbeiten</button>
+              <button class="btn btn-danger btn-sm" onclick="screeningLoeschen()">🗑 Löschen</button>
+            </div>
+          </div>
+
+          <!-- Comorbidity Patterns -->
+          <div id="scr-komorbiditat-patterns" style="margin-bottom:16px;"></div>
+
+          <!-- Bar Chart -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <span>📊</span>
+              <div class="card-title">Belastungsprofil <button onclick="showToolLegitimation('screening')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;font-weight:400;">📚 Grundlage</button></div>
+            </div>
+            <div class="card-body">
+              <div style="position:relative;height:320px;">
+                <canvas id="scr-chart-profil"></canvas>
+              </div>
+              <div style="max-width:600px;margin:16px auto 0;">
+                <canvas id="scr-radar-chart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flagged Areas Detail -->
+          <div id="scr-flagged-areas"></div>
+
+          <!-- Clinical Notes -->
+          <div class="card" style="margin-top:16px;">
+            <div class="card-header"><span>📝</span><div class="card-title">Klinische Notizen</div></div>
+            <div class="card-body">
+              <textarea id="scr-clinical-notes" class="notiz-textarea" rows="3"
+                placeholder="Beobachtungen, Kontext, Auffälligkeiten..." oninput="saveScrNotes()"></textarea>
+              <div style="display:flex;gap:12px;margin-top:8px;align-items:center;">
+                <label style="font-size:13px;font-weight:500;">Follow-up Datum:</label>
+                <input type="date" id="scr-followup-date" onchange="saveScrNotes()" style="width:160px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Empfehlungen -->
+        <div class="screening-ergebnis-tab" data-scrtab="empfehlungen">
+          <div class="scr-disclaimer" style="margin-bottom:16px;">
+            Die folgenden Empfehlungen basieren auf den Screening-Ergebnissen und sind als Arbeitshilfe gedacht.
+          </div>
+          <div id="scr-empfehlungen-liste"></div>
+        </div>
+
+        <!-- TAB: Verlauf -->
+        <div class="screening-ergebnis-tab" data-scrtab="verlauf">
+          <div class="card">
+            <div class="card-header"><span>📈</span><div class="card-title">Screening-Verlauf (T1 / T2 / T3)</div></div>
+            <div class="card-body">
+              <div id="scr-verlauf-selector" style="margin-bottom:16px;"></div>
+              <div style="position:relative;height:300px;">
+                <canvas id="scr-chart-verlauf"></canvas>
+              </div>
+              <div id="scr-verlauf-leer" style="display:none;text-align:center;color:#888;padding:40px;">
+                Noch kein Verlauf vorhanden. Führe mindestens zwei Screenings durch.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end ergebnis container -->
+
+    </div><!-- end content -->
+  </div><!-- end screening view -->
+
+</main>
+
+<!-- Wiki Floating Panel -->
+<button class="wiki-fab" id="wiki-fab" onclick="toggleWikiPanel()" title="Wiki nachschlagen">📚</button>
+<div class="wiki-panel" id="wiki-panel">
+  <div class="wiki-panel-header">
+    <h3>📚 Pädagogisches Wiki</h3>
+    <button class="wiki-panel-close" onclick="toggleWikiPanel()">&times;</button>
+  </div>
+  <div class="wiki-panel-body" id="wiki-container"></div>
+</div>
+<div class="wiki-overlay" id="wiki-overlay" onclick="toggleWikiPanel()"></div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/phase-ressourcen.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

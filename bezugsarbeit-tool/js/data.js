@@ -1098,6 +1098,89 @@ const THEMA_INTERVENTIONEN = {
     { titel: 'Innere Sicherheit aufbauen', ansatz: 'Ressourcenorientiert', beschreibung: 'Imaginationsübung: Was gibt mir Sicherheit unabhängig von anderen Menschen? Innere Ressourcen verankern.', indikation: 'Starke Trennungsangst, Verlassenheitsangst', dauer: '20 Min' },
     { titel: 'Grounding bei Trennungsangst', ansatz: 'Kognitiv-behavioral', beschreibung: 'In akuten Angstsituationen: 5-4-3-2-1-Grounding anwenden. Automatische Katastrophengedanken identifizieren und hinterfragen.', indikation: 'Panikattacken bei Trennungen, Überflutung', dauer: '15 Min' },
   ],
+  'parentifizierung': [
+    { titel: 'Rollentausch sichtbar machen', ansatz: 'Systemisch', beschreibung: 'Mit Familienbrett oder Figuren die aktuelle Rollenverteilung darstellen. Wer kümmert sich um wen? Kind erkennt die Umkehrung.', indikation: 'Kind übernimmt Elternrolle', dauer: '30 Min' },
+    { titel: 'Erlaubnis zum Kind-Sein', ansatz: 'Gestalttherapie', beschreibung: 'Leerer Stuhl: Was würdest du tun, wenn du dich nicht um deine Familie kümmern müsstest? Bedürfnisse explorieren.', indikation: 'Vernachlässigung eigener Bedürfnisse', dauer: '25 Min' },
+    { titel: 'Grenzen der Verantwortung', ansatz: 'Psychoedukativ', beschreibung: 'Altersangemessene vs. unangemessene Verantwortung besprechen. Was ist OK? Was ist zu viel?', indikation: 'Übermässige Verantwortungsübernahme', dauer: '20 Min' },
+  ],
+  'young-carers': [
+    { titel: 'Meine Caring-Situation verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Benennen: Du pflegst/unterstützt jemanden — das ist viel. Normalisieren und anerkennen. Information über Hilfsangebote.', indikation: 'Kinder die Angehörige pflegen', dauer: '25 Min' },
+    { titel: 'Entlastungs-Inseln planen', ansatz: 'Ressourcenorientiert', beschreibung: 'Welche Freiräume gibt es? Wo kannst du Aufgaben abgeben? Konkrete Entlastungszeiten in den Alltag einplanen.', indikation: 'Überlastung durch Pflegerolle', dauer: '20 Min' },
+  ],
+  'institutionserfahrung': [
+    { titel: 'Meine Geschichte — Lebensgeschichtsbuch', ansatz: 'Narrativ', beschreibung: 'Stationen meines Lebens chronologisch aufarbeiten. Jede Station: Was war gut? Was war schwer? Wer war wichtig?', indikation: 'Viele Platzierungswechsel', dauer: '45 Min' },
+    { titel: 'Vertrauen nach Enttäuschungen', ansatz: 'Bindungstheorie', beschreibung: 'Beziehungslinie: Wem habe ich vertraut? Wer hat mich enttäuscht? Muster erkennen ohne zu werten.', indikation: 'Beziehungsabbrüche durch Institutionswechsel', dauer: '30 Min' },
+  ],
+  'angstanfaelle': [
+    { titel: 'Panikattacke verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Angstkreis erklären: Gedanke → Körper → Verhalten → Gedanke. Normalisieren: Panik ist unangenehm aber nicht gefährlich.', indikation: 'Akute Panikattacken', dauer: '20 Min' },
+    { titel: 'Atemtechnik 4-7-8', ansatz: 'Körpertherapeutisch', beschreibung: '4 Sekunden einatmen, 7 Sekunden halten, 8 Sekunden ausatmen. Aktiviert den Parasympathikus und reduziert akute Angst.', indikation: 'Akute Angst, Hyperventilation', dauer: '10 Min' },
+    { titel: 'Angst-Exposition planen', ansatz: 'Kognitiv-behavioral', beschreibung: 'Angsthierarchie erstellen (0-100). Schrittweise Exposition von niedrig nach hoch planen. Erfolge dokumentieren.', indikation: 'Vermeidungsverhalten bei Angst', dauer: '30 Min' },
+  ],
+  'wiederkehrende-gedanken': [
+    { titel: 'Gedankenprotokoll', ansatz: 'Kognitiv-behavioral', beschreibung: 'Automatische Gedanken aufschreiben: Situation → Gedanke → Gefühl → Alternatives Denken. Muster erkennen.', indikation: 'Grübeln, negative Gedankenspiralen', dauer: '25 Min' },
+    { titel: 'Gedankenstopp + Ablenkung', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Bei wiederkehrenden Gedanken: STOPP sagen (innerlich oder laut). Sofort Aktivität wechseln. Wirksamkeit über Zeit testen.', indikation: 'Zwanghafte/intrusive Gedanken', dauer: '15 Min' },
+  ],
+  'stimmungsextreme': [
+    { titel: 'Stimmungstagebuch', ansatz: 'DBT', beschreibung: 'Tägliche Stimmung auf Skala 1-10 tracken. Auslöser notieren. Muster über 2-4 Wochen erkennen.', indikation: 'Starke Stimmungsschwankungen', dauer: '10 Min täglich' },
+    { titel: 'Emotionsregulations-Skills', ansatz: 'DBT', beschreibung: 'TIPP-Skills: Temperatur (kaltes Wasser), Intensive Bewegung, Paced Breathing, Progressive Muskelentspannung.', indikation: 'Extreme Emotionen, Impulsdurchbrüche', dauer: '20 Min' },
+  ],
+  'impulskontrolle': [
+    { titel: 'STOPP-Ampel-Technik', ansatz: 'Kognitiv-behavioral', beschreibung: 'Rot = Stopp (Impuls wahrnehmen). Gelb = Nachdenken (Was passiert wenn?). Grün = Handeln (überlegte Reaktion). Üben mit Szenarien.', indikation: 'Impulsive Reaktionen, Aggression', dauer: '20 Min' },
+    { titel: 'Körpersignale der Anspannung', ansatz: 'Körpertherapeutisch', beschreibung: 'Wo im Körper spürst du Anspannung bevor du explodierst? Frühwarnsystem entwickeln. Alternative Ventile finden.', indikation: 'Mangelnde Impulskontrolle', dauer: '25 Min' },
+  ],
+  'einsamkeit': [
+    { titel: 'Einsamkeit vs. Alleinsein', ansatz: 'Psychoedukativ', beschreibung: 'Unterschied zwischen gewähltem Alleinsein und ungewollter Einsamkeit. Was fehlt? Was wünsche ich mir?', indikation: 'Chronische Einsamkeit', dauer: '20 Min' },
+    { titel: 'Sozialer Aktionsplan', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Kleine Schritte: 1 Kontakt pro Woche. Erst sichere Kontexte (Verein, AG). Erfolge feiern. Schrittweise steigern.', indikation: 'Sozialer Rückzug', dauer: '25 Min' },
+  ],
+  'soziale-wahrnehmung': [
+    { titel: 'Perspektivenwechsel üben', ansatz: 'Kognitiv-behavioral', beschreibung: 'Soziale Situationen aus verschiedenen Perspektiven betrachten. Was denkt die andere Person? Warum reagiert sie so?', indikation: 'Schwierigkeiten soziale Signale zu lesen', dauer: '25 Min' },
+    { titel: 'Emotionen bei anderen erkennen', ansatz: 'Psychoedukativ', beschreibung: 'Gesichtsausdrücke, Körpersprache, Tonfall lesen üben. Mit Bildkarten oder Videos. Ohne Wertung.', indikation: 'ASS, soziale Unsicherheit', dauer: '20 Min' },
+  ],
+  'konzentration-aufmerksamkeit': [
+    { titel: 'Pomodoro-Technik anpassen', ansatz: 'Verhaltenstherapeutisch', beschreibung: '15 Min fokussiert arbeiten → 5 Min Pause. Schrittweise auf 25 Min steigern. Timer nutzen.', indikation: 'Konzentrationsprobleme, ADHS', dauer: '15 Min' },
+    { titel: 'Ablenkungen identifizieren', ansatz: 'Kognitiv-behavioral', beschreibung: 'Was lenkt mich ab? Handy, Lärm, Gedanken? Für jede Ablenkung eine Lösung finden. Arbeitsplatz optimieren.', indikation: 'Leicht ablenkbar', dauer: '20 Min' },
+  ],
+  'schulverweigerung': [
+    { titel: 'Funktionsanalyse der Verweigerung', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Kearney-Modell: Welche Funktion hat die Verweigerung? Vermeidung negativer Emotionen? Aufmerksamkeit? Angenehme Alternativen?', indikation: 'Chronische Schulverweigerung', dauer: '30 Min' },
+    { titel: 'Schrittweise Reintegration', ansatz: 'Kognitiv-behavioral', beschreibung: 'Stufenplan: 1) Schulweg gehen 2) 1 Stunde bleiben 3) Halber Tag 4) Ganzer Tag. Mit Schule abstimmen.', indikation: 'Nach längerer Abwesenheit', dauer: '25 Min' },
+  ],
+  'lernbehinderung': [
+    { titel: 'Meine Stärken trotz Lernschwäche', ansatz: 'Ressourcenorientiert', beschreibung: 'Was kann ich gut — auch ausserhalb der Schule? Stärken sichtbar machen die nicht schulleistungsbezogen sind.', indikation: 'Niedriger Selbstwert bei Lernstörung', dauer: '25 Min' },
+    { titel: 'Nachteilsausgleich verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Was ist ein Nachteilsausgleich? Welche Rechte habe ich? Wie beantrage ich ihn? Empowerment statt Opferrolle.', indikation: 'Ungenutzte Unterstützungsangebote', dauer: '20 Min' },
+  ],
+  'essverhalten': [
+    { titel: 'Essverhalten beobachten', ansatz: 'Verhaltenstherapeutisch', beschreibung: 'Esstagebuch: Was esse ich wann? Hunger vs. Emotionales Essen? Welche Gefühle lösen Essen/Nicht-Essen aus?', indikation: 'Auffälliges Essverhalten', dauer: '15 Min täglich' },
+    { titel: 'Körperbild-Arbeit', ansatz: 'Körpertherapeutisch', beschreibung: 'Meinen Körper wahrnehmen ohne zu bewerten. Was kann mein Körper? Dankbarkeitsübung für Körperfunktionen.', indikation: 'Negatives Körperbild', dauer: '25 Min' },
+  ],
+  'koerperbeschwerden': [
+    { titel: 'Körper-Scan Übung', ansatz: 'Achtsamkeit', beschreibung: 'Systematisch durch den Körper gehen. Wo spüre ich Anspannung/Schmerz? Ohne zu verändern — nur wahrnehmen.', indikation: 'Psychosomatische Beschwerden', dauer: '15 Min' },
+    { titel: 'Zusammenhang Körper-Gefühle', ansatz: 'Psychoedukativ', beschreibung: 'Wenn der Körper spricht: Welche Gefühle stecken hinter den Beschwerden? Bauchschmerzen = Angst? Kopfschmerzen = Überforderung?', indikation: 'Somatisierung', dauer: '25 Min' },
+  ],
+  'psychoedukation': [
+    { titel: 'Mein Gehirn verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Altersgerechte Erklärung: Amygdala (Alarmanlage), Präfrontaler Cortex (Chef). Warum reagiere ich so?', indikation: 'Grundlage für alle Themen', dauer: '20 Min' },
+    { titel: 'Meine Diagnose verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Was bedeutet meine Diagnose? Was bedeutet sie NICHT? Entstigmatisierung. Eigene Ressourcen trotz Diagnose.', indikation: 'Nach Diagnosemitteilung', dauer: '30 Min' },
+  ],
+  'uebergaenge': [
+    { titel: 'Übergangs-Timeline', ansatz: 'Narrativ', beschreibung: 'Alle Übergänge im Leben auf einer Timeline. Welche waren gut? Welche schwer? Was hat geholfen? Muster erkennen.', indikation: 'Angst vor Veränderung', dauer: '30 Min' },
+    { titel: 'Vorbereitung auf den nächsten Schritt', ansatz: 'Lösungsfokussiert', beschreibung: 'Was steht an? (Schulwechsel, Austritt, Beruf). Was brauche ich? Was kann ich schon? Konkreter Plan.', indikation: 'Bevorstehende Transition', dauer: '25 Min' },
+  ],
+  'migration-flucht': [
+    { titel: 'Meine zwei Welten', ansatz: 'Narrativ', beschreibung: 'Herkunftskultur und aktuelle Kultur vergleichen. Was schätze ich an beiden? Wo gibt es Konflikte? Eigene Synthese finden.', indikation: 'Kulturelle Identitätskonflikte', dauer: '30 Min' },
+    { titel: 'Was ich mitgebracht habe', ansatz: 'Ressourcenorientiert', beschreibung: 'Welche Stärken habe ich aus meiner Migrationsgeschichte? Sprachkenntnisse, Anpassungsfähigkeit, Resilienz als Ressource rahmen.', indikation: 'Defizitorientierung bei Migrationshintergrund', dauer: '25 Min' },
+  ],
+  'dissoziative-erfahrungen': [
+    { titel: 'Dissoziation erkennen und benennen', ansatz: 'Psychoedukativ', beschreibung: 'Was passiert bei Dissoziation? Warum macht mein Gehirn das? Normalisierung als Schutzmechanismus erklären.', indikation: 'Dissoziative Episoden', dauer: '20 Min' },
+    { titel: 'Grounding-Notfallkoffer', ansatz: 'Körpertherapeutisch', beschreibung: 'Eiswürfel, Ammoniak-Riechstift, kaltes Wasser, Igelball — sensorische Anker die sofort ins Hier-und-Jetzt bringen.', indikation: 'Akute Dissoziation', dauer: '15 Min' },
+  ],
+  'wahrnehmungsveraenderungen': [
+    { titel: 'Realitäts-Check Strategien', ansatz: 'Kognitiv-behavioral', beschreibung: 'Bei ungewöhnlichen Wahrnehmungen: Checkliste durchgehen. Sehen andere das auch? Bin ich müde/gestresst? Substanzen?', indikation: 'Milde Wahrnehmungsstörungen', dauer: '20 Min' },
+    { titel: 'Sicherheit in der Unsicherheit', ansatz: 'Ressourcenorientiert', beschreibung: 'Was hilft mir wenn die Welt sich komisch anfühlt? Vertrauenspersonen identifizieren. Wann zum Arzt?', indikation: 'Psychose-Frühzeichen', dauer: '25 Min' },
+  ],
+  'bindungsstoerung': [
+    { titel: 'Mein Beziehungsmuster erkennen', ansatz: 'Bindungstheorie', beschreibung: 'Wie reagiere ich wenn jemand mir nahe kommt? Wenn jemand geht? Muster benennen ohne Schuldzuweisung.', indikation: 'Beziehungsvermeidung oder Klammern', dauer: '30 Min' },
+    { titel: 'Vertrauen in kleinen Schritten', ansatz: 'Bindungstheorie', beschreibung: 'Vertrauensbarometer erstellen. Kleine Tests: Kann ich X vertrauen? Erfahrungen sammeln. Nicht alles auf einmal.', indikation: 'Misstrauen, Beziehungsangst', dauer: '25 Min' },
+    { titel: 'Sichere Basis erfahren', ansatz: 'Ressourcenorientiert', beschreibung: 'Wer ist meine sichere Basis? (Person, Ort, Tier, Objekt). Diese Ressource stärken und bewusst nutzen.', indikation: 'Fehlende Sicherheitserfahrung', dauer: '20 Min' },
+  ],
 };
 
 const THEMEN_KATEGORIEN = [

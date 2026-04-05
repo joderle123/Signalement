@@ -1892,6 +1892,31 @@ function generateHypothesen(schuelerId) {
     h._konfidenz = Math.min(konfidenz, 100);
   }
 
+  // ── Treatment-Response-Konfidenz-Boost ──────────────────────
+  try {
+    const trAnalyse = analyzeTreatmentResponse(schuelerId);
+    if (trAnalyse && trAnalyse.themen && typeof HYPOTHESEN_THEMA_MAP !== 'undefined') {
+      aktive.forEach(hypo => {
+        if (!hypo.wiki_ids) return;
+        const hypoThemen = [];
+        hypo.wiki_ids.forEach(wid => {
+          (HYPOTHESEN_THEMA_MAP[wid] || []).forEach(tid => { if (!hypoThemen.includes(tid)) hypoThemen.push(tid); });
+        });
+        const relevantTR = trAnalyse.themen.filter(t => hypoThemen.includes(t.themaId) && t.anzahl >= 2);
+        if (relevantTR.length === 0) return;
+        const avgResponse = relevantTR.reduce((sum, t) => sum + t.responseRate, 0) / relevantTR.length;
+        if (avgResponse >= 60) {
+          hypo._konfidenz = Math.min(100, hypo._konfidenz + 10);
+          hypo._trBestaetigt = true;
+          hypo._trHinweis = 'Gute Response (' + Math.round(avgResponse) + '%) bei zugehörigen Themen';
+        } else if (avgResponse < 40 && relevantTR.some(t => t.anzahl >= 3)) {
+          hypo._trHinterfragen = true;
+          hypo._trHinweis = 'Niedrige Response (' + Math.round(avgResponse) + '%) — Hypothese überprüfen';
+        }
+      });
+    }
+  } catch(e) { /* silent */ }
+
   // Sortieren: staerkeWert desc, dann risiko vor schutz vor differenzial
   const typRang = { risiko: 0, differenzial: 1, schutz: 2 };
   aktive.sort((a, b) => b.staerkeWert - a.staerkeWert || (typRang[a.typ] || 0) - (typRang[b.typ] || 0));
@@ -1989,11 +2014,20 @@ function renderHypothesen(hypothesen) {
       verlaufHtml = `<span class="hypothese-verlauf-info" title="Seit ${seit} in ${h._verlaufAnzahl} Auswertungen bestätigt">🔄 ${h._verlaufAnzahl}x bestätigt</span>`;
     }
 
+    // Treatment-Response Badge
+    let trBadgeHtml = '';
+    if (h._trBestaetigt) {
+      trBadgeHtml = `<span style="background:#F0FDF4;color:#166534;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px;" title="${h._trHinweis || ''}">✅ Durch Verlauf bestätigt</span>`;
+    } else if (h._trHinterfragen) {
+      trBadgeHtml = `<span style="background:#FFFBEB;color:#92400E;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px;" title="${h._trHinweis || ''}">🔄 Response niedrig — überprüfen</span>`;
+    }
+
     return `
       <div class="hypothese-card ${isEskalation ? 'hypothese-eskalation' : ''}" data-ebene="${h.ebene || ''}" data-staerke="${h.staerkeWert}" data-typ="${h.typ}" style="border-left:4px solid ${borderColor}">
         <div class="hypothese-header">
           <span class="hypothese-titel">${typIcon} ${h.titel}</span>
           ${verlaufHtml}
+          ${trBadgeHtml}
           ${h._konfidenz != null ? `<span class="hypothese-konfidenz" title="Konfidenz: ${h._konfidenz}% — basierend auf Datenpunkten, Verlauf und Screening">${h._konfidenz}%</span>` : ''}
           <span class="hypothese-badge" style="background:${badgeBg};color:${badgeText}">${staerkeLabel}</span>
         </div>
@@ -4363,6 +4397,44 @@ function renderSitzungsvorschlag() {
     }
   }
 
+  // ── Schutzfaktoren / Ressourcen-Hint ──
+  let ressourcenHint = '';
+  try {
+    const schutzHypos = generateHypothesen(sid).filter(h => h.typ === 'schutz').slice(0, 3);
+    const sSchutz = DB.getSchuelerById(sid);
+    const ffSchutz = (sSchutz && sSchutz.fallFormulierung) || {};
+    const protectiveItems = (ffSchutz.protective || []).slice(0, 3);
+    const items = [];
+    schutzHypos.forEach(h => { if (!items.includes(h.titel)) items.push(h.titel); });
+    protectiveItems.forEach(p => { if (!items.includes(p) && items.length < 4) items.push(p); });
+    if (items.length > 0) {
+      const chips = items.map(i => '<span style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:2px 8px;font-size:10px;color:#166534;">' + i + '</span>').join(' ');
+      ressourcenHint = '<div style="margin-top:6px;font-size:11px;color:#166534;">💪 Ressourcen nutzen: ' + chips + '</div>';
+    }
+  } catch(e) { /* silent */ }
+
+  // ── Begründungssatz zusammenbauen ──
+  const gruende = [];
+  if (pvtOverride && lastPVT === 'frozen') gruende.push('Nervensystem eingefroren → Stabilisierung Vorrang');
+  else if (pvtOverride && lastPVT === 'activated') gruende.push('Nervensystem angespannt → Co-Regulation');
+  else if (aktivePhase) gruende.push('Phase ' + aktivePhase.nr + ' aktiv');
+  try {
+    const topHypoB = generateHypothesen(sid).find(h => h.typ === 'risiko' && h._konfidenz >= 50);
+    if (topHypoB) gruende.push('Hypothese "' + topHypoB.titel + '"');
+  } catch(e) {}
+  if (trAnalyse && trAnalyse.bestesThema && empfohlenesThema.id === trAnalyse.bestesThema.themaId) {
+    gruende.push(trAnalyse.bestesThema.responseRate + '% Response-Bestätigung');
+  } else if (trAnalyse && trAnalyse.gesamtTrend && trAnalyse.gesamtTrend.richtung === 'positiv') {
+    gruende.push('Positiver Gesamttrend');
+  }
+  const begruendung = gruende.length > 0
+    ? '<div style="margin-top:4px;font-size:11px;color:var(--text-secondary);cursor:pointer;" onclick="this.querySelector(\'.detail\').style.display=this.querySelector(\'.detail\').style.display===\'none\'?\'block\':\'none\'">' +
+      '📋 Begründung <span style="font-size:10px;color:var(--grau);">▾</span>' +
+      '<div class="detail" style="display:none;margin-top:4px;padding:6px 10px;background:#F8FAFC;border-radius:6px;font-size:11px;line-height:1.5;">' +
+      'Empfohlen weil: ' + gruende.join(' + ') +
+      '</div></div>'
+    : '';
+
   const pvtBadge = lastPVT ? `<span class="sitzungsvorschlag-pvt">${pvtLabels[lastPVT] || lastPVT}</span>` : '';
   const overrideHint = pvtOverride
     ? `<div class="sitzungsvorschlag-pvt-hint">Basierend auf dem letzten Nervensystem-Zustand wird ein angepasstes Thema vorgeschlagen.</div>`
@@ -4376,9 +4448,11 @@ function renderSitzungsvorschlag() {
           <div class="sitzungsvorschlag-label">Heute empfohlen ${pvtBadge}</div>
           <div class="sitzungsvorschlag-thema">${empfohlenesThema.titel}</div>
           <div class="sitzungsvorschlag-grund">${empfGrund}</div>
+          ${begruendung}
           ${overrideHint}
           ${treatmentHint}
           ${hypothesenHint}
+          ${ressourcenHint}
         </div>
         <div class="sitzungsvorschlag-actions">
           <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">
@@ -4449,6 +4523,25 @@ function renderPhaseTransitionPrompt() {
   // Nur anzeigen wenn ≥ 80%
   if (pct < 80) { el.innerHTML = ''; return; }
 
+  // ── Phase-Gate: Treatment-Response prüfen ──
+  let phaseGateWarnung = '';
+  try {
+    const trAnalyse = analyzeTreatmentResponse(sid);
+    if (trAnalyse && trAnalyse.gesamtTrend && trAnalyse.gesamtTrend.richtung === 'negativ') {
+      phaseGateWarnung += '<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;color:#991B1B;">⚠️ <strong>Achtung:</strong> Der Gesamt-Trend zeigt eine negative Entwicklung. Bevor du zur nächsten Phase wechselst, prüfe ob die aktuellen Themen ausreichend bearbeitet wurden.</div>';
+    }
+    const srsNotizen = DB.getNotizen(sid)
+      .filter(n => n.soap && n.soap.srs && n.soap.srs.total > 0)
+      .sort((a, b) => new Date(b.datum) - new Date(a.datum))
+      .slice(0, 3);
+    if (srsNotizen.length >= 3) {
+      const avgSRS = Math.round(srsNotizen.reduce((sum, n) => sum + n.soap.srs.total, 0) / srsNotizen.length);
+      if (avgSRS < 25) {
+        phaseGateWarnung += '<div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;color:#92400E;">⚠️ Durchschnittlicher SRS der letzten 3 Sitzungen: <strong>' + avgSRS + '/40</strong>. Phase-Wechsel wird nicht empfohlen — therapeutische Beziehung oder Ansatz zuerst reflektieren.</div>';
+      }
+    }
+  } catch(e) { /* silent */ }
+
   const nextPhaseNr = aktivePhase.nr + 1;
   const nextPhaseDef = ROADMAP_PHASEN[nextPhaseNr];
   if (!nextPhaseDef) { el.innerHTML = ''; return; }
@@ -4469,6 +4562,7 @@ function renderPhaseTransitionPrompt() {
           <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
             ${done} von ${total} Themen erledigt${dauerText}. Bereit für Phase ${nextPhaseNr} (${nextPhaseDef.titel})?
           </div>
+          ${phaseGateWarnung}
           <div style="display:flex;gap:8px;">
             <button class="btn btn-primary" style="padding:10px 22px;font-size:15px;font-weight:600;" onclick="advancePhase(${aktivePhase.nr})">
               ✓ Phase abschließen & weiter

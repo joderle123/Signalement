@@ -1774,6 +1774,33 @@ function generateHypothesen(schuelerId) {
     staerken: s.staerkenProfil || {},
     fiveP: fiveP,
     verhalten: s.topicStatus || {},
+    // NEU: Wohlbefinden-Verlauf
+    wohlbefinden: (() => {
+      const wb = DB.getWohlbefinden ? DB.getWohlbefinden(schuelerId) : [];
+      if (!wb || wb.length === 0) return { aktuell: null, trend: null, werte: [] };
+      const sortiert = [...wb].sort((a, b) => a.datum.localeCompare(b.datum));
+      const letzter = sortiert[sortiert.length - 1];
+      let trend = null;
+      if (sortiert.length >= 3) {
+        const mitte = Math.floor(sortiert.length / 2);
+        const erste = sortiert.slice(0, mitte).reduce((a, w) => a + (w.wert || 0), 0) / mitte;
+        const zweite = sortiert.slice(mitte).reduce((a, w) => a + (w.wert || 0), 0) / (sortiert.length - mitte);
+        trend = zweite - erste > 0.5 ? 'steigend' : zweite - erste < -0.5 ? 'fallend' : 'stabil';
+      }
+      return { aktuell: letzter?.wert || null, trend, werte: sortiert.map(w => w.wert) };
+    })(),
+    // NEU: SRS-Trend
+    srsTrend: (() => {
+      const notizen = DB.getNotizen(schuelerId).filter(n => n.soap?.srs?.total != null);
+      if (notizen.length < 2) return null;
+      notizen.sort((a, b) => a.datum.localeCompare(b.datum));
+      const werte = notizen.map(n => n.soap.srs.total);
+      const mitte = Math.floor(werte.length / 2);
+      const erste = werte.slice(0, mitte).reduce((a, b) => a + b, 0) / mitte;
+      const zweite = werte.slice(mitte).reduce((a, b) => a + b, 0) / (werte.length - mitte);
+      const letzter = werte[werte.length - 1];
+      return { letzterWert: letzter, trend: zweite - erste > 2 ? 'steigend' : zweite - erste < -2 ? 'fallend' : 'stabil', anzahl: werte.length };
+    })(),
   };
 
   // Alle Regeln evaluieren
@@ -1904,10 +1931,13 @@ function renderHypothesen(hypothesen) {
 
   function hypotheseCard(h) {
     let borderColor, badgeBg, badgeText;
+    const isEskalation = h.staerkeWert >= 5;
     if (h.typ === 'schutz') {
       borderColor = '#22C55E'; badgeBg = '#F0FDF4'; badgeText = '#166534';
     } else if (h.typ === 'differenzial') {
       borderColor = '#8B5CF6'; badgeBg = '#F5F3FF'; badgeText = '#5B21B6';
+    } else if (isEskalation) {
+      borderColor = '#991B1B'; badgeBg = '#991B1B'; badgeText = '#FFFFFF';
     } else if (h.staerkeWert >= 3) {
       borderColor = '#EF4444'; badgeBg = '#FEF2F2'; badgeText = '#991B1B';
     } else if (h.staerkeWert >= 2) {
@@ -1916,10 +1946,11 @@ function renderHypothesen(hypothesen) {
       borderColor = '#9CA3AF'; badgeBg = '#F3F4F6'; badgeText = '#374151';
     }
 
-    const staerkeLabel = h.staerke === 'sehr-wahrscheinlich' ? 'Sehr wahrscheinlich'
+    const staerkeLabel = isEskalation ? '🚨 ESKALATION'
+      : h.staerke === 'sehr-wahrscheinlich' ? 'Sehr wahrscheinlich'
       : h.staerke === 'wahrscheinlich' ? 'Wahrscheinlich' : 'Hinweis';
 
-    const typIcon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
+    const typIcon = isEskalation ? '🚨' : h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
 
     const daten = h._ausloesendeDaten || [];
 
@@ -1935,7 +1966,7 @@ function renderHypothesen(hypothesen) {
     }
 
     return `
-      <div class="hypothese-card" data-ebene="${h.ebene || ''}" data-staerke="${h.staerkeWert}" data-typ="${h.typ}" style="border-left:4px solid ${borderColor}">
+      <div class="hypothese-card ${isEskalation ? 'hypothese-eskalation' : ''}" data-ebene="${h.ebene || ''}" data-staerke="${h.staerkeWert}" data-typ="${h.typ}" style="border-left:4px solid ${borderColor}">
         <div class="hypothese-header">
           <span class="hypothese-titel">${typIcon} ${h.titel}</span>
           ${verlaufHtml}

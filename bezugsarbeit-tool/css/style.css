@@ -4983,6 +4983,18 @@ select {
   border: 1px solid #BAE6FD;
 }
 
+/* Eskalations-Alert */
+.hypothese-eskalation {
+  background: #FEF2F2 !important;
+  border: 2px solid #EF4444 !important;
+  border-left: 6px solid #991B1B !important;
+  animation: eskalation-pulse 1.5s infinite;
+}
+@keyframes eskalation-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.3); }
+  50% { box-shadow: 0 0 12px 4px rgba(239,68,68,0.2); }
+}
+
 /* Hypothesen-Diff */
 .hypothesen-diff {
   margin-bottom: 14px;

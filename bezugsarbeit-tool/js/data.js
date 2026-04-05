@@ -3892,6 +3892,152 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Bezugsperson identifizieren und in die Arbeit einbeziehen. Beziehung stärken.',
     wiki_ids: ['resilienz', 'bindungstheorie'],
   },
+
+  // ── Gruppe 17: Wohlbefinden + SRS-Trend ───────────────────────
+  {
+    id: 'wohlbefinden-sinkend-risiko',
+    gruppe: 'Dynamisch',
+    titel: 'Wohlbefinden sinkt + Risikofaktoren vorhanden',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: [],
+    bedingung: (ctx) => ctx.wohlbefinden?.trend === 'fallend' && ctx.screening.flaggedAreas.length >= 1,
+    erklaerung: 'Sinkendes Wohlbefinden in Kombination mit erhöhten Screening-Werten zeigt aktive Verschlechterung — Handlungsbedarf besteht jetzt.',
+    evidenz: 'Subjektives Wohlbefinden ist ein valider Indikator für psychische Gesundheit; sinkende Werte prognostizieren Krisen und Behandlungsabbruch (Diener 2009; Lambert et al. 2001).',
+    quelle: 'Diener (2009); Lambert et al. (2001)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Wohlbefinden: Trend fallend'];
+      d.push(`${ctx.screening.flaggedAreas.length} erhöhte Screening-Bereiche`);
+      return d;
+    },
+    gegenHypothese: 'Kurzfristige Wohlbefindens-Einbrüche können situativ bedingt sein (z.B. Prüfungsstress).',
+    empfehlung: 'Aktuellen Belastungsstand explorieren. Ggf. Krisenintervention. Engmaschigeres Monitoring.',
+    wiki_ids: [],
+  },
+  {
+    id: 'srs-fallend-allianz',
+    gruppe: 'Dynamisch',
+    titel: 'SRS-Trend fallend — therapeutische Allianz gefährdet',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: [],
+    bedingung: (ctx) => ctx.srsTrend?.trend === 'fallend' && ctx.srsTrend?.letzterWert < 25,
+    erklaerung: 'Fallender SRS-Trend plus niedriger letzter Wert (<25/40) deutet auf eine gefährdete therapeutische Allianz hin — das Risiko für Therapieabbruch steigt.',
+    evidenz: 'SRS-Werte unter 25 prognostizieren Therapieabbruch mit OR 3.5; fallender Trend verschärft das Risiko (Miller et al. 2006; Duncan et al. 2003).',
+    quelle: 'Miller et al. (2006); Duncan et al. (2003)',
+    ausloesendeDaten: (ctx) => [`SRS-Trend: fallend (letzter Wert: ${ctx.srsTrend?.letzterWert}/40)`, `${ctx.srsTrend?.anzahl} Sitzungen ausgewertet`],
+    gegenHypothese: 'Einzelne niedrige SRS-Werte können themenbedingt sein, ohne die Gesamtallianz zu gefährden.',
+    empfehlung: 'SRS direkt ansprechen: "Wie erleben Sie unsere Zusammenarbeit?" Anpassungen vornehmen. Ggf. Methode wechseln.',
+    wiki_ids: [],
+  },
+  {
+    id: 'wohlbefinden-steigend-schutz',
+    gruppe: 'Schutzfaktoren',
+    titel: 'Wohlbefinden steigt — positive Entwicklung',
+    typ: 'schutz',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: [],
+    bedingung: (ctx) => ctx.wohlbefinden?.trend === 'steigend',
+    erklaerung: 'Steigendes Wohlbefinden zeigt positive Entwicklung — die aktuelle Arbeit wirkt. Dieser Trend sollte gestärkt und nicht durch unnötige Interventionen gestört werden.',
+    evidenz: 'Steigendes subjektives Wohlbefinden ist der beste Indikator für therapeutischen Erfolg und korreliert mit nachhaltiger Verbesserung (Lambert & Ogles 2004).',
+    quelle: 'Lambert & Ogles (2004)',
+    ausloesendeDaten: (ctx) => ['Wohlbefinden: Trend steigend'],
+    gegenHypothese: 'Kurzfristige Verbesserung kann auch "Flight into Health" sein — Monitoring beibehalten.',
+    empfehlung: 'Aktuelle Arbeit fortsetzen. Stärken würdigen. Nicht overengineer-en.',
+    wiki_ids: ['resilienz'],
+  },
+  {
+    id: 'srs-hoch-plus-screening-besser',
+    gruppe: 'Schutzfaktoren',
+    titel: 'Gute therapeutische Allianz + Screening verbessert',
+    typ: 'schutz',
+    ebene: 'dynamisch',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: [],
+    bedingung: (ctx) => {
+      if (!ctx.srsTrend || ctx.srsTrend.letzterWert < 30) return false;
+      // Prüfe ob Screening-Scores unter Cutoff
+      const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+      const unterCutoff = domains.filter(d => {
+        const score = ctx.screening.scores[d.id];
+        return score != null && score < d.cutoff;
+      }).length;
+      const totalDomains = domains.filter(d => ctx.screening.scores[d.id] != null).length;
+      return totalDomains > 0 && unterCutoff >= totalDomains * 0.7;
+    },
+    erklaerung: 'Hohe SRS-Werte (gute Allianz) kombiniert mit Screening-Werten unter klinischem Cutoff zeigt: Die Arbeit wirkt, der Schüler profitiert.',
+    evidenz: 'Therapeutische Allianz ist der stärkste allgemeine Wirkfaktor; gute Allianz + messbare Verbesserung = optimaler Verlauf (Norcross & Lambert 2019).',
+    quelle: 'Norcross & Lambert (2019)',
+    ausloesendeDaten: (ctx) => [`SRS: ${ctx.srsTrend?.letzterWert}/40 (gut)`, `70%+ der Screening-Domains unter Cutoff`],
+    gegenHypothese: '',
+    empfehlung: 'Positiven Verlauf würdigen. Ggf. Phase abschliessen. Übergang planen.',
+    wiki_ids: ['resilienz'],
+  },
+
+  // ── Gruppe 18: Eskalations-Alerts ─────────────────────────────
+  {
+    id: 'eskalation-suizid-akut',
+    gruppe: 'ESKALATION',
+    titel: 'AKUTE SUIZIDGEFAHR — Sofortmassnahme erforderlich',
+    typ: 'risiko',
+    ebene: 'einzelfaktor',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 5,
+    icd10: ['X71-X83'],
+    bedingung: (ctx) => ctx.anamnese.includes('suizid_ja') && ctx.anamnese.includes('svv_aktiv'),
+    erklaerung: 'Suizidversuch in Vorgeschichte PLUS aktive Selbstverletzung stellt höchste Gefahrenstufe dar. Sofortige professionelle Intervention notwendig.',
+    evidenz: 'Kombination von früherem Suizidversuch und aktiver SVV erhöht das Suizidrisiko um Faktor 30-40 (Hawton et al. 2012; Nock et al. 2006).',
+    quelle: 'Hawton et al. (2012); Nock et al. (2006)',
+    ausloesendeDaten: (ctx) => ['⚠️ Suizidversuch in Vorgeschichte', '⚠️ Aktive Selbstverletzung'],
+    gegenHypothese: '',
+    empfehlung: 'SOFORT: Sicherheitsplan. Kein Alleinsein. Fachperson kontaktieren. Notfallnummer bereitstellen. Eltern/Erziehungsberechtigte informieren.',
+    wiki_ids: ['suizidalitaet', 'selbstverletzung', 'krisenintervention'],
+  },
+  {
+    id: 'eskalation-krise-multi',
+    gruppe: 'ESKALATION',
+    titel: 'Multiple akute Risikofaktoren — Krisenintervention',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 5,
+    icd10: [],
+    bedingung: (ctx) => {
+      let kritisch = 0;
+      if (ctx.anamnese.includes('suizid_ja')) kritisch++;
+      if (ctx.anamnese.includes('svv_aktiv')) kritisch++;
+      if (ctx.anamnese.includes('obdachlosigkeit')) kritisch++;
+      if (ctx.anamnese.includes('kein_stabiler_erwachsener')) kritisch++;
+      if (ctx.anamnese.includes('gang')) kritisch++;
+      if (ctx.wohlbefinden?.trend === 'fallend') kritisch++;
+      if (ctx.srsTrend?.trend === 'fallend' && ctx.srsTrend?.letzterWert < 20) kritisch++;
+      return kritisch >= 3;
+    },
+    erklaerung: 'Drei oder mehr kritische Risikofaktoren gleichzeitig aktiv — dieses Profil erfordert sofortige multiprofessionelle Intervention.',
+    evidenz: 'Kumulation von Hochrisikofaktoren multipliziert das Gesamtrisiko exponentiell (Rutter 1979). Bei 3+ akuten Faktoren ist Krisenintervention indiziert.',
+    quelle: 'Rutter (1979); Hawton et al. (2012)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('suizid_ja')) d.push('⚠️ Suizidversuch');
+      if (ctx.anamnese.includes('svv_aktiv')) d.push('⚠️ Aktive SVV');
+      if (ctx.anamnese.includes('obdachlosigkeit')) d.push('⚠️ Obdachlosigkeit');
+      if (ctx.anamnese.includes('kein_stabiler_erwachsener')) d.push('⚠️ Keine Bezugsperson');
+      if (ctx.anamnese.includes('gang')) d.push('⚠️ Gang-Zugehörigkeit');
+      if (ctx.wohlbefinden?.trend === 'fallend') d.push('⚠️ Wohlbefinden sinkt');
+      if (ctx.srsTrend?.trend === 'fallend') d.push('⚠️ SRS-Trend fallend');
+      return d;
+    },
+    gegenHypothese: '',
+    empfehlung: 'Sofortige Krisenintervention. Multiprofessionelles Team einberufen. Sicherheitsplan erstellen. Engmaschiges Monitoring.',
+    wiki_ids: ['krisenintervention'],
+  },
 ];
 
 // ============================================================

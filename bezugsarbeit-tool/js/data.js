@@ -3062,6 +3062,166 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Diese soziale Kompetenz als Stärke in der Arbeit nutzen. Peer-basierte Interventionen erwägen.',
     wiki_ids: ['resilienz'],
   },
+
+  // ── Gruppe 12: Gesundheit, Wohnung, Finanzen — neue Felder ─────
+  {
+    id: 'autismus-mobbing',
+    gruppe: 'Entwicklung',
+    titel: 'Autismus-Spektrum + Mobbing-Erfahrung',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: ['F84', 'Z65.4'],
+    bedingung: (ctx) => ctx.anamnese.includes('autismus_spektrum') && (ctx.anamnese.includes('mobbing_opfer') || ctx.anamnese.includes('mobbing_beides')),
+    erklaerung: 'Kinder im Autismus-Spektrum werden überproportional häufig gemobbt. Die Kombination führt zu massivem Rückzug, Angst und Depression.',
+    evidenz: 'Bis zu 63% der Kinder mit ASS erleben Mobbing — mit signifikant höheren Raten von Angst und Depression als neurotypische Peers (Sterzing et al. 2012; Maiano et al. 2016).',
+    quelle: 'Sterzing et al. (2012); Maiano et al. (2016)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Autismus-Spektrum-Störung'];
+      if (ctx.anamnese.includes('mobbing_opfer')) d.push('Mobbing-Opfer');
+      if (ctx.anamnese.includes('mobbing_beides')) d.push('Mobbing: Täter-Opfer');
+      return d;
+    },
+    gegenHypothese: 'Bei gutem schulischem Support und Peer-Sensibilisierung kann Mobbing reduziert werden.',
+    empfehlung: 'Anti-Mobbing-Programm. Peer-Sensibilisierung. Sozialtraining. Rückzugsräume schaffen.',
+    wiki_ids: ['mobbing', 'entwicklung'],
+  },
+  {
+    id: 'schlafprobleme-verhalten',
+    gruppe: 'Entwicklung',
+    titel: 'Chronische Schlafprobleme + Verhaltensauffälligkeiten',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['G47', 'F91'],
+    bedingung: (ctx) => ctx.anamnese.includes('schlafprobleme') && ctx.screening.flaggedAreas.includes('verhaltensauffaelligkeiten'),
+    erklaerung: 'Chronischer Schlafmangel verstärkt Impulsivität, Reizbarkeit und Aggressivität — Schlafprobleme können externalisierendes Verhalten verursachen oder verschärfen.',
+    evidenz: 'Schlafstörungen sind unabhängiger Risikofaktor für Verhaltensprobleme und können ADHS-Symptome imitieren (Gregory & Sadeh 2012; Owens 2009).',
+    quelle: 'Gregory & Sadeh (2012); Owens (2009)',
+    ausloesendeDaten: (ctx) => ['Chronische Schlafprobleme', 'Screening: Verhaltensauffälligkeiten erhöht'],
+    gegenHypothese: 'Schlafhygiene-Intervention kann Verhaltensprobleme signifikant reduzieren ohne weitere Therapie.',
+    empfehlung: 'Schlafhygiene prüfen. Mediennutzung abends erfassen. Ggf. Schlafprotokoll. Somatische Abklärung.',
+    wiki_ids: ['entwicklung'],
+  },
+  {
+    id: 'fruehgeburt-entwicklung',
+    gruppe: 'Entwicklung',
+    titel: 'Frühgeburt + Entwicklungsverzögerung',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['P07', 'F80', 'F82'],
+    bedingung: (ctx) => ctx.anamnese.includes('fruehgeburt') && (ctx.anamnese.includes('entwicklungsverzoegerung') || ctx.anamnese.includes('sprache_verzoegert') || ctx.anamnese.includes('motorik_verzoegert')),
+    erklaerung: 'Frühgeburt in Kombination mit Entwicklungsverzögerungen deutet auf perinatale Schädigungen hin, die langfristige Unterstützung erfordern.',
+    evidenz: 'Frühgeborene mit Entwicklungsverzögerungen haben 3-5x erhöhtes Risiko für schulische Probleme und ADHS (Johnson & Marlow 2011; Saigal & Doyle 2008).',
+    quelle: 'Johnson & Marlow (2011); Saigal & Doyle (2008)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Frühgeburt'];
+      if (ctx.anamnese.includes('entwicklungsverzoegerung')) d.push('Entwicklungsverzögerung');
+      if (ctx.anamnese.includes('sprache_verzoegert')) d.push('Sprachverzögerung');
+      if (ctx.anamnese.includes('motorik_verzoegert')) d.push('Motorik verzögert');
+      return d;
+    },
+    gegenHypothese: 'Viele Frühgeborene holen Entwicklungsrückstände bis zum Schulalter auf.',
+    empfehlung: 'Entwicklungsdiagnostik. Frühförderung prüfen. Schulische Nachteilsausgleiche.',
+    wiki_ids: ['entwicklung'],
+  },
+  {
+    id: 'essstoerung-screening',
+    gruppe: 'Internalisierend',
+    titel: 'Essstörung + Depression/Angst',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: ['F50', 'F32', 'F41'],
+    bedingung: (ctx) => (ctx.anamnese.includes('essstoerung') || ctx.anamnese.includes('diagnose_essstoerung')) && (ctx.screening.flaggedAreas.includes('depression') || ctx.screening.flaggedAreas.includes('angst-generalisiert')),
+    erklaerung: 'Essstörungen mit komorbider Depression oder Angst erfordern spezialisierte Behandlung — höchste Mortalitätsrate aller psychischen Störungen.',
+    evidenz: 'Komorbide Depression bei Essstörungen verschlechtert Prognose signifikant und erhöht Suizidrisiko (Franko & Keel 2006; Arcelus et al. 2011).',
+    quelle: 'Franko & Keel (2006); Arcelus et al. (2011)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('essstoerung') || ctx.anamnese.includes('diagnose_essstoerung')) d.push('Essstörung');
+      if (ctx.screening.flaggedAreas.includes('depression')) d.push('Screening: Depression erhöht');
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Angst erhöht');
+      return d;
+    },
+    gegenHypothese: 'Bei leichtem auffälligem Essverhalten ohne klinische Diagnose kann Psychoedukation ausreichen.',
+    empfehlung: 'Spezialisierte Abklärung. Suizidalität screenen. Somatische Überwachung (Gewicht, Elektrolyte).',
+    wiki_ids: ['depression', 'angst'],
+  },
+  {
+    id: 'beengte-wohnung-schlaf',
+    gruppe: 'Sozioökonomie',
+    titel: 'Beengte Wohnverhältnisse + Schlafprobleme',
+    typ: 'risiko',
+    staerke: 'hinweis',
+    staerkeWert: 2,
+    icd10: ['Z59', 'G47'],
+    bedingung: (ctx) => ctx.anamnese.includes('beengte_verhaeltnisse') && ctx.anamnese.includes('schlafprobleme'),
+    erklaerung: 'Beengte Wohnverhältnisse verursachen häufig Schlafprobleme durch Lärm und fehlende Rückzugsräume — ein oft übersehener Zusammenhang.',
+    evidenz: 'Wohnungsüberbelegung korreliert mit chronischem Schlafmangel und erhöhtem Cortisol bei Kindern (Evans et al. 2010).',
+    quelle: 'Evans et al. (2010)',
+    ausloesendeDaten: (ctx) => ['Beengte Wohnverhältnisse', 'Chronische Schlafprobleme'],
+    gegenHypothese: 'Schlafprobleme können auch andere Ursachen haben (Mediennutzung, Angst).',
+    empfehlung: 'Wohnsituation thematisieren. Schlafplatz optimieren. Rückzugsraum schaffen.',
+    wiki_ids: ['soziales'],
+  },
+  {
+    id: 'unsichere-nachbarschaft-trauma',
+    gruppe: 'Trauma/Krise',
+    titel: 'Unsichere Nachbarschaft + Trauma-Diagnose',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F43.1', 'Z65'],
+    bedingung: (ctx) => ctx.anamnese.includes('unsichere_nachbarschaft') && (ctx.anamnese.includes('diagnose_trauma') || ctx.screening.flaggedAreas.includes('trauma')),
+    erklaerung: 'Aufwachsen in einer gewaltbelasteten Umgebung ist eine eigenständige Traumaquelle — in Kombination mit bestehender PTBS verschärft sich die Symptomatik.',
+    evidenz: 'Community Violence Exposure ist unabhängiger Risikofaktor für PTBS; bei bestehender Traumatisierung entsteht kumulative Belastung (Fowler et al. 2009; Finkelhor et al. 2007).',
+    quelle: 'Fowler et al. (2009); Finkelhor et al. (2007)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Unsichere Nachbarschaft'];
+      if (ctx.anamnese.includes('diagnose_trauma')) d.push('Diagnose: Trauma/PTBS');
+      if (ctx.screening.flaggedAreas.includes('trauma')) d.push('Screening: Trauma erhöht');
+      return d;
+    },
+    gegenHypothese: 'Starke familiäre Kohäsion kann den Effekt gewaltbelasteter Nachbarschaften abschwächen.',
+    empfehlung: 'Traumasensible Haltung. Sicherheitsgefühl stärken. Ggf. Wohnortwechsel thematisieren.',
+    wiki_ids: ['trauma'],
+  },
+  {
+    id: 'schutz-gute-elternbeziehung',
+    gruppe: 'Schutzfaktoren',
+    titel: 'Gute Elternbeziehung + sichere Bindung',
+    typ: 'schutz',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('gute_elternbeziehung') && ctx.anamnese.includes('bindung_sicher'),
+    erklaerung: 'Gute Elternbeziehung kombiniert mit sicherer Bindung bildet das stärkste Schutzfundament — diese Kinder sind auch bei äusseren Belastungen resilient.',
+    evidenz: 'Sichere Bindung + warme Erziehung ist der konsistenteste Schutzfaktor über alle Risikogruppen hinweg (Luthar 2006; Sroufe et al. 2005).',
+    quelle: 'Luthar (2006); Sroufe et al. (2005)',
+    ausloesendeDaten: (ctx) => ['Gute Beziehung zu Elternteil', 'Sichere Bindung'],
+    gegenHypothese: '',
+    empfehlung: 'Elternressource aktiv einbeziehen. Eltern-Kind-Beziehung stärken und würdigen.',
+    wiki_ids: ['bindung', 'resilienz'],
+  },
+  {
+    id: 'schutz-selbstwirksamkeit',
+    gruppe: 'Schutzfaktoren',
+    titel: 'Hohe Selbstwirksamkeit als Schutzfaktor',
+    typ: 'schutz',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('selbstwirksamkeit'),
+    erklaerung: 'Hohe Selbstwirksamkeitserwartung ermöglicht aktive Problembewältigung und schützt gegen Hilflosigkeit.',
+    evidenz: 'Selbstwirksamkeit mediiert den Zusammenhang zwischen Risiko und Anpassung — zentraler Resilienzfaktor (Bandura 1997; Rutter 2012).',
+    quelle: 'Bandura (1997); Rutter (2012)',
+    ausloesendeDaten: (ctx) => ['Hohe Selbstwirksamkeitserwartung'],
+    gegenHypothese: '',
+    empfehlung: 'Selbstwirksamkeit gezielt stärken. Erfolgserlebnisse ermöglichen. Autonomie fördern.',
+    wiki_ids: ['resilienz'],
+  },
 ];
 
 // ============================================================

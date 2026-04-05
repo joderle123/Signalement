@@ -756,6 +756,73 @@ body {
   flex-wrap: wrap;
 }
 
+/* Phasen-Haupttabs */
+.profil-tabs-main {
+  background: white;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+.profil-main-tab {
+  padding: 14px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-bottom: -2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.profil-main-tab .phase-icon {
+  font-size: 16px;
+}
+.profil-main-tab:hover { color: var(--text); background: #f8f9fb; }
+.profil-main-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Phasen-Sub-Tabs (Pill-Style) */
+.profil-tabs-sub {
+  display: none;
+  gap: 8px;
+  padding: 10px 24px;
+  background: #f8f9fb;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.profil-sub-tab {
+  padding: 6px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  color: var(--text-muted);
+  background: white;
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.profil-sub-tab:hover {
+  color: var(--text);
+  border-color: #94a3b8;
+}
+.profil-sub-tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Tab content show/hide (unchanged) */
+.profil-tab-content { display: none; }
+.profil-tab-content.active { display: block; }
+
+/* Legacy .profil-tabs/.profil-tab for screening result tabs */
 .profil-tabs {
   background: white;
   border-bottom: 1px solid var(--border);
@@ -767,7 +834,6 @@ body {
   scrollbar-width: none;
 }
 .profil-tabs::-webkit-scrollbar { display: none; }
-
 .profil-tab {
   padding: 13px 16px;
   font-size: 13px;
@@ -778,14 +844,99 @@ body {
   transition: all var(--transition-fast);
   white-space: nowrap;
   margin-bottom: -1px;
-  letter-spacing: -0.1px;
 }
-
 .profil-tab:hover { color: var(--text); }
 .profil-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
 
-.profil-tab-content { display: none; }
-.profil-tab-content.active { display: block; }
+/* Wiki Floating Action Button */
+.wiki-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
+  z-index: 999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wiki-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.45);
+}
+
+/* Wiki Slide-In Panel */
+.wiki-panel {
+  position: fixed;
+  top: 0;
+  right: -440px;
+  width: 420px;
+  height: 100vh;
+  background: white;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  z-index: 1001;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+.wiki-panel.open { right: 0; }
+.wiki-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.wiki-panel-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.wiki-panel-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wiki-panel-close:hover { background: #f1f5f9; color: var(--text); }
+.wiki-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Wiki overlay */
+.wiki-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.wiki-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
 
 /* ============================================================
    THEMEN GRID

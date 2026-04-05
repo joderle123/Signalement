@@ -348,26 +348,95 @@ function renderProfil(schuelerId) {
   risikoEl.className = `risiko-indicator ${s.risiko || 'niedrig'}`;
   risikoEl.innerHTML = `<div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div> ${capitalize(s.risiko || 'niedrig')} Risiko`;
 
-  // Aktiven Tab rendern
-  showProfilTab(APP.currentProfilTab);
+  // Aktiven Tab rendern (über Phasen-Navigation)
+  const phase = getPhaseForTab(APP.currentProfilTab);
+  showPhase(phase, APP.currentProfilTab);
+}
+
+// ============================================================
+// PHASEN-NAVIGATION (5 Haupttabs mit Sub-Tabs)
+// ============================================================
+const PHASE_TABS = {
+  uebersicht: [{ id: 'dashboard', label: 'Übersicht' }],
+  erfassen: [
+    { id: 'info', label: 'Aufnahme' },
+    { id: 'genogramm', label: 'Genogramm' },
+    { id: 'staerken', label: 'Stärken' }
+  ],
+  analysieren: [
+    { id: 'screening', label: 'Screening' },
+    { id: 'fallformulierung', label: '5P-Analyse' },
+    { id: 'verhalten', label: 'Verhalten' }
+  ],
+  handeln: [
+    { id: 'roadmap', label: 'Förderplan & Ziele' },
+    { id: 'themen', label: 'Themen & Sitzungen' },
+    { id: 'notizen', label: 'Notizen' }
+  ],
+  berichte: [{ id: 'berichte', label: 'Berichte' }]
+};
+
+// Track current phase
+APP.currentPhase = 'uebersicht';
+
+function getPhaseForTab(tabId) {
+  for (const [phase, tabs] of Object.entries(PHASE_TABS)) {
+    if (tabs.some(t => t.id === tabId)) return phase;
+  }
+  return 'uebersicht';
+}
+
+function showPhase(phase, subTabId) {
+  APP.currentPhase = phase;
+
+  // Highlight main tab
+  document.querySelectorAll('.profil-main-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.phase === phase)
+  );
+
+  // Render sub-tabs
+  const subBar = document.getElementById('profil-tabs-sub');
+  const tabs = PHASE_TABS[phase];
+
+  if (tabs.length <= 1) {
+    subBar.style.display = 'none';
+    showProfilTab(subTabId || tabs[0].id);
+  } else {
+    subBar.style.display = 'flex';
+    const activeSubId = subTabId || tabs[0].id;
+    subBar.innerHTML = tabs.map(t =>
+      `<div class="profil-sub-tab ${t.id === activeSubId ? 'active' : ''}" data-tab="${t.id}" onclick="showSubTab('${t.id}')">${t.label}</div>`
+    ).join('');
+    showProfilTab(activeSubId);
+  }
+}
+
+function showSubTab(tabId) {
+  document.querySelectorAll('.profil-sub-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.tab === tabId)
+  );
+  showProfilTab(tabId);
 }
 
 function showProfilTab(tab) {
   APP.currentProfilTab = tab;
-  // Notizen-Tab hat keinen eigenen Header-Tab, wird dem Themen-Tab zugeordnet
-  const highlightTab = (tab === 'notizen') ? 'themen' : tab;
-  document.querySelectorAll('.profil-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.tab === highlightTab);
-  });
+
+  // Show/hide tab content
   document.querySelectorAll('.profil-tab-content').forEach(c => {
     c.classList.toggle('active', c.dataset.tab === tab);
   });
 
+  // Ensure phase nav is synced (for direct calls to showProfilTab)
+  const phase = getPhaseForTab(tab);
+  if (phase !== APP.currentPhase) {
+    showPhase(phase, tab);
+    return; // showPhase will call showProfilTab again
+  }
+
   if (tab === 'dashboard') renderDashboard();
-  if (tab === 'roadmap') renderRoadmap();
+  if (tab === 'roadmap') { renderRoadmap(); renderZiele(); renderScreeningZielVorschlaege(); }
   if (tab === 'themen') { renderThemen(); renderSitzungenImThemenTab(); }
   if (tab === 'notizen') renderNotizen();
-  if (tab === 'ziele') { renderZiele(); renderScreeningZielVorschlaege(); }
   if (tab === 'staerken') renderStaerken();
   if (tab === 'fallformulierung') renderFallformulierung();
   if (tab === 'screening') renderScreeningEmbedded();
@@ -375,7 +444,27 @@ function showProfilTab(tab) {
   if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
   if (tab === 'genogramm') renderGenogramm();
-  if (tab === 'wiki') renderWiki();
+}
+
+// ============================================================
+// WIKI FLOATING PANEL
+// ============================================================
+function toggleWikiPanel() {
+  const panel = document.getElementById('wiki-panel');
+  const overlay = document.getElementById('wiki-overlay');
+  const fab = document.getElementById('wiki-fab');
+  const isOpen = panel.classList.contains('open');
+
+  if (isOpen) {
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+    fab.style.display = '';
+  } else {
+    renderWiki();
+    panel.classList.add('open');
+    overlay.classList.add('open');
+    fab.style.display = 'none';
+  }
 }
 
 // ============================================================
@@ -2625,7 +2714,7 @@ function renderDashboardSummary() {
         <div style="font-size:16px;font-weight:700;color:${scrFlagged > 0 ? '#EF4444' : '#22C55E'};">${screenings.length === 0 ? 'Ausstehend' : scrFlagged + ' auffällig'}</div>
         <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${screenings.length > 0 ? 'von ' + scrTotal + ' Bereichen' : 'Noch kein Screening'}</div>
       </div>
-      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showProfilTab('ziele')">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showPhase('handeln','roadmap')">
         <div style="font-size:22px;margin-bottom:4px;">🎯</div>
         <div style="font-size:11px;color:#6B7280;">Ziele</div>
         <div style="font-size:16px;font-weight:700;color:${zielFarbe};">${ziele.length === 0 ? 'Keine' : avgZiel + '%'}</div>
@@ -6951,7 +7040,7 @@ function renderWikiTeaserWidget() {
   html += '<div style="font-size:12px;color:#374151;line-height:1.5;">' + (artikel.definition || '').substring(0, 180) + '...</div>';
   html += '<div style="margin-top:8px;font-size:11px;color:#3B82F6;font-weight:600;">📚 Artikel lesen →</div>';
   html += '</div>';
-  html += '<div style="text-align:center;margin-top:10px;"><button class="btn btn-sm" onclick="showProfilTab(\'wiki\')" style="font-size:11px;padding:4px 14px;background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;border-radius:6px;cursor:pointer;">Alle ' + WIKI_ARTIKEL.length + ' Wiki-Artikel anzeigen</button></div>';
+  html += '<div style="text-align:center;margin-top:10px;"><button class="btn btn-sm" onclick="toggleWikiPanel()" style="font-size:11px;padding:4px 14px;background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;border-radius:6px;cursor:pointer;">Alle ' + WIKI_ARTIKEL.length + ' Wiki-Artikel anzeigen</button></div>';
   html += '</div></div>';
 
   container.insertAdjacentHTML('beforeend', html);

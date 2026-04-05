@@ -104,21 +104,25 @@
       </div>
     </div>
 
-    <!-- Tabs — therapeutische Reihenfolge -->
-    <div class="profil-tabs">
-      <div class="profil-tab active" data-tab="dashboard" onclick="showProfilTab('dashboard')">🏠 Übersicht</div>
-      <div class="profil-tab" data-tab="info" onclick="showProfilTab('info')">ℹ️ Aufnahme</div>
-      <div class="profil-tab" data-tab="genogramm" onclick="showProfilTab('genogramm')">👨‍👩‍👧 Genogramm</div>
-      <div class="profil-tab" data-tab="screening" onclick="showProfilTab('screening')">🔍 Screening</div>
-      <div class="profil-tab" data-tab="fallformulierung" onclick="showProfilTab('fallformulierung')">🧩 5P-Analyse</div>
-      <div class="profil-tab" data-tab="staerken" onclick="showProfilTab('staerken')">💪 Stärken</div>
-      <div class="profil-tab" data-tab="verhalten" onclick="showProfilTab('verhalten')">👁️ Verhalten</div>
-      <div class="profil-tab" data-tab="roadmap" onclick="showProfilTab('roadmap')">🗺️ Förderplan</div>
-      <div class="profil-tab" data-tab="ziele" onclick="showProfilTab('ziele')">🎯 Ziele</div>
-      <div class="profil-tab" data-tab="themen" onclick="showProfilTab('themen')">📋 Themen & Sitzungen</div>
-      <div class="profil-tab" data-tab="wiki" onclick="showProfilTab('wiki')">📚 Wiki</div>
-      <div class="profil-tab" data-tab="berichte" onclick="showProfilTab('berichte')">📄 Berichte</div>
+    <!-- Phasen-Navigation -->
+    <div class="profil-tabs-main">
+      <div class="profil-main-tab active" data-phase="uebersicht" onclick="showPhase('uebersicht')">
+        <span class="phase-icon">🏠</span> Übersicht
+      </div>
+      <div class="profil-main-tab" data-phase="erfassen" onclick="showPhase('erfassen')">
+        <span class="phase-icon">📋</span> Erfassen
+      </div>
+      <div class="profil-main-tab" data-phase="analysieren" onclick="showPhase('analysieren')">
+        <span class="phase-icon">🔎</span> Analysieren
+      </div>
+      <div class="profil-main-tab" data-phase="handeln" onclick="showPhase('handeln')">
+        <span class="phase-icon">🎯</span> Handeln
+      </div>
+      <div class="profil-main-tab" data-phase="berichte" onclick="showPhase('berichte')">
+        <span class="phase-icon">📄</span> Berichte
+      </div>
     </div>
+    <div class="profil-tabs-sub" id="profil-tabs-sub"></div>
 
     <!-- Tab-Inhalte -->
     <div class="content" style="flex:1;overflow-y:auto;">
@@ -228,9 +232,37 @@
         <div id="verhalten-container"></div>
       </div>
 
-      <!-- FÖRDERPLAN / ROADMAP -->
+      <!-- FÖRDERPLAN / ROADMAP (inkl. Ziele) -->
       <div class="profil-tab-content" data-tab="roadmap">
         <div id="roadmap-container"></div>
+        <div id="roadmap-ziele-section" style="margin-top:24px;">
+          <div class="card">
+            <div class="card-header">
+              <span>🎯</span>
+              <div class="card-title">Ziele & Fortschritte</div>
+            </div>
+            <div class="card-body">
+              <div id="screening-ziel-vorschlaege"></div>
+              <div id="ziele-liste" style="margin-bottom:16px;"></div>
+              <details class="smart-hilfe" style="margin-bottom:12px;">
+                <summary style="font-size:12px;color:#3B82F6;cursor:pointer;font-weight:600;">📐 SMART-Methode — Wie formuliere ich gute Ziele? <span onclick="event.stopPropagation();showToolLegitimation('smart')" style="margin-left:8px;color:#6B7280;font-weight:400;text-decoration:underline;cursor:pointer;">📚 Evidenz</span></summary>
+                <div style="font-size:12px;color:#6B7280;padding:8px 12px;background:#F0F7FF;border-radius:8px;margin-top:6px;line-height:1.6;">
+                  <strong>S</strong>pezifisch — Was genau soll erreicht werden?<br>
+                  <strong>M</strong>essbar — Woran erkenne ich den Fortschritt?<br>
+                  <strong>E</strong>rreichbar — Ist das Ziel realistisch für diesen Jugendlichen?<br>
+                  <strong>R</strong>elevant — Passt es zu den identifizierten Problemen?<br>
+                  <strong>T</strong>erminiert — Bis wann soll es erreicht sein?<br>
+                  <em style="display:block;margin-top:6px;">Nicht: „Besser in der Schule" — Sondern: „In 4 Wochen kann Max 3x wöchentlich ohne Streit in der Pause spielen"</em>
+                </div>
+              </details>
+              <div style="display:flex;gap:10px;">
+                <input type="text" id="neues-ziel-input" placeholder="z.B. In 4 Wochen kann Max 3x/Woche ohne Streit in der Pause spielen"
+                  onkeydown="if(event.key==='Enter') addZiel()">
+                <button class="btn btn-success btn-sm" onclick="addZiel()">+ Hinzufügen</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- THEMEN & SITZUNGEN (zusammengelegt) -->
@@ -439,36 +471,7 @@
         <div id="notizen-liste"></div>
       </div>
 
-      <!-- ZIELE -->
-      <div class="profil-tab-content" data-tab="ziele">
-        <div class="card" style="margin-bottom:20px;">
-          <div class="card-header">
-            <span>🎯</span>
-            <div class="card-title">Ziele & Fortschritte</div>
-          </div>
-          <div class="card-body">
-            <div id="screening-ziel-vorschlaege"></div>
-            <div id="ziele-liste" style="margin-bottom:16px;"></div>
-            <!-- SMART-Hilfe aufklappbar -->
-            <details class="smart-hilfe" style="margin-bottom:12px;">
-              <summary style="font-size:12px;color:#3B82F6;cursor:pointer;font-weight:600;">📐 SMART-Methode — Wie formuliere ich gute Ziele? <span onclick="event.stopPropagation();showToolLegitimation('smart')" style="margin-left:8px;color:#6B7280;font-weight:400;text-decoration:underline;cursor:pointer;">📚 Evidenz</span></summary>
-              <div style="font-size:12px;color:#6B7280;padding:8px 12px;background:#F0F7FF;border-radius:8px;margin-top:6px;line-height:1.6;">
-                <strong>S</strong>pezifisch — Was genau soll erreicht werden?<br>
-                <strong>M</strong>essbar — Woran erkenne ich den Fortschritt?<br>
-                <strong>E</strong>rreichbar — Ist das Ziel realistisch für diesen Jugendlichen?<br>
-                <strong>R</strong>elevant — Passt es zu den identifizierten Problemen?<br>
-                <strong>T</strong>erminiert — Bis wann soll es erreicht sein?<br>
-                <em style="display:block;margin-top:6px;">Nicht: „Besser in der Schule" — Sondern: „In 4 Wochen kann Max 3x wöchentlich ohne Streit in der Pause spielen"</em>
-              </div>
-            </details>
-            <div style="display:flex;gap:10px;">
-              <input type="text" id="neues-ziel-input" placeholder="z.B. In 4 Wochen kann Max 3x/Woche ohne Streit in der Pause spielen"
-                onkeydown="if(event.key==='Enter') addZiel()">
-              <button class="btn btn-success btn-sm" onclick="addZiel()">+ Hinzufügen</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Ziele jetzt in Förderplan integriert -->
 
       <!-- STÄRKEN-PROFIL -->
       <div class="profil-tab-content" data-tab="staerken">
@@ -483,10 +486,7 @@
         <div id="fallformulierung-container"></div>
       </div>
 
-      <!-- WIKI -->
-      <div class="profil-tab-content" data-tab="wiki">
-        <div id="wiki-container"></div>
-      </div>
+      <!-- Wiki jetzt als Floating Panel -->
 
       <!-- BERICHTE -->
       <div class="profil-tab-content" data-tab="berichte">
@@ -794,6 +794,17 @@
   </div><!-- end screening view -->
 
 </main>
+
+<!-- Wiki Floating Panel -->
+<button class="wiki-fab" id="wiki-fab" onclick="toggleWikiPanel()" title="Wiki nachschlagen">📚</button>
+<div class="wiki-panel" id="wiki-panel">
+  <div class="wiki-panel-header">
+    <h3>📚 Pädagogisches Wiki</h3>
+    <button class="wiki-panel-close" onclick="toggleWikiPanel()">&times;</button>
+  </div>
+  <div class="wiki-panel-body" id="wiki-container"></div>
+</div>
+<div class="wiki-overlay" id="wiki-overlay" onclick="toggleWikiPanel()"></div>
 
 <!-- Toast Container -->
 <div id="toast-container"></div>

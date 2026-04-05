@@ -1988,9 +1988,12 @@ function renderHypothesen(hypothesen) {
         <div id="hypothesen-ansicht-flat" class="hypothesen-ansicht" style="display:none;">
           ${flatHtml}
         </div>
-        <div style="text-align:center;margin-top:12px;">
+        <div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center;">
           <button class="btn btn-sm btn-primary" onclick="openHypothesen5PModal()">
-            🔀 Hypothesen → 5P-Analyse übernehmen
+            🔀 Hypothesen → 5P-Analyse
+          </button>
+          <button class="btn btn-sm btn-secondary" onclick="generateHypothesenBericht()">
+            🖨️ Bericht drucken
           </button>
         </div>
         <div class="hypothesen-disclaimer">
@@ -2134,6 +2137,155 @@ function renderTreatmentResponse(schuelerId) {
       </div>
     </div>
   `;
+}
+
+// ============================================================
+// HYPOTHESEN-BERICHT (druckbar)
+// ============================================================
+function generateHypothesenBericht() {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  if (!s) return;
+
+  const hypothesen = generateHypothesen(APP.currentSchuelerId);
+  const trAnalyse = analyzeTreatmentResponse(APP.currentSchuelerId);
+  const screenings = DB.getScreenings(APP.currentSchuelerId).filter(sc => sc.abgeschlossen);
+  screenings.sort((a, b) => a.erstellt.localeCompare(b.erstellt));
+
+  const datum = new Date().toLocaleDateString('de-CH');
+  const risiken = hypothesen.filter(h => h.typ === 'risiko');
+  const schutz = hypothesen.filter(h => h.typ === 'schutz');
+  const diff = hypothesen.filter(h => h.typ === 'differenzial');
+
+  // Screening-Delta
+  let screeningDelta = '';
+  if (screenings.length >= 2) {
+    const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+    const erst = screenings[0];
+    const letzt = screenings[screenings.length - 1];
+    const allDomIds = [...new Set([...Object.keys(erst.scores || {}), ...Object.keys(letzt.scores || {})])];
+    screeningDelta = allDomIds.map(did => {
+      const dom = domains.find(d => d.id === did);
+      const s1 = (erst.scores || {})[did] || 0;
+      const s2 = (letzt.scores || {})[did] || 0;
+      const diff = s2 - s1;
+      if (s1 === 0 && s2 === 0) return '';
+      const arrow = diff < 0 ? '\u2193' : diff > 0 ? '\u2191' : '\u2194';
+      return `${dom?.label || did}: ${s1} \u2192 ${s2} (${diff > 0 ? '+' : ''}${diff}) ${arrow}`;
+    }).filter(Boolean).join('\n');
+  }
+
+  const berichtHtml = `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <title>Hypothesen-Bericht: ${s.vorname} ${s.nachname}</title>
+      <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size:12px; color:#1F2937; padding:30px; max-width:800px; margin:0 auto; }
+        h1 { font-size:18px; margin-bottom:4px; }
+        h2 { font-size:14px; margin:16px 0 8px; border-bottom:2px solid #E5E7EB; padding-bottom:4px; }
+        h3 { font-size:12px; margin:8px 0 4px; }
+        .meta { color:#6B7280; font-size:11px; margin-bottom:16px; }
+        .section { margin-bottom:16px; }
+        .hypo { padding:8px 12px; margin-bottom:6px; border-left:3px solid #ccc; background:#F9FAFB; border-radius:0 6px 6px 0; }
+        .hypo.risiko-hoch { border-color:#EF4444; }
+        .hypo.risiko-mittel { border-color:#F59E0B; }
+        .hypo.risiko-niedrig { border-color:#9CA3AF; }
+        .hypo.schutz { border-color:#22C55E; }
+        .hypo.diff { border-color:#8B5CF6; }
+        .hypo-titel { font-weight:600; }
+        .hypo-detail { font-size:11px; color:#6B7280; margin-top:3px; }
+        .hypo-evidenz { font-size:10px; color:#9CA3AF; margin-top:2px; font-style:italic; }
+        .treatment { padding:6px 10px; background:#F0FDF4; border-radius:6px; margin-bottom:4px; }
+        .screening-row { padding:3px 0; font-size:11px; }
+        .disclaimer { font-size:10px; color:#9CA3AF; margin-top:20px; padding-top:10px; border-top:1px solid #E5E7EB; text-align:center; }
+        .hochgestuft { color:#DC2626; font-weight:600; font-size:10px; }
+        @media print { body { padding:15px; } }
+      </style>
+    </head>
+    <body>
+      <h1>Klinische Hypothesen-Analyse</h1>
+      <div class="meta">
+        ${s.vorname} ${s.nachname} | Klasse: ${s.klasse || '—'} | Erstellt: ${datum}<br>
+        ${hypothesen.length} aktive Hypothesen | ${risiken.length} Risiken | ${schutz.length} Schutzfaktoren | ${diff.length} Differenzialdiagnosen
+      </div>
+
+      ${risiken.length > 0 ? `
+        <div class="section">
+          <h2>\u26A0\uFE0F Risikohypothesen (${risiken.length})</h2>
+          ${risiken.map(h => `
+            <div class="hypo ${h.staerkeWert >= 3 ? 'risiko-hoch' : h.staerkeWert >= 2 ? 'risiko-mittel' : 'risiko-niedrig'}">
+              <div class="hypo-titel">${h.titel} — ${h.staerke === 'sehr-wahrscheinlich' ? 'Sehr wahrscheinlich' : h.staerke === 'wahrscheinlich' ? 'Wahrscheinlich' : 'Hinweis'}
+                ${h._dynamischHochgestuft ? '<span class="hochgestuft">\u2191 dynamisch hochgestuft</span>' : ''}
+              </div>
+              <div class="hypo-detail">Basierend auf: ${(h._ausloesendeDaten || []).join(', ')}</div>
+              <div class="hypo-detail">${h.erklaerung}</div>
+              <div class="hypo-detail"><strong>Empfehlung:</strong> ${h.empfehlung}</div>
+              <div class="hypo-evidenz">${h.quelle}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      ${schutz.length > 0 ? `
+        <div class="section">
+          <h2>\uD83D\uDEE1\uFE0F Schutzfaktoren (${schutz.length})</h2>
+          ${schutz.map(h => `
+            <div class="hypo schutz">
+              <div class="hypo-titel">${h.titel}</div>
+              <div class="hypo-detail">${h.erklaerung}</div>
+              <div class="hypo-evidenz">${h.quelle}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      ${diff.length > 0 ? `
+        <div class="section">
+          <h2>\uD83D\uDD00 Differenzialdiagnostische Hinweise (${diff.length})</h2>
+          ${diff.map(h => `
+            <div class="hypo diff">
+              <div class="hypo-titel">${h.titel}</div>
+              <div class="hypo-detail">${h.erklaerung}</div>
+              <div class="hypo-evidenz">${h.quelle}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      ${trAnalyse.themen.length > 0 ? `
+        <div class="section">
+          <h2>\uD83D\uDC8A Treatment-Response</h2>
+          ${trAnalyse.bestesThema ? `<div class="treatment"><strong>Respondiert gut auf:</strong> ${trAnalyse.bestesThema.label} (${trAnalyse.bestesThema.responseRate}% Response, \u00D8 SRS ${trAnalyse.bestesThema.durchschnittSrs}/40)</div>` : ''}
+          ${trAnalyse.themen.map(t => `
+            <div class="screening-row">${t.label}: ${t.anzahl} Sitzungen, ${t.responseRate}% Response, Trend: ${t.trend}</div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      ${screeningDelta ? `
+        <div class="section">
+          <h2>\uD83D\uDCCA Screening-Verlauf (T1 \u2192 T${screenings.length})</h2>
+          ${screeningDelta.split('\n').map(line => `<div class="screening-row">${line}</div>`).join('')}
+        </div>
+      ` : ''}
+
+      <div class="disclaimer">
+        Dieser Bericht wurde automatisch generiert und dient als Arbeitshilfe f\u00FCr Fachkr\u00E4fte \u2014 kein Ersatz f\u00FCr klinische Diagnostik.
+      </div>
+    </body>
+    </html>
+  `;
+
+  const fenster = window.open('', '_blank');
+  if (fenster) {
+    fenster.document.write(berichtHtml);
+    fenster.document.close();
+    fenster.print();
+  } else {
+    showToast('Pop-up blockiert — bitte Pop-ups erlauben', 'warning');
+  }
 }
 
 // ============================================================

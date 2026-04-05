@@ -3632,6 +3632,149 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Funktionale Verhaltensanalyse. Soziales Kompetenztraining. Systemische Intervention im Umfeld.',
     wiki_ids: ['mobbing', 'conduct-disorder'],
   },
+
+  // ── Gruppe 15: Erweiterte Kreuzreferenzen ─────────────────────
+  {
+    id: 'trennungsangst-kiga-pendeln',
+    gruppe: 'Internalisierend',
+    titel: 'Trennungsangst-Muster (Kiga + Pendeln + Screening)',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F93.0'],
+    bedingung: (ctx) => {
+      const hatKiga = ctx.anamnese.includes('kiga_schwierig') || ctx.anamnese.includes('kiga_wechsel');
+      const hatPendeln = ctx.anamnese.includes('pendeln_elternteile');
+      const hatScreening = ctx.screening.flaggedAreas.includes('trennungsangst') || ctx.screening.flaggedAreas.includes('angst-generalisiert');
+      return hatKiga && (hatPendeln || hatScreening);
+    },
+    erklaerung: 'Schwierige Kindergarten-Erfahrung kombiniert mit Pendeln oder Angst-Screening deutet auf ein frühes Trennungsangst-Muster hin, das sich chronifizieren kann.',
+    evidenz: 'Trennungsangst in der frühen Kindheit ist Prädiktor für generalisierte Angststörung und Schulangst im Jugendalter (Kessler et al. 2005; Shear et al. 2006).',
+    quelle: 'Kessler et al. (2005); Shear et al. (2006)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('kiga_schwierig')) d.push('Kindergarten: Schwierige Eingewöhnung');
+      if (ctx.anamnese.includes('kiga_wechsel')) d.push('Kindergarten: Häufige Wechsel');
+      if (ctx.anamnese.includes('pendeln_elternteile')) d.push('Pendeln zwischen Elternteilen');
+      if (ctx.screening.flaggedAreas.includes('trennungsangst')) d.push('Screening: Trennungsangst erhöht');
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Angst erhöht');
+      return d;
+    },
+    gegenHypothese: 'Schwierige Eingewöhnung kann temperamentsbedingt sein und sich mit der Zeit von selbst auflösen.',
+    empfehlung: 'Stufenweise Exposition. Elternarbeit: Abschiedsrituale. Bezugspersonenprinzip.',
+    wiki_ids: ['trennungsangst', 'angst'],
+  },
+  {
+    id: 'ace-hoch-plus-keine-therapie',
+    gruppe: 'Trauma/Krise',
+    titel: 'Hohe ACE-Belastung ohne bisherige Therapie',
+    typ: 'risiko',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['Z62', 'Z61'],
+    bedingung: (ctx) => {
+      const aceKat = ANAMNESE_KATEGORIEN.find(k => k.id === 'ace');
+      if (!aceKat || !aceKat.items) return false;
+      const aceItems = aceKat.items ? aceKat.items.flatMap(g => g.optionen || [g]) : [];
+      const aceCount = aceItems.filter(it => ctx.anamnese.includes(it.id)).length;
+      return aceCount >= 4 && ctx.anamnese.includes('behandlung_keine');
+    },
+    erklaerung: '4+ ACE-Faktoren ohne bisherige therapeutische Unterstützung bedeutet hohe unbehandelte Belastung — die Folgen akkumulieren sich über die Zeit.',
+    evidenz: 'ACE-Score ≥4 erhöht das Risiko für Depression um 4.6x, Suizidversuch um 12x und Substanzmissbrauch um 7x (Felitti et al. 1998). Ohne Therapie fehlt die Verarbeitungsmöglichkeit.',
+    quelle: 'Felitti et al. (1998); Anda et al. (2006)',
+    ausloesendeDaten: (ctx) => {
+      const aceKat = ANAMNESE_KATEGORIEN.find(k => k.id === 'ace');
+      if (!aceKat) return ['ACE ≥4', 'Keine Vorbehandlung'];
+      const aceItems = aceKat.items ? aceKat.items.flatMap(g => g.optionen || [g]) : [];
+      const d = aceItems.filter(it => ctx.anamnese.includes(it.id)).map(it => 'ACE: ' + it.label);
+      d.push('Keine frühere Behandlung');
+      return d;
+    },
+    gegenHypothese: 'Manche Menschen verarbeiten belastende Erfahrungen ohne formale Therapie durch natürliche Resilienzfaktoren.',
+    empfehlung: 'Therapeutische Anbindung priorisieren. Traumasensible Grundhaltung. Nicht forcieren, aber Zugang ermöglichen.',
+    wiki_ids: ['ace-studie', 'trauma'],
+  },
+  {
+    id: 'autismus-isolation-angst',
+    gruppe: 'Entwicklung',
+    titel: 'Autismus-Spektrum + Isolation + Angst',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: ['F84', 'F40', 'F41'],
+    bedingung: (ctx) => ctx.anamnese.includes('autismus_spektrum') && ctx.anamnese.includes('soziale_isolation') && (ctx.screening.flaggedAreas.includes('angst-sozial') || ctx.screening.flaggedAreas.includes('angst-generalisiert')),
+    erklaerung: 'Autismus-Spektrum + soziale Isolation + Angst bilden einen sich selbst verstärkenden Kreislauf — soziale Schwierigkeiten führen zu Vermeidung, Vermeidung zu mehr Isolation.',
+    evidenz: 'Bis zu 40% der Jugendlichen mit ASS entwickeln komorbide Angststörungen; soziale Isolation verstärkt den Kreislauf (Simonoff et al. 2008; White et al. 2009).',
+    quelle: 'Simonoff et al. (2008); White et al. (2009)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Autismus-Spektrum', 'Soziale Isolation'];
+      if (ctx.screening.flaggedAreas.includes('angst-sozial')) d.push('Screening: Soziale Angst erhöht');
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Generalisierte Angst erhöht');
+      return d;
+    },
+    gegenHypothese: 'Manche autistische Jugendliche bevorzugen bewusst weniger soziale Kontakte, ohne darunter zu leiden.',
+    empfehlung: 'Angstbehandlung (angepasste KVT). Sozialtraining in Kleingruppe. Nicht erzwungene Peer-Kontakte.',
+    wiki_ids: ['autismus', 'soziale-angst'],
+  },
+  {
+    id: 'multipler-schutz',
+    gruppe: 'Schutzfaktoren',
+    titel: 'Multiple Schutzfaktoren — hohe Resilienz',
+    typ: 'schutz',
+    ebene: 'kombination',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: [],
+    bedingung: (ctx) => {
+      let count = 0;
+      if (ctx.anamnese.includes('stabile_bezugsperson')) count++;
+      if (ctx.anamnese.includes('freundschaft')) count++;
+      if (ctx.anamnese.includes('gute_schulleistung')) count++;
+      if (ctx.anamnese.includes('hobby') || ctx.anamnese.includes('vereinsmitgliedschaft')) count++;
+      if (ctx.anamnese.includes('selbstwirksamkeit')) count++;
+      if (ctx.anamnese.includes('gute_elternbeziehung')) count++;
+      if (ctx.anamnese.includes('bindung_sicher')) count++;
+      return count >= 4;
+    },
+    erklaerung: 'Vier oder mehr Schutzfaktoren gleichzeitig bilden ein starkes Resilienz-Fundament — selbst bei erheblichen Risikofaktoren kann eine positive Entwicklung erwartet werden.',
+    evidenz: 'Kumulative Schutzfaktoren wirken kompensatorisch auf kumulative Risiken; ab 4+ Schutzfaktoren sinkt das Störungsrisiko drastisch (Masten 2001; Rutter 2012; Werner & Smith 1992).',
+    quelle: 'Masten (2001); Rutter (2012); Werner & Smith (1992)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('stabile_bezugsperson')) d.push('Stabile Bezugsperson');
+      if (ctx.anamnese.includes('freundschaft')) d.push('Enge Freundschaft');
+      if (ctx.anamnese.includes('gute_schulleistung')) d.push('Gute Schulleistungen');
+      if (ctx.anamnese.includes('hobby') || ctx.anamnese.includes('vereinsmitgliedschaft')) d.push('Hobby/Verein');
+      if (ctx.anamnese.includes('selbstwirksamkeit')) d.push('Hohe Selbstwirksamkeit');
+      if (ctx.anamnese.includes('gute_elternbeziehung')) d.push('Gute Elternbeziehung');
+      if (ctx.anamnese.includes('bindung_sicher')) d.push('Sichere Bindung');
+      return d;
+    },
+    gegenHypothese: '',
+    empfehlung: 'Schutzfaktoren aktiv nutzen und stärken. Ressourcenorientierte Arbeit. Stärken in Hilfeplanung einbeziehen.',
+    wiki_ids: ['resilienz', 'salutogenese'],
+  },
+  {
+    id: 'sucht-haushalt-substanz-screening',
+    gruppe: 'Externalisierend',
+    titel: 'Sucht im Haushalt + eigener Substanzkonsum',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 4,
+    icd10: ['F10-F19'],
+    bedingung: (ctx) => ctx.anamnese.includes('sucht_haushalt') && ctx.screening.flaggedAreas.includes('substanz'),
+    erklaerung: 'Aufwachsen in einem Suchthaushalt kombiniert mit eigenem auffälligem Konsum zeigt das typische transgenerationale Suchtmuster — Normalisierung von Substanzgebrauch plus genetische Vulnerabilität.',
+    evidenz: 'Kinder suchtkranker Eltern haben 4-8x erhöhtes Risiko für eigene Suchtentwicklung (Sher 1991); eigener erhöhter Konsum im Screening bestätigt die Transmission.',
+    quelle: 'Sher (1991); Chassin et al. (1999)',
+    ausloesendeDaten: (ctx) => ['Sucht im Haushalt', 'Screening: Substanzkonsum erhöht'],
+    gegenHypothese: 'Bewusstes Gegensteuern ("Ich will nicht wie meine Eltern werden") kann protektiv wirken.',
+    empfehlung: 'Suchtspezifische Prävention. Psychoedukation über transgenerationale Muster. Motivierende Gesprächsführung.',
+    wiki_ids: ['substanzkonsum'],
+  },
 ];
 
 // ============================================================

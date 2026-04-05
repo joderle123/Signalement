@@ -4389,6 +4389,52 @@ const HYPOTHESEN_REGELN = [
 ];
 
 // ============================================================
+// HYPOTHESEN → THEMEN MAPPING
+// Verbindet wiki_ids aus Hypothesen mit konkreten Therapie-Themen
+// ============================================================
+const HYPOTHESEN_THEMA_MAP = {
+  'bindungsstoerung': ['bindungsstoerung', 'eltern-kind-beziehung', 'trennungsangst', 'pflegefamilie'],
+  'bindung': ['eltern-kind-beziehung', 'bindungsstoerung', 'pflegefamilie', 'trennungsangst'],
+  'bindungstheorie': ['eltern-kind-beziehung', 'bindungsstoerung'],
+  'trauma': ['trauma', 'krisenintervention', 'emotionsregulation', 'resilienz'],
+  'komplextrauma': ['trauma', 'dissoziative-erfahrungen', 'emotionsregulation', 'krisenintervention'],
+  'depression': ['depressive-stimmungen', 'einsamkeit', 'selbstwertgefuehl', 'freude-wohlbefinden'],
+  'angst': ['stress-angst', 'angstanfaelle', 'emotionsregulation'],
+  'angststoerung': ['stress-angst', 'angstanfaelle', 'schulverweigerung'],
+  'soziale-angst': ['einsamkeit', 'soziale-wahrnehmung', 'freundschaften', 'kommunikation'],
+  'adhs': ['konzentration-aufmerksamkeit', 'impulskontrolle', 'lernstrategien', 'schulisches-engagement'],
+  'conduct-disorder': ['impulskontrolle', 'wut-aggression', 'grenzen-setzen', 'konfliktmanagement'],
+  'oppositionelles-verhalten': ['wut-aggression', 'impulskontrolle', 'konfliktmanagement', 'schulkonflikt'],
+  'schulabsentismus': ['schulverweigerung', 'schulisches-engagement', 'motivation', 'stress-angst'],
+  'schule': ['schulisches-engagement', 'lernstrategien', 'motivation', 'konzentration-aufmerksamkeit'],
+  'substanzkonsum': ['alkohol', 'cannabis', 'selbstmedikation'],
+  'sucht-substanzmissbrauch': ['alkohol', 'cannabis', 'selbstmedikation', 'tabak-ezigarette'],
+  'delinquenz': ['impulskontrolle', 'wut-aggression', 'grenzen-setzen', 'jugendrecht'],
+  'suizidalitaet': ['suizidpraevention', 'krisenintervention', 'selbstverletzung'],
+  'selbstverletzung': ['selbstverletzung', 'emotionsregulation', 'krisenintervention', 'stress-angst'],
+  'dissoziation': ['dissoziative-erfahrungen', 'trauma', 'emotionsregulation'],
+  'psychose': ['wahrnehmungsveraenderungen', 'mentale-gesundheit', 'krisenintervention'],
+  'psychosomatik': ['koerperbeschwerden', 'stress-angst', 'emotionserkennung'],
+  'parentifizierung': ['parentifizierung', 'grenzen-setzen', 'eltern-kind-beziehung'],
+  'trauer': ['trauer-verlust', 'emotionsregulation', 'resilienz'],
+  'trennungsangst': ['trennungsangst', 'stress-angst', 'eltern-kind-beziehung'],
+  'resilienz': ['resilienz', 'selbstwertgefuehl', 'freude-wohlbefinden', 'sport-bewegung'],
+  'salutogenese': ['resilienz', 'freude-wohlbefinden', 'lebenssinn'],
+  'mobbing': ['mobbing', 'cybermobbing', 'selbstwertgefuehl', 'soziale-wahrnehmung'],
+  'familie': ['familienzusammensetzung', 'eltern-kind-beziehung', 'trennung-scheidung', 'genogramm'],
+  'soziales': ['freundschaften', 'soziales-netzwerk', 'kommunikation', 'einsamkeit'],
+  'soziale-kompetenz': ['freundschaften', 'kommunikation', 'konfliktmanagement', 'empathie'],
+  'ace-studie': ['trauma', 'krisenintervention', 'resilienz', 'psychoedukation'],
+  'autismus': ['soziale-wahrnehmung', 'kommunikation', 'emotionserkennung'],
+  'psychopharmaka': ['mentale-gesundheit', 'psychoedukation', 'chronische-erkrankung'],
+  'vernachlaessigung': ['eltern-kind-beziehung', 'bindungsstoerung', 'trauma'],
+  'krisenintervention': ['krisenintervention', 'suizidpraevention', 'selbstverletzung'],
+  'entwicklung': ['konzentration-aufmerksamkeit', 'impulskontrolle', 'soziale-wahrnehmung'],
+  'migration-kulturelle-identitaet': ['migration-flucht', 'kulturelle-identitaet', 'diskriminierung', 'zugehoerigkeit'],
+  'gesundheit': ['schlaf', 'chronische-erkrankung', 'sport-bewegung', 'ernaehrung'],
+};
+
+// ============================================================
 // FACHLITERARISCHE LEGITIMATION DER TOOLS
 // ============================================================
 const TOOL_LEGITIMATION = {

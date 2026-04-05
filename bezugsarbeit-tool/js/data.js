@@ -1838,6 +1838,562 @@ const ANAMNESE_KATEGORIEN = [
 ];
 
 // ============================================================
+// HYPOTHESEN-ENGINE — Evidenzbasierte Regeln
+// ============================================================
+const HYPOTHESEN_REGELN = [
+  // ── GRUPPE 1: Bindung & Frühe Entwicklung ──────────────────
+  {
+    id: 'vaterfigur-fehlt',
+    titel: 'Eingeschränkte Vaterfigur-Erfahrung',
+    typ: 'risiko',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z62.0'],
+    bedingung: (ctx) => ctx.anamnese.includes('kein_vater') && (ctx.anamnese.includes('alleinerziehend') || ctx.anamnese.includes('pflegefamilie')),
+    erklaerung: 'Fehlende väterliche Bindungserfahrung korreliert mit erhöhter Wahrscheinlichkeit für Schwierigkeiten mit männlichen Autoritätspersonen, Identitätsentwicklung und Emotionsregulation.',
+    evidenz: 'Väterliche Abwesenheit erhöht das Risiko für externalisierende Verhaltensprobleme bei Jungen um Faktor 2-3 und für internalisierende Probleme bei Mädchen (Fthenakis 1999; McLanahan & Sandefur 1994).',
+    quelle: 'Fthenakis (1999); McLanahan & Sandefur (1994); Harper & McLanahan (2004)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('kein_vater')) d.push('Kein Vaterkontakt');
+      if (ctx.anamnese.includes('alleinerziehend')) d.push('Alleinerziehend');
+      if (ctx.anamnese.includes('pflegefamilie')) d.push('Pflegefamilie');
+      return d;
+    },
+    gegenHypothese: 'Falls ein stabiler männlicher Mentor oder Bezugsperson vorhanden ist (z.B. Grossvater, Trainer, Lehrer), kann dies die väterliche Abwesenheit teilweise kompensieren.',
+    empfehlung: 'Männliche Bezugsperson im Umfeld identifizieren. Bei Jungen: Identitätsarbeit. Beziehung zu Autoritätspersonen beobachten.',
+    wiki_ids: ['bindungsstoerung'],
+  },
+  {
+    id: 'mutterfigur-fehlt',
+    titel: 'Eingeschränkte primäre Bindungserfahrung (Mutter)',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F94.1', 'F94.2'],
+    bedingung: (ctx) => ctx.anamnese.includes('kein_mutter') && (ctx.anamnese.includes('heim') || ctx.anamnese.includes('pflegefamilie')),
+    erklaerung: 'Fehlende mütterliche Bezugsperson kombiniert mit Fremdplatzierung deutet auf massive Bindungsunterbrechung in der frühen Kindheit hin.',
+    evidenz: 'Mütterliche Abwesenheit in den ersten 3 Lebensjahren ist der stärkste Einzelprädiktor für desorganisierte Bindung. Fremdplatzierte Kinder zeigen 3-7x höheres Risiko für Bindungsstörungen (Bowlby 1969; Dozier et al. 2012).',
+    quelle: 'Bowlby (1969); Rutter (1981); Dozier et al. (2012)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Kein Mutterkontakt'];
+      if (ctx.anamnese.includes('heim')) d.push('Heimunterbringung');
+      if (ctx.anamnese.includes('pflegefamilie')) d.push('Pflegefamilie');
+      return d;
+    },
+    gegenHypothese: 'Falls eine stabile Ersatz-Bezugsperson (Pflegemutter, Grossmutter) seit früher Kindheit vorhanden ist, kann sichere Bindung trotzdem entstanden sein.',
+    empfehlung: 'Bindungsqualität gezielt explorieren. Traumasensiblen Beziehungsaufbau priorisieren. Bezugspersonenprinzip stärken.',
+    wiki_ids: ['bindungsstoerung'],
+  },
+  {
+    id: 'komplextrauma',
+    titel: 'Komplextraumatisierung möglich',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F43.1', 'F62.0'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      return a.includes('haeusliche_gewalt') || a.includes('misshandlung_physisch') || a.includes('vernachlaessigung_emotional') || a.includes('vernachlaessigung_physisch');
+    },
+    erklaerung: 'Häusliche Gewalt, Misshandlung oder Vernachlässigung in der Kindheit deutet auf potenzielle Komplextraumatisierung hin — mit weitreichenden Folgen für Emotionsregulation, Beziehungsfähigkeit und Selbstbild.',
+    evidenz: 'Komplextrauma unterscheidet sich von Einzeltrauma durch die kumulative Wirkung auf die Hirnentwicklung. Betroffene zeigen häufig Schwierigkeiten in Affektregulation, Dissoziation und gestörtem Selbstbild (van der Kolk 2005; Herman 1992).',
+    quelle: 'van der Kolk (2005); Herman (1992); Cook et al. (2005)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('haeusliche_gewalt')) d.push('Häusliche Gewalt');
+      if (ctx.anamnese.includes('misshandlung_physisch')) d.push('Physische Misshandlung');
+      if (ctx.anamnese.includes('vernachlaessigung_emotional')) d.push('Emotionale Vernachlässigung');
+      if (ctx.anamnese.includes('vernachlaessigung_physisch')) d.push('Physische Vernachlässigung');
+      return d;
+    },
+    gegenHypothese: 'Nicht jede Gewalt-/Vernachlässigungserfahrung führt zu Komplextrauma — Resilienzfaktoren (stabile Bezugsperson, Therapieerfahrung) können protektiv wirken.',
+    empfehlung: 'Traumasensible Haltung prioritär. Stabilisierung vor Konfrontation. Polyvagale Sicherheitssignale beachten. Fachärztliche Abklärung empfehlen.',
+    wiki_ids: ['trauma', 'komplextrauma'],
+  },
+  {
+    id: 'desorganisierte-bindung',
+    titel: 'Desorganisiertes Bindungsmuster wahrscheinlich',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F94.1', 'F94.2'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      const hatInstabilitaet = a.includes('haeufige_umzuege') || a.includes('heim') || a.includes('pflegefamilie');
+      const hatVerlust = a.includes('kein_vater') || a.includes('kein_mutter') || a.includes('tod_elternteil');
+      const hatTraumaScreening = ctx.screening.flaggedAreas.includes('trauma');
+      return hatInstabilitaet && hatVerlust && hatTraumaScreening;
+    },
+    erklaerung: 'Drei unabhängige Indikatoren — Instabilität der Lebenssituation, Verlust einer Bezugsperson und erhöhte Traumasymptome im Screening — weisen gemeinsam auf eine frühkindliche Bindungsunterbrechung mit desorganisiertem Muster hin.',
+    evidenz: 'Desorganisierte Bindung entsteht wenn die Bindungsperson gleichzeitig Quelle von Angst ist (Main & Hesse 1990). Sie ist der stärkste Prädiktor für spätere Psychopathologie mit OR 3.5 für Dissoziation und OR 2.5 für externalisierende Störungen.',
+    quelle: 'Main & Hesse (1990); Lyons-Ruth & Jacobvitz (2008); van IJzendoorn et al. (1999)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('haeufige_umzuege')) d.push('Häufige Umzüge');
+      if (ctx.anamnese.includes('heim')) d.push('Heimunterbringung');
+      if (ctx.anamnese.includes('pflegefamilie')) d.push('Pflegefamilie');
+      if (ctx.anamnese.includes('kein_vater')) d.push('Kein Vaterkontakt');
+      if (ctx.anamnese.includes('kein_mutter')) d.push('Kein Mutterkontakt');
+      if (ctx.anamnese.includes('tod_elternteil')) d.push('Tod eines Elternteils');
+      if (ctx.screening.flaggedAreas.includes('trauma')) d.push('Screening: Trauma erhöht');
+      return d;
+    },
+    gegenHypothese: 'Falls Screening-Werte grenzwertig und stabile Bezugsperson vorhanden, könnte unsicher-vermeidende statt desorganisierte Bindung vorliegen.',
+    empfehlung: 'Fachärztliche Bindungsdiagnostik empfehlen. Bezugspersonenprinzip mit hoher Verlässlichkeit. Keine konfrontativen Methoden.',
+    wiki_ids: ['bindungsstoerung', 'trauma'],
+  },
+  {
+    id: 'bindungsstoerung',
+    titel: 'Bindungsstörung — multiple Indikatoren',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F94.1', 'F94.2'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      const hatBezugspersonVerlust = a.includes('kein_vater') || a.includes('kein_mutter') || a.includes('tod_elternteil');
+      const hatVernachlaessigung = a.includes('vernachlaessigung_emotional') || a.includes('vernachlaessigung_physisch');
+      const hatIsolation = a.includes('soziale_isolation') || ctx.screening.flaggedAreas.includes('soziale-isolation');
+      return hatBezugspersonVerlust && hatVernachlaessigung && hatIsolation;
+    },
+    erklaerung: 'Bezugspersonenverlust + Vernachlässigungserfahrung + soziale Isolation bilden die klassische Trias für Bindungsstörungen.',
+    evidenz: 'Vernachlässigung in Kombination mit instabilen Bezugspersonen führt bei 60-80% der betroffenen Kinder zu unsicherer oder desorganisierter Bindung (Cicchetti & Barnett 1991; Crittenden 1985).',
+    quelle: 'Bowlby (1969); Brisch (2009); Cicchetti & Barnett (1991)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('kein_vater')) d.push('Kein Vaterkontakt');
+      if (ctx.anamnese.includes('kein_mutter')) d.push('Kein Mutterkontakt');
+      if (ctx.anamnese.includes('tod_elternteil')) d.push('Tod Elternteil');
+      if (ctx.anamnese.includes('vernachlaessigung_emotional')) d.push('Emotionale Vernachlässigung');
+      if (ctx.anamnese.includes('vernachlaessigung_physisch')) d.push('Physische Vernachlässigung');
+      if (ctx.anamnese.includes('soziale_isolation')) d.push('Soziale Isolation (Anamnese)');
+      if (ctx.screening.flaggedAreas.includes('soziale-isolation')) d.push('Soziale Isolation (Screening)');
+      return d;
+    },
+    gegenHypothese: 'Soziale Isolation kann auch durch Umzug, Schüchternheit oder ASS bedingt sein — nicht automatisch Bindungsstörung.',
+    empfehlung: 'Bindungsbasierte Interventionen priorisieren. Beziehungskontinuität sicherstellen. Keine häufigen Bezugspersonenwechsel.',
+    wiki_ids: ['bindungsstoerung'],
+  },
+  // ── GRUPPE 2: Externalisierende Muster ─────────────────────
+  {
+    id: 'externalisierend',
+    titel: 'Externalisierendes Störungsmuster',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F91', 'F92'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return f.includes('conduct') && f.includes('adhs') && ctx.anamnese.includes('haeusliche_gewalt');
+    },
+    erklaerung: 'Verhaltensauffälligkeiten + ADHS-Symptomatik + familiäre Gewalt bilden ein hochriskantes externalisierendes Muster mit erhöhtem Risiko für Conduct Disorder.',
+    evidenz: 'Die Kombination ADHS + Gewaltexposition erhöht das Risiko für Conduct Disorder um Faktor 4-6. Frühes Eingreifen ist entscheidend, da sich das Muster ohne Intervention chronifiziert (Moffitt 1993; Patterson et al. 1992).',
+    quelle: 'Moffitt (1993); Patterson et al. (1992); Loeber & Farrington (2000)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Screening: Verhaltensauffälligkeiten erhöht', 'Screening: ADHS erhöht'];
+      if (ctx.anamnese.includes('haeusliche_gewalt')) d.push('Häusliche Gewalt');
+      return d;
+    },
+    gegenHypothese: 'Externalisierende Symptome können auch Ausdruck von Trauma sein (Trauma-Reenactment) — Differenzialdiagnostik wichtig.',
+    empfehlung: 'Strukturgebende Interventionen. Positive Verhaltensunterstützung. Elternarbeit dringend empfohlen. Fachärztliche ADHS-Abklärung.',
+    wiki_ids: ['adhs', 'oppositionelles-verhalten'],
+  },
+  {
+    id: 'schulvermeidung-oppositionell',
+    titel: 'Schulvermeidung mit oppositioneller Komponente',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F91.3', 'F43.2'],
+    bedingung: (ctx) => {
+      return ctx.anamnese.includes('absentismus') && ctx.screening.flaggedAreas.includes('conduct');
+    },
+    erklaerung: 'Schulabsentismus in Kombination mit erhöhten Verhaltensauffälligkeiten deutet auf eine Schulvermeidung mit oppositioneller Motivation hin — im Gegensatz zu angstbedingter Schulverweigerung.',
+    evidenz: 'Kearney (2008) unterscheidet 4 Funktionen von Schulabsentismus. Die Kombination mit Conduct-Problemen deutet auf Verstärkung durch angenehme Aktivitäten ausserhalb der Schule und/oder Vermeidung aversiver sozialer Situationen.',
+    quelle: 'Kearney (2008); Kearney & Silverman (1996)',
+    ausloesendeDaten: (ctx) => ['Schulabsentismus', 'Screening: Verhaltensauffälligkeiten erhöht'],
+    gegenHypothese: 'Schulvermeidung kann auch angstbasiert sein — bei gleichzeitig erhöhten Angst-Screening-Werten eher Schulphobie als Opposition.',
+    empfehlung: 'Funktionsanalyse der Schulvermeidung. Schulische Reintegration planen. Kooperation mit Schule und Eltern.',
+    wiki_ids: ['schulabsentismus'],
+  },
+  {
+    id: 'selbstmedikation',
+    titel: 'Substanzkonsum als Selbstmedikation',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F10-F19'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return f.includes('substanz') && (f.includes('depression') || f.includes('trauma'));
+    },
+    erklaerung: 'Substanzkonsum bei gleichzeitiger Depression oder Traumasymptomatik deutet auf Selbstmedikation hin — der Konsum dient der Affektregulation.',
+    evidenz: 'Die Selbstmedikationshypothese (Khantzian 1997) ist empirisch gut belegt: 60-80% der substanzkonsumierenden Jugendlichen mit psychischen Störungen nutzen Substanzen zur Emotionsregulation (Swendsen et al. 2010).',
+    quelle: 'Khantzian (1997); Swendsen et al. (2010); Brady & Sinha (2005)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Screening: Substanzkonsum erhöht'];
+      if (ctx.screening.flaggedAreas.includes('depression')) d.push('Screening: Depression erhöht');
+      if (ctx.screening.flaggedAreas.includes('trauma')) d.push('Screening: Trauma erhöht');
+      return d;
+    },
+    gegenHypothese: 'Substanzkonsum kann auch primär peer-bedingt sein (sozialer Druck) ohne zugrundeliegende psychische Belastung.',
+    empfehlung: 'Zugrundeliegende Störung behandeln, nicht nur den Konsum. Motivierende Gesprächsführung. Suchtberatung einbeziehen.',
+    wiki_ids: ['sucht-substanzmissbrauch'],
+  },
+  {
+    id: 'delinquenz-risiko',
+    titel: 'Erhöhtes Delinquenz-Risiko',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F91.1', 'F91.2'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      return a.includes('gang') && a.includes('negativer_peer_einfluss') && ctx.screening.flaggedAreas.includes('conduct');
+    },
+    erklaerung: 'Gang-Zugehörigkeit + deviante Peers + Verhaltensauffälligkeiten bilden die Risikotrias für Delinquenz im Jugendalter.',
+    evidenz: 'Assoziation mit devianten Peers ist der stärkste Einzelprädiktor für Delinquenz. In Kombination mit Conduct-Problemen steigt das Risiko für chronische Delinquenz um Faktor 5-8 (Thornberry et al. 2003; Dishion & Tipsord 2011).',
+    quelle: 'Thornberry et al. (2003); Dishion & Tipsord (2011); Patterson et al. (1992)',
+    ausloesendeDaten: (ctx) => ['Gangzugehörigkeit', 'Negativer Peer-Einfluss', 'Screening: Verhaltensauffälligkeiten erhöht'],
+    gegenHypothese: 'Peer-Kontext kann sich schnell ändern — ein Umgebungswechsel (neue Schule, Verein) kann den Verlauf positiv beeinflussen.',
+    empfehlung: 'Prosoziale Peer-Kontakte fördern. Mentoring-Programm. Strukturierte Freizeitangebote. Kooperation mit Jugendgerichtshilfe bei Bedarf.',
+    wiki_ids: ['oppositionelles-verhalten', 'delinquenz'],
+  },
+  // ── GRUPPE 3: Internalisierende Muster ─────────────────────
+  {
+    id: 'internalisierend-komorbid',
+    titel: 'Internalisierendes Komorbiditätsmuster (Depression + Angst)',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F32', 'F41.1'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return f.includes('depression') && (f.includes('angst-generalisiert') || f.includes('angst-sozial')) && ctx.anamnese.includes('soziale_isolation');
+    },
+    erklaerung: 'Depression + Angst + soziale Isolation bilden das häufigste internalisierende Komorbiditätsmuster im Jugendalter. Die Störungen verstärken sich gegenseitig in einem Teufelskreis.',
+    evidenz: 'Depression und Angststörungen treten bei 50-70% der Betroffenen komorbid auf — die häufigste Komorbidität im Jugendalter. Soziale Isolation wirkt als aufrechterhaltender Faktor (Angold et al. 1999; Cummings et al. 2014).',
+    quelle: 'Angold et al. (1999); Cummings et al. (2014); Garber & Weersing (2010)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Screening: Depression erhöht'];
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Generalisierte Angst erhöht');
+      if (ctx.screening.flaggedAreas.includes('angst-sozial')) d.push('Screening: Soziale Angst erhöht');
+      d.push('Soziale Isolation');
+      return d;
+    },
+    gegenHypothese: 'Soziale Isolation kann primär sein (ASS, Schüchternheit) und sekundär zu depressiven Symptomen führen — nicht umgekehrt.',
+    empfehlung: 'Kognitive Verhaltenstherapie-Elemente. Soziale Aktivierung schrittweise. Gedankenarbeit zu negativen Kognitionen.',
+    wiki_ids: ['depression', 'angststoerung'],
+  },
+  {
+    id: 'komplizierte-trauer',
+    titel: 'Komplizierte Trauer möglich',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F43.21'],
+    bedingung: (ctx) => {
+      return ctx.anamnese.includes('tod_elternteil') && ctx.screening.flaggedAreas.includes('depression');
+    },
+    erklaerung: 'Tod einer nahen Bezugsperson in Kombination mit erhöhten Depressionswerten kann auf komplizierte Trauer hindeuten — eine anhaltende, die Entwicklung beeinträchtigende Trauerreaktion.',
+    evidenz: 'Etwa 10-20% der trauernden Kinder entwickeln komplizierte Trauer mit persistierenden Symptomen über 6+ Monate. Komorbide Depression tritt bei 40-50% auf (Melhem et al. 2011; Shear et al. 2011).',
+    quelle: 'Melhem et al. (2011); Shear et al. (2011); Cerel et al. (2006)',
+    ausloesendeDaten: (ctx) => ['Tod eines Elternteils/Bezugsperson', 'Screening: Depression erhöht'],
+    gegenHypothese: 'Depression kann auch unabhängig vom Verlust bestehen — zeitlicher Zusammenhang prüfen.',
+    empfehlung: 'Trauerbegleitung anbieten. Raum für Erinnerung und Gefühle. Bei Bedarf traumaspezifische Trauerarbeit.',
+    wiki_ids: ['trauer'],
+  },
+  {
+    id: 'schulangst',
+    titel: 'Schulangst / Schulphobie',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F40.1', 'F93.0'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return ctx.anamnese.includes('absentismus') && (f.includes('angst-sozial') || f.includes('angst-generalisiert')) && ctx.anamnese.includes('mobbing_opfer');
+    },
+    erklaerung: 'Schulabsentismus + Angst-Screening + Mobbing-Erfahrung deutet auf angstmotivierte Schulverweigerung hin — im Gegensatz zur oppositionellen Schulvermeidung.',
+    evidenz: 'Bei 50-70% der schulverweigernden Kinder liegt eine Angststörung zugrunde. Mobbing-Erfahrung ist der häufigste Auslöser für schulbezogene Angst (Kearney 2008; Last et al. 1998).',
+    quelle: 'Kearney (2008); Last et al. (1998); Egger et al. (2003)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Schulabsentismus', 'Mobbing-Opfer'];
+      if (ctx.screening.flaggedAreas.includes('angst-sozial')) d.push('Screening: Soziale Angst erhöht');
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Generalisierte Angst erhöht');
+      return d;
+    },
+    gegenHypothese: 'Schulabsentismus kann auch durch familiäre Faktoren bedingt sein (Parentifizierung, mangelnde Aufsicht).',
+    empfehlung: 'Angstbewältigungstraining. Schrittweise schulische Reintegration. Anti-Mobbing-Intervention. Schulkooperation.',
+    wiki_ids: ['schulabsentismus', 'angststoerung'],
+  },
+  {
+    id: 'somatisierung',
+    titel: 'Somatisierungstendenz',
+    typ: 'risiko',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F45'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return f.includes('somatisierung') && (f.includes('angst-generalisiert') || f.includes('depression'));
+    },
+    erklaerung: 'Erhöhte somatische Beschwerden bei gleichzeitiger Angst- oder Depressionssymptomatik deutet auf Somatisierung hin — körperlicher Ausdruck psychischer Belastung.',
+    evidenz: 'Bei Kindern und Jugendlichen äussern sich psychische Belastungen häufig somatisch (Kopfschmerzen, Bauchschmerzen). 25-50% der Kinder mit psychischen Störungen berichten primär körperliche Symptome (Campo & Fritsch 1994).',
+    quelle: 'Campo & Fritsch (1994); Garralda (2010); Eminson (2007)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Screening: Somatisierung erhöht'];
+      if (ctx.screening.flaggedAreas.includes('angst-generalisiert')) d.push('Screening: Angst erhöht');
+      if (ctx.screening.flaggedAreas.includes('depression')) d.push('Screening: Depression erhöht');
+      return d;
+    },
+    gegenHypothese: 'Organische Ursachen müssen ärztlich ausgeschlossen werden bevor Somatisierung angenommen wird.',
+    empfehlung: 'Psychoedukation: Zusammenhang Körper-Psyche. Körperwahrnehmungsübungen. Ärztliche Abklärung empfehlen.',
+    wiki_ids: ['psychosomatik'],
+  },
+  {
+    id: 'parentifizierung',
+    titel: 'Parentifizierung',
+    typ: 'risiko',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['Z62.6'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      const hatBelastung = a.includes('alleinerziehend') && (a.includes('sucht_haushalt') || a.includes('psych_erkrankung_eltern'));
+      const hoheEmpathie = ctx.staerken && ctx.staerken.empathie >= 7;
+      return hatBelastung && hoheEmpathie;
+    },
+    erklaerung: 'Alleinerziehender Elternteil mit Sucht/psychischer Erkrankung + auffallend hohe Empathie beim Kind deutet auf Parentifizierung hin — das Kind übernimmt die Elternrolle.',
+    evidenz: 'Parentifizierte Kinder zeigen oft überdurchschnittliche Empathie und Fürsorge — auf Kosten eigener Entwicklungsbedürfnisse. Langfristig erhöhtes Risiko für Depression und Beziehungsprobleme (Jurkovic 1997; Hooper et al. 2011).',
+    quelle: 'Jurkovic (1997); Hooper et al. (2011); Byng-Hall (2008)',
+    ausloesendeDaten: (ctx) => {
+      const d = ['Alleinerziehend'];
+      if (ctx.anamnese.includes('sucht_haushalt')) d.push('Sucht im Haushalt');
+      if (ctx.anamnese.includes('psych_erkrankung_eltern')) d.push('Psych. Erkrankung Elternteil');
+      d.push('Stärke: Hohe Empathie (' + (ctx.staerken?.empathie || '?') + '/10)');
+      return d;
+    },
+    gegenHypothese: 'Hohe Empathie kann auch natürliche Stärke sein ohne Parentifizierung — Kontext beachten.',
+    empfehlung: 'Entlastung von Verantwortung. Eigene Bedürfnisse explorieren. Erlaubnis geben "Kind zu sein".',
+    wiki_ids: ['parentifizierung'],
+  },
+  // ── GRUPPE 4: Trauma & Krise ───────────────────────────────
+  {
+    id: 'traumareaktion-aktiv',
+    titel: 'Traumareaktion aktiv — Stabilisierung prioritär',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F43.1'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      const hatACEGewalt = a.includes('missbrauch_sexuell') || a.includes('misshandlung_physisch') || a.includes('haeusliche_gewalt');
+      return hatACEGewalt && ctx.screening.flaggedAreas.includes('trauma');
+    },
+    erklaerung: 'Gewalt-/Missbrauchserfahrung + erhöhte Trauma-Screening-Werte deuten auf eine aktive Traumareaktion hin. Stabilisierung muss vor jeder anderen Intervention erfolgen.',
+    evidenz: 'Bei aktiver Traumareaktion ist das autonome Nervensystem im Überlebensmodus. Beziehungsarbeit oder konfrontative Methoden können retraumatisierend wirken (van der Kolk 2014; Porges 2011).',
+    quelle: 'van der Kolk (2014); Porges (2011); Perry (2006)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('missbrauch_sexuell')) d.push('Sexueller Missbrauch');
+      if (ctx.anamnese.includes('misshandlung_physisch')) d.push('Physische Misshandlung');
+      if (ctx.anamnese.includes('haeusliche_gewalt')) d.push('Häusliche Gewalt');
+      d.push('Screening: Trauma erhöht');
+      return d;
+    },
+    gegenHypothese: 'Erhöhte Trauma-Werte können auch auf aktuelle Belastungen (Mobbing, Trennung) zurückgehen, ohne Bezug zu früherer Gewalt.',
+    empfehlung: 'Stabilisierung prioritär (Sicherheit, Orientierung, Beruhigung). Keine Trauma-Exposition. Polyvagal-Übungen. Fachärztliche Anbindung.',
+    wiki_ids: ['trauma', 'komplextrauma'],
+  },
+  {
+    id: 'ace-kumulation',
+    titel: 'ACE-Kumulationsrisiko — 4+ belastende Kindheitserfahrungen',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['Z61', 'Z62'],
+    bedingung: (ctx) => {
+      const aceKat = ANAMNESE_KATEGORIEN.find(k => k.id === 'ace');
+      if (!aceKat) return false;
+      const aceCount = aceKat.items.filter(it => ctx.anamnese.includes(it.id)).length;
+      return aceCount >= 4;
+    },
+    erklaerung: 'Ab 4 belastenden Kindheitserfahrungen (ACE) steigt das Risiko für physische und psychische Erkrankungen exponentiell.',
+    evidenz: 'Die ACE-Studie (Felitti et al. 1998, n=17.000) zeigt: ACE-Score ≥4 → 2x Depression, 4.6x Sucht, 12x Suizidversuch, 2x Herzerkrankung. Der Effekt ist kumulativ und dosisabhängig.',
+    quelle: 'Felitti et al. (1998); Anda et al. (2006); Hughes et al. (2017)',
+    ausloesendeDaten: (ctx) => {
+      const aceKat = ANAMNESE_KATEGORIEN.find(k => k.id === 'ace');
+      if (!aceKat) return [];
+      return aceKat.items.filter(it => ctx.anamnese.includes(it.id)).map(it => 'ACE: ' + it.label);
+    },
+    gegenHypothese: 'ACE-Scores erfassen keine Schutzfaktoren. Ein hoher ACE-Score mit starken Schutzfaktoren kann eine bessere Prognose haben als ein niedrigerer ohne Schutz.',
+    empfehlung: 'Traumainformierte Grundhaltung in allen Kontexten. Schutzfaktoren aktiv stärken. Langfristige Begleitung einplanen.',
+    wiki_ids: ['ace-studie', 'trauma'],
+  },
+  {
+    id: 'akute-krise',
+    titel: 'Akute Krise — Selbstgefährdung beachten',
+    typ: 'risiko',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['X71-X83'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return f.includes('selbstverletzung') && f.includes('depression');
+    },
+    erklaerung: 'Selbstverletzung + Depression im Screening weist auf akute Krise mit Selbstgefährdung hin. Sofortige Risikobewertung erforderlich.',
+    evidenz: 'Selbstverletzung ist der stärkste Einzelprädiktor für Suizid bei Jugendlichen (OR 6-10). In Kombination mit Depression steigt das akute Risiko signifikant (Hawton et al. 2012; Nock et al. 2006).',
+    quelle: 'Hawton et al. (2012); Nock et al. (2006); Klonsky et al. (2016)',
+    ausloesendeDaten: (ctx) => ['Screening: Selbstverletzung erhöht', 'Screening: Depression erhöht'],
+    gegenHypothese: 'Selbstverletzung dient oft der Affektregulation ohne suizidale Absicht — dennoch immer Suizidalität explorieren.',
+    empfehlung: 'Suizidalitätsabklärung sofort. Sicherheitsplan erstellen. Krisentelefon vermitteln. Fachärztliche Anbindung am selben Tag.',
+    wiki_ids: ['selbstverletzung', 'suizidalitaet'],
+  },
+  {
+    id: 'dissoziation',
+    titel: 'Dissoziationsrisiko erhöht',
+    typ: 'risiko',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F44'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      return a.includes('missbrauch_sexuell') && ctx.screening.flaggedAreas.includes('trauma') && ctx.screening.flaggedAreas.includes('psychose');
+    },
+    erklaerung: 'Sexueller Missbrauch + Trauma-Symptome + psychoseähnliche Symptome im Screening können auf dissoziative Phänomene hindeuten statt auf primäre Psychose.',
+    evidenz: 'Sexueller Missbrauch ist der stärkste Prädiktor für dissoziative Störungen. Dissoziative Symptome werden häufig als Psychose fehldiagnostiziert (Putnam 1997; Ross 2004; Read et al. 2005).',
+    quelle: 'Putnam (1997); Ross (2004); Read et al. (2005)',
+    ausloesendeDaten: (ctx) => ['Sexueller Missbrauch', 'Screening: Trauma erhöht', 'Screening: Psychose-Risiko erhöht'],
+    gegenHypothese: 'Psychoseähnliche Symptome können auch auf tatsächliche Frühpsychose oder Substanzwirkung hinweisen — psychiatrische Abklärung zwingend.',
+    empfehlung: 'Psychiatrische Differenzialdiagnostik (Dissoziation vs. Psychose). Stabilisierung. Keine Trauma-Exposition bis Abklärung.',
+    wiki_ids: ['dissoziation', 'trauma'],
+  },
+  // ── GRUPPE 5: Schutzfaktoren ───────────────────────────────
+  {
+    id: 'schutz-sport',
+    titel: 'Sport als Ressource und Regulationsstrategie',
+    typ: 'schutz',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: [],
+    bedingung: (ctx) => ctx.staerken && ctx.staerken.sport >= 7,
+    erklaerung: 'Hohe sportliche Aktivität ist ein signifikanter Schutzfaktor — Sport reguliert Stress, fördert Selbstwirksamkeit und bietet soziale Einbindung.',
+    evidenz: 'Regelmässige körperliche Aktivität reduziert Depressionssymptome um 20-30% und ist einer der stärksten modifizierbaren Schutzfaktoren bei Jugendlichen (Biddle & Asare 2011; Lubans et al. 2016).',
+    quelle: 'Biddle & Asare (2011); Lubans et al. (2016); Bailey (2006)',
+    ausloesendeDaten: (ctx) => ['Stärke: Sport & Bewegung (' + (ctx.staerken?.sport || '?') + '/10)'],
+    gegenHypothese: '',
+    empfehlung: 'Sportliche Aktivität beibehalten und ausbauen. Als Regulationsstrategie in den Alltag integrieren.',
+    wiki_ids: ['resilienz'],
+  },
+  {
+    id: 'schutz-soziales-netz',
+    titel: 'Tragfähiges soziales Netz vorhanden',
+    typ: 'schutz',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: [],
+    bedingung: (ctx) => ctx.staerken && ctx.staerken.sozial >= 7 && ctx.anamnese.includes('freundschaft'),
+    erklaerung: 'Hohe soziale Kompetenz + enge Freundschaft bilden ein tragfähiges soziales Netz, das als Puffer gegen Risikofaktoren wirkt.',
+    evidenz: 'Soziale Unterstützung ist einer der konsistentesten Schutzfaktoren in der Resilienzforschung. Eine enge Freundschaft reduziert das Depressionsrisiko um 40% (Bukowski et al. 1996; Ladd 1999).',
+    quelle: 'Bukowski et al. (1996); Ladd (1999); Luthar (2006)',
+    ausloesendeDaten: (ctx) => ['Stärke: Soziale Kompetenz (' + (ctx.staerken?.sozial || '?') + '/10)', 'Mind. eine enge Freundschaft'],
+    gegenHypothese: '',
+    empfehlung: 'Freundschaft aktiv unterstützen. Soziale Kompetenz weiter fördern. Peer-Aktivitäten ermöglichen.',
+    wiki_ids: ['resilienz', 'soziale-kompetenz'],
+  },
+  {
+    id: 'schutz-bezugsperson',
+    titel: 'Stabile Bezugsperson — stärkster Resilienzfaktor',
+    typ: 'schutz',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: [],
+    bedingung: (ctx) => ctx.anamnese.includes('stabile_bezugsperson'),
+    erklaerung: 'Mindestens eine verlässliche, warmherzige Bezugsperson ist der wichtigste Schutzfaktor der Resilienzforschung — sie kann die Auswirkungen multipler Risikofaktoren signifikant abpuffern.',
+    evidenz: 'Die Kauai-Längsschnittstudie (Werner & Smith 1992, n=698, 40 Jahre Follow-up) identifizierte eine stabile Bezugsperson als den stärksten Einzelprädiktor für positive Entwicklung trotz Risiken.',
+    quelle: 'Werner & Smith (1992); Masten (2001); Rutter (2012)',
+    ausloesendeDaten: (ctx) => ['Mind. eine stabile Bezugsperson vorhanden'],
+    gegenHypothese: '',
+    empfehlung: 'Diese Beziehung aktiv stärken und schützen. Bezugsperson in Förderplanung einbeziehen.',
+    wiki_ids: ['resilienz', 'bindungsstoerung'],
+  },
+  {
+    id: 'schutz-kreativitaet',
+    titel: 'Kreativität als Bewältigungsressource',
+    typ: 'schutz',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: [],
+    bedingung: (ctx) => ctx.staerken && ctx.staerken.kreativitaet >= 8,
+    erklaerung: 'Ausgeprägte Kreativität kann als Bewältigungsressource aktiviert werden — kreative Expression ermöglicht Emotionsverarbeitung ohne Verbalisierung.',
+    evidenz: 'Kreative Aktivitäten (Musik, Kunst, Schreiben) fördern Emotionsregulation und Selbstwirksamkeit. Besonders wirksam bei traumatisierten Jugendlichen, die Schwierigkeiten mit verbaler Expression haben (Malchiodi 2011).',
+    quelle: 'Malchiodi (2011); Csikszentmihalyi (1990); Stuckey & Nobel (2010)',
+    ausloesendeDaten: (ctx) => ['Stärke: Kreativität (' + (ctx.staerken?.kreativitaet || '?') + '/10)'],
+    gegenHypothese: '',
+    empfehlung: 'Kreative Methoden in Sitzungen einsetzen (Zeichnen, Musik, Geschichten). Flow-Erleben fördern.',
+    wiki_ids: ['resilienz'],
+  },
+
+  // ── GRUPPE 6: Differenzialdiagnosen ────────────────────────
+  {
+    id: 'diff-adhs-depression',
+    titel: 'Differenzial: ADHS vs. depressionsbedingte Konzentrationsprobleme',
+    typ: 'differenzial',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F90', 'F32'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return f.includes('adhs') && f.includes('depression');
+    },
+    erklaerung: 'ADHS und Depression zeigen überlappende Symptome (Konzentrationsprobleme, Antriebsmangel). Klinisch schwer zu unterscheiden ob Aufmerksamkeitsprobleme primär (ADHS) oder sekundär (Depression) sind.',
+    evidenz: 'Bei 30-50% der ADHS-Diagnostik liegt eine komorbide Depression vor. Umgekehrt zeigen 40% der depressiven Jugendlichen ADHS-ähnliche Konzentrationsprobleme. Verlaufsbeobachtung über 4+ Wochen empfohlen (Biederman et al. 2008).',
+    quelle: 'Biederman et al. (2008); Willcutt et al. (2012); Barkley (2015)',
+    ausloesendeDaten: (ctx) => ['Screening: ADHS erhöht', 'Screening: Depression erhöht'],
+    gegenHypothese: 'Wenn Konzentrationsprobleme seit früher Kindheit bestehen (vor Depressionsbeginn), spricht dies für primäres ADHS.',
+    empfehlung: 'Verlaufsbeobachtung 4 Wochen. Symptomtagebuch. Fachärztliche Abklärung empfehlen. Anamnese der Konzentrationsprobleme (seit wann?).',
+    wiki_ids: ['adhs', 'depression'],
+  },
+  {
+    id: 'diff-psychose',
+    titel: 'Differenzial: Psychose-Frühzeichen — psychiatrische Abklärung dringend',
+    typ: 'differenzial',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F20-F29'],
+    bedingung: (ctx) => ctx.screening.flaggedAreas.includes('psychose'),
+    erklaerung: 'Erhöhte Psychose-Screening-Werte erfordern immer psychiatrische Abklärung. Differenzialdiagnose: Frühpsychose vs. Dissoziation vs. Substanzwirkung vs. schwere Traumafolge.',
+    evidenz: 'Frühintervention bei Psychose-Ersterkennung verbessert den Verlauf signifikant. 75% der Psychosen manifestieren sich zwischen 15-25 Jahren. Abklärung innerhalb von 2 Wochen empfohlen (McGorry et al. 2008; NICE 2014).',
+    quelle: 'McGorry et al. (2008); NICE Guidelines (2014); Fusar-Poli et al. (2013)',
+    ausloesendeDaten: (ctx) => ['Screening: Psychose-Risiko erhöht'],
+    gegenHypothese: 'Pseudopsychotische Symptome kommen bei Trauma, Dissoziation und Substanzkonsum vor — nicht automatisch Schizophrenie.',
+    empfehlung: 'Psychiatrische Abklärung innerhalb 2 Wochen. Substanzanamnese. Trauma-Screening. Nicht abwarten.',
+    wiki_ids: ['psychose'],
+  },
+  {
+    id: 'diff-adhs-trauma',
+    titel: 'Differenzial: ADHS vs. Trauma-Hyperarousal',
+    typ: 'differenzial',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F90', 'F43.1'],
+    bedingung: (ctx) => {
+      const f = ctx.screening.flaggedAreas;
+      return f.includes('adhs') && f.includes('trauma');
+    },
+    erklaerung: 'ADHS und Trauma-Hyperarousal zeigen nahezu identische Symptome: Unruhe, Konzentrationsprobleme, Impulsivität. Trauma-bedingte Hypervigilanz wird häufig als ADHS fehldiagnostiziert.',
+    evidenz: 'Bis zu 30% der ADHS-Diagnosen bei traumatisierten Kindern sind Fehldiagnosen (Trauma-Hyperarousal). Die Symptomüberlappung beträgt 85% (Weinstein et al. 2000; Ford & Connor 2009).',
+    quelle: 'Weinstein et al. (2000); Ford & Connor (2009); van der Kolk (2005)',
+    ausloesendeDaten: (ctx) => ['Screening: ADHS erhöht', 'Screening: Trauma erhöht'],
+    gegenHypothese: 'ADHS und Trauma können auch komorbid vorliegen — eines schliesst das andere nicht aus.',
+    empfehlung: 'Trauma-Anamnese VOR ADHS-Diagnostik. Wenn Trauma vorhanden: erst Stabilisierung, dann ADHS-Abklärung.',
+    wiki_ids: ['adhs', 'trauma'],
+  },
+];
+
+// ============================================================
 // FACHLITERARISCHE LEGITIMATION DER TOOLS
 // ============================================================
 const TOOL_LEGITIMATION = {

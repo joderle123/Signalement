@@ -4522,3 +4522,124 @@ select {
   font-size: 12px;
   margin: 2px 4px 2px 0;
 }
+
+/* ============================================================
+   HYPOTHESEN-ENGINE
+   ============================================================ */
+.hypothese-card {
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid var(--border);
+}
+.hypothese-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hypothese-titel {
+  font-weight: 600;
+  font-size: 14px;
+  flex: 1;
+}
+.hypothese-badge {
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.hypothese-daten {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+.hypothese-details {
+  margin-top: 8px;
+}
+.hypothese-details summary {
+  font-size: 12px;
+  color: var(--primary);
+  cursor: pointer;
+  user-select: none;
+}
+.hypothese-details-body {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.hypothese-details-body p {
+  margin: 6px 0;
+}
+.hypothese-evidenz {
+  color: #555;
+  font-style: italic;
+}
+.hypothese-quelle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.hypothese-gegen {
+  background: #FFF7ED;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.hypothese-empfehlung {
+  background: #EFF6FF;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.hypothese-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.hypothese-wiki-chip {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1E40AF;
+  cursor: pointer;
+}
+.hypothese-wiki-chip:hover {
+  background: #DBEAFE;
+}
+.hypothese-icd-chip {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  color: #6B7280;
+  font-family: monospace;
+}
+.hypothesen-section {
+  margin-bottom: 12px;
+}
+.hypothesen-schutz {
+  border-top: 1px solid #E5E7EB;
+  padding-top: 12px;
+}
+.hypothesen-schutz-header {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #166534;
+}
+.hypothesen-disclaimer {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #F3F4F6;
+  line-height: 1.4;
+}

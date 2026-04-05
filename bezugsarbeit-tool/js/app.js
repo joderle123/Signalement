@@ -1549,6 +1549,10 @@ function renderInfo() {
   // Zusammenfassung rendern
   renderAnamneseZusammenfassung(s);
 
+  // Hypothesen generieren und anzeigen
+  const hypothesen = generateHypothesen(APP.currentSchuelerId);
+  renderHypothesen(hypothesen);
+
   // Notizfeld befüllen
   const notizEl = document.getElementById('info-allgemein');
   if (notizEl) notizEl.value = s.allgemeineNotizen || '';
@@ -1666,6 +1670,149 @@ function saveInfo() {
     allgemeineNotizen: document.getElementById('info-allgemein').value,
   });
   showToast('Notizen gespeichert', 'success');
+}
+
+// ============================================================
+// HYPOTHESEN-ENGINE
+// ============================================================
+function generateHypothesen(schuelerId) {
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) return [];
+
+  // Neuestes Screening holen
+  const screenings = DB.getScreenings(schuelerId);
+  const latestScreening = screenings.length
+    ? screenings.sort((a, b) => b.erstellt.localeCompare(a.erstellt))[0]
+    : { scores: {}, flaggedAreas: [] };
+
+  // 5P-Formulierung holen
+  const ff = DB.getFallformulierung(schuelerId);
+  const fiveP = ff || { presenting: [], predisposing: [], precipitating: [], perpetuating: [], protective: [] };
+
+  // Kontext-Objekt für alle Regeln
+  const ctx = {
+    anamnese: s.anamnese || [],
+    screening: {
+      scores: latestScreening.scores || {},
+      flaggedAreas: latestScreening.flaggedAreas || [],
+    },
+    staerken: s.staerkenProfil || {},
+    fiveP: fiveP,
+    verhalten: s.topicStatus || {},
+  };
+
+  // Alle Regeln evaluieren
+  const aktive = [];
+  for (const regel of HYPOTHESEN_REGELN) {
+    try {
+      if (regel.bedingung(ctx)) {
+        aktive.push({
+          ...regel,
+          _ausloesendeDaten: typeof regel.ausloesendeDaten === 'function' ? regel.ausloesendeDaten(ctx) : [],
+        });
+      }
+    } catch (e) {
+      // Regel-Fehler still ignorieren
+    }
+  }
+
+  // Sortieren: staerkeWert desc, dann risiko vor schutz vor differenzial
+  const typRang = { risiko: 0, differenzial: 1, schutz: 2 };
+  aktive.sort((a, b) => b.staerkeWert - a.staerkeWert || (typRang[a.typ] || 0) - (typRang[b.typ] || 0));
+
+  return aktive;
+}
+
+function renderHypothesen(hypothesen) {
+  const el = document.getElementById('hypothesen-container');
+  if (!el) return;
+
+  if (hypothesen.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+
+  // Aufteilen: Risiko/Differenzial vs. Schutz
+  const risiken = hypothesen.filter(h => h.typ !== 'schutz');
+  const schutz = hypothesen.filter(h => h.typ === 'schutz');
+
+  function hypotheseCard(h) {
+    // Farbe bestimmen
+    let borderColor, badgeBg, badgeText;
+    if (h.typ === 'schutz') {
+      borderColor = '#22C55E'; badgeBg = '#F0FDF4'; badgeText = '#166534';
+    } else if (h.typ === 'differenzial') {
+      borderColor = '#8B5CF6'; badgeBg = '#F5F3FF'; badgeText = '#5B21B6';
+    } else if (h.staerkeWert >= 3) {
+      borderColor = '#EF4444'; badgeBg = '#FEF2F2'; badgeText = '#991B1B';
+    } else if (h.staerkeWert >= 2) {
+      borderColor = '#F59E0B'; badgeBg = '#FFFBEB'; badgeText = '#92400E';
+    } else {
+      borderColor = '#9CA3AF'; badgeBg = '#F3F4F6'; badgeText = '#374151';
+    }
+
+    const staerkeLabel = h.staerke === 'sehr-wahrscheinlich' ? 'Sehr wahrscheinlich'
+      : h.staerke === 'wahrscheinlich' ? 'Wahrscheinlich' : 'Hinweis';
+
+    const typIcon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
+
+    const daten = h._ausloesendeDaten || [];
+
+    return `
+      <div class="hypothese-card" style="border-left:4px solid ${borderColor}">
+        <div class="hypothese-header">
+          <span class="hypothese-titel">${typIcon} ${h.titel}</span>
+          <span class="hypothese-badge" style="background:${badgeBg};color:${badgeText}">${staerkeLabel}</span>
+        </div>
+        ${daten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${daten.join(' · ')}</div>` : ''}
+        <details class="hypothese-details">
+          <summary>Erklärung & Evidenz</summary>
+          <div class="hypothese-details-body">
+            <p>${h.erklaerung}</p>
+            <p class="hypothese-evidenz">${h.evidenz}</p>
+            <p class="hypothese-quelle">📚 ${h.quelle}</p>
+            ${h.gegenHypothese ? `<p class="hypothese-gegen"><strong>Gegenhypothese:</strong> ${h.gegenHypothese}</p>` : ''}
+            ${h.empfehlung ? `<p class="hypothese-empfehlung"><strong>→ Empfehlung:</strong> ${h.empfehlung}</p>` : ''}
+          </div>
+        </details>
+        ${h.wiki_ids && h.wiki_ids.length > 0 ? `
+          <div class="hypothese-chips">
+            ${h.wiki_ids.map(wId => {
+              const wiki = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.find(a => a.id === wId) : null;
+              return wiki ? `<span class="hypothese-wiki-chip" onclick="toggleWikiPanel();setTimeout(()=>{const el=document.querySelector('[data-wiki-id=&quot;${wId}&quot;]');if(el)el.click();},300)">📖 ${wiki.titel}</span>` : '';
+            }).join('')}
+            ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => `<span class="hypothese-icd-chip">${c}</span>`).join('') : ''}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-header">
+        <span>🧠</span>
+        <div class="card-title">Klinische Hypothesen</div>
+        <span style="font-size:12px;color:var(--text-muted);margin-left:auto;">${hypothesen.length} aktiv</span>
+      </div>
+      <div class="card-body">
+        ${risiken.length > 0 ? `
+          <div class="hypothesen-section">
+            ${risiken.map(hypotheseCard).join('')}
+          </div>
+        ` : ''}
+        ${schutz.length > 0 ? `
+          <div class="hypothesen-section hypothesen-schutz">
+            <div class="hypothesen-schutz-header">🛡️ Schutzfaktoren</div>
+            ${schutz.map(hypotheseCard).join('')}
+          </div>
+        ` : ''}
+        <div class="hypothesen-disclaimer">
+          Diese Hypothesen sind Arbeitshilfen für Fachkräfte — kein Ersatz für klinische Diagnostik. Alle Angaben basieren auf den eingegebenen Daten.
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ============================================================

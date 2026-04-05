@@ -2310,7 +2310,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls ein stabiler männlicher Mentor oder Bezugsperson vorhanden ist (z.B. Grossvater, Trainer, Lehrer), kann dies die väterliche Abwesenheit teilweise kompensieren.',
     empfehlung: 'Männliche Bezugsperson im Umfeld identifizieren. Bei Jungen: Identitätsarbeit. Beziehung zu Autoritätspersonen beobachten.',
-    wiki_ids: ['bindungsstoerung'],
+    wiki_ids: ['bindungsstoerung', 'bindungstheorie', 'parentifizierung'],
   },
   {
     id: 'mutterfigur-fehlt',
@@ -2336,7 +2336,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls eine stabile Ersatz-Bezugsperson (Pflegemutter, Grossmutter) seit früher Kindheit vorhanden ist, kann sichere Bindung trotzdem entstanden sein.',
     empfehlung: 'Bindungsqualität gezielt explorieren. Traumasensiblen Beziehungsaufbau priorisieren. Bezugspersonenprinzip stärken.',
-    wiki_ids: ['bindungsstoerung'],
+    wiki_ids: ['bindungsstoerung', 'bindungstheorie', 'parentifizierung'],
   },
   {
     id: 'komplextrauma',
@@ -2363,7 +2363,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Nicht jede Gewalt-/Vernachlässigungserfahrung führt zu Komplextrauma — Resilienzfaktoren (stabile Bezugsperson, Therapieerfahrung) können protektiv wirken.',
     empfehlung: 'Traumasensible Haltung prioritär. Stabilisierung vor Konfrontation. Polyvagale Sicherheitssignale beachten. Fachärztliche Abklärung empfehlen.',
-    wiki_ids: ['trauma', 'komplextrauma'],
+    wiki_ids: ['trauma-ptbs', 'ace-studie', 'dissoziation'],
   },
   {
     id: 'desorganisierte-bindung',
@@ -2396,7 +2396,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls Screening-Werte grenzwertig und stabile Bezugsperson vorhanden, könnte unsicher-vermeidende statt desorganisierte Bindung vorliegen.',
     empfehlung: 'Fachärztliche Bindungsdiagnostik empfehlen. Bezugspersonenprinzip mit hoher Verlässlichkeit. Keine konfrontativen Methoden.',
-    wiki_ids: ['bindungsstoerung', 'trauma'],
+    wiki_ids: ['bindungsstoerung', 'trauma-ptbs'],
   },
   {
     id: 'bindungsstoerung',
@@ -2429,7 +2429,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Soziale Isolation kann auch durch Umzug, Schüchternheit oder ASS bedingt sein — nicht automatisch Bindungsstörung.',
     empfehlung: 'Bindungsbasierte Interventionen priorisieren. Beziehungskontinuität sicherstellen. Keine häufigen Bezugspersonenwechsel.',
-    wiki_ids: ['bindungsstoerung'],
+    wiki_ids: ['bindungsstoerung', 'bindungstheorie', 'fremdplatzierung'],
   },
   // ── GRUPPE 2: Externalisierende Muster ─────────────────────
   {
@@ -2473,7 +2473,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Schulabsentismus', 'Screening: Verhaltensauffälligkeiten erhöht'],
     gegenHypothese: 'Schulvermeidung kann auch angstbasiert sein — bei gleichzeitig erhöhten Angst-Screening-Werten eher Schulphobie als Opposition.',
     empfehlung: 'Funktionsanalyse der Schulvermeidung. Schulische Reintegration planen. Kooperation mit Schule und Eltern.',
-    wiki_ids: ['schulabsentismus'],
+    wiki_ids: ['schulvermeidung', 'oppositionelles-verhalten', 'conduct-disorder'],
   },
   {
     id: 'selbstmedikation',
@@ -2498,7 +2498,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Substanzkonsum kann auch primär peer-bedingt sein (sozialer Druck) ohne zugrundeliegende psychische Belastung.',
     empfehlung: 'Zugrundeliegende Störung behandeln, nicht nur den Konsum. Motivierende Gesprächsführung. Suchtberatung einbeziehen.',
-    wiki_ids: ['sucht-substanzmissbrauch'],
+    wiki_ids: ['substanzkonsum', 'depression', 'angststoerungen'],
   },
   {
     id: 'delinquenz-risiko',
@@ -2518,7 +2518,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Gangzugehörigkeit', 'Negativer Peer-Einfluss', 'Screening: Verhaltensauffälligkeiten erhöht'],
     gegenHypothese: 'Peer-Kontext kann sich schnell ändern — ein Umgebungswechsel (neue Schule, Verein) kann den Verlauf positiv beeinflussen.',
     empfehlung: 'Prosoziale Peer-Kontakte fördern. Mentoring-Programm. Strukturierte Freizeitangebote. Kooperation mit Jugendgerichtshilfe bei Bedarf.',
-    wiki_ids: ['oppositionelles-verhalten', 'delinquenz'],
+    wiki_ids: ['oppositionelles-verhalten', 'conduct-disorder'],
   },
   // ── GRUPPE 3: Internalisierende Muster ─────────────────────
   {
@@ -2545,7 +2545,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Soziale Isolation kann primär sein (ASS, Schüchternheit) und sekundär zu depressiven Symptomen führen — nicht umgekehrt.',
     empfehlung: 'Kognitive Verhaltenstherapie-Elemente. Soziale Aktivierung schrittweise. Gedankenarbeit zu negativen Kognitionen.',
-    wiki_ids: ['depression', 'angststoerung'],
+    wiki_ids: ['depression', 'angststoerungen'],
   },
   {
     id: 'komplizierte-trauer',
@@ -2564,7 +2564,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Tod eines Elternteils/Bezugsperson', 'Screening: Depression erhöht'],
     gegenHypothese: 'Depression kann auch unabhängig vom Verlust bestehen — zeitlicher Zusammenhang prüfen.',
     empfehlung: 'Trauerbegleitung anbieten. Raum für Erinnerung und Gefühle. Bei Bedarf traumaspezifische Trauerarbeit.',
-    wiki_ids: ['trauer'],
+    wiki_ids: ['trauer', 'trauma-ptbs', 'depression'],
   },
   {
     id: 'schulangst',
@@ -2589,7 +2589,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Schulabsentismus kann auch durch familiäre Faktoren bedingt sein (Parentifizierung, mangelnde Aufsicht).',
     empfehlung: 'Angstbewältigungstraining. Schrittweise schulische Reintegration. Anti-Mobbing-Intervention. Schulkooperation.',
-    wiki_ids: ['schulabsentismus', 'angststoerung'],
+    wiki_ids: ['schulvermeidung', 'angststoerungen'],
   },
   {
     id: 'somatisierung',
@@ -2614,7 +2614,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Organische Ursachen müssen ärztlich ausgeschlossen werden bevor Somatisierung angenommen wird.',
     empfehlung: 'Psychoedukation: Zusammenhang Körper-Psyche. Körperwahrnehmungsübungen. Ärztliche Abklärung empfehlen.',
-    wiki_ids: ['psychosomatik'],
+    wiki_ids: ['somatoforme-stoerungen', 'angststoerungen', 'depression'],
   },
   {
     id: 'parentifizierung',
@@ -2642,7 +2642,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Hohe Empathie kann auch natürliche Stärke sein ohne Parentifizierung — Kontext beachten.',
     empfehlung: 'Entlastung von Verantwortung. Eigene Bedürfnisse explorieren. Erlaubnis geben "Kind zu sein".',
-    wiki_ids: ['parentifizierung'],
+    wiki_ids: ['parentifizierung', 'bindungstheorie', 'vernachlaessigung'],
   },
   // ── GRUPPE 4: Trauma & Krise ───────────────────────────────
   {
@@ -2671,7 +2671,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Erhöhte Trauma-Werte können auch auf aktuelle Belastungen (Mobbing, Trennung) zurückgehen, ohne Bezug zu früherer Gewalt.',
     empfehlung: 'Stabilisierung prioritär (Sicherheit, Orientierung, Beruhigung). Keine Trauma-Exposition. Polyvagal-Übungen. Fachärztliche Anbindung.',
-    wiki_ids: ['trauma', 'komplextrauma'],
+    wiki_ids: ['trauma-ptbs', 'ace-studie', 'trauma-informed-care'],
   },
   {
     id: 'ace-kumulation',
@@ -2697,7 +2697,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'ACE-Scores erfassen keine Schutzfaktoren. Ein hoher ACE-Score mit starken Schutzfaktoren kann eine bessere Prognose haben als ein niedrigerer ohne Schutz.',
     empfehlung: 'Traumainformierte Grundhaltung in allen Kontexten. Schutzfaktoren aktiv stärken. Langfristige Begleitung einplanen.',
-    wiki_ids: ['ace-studie', 'trauma'],
+    wiki_ids: ['ace-studie', 'trauma-ptbs'],
   },
   {
     id: 'akute-krise',
@@ -2737,7 +2737,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Sexueller Missbrauch', 'Screening: Trauma erhöht', 'Screening: Psychose-Risiko erhöht'],
     gegenHypothese: 'Psychoseähnliche Symptome können auch auf tatsächliche Frühpsychose oder Substanzwirkung hinweisen — psychiatrische Abklärung zwingend.',
     empfehlung: 'Psychiatrische Differenzialdiagnostik (Dissoziation vs. Psychose). Stabilisierung. Keine Trauma-Exposition bis Abklärung.',
-    wiki_ids: ['dissoziation', 'trauma'],
+    wiki_ids: ['dissoziation', 'trauma-ptbs'],
   },
   // ── GRUPPE 5: Schutzfaktoren ───────────────────────────────
   {
@@ -2755,7 +2755,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Stärke: Sport & Bewegung (' + (ctx.staerken?.sport || '?') + '/10)'],
     gegenHypothese: '',
     empfehlung: 'Sportliche Aktivität beibehalten und ausbauen. Als Regulationsstrategie in den Alltag integrieren.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'selbstwirksamkeit'],
   },
   {
     id: 'schutz-soziales-netz',
@@ -2772,7 +2772,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Stärke: Soziale Kompetenz (' + (ctx.staerken?.sozial || '?') + '/10)', 'Mind. eine enge Freundschaft'],
     gegenHypothese: '',
     empfehlung: 'Freundschaft aktiv unterstützen. Soziale Kompetenz weiter fördern. Peer-Aktivitäten ermöglichen.',
-    wiki_ids: ['resilienz', 'soziale-kompetenz'],
+    wiki_ids: ['resilienz', 'peer-beziehungen'],
   },
   {
     id: 'schutz-bezugsperson',
@@ -2806,7 +2806,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Stärke: Kreativität (' + (ctx.staerken?.kreativitaet || '?') + '/10)'],
     gegenHypothese: '',
     empfehlung: 'Kreative Methoden in Sitzungen einsetzen (Zeichnen, Musik, Geschichten). Flow-Erleben fördern.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'selbstwirksamkeit'],
   },
 
   // ── GRUPPE 6: Differenzialdiagnosen ────────────────────────
@@ -2845,7 +2845,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Screening: Psychose-Risiko erhöht'],
     gegenHypothese: 'Pseudopsychotische Symptome kommen bei Trauma, Dissoziation und Substanzkonsum vor — nicht automatisch Schizophrenie.',
     empfehlung: 'Psychiatrische Abklärung innerhalb 2 Wochen. Substanzanamnese. Trauma-Screening. Nicht abwarten.',
-    wiki_ids: ['psychose'],
+    wiki_ids: ['psychose', 'bipolare-stoerung', 'substanzkonsum'],
   },
   {
     id: 'diff-adhs-trauma',
@@ -2865,7 +2865,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Screening: ADHS erhöht', 'Screening: Trauma erhöht'],
     gegenHypothese: 'ADHS und Trauma können auch komorbid vorliegen — eines schliesst das andere nicht aus.',
     empfehlung: 'Trauma-Anamnese VOR ADHS-Diagnostik. Wenn Trauma vorhanden: erst Stabilisierung, dann ADHS-Abklärung.',
-    wiki_ids: ['adhs', 'trauma'],
+    wiki_ids: ['adhs', 'trauma-ptbs'],
   },
 
   // ── GRUPPE 7: Neue Regeln für detaillierte Anamnese-Felder ──
@@ -2892,7 +2892,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Bindungsqualität kann sich im Verlauf verändern — eine spätere sichere Bezugsperson kann korrigierend wirken (earned security).',
     empfehlung: 'Beziehungskontinuität sicherstellen. Verlässlichkeit betonen. Keine abrupten Beziehungsabbrüche.',
-    wiki_ids: ['bindungsstoerung'],
+    wiki_ids: ['bindungsstoerung', 'bindungstheorie', 'trauma-ptbs'],
   },
   {
     id: 'suizid-vorgeschichte',
@@ -2909,7 +2909,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Suizidversuch in Vorgeschichte: Ja'],
     gegenHypothese: 'Zeitlicher Abstand und erfolgreiche Behandlung können das Risiko senken — aber Monitoring bleibt langfristig wichtig.',
     empfehlung: 'Sicherheitsplan sofort erstellen/aktualisieren. Krisentelefon bekannt? Fachärztliche Anbindung sicherstellen. Regelmässige Suizidalitäts-Checks.',
-    wiki_ids: ['suizidalitaet'],
+    wiki_ids: ['suizidalitaet', 'selbstverletzung', 'krisenintervention'],
   },
   {
     id: 'svv-aktiv',
@@ -2980,7 +2980,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Schulvermeidung kann auch familiär bedingt sein (Parentifizierung, mangelnde Aufsicht).',
     empfehlung: 'Angstbehandlung priorisieren. Schrittweise Reintegration. Anti-Mobbing-Intervention. Lehrpersonen einbeziehen.',
-    wiki_ids: ['schulabsentismus', 'angststoerung'],
+    wiki_ids: ['schulvermeidung', 'angststoerungen'],
   },
   {
     id: 'klinik-vorgeschichte',
@@ -2997,7 +2997,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Frühere Behandlung: Klinikaufenthalt'],
     gegenHypothese: 'Erfolgreiche stationäre Behandlung kann auch stabilisierend gewirkt haben.',
     empfehlung: 'Entlassungsbericht einholen. Krisenplan aktualisieren. Engmaschiges Monitoring. Fachärztliche Anbindung sicherstellen.',
-    wiki_ids: [],
+    wiki_ids: ['fremdplatzierung', 'psychopharmaka'],
   },
   {
     id: 'sichere-bindung-schutz',
@@ -3033,7 +3033,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Romantische Beziehungen: Toxische Muster', 'Häusliche Gewalt erlebt'],
     gegenHypothese: 'Nicht jede toxische Beziehung ist Folge häuslicher Gewalt — Peer-Einfluss und Entwicklungsphase beachten.',
     empfehlung: 'Psychoedukation über gesunde Beziehungen. Gewaltkreislauf thematisieren. Grenzen setzen üben.',
-    wiki_ids: ['trauma'],
+    wiki_ids: ['trauma-ptbs', 'haeusliche-gewalt', 'bindungstheorie'],
   },
   {
     id: 'schutz-therapieerfahrung',
@@ -3050,7 +3050,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Frühere Behandlung: Psychotherapie'],
     gegenHypothese: 'Negative Therapieerfahrungen können auch Widerstand erzeugen.',
     empfehlung: 'Frühere Therapieerfahrung explorieren (positiv/negativ?). Auf Bewährtem aufbauen.',
-    wiki_ids: [],
+    wiki_ids: ['resilienz', 'salutogenese'],
   },
   {
     id: 'schutz-lehrer-positiv',
@@ -3067,7 +3067,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Verhältnis zu Lehrpersonen: Positiv'],
     gegenHypothese: '',
     empfehlung: 'Diese Ressource nutzen. Lehrperson als Verbündete in die Arbeit einbeziehen.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'selbstwirksamkeit'],
   },
 
   // ── Gruppe 9: Entwicklung & Diagnosen ──────────────────────────
@@ -3087,7 +3087,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Entwicklungsverzögerung', 'Sprachentwicklung: Verzögert'],
     gegenHypothese: 'Isolierte Sprachverzögerung ohne weitere Entwicklungsdefizite hat oft gute Prognose.',
     empfehlung: 'Logopädische und entwicklungspädagogische Abklärung. Schulische Unterstützung prüfen.',
-    wiki_ids: ['entwicklung'],
+    wiki_ids: ['pubertaet', 'lernstoerungen', 'intelligenzminderung'],
   },
   {
     id: 'adhs-diagnose-schule',
@@ -3111,7 +3111,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Gut behandelte ADHS mit schulischer Unterstützung kann kompensiert werden.',
     empfehlung: 'Schulische Nachteilsausgleiche prüfen. Medikation und Therapie abstimmen. Verhaltensplan mit Lehrpersonen.',
-    wiki_ids: ['adhs'],
+    wiki_ids: ['adhs', 'lernstoerungen', 'oppositionelles-verhalten'],
   },
   {
     id: 'depression-diagnose-isolation',
@@ -3129,7 +3129,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Diagnose: Depression', 'Soziale Isolation'],
     gegenHypothese: 'Soziale Isolation kann situativ bedingt sein und sich bei verbessertem Zugang zu Peers auflösen.',
     empfehlung: 'Aktivierung sozialer Kontakte. Gruppentherapeutische Angebote prüfen. Suizidalität screenen.',
-    wiki_ids: ['depression'],
+    wiki_ids: ['depression', 'suizidalitaet', 'peer-beziehungen'],
   },
   {
     id: 'angst-diagnose-somatisierung',
@@ -3147,7 +3147,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Diagnose: Angststörung', 'Screening: Somatisierung erhöht'],
     gegenHypothese: 'Somatische Beschwerden können auch rein medizinische Ursachen haben — somatische Abklärung wichtig.',
     empfehlung: 'Somatische Abklärung beim Kinderarzt. Psychoedukation zu Angst und Körpersymptomen. KVT-basierte Intervention.',
-    wiki_ids: ['angst'],
+    wiki_ids: ['angststoerungen', 'somatoforme-stoerungen', 'panikstoerung'],
   },
 
   // ── Gruppe 10: Sozioökonomie & Umfeld ──────────────────────────
@@ -3167,7 +3167,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Armut', 'Bildungsfernes Elternhaus'],
     gegenHypothese: 'Schulische Förderangebote und Mentoring können sozioökonomische Nachteile teilweise kompensieren.',
     empfehlung: 'Soziale Unterstützung vernetzen. Schulische Förderung aktivieren. Elternbildungsangebote.',
-    wiki_ids: ['soziales'],
+    wiki_ids: ['peer-beziehungen', 'ace-studie', 'lernstoerungen'],
   },
   {
     id: 'obdachlosigkeit-risiko',
@@ -3185,7 +3185,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Obdachlosigkeit / Wohnungslosigkeit'],
     gegenHypothese: '',
     empfehlung: 'Sofortige Wohnraumvermittlung. Soziale Dienste einschalten. Stabilität als Priorität.',
-    wiki_ids: ['soziales'],
+    wiki_ids: ['peer-beziehungen', 'ace-studie', 'krisenintervention'],
   },
   {
     id: 'migration-diskriminierung',
@@ -3203,7 +3203,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Migrationshintergrund', 'Diskriminierungserfahrung'],
     gegenHypothese: 'Bikulturelle Identität kann auch eine Stärke sein — Sprachkompetenz, Resilienz, Perspektivwechsel.',
     empfehlung: 'Kultursensible Begleitung. Identitätsarbeit. Anti-Diskriminierungsarbeit im Umfeld.',
-    wiki_ids: ['soziales'],
+    wiki_ids: ['peer-beziehungen', 'migration-kulturelle-identitaet', 'trauma-ptbs'],
   },
 
   // ── Gruppe 11: Weitere Kombinationen ───────────────────────────
@@ -3228,7 +3228,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Gute digitale Medienkompetenz und Unterstützungsnetzwerk können schützend wirken.',
     empfehlung: 'Dokumentation der Vorfälle. Schulische Intervention. Medienkompetenz stärken. Suizidalität prüfen.',
-    wiki_ids: ['mobbing'],
+    wiki_ids: ['mobbing', 'depression', 'mediensozialisation'],
   },
   {
     id: 'schutz-hobby-verein',
@@ -3251,7 +3251,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: '',
     empfehlung: 'Diese Ressource aktiv nutzen und ausbauen. In Hilfeplanung einbeziehen.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'selbstwirksamkeit'],
   },
   {
     id: 'schutz-prosozial-freundschaft',
@@ -3269,7 +3269,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Prosoziales Verhalten', 'Stabile Freundschaften'],
     gegenHypothese: '',
     empfehlung: 'Diese soziale Kompetenz als Stärke in der Arbeit nutzen. Peer-basierte Interventionen erwägen.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'peer-beziehungen', 'salutogenese'],
   },
 
   // ── Gruppe 12: Gesundheit, Wohnung, Finanzen — neue Felder ─────
@@ -3294,7 +3294,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Bei gutem schulischem Support und Peer-Sensibilisierung kann Mobbing reduziert werden.',
     empfehlung: 'Anti-Mobbing-Programm. Peer-Sensibilisierung. Sozialtraining. Rückzugsräume schaffen.',
-    wiki_ids: ['mobbing', 'entwicklung'],
+    wiki_ids: ['mobbing', 'pubertaet'],
   },
   {
     id: 'schlafprobleme-verhalten',
@@ -3312,7 +3312,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Chronische Schlafprobleme', 'Screening: Verhaltensauffälligkeiten erhöht'],
     gegenHypothese: 'Schlafhygiene-Intervention kann Verhaltensprobleme signifikant reduzieren ohne weitere Therapie.',
     empfehlung: 'Schlafhygiene prüfen. Mediennutzung abends erfassen. Ggf. Schlafprotokoll. Somatische Abklärung.',
-    wiki_ids: ['entwicklung'],
+    wiki_ids: ['pubertaet', 'schlafstoerungen', 'adhs'],
   },
   {
     id: 'fruehgeburt-entwicklung',
@@ -3336,7 +3336,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Viele Frühgeborene holen Entwicklungsrückstände bis zum Schulalter auf.',
     empfehlung: 'Entwicklungsdiagnostik. Frühförderung prüfen. Schulische Nachteilsausgleiche.',
-    wiki_ids: ['entwicklung'],
+    wiki_ids: ['pubertaet', 'lernstoerungen', 'fasd'],
   },
   {
     id: 'essstoerung-screening',
@@ -3360,7 +3360,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Bei leichtem auffälligem Essverhalten ohne klinische Diagnose kann Psychoedukation ausreichen.',
     empfehlung: 'Spezialisierte Abklärung. Suizidalität screenen. Somatische Überwachung (Gewicht, Elektrolyte).',
-    wiki_ids: ['depression', 'angst'],
+    wiki_ids: ['depression', 'angststoerungen'],
   },
   {
     id: 'beengte-wohnung-schlaf',
@@ -3378,7 +3378,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Beengte Wohnverhältnisse', 'Chronische Schlafprobleme'],
     gegenHypothese: 'Schlafprobleme können auch andere Ursachen haben (Mediennutzung, Angst).',
     empfehlung: 'Wohnsituation thematisieren. Schlafplatz optimieren. Rückzugsraum schaffen.',
-    wiki_ids: ['soziales'],
+    wiki_ids: ['peer-beziehungen', 'schlafstoerungen', 'ace-studie'],
   },
   {
     id: 'unsichere-nachbarschaft-trauma',
@@ -3401,7 +3401,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Starke familiäre Kohäsion kann den Effekt gewaltbelasteter Nachbarschaften abschwächen.',
     empfehlung: 'Traumasensible Haltung. Sicherheitsgefühl stärken. Ggf. Wohnortwechsel thematisieren.',
-    wiki_ids: ['trauma'],
+    wiki_ids: ['trauma-ptbs', 'ace-studie', 'haeusliche-gewalt'],
   },
   {
     id: 'schutz-gute-elternbeziehung',
@@ -3419,7 +3419,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Gute Beziehung zu Elternteil', 'Sichere Bindung'],
     gegenHypothese: '',
     empfehlung: 'Elternressource aktiv einbeziehen. Eltern-Kind-Beziehung stärken und würdigen.',
-    wiki_ids: ['bindung', 'resilienz'],
+    wiki_ids: ['bindungstheorie', 'resilienz'],
   },
   {
     id: 'schutz-selbstwirksamkeit',
@@ -3437,7 +3437,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Hohe Selbstwirksamkeitserwartung'],
     gegenHypothese: '',
     empfehlung: 'Selbstwirksamkeit gezielt stärken. Erfolgserlebnisse ermöglichen. Autonomie fördern.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'selbstwirksamkeit'],
   },
 
   // ── Gruppe 13: ACE-Details, Gang, Chronisch, Pendeln, Kiga ────
@@ -3457,7 +3457,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Gang-/Bandenzugehörigkeit'],
     gegenHypothese: 'Gang-Zugehörigkeit kann auch Ausdruck von Zugehörigkeitsbedürfnis sein — alternative Gruppenangebote können wirken.',
     empfehlung: 'Sofortige Risikoeinschätzung. Alternative Gruppenangebote. Familienarbeit. Ggf. Jugendhilfe.',
-    wiki_ids: ['conduct-disorder'],
+    wiki_ids: ['conduct-disorder', 'oppositionelles-verhalten', 'peer-beziehungen'],
   },
   {
     id: 'negativer-peer-substanz',
@@ -3475,7 +3475,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Negativer Peer-Einfluss', 'Screening: Substanzkonsum erhöht'],
     gegenHypothese: 'Positive Peer-Alternativen und starke Familienbindung können devianten Peer-Einfluss abschwächen.',
     empfehlung: 'Peer-Umfeld analysieren. Alternative Freizeitangebote. Motivierende Gesprächsführung.',
-    wiki_ids: ['substanzkonsum'],
+    wiki_ids: ['substanzkonsum', 'peer-beziehungen', 'conduct-disorder'],
   },
   {
     id: 'chronische-erkrankung-depression',
@@ -3498,7 +3498,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Gutes Krankheitsmanagement und soziale Unterstützung können Depression trotz chronischer Erkrankung verhindern.',
     empfehlung: 'Psychosomatische Begleitung. Krankheitsbewältigung thematisieren. Soziale Einbindung fördern.',
-    wiki_ids: ['depression'],
+    wiki_ids: ['depression', 'somatoforme-stoerungen', 'ace-studie'],
   },
   {
     id: 'kiga-schwierig-bindung',
@@ -3539,7 +3539,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Gut abgesprochenes Wechselmodell mit kooperativen Eltern kann funktionieren.',
     empfehlung: 'Elternkonstellation explorieren. Konfliktlevel einschätzen. Ggf. Mediationsangebot.',
-    wiki_ids: ['familie'],
+    wiki_ids: ['parentifizierung', 'trennungsangst', 'anpassungsstoerung'],
   },
   {
     id: 'misshandlung-emotional',
@@ -3557,7 +3557,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Emotionale Misshandlung'],
     gegenHypothese: 'Wahrnehmung von emotionaler Misshandlung kann kulturell variieren — sorgfältige Exploration wichtig.',
     empfehlung: 'Gefährdungseinschätzung. Selbstwertarbeit. Ggf. Meldepflicht prüfen.',
-    wiki_ids: ['trauma', 'vernachlaessigung'],
+    wiki_ids: ['trauma-ptbs', 'vernachlaessigung'],
   },
   {
     id: 'flucht-trauma',
@@ -3580,7 +3580,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Nicht alle geflüchteten Jugendlichen entwickeln PTBS — post-migratorische Stressoren sind oft entscheidender als die Flucht selbst.',
     empfehlung: 'Kultursensible Traumatherapie. Stabilisierung. Aufenthaltssituation als Stressor berücksichtigen.',
-    wiki_ids: ['trauma', 'migration-kulturelle-identitaet'],
+    wiki_ids: ['trauma-ptbs', 'migration-kulturelle-identitaet'],
   },
   {
     id: 'kein-stabiler-erwachsener',
@@ -3616,7 +3616,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Inhaftierung eines Elternteils'],
     gegenHypothese: 'Bei stabiler Betreuung durch den anderen Elternteil und offenem Umgang kann die Belastung gemildert werden.',
     empfehlung: 'Enttabuisierung. Kontaktregelung klären. Stigma-Bewältigung. Finanzielle Absicherung prüfen.',
-    wiki_ids: ['familie'],
+    wiki_ids: ['parentifizierung', 'ace-studie', 'trauma-ptbs'],
   },
   {
     id: 'schutz-gute-schulleistung',
@@ -3634,7 +3634,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Gute Schulleistungen'],
     gegenHypothese: '',
     empfehlung: 'Schulische Stärken würdigen und nutzen. Leistungsmotivation erhalten.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'selbstwirksamkeit'],
   },
   {
     id: 'schutz-religioes',
@@ -3652,7 +3652,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Religiöse/spirituelle Gemeinschaft'],
     gegenHypothese: 'Religiöse Gemeinschaften können auch einengend wirken — Kontext beachten.',
     empfehlung: 'Als Ressource respektieren und einbeziehen. Nicht pathologisieren.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'migration-kulturelle-identitaet'],
   },
 
   // ── Gruppe 14: Komorbidität & komplexe Muster ─────────────────
@@ -3672,7 +3672,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Diagnose: Trauma/PTBS', 'Selbstverletzung: Aktiv'],
     gegenHypothese: 'SVV kann auch ohne Trauma auftreten (z.B. bei Borderline-Persönlichkeitsentwicklung).',
     empfehlung: 'Sofortiger Sicherheitsplan. Traumatherapie priorisieren. Affektregulationsstrategien erarbeiten.',
-    wiki_ids: ['trauma', 'selbstverletzung'],
+    wiki_ids: ['trauma-ptbs', 'selbstverletzung'],
   },
   {
     id: 'soziale-benachteiligung-multi',
@@ -3706,7 +3706,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Starke familiäre Kohäsion und Community-Unterstützung können kumulative Benachteiligung mildern.',
     empfehlung: 'Multiprofessionelle Vernetzung. Soziale Dienste einbeziehen. Niederschwellige Angebote.',
-    wiki_ids: ['soziales'],
+    wiki_ids: ['peer-beziehungen', 'ace-studie', 'migration-kulturelle-identitaet'],
   },
   {
     id: 'scheidung-internalisierend',
@@ -3729,7 +3729,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Gut begleitete Trennung mit kooperativen Eltern kann adaptiv bewältigt werden.',
     empfehlung: 'Elternkonstellation explorieren. Ggf. Mediationsangebot. Loyalitätskonflikte thematisieren.',
-    wiki_ids: ['familie'],
+    wiki_ids: ['parentifizierung', 'depression', 'anpassungsstoerung'],
   },
   {
     id: 'psychiatrie-plus-medikation',
@@ -3747,7 +3747,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Psychiatrie', 'Medikation'],
     gegenHypothese: 'Medikation + Therapie kann auch Zeichen eines gut behandelten Zustands sein.',
     empfehlung: 'Aktuelle Medikation erfragen. Compliance prüfen. Behandlungsgeschichte dokumentieren.',
-    wiki_ids: ['psychopharmaka'],
+    wiki_ids: ['psychopharmaka', 'fremdplatzierung', 'diagnostik-testverfahren'],
   },
   {
     id: 'svv-vergangenheit-plus-krise',
@@ -3770,7 +3770,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Gut aufgebaute Coping-Strategien aus früherer Therapie können Rückfall verhindern.',
     empfehlung: 'Alten Sicherheitsplan reaktivieren. Coping-Skills prüfen. Engmaschiges Monitoring.',
-    wiki_ids: ['selbstverletzung'],
+    wiki_ids: ['selbstverletzung', 'krisenintervention', 'suizidalitaet'],
   },
   {
     id: 'mobbing-taeter-externalisierend',
@@ -3827,7 +3827,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Schwierige Eingewöhnung kann temperamentsbedingt sein und sich mit der Zeit von selbst auflösen.',
     empfehlung: 'Stufenweise Exposition. Elternarbeit: Abschiedsrituale. Bezugspersonenprinzip.',
-    wiki_ids: ['trennungsangst', 'angst'],
+    wiki_ids: ['trennungsangst', 'angststoerungen'],
   },
   {
     id: 'ace-hoch-plus-keine-therapie',
@@ -3858,7 +3858,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Manche Menschen verarbeiten belastende Erfahrungen ohne formale Therapie durch natürliche Resilienzfaktoren.',
     empfehlung: 'Therapeutische Anbindung priorisieren. Traumasensible Grundhaltung. Nicht forcieren, aber Zugang ermöglichen.',
-    wiki_ids: ['ace-studie', 'trauma'],
+    wiki_ids: ['ace-studie', 'trauma-ptbs'],
   },
   {
     id: 'autismus-isolation-angst',
@@ -3937,7 +3937,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Sucht im Haushalt', 'Screening: Substanzkonsum erhöht'],
     gegenHypothese: 'Bewusstes Gegensteuern ("Ich will nicht wie meine Eltern werden") kann protektiv wirken.',
     empfehlung: 'Suchtspezifische Prävention. Psychoedukation über transgenerationale Muster. Motivierende Gesprächsführung.',
-    wiki_ids: ['substanzkonsum'],
+    wiki_ids: ['substanzkonsum', 'ace-studie', 'haeusliche-gewalt'],
   },
 
   // ── Gruppe 16: Verhalten × Screening × Anamnese ──────────────
@@ -3965,7 +3965,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Abbruch kann auch Zeichen von Fortschritt sein — das Thema ist nicht mehr relevant.',
     empfehlung: 'Abbruchgründe explorieren. Therapeutische Allianz stärken. Ggf. Thema anpassen.',
-    wiki_ids: [],
+    wiki_ids: ['motivational-interviewing', 'pvt'],
   },
   {
     id: 'viele-themen-offen',
@@ -3989,7 +3989,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Bei komplexen Fällen kann parallele Arbeit an mehreren Themen sinnvoll sein.',
     empfehlung: 'Priorisierung mit Schüler besprechen. Max. 2-3 aktive Themen. Roadmap aktualisieren.',
-    wiki_ids: [],
+    wiki_ids: ['salutogenese', 'loesungsfokussiert'],
   },
   {
     id: 'psych-eltern-plus-kind-internalisierend',
@@ -4012,7 +4012,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Offene Kommunikation über elterliche Erkrankung und gute Behandlung der Eltern kann protektiv wirken.',
     empfehlung: 'Psychoedukation: "Deine Eltern sind krank, nicht du bist schuld." Children of Mentally Ill Parents (CHIMPS) Ansatz.',
-    wiki_ids: ['depression', 'angst'],
+    wiki_ids: ['depression', 'angststoerungen'],
   },
   {
     id: 'motorik-verzoegert-schule',
@@ -4036,7 +4036,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Isolierte motorische Verzögerung ohne kognitive Defizite hat oft gute Prognose.',
     empfehlung: 'Neuropsychologische Abklärung. Ergotherapie prüfen. Schulische Förderung.',
-    wiki_ids: ['entwicklung'],
+    wiki_ids: ['pubertaet', 'lernstoerungen', 'amenagements-raisonnables'],
   },
   {
     id: 'schutz-stabile-bezugsperson-allein',
@@ -4078,7 +4078,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Kurzfristige Wohlbefindens-Einbrüche können situativ bedingt sein (z.B. Prüfungsstress).',
     empfehlung: 'Aktuellen Belastungsstand explorieren. Ggf. Krisenintervention. Engmaschigeres Monitoring.',
-    wiki_ids: [],
+    wiki_ids: ['depression', 'ace-studie'],
   },
   {
     id: 'srs-fallend-allianz',
@@ -4096,7 +4096,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => [`SRS-Trend: fallend (letzter Wert: ${ctx.srsTrend?.letzterWert}/40)`, `${ctx.srsTrend?.anzahl} Sitzungen ausgewertet`],
     gegenHypothese: 'Einzelne niedrige SRS-Werte können themenbedingt sein, ohne die Gesamtallianz zu gefährden.',
     empfehlung: 'SRS direkt ansprechen: "Wie erleben Sie unsere Zusammenarbeit?" Anpassungen vornehmen. Ggf. Methode wechseln.',
-    wiki_ids: [],
+    wiki_ids: ['pvt', 'expressed-emotion'],
   },
   {
     id: 'wohlbefinden-steigend-schutz',
@@ -4114,7 +4114,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => ['Wohlbefinden: Trend steigend'],
     gegenHypothese: 'Kurzfristige Verbesserung kann auch "Flight into Health" sein — Monitoring beibehalten.',
     empfehlung: 'Aktuelle Arbeit fortsetzen. Stärken würdigen. Nicht overengineer-en.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'selbstwirksamkeit'],
   },
   {
     id: 'srs-hoch-plus-screening-besser',
@@ -4142,7 +4142,7 @@ const HYPOTHESEN_REGELN = [
     ausloesendeDaten: (ctx) => [`SRS: ${ctx.srsTrend?.letzterWert}/40 (gut)`, `70%+ der Screening-Domains unter Cutoff`],
     gegenHypothese: '',
     empfehlung: 'Positiven Verlauf würdigen. Ggf. Phase abschliessen. Übergang planen.',
-    wiki_ids: ['resilienz'],
+    wiki_ids: ['resilienz', 'salutogenese', 'pvt'],
   },
 
   // ── Gruppe 18: Eskalations-Alerts ─────────────────────────────
@@ -4200,7 +4200,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: '',
     empfehlung: 'Sofortige Krisenintervention. Multiprofessionelles Team einberufen. Sicherheitsplan erstellen. Engmaschiges Monitoring.',
-    wiki_ids: ['krisenintervention'],
+    wiki_ids: ['krisenintervention', 'suizidalitaet', 'trauma-ptbs'],
   },
   // ── GRUPPE 19: Erweiterte Kombinations-Hypothesen ──────────
   {
@@ -4223,7 +4223,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Patchwork-Situation stabil ist (>3 Jahre) und gute Beziehungsqualität zum Stiefelternteil besteht, sinkt das Risiko deutlich.',
     empfehlung: 'Loyalitätskonflikte explorieren. Beziehungsqualität zu allen Elternfiguren erfassen. Familiensystemische Perspektive einnehmen.',
-    wiki_ids: ['familie', 'bindung'],
+    wiki_ids: ['parentifizierung', 'bindungstheorie'],
   },
   {
     id: 'hochbegabung-underachievement',
@@ -4246,7 +4246,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls Leistungsschwäche auf eine Lernstörung (z.B. Legasthenie) zurückzuführen ist, liegt kein klassisches Underachievement vor.',
     empfehlung: 'Begabungsdiagnostik anregen. Differenzierung/Enrichment in der Schule besprechen. Motivation und Passung explorieren.',
-    wiki_ids: ['schule', 'depression'],
+    wiki_ids: ['lernstoerungen', 'depression'],
   },
   {
     id: 'alleinerziehend-belastung',
@@ -4271,7 +4271,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls ein gutes soziales Netz (Grosseltern, Nachbarn, Verein) vorhanden ist, können die Risiken deutlich abgefedert werden.',
     empfehlung: 'Soziales Unterstützungsnetz erfassen. Entlastungsangebote für Elternteil identifizieren. Finanzielle Beratung vermitteln.',
-    wiki_ids: ['familie', 'soziales'],
+    wiki_ids: ['parentifizierung', 'peer-beziehungen'],
   },
   {
     id: 'online-isolation',
@@ -4293,7 +4293,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Online-Kontakte stabil und unterstützend sind (z.B. Gaming-Community mit echten Freundschaften), kann die protektive Wirkung unterschätzt werden.',
     empfehlung: 'Qualität der Online-Beziehungen explorieren. Schrittweise Face-to-Face-Kontakte aufbauen. Soziale Angst abklären.',
-    wiki_ids: ['soziale-angst', 'soziales'],
+    wiki_ids: ['soziale-angst', 'peer-beziehungen'],
   },
   {
     id: 'schulabbruch-risiko',
@@ -4317,7 +4317,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls der Absentismus primär krankheitsbedingt ist (chronische Erkrankung), liegt ein anderes Interventionsmuster vor.',
     empfehlung: 'Sofortige Vernetzung mit Schule. Reintegrations-Plan erstellen. Ursachen für Absentismus klären (Angst vs. Opposition vs. Überforderung).',
-    wiki_ids: ['schulabsentismus'],
+    wiki_ids: ['schulvermeidung', 'lernstoerungen', 'conduct-disorder'],
   },
   {
     id: 'medikation-monitoring',
@@ -4339,7 +4339,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Medikation stabil eingestellt ist und regelmässige psychiatrische Kontrollen stattfinden, ist das Risiko geringer.',
     empfehlung: 'Medikamenten-Adhärenz regelmässig thematisieren. Nebenwirkungen beobachten. Kontakt zum verschreibenden Arzt sicherstellen.',
-    wiki_ids: ['psychopharmaka'],
+    wiki_ids: ['psychopharmaka', 'diagnostik-testverfahren', 'depression'],
   },
   {
     id: 'wechselnde-peers-bindung',
@@ -4362,7 +4362,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die wechselnden Kontakte auf externe Faktoren zurückzuführen sind (Umzüge) und das Kind grundsätzlich beziehungsfähig ist, ist die Prognose besser.',
     empfehlung: 'Bindungsstil explorieren. Soziale Kompetenzen fördern. Stabile Bezugsperson identifizieren.',
-    wiki_ids: ['bindung', 'soziales'],
+    wiki_ids: ['bindungstheorie', 'peer-beziehungen'],
   },
   {
     id: 'toxische-romantik-jugend',
@@ -4385,7 +4385,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls das toxische Muster situativ begrenzt ist (eine einzelne Beziehung) und keine familiäre Gewaltgeschichte vorliegt, ist das Wiederholungsrisiko geringer.',
     empfehlung: 'Psychoedukation zu gesunden Beziehungen. Gewaltdynamiken explorieren. Safety-Planning bei akuter Bedrohung.',
-    wiki_ids: ['familie', 'trauma'],
+    wiki_ids: ['parentifizierung', 'trauma-ptbs'],
   },
   {
     id: 'lernbehinderung-emotional',
@@ -4407,7 +4407,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Depression primär (familiär bedingt) ist und die Lernprobleme Folge der Depression sind, kehrt sich die Kausalität um.',
     empfehlung: 'Lerndiagnostik anregen falls nicht vorhanden. Nachteilsausgleich prüfen. Selbstwert-Arbeit parallel zur Lernförderung.',
-    wiki_ids: ['schule', 'depression'],
+    wiki_ids: ['lernstoerungen', 'depression'],
   },
   {
     id: 'klassenwiederholung-selbstwert',
@@ -4430,7 +4430,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Wiederholung zu einer Verbesserung geführt hat und das Kind sich im neuen Klassenverband wohlfühlt, kann der Effekt positiv sein.',
     empfehlung: 'Schulische Selbstwirksamkeit gezielt stärken. Erfolgserlebnisse ermöglichen. Peer-Integration in neuer Klasse beobachten.',
-    wiki_ids: ['schule', 'depression'],
+    wiki_ids: ['lernstoerungen', 'depression'],
   },
   {
     id: 'grosseltern-betreuung',
@@ -4453,7 +4453,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Grosseltern-Betreuung gewählt und nicht erzwungen ist, und die Beziehung warmherzig-stabil, kann sie hochprotektiv wirken.',
     empfehlung: 'Verlusterfahrung bezüglich Eltern explorieren. Beziehungsqualität zu Grosseltern erfassen. Altersangemessene Aufklärung über Elternsituation.',
-    wiki_ids: ['familie', 'trauer'],
+    wiki_ids: ['parentifizierung', 'trauer'],
   },
   {
     id: 'viele-geschwister-ressourcen',
@@ -4476,7 +4476,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Familie trotz Grösse gut organisiert ist und ältere Geschwister eine unterstützende (nicht parentifizierte) Rolle spielen, wirkt die Geschwistergruppe protektiv.',
     empfehlung: 'Individuelle Aufmerksamkeit in der Beziehungsarbeit sicherstellen. Parentifizierung prüfen. Ressourcen-Beratung für Familie.',
-    wiki_ids: ['familie', 'soziales'],
+    wiki_ids: ['parentifizierung', 'peer-beziehungen'],
   },
   {
     id: 'haeufige-schulwechsel-sozial',
@@ -4500,7 +4500,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls das Kind hohe soziale Kompetenz und schnelle Anpassungsfähigkeit zeigt, kann die Auswirkung geringer sein.',
     empfehlung: 'Soziale Integration aktiv fördern. Peer-Kontakte in der aktuellen Schule aufbauen. Stabilität im Beziehungsangebot betonen.',
-    wiki_ids: ['soziales', 'schule'],
+    wiki_ids: ['peer-beziehungen', 'lernstoerungen'],
   },
   {
     id: 'chronische-erkrankung-psychisch',
@@ -4519,7 +4519,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Erkrankung gut eingestellt ist, die Familie unterstützend und das Kind gut informiert, sinkt das psychische Risiko deutlich.',
     empfehlung: 'Krankheitsverarbeitung explorieren. Psychoedukation anbieten. Kontakt zu Selbsthilfegruppen vermitteln.',
-    wiki_ids: ['gesundheit'],
+    wiki_ids: ['somatoforme-stoerungen', 'depression', 'anpassungsstoerung'],
   },
   {
     id: 'schlafprobleme-solo',
@@ -4541,7 +4541,7 @@ const HYPOTHESEN_REGELN = [
     },
     gegenHypothese: 'Falls die Schlafprobleme situativ bedingt sind (Lärm, Schichtarbeit der Eltern, Bildschirmzeit), können sie durch Schlafhygiene-Massnahmen behoben werden.',
     empfehlung: 'Schlafhygiene erfassen. Bildschirmzeit vor dem Schlafen reduzieren. Bei Persistenz ärztliche Abklärung empfehlen.',
-    wiki_ids: ['gesundheit'],
+    wiki_ids: ['somatoforme-stoerungen', 'schlafstoerungen', 'depression'],
   },
 ];
 

@@ -2043,12 +2043,20 @@ function renderHypothesen(hypothesen) {
           </div>
         </details>
         ${h.wiki_ids && h.wiki_ids.length > 0 ? `
-          <div class="hypothese-chips">
-            ${h.wiki_ids.map(wId => {
-              const wiki = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.find(a => a.id === wId) : null;
-              return wiki ? `<span class="hypothese-wiki-chip" onclick="toggleWikiPanel();setTimeout(()=>{const el=document.querySelector('[data-wiki-id=&quot;${wId}&quot;]');if(el)el.click();},300)">📖 ${wiki.titel}</span>` : '';
-            }).join('')}
-            ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => `<span class="hypothese-icd-chip">${c}</span>`).join('') : ''}
+          <div class="hypothese-wissen" style="margin-top:8px;padding:8px 10px;background:#F8FAFC;border-radius:8px;border:1px solid #E2E8F0;">
+            <div style="font-size:10px;font-weight:600;color:#64748B;margin-bottom:6px;">📚 Nachschlagen & Vertiefen</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;">
+              ${h.wiki_ids.map(wId => {
+                const wiki = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.find(a => a.id === wId) : null;
+                if (!wiki) return '';
+                const themenIds = wiki.themen_ids || [];
+                const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
+                const fkDatei = fkTid ? FACHKRAFT_MODULE_DATEIEN[fkTid] : null;
+                return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
+                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '');
+              }).join('')}
+              ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => '<span style="background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:6px;font-size:10px;font-family:monospace;">' + c + '</span>').join('') : ''}
+            </div>
           </div>
         ` : ''}
       </div>
@@ -8661,6 +8669,18 @@ function renderWikiRessourcen(a) {
     a.themen_ids.forEach(function(tid) {
       var tm = THERAPIE_MODULE_DATEIEN[tid];
       if (tm) links.push({ typ: 'Therapiemodul', icon: '🧠', titel: tid.replace(/-/g, ' '), href: 'therapie-module/' + tm });
+    });
+  }
+
+  // Fachkraft-Module
+  if (a.themen_ids && typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined') {
+    var fkSeen = {};
+    a.themen_ids.forEach(function(tid) {
+      var fk = FACHKRAFT_MODULE_DATEIEN[tid];
+      if (fk && !fkSeen[fk]) {
+        fkSeen[fk] = true;
+        links.push({ typ: 'Fachkraft-Modul', icon: '🎓', titel: tid.replace(/-/g, ' '), href: 'fachkraft-module/' + fk });
+      }
     });
   }
 

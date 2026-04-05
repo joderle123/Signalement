@@ -4751,6 +4751,31 @@ select {
   gap: 8px;
   padding-left: 8px;
 }
+.hypothesen-filter-separator {
+  width: 1px;
+  height: 20px;
+  background: #E5E7EB;
+  align-self: center;
+  margin: 0 4px;
+}
+.hypothesen-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  background: #F9FAFB;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.hypothesen-sort-btn:hover {
+  background: #F3F4F6;
+  border-color: var(--primary);
+}
 
 /* Dashboard Hypothesen Widget */
 .dash-hypo-count {

@@ -1911,6 +1911,10 @@ function renderHypothesen(hypothesen) {
                 ${eb.icon} ${eb.label} <span class="hypothesen-filter-count">${eb.count}</span>
               </button>
             `).join('')}
+            <span class="hypothesen-filter-separator"></span>
+            <button class="hypothesen-sort-btn" onclick="toggleHypothesenSort()" title="Sortierung umschalten">
+              🔽 <span id="hypothesen-sort-label">Stärke</span>
+            </button>
           </div>
         </div>
         <div id="hypothesen-ansicht-ebenen" class="hypothesen-ansicht">
@@ -1955,6 +1959,29 @@ function toggleHypothesenFilter(ebene) {
   document.querySelectorAll('.hypothesen-ebene-gruppe').forEach(grp => {
     const visibleCards = grp.querySelectorAll('.hypothese-card:not([style*="display: none"])');
     grp.style.display = visibleCards.length > 0 ? '' : 'none';
+  });
+}
+
+// Hypothesen-Sortierung umschalten
+let hypothesenSortModus = 'staerke'; // 'staerke' oder 'alpha'
+function toggleHypothesenSort() {
+  hypothesenSortModus = hypothesenSortModus === 'staerke' ? 'alpha' : 'staerke';
+  const label = document.getElementById('hypothesen-sort-label');
+  if (label) label.textContent = hypothesenSortModus === 'staerke' ? 'Stärke' : 'A-Z';
+
+  // Karten in allen Containern neu sortieren
+  document.querySelectorAll('.hypothesen-ebene-cards, #hypothesen-ansicht-flat').forEach(container => {
+    const cards = Array.from(container.querySelectorAll('.hypothese-card'));
+    if (hypothesenSortModus === 'alpha') {
+      cards.sort((a, b) => {
+        const tA = a.querySelector('.hypothese-titel')?.textContent || '';
+        const tB = b.querySelector('.hypothese-titel')?.textContent || '';
+        return tA.localeCompare(tB, 'de');
+      });
+    } else {
+      cards.sort((a, b) => (parseInt(b.dataset.staerke) || 0) - (parseInt(a.dataset.staerke) || 0));
+    }
+    cards.forEach(card => container.appendChild(card));
   });
 }
 

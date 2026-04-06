@@ -8767,3 +8767,214 @@ function renderWikiTeaserWidget() {
 
   container.insertAdjacentHTML('beforeend', html);
 }
+
+// ============================================================
+// COMMAND PALETTE (Cmd+K / Ctrl+K)
+// ============================================================
+(function() {
+  var cmdPaletteOpen = false;
+  var cmdSelectedIdx = 0;
+  var cmdResults = [];
+
+  function getCommandItems(query) {
+    var items = [];
+    var q = (query || '').toLowerCase().trim();
+
+    // Students
+    try {
+      var schueler = DB.getSchueler();
+      schueler.forEach(function(s) {
+        items.push({
+          icon: '👤',
+          label: s.vorname + ' ' + s.nachname,
+          hint: 'Schüler·in',
+          action: function() { showView('profil', s.id); }
+        });
+      });
+    } catch(e) {}
+
+    // Navigation
+    items.push({ icon: '🏠', label: 'Startseite', hint: 'Navigation', action: function() { showView('home'); } });
+    items.push({ icon: '📅', label: 'Kalender', hint: 'Navigation', action: function() { showView('kalender'); } });
+    items.push({ icon: '➕', label: 'Neuen Schüler anlegen', hint: 'Aktion', action: function() { openSchuelerModal(); } });
+
+    // Profile tabs (only when in profile view)
+    if (APP.currentView === 'profil' && APP.currentSchuelerId) {
+      var tabs = [
+        { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+        { id: 'roadmap', icon: '🗺️', label: 'Roadmap & Ziele' },
+        { id: 'themen', icon: '💬', label: 'Themen & Sitzungen' },
+        { id: 'staerken', icon: '💪', label: 'Stärken & Ressourcen' },
+        { id: 'verhalten', icon: '📈', label: 'Verhaltensbeobachtung' },
+        { id: 'screening', icon: '🔍', label: 'Screening' },
+        { id: 'fallformulierung', icon: '📝', label: 'Fallformulierung' },
+        { id: 'berichte', icon: '📄', label: 'Berichte' },
+        { id: 'notizen', icon: '🗒️', label: 'Notizen' },
+        { id: 'info', icon: '📋', label: 'Info & Anamnese' },
+        { id: 'genogramm', icon: '🌳', label: 'Genogramm' }
+      ];
+      tabs.forEach(function(t) {
+        items.push({
+          icon: t.icon,
+          label: t.label,
+          hint: 'Tab',
+          action: function() { showProfilTab(t.id); }
+        });
+      });
+    }
+
+    // Wiki articles
+    if (typeof WIKI_ARTIKEL !== 'undefined') {
+      WIKI_ARTIKEL.slice(0, 20).forEach(function(a) {
+        items.push({
+          icon: a.icon || '📖',
+          label: a.titel,
+          hint: 'Wiki',
+          action: function() { openWikiArtikel(a.id); }
+        });
+      });
+    }
+
+    // Filter
+    if (q) {
+      items = items.filter(function(item) {
+        return item.label.toLowerCase().indexOf(q) !== -1 ||
+               item.hint.toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
+    return items.slice(0, 12);
+  }
+
+  function renderCommandPalette() {
+    var existing = document.querySelector('.command-palette-overlay');
+    if (existing) existing.remove();
+
+    var overlay = document.createElement('div');
+    overlay.className = 'command-palette-overlay';
+    overlay.innerHTML =
+      '<div class="command-palette">' +
+        '<input class="command-palette-input" placeholder="Suche Schüler, Seiten, Wiki-Artikel…" autocomplete="off" />' +
+        '<div class="command-palette-results"></div>' +
+        '<div class="command-palette-footer">' +
+          '<span><kbd>↑↓</kbd> Navigieren</span>' +
+          '<span><kbd>↵</kbd> Öffnen</span>' +
+          '<span><kbd>Esc</kbd> Schließen</span>' +
+        '</div>' +
+      '</div>';
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeCommandPalette();
+    });
+
+    document.body.appendChild(overlay);
+    cmdPaletteOpen = true;
+    cmdSelectedIdx = 0;
+
+    var input = overlay.querySelector('.command-palette-input');
+    input.focus();
+
+    input.addEventListener('input', function() {
+      cmdSelectedIdx = 0;
+      updateCommandResults(input.value);
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        cmdSelectedIdx = Math.min(cmdSelectedIdx + 1, cmdResults.length - 1);
+        highlightCommandItem();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        cmdSelectedIdx = Math.max(cmdSelectedIdx - 1, 0);
+        highlightCommandItem();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (cmdResults[cmdSelectedIdx]) {
+          cmdResults[cmdSelectedIdx].action();
+          closeCommandPalette();
+        }
+      } else if (e.key === 'Escape') {
+        closeCommandPalette();
+      }
+    });
+
+    updateCommandResults('');
+  }
+
+  function updateCommandResults(query) {
+    cmdResults = getCommandItems(query);
+    var container = document.querySelector('.command-palette-results');
+    if (!container) return;
+
+    if (cmdResults.length === 0) {
+      container.innerHTML = '<div style="padding:24px;text-align:center;color:#9CA3AF;font-size:13px;">Keine Ergebnisse</div>';
+      return;
+    }
+
+    var html = '';
+    cmdResults.forEach(function(item, i) {
+      html += '<div class="command-palette-item' + (i === cmdSelectedIdx ? ' active' : '') + '" data-idx="' + i + '">' +
+        '<span class="command-palette-item-icon">' + item.icon + '</span>' +
+        '<span class="command-palette-item-label">' + item.label + '</span>' +
+        '<span class="command-palette-item-hint">' + item.hint + '</span>' +
+      '</div>';
+    });
+    container.innerHTML = html;
+
+    container.querySelectorAll('.command-palette-item').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var idx = parseInt(el.dataset.idx);
+        if (cmdResults[idx]) {
+          cmdResults[idx].action();
+          closeCommandPalette();
+        }
+      });
+      el.addEventListener('mouseenter', function() {
+        cmdSelectedIdx = parseInt(el.dataset.idx);
+        highlightCommandItem();
+      });
+    });
+  }
+
+  function highlightCommandItem() {
+    document.querySelectorAll('.command-palette-item').forEach(function(el, i) {
+      el.classList.toggle('active', i === cmdSelectedIdx);
+      if (i === cmdSelectedIdx) el.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  function closeCommandPalette() {
+    var overlay = document.querySelector('.command-palette-overlay');
+    if (overlay) overlay.remove();
+    cmdPaletteOpen = false;
+  }
+
+  // Global keyboard shortcut
+  document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      if (cmdPaletteOpen) {
+        closeCommandPalette();
+      } else {
+        renderCommandPalette();
+      }
+    }
+  });
+
+  // Show keyboard hint on first visit
+  if (!localStorage.getItem('cmdPaletteHintShown')) {
+    setTimeout(function() {
+      var hint = document.createElement('div');
+      hint.className = 'kbd-hint';
+      hint.innerHTML = 'Tipp: <kbd>⌘</kbd><kbd>K</kbd> für Schnellsuche';
+      document.body.appendChild(hint);
+      setTimeout(function() { hint.classList.add('visible'); }, 100);
+      setTimeout(function() {
+        hint.classList.remove('visible');
+        setTimeout(function() { hint.remove(); }, 300);
+      }, 5000);
+      localStorage.setItem('cmdPaletteHintShown', '1');
+    }, 3000);
+  }
+})();

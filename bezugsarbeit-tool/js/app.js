@@ -6011,6 +6011,7 @@ function renderFallformulierung() {
         onchange="save5PHypothese(this.value)">${ff ? (ff.hypothese || '') : ''}</textarea>
     </div>
 
+    ${ff ? renderHandlungsTriage(ff, sid) : ''}
     ${ff ? render5PPatternAnalysis(ff) : ''}
     ${ff ? render5PKomorbidity(ff) : ''}
 
@@ -6039,6 +6040,32 @@ function renderFallformulierung() {
       ${ff ? '<button class="btn btn-secondary btn-sm" onclick="generate5PHypothese()">💡 Hypothese generieren</button>' : ''}
       ${ff ? '<button class="btn btn-secondary btn-sm" onclick="fivePToRoadmap()">🗺️ 5P → Förderplan übernehmen</button>' : ''}
     </div>
+
+    ${(function(){
+      if (!ff || typeof generateHypothesen !== 'function' || typeof HYPOTHESEN_REGELN === 'undefined') return '';
+      try {
+        const hypos = generateHypothesen(sid);
+        if (!hypos || hypos.length === 0) return '';
+        const diffs = hypos.filter(h => h.typ === 'differenzial');
+        const risikos = hypos.filter(h => h.typ === 'risiko');
+        const total = hypos.length;
+        let badge = '';
+        if (diffs.length > 0) {
+          badge += '<span style="display:inline-block;padding:2px 8px;background:#FEF3C7;border:1px solid #FCD34D;border-radius:12px;font-size:11px;color:#92400E;margin-right:4px;">' +
+            diffs.length + ' Differenzialdiagnose' + (diffs.length > 1 ? 'n' : '') + '</span>';
+        }
+        if (risikos.length > 0) {
+          badge += '<span style="display:inline-block;padding:2px 8px;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:12px;font-size:11px;color:#991B1B;margin-right:4px;">' +
+            risikos.length + ' Risiko-Hypothese' + (risikos.length > 1 ? 'n' : '') + '</span>';
+        }
+        return '<div style="margin-top:12px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+          '<span style="font-weight:600;color:#92400E;">📊 ' + total + ' aktive Hypothesen</span>' +
+          badge +
+          '<button class="btn btn-sm" style="margin-left:auto;background:#F59E0B;color:#fff;border:none;font-size:11px;" ' +
+          'onclick="showPhase(&quot;analyse&quot;, &quot;hypothesen&quot;)">→ Zum Hypothesen-Tab</button>' +
+          '</div>';
+      } catch(e) { return ''; }
+    })()}
   `;
 
   // Radar-Chart initialisieren
@@ -6197,13 +6224,59 @@ function generate5PHypothese() {
     }
   }
 
+  // Handlungspriorität basierend auf Triage-Kategorien
+  if (typeof SCREENING_DOMAINS !== 'undefined' && typeof resolveHandlung === 'function') {
+    const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+    const latestScr = screenings.length > 0
+      ? screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0]
+      : null;
+    const scrScores = latestScr ? (latestScr.scores || {}) : {};
+
+    const prioItems = [];
+    pres.forEach(tag => {
+      const dom = SCREENING_DOMAINS.find(d => tag.includes(d.label));
+      if (!dom || !dom.handlung) return;
+      const sc = scrScores[dom.id] || 0;
+      const handlung = resolveHandlung(dom, sc);
+      prioItems.push({ dom, score: sc, handlung });
+    });
+
+    // Sortierung: krise > abklaerung > intervention > beobachtung
+    const prioOrder = { krise: 0, abklaerung: 1, intervention: 2, beobachtung: 3 };
+    prioItems.sort((a, b) => prioOrder[a.handlung] - prioOrder[b.handlung]);
+
+    if (prioItems.length > 0) {
+      hypothese += '\n\n--- Handlungspriorit\u00E4t ---\n';
+      prioItems.forEach((item, idx) => {
+        const cfg = HANDLUNG_CONFIG[item.handlung];
+        let detail = '';
+        if (item.handlung === 'krise') {
+          detail = `Krisenprotokoll aktivieren${item.dom.ueberweisungAn ? ', ' + item.dom.ueberweisungAn + ' kontaktieren' : ''}`;
+        } else if (item.handlung === 'abklaerung') {
+          detail = `\u00DCberweisung an ${item.dom.ueberweisungAn || 'Fachstelle'} initiieren`;
+          const themen = (typeof SCREENING_THEMA_MAP !== 'undefined' && SCREENING_THEMA_MAP[item.dom.id])
+            ? SCREENING_THEMA_MAP[item.dom.id].slice(0, 3)
+            : [];
+          if (themen.length > 0) {
+            detail += `\n   \u2192 Bis zur Diagnostik: ${themen.join(', ')}`;
+          }
+        } else if (item.handlung === 'intervention') {
+          detail = 'In-house Arbeit m\u00F6glich';
+        } else {
+          detail = 'Beobachten und st\u00E4rken';
+        }
+        hypothese += `${cfg.icon} PRIORIT\u00C4T ${idx + 1}: ${item.dom.label} \u2014 ${detail}\n`;
+      });
+    }
+  }
+
   // Hebelpunkt-Identifikation
   const perps = ff.perpetuating || [];
   if (perps.length >= 2) {
     hypothese += `\n\n--- Hebelpunkt-Analyse ---\n` +
       `Mit ${perps.length} aufrechterhaltenden Faktoren bieten sich mehrere Ansatzpunkte. ` +
-      `Prioritär sollte an "${perps[0]}" gearbeitet werden, da aufrechterhaltende Faktoren ` +
-      `oft den effektivsten Hebel für Veränderung darstellen.`;
+      `Priorit\u00E4r sollte an "${perps[0]}" gearbeitet werden, da aufrechterhaltende Faktoren ` +
+      `oft den effektivsten Hebel f\u00FCr Ver\u00E4nderung darstellen.`;
   }
 
   // Interventionsempfehlung basierend auf verwandten Themen
@@ -6239,28 +6312,22 @@ function generate5PHypothese() {
 }
 
 // ---- 5P → Förderplan ----
+// Krisen-Themen die in Phase 1 (Sicherheit & Beziehung) gehören
+const KRISEN_THEMEN = ['krisenintervention', 'suizidpraevention', 'selbstverletzung', 'trauma'];
+
 function fivePToRoadmap() {
   const sid = APP.currentSchuelerId;
   const ff = DB.getFallformulierung(sid);
   if (!ff) return;
 
   const presenting = ff.presenting || [];
-  const suggestedThemen = [];
 
-  // Map presenting tags zu Screening-Domains zu Themen
-  for (const tag of presenting) {
-    const dom = SCREENING_DOMAINS.find(d => d.label === tag || d.id === tag.toLowerCase().replace(/\s/g, '-'));
-    if (dom && SCREENING_THEMA_MAP[dom.id]) {
-      for (const themaId of SCREENING_THEMA_MAP[dom.id]) {
-        if (!suggestedThemen.includes(themaId)) suggestedThemen.push(themaId);
-      }
-    }
-  }
-
-  if (suggestedThemen.length === 0) {
-    showToast('Keine passenden Themen gefunden. Presenting-Tags müssen Screening-Domänen entsprechen.', 'error');
-    return;
-  }
+  // Screening-Daten für Score-basierte Eskalation
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  const latestScr = screenings.length > 0
+    ? screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0]
+    : null;
+  const scores = latestScr ? (latestScr.scores || {}) : {};
 
   let roadmap = DB.getRoadmap(sid);
   if (!roadmap) {
@@ -6268,19 +6335,75 @@ function fivePToRoadmap() {
     DB.saveRoadmap(roadmap);
   }
 
-  const phase4 = roadmap.phasen.find(p => p.nr === 4);
-  if (!phase4) return;
+  const addToPhase = (nr, themen) => {
+    const phase = roadmap.phasen.find(p => p.nr === nr);
+    if (!phase) return 0;
+    let count = 0;
+    for (const tid of themen) {
+      if (!phase.themen.includes(tid)) {
+        phase.themen.push(tid);
+        count++;
+      }
+    }
+    return count;
+  };
 
-  let added = 0;
-  for (const tid of suggestedThemen.slice(0, 8)) {
-    if (!phase4.themen.includes(tid)) {
-      phase4.themen.push(tid);
-      added++;
+  let totalAdded = 0;
+
+  // Map presenting tags → Domains → Themen mit handlungsbasierter Phasen-Zuordnung
+  for (const tag of presenting) {
+    const dom = SCREENING_DOMAINS.find(d => tag.includes(d.label));
+    if (!dom) continue;
+
+    const themen = (typeof SCREENING_THEMA_MAP !== 'undefined' && SCREENING_THEMA_MAP[dom.id])
+      ? SCREENING_THEMA_MAP[dom.id]
+      : [];
+    if (themen.length === 0) continue;
+
+    const score = scores[dom.id] || 0;
+    const handlung = resolveHandlung(dom, score);
+
+    switch (handlung) {
+      case 'krise':
+        // Phase 1 (Sicherheit & Beziehung): Krisen-Themen
+        totalAdded += addToPhase(1, themen.filter(t => KRISEN_THEMEN.includes(t)));
+        // Restliche Themen → Phase 4 für spätere Arbeit
+        totalAdded += addToPhase(4, themen.filter(t => !KRISEN_THEMEN.includes(t)));
+        break;
+      case 'abklaerung':
+        // Phase 2 (Exploration): Diagnostik-relevante Themen
+        totalAdded += addToPhase(2, themen.slice(0, 2));
+        // Phase 4: Adaptive Interventionen parallel
+        totalAdded += addToPhase(4, themen.slice(2));
+        break;
+      case 'intervention':
+        // Phase 4 (Intervention): Kernarbeit
+        totalAdded += addToPhase(4, themen);
+        break;
+      case 'beobachtung':
+        // Phase 5 (Konsolidierung): Monitoring-Themen
+        totalAdded += addToPhase(5, themen);
+        break;
     }
   }
 
+  if (totalAdded === 0) {
+    showToast('Keine neuen Themen gefunden oder alle bereits im Förderplan', 'info');
+    return;
+  }
+
   DB.saveRoadmap(roadmap);
-  showToast(`${added} Themen in Phase 4 (Intervention) übernommen`, 'success');
+
+  // Zusammenfassung der Phasen-Verteilung
+  const phasenInfo = [1, 2, 4, 5]
+    .map(nr => {
+      const p = roadmap.phasen.find(ph => ph.nr === nr);
+      return p && p.themen.length > 0 ? `Phase ${nr}: ${p.themen.length}` : null;
+    })
+    .filter(Boolean)
+    .join(', ');
+
+  showToast(`${totalAdded} Themen verteilt (${phasenInfo})`, 'success');
 }
 
 // ---- Komorbidität in 5P anzeigen ----
@@ -6470,6 +6593,123 @@ function render5PPatternAnalysis(ff) {
       ${staerkenHtml}
     </div>
   `;
+}
+
+// ============================================================
+// Handlungs-Triage-Panel in 5P-Fallformulierung
+// ============================================================
+function renderHandlungsTriage(ff, sid) {
+  if (!ff || !ff.presenting || ff.presenting.length === 0) return '';
+  if (typeof SCREENING_DOMAINS === 'undefined') return '';
+
+  // Screening-Daten holen für Score-basierte Eskalation
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  const latestScr = screenings.length > 0
+    ? screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0]
+    : null;
+  const scores = latestScr ? (latestScr.scores || {}) : {};
+
+  // Presenting-Tags → Domains zuordnen und nach Handlung gruppieren
+  const grouped = { krise: [], abklaerung: [], intervention: [], beobachtung: [] };
+
+  ff.presenting.forEach(tag => {
+    const dom = SCREENING_DOMAINS.find(d => tag.includes(d.label));
+    if (!dom || !dom.handlung) return;
+
+    const score = scores[dom.id] || 0;
+    const handlung = resolveHandlung(dom, score);
+    grouped[handlung].push({ dom, score, tag });
+  });
+
+  const totalGrouped = Object.values(grouped).reduce((sum, arr) => sum + arr.length, 0);
+  if (totalGrouped === 0) return '';
+
+  // SCREENING_THEMA_MAP Themen-Empfehlungen für Interventions-Gruppe
+  const getThemenForDomain = (domId) => {
+    if (typeof SCREENING_THEMA_MAP === 'undefined') return [];
+    return (SCREENING_THEMA_MAP[domId] || []).slice(0, 3);
+  };
+
+  let html = `
+    <div style="margin-top:20px;border:2px solid #E5E7EB;border-radius:12px;overflow:hidden;">
+      <div style="padding:12px 16px;background:#F8FAFC;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px;">\u{1F3E5}</span>
+        <strong style="font-size:14px;color:#1F2937;">Klinische Handlungs\u00FCbersicht</strong>
+        <span style="font-size:11px;color:#9CA3AF;margin-left:auto;">Automatisch aus Screening-Ergebnissen</span>
+      </div>`;
+
+  // Krise
+  if (grouped.krise.length > 0) {
+    html += `
+      <div style="padding:12px 16px;background:#FEF2F2;border-bottom:2px solid #FCA5A5;">
+        <div style="font-size:13px;font-weight:700;color:#991B1B;margin-bottom:8px;">\u{1F6A8} SOFORT HANDELN</div>`;
+    grouped.krise.forEach(({ dom, score }) => {
+      html += `
+        <div style="padding:8px 12px;background:#fff;border:1px solid #FCA5A5;border-left:4px solid #DC2626;border-radius:6px;margin-bottom:6px;">
+          <div style="font-weight:600;color:#991B1B;">${dom.icon} ${dom.label} <span style="font-weight:400;color:#6B7280;">(Score: ${score})</span></div>
+          ${dom.ueberweisungAn ? `<div style="font-size:12px;color:#991B1B;margin-top:4px;">\u{260E}\u{FE0F} <strong>${dom.ueberweisungAn}</strong></div>` : ''}
+          <div style="font-size:11px;color:#B91C1C;margin-top:4px;font-style:italic;">Krisenprotokoll pr\u00FCfen \u2014 Sicherheit hat Vorrang vor therapeutischer Arbeit</div>
+        </div>`;
+    });
+    html += '</div>';
+  }
+
+  // Abklärung
+  if (grouped.abklaerung.length > 0) {
+    html += `
+      <div style="padding:12px 16px;background:#F5F3FF;border-bottom:1px solid #DDD6FE;">
+        <div style="font-size:13px;font-weight:700;color:#7C3AED;margin-bottom:8px;">\u{1F52C} FACHDIAGNOSTIK EMPFOHLEN</div>`;
+    grouped.abklaerung.forEach(({ dom, score }) => {
+      const themen = getThemenForDomain(dom.id);
+      html += `
+        <div style="padding:8px 12px;background:#fff;border:1px solid #DDD6FE;border-left:4px solid #7C3AED;border-radius:6px;margin-bottom:6px;">
+          <div style="font-weight:600;color:#5B21B6;">${dom.icon} ${dom.label} <span style="font-weight:400;color:#6B7280;">(Score: ${score})</span></div>
+          ${dom.ueberweisungAn ? `<div style="font-size:12px;color:#7C3AED;margin-top:4px;">\u{1F4CB} \u00DCberweisung an: <strong>${dom.ueberweisungAn}</strong></div>` : ''}
+          ${themen.length > 0 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">Was wir parallel tun k\u00F6nnen: ${themen.map(t => `<em>${t}</em>`).join(', ')}</div>` : ''}
+        </div>`;
+    });
+    html += '</div>';
+  }
+
+  // Intervention
+  if (grouped.intervention.length > 0) {
+    html += `
+      <div style="padding:12px 16px;background:#EFF6FF;border-bottom:1px solid #BFDBFE;">
+        <div style="font-size:13px;font-weight:700;color:#2563EB;margin-bottom:8px;">\u{1F3AF} UNSERE ARBEIT</div>`;
+    const allThemen = [];
+    grouped.intervention.forEach(({ dom, score }) => {
+      const themen = getThemenForDomain(dom.id);
+      themen.forEach(t => { if (!allThemen.includes(t)) allThemen.push(t); });
+      html += `
+        <span style="display:inline-block;padding:4px 10px;background:#fff;border:1px solid #BFDBFE;border-radius:16px;font-size:12px;color:#1D4ED8;margin:0 4px 4px 0;">
+          ${dom.icon} ${dom.label} (${score})
+        </span>`;
+    });
+    if (allThemen.length > 0) {
+      html += `
+        <div style="font-size:12px;color:#6B7280;margin-top:8px;">
+          Empfohlene Themen: ${allThemen.slice(0, 6).map(t => `<strong>${t}</strong>`).join(', ')}
+        </div>`;
+    }
+    html += '</div>';
+  }
+
+  // Beobachtung
+  if (grouped.beobachtung.length > 0) {
+    html += `
+      <div style="padding:12px 16px;background:#F9FAFB;">
+        <div style="font-size:13px;font-weight:700;color:#6B7280;margin-bottom:8px;">\u{1F441}\u{FE0F} BEOBACHTEN</div>`;
+    grouped.beobachtung.forEach(({ dom, score }) => {
+      html += `
+        <span style="display:inline-block;padding:4px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:16px;font-size:12px;color:#6B7280;margin:0 4px 4px 0;">
+          ${dom.icon} ${dom.label} (${score}) \u2014 st\u00E4rken
+        </span>`;
+    });
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
 }
 
 // ============================================================
@@ -8112,6 +8352,28 @@ function renderScreeningEmbedded() {
 // ============================================================
 // FEATURE-VERBINDUNGEN: Screening → 5P
 // ============================================================
+
+// Handlungskategorien-Konfiguration
+const HANDLUNG_CONFIG = {
+  krise:       { icon: '\u{1F6A8}', label: 'SOFORT HANDELN', farbe: '#991B1B', bg: '#FEF2F2', prefix: 'KRISENPROTOKOLL' },
+  abklaerung:  { icon: '\u{1F52C}', label: 'FACHDIAGNOSTIK EMPFOHLEN', farbe: '#7C3AED', bg: '#F5F3FF', prefix: 'Fachdiagnostik' },
+  intervention:{ icon: '\u{1F3AF}', label: 'UNSERE ARBEIT', farbe: '#2563EB', bg: '#EFF6FF', prefix: '' },
+  beobachtung: { icon: '\u{1F441}', label: 'BEOBACHTEN', farbe: '#6B7280', bg: '#F9FAFB', prefix: 'beobachten' },
+};
+
+// Score-basierte dynamische Eskalation der Handlungskategorie
+function resolveHandlung(domain, score) {
+  const base = domain.handlung || 'intervention';
+  // Dynamische Eskalation bei hohen Scores
+  if (base === 'intervention' && score > 0) {
+    if (domain.id === 'depression' && score >= 10) return 'abklaerung';
+    if (domain.id === 'trauma' && score >= 8) return 'abklaerung';
+    if (domain.id === 'substanz' && score >= 9) return 'abklaerung';
+    if (domain.id === 'conduct' && score >= 9) return 'abklaerung';
+  }
+  return base;
+}
+
 function screeningTo5P() {
   const sid = APP.currentSchuelerId;
   const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
@@ -8133,14 +8395,29 @@ function screeningTo5P() {
     ff = DB.createFallformulierung(sid);
   }
 
-  // Flagged areas → Presenting (Symptome)
+  // Flagged areas → Presenting (Symptome) mit Handlungskategorie-Prefix
   const presentingNeu = [];
   flagged.forEach(areaId => {
     const domain = (typeof SCREENING_DOMAINS !== 'undefined') ? SCREENING_DOMAINS.find(d => d.id === areaId) : null;
     const label = domain ? `${domain.icon} ${domain.label}` : areaId;
     const score = latestScr.scores[areaId] || 0;
-    const entry = `${label} (Screening-Score: ${score})`;
-    if (!ff.presenting.includes(entry)) {
+
+    // Handlungsbasierter Tag mit Prefix
+    let entry;
+    if (domain && domain.handlung) {
+      const handlung = resolveHandlung(domain, score);
+      const cfg = HANDLUNG_CONFIG[handlung];
+      const suffix = cfg.prefix ? ` \u2014 ${cfg.prefix}` : '';
+      entry = `${cfg.icon} ${domain.label} (Score: ${score})${suffix}`;
+    } else {
+      entry = `${label} (Screening-Score: ${score})`;
+    }
+
+    // Duplikat-Check: auch alte Formate erkennen
+    const isDuplicate = ff.presenting.some(p =>
+      p.includes(domain ? domain.label : areaId) && p.includes('Score')
+    );
+    if (!isDuplicate) {
       presentingNeu.push(entry);
     }
   });

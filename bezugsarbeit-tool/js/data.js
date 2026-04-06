@@ -1658,6 +1658,7 @@ const SCREENING_DOMAINS = [
     farbe: '#5B6ABF',
     icon: '😔',
     cutoff: 6,
+    handlung: 'intervention',
     items: [
       'Fühlt sich die meiste Zeit traurig oder leer',
       'Hat kaum Freude oder Interesse an Dingen, die früher Spaß gemacht haben',
@@ -1674,6 +1675,7 @@ const SCREENING_DOMAINS = [
     farbe: '#E8A838',
     icon: '😰',
     cutoff: 5,
+    handlung: 'intervention',
     items: [
       'Sorgt sich übermäßig und unkontrollierbar um viele Dinge',
       'Fühlt sich angespannt, nervös oder innerlich unruhig',
@@ -1689,6 +1691,7 @@ const SCREENING_DOMAINS = [
     farbe: '#E07B39',
     icon: '😶',
     cutoff: 5,
+    handlung: 'intervention',
     items: [
       'Vermeidet soziale Situationen (Klasse, Gruppenarbeit, Mensa)',
       'Fürchtet, bewertet oder ausgelacht zu werden',
@@ -1704,6 +1707,7 @@ const SCREENING_DOMAINS = [
     farbe: '#9C4E77',
     icon: '⚡',
     cutoff: 4,
+    handlung: 'intervention',
     items: [
       'Erlebt Flashbacks oder aufdringliche Erinnerungen an belastende Ereignisse',
       'Vermeidet Orte, Menschen oder Situationen, die an das Ereignis erinnern',
@@ -1719,6 +1723,8 @@ const SCREENING_DOMAINS = [
     farbe: '#3DA8A8',
     icon: '⚡',
     cutoff: 7,
+    handlung: 'abklaerung',
+    ueberweisungAn: 'Kinder-/Jugendpsychiater (CHL / ZNS-Letzebuerg)',
     items: [
       'Hat große Schwierigkeiten, die Aufmerksamkeit aufrechtzuerhalten',
       'Vergisst Aufgaben, verliert Gegenstände, ist unorganisiert',
@@ -1735,6 +1741,7 @@ const SCREENING_DOMAINS = [
     farbe: '#C0392B',
     icon: '🔥',
     cutoff: 5,
+    handlung: 'intervention',
     items: [
       'Zeigt aggressives Verhalten gegenüber Personen oder Tieren',
       'Verstößt wiederholt gegen Regeln (Schule, Heimregeln)',
@@ -1750,6 +1757,8 @@ const SCREENING_DOMAINS = [
     farbe: '#7B2D2D',
     icon: '⚠️',
     cutoff: 2,
+    handlung: 'krise',
+    ueberweisungAn: 'CHL Kinder- und Jugendpsychiatrie (4411-6100)',
     items: [
       'Verletzt sich absichtlich (Schneiden, Kratzen, Verbrennen)',
       'Hat Gedanken daran, sich selbst zu verletzen',
@@ -1766,6 +1775,8 @@ const SCREENING_DOMAINS = [
     farbe: '#8E5EA2',
     icon: '🍽️',
     cutoff: 5,
+    handlung: 'abklaerung',
+    ueberweisungAn: 'CHL/KJP oder Mondorf Clinique (23 666-1)',
     items: [
       'Hat ein sehr negatives Körperbild oder fühlt sich zu dick/dünn',
       'Isst extrem wenig oder verweigert Mahlzeiten',
@@ -1781,6 +1792,7 @@ const SCREENING_DOMAINS = [
     farbe: '#556B2F',
     icon: '🚬',
     cutoff: 5,
+    handlung: 'intervention',
     items: [
       'Konsumiert regelmäßig Alkohol (mehr als 1x/Woche)',
       'Konsumiert Cannabis oder andere Drogen',
@@ -1796,6 +1808,7 @@ const SCREENING_DOMAINS = [
     farbe: '#2C5F7A',
     icon: '🌙',
     cutoff: 5,
+    handlung: 'intervention',
     items: [
       'Hat anhaltende Ein- oder Durchschlafprobleme',
       'Schläft am Tag sehr viel (mehr als 10h) oder ist tagsüber sehr müde',
@@ -1811,6 +1824,8 @@ const SCREENING_DOMAINS = [
     farbe: '#4A2D6B',
     icon: '🔮',
     cutoff: 2,
+    handlung: 'krise',
+    ueberweisungAn: 'CHL Psychiatrie — SOFORT (4411-6100)',
     items: [
       'Berichtet über Stimmen oder Wahrnehmungen ohne äußere Ursache',
       'Hat ungewöhnliche oder bizarre Überzeugungen (Verfolgung, besondere Mission)',
@@ -1826,6 +1841,8 @@ const SCREENING_DOMAINS = [
     farbe: '#2A7D6E',
     icon: '🧩',
     cutoff: 6,
+    handlung: 'abklaerung',
+    ueberweisungAn: 'CHL Autismus-Zentrum / ZNS-Letzebuerg (2843 41-1)',
     items: [
       'Hat große Schwierigkeiten mit sozialer Kommunikation',
       'Zeigt ungewöhnliche oder sehr eingeschränkte Interessen',
@@ -1841,6 +1858,7 @@ const SCREENING_DOMAINS = [
     farbe: '#C0834A',
     icon: '🏠',
     cutoff: 4,
+    handlung: 'intervention',
     items: [
       'Hat übermäßige Angst, von Bezugspersonen getrennt zu werden',
       'Weigert sich, alleine zu sein oder ohne Bezugspersonen zur Schule zu gehen',
@@ -1855,6 +1873,7 @@ const SCREENING_DOMAINS = [
     farbe: '#B05030',
     icon: '👊',
     cutoff: 4,
+    handlung: 'intervention',
     items: [
       'Wird von Peers regelmäßig ausgegrenzt, gehänselt oder schikaniert',
       'Erlebt Cybermobbing (Nachrichten, Bilder, Gruppen)',
@@ -1869,6 +1888,7 @@ const SCREENING_DOMAINS = [
     farbe: '#6B4F30',
     icon: '👨‍👩‍👦',
     cutoff: 5,
+    handlung: 'intervention',
     items: [
       'Erlebt oder erlebte häusliche Gewalt (direkt oder als Zeuge)',
       'Hat einen Elternteil mit psychischer Erkrankung oder Suchtproblem',
@@ -1884,6 +1904,7 @@ const SCREENING_DOMAINS = [
     farbe: '#B03060',
     icon: '⚖️',
     cutoff: 4,
+    handlung: 'intervention',
     items: [
       'Erlebt Diskriminierung aufgrund von Herkunft, Religion oder Aussehen',
       'Hat Schwierigkeiten mit der eigenen kulturellen oder religiösen Identität',
@@ -1898,6 +1919,7 @@ const SCREENING_DOMAINS = [
     farbe: '#445566',
     icon: '🏝️',
     cutoff: 4,
+    handlung: 'intervention',
     items: [
       'Hat keine oder kaum Freundschaften',
       'Verbringt die meiste Freizeit allein (ohne bewusste Wahl)',
@@ -1913,6 +1935,8 @@ const SCREENING_DOMAINS = [
     farbe: '#0891B2',
     icon: '🔄',
     cutoff: 5,
+    handlung: 'abklaerung',
+    ueberweisungAn: 'Kinder-/Jugendpsychiater (KVT-spezialisiert)',
     items: [
       'Hat wiederkehrende, aufdringliche Gedanken die sich nicht abstellen lassen',
       'Führt Handlungen/Rituale wiederholt aus um Angst zu reduzieren',
@@ -1928,6 +1952,8 @@ const SCREENING_DOMAINS = [
     farbe: '#7C3AED',
     icon: '🌊',
     cutoff: 5,
+    handlung: 'abklaerung',
+    ueberweisungAn: 'CHL KJP — Bipolar-Screening (4411-6100)',
     items: [
       'Hat ausgeprägte Hochphasen (überdreht, kaum Schlaf nötig, viele Ideen)',
       'Wechselt schnell zwischen Hochgefühl und tiefer Depression',
@@ -1943,6 +1969,7 @@ const SCREENING_DOMAINS = [
     farbe: '#0F766E',
     icon: '🫀',
     cutoff: 5,
+    handlung: 'intervention',
     items: [
       'Hat häufig körperliche Beschwerden ohne medizinische Ursache (Bauch, Kopf)',
       'Die körperlichen Beschwerden treten besonders in Stresssituationen auf',
@@ -1958,6 +1985,8 @@ const SCREENING_DOMAINS = [
     farbe: '#7E22CE',
     icon: '🌫️',
     cutoff: 4,
+    handlung: 'abklaerung',
+    ueberweisungAn: 'Trauma-Therapeut (EMDR/SE-qualifiziert)',
     items: [
       'Fühlt sich manchmal unwirklich oder wie hinter Glas',
       'Erlebt Phasen wo er/sie sich von außen beobachtet',
@@ -1973,6 +2002,7 @@ const SCREENING_DOMAINS = [
     farbe: '#2E7D32',
     icon: '💪',
     cutoff: 0,
+    handlung: 'beobachtung',
     invertiert: true, // Höherer Score = besser (Ressourcen)
     items: [
       'Hat mindestens eine stabile Vertrauensperson (Familie oder Peers)',
@@ -2006,7 +2036,7 @@ const SCREENING_THEMA_MAP = {
   'diskriminierung':    ['diskriminierung', 'kulturelle-identitaet', 'selbstwertgefuehl', 'resilienz'],
   'soziale-isolation':  ['einsamkeit', 'freundschaften', 'soziales-netzwerk', 'kommunikation'],
   'zwang':              ['wiederkehrende-gedanken', 'stress-angst', 'emotionsregulation'],
-  'stimmung-extrem':    ['stimmungsextreme', 'emotionsregulation', 'impulskontrolle'],
+  'stimmungsextreme':   ['stimmungsextreme', 'emotionsregulation', 'impulskontrolle'],
   'psychosomatik':      ['koerperbeschwerden', 'stress-angst', 'emotionserkennung'],
   'dissoziation':       ['dissoziative-erfahrungen', 'trauma', 'emotionserkennung'],
 };

@@ -1,5 +1,5 @@
 // ============================================================
-// CDSE Bezugsarbeit Tool - Datendefinitionen
+// Pathways — Data Definitions
 // ============================================================
 
 // Zuordnung: Thema-ID → Arbeitsblatt-Datei(en)

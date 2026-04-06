@@ -243,10 +243,10 @@ const THERAPIE_MODULE_DATEIEN = {
 const FACHKRAFT_MODULE_DATEIEN = {
   // Familie
   'familienzusammensetzung': 'familie.html',
-  'eltern-kind-beziehung':   'familie.html',
-  'geschwister':             'familie.html',
-  'wohnsituation':           'familie.html',
-  'trennung-scheidung':      'familie.html',
+  'eltern-kind-beziehung':   'eltern-kind-beziehung.html',
+  'geschwister':             'geschwister.html',
+  'wohnsituation':           'wohnsituation.html',
+  'trennung-scheidung':      'trennung-scheidung.html',
   'soziales-netzwerk':       'soziales-netzwerk.html',
   'genogramm':               'familie.html',
   'pflegefamilie':           'pflegefamilie.html',
@@ -283,7 +283,7 @@ const FACHKRAFT_MODULE_DATEIEN = {
   'gluecksspiel':            'gluecksspiel.html',
   'selbstmedikation':        'cannabis.html',
   // Schule & Zukunft
-  'schulisches-engagement':       'lernstrategien.html',
+  'schulisches-engagement':       'schulisches-engagement.html',
   'konzentration-aufmerksamkeit': 'konzentration-aufmerksamkeit.html',
   'lernstrategien':          'lernstrategien.html',
   'schulkonflikt':           'schulkonflikt.html',
@@ -333,6 +333,16 @@ const FACHKRAFT_MODULE_DATEIEN = {
   'gewalt':                  'gewalt-schutz.html',
   'resilienz':               'resilienz.html',
   'trennungsangst':          'trauma-stabilisierung.html',
+  // Fehlende Themen-Mappings
+  'alltagsstruktur':         'haushalt.html',
+  'bewegung':                'schlaf.html',
+  'hygiene-selbstfuersorge': 'schlaf.html',
+  'koerper-bild':            'koerperbild-sexualitaet.html',
+  'meine-rechte':            'jugendrecht.html',
+  'sexuelle-orientierung':   'identitaet.html',
+  'sexueller-missbrauch':    'gewalt-schutz.html',
+  'suizidalitaet':           'suizidpraevention.html',
+  'werte-lebensinn':         'identitaet.html',
   // Neue Module (bisher fehlend) — verwenden existierende themenverwandte Fachkraft-Seiten
   'bindungsstoerung':        'familie.html',
   'cybermobbing':            'mobbing.html',

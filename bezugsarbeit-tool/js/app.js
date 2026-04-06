@@ -1,5 +1,5 @@
 // ============================================================
-// Bezugsarbeit Tool - App Logic (by Joey Guedes)
+// Pathways — Therapeutic Case Management
 // ============================================================
 
 // ---- State ----
@@ -1166,7 +1166,7 @@ function generatePrintSheetHTML(themaLabel, modul, s) {
   </div>` : ''}
 
   <div class="footer">
-    <span>Bezugsarbeit-Tool · Sitzungsarbeitsblatt</span>
+    <span>Pathways · Sitzungsarbeitsblatt</span>
     <span>Sitzung ${s.nr} von ${modul.sitzungen.length} · ${escHtml(modul.dauer)}</span>
   </div>
 </div>
@@ -3573,7 +3573,7 @@ function druckeProfilbericht(schuelerId) {
           <div style="font-size:11px;font-weight:700;color:${s.risiko==='hoch'?'#DC2626':s.risiko==='mittel'?'#D97706':'#059669'};">
             ${s.risiko==='hoch'?'🔴':s.risiko==='mittel'?'🟡':'🟢'} Risiko: ${capitalize(s.risiko||'niedrig')}
           </div>
-          <div style="font-size:9px;color:#9CA3AF;margin-top:3px;">Bezugsarbeit Tool · ${new Date().toLocaleDateString('de-DE')}</div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:3px;">Pathways · ${new Date().toLocaleDateString('de-DE')}</div>
         </div>
       </div>
 
@@ -3603,7 +3603,7 @@ function druckeProfilbericht(schuelerId) {
 
       ${roadmapHTML}
 
-      <div class="footer">Vertraulich · Bezugsarbeit Tool · Erstellt am ${new Date().toLocaleDateString('de-DE')} um ${new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'})}</div>
+      <div class="footer">Vertraulich · Pathways · Erstellt am ${new Date().toLocaleDateString('de-DE')} um ${new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'})}</div>
     </div>
 
     <!-- SEITE 2: Protokolle -->
@@ -3638,7 +3638,7 @@ function exportDaten() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `bezugsarbeit-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.download = `pathways-backup-${new Date().toISOString().split('T')[0]}.json`;
   a.click();
   URL.revokeObjectURL(url);
   showToast('Daten exportiert', 'success');
@@ -7249,7 +7249,7 @@ function generateSCASBericht(s, name, notizen, scr, roadmap, ff, wb, heute) {
   return `
     <div class="bericht-doc">
       <div class="bericht-header-block">
-        <strong>Bezugsarbeit Tool — Service Bezugspädagogik</strong><br>
+        <strong>Pathways — Service Bezugspädagogik</strong><br>
         <strong>Bericht für SCAS</strong><br>
         Datum: ${heute}
       </div>
@@ -7309,7 +7309,7 @@ function generateElternbrief(s, name, notizen, roadmap, wb, heute) {
   return `
     <div class="bericht-doc">
       <div class="bericht-header-block">
-        <strong>Bezugsarbeit Tool</strong><br>
+        <strong>Pathways</strong><br>
         Datum: ${heute}
       </div>
       <hr>
@@ -7493,7 +7493,7 @@ function generateUeberweisungsschreiben() {
   inhalt.innerHTML = `
     <div class="bericht-doc">
       <div class="bericht-header-block">
-        <strong>Bezugsarbeit Tool — Joey Guedes</strong><br>
+        <strong>Pathways — Joey Guedes</strong><br>
         Überweisungsschreiben<br>
         <small>Datum: ${heute}</small>
       </div>

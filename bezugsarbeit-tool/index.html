@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bezugsarbeit Tool</title>
+  <title>Pathways</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,10 +17,17 @@
 <aside id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">🧠</div>
-      <div class="sidebar-title">Bezugsarbeit</div>
+      <div class="sidebar-logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3C7.5 3 4 6.5 4 10.5C4 14 6 16.5 8 18L9 21H15L16 18C18 16.5 20 14 20 10.5C20 6.5 16.5 3 12 3Z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M12 3V8M8 6L10.5 9M16 6L13.5 9" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M9 21H15M9.5 19.5H14.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="12" cy="12" r="2.5" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/>
+        </svg>
+      </div>
+      <div class="sidebar-title">Pathways</div>
     </div>
-    <div class="sidebar-subtitle">by Joey Guedes</div>
+    <div class="sidebar-subtitle">Therapeutic Case Management</div>
   </div>
 
   <nav class="sidebar-nav">
@@ -53,13 +60,13 @@
 
   <div class="sidebar-schueler-section">
     <div class="sidebar-schueler-header">
-      Schüler
+      Klienten
       <button class="btn-add-schueler" onclick="openSchuelerModal()">+ Neu</button>
     </div>
     <div class="schueler-liste" id="schueler-sidebar-liste"></div>
   </div>
 
-  <div class="sidebar-footer">v1.0 · Joey Guedes</div>
+  <div class="sidebar-footer">Pathways v2.0 · by Joey Guedes</div>
 </aside>
 
 <!-- ============================================================
@@ -70,13 +77,15 @@
   <!-- ---- HOME VIEW ---- -->
   <div class="view active" id="view-home">
     <div class="topbar">
-      <div class="topbar-title">Schülerübersicht</div>
+      <div class="topbar-title">Dashboard</div>
       <div class="topbar-actions">
         <div class="search-input">
-          <span>🔍</span>
-          <input type="text" id="home-suche" placeholder="Schüler suchen..." oninput="renderHome()">
+          <span style="color:var(--text-muted);font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input type="text" id="home-suche" placeholder="Suchen..." oninput="renderHome()">
         </div>
-        <button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuer Schüler</button>
+        <button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuer Klient</button>
       </div>
     </div>
     <div class="content">

@@ -4448,6 +4448,68 @@ function renderSitzungsvorschlag() {
     ? `<div class="sitzungsvorschlag-pvt-hint">Basierend auf dem letzten Nervensystem-Zustand wird ein angepasstes Thema vorgeschlagen.</div>`
     : '';
 
+  // ── Aktivitäten-Vorschläge basierend auf Alter + Setting ──
+  let aktivitaetenHTML = '';
+  try {
+    const schueler = DB.getSchuelerById(sid);
+    const gebStr = schueler && schueler.geburtsdatum;
+    let schuelerAlter = null;
+    if (gebStr) {
+      const heute = new Date();
+      const geb = new Date(gebStr);
+      schuelerAlter = heute.getFullYear() - geb.getFullYear();
+      if (heute.getMonth() < geb.getMonth() ||
+        (heute.getMonth() === geb.getMonth() && heute.getDate() < geb.getDate())) schuelerAlter--;
+    }
+    const interventionen = THEMA_INTERVENTIONEN[empfohlenesThema.id] || [];
+    if (interventionen.length > 0) {
+      // Filter nach Alter (wenn bekannt)
+      let passend = interventionen;
+      if (schuelerAlter !== null) {
+        passend = interventionen.filter(iv => {
+          if (!iv.alter) return true;
+          return schuelerAlter >= iv.alter[0] && schuelerAlter <= iv.alter[1];
+        });
+        if (passend.length === 0) passend = interventionen; // Fallback
+      }
+      // Max 3 anzeigen, Einzel bevorzugen
+      const einzel = passend.filter(iv => iv.setting === 'einzel');
+      const gruppe = passend.filter(iv => iv.setting === 'gruppe');
+      const auswahl = [...einzel.slice(0, 2), ...gruppe.slice(0, 1)].slice(0, 3);
+      if (auswahl.length === 0 && passend.length > 0) auswahl.push(...passend.slice(0, 3));
+
+      const karten = auswahl.map(iv => {
+        const settingIcon = iv.setting === 'gruppe' ? '👥 Gruppe' : '👤 Einzel';
+        const alterBadge = iv.alter ? `${iv.alter[0]}–${iv.alter[1]}J` : '';
+        const matLine = iv.material && iv.material !== '—' ? `<div class="aktivitaet-material">📦 ${iv.material}</div>` : '';
+        return `<div class="aktivitaet-karte">
+          <div class="aktivitaet-header">
+            <strong>${iv.titel}</strong>
+            <span class="aktivitaet-dauer">${iv.dauer}</span>
+          </div>
+          <div class="aktivitaet-badges">
+            <span class="aktivitaet-badge setting">${settingIcon}</span>
+            <span class="aktivitaet-badge alter">${alterBadge}</span>
+            <span class="aktivitaet-badge ansatz">${iv.ansatz}</span>
+          </div>
+          ${matLine}
+          <div class="aktivitaet-beschreibung">${iv.beschreibung}</div>
+        </div>`;
+      }).join('');
+
+      const allCount = interventionen.length;
+      const browserBtn = allCount > 3
+        ? `<button class="btn btn-xs btn-outline-secondary" onclick="renderAktivitaetenBrowser('${empfohlenesThema.id}')" style="margin-top:6px;">Alle ${allCount} Aktivitäten anzeigen</button>`
+        : '';
+
+      aktivitaetenHTML = `<div class="aktivitaeten-vorschlag">
+        <div class="aktivitaeten-titel">Passende Aktivitäten${schuelerAlter !== null ? ' (Alter ' + schuelerAlter + ')' : ''}</div>
+        <div class="aktivitaeten-grid">${karten}</div>
+        ${browserBtn}
+      </div>`;
+    }
+  } catch(e) { /* silent */ }
+
   container.innerHTML = `
     <div class="card sitzungsvorschlag-card ${pvtOverride ? 'pvt-override' : ''}">
       <div class="card-body" style="display:flex;align-items:center;gap:14px;padding:14px 18px;">
@@ -4461,6 +4523,7 @@ function renderSitzungsvorschlag() {
           ${treatmentHint}
           ${hypothesenHint}
           ${ressourcenHint}
+          ${aktivitaetenHTML}
         </div>
         <div class="sitzungsvorschlag-actions">
           <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">
@@ -4473,6 +4536,113 @@ function renderSitzungsvorschlag() {
       </div>
     </div>
   `;
+}
+
+// ── Aktivitäten-Browser: Alle Aktivitäten eines Themas mit Filtern ──
+function renderAktivitaetenBrowser(themaId) {
+  const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
+  if (interventionen.length === 0) return;
+
+  const sid = APP.currentSchuelerId;
+  const schueler = DB.getSchuelerById(sid);
+  let schuelerAlter = null;
+  if (schueler && schueler.geburtsdatum) {
+    const heute = new Date();
+    const geb = new Date(schueler.geburtsdatum);
+    schuelerAlter = heute.getFullYear() - geb.getFullYear();
+    if (heute.getMonth() < geb.getMonth() ||
+      (heute.getMonth() === geb.getMonth() && heute.getDate() < geb.getDate())) schuelerAlter--;
+  }
+
+  // Thema-Titel finden
+  let themaLabel = themaId;
+  for (const kat of THEMEN_KATEGORIEN) {
+    const t = kat.themen.find(th => th.id === themaId);
+    if (t) { themaLabel = t.titel; break; }
+  }
+
+  // Modal erstellen
+  let overlay = document.getElementById('aktivitaeten-browser-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'aktivitaeten-browser-overlay';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+  }
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'background:#fff;border-radius:12px;max-width:700px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);';
+  overlay.innerHTML = '';
+  overlay.appendChild(modal);
+
+  function render(filterSetting, filterAlter) {
+    let filtered = interventionen;
+    if (filterSetting === 'einzel') filtered = filtered.filter(iv => iv.setting === 'einzel');
+    else if (filterSetting === 'gruppe') filtered = filtered.filter(iv => iv.setting === 'gruppe');
+
+    if (filterAlter === 'passend' && schuelerAlter !== null) {
+      const passend = filtered.filter(iv => !iv.alter || (schuelerAlter >= iv.alter[0] && schuelerAlter <= iv.alter[1]));
+      if (passend.length > 0) filtered = passend;
+    } else if (filterAlter === 'kind') {
+      filtered = filtered.filter(iv => iv.alter && iv.alter[1] <= 13);
+    } else if (filterAlter === 'jugend') {
+      filtered = filtered.filter(iv => iv.alter && iv.alter[0] >= 12);
+    }
+
+    const karten = filtered.map(iv => {
+      const settingIcon = iv.setting === 'gruppe' ? '👥 Gruppe' : '👤 Einzel';
+      const alterBadge = iv.alter ? `${iv.alter[0]}–${iv.alter[1]}J` : '';
+      const matLine = iv.material && iv.material !== '—' ? `<div class="aktivitaet-material">📦 ${iv.material}</div>` : '';
+      return `<div class="aktivitaet-karte">
+        <div class="aktivitaet-header">
+          <strong>${iv.titel}</strong>
+          <span class="aktivitaet-dauer">${iv.dauer}</span>
+        </div>
+        <div class="aktivitaet-badges">
+          <span class="aktivitaet-badge setting">${settingIcon}</span>
+          <span class="aktivitaet-badge alter">${alterBadge}</span>
+          <span class="aktivitaet-badge ansatz">${iv.ansatz}</span>
+        </div>
+        ${matLine}
+        <div class="aktivitaet-beschreibung">${iv.beschreibung}</div>
+        ${iv.indikation ? '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Indikation: ' + iv.indikation + '</div>' : ''}
+      </div>`;
+    }).join('');
+
+    const btnClass = (val, current) => val === current ? 'filter-btn active' : 'filter-btn';
+
+    modal.innerHTML = `
+      <div class="aktivitaeten-browser">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 style="margin:0;font-size:16px;">${themaLabel} — Aktivitäten (${filtered.length}/${interventionen.length})</h3>
+          <button onclick="document.getElementById('aktivitaeten-browser-overlay').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-muted);">&times;</button>
+        </div>
+        <div class="aktivitaeten-browser-filter">
+          <span style="font-size:11px;font-weight:600;color:var(--text-secondary);">Setting:</span>
+          <button class="${btnClass('alle', filterSetting)}" data-f="s:alle">Alle</button>
+          <button class="${btnClass('einzel', filterSetting)}" data-f="s:einzel">👤 Einzel</button>
+          <button class="${btnClass('gruppe', filterSetting)}" data-f="s:gruppe">👥 Gruppe</button>
+          <span style="margin-left:8px;font-size:11px;font-weight:600;color:var(--text-secondary);">Alter:</span>
+          <button class="${btnClass('alle', filterAlter)}" data-f="a:alle">Alle</button>
+          ${schuelerAlter !== null ? '<button class="' + btnClass('passend', filterAlter) + '" data-f="a:passend">Passend (' + schuelerAlter + 'J)</button>' : ''}
+          <button class="${btnClass('kind', filterAlter)}" data-f="a:kind">6–12</button>
+          <button class="${btnClass('jugend', filterAlter)}" data-f="a:jugend">12–18</button>
+        </div>
+        <div class="aktivitaeten-browser-liste">${karten}</div>
+      </div>
+    `;
+
+    modal.querySelectorAll('[data-f]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const [type, val] = btn.dataset.f.split(':');
+        if (type === 's') render(val, filterAlter);
+        else render(filterSetting, val);
+      });
+    });
+  }
+
+  render('alle', schuelerAlter !== null ? 'passend' : 'alle');
 }
 
 // Hilfsfunktion: Nächstes nicht-abgeschlossenes Thema aus einer Phase

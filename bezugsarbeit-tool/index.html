@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CDSE – Bezugsarbeit Tool</title>
+  <title>Bezugsarbeit Tool</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -17,10 +17,10 @@
 <aside id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">🎓</div>
-      <div class="sidebar-title">Bezugsarbeit Tool</div>
+      <div class="sidebar-logo-icon">🧠</div>
+      <div class="sidebar-title">Bezugsarbeit</div>
     </div>
-    <div class="sidebar-subtitle">CDSE Luxembourg</div>
+    <div class="sidebar-subtitle">by Joey Guedes</div>
   </div>
 
   <nav class="sidebar-nav">
@@ -30,20 +30,26 @@
     <div class="nav-item" id="nav-kalender" onclick="showView('kalender')">
       <span class="nav-item-icon">📅</span> Kalender
     </div>
-    <a class="nav-item" href="arbeitsblatter/index.html" target="_blank">
-      <span class="nav-item-icon">📋</span> Alle Arbeitsblätter
-    </a>
-    <div class="sidebar-sync-section">
-      <div class="sidebar-sync-label">Datenaustausch</div>
-      <div class="nav-item nav-item-sync" onclick="exportDaten()" title="Alle Daten als JSON-Datei speichern">
-        <span class="nav-item-icon">📤</span> Exportieren
-      </div>
-      <div class="nav-item nav-item-sync" onclick="document.getElementById('import-input').click()" title="JSON-Datei einer Kollegin / eines Kollegen importieren">
-        <span class="nav-item-icon">📥</span> Importieren
-      </div>
-      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
-    </div>
   </nav>
+
+  <!-- Phasen-Navigation (nur sichtbar wenn Profil offen) -->
+  <div class="sidebar-phase-nav" id="sidebar-phase-nav" style="display:none;">
+    <div class="sidebar-section-label">Bereiche</div>
+    <div class="sidebar-phase-item" data-phase="wissen" onclick="showPhase('wissen')">
+      <span class="nav-item-icon">📚</span> Wissen
+    </div>
+    <div class="sidebar-phase-item" data-phase="sammeln" onclick="showPhase('sammeln')">
+      <span class="nav-item-icon">📋</span> Daten sammeln
+    </div>
+    <div class="sidebar-phase-item active" data-phase="leitfaden" onclick="showPhase('leitfaden')">
+      <span class="nav-item-icon">🧭</span> Leitfaden
+    </div>
+    <div class="sidebar-phase-item" data-phase="analyse" onclick="showPhase('analyse')">
+      <span class="nav-item-icon">📊</span> Analyse
+    </div>
+  </div>
+
+  <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
 
   <div class="sidebar-schueler-section">
     <div class="sidebar-schueler-header">
@@ -53,7 +59,7 @@
     <div class="schueler-liste" id="schueler-sidebar-liste"></div>
   </div>
 
-  <div class="sidebar-footer">CDSE · Spezialisierte Beschulung</div>
+  <div class="sidebar-footer">v1.0 · Joey Guedes</div>
 </aside>
 
 <!-- ============================================================
@@ -104,21 +110,7 @@
       </div>
     </div>
 
-    <!-- Phasen-Navigation -->
-    <div class="profil-tabs-main">
-      <div class="profil-main-tab" data-phase="wissen" onclick="showPhase('wissen')">
-        <span class="phase-icon">📚</span> Wissen
-      </div>
-      <div class="profil-main-tab" data-phase="sammeln" onclick="showPhase('sammeln')">
-        <span class="phase-icon">📋</span> Daten sammeln
-      </div>
-      <div class="profil-main-tab active" data-phase="leitfaden" onclick="showPhase('leitfaden')">
-        <span class="phase-icon">🧭</span> Leitfaden
-      </div>
-      <div class="profil-main-tab" data-phase="analyse" onclick="showPhase('analyse')">
-        <span class="phase-icon">📊</span> Analyse
-      </div>
-    </div>
+    <!-- Sub-Tabs (Phase-Tabs sind jetzt in der Sidebar) -->
     <div class="profil-tabs-sub" id="profil-tabs-sub"></div>
 
     <!-- Tab-Inhalte -->
@@ -233,13 +225,10 @@
       <!-- FÖRDERPLAN / ROADMAP (inkl. Ziele) -->
       <div class="profil-tab-content" data-tab="roadmap">
         <div id="roadmap-container"></div>
-        <div id="roadmap-ziele-section" style="margin-top:24px;">
-          <div class="card">
-            <div class="card-header">
-              <span>🎯</span>
-              <div class="card-title">Ziele & Fortschritte</div>
-            </div>
-            <div class="card-body">
+        <div id="roadmap-ziele-section" style="margin-top:16px;">
+          <details class="collapsible-panel" open>
+            <summary class="collapsible-header">🎯 Ziele & Fortschritte</summary>
+            <div class="collapsible-body">
               <div id="screening-ziel-vorschlaege"></div>
               <div id="ziele-liste" style="margin-bottom:16px;"></div>
               <details class="smart-hilfe" style="margin-bottom:12px;">
@@ -259,7 +248,7 @@
                 <button class="btn btn-success btn-sm" onclick="addZiel()">+ Hinzufügen</button>
               </div>
             </div>
-          </div>
+          </details>
         </div>
       </div>
 

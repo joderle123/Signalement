@@ -1,5 +1,5 @@
 // ============================================================
-// CDSE Bezugsarbeit Tool - App Logic
+// Bezugsarbeit Tool - App Logic (by Joey Guedes)
 // ============================================================
 
 // ---- State ----
@@ -85,6 +85,10 @@ function showView(view, schuelerId = null) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
   APP.currentView = view;
+
+  // Show/hide sidebar phase nav based on view
+  const sidebarPhaseNav = document.getElementById('sidebar-phase-nav');
+  if (sidebarPhaseNav) sidebarPhaseNav.style.display = (view === 'profil' || view === 'screening') ? '' : 'none';
 
   if (view === 'home') {
     document.getElementById('view-home').classList.add('active');
@@ -394,8 +398,8 @@ function getPhaseForTab(tabId) {
 function showPhase(phase, subTabId) {
   APP.currentPhase = phase;
 
-  // Highlight main tab
-  document.querySelectorAll('.profil-main-tab').forEach(t =>
+  // Highlight sidebar phase item
+  document.querySelectorAll('.sidebar-phase-item').forEach(t =>
     t.classList.toggle('active', t.dataset.phase === phase)
   );
 
@@ -1162,7 +1166,7 @@ function generatePrintSheetHTML(themaLabel, modul, s) {
   </div>` : ''}
 
   <div class="footer">
-    <span>CDSE Bezugsarbeit-Tool · Sitzungsarbeitsblatt</span>
+    <span>Bezugsarbeit-Tool · Sitzungsarbeitsblatt</span>
     <span>Sitzung ${s.nr} von ${modul.sitzungen.length} · ${escHtml(modul.dauer)}</span>
   </div>
 </div>
@@ -3569,7 +3573,7 @@ function druckeProfilbericht(schuelerId) {
           <div style="font-size:11px;font-weight:700;color:${s.risiko==='hoch'?'#DC2626':s.risiko==='mittel'?'#D97706':'#059669'};">
             ${s.risiko==='hoch'?'🔴':s.risiko==='mittel'?'🟡':'🟢'} Risiko: ${capitalize(s.risiko||'niedrig')}
           </div>
-          <div style="font-size:9px;color:#9CA3AF;margin-top:3px;">CDSE Luxembourg · ${new Date().toLocaleDateString('de-DE')}</div>
+          <div style="font-size:9px;color:#9CA3AF;margin-top:3px;">Bezugsarbeit Tool · ${new Date().toLocaleDateString('de-DE')}</div>
         </div>
       </div>
 
@@ -3599,7 +3603,7 @@ function druckeProfilbericht(schuelerId) {
 
       ${roadmapHTML}
 
-      <div class="footer">Vertraulich · CDSE Bezugsarbeit Tool · Erstellt am ${new Date().toLocaleDateString('de-DE')} um ${new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'})}</div>
+      <div class="footer">Vertraulich · Bezugsarbeit Tool · Erstellt am ${new Date().toLocaleDateString('de-DE')} um ${new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'})}</div>
     </div>
 
     <!-- SEITE 2: Protokolle -->
@@ -3634,7 +3638,7 @@ function exportDaten() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `cdse-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.download = `bezugsarbeit-backup-${new Date().toISOString().split('T')[0]}.json`;
   a.click();
   URL.revokeObjectURL(url);
   showToast('Daten exportiert', 'success');
@@ -6227,6 +6231,13 @@ function gatherAutoSuggestions(sid) {
   return suggestions;
 }
 
+function renderCollapsible(id, titel, content, open = false) {
+  return `<details class="collapsible-panel" ${open ? 'open' : ''} id="panel-${id}">
+    <summary class="collapsible-header">${titel}</summary>
+    <div class="collapsible-body">${content}</div>
+  </details>`;
+}
+
 function renderFallformulierung() {
   const sid = APP.currentSchuelerId;
   if (!sid) return;
@@ -6358,25 +6369,24 @@ function renderFallformulierung() {
       }).join('')}
     </div>
 
-    <div class="fivep-hypothese" style="margin-top:20px;">
-      <label style="font-weight:600;font-size:13px;display:block;margin-bottom:6px;">
-        💡 Klinische Hypothese / Formulierung
-      </label>
-      <textarea class="fivep-hypothese-input" id="fivep-hypothese" rows="4"
-        placeholder="Zusammenfassende klinische Hypothese basierend auf den 5P-Faktoren…"
-        onchange="save5PHypothese(this.value)">${ff ? (ff.hypothese || '') : ''}</textarea>
-    </div>
+    <div style="margin-top:16px;">
+      ${renderCollapsible('hypo', '💡 Klinische Hypothese', `
+        <textarea class="fivep-hypothese-input" id="fivep-hypothese" rows="4"
+          placeholder="Zusammenfassende klinische Hypothese basierend auf den 5P-Faktoren…"
+          onchange="save5PHypothese(this.value)">${ff ? (ff.hypothese || '') : ''}</textarea>
+      `, !!(ff && ff.hypothese))}
 
-    ${ff ? renderHandlungsTriage(ff, sid) : ''}
-    ${ff ? render5PPatternAnalysis(ff) : ''}
-    ${ff ? render5PKomorbidity(ff) : ''}
+      ${ff ? renderCollapsible('triage', '🚦 Handlungstriage', renderHandlungsTriage(ff, sid), ff.triageOpen || false) : ''}
+      ${ff ? renderCollapsible('muster', '📊 Muster-Analyse', render5PPatternAnalysis(ff)) : ''}
+      ${ff ? renderCollapsible('komorb', '⚡ Erkannte Muster', render5PKomorbidity(ff)) : ''}
 
-    <!-- Inline Hypothesen (vorher separater Tab) -->
-    ${hypothesenHtml}
+      ${hypothesenHtml ? renderCollapsible('hypos', '🧠 Klinische Hypothesen', hypothesenHtml) : ''}
 
-    <!-- Radar-Chart -->
-    <div id="fivep-radar-container" style="margin-top:18px;max-width:400px;margin-left:auto;margin-right:auto;">
-      <canvas id="fivep-radar-chart" width="400" height="300"></canvas>
+      ${renderCollapsible('radar', '📈 Radar-Visualisierung', `
+        <div id="fivep-radar-container" style="max-width:400px;margin:0 auto;">
+          <canvas id="fivep-radar-chart" width="400" height="300"></canvas>
+        </div>
+      `)}
     </div>
   `;
 
@@ -7239,7 +7249,7 @@ function generateSCASBericht(s, name, notizen, scr, roadmap, ff, wb, heute) {
   return `
     <div class="bericht-doc">
       <div class="bericht-header-block">
-        <strong>CDSE Luxembourg — Service Bezugspädagogik</strong><br>
+        <strong>Bezugsarbeit Tool — Service Bezugspädagogik</strong><br>
         <strong>Bericht für SCAS</strong><br>
         Datum: ${heute}
       </div>
@@ -7268,7 +7278,7 @@ function generateSCASBericht(s, name, notizen, scr, roadmap, ff, wb, heute) {
 
       <div class="bericht-footer">
         <br><br>
-        <p>_________________________<br>Bezugspädagoge/in<br>CDSE Luxembourg</p>
+        <p>_________________________<br>Bezugspädagoge/in</p>
       </div>
     </div>
   `;
@@ -7299,7 +7309,7 @@ function generateElternbrief(s, name, notizen, roadmap, wb, heute) {
   return `
     <div class="bericht-doc">
       <div class="bericht-header-block">
-        <strong>CDSE Luxembourg</strong><br>
+        <strong>Bezugsarbeit Tool</strong><br>
         Datum: ${heute}
       </div>
       <hr>
@@ -7315,7 +7325,7 @@ function generateElternbrief(s, name, notizen, roadmap, wb, heute) {
       Bei Fragen stehen wir Ihnen jederzeit zur Verfügung.</p>
 
       <p>Mit freundlichen Grüßen,<br>
-      <em>Bezugspädagogisches Team — CDSE Luxembourg</em></p>
+      <em>Bezugspädagogisches Team</em></p>
     </div>
   `;
 }
@@ -7483,7 +7493,7 @@ function generateUeberweisungsschreiben() {
   inhalt.innerHTML = `
     <div class="bericht-doc">
       <div class="bericht-header-block">
-        <strong>Centre de Documentation et de Services pour l'Éducation (CDSE)</strong><br>
+        <strong>Bezugsarbeit Tool — Joey Guedes</strong><br>
         Überweisungsschreiben<br>
         <small>Datum: ${heute}</small>
       </div>
@@ -7532,7 +7542,7 @@ function generateUeberweisungsschreiben() {
         <p>Mit freundlichen Grüßen,</p>
         <br><br>
         <p>_________________________________<br>
-        Bezugspädagoge/in, CDSE<br>
+        Bezugspädagoge/in<br>
         ${heute}</p>
       </div>
     </div>

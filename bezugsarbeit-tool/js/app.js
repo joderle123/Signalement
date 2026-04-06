@@ -358,9 +358,7 @@ function renderProfil(schuelerId) {
 // ============================================================
 const PHASE_TABS = {
   wissen: [
-    { id: 'bibliothek', label: 'Fachwissen' },
-    { id: 'interventionen', label: 'Interventionen' },
-    { id: 'arbeitsblaetter', label: 'Arbeitsblätter' }
+    { id: 'bibliothek', label: 'Bibliothek' }
   ],
   sammeln: [
     { id: 'info', label: 'Aufnahme' },
@@ -451,170 +449,223 @@ function showProfilTab(tab) {
   if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
   if (tab === 'genogramm') renderGenogramm();
-  // Neue Tabs
+  // Wissen
   if (tab === 'bibliothek') renderBibliothek();
-  if (tab === 'interventionen') renderInterventionenKatalog();
-  if (tab === 'arbeitsblaetter') renderArbeitsblaetterTab();
   if (tab === 'hypothesen-tab') renderHypothesenTab();
   if (tab === 'treatment-tab') renderTreatmentTab();
 }
 
 // ============================================================
-// WISSEN: Fachwissen-Bibliothek
+// WISSEN: Unified Bibliothek — alle Inhalte an einem Ort
 // ============================================================
+var bibliothekFilter = 'alle';
+var bibliothekSuche = '';
+
 function renderBibliothek() {
   const container = document.getElementById('bibliothek-container');
   if (!container) return;
 
-  // Collect all knowledge sources
-  const fachModule = Object.entries(FACHKRAFT_MODULE_DATEIEN);
-  const therapieModule = Object.entries(THERAPIE_MODULE_DATEIEN);
-  const uniqueFiles = new Map();
-  fachModule.forEach(([themaId, datei]) => {
-    if (!uniqueFiles.has(datei)) {
-      // Find theme title
+  // ── Alle Inhalte sammeln ──
+  const allItems = [];
+
+  // 1. Fachkraft-Module (📚 blau)
+  const fachFiles = new Map();
+  Object.entries(FACHKRAFT_MODULE_DATEIEN).forEach(([themaId, datei]) => {
+    if (!fachFiles.has(datei)) {
       let label = themaId;
       for (const kat of THEMEN_KATEGORIEN) {
         const t = kat.themen.find(th => th.id === themaId);
         if (t) { label = t.titel; break; }
       }
-      uniqueFiles.set(datei, { datei, label, themen: [themaId], typ: 'fachkraft' });
+      fachFiles.set(datei, { id: 'fk-' + datei, label, datei, typ: 'fachkraft', themen: [themaId] });
     } else {
-      uniqueFiles.get(datei).themen.push(themaId);
+      fachFiles.get(datei).themen.push(themaId);
     }
   });
+  fachFiles.forEach(item => allItems.push(item));
 
-  const allItems = [...uniqueFiles.values()];
+  // 2. Therapie-Module (🎓 grün)
+  const therapieFiles = new Map();
+  Object.entries(THERAPIE_MODULE_DATEIEN).forEach(([themaId, datei]) => {
+    if (!therapieFiles.has(datei)) {
+      let label = themaId;
+      for (const kat of THEMEN_KATEGORIEN) {
+        const t = kat.themen.find(th => th.id === themaId);
+        if (t) { label = t.titel; break; }
+      }
+      therapieFiles.set(datei, { id: 'tm-' + datei, label, datei, typ: 'therapie', themen: [themaId] });
+    } else {
+      therapieFiles.get(datei).themen.push(themaId);
+    }
+  });
+  therapieFiles.forEach(item => allItems.push(item));
 
+  // 3. Interventionen (🎯 orange)
+  for (const kat of THEMEN_KATEGORIEN) {
+    for (const t of kat.themen) {
+      const inters = THEMA_INTERVENTIONEN[t.id];
+      if (inters && inters.length > 0) {
+        allItems.push({
+          id: 'int-' + t.id,
+          label: t.titel,
+          typ: 'intervention',
+          themaId: t.id,
+          anzahl: inters.length,
+          farbe: kat.farbe,
+        });
+      }
+    }
+  }
+
+  // 4. Arbeitsblätter (📝 lila)
+  const abFiles = new Map();
+  for (const [themaId, blaetter] of Object.entries(ARBEITSBLÄTTER)) {
+    for (const ab of blaetter) {
+      if (!abFiles.has(ab.datei)) {
+        abFiles.set(ab.datei, { id: 'ab-' + ab.datei, label: ab.titel, datei: ab.datei, typ: 'arbeitsblatt' });
+      }
+    }
+  }
+  abFiles.forEach(item => allItems.push(item));
+
+  // 5. Wiki-Artikel (📖 teal)
+  if (typeof WIKI_ARTIKEL !== 'undefined') {
+    WIKI_ARTIKEL.forEach(w => {
+      allItems.push({
+        id: 'wiki-' + w.id,
+        label: w.titel,
+        typ: 'wiki',
+        wikiId: w.id,
+        icon: w.icon,
+        kategorie: w.kategorie,
+      });
+    });
+  }
+
+  // ── Filtern ──
+  const q = bibliothekSuche.toLowerCase().trim();
+  const filtered = allItems.filter(item => {
+    if (bibliothekFilter !== 'alle' && item.typ !== bibliothekFilter) return false;
+    if (q) {
+      const searchText = (item.label + ' ' + (item.datei || '') + ' ' + (item.themen || []).join(' ') + ' ' + (item.wikiId || '') + ' ' + (item.kategorie || '')).toLowerCase();
+      if (!searchText.includes(q)) return false;
+    }
+    return true;
+  });
+
+  // ── Typ-Konfiguration ──
+  const typConfig = {
+    fachkraft:     { icon: '📚', label: 'Fachwissen',      farbe: '#3B82F6', bg: '#EFF6FF' },
+    therapie:      { icon: '🎓', label: 'Therapie-Module', farbe: '#22C55E', bg: '#F0FDF4' },
+    intervention:  { icon: '🎯', label: 'Interventionen',  farbe: '#F59E0B', bg: '#FFFBEB' },
+    arbeitsblatt:  { icon: '📝', label: 'Arbeitsblätter',  farbe: '#8B5CF6', bg: '#F5F3FF' },
+    wiki:          { icon: '📖', label: 'Wiki',            farbe: '#0D9488', bg: '#F0FDFA' },
+  };
+
+  // ── Zähler pro Typ ──
+  const counts = {};
+  allItems.forEach(i => { counts[i.typ] = (counts[i.typ] || 0) + 1; });
+  const totalCount = allItems.length;
+
+  // ── Render ──
   container.innerHTML = `
-    <div class="bibliothek-header">
-      <h2 style="margin:0;font-size:18px;">📚 Fachwissen-Bibliothek</h2>
-      <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">Alle Fachkraft-Module, Therapie-Module und Ressourcen an einem Ort</p>
+    <div style="margin-bottom:24px;">
+      <h2 style="margin:0 0 4px;font-size:22px;font-weight:700;">📚 Bibliothek</h2>
+      <p style="margin:0;font-size:13px;color:#6B7280;">${totalCount} Ressourcen — Fachwissen, Therapie-Module, Interventionen, Arbeitsblätter & Wiki</p>
     </div>
-    <div class="bibliothek-suche" style="margin:16px 0;">
-      <input type="text" id="bibliothek-suche-input" placeholder="Suche nach Thema, Modul, Stichwort..."
-        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;"
-        oninput="filterBibliothek(this.value)">
+
+    <!-- Suchleiste -->
+    <div style="margin-bottom:16px;">
+      <input type="text" id="bib-suche" placeholder="Suche nach Thema, Modul, Stichwort..."
+        value="${escapeHtml(bibliothekSuche)}"
+        oninput="bibliothekSuche=this.value;renderBibliothek()"
+        style="width:100%;padding:12px 16px;border:2px solid #E5E7EB;border-radius:12px;font-size:15px;box-sizing:border-box;transition:border-color 0.2s;outline:none;"
+        onfocus="this.style.borderColor='#3B82F6'" onblur="this.style.borderColor='#E5E7EB'">
     </div>
-    <div id="bibliothek-liste" class="bibliothek-grid">
-      ${allItems.map(item => `
-        <div class="bibliothek-karte" data-search="${item.label.toLowerCase()} ${item.themen.join(' ')} ${item.datei}">
-          <div class="bibliothek-karte-titel">${item.label}</div>
-          <div class="bibliothek-karte-meta">${item.themen.length > 1 ? item.themen.length + ' Themen' : '1 Thema'}</div>
-          <button class="btn btn-sm btn-primary" onclick="window.open('fachkraft-module/${item.datei}', '_blank')">Öffnen</button>
-        </div>
-      `).join('')}
+
+    <!-- Filter-Pills -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+      <button onclick="bibliothekFilter='alle';renderBibliothek()"
+        style="padding:6px 16px;border-radius:20px;border:2px solid ${bibliothekFilter === 'alle' ? '#3B82F6' : '#E5E7EB'};background:${bibliothekFilter === 'alle' ? '#3B82F6' : '#fff'};color:${bibliothekFilter === 'alle' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+        Alle <span style="opacity:0.7;">${totalCount}</span>
+      </button>
+      ${Object.entries(typConfig).map(([typ, cfg]) => {
+        const count = counts[typ] || 0;
+        if (count === 0) return '';
+        const active = bibliothekFilter === typ;
+        return `<button onclick="bibliothekFilter='${typ}';renderBibliothek()"
+          style="padding:6px 16px;border-radius:20px;border:2px solid ${active ? cfg.farbe : '#E5E7EB'};background:${active ? cfg.farbe : '#fff'};color:${active ? '#fff' : '#374151'};font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;">
+          ${cfg.icon} ${cfg.label} <span style="opacity:0.7;">${count}</span>
+        </button>`;
+      }).join('')}
+    </div>
+
+    <!-- Ergebnis-Info -->
+    ${q || bibliothekFilter !== 'alle' ? `<div style="font-size:12px;color:#6B7280;margin-bottom:12px;">${filtered.length} Ergebnis${filtered.length !== 1 ? 'se' : ''}${q ? ' für "' + escapeHtml(q) + '"' : ''}${bibliothekFilter !== 'alle' ? ' in ' + typConfig[bibliothekFilter].label : ''}</div>` : ''}
+
+    <!-- Karten-Grid -->
+    <div class="bibliothek-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+      ${filtered.length === 0 ? '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF;">Keine Ergebnisse gefunden.</div>' : ''}
+      ${filtered.map(item => {
+        const cfg = typConfig[item.typ];
+        return renderBibliothekKarte(item, cfg);
+      }).join('')}
+    </div>
+  `;
+
+  // Focus erhalten
+  if (q) {
+    const inp = document.getElementById('bib-suche');
+    if (inp) { inp.focus(); inp.setSelectionRange(q.length, q.length); }
+  }
+}
+
+function renderBibliothekKarte(item, cfg) {
+  let actionHtml = '';
+  let metaHtml = '';
+
+  switch (item.typ) {
+    case 'fachkraft':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('fachkraft-module/${item.datei}', '_blank')">Öffnen</button>`;
+      metaHtml = item.themen.length > 1 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.themen.length} Themen</div>` : '';
+      break;
+    case 'therapie':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('therapie-module/${item.datei}', '_blank')">Öffnen</button>`;
+      metaHtml = item.themen.length > 1 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.themen.length} Themen</div>` : '';
+      break;
+    case 'intervention':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="renderAktivitaetenBrowser('${item.themaId}')">Anzeigen</button>`;
+      metaHtml = `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.anzahl} Aktivitäten</div>`;
+      break;
+    case 'arbeitsblatt':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('arbeitsblatter/${item.datei}', '_blank')">Öffnen</button>`;
+      break;
+    case 'wiki':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="openWikiArtikel('${item.wikiId}')">Lesen</button>`;
+      metaHtml = item.kategorie ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.kategorie}</div>` : '';
+      break;
+  }
+
+  return `
+    <div class="bibliothek-karte" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:box-shadow 0.2s,transform 0.2s;cursor:default;border-top:3px solid ${cfg.farbe};"
+      onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';this.style.transform='translateY(-2px)'"
+      onmouseout="this.style.boxShadow='none';this.style.transform='none'">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:18px;">${item.icon || cfg.icon}</span>
+        <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${cfg.bg};color:${cfg.farbe};font-weight:600;">${cfg.label}</span>
+      </div>
+      <div style="font-weight:600;font-size:14px;color:#1F2937;line-height:1.3;">${item.label}</div>
+      ${metaHtml}
+      <div style="margin-top:auto;padding-top:8px;">
+        ${actionHtml}
+      </div>
     </div>
   `;
 }
 
 function filterBibliothek(query) {
-  const q = query.toLowerCase();
-  document.querySelectorAll('.bibliothek-karte').forEach(k => {
-    k.style.display = k.dataset.search.includes(q) ? '' : 'none';
-  });
-}
-
-// ============================================================
-// WISSEN: Interventionen-Katalog
-// ============================================================
-function renderInterventionenKatalog() {
-  const container = document.getElementById('interventionen-katalog-container');
-  if (!container) return;
-
-  // Gather all themes
-  const themenListe = [];
-  for (const kat of THEMEN_KATEGORIEN) {
-    for (const t of kat.themen) {
-      const inters = THEMA_INTERVENTIONEN[t.id];
-      if (inters && inters.length > 0) {
-        themenListe.push({ id: t.id, titel: t.titel, farbe: kat.farbe, anzahl: inters.length });
-      }
-    }
-  }
-
-  // Get student age if available
-  let schuelerAlter = null;
-  const sid = APP.currentSchuelerId;
-  if (sid) {
-    const s = DB.getSchuelerById(sid);
-    if (s && s.geburtsdatum) {
-      const h = new Date(), g = new Date(s.geburtsdatum);
-      schuelerAlter = h.getFullYear() - g.getFullYear();
-      if (h.getMonth() < g.getMonth() || (h.getMonth() === g.getMonth() && h.getDate() < g.getDate())) schuelerAlter--;
-    }
-  }
-
-  const total = Object.values(THEMA_INTERVENTIONEN).reduce((s, a) => s + a.length, 0);
-
-  container.innerHTML = `
-    <div class="bibliothek-header">
-      <h2 style="margin:0;font-size:18px;">🎯 Interventionen-Katalog</h2>
-      <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">${total} Interventionen in ${themenListe.length} Themen${schuelerAlter ? ' · Schüler: ' + schuelerAlter + ' Jahre' : ''}</p>
-    </div>
-    <div class="bibliothek-suche" style="margin:16px 0;">
-      <input type="text" id="interventionen-suche-input" placeholder="Suche nach Intervention, Thema, Ansatz, Material..."
-        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;"
-        oninput="filterInterventionenKatalog(this.value)">
-    </div>
-    <div id="interventionen-themen-grid" class="bibliothek-grid">
-      ${themenListe.map(t => `
-        <div class="bibliothek-karte interventionen-thema-karte" data-search="${t.titel.toLowerCase()} ${t.id}"
-          style="border-left:3px solid ${t.farbe || 'var(--primary)'};">
-          <div class="bibliothek-karte-titel">${t.titel}</div>
-          <div class="bibliothek-karte-meta">${t.anzahl} Aktivitäten</div>
-          <button class="btn btn-sm btn-outline-primary" onclick="renderAktivitaetenBrowser('${t.id}')">Anzeigen</button>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function filterInterventionenKatalog(query) {
-  const q = query.toLowerCase();
-  document.querySelectorAll('.interventionen-thema-karte').forEach(k => {
-    k.style.display = k.dataset.search.includes(q) ? '' : 'none';
-  });
-}
-
-// ============================================================
-// WISSEN: Arbeitsblätter-Tab
-// ============================================================
-function renderArbeitsblaetterTab() {
-  const container = document.getElementById('arbeitsblaetter-container');
-  if (!container) return;
-
-  const abListe = [];
-  for (const [themaId, blaetter] of Object.entries(ARBEITSBLÄTTER)) {
-    for (const ab of blaetter) {
-      abListe.push({ themaId, ...ab });
-    }
-  }
-  // Deduplicate by datei
-  const unique = new Map();
-  abListe.forEach(ab => {
-    if (!unique.has(ab.datei)) unique.set(ab.datei, ab);
-  });
-
-  container.innerHTML = `
-    <div class="bibliothek-header">
-      <h2 style="margin:0;font-size:18px;">📝 Arbeitsblätter</h2>
-      <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">${unique.size} Arbeitsblätter für Schüler</p>
-    </div>
-    <div class="bibliothek-suche" style="margin:16px 0;">
-      <input type="text" placeholder="Suche..."
-        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;"
-        oninput="this.parentElement.nextElementSibling.querySelectorAll('.bibliothek-karte').forEach(k=>k.style.display=k.dataset.search.includes(this.value.toLowerCase())?'':'none')">
-    </div>
-    <div class="bibliothek-grid">
-      ${[...unique.values()].map(ab => `
-        <div class="bibliothek-karte" data-search="${ab.titel.toLowerCase()} ${ab.datei}">
-          <div class="bibliothek-karte-titel">${ab.titel}</div>
-          <button class="btn btn-sm btn-primary" onclick="window.open('arbeitsblatter/${ab.datei}', '_blank')">Öffnen</button>
-        </div>
-      `).join('')}
-    </div>
-  `;
+  bibliothekSuche = query;
+  renderBibliothek();
 }
 
 // ============================================================

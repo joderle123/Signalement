@@ -6035,6 +6035,7 @@ function renderFallformulierung() {
           ? '<button class="btn btn-secondary btn-sm" onclick="staerkenTo5P()">💪 Stärken → Protective übernehmen</button>'
           : '';
       })()}
+      ${typeof VERHALTENS_KATALOG !== 'undefined' ? '<button class="btn btn-secondary btn-sm" onclick="verhaltensTo5P()">📋 Verhalten → 5P übernehmen</button>' : ''}
       ${ff ? '<button class="btn btn-secondary btn-sm" onclick="generate5PHypothese()">💡 Hypothese generieren</button>' : ''}
       ${ff ? '<button class="btn btn-secondary btn-sm" onclick="fivePToRoadmap()">🗺️ 5P → Förderplan übernehmen</button>' : ''}
     </div>
@@ -6157,13 +6158,77 @@ function generate5PHypothese() {
   const perpetuating = (ff.perpetuating || []).join(', ') || '[keine aufrechterhaltenden Faktoren]';
   const protective = (ff.protective || []).join(', ') || '[keine Schutzfaktoren]';
 
-  const hypothese =
+  // Basis-Narrativ
+  let hypothese =
     `${name} zeigt aktuell ${presenting} (Presenting). ` +
     `Diese Problematik ist vor dem Hintergrund von ${predisposing} (Predisposing) zu verstehen ` +
     `und wurde ausgelöst durch ${precipitating} (Precipitating). ` +
     `Aufrechterhalten wird die Symptomatik durch ${perpetuating} (Perpetuating). ` +
     `Als Schutzfaktoren stehen ${protective} (Protective) zur Verfügung, ` +
     `die im Behandlungsverlauf gezielt gestärkt werden sollten.`;
+
+  // Muster-basierte Interpretation
+  const pres = ff.presenting || [];
+  const extIcons = pres.filter(p => p.startsWith('⚡')).length;
+  const intIcons = pres.filter(p => p.startsWith('🌊')).length;
+  const relIcons = pres.filter(p => p.startsWith('🤝')).length;
+  const schulIcons = pres.filter(p => p.startsWith('🏫')).length;
+
+  if (extIcons > 0 || intIcons > 0 || relIcons > 0 || schulIcons > 0) {
+    hypothese += '\n\n--- Muster-Interpretation ---\n';
+    if (extIcons > intIcons && extIcons > 0) {
+      hypothese += `Das klinische Bild ist überwiegend externalisierend geprägt (${extIcons} externalisierendes Verhalten). ` +
+        `Dies deutet auf eine Stressverarbeitung über Aktivierung (Sympathikus) hin. ` +
+        `Interventionen sollten auf Selbstregulation, Impulskontrolle und sichere Beziehungserfahrungen fokussieren. `;
+    } else if (intIcons > extIcons && intIcons > 0) {
+      hypothese += `Das klinische Bild ist überwiegend internalisierend geprägt (${intIcons} internalisierendes Verhalten). ` +
+        `Dies deutet auf eine Stressverarbeitung über Rückzug (Dorsal-Vagal) hin. ` +
+        `Interventionen sollten auf emotionale Aktivierung, Selbstwert und soziale Anbindung fokussieren. `;
+    } else if (extIcons > 0 && intIcons > 0) {
+      hypothese += `Es liegt ein gemischtes Bild vor mit externalisierenden (${extIcons}) und internalisierenden (${intIcons}) Anteilen. ` +
+        `Dies kann auf eine instabile Regulationsfähigkeit hinweisen, bei der zwischen Über- und Untererregung gewechselt wird. ` +
+        `Ein multimodaler Ansatz ist empfohlen. `;
+    }
+    if (relIcons > 0) {
+      hypothese += `Zusätzlich zeigen sich ${relIcons} beziehungsbezogene Auffälligkeiten, die auf bindungsrelevante Themen hinweisen. `;
+    }
+    if (schulIcons > 0) {
+      hypothese += `${schulIcons} schulbezogene Auffälligkeiten weisen auf Interventionsbedarf im schulischen Setting hin. `;
+    }
+  }
+
+  // Hebelpunkt-Identifikation
+  const perps = ff.perpetuating || [];
+  if (perps.length >= 2) {
+    hypothese += `\n\n--- Hebelpunkt-Analyse ---\n` +
+      `Mit ${perps.length} aufrechterhaltenden Faktoren bieten sich mehrere Ansatzpunkte. ` +
+      `Prioritär sollte an "${perps[0]}" gearbeitet werden, da aufrechterhaltende Faktoren ` +
+      `oft den effektivsten Hebel für Veränderung darstellen.`;
+  }
+
+  // Interventionsempfehlung basierend auf verwandten Themen
+  if (typeof THEMA_INTERVENTIONEN !== 'undefined' && pres.length > 0) {
+    const themenHits = {};
+    pres.forEach(p => {
+      // Suche verwandte Themen in VERHALTENS_KATALOG
+      if (typeof VERHALTENS_KATALOG !== 'undefined') {
+        VERHALTENS_KATALOG.forEach(kat => {
+          kat.eintraege.forEach(e => {
+            if (p.includes(e.titel) && e.verwandte_themen) {
+              e.verwandte_themen.forEach(t => {
+                themenHits[t] = (themenHits[t] || 0) + 1;
+              });
+            }
+          });
+        });
+      }
+    });
+    const topThemen = Object.entries(themenHits).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    if (topThemen.length > 0) {
+      hypothese += `\n\n--- Empfohlene Interventions-Themen ---\n` +
+        topThemen.map((t, i) => `${i + 1}. ${t[0]} (${t[1]}× verknüpft)`).join('\n');
+    }
+  }
 
   const textarea = document.getElementById('fivep-hypothese');
   if (textarea) {
@@ -6310,6 +6375,78 @@ function render5PPatternAnalysis(ff) {
     perpHint = `<br>🔄 <strong>${perpCount} aufrechterhaltende Faktoren</strong> — diese sind oft der beste Hebel für Veränderung.`;
   }
 
+  // Muster-Erkennung: Externalisierend vs. Internalisierend
+  const pres = ff.presenting || [];
+  const extCount = pres.filter(p => p.startsWith('⚡')).length;
+  const intCount = pres.filter(p => p.startsWith('🌊')).length;
+  let musterHint = '';
+  if (extCount > 0 || intCount > 0) {
+    if (extCount > intCount) {
+      musterHint = `<br>🔥 <strong>Überwiegend externalisierendes Muster</strong> (${extCount}× extern. / ${intCount}× intern.) — Fokus auf Regulation & Impulskontrolle.`;
+    } else if (intCount > extCount) {
+      musterHint = `<br>💧 <strong>Überwiegend internalisierendes Muster</strong> (${intCount}× intern. / ${extCount}× extern.) — Fokus auf Aktivierung & Selbstwert.`;
+    } else if (extCount > 0 && intCount > 0) {
+      musterHint = `<br>🔀 <strong>Gemischtes Muster</strong> (${extCount}× extern. / ${intCount}× intern.) — Multimodaler Ansatz empfohlen.`;
+    }
+  }
+
+  // Interventions-Empfehlungen basierend auf Presenting + Perpetuating
+  let interventionHtml = '';
+  if (typeof VERHALTENS_KATALOG !== 'undefined' && typeof THEMA_INTERVENTIONEN !== 'undefined') {
+    const themenHits = {};
+    pres.forEach(p => {
+      VERHALTENS_KATALOG.forEach(kat => {
+        kat.eintraege.forEach(e => {
+          if (p.includes(e.titel) && e.verwandte_themen) {
+            e.verwandte_themen.forEach(t => {
+              themenHits[t] = (themenHits[t] || 0) + 1;
+            });
+          }
+        });
+      });
+    });
+    const topThemen = Object.entries(themenHits).sort((a, b) => b[1] - a[1]).slice(0, 4);
+    if (topThemen.length > 0) {
+      interventionHtml = `
+        <div style="margin-top:10px;padding:10px 12px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;">
+          <div style="font-size:12px;font-weight:600;color:#166534;margin-bottom:6px;">🎯 Empfohlene Interventions-Themen</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            ${topThemen.map(([thema, count]) =>
+              `<span style="padding:3px 10px;background:#DCFCE7;border:1px solid #86EFAC;border-radius:12px;font-size:12px;color:#166534;">
+                ${thema} <span style="color:#15803D;font-weight:600;">(${count}×)</span>
+              </span>`
+            ).join('')}
+          </div>
+        </div>`;
+    }
+  }
+
+  // Stärken-Aktivierung
+  let staerkenHtml = '';
+  const prots = ff.protective || [];
+  if (prots.length > 0 && pres.length > 0) {
+    const staerken = prots.filter(p => p.startsWith('💪')).slice(0, 2);
+    if (staerken.length > 0) {
+      staerkenHtml = `
+        <div style="margin-top:8px;padding:8px 12px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;font-size:12px;">
+          <strong style="color:#1D4ED8;">💡 Stärken-Aktivierung:</strong>
+          ${staerken.map(s => `<em>${s.replace('💪 ', '')}</em>`).join(', ')}
+          können gezielt als Ressource in der Arbeit an den Presenting-Faktoren eingesetzt werden.
+        </div>`;
+    }
+  }
+
+  // Hebelpunkt hervorheben
+  let hebelHtml = '';
+  const perps = ff.perpetuating || [];
+  if (perps.length >= 1) {
+    hebelHtml = `
+      <div style="margin-top:8px;padding:8px 12px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;font-size:12px;">
+        <strong style="color:#C2410C;">🎯 Prioritärer Ansatzpunkt:</strong>
+        <em>${perps[0]}</em> — Perpetuating-Faktoren sind der effektivste Hebel für nachhaltige Veränderung.
+      </div>`;
+  }
+
   return `
     <div class="fivep-analysis" style="margin-top:18px;">
       <div class="fivep-analysis-header">📊 Muster-Analyse</div>
@@ -6327,7 +6464,10 @@ function render5PPatternAnalysis(ff) {
           <span class="fivep-stat-label">Schutzfaktoren</span>
         </div>
       </div>
-      <div class="fivep-analysis-insight">${insight}${perpHint}</div>
+      <div class="fivep-analysis-insight">${insight}${perpHint}${musterHint}</div>
+      ${interventionHtml}
+      ${hebelHtml}
+      ${staerkenHtml}
     </div>
   `;
 }
@@ -8066,6 +8206,116 @@ function staerkenTo5P() {
   ff.protective = [...ff.protective, ...protectiveNeu];
   DB.saveFallformulierung(ff);
   showToast(`${protectiveNeu.length} Schutzfaktoren in 5P übernommen`, 'success');
+  showProfilTab('fallformulierung');
+}
+
+// ============================================================
+// FEATURE-VERBINDUNGEN: Verhalten → 5P (Presenting + Perpetuating)
+// ============================================================
+function verhaltensTo5P() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) ff = DB.createFallformulierung(sid);
+
+  // Modal mit Verhaltens-Checkboxen öffnen
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.id = 'verhalten-5p-modal';
+  modal.onclick = e => { if (e.target === modal) modal.remove(); };
+
+  const kategorien = typeof VERHALTENS_KATALOG !== 'undefined' ? VERHALTENS_KATALOG : [];
+  const katIcons = { 'Externalisierend': '⚡', 'Internalisierend': '🌊', 'Beziehung': '🤝', 'Schulbezogen': '🏫' };
+
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:680px;max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <h3 style="margin:0;font-size:17px;">📋 Verhaltensbeobachtungen → 5P</h3>
+          <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Beobachtete Verhaltensweisen auswählen — werden als Presenting & Perpetuating übernommen</p>
+        </div>
+        <button onclick="document.getElementById('verhalten-5p-modal').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6B7280;">✕</button>
+      </div>
+
+      ${kategorien.map(kat => `
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:13px;color:#374151;padding:6px 0;border-bottom:1px solid #E5E7EB;margin-bottom:8px;">
+            ${katIcons[kat.titel] || '📌'} ${kat.titel}
+          </div>
+          <div style="display:grid;gap:6px;">
+            ${kat.eintraege.map(e => `
+              <label style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:#F9FAFB;border-radius:6px;cursor:pointer;font-size:13px;border:1px solid #E5E7EB;">
+                <input type="checkbox" class="verhalten-5p-check" data-id="${e.id}" data-titel="${e.titel}"
+                  data-kategorie="${kat.titel}"
+                  data-ursachen="${(e.was_es_bedeuten_kann || []).slice(0, 2).map(w => w.ursache).join('||')}"
+                  data-themen="${(e.verwandte_themen || []).join(',')}"
+                  style="margin-top:2px;"
+                  ${ff.presenting.some(p => p.includes(e.titel)) ? 'checked disabled' : ''} />
+                <div>
+                  <strong>${e.titel}</strong>
+                  <div style="color:#6B7280;font-size:11px;margin-top:2px;">${(e.wie_es_aussieht || []).slice(0, 2).join(' · ')}</div>
+                </div>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #E5E7EB;">
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('verhalten-5p-modal').remove()">Abbrechen</button>
+        <button class="btn btn-primary btn-sm" onclick="verhaltensTo5PUebernehmen()">✅ In 5P übernehmen</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function verhaltensTo5PUebernehmen() {
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) ff = DB.createFallformulierung(sid);
+
+  const checks = document.querySelectorAll('.verhalten-5p-check:checked:not(:disabled)');
+  if (checks.length === 0) {
+    showToast('Keine neuen Verhaltensweisen ausgewählt', 'info');
+    document.getElementById('verhalten-5p-modal')?.remove();
+    return;
+  }
+
+  let presentingNeu = 0, perpetuatingNeu = 0;
+
+  checks.forEach(cb => {
+    const titel = cb.dataset.titel;
+    const kategorie = cb.dataset.kategorie;
+    const ursachen = cb.dataset.ursachen ? cb.dataset.ursachen.split('||').filter(Boolean) : [];
+
+    // Presenting: Verhalten selbst
+    const katIcon = kategorie === 'Externalisierend' ? '⚡' : kategorie === 'Internalisierend' ? '🌊' : kategorie === 'Beziehung' ? '🤝' : '🏫';
+    const presentingEntry = `${katIcon} ${titel}`;
+    if (!ff.presenting.includes(presentingEntry)) {
+      ff.presenting.push(presentingEntry);
+      presentingNeu++;
+    }
+
+    // Perpetuating: Top 2 mögliche Ursachen
+    ursachen.forEach(u => {
+      const perpEntry = `🔄 ${u} (→ ${titel})`;
+      if (!ff.perpetuating.includes(perpEntry)) {
+        ff.perpetuating.push(perpEntry);
+        perpetuatingNeu++;
+      }
+    });
+  });
+
+  DB.saveFallformulierung(ff);
+  document.getElementById('verhalten-5p-modal')?.remove();
+
+  const msg = [];
+  if (presentingNeu > 0) msg.push(`${presentingNeu}× Presenting`);
+  if (perpetuatingNeu > 0) msg.push(`${perpetuatingNeu}× Perpetuating`);
+  showToast(`In 5P übernommen: ${msg.join(', ')}`, 'success');
   showProfilTab('fallformulierung');
 }
 

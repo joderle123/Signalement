@@ -14,7 +14,7 @@
 <!-- ============================================================
      SIDEBAR
      ============================================================ -->
-<aside id="sidebar">
+<aside id="sidebar" role="navigation" aria-label="Hauptnavigation">
   <div class="sidebar-header">
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">
@@ -66,8 +66,12 @@
     <div class="schueler-liste" id="schueler-sidebar-liste"></div>
   </div>
 
-  <div class="sidebar-footer">Pathways v2.0 · by Joey Guedes</div>
+  <div class="sidebar-footer">
+    <span id="save-indicator" style="font-size:11px;color:#22C55E;">✓ Gespeichert</span>
+    <span style="opacity:0.5;">·</span> Pathways v2.0 · by Joey Guedes
+  </div>
 </aside>
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
 
 <!-- ============================================================
      MAIN CONTENT
@@ -77,6 +81,7 @@
   <!-- ---- HOME VIEW ---- -->
   <div class="view active" id="view-home">
     <div class="topbar">
+      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
       <div class="topbar-title">Dashboard</div>
       <div class="topbar-actions">
         <div class="search-input">
@@ -812,7 +817,7 @@
 <div class="wiki-overlay" id="wiki-overlay" onclick="toggleWikiPanel()"></div>
 
 <!-- Toast Container -->
-<div id="toast-container"></div>
+<div id="toast-container" role="status" aria-live="polite"></div>
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>

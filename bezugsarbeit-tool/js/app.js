@@ -6058,8 +6058,123 @@ function saveStaerkenFreitext(text) {
 }
 
 // ============================================================
-// 5P-FALLFORMULIERUNG
+// 5P-FALLFORMULIERUNG (mit Auto-Populate + Inline-Hypothesen)
 // ============================================================
+
+// Auto-gather suggestions from ALL collected data sources
+function gatherAutoSuggestions(sid) {
+  const suggestions = { presenting: [], predisposing: [], precipitating: [], perpetuating: [], protective: [] };
+  const s = DB.getSchuelerById(sid);
+  if (!s) return suggestions;
+
+  // 1. Screening → Presenting
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  if (screenings.length > 0) {
+    const latestScr = screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+    const flagged = latestScr.flaggedAreas || [];
+    flagged.forEach(areaId => {
+      const domain = SCREENING_DOMAINS.find(d => d.id === areaId);
+      if (!domain) return;
+      const score = latestScr.scores[areaId] || 0;
+      let entry;
+      if (domain.handlung && typeof resolveHandlung === 'function') {
+        const handlung = resolveHandlung(domain, score);
+        const cfg = HANDLUNG_CONFIG[handlung];
+        entry = `${cfg.icon} ${domain.label} (Score: ${score})`;
+      } else {
+        entry = `${domain.icon} ${domain.label} (Score: ${score})`;
+      }
+      suggestions.presenting.push({ text: entry, source: 'Screening', key: domain.label });
+    });
+  }
+
+  // 2. Anamnese → Predisposing + Precipitating
+  const anamnese = s.anamnese || [];
+  if (typeof ANAMNESE_KATEGORIEN !== 'undefined') {
+    ANAMNESE_KATEGORIEN.forEach(kat => {
+      if (kat.items) {
+        // ACE-style checkbox items
+        kat.items.forEach(item => {
+          if (anamnese.includes(item.id) && item.gewicht >= 2) {
+            suggestions.predisposing.push({ text: `⚠️ ${item.label}`, source: 'Anamnese', key: item.id });
+          }
+        });
+      }
+      if (kat.felder) {
+        kat.felder.forEach(feld => {
+          if (feld.typ === 'single') {
+            const selected = feld.optionen.find(o => anamnese.includes(o.id));
+            if (selected && selected.gewicht >= 2) {
+              const target = kat.id === 'ace' ? 'predisposing' : (feld.id.includes('weiteres') || kat.id === 'ace') ? 'predisposing' : 'predisposing';
+              suggestions[target].push({ text: `${kat.icon} ${selected.label}`, source: 'Anamnese', key: selected.id });
+            }
+          } else if (feld.typ === 'multi') {
+            feld.optionen.forEach(opt => {
+              if (anamnese.includes(opt.id) && opt.gewicht >= 1) {
+                // Precipitating events vs predisposing factors
+                const isPrecipitating = ['scheidung', 'flucht', 'tod_elternteil'].includes(opt.id);
+                const target = isPrecipitating ? 'precipitating' : 'predisposing';
+                suggestions[target].push({ text: `${kat.icon} ${opt.label}`, source: 'Anamnese', key: opt.id });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  // 3. Stärken → Protective
+  const profil = s.staerkenProfil || {};
+  const ratings = profil.ratings || {};
+  if (typeof STAERKEN_DIMENSIONEN !== 'undefined') {
+    STAERKEN_DIMENSIONEN.forEach(d => {
+      if ((ratings[d.id] || 0) >= 7) {
+        suggestions.protective.push({ text: `💪 ${d.label} (${ratings[d.id]}/10)`, source: 'Stärken', key: d.id });
+      }
+    });
+  }
+  (profil.schutzfaktoren || []).forEach(sf => {
+    suggestions.protective.push({ text: `🛡️ ${sf}`, source: 'Stärken', key: sf });
+  });
+  (profil.interessen || []).forEach(int => {
+    suggestions.protective.push({ text: `🎯 ${int}`, source: 'Stärken', key: int });
+  });
+
+  // 4. Hypothesen → mapped to 5P columns
+  try {
+    const hypos = generateHypothesen(sid);
+    hypos.forEach(h => {
+      if (h.typ === 'risiko') {
+        suggestions.predisposing.push({ text: `🧠 ${h.titel}`, source: 'Hypothese', key: h.id, hypo: true });
+      } else if (h.typ === 'schutz') {
+        suggestions.protective.push({ text: `🧠 ${h.titel}`, source: 'Hypothese', key: h.id, hypo: true });
+      } else if (h.typ === 'differenzial') {
+        suggestions.presenting.push({ text: `🔀 ${h.titel}`, source: 'Hypothese', key: h.id, hypo: true });
+      }
+    });
+  } catch(e) {}
+
+  // 5. Verhalten (from Notizen SOAP) → Presenting + Perpetuating
+  const notizen = DB.getNotizen(sid);
+  const soapNotizen = notizen.filter(n => n.soap && n.soap.objektiv);
+  if (soapNotizen.length > 0 && typeof VERHALTENS_KATALOG !== 'undefined') {
+    // Check which behaviors have been observed in SOAP notes
+    VERHALTENS_KATALOG.forEach(kat => {
+      const katIcon = kat.kategorie === 'externalisierend' ? '⚡' : kat.kategorie === 'internalisierend' ? '🌊' : kat.kategorie === 'beziehung' ? '🤝' : '🏫';
+      kat.eintraege.forEach(e => {
+        const mentioned = soapNotizen.some(n =>
+          (n.soap.objektiv || '').toLowerCase().includes(e.titel.toLowerCase()) ||
+          (n.soap.subjektiv || '').toLowerCase().includes(e.titel.toLowerCase())
+        );
+        if (mentioned) {
+          suggestions.presenting.push({ text: `${katIcon} ${e.titel}`, source: 'SOAP', key: e.id });
+        }
+      });
+    });
+  }
+
+  return suggestions;
+}
 
 function renderFallformulierung() {
   const sid = APP.currentSchuelerId;
@@ -6069,6 +6184,52 @@ function renderFallformulierung() {
 
   let ff = DB.getFallformulierung(sid);
 
+  // Auto-populate: gather all suggestions and auto-add new ones
+  const autoSugg = gatherAutoSuggestions(sid);
+  if (!ff) {
+    // Auto-create if there's data to populate
+    const hasData = Object.values(autoSugg).some(arr => arr.length > 0);
+    if (hasData) {
+      ff = DB.createFallformulierung(sid);
+    }
+  }
+  if (ff) {
+    // Track dismissed suggestions
+    if (!ff._dismissed) ff._dismissed = {};
+    // Auto-add new suggestions that aren't already present and not dismissed
+    let autoAdded = 0;
+    ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(key => {
+      const existing = ff[key] || [];
+      const dismissed = ff._dismissed[key] || [];
+      (autoSugg[key] || []).forEach(s => {
+        const isDuplicate = existing.some(e => e.includes(s.key) || e === s.text || (s.key && e.includes(s.key)));
+        const isDismissed = dismissed.includes(s.key);
+        if (!isDuplicate && !isDismissed && !s.hypo) {
+          ff[key].push(s.text);
+          autoAdded++;
+        }
+      });
+    });
+    if (autoAdded > 0) {
+      DB.saveFallformulierung(ff);
+    }
+  }
+
+  // Get pending suggestions (hypo-based that aren't yet added)
+  const pendingSugg = {};
+  if (ff) {
+    ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(key => {
+      const existing = ff[key] || [];
+      const dismissed = ff._dismissed[key] || [];
+      pendingSugg[key] = (autoSugg[key] || []).filter(s => {
+        if (!s.hypo) return false;
+        const isDuplicate = existing.some(e => e.includes(s.key) || e === s.text);
+        const isDismissed = dismissed.includes(s.key);
+        return !isDuplicate && !isDismissed;
+      });
+    });
+  }
+
   const pDefs = [
     { key: 'presenting',     label: 'Presenting',     farbe: '#EF4444', bg: '#FEF2F2', desc: 'Aktuelle Symptome & Probleme' },
     { key: 'predisposing',   label: 'Predisposing',   farbe: '#F97316', bg: '#FFF7ED', desc: 'Vorbestehende Risikofaktoren' },
@@ -6077,21 +6238,33 @@ function renderFallformulierung() {
     { key: 'protective',     label: 'Protective',     farbe: '#22C55E', bg: '#F0FDF4', desc: 'Schutzfaktoren & Ressourcen' },
   ];
 
+  // Inline hypotheses
+  let hypothesenHtml = '';
+  try {
+    const hypos = generateHypothesen(sid);
+    if (hypos && hypos.length > 0) {
+      hypothesenHtml = render5PInlineHypothesen(hypos);
+    }
+  } catch(e) {}
+
   container.innerHTML = `
     <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div>
         <h3 style="margin:0;font-size:18px;">🧩 5P-Fallformulierung</h3>
-        <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Klinische Fallkonzeption nach dem 5P-Modell</p>
+        <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Klinische Fallkonzeption — automatisch befüllt aus allen gesammelten Daten</p>
       </div>
       <div style="display:flex;gap:8px;">
-        ${typeof FIVEP_BEISPIEL_KOMPLETT !== 'undefined' ? `<button class="btn btn-secondary btn-sm" onclick="open5PBeispiel()">📖 Komplett-Beispiel</button>` : ''}
-        ${ff ? `<button class="btn btn-outline btn-sm" onclick="delete5P()">🗑 Zurücksetzen</button>` : ''}
+        ${typeof FIVEP_BEISPIEL_KOMPLETT !== 'undefined' ? `<button class="btn btn-secondary btn-sm" onclick="open5PBeispiel()">📖 Beispiel</button>` : ''}
+        ${ff ? `<button class="btn btn-secondary btn-sm" onclick="generate5PHypothese()">💡 Hypothese generieren</button>` : ''}
+        ${ff ? `<button class="btn btn-secondary btn-sm" onclick="fivePToRoadmap()">🗺️ → Förderplan</button>` : ''}
+        ${ff ? `<button class="btn btn-outline btn-sm" onclick="delete5P()">🗑</button>` : ''}
       </div>
     </div>
 
     <div class="fivep-grid">
       ${pDefs.map(p => {
         const items = ff ? (ff[p.key] || []) : [];
+        const pending = pendingSugg[p.key] || [];
         return `
           <div class="fivep-column" style="border-top:3px solid ${p.farbe};">
             <div class="fivep-col-header" style="background:${p.bg};">
@@ -6099,6 +6272,7 @@ function renderFallformulierung() {
               <div style="flex:1;">
                 <div style="display:flex;align-items:center;gap:6px;">
                   <strong>${p.label}</strong>
+                  <span style="font-size:11px;color:${p.farbe};font-weight:600;">${items.length}</span>
                   <button class="soap-beispiel-btn" onclick="toggle5PHilfe('${p.key}')" title="Erklärung & Beispiele" style="font-size:13px;line-height:1;">ℹ️</button>
                 </div>
                 <div class="fivep-col-desc">${p.desc}</div>
@@ -6113,6 +6287,13 @@ function renderFallformulierung() {
                     <span class="fivep-tag-del" onclick="remove5PTag('${p.key}', ${i})">×</span>
                   </span>
                 `).join('')}
+                ${pending.map(s => `
+                  <span class="fivep-tag fivep-tag-suggestion" style="background:${p.bg}80;border-color:${p.farbe};border-style:dashed;opacity:0.75;">
+                    ${s.text}
+                    <span class="fivep-tag-accept" onclick="accept5PSuggestion('${p.key}','${s.key.replace(/'/g, "\\'")}','${s.text.replace(/'/g, "\\'")}')" title="Übernehmen" style="cursor:pointer;color:#22C55E;font-weight:bold;margin-left:4px;">✓</span>
+                    <span class="fivep-tag-del" onclick="dismiss5PSuggestion('${p.key}','${s.key.replace(/'/g, "\\'")}')" title="Ablehnen">×</span>
+                  </span>
+                `).join('')}
               </div>
               <div class="fivep-input-row">
                 <input type="text" class="fivep-input" id="fivep-input-${p.key}"
@@ -6121,7 +6302,6 @@ function renderFallformulierung() {
                 <button class="btn btn-sm" style="background:${p.farbe};color:#fff;border:none;"
                   onclick="add5PTag('${p.key}')">+</button>
               </div>
-              ${render5PSuggestions(p.key, items)}
             </div>
           </div>`;
       }).join('')}
@@ -6140,61 +6320,105 @@ function renderFallformulierung() {
     ${ff ? render5PPatternAnalysis(ff) : ''}
     ${ff ? render5PKomorbidity(ff) : ''}
 
+    <!-- Inline Hypothesen (vorher separater Tab) -->
+    ${hypothesenHtml}
+
     <!-- Radar-Chart -->
     <div id="fivep-radar-container" style="margin-top:18px;max-width:400px;margin-left:auto;margin-right:auto;">
       <canvas id="fivep-radar-chart" width="400" height="300"></canvas>
     </div>
-
-    <!-- Datenübernahme-Buttons -->
-    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
-      ${(function(){
-        const scrs = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
-        return scrs.length > 0
-          ? '<button class="btn btn-secondary btn-sm" onclick="screeningTo5P()">🔍 Screening → Presenting übernehmen</button>'
-          : '';
-      })()}
-      ${(function(){
-        const schul = DB.getSchuelerById(sid);
-        const p = schul ? (schul.staerkenProfil || {}) : {};
-        const has = Object.values(p.ratings || {}).filter(v => v > 0).length > 0 || (p.schutzfaktoren || []).length > 0;
-        return has
-          ? '<button class="btn btn-secondary btn-sm" onclick="staerkenTo5P()">💪 Stärken → Protective übernehmen</button>'
-          : '';
-      })()}
-      ${typeof VERHALTENS_KATALOG !== 'undefined' ? '<button class="btn btn-secondary btn-sm" onclick="verhaltensTo5P()">📋 Verhalten → 5P übernehmen</button>' : ''}
-      ${ff ? '<button class="btn btn-secondary btn-sm" onclick="generate5PHypothese()">💡 Hypothese generieren</button>' : ''}
-      ${ff ? '<button class="btn btn-secondary btn-sm" onclick="fivePToRoadmap()">🗺️ 5P → Förderplan übernehmen</button>' : ''}
-    </div>
-
-    ${(function(){
-      if (!ff || typeof generateHypothesen !== 'function' || typeof HYPOTHESEN_REGELN === 'undefined') return '';
-      try {
-        const hypos = generateHypothesen(sid);
-        if (!hypos || hypos.length === 0) return '';
-        const diffs = hypos.filter(h => h.typ === 'differenzial');
-        const risikos = hypos.filter(h => h.typ === 'risiko');
-        const total = hypos.length;
-        let badge = '';
-        if (diffs.length > 0) {
-          badge += '<span style="display:inline-block;padding:2px 8px;background:#FEF3C7;border:1px solid #FCD34D;border-radius:12px;font-size:11px;color:#92400E;margin-right:4px;">' +
-            diffs.length + ' Differenzialdiagnose' + (diffs.length > 1 ? 'n' : '') + '</span>';
-        }
-        if (risikos.length > 0) {
-          badge += '<span style="display:inline-block;padding:2px 8px;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:12px;font-size:11px;color:#991B1B;margin-right:4px;">' +
-            risikos.length + ' Risiko-Hypothese' + (risikos.length > 1 ? 'n' : '') + '</span>';
-        }
-        return '<div style="margin-top:12px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
-          '<span style="font-weight:600;color:#92400E;">📊 ' + total + ' aktive Hypothesen</span>' +
-          badge +
-          '<button class="btn btn-sm" style="margin-left:auto;background:#F59E0B;color:#fff;border:none;font-size:11px;" ' +
-          'onclick="showPhase(&quot;analyse&quot;, &quot;hypothesen&quot;)">→ Zum Hypothesen-Tab</button>' +
-          '</div>';
-      } catch(e) { return ''; }
-    })()}
   `;
 
   // Radar-Chart initialisieren
   if (ff) setTimeout(render5PRadar, 50);
+}
+
+// Accept a hypothesis-based suggestion into 5P
+function accept5PSuggestion(key, suggKey, text) {
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) ff = DB.createFallformulierung(sid);
+  if (!ff[key]) ff[key] = [];
+  if (!ff[key].includes(text)) ff[key].push(text);
+  DB.saveFallformulierung(ff);
+  renderFallformulierung();
+}
+
+// Dismiss a suggestion so it doesn't appear again
+function dismiss5PSuggestion(key, suggKey) {
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) return;
+  if (!ff._dismissed) ff._dismissed = {};
+  if (!ff._dismissed[key]) ff._dismissed[key] = [];
+  if (!ff._dismissed[key].includes(suggKey)) ff._dismissed[key].push(suggKey);
+  DB.saveFallformulierung(ff);
+  renderFallformulierung();
+}
+
+// Render hypotheses inline within the 5P view
+function render5PInlineHypothesen(hypothesen) {
+  if (!hypothesen || hypothesen.length === 0) return '';
+
+  const diffs = hypothesen.filter(h => h.typ === 'differenzial');
+  const risikos = hypothesen.filter(h => h.typ === 'risiko').sort((a, b) => b.staerkeWert - a.staerkeWert).slice(0, 8);
+  const schutz = hypothesen.filter(h => h.typ === 'schutz').slice(0, 5);
+
+  function miniCard(h) {
+    const borderColor = h.typ === 'schutz' ? '#22C55E' : h.typ === 'differenzial' ? '#8B5CF6'
+      : h.staerkeWert >= 4 ? '#991B1B' : h.staerkeWert >= 3 ? '#EF4444' : '#F59E0B';
+    const typIcon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
+    const staerkeLabel = h.staerkeWert >= 4 ? 'Sehr wahrsch.' : h.staerkeWert >= 2 ? 'Wahrsch.' : 'Hinweis';
+    return `
+      <div style="border-left:3px solid ${borderColor};padding:8px 12px;background:#fff;border-radius:0 6px 6px 0;margin-bottom:6px;font-size:12px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span>${typIcon}</span>
+          <strong style="flex:1;">${h.titel}</strong>
+          ${h._konfidenz != null ? `<span style="font-size:10px;color:#6B7280;background:#F3F4F6;padding:1px 6px;border-radius:8px;">${h._konfidenz}%</span>` : ''}
+          <span style="font-size:10px;padding:1px 6px;border-radius:8px;background:${borderColor}15;color:${borderColor};font-weight:600;">${staerkeLabel}</span>
+        </div>
+        <details style="font-size:11px;color:#6B7280;">
+          <summary style="cursor:pointer;">Details</summary>
+          <p style="margin:4px 0;">${h.erklaerung}</p>
+          ${h.empfehlung ? `<p style="margin:4px 0;color:#1D4ED8;"><strong>→</strong> ${h.empfehlung}</p>` : ''}
+          <p style="margin:2px 0;font-size:10px;">📚 ${h.quelle}</p>
+        </details>
+      </div>`;
+  }
+
+  let html = '<div style="margin-top:24px;">';
+  html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
+  html += '<h3 style="margin:0;font-size:16px;">🧠 Klinische Hypothesen</h3>';
+  html += `<span style="font-size:12px;color:#6B7280;">${hypothesen.length} aktiv</span>`;
+  html += `<button class="btn btn-sm btn-outline-primary" style="margin-left:auto;font-size:11px;" onclick="showPhase('analyse', 'hypothesen-tab')">Alle anzeigen →</button>`;
+  html += '</div>';
+
+  // Differenzialdiagnosen (prominently)
+  if (diffs.length > 0) {
+    html += '<div style="margin-bottom:14px;">';
+    html += '<div style="font-size:12px;font-weight:600;color:#5B21B6;margin-bottom:6px;">🔀 Differenzialdiagnosen (' + diffs.length + ')</div>';
+    diffs.forEach(h => { html += miniCard(h); });
+    html += '</div>';
+  }
+
+  // Top Risiko-Hypothesen
+  if (risikos.length > 0) {
+    html += '<div style="margin-bottom:14px;">';
+    html += '<div style="font-size:12px;font-weight:600;color:#991B1B;margin-bottom:6px;">⚠️ Top Risiko-Hypothesen (' + risikos.length + ')</div>';
+    risikos.forEach(h => { html += miniCard(h); });
+    html += '</div>';
+  }
+
+  // Schutz-Hypothesen
+  if (schutz.length > 0) {
+    html += '<div style="margin-bottom:14px;">';
+    html += '<div style="font-size:12px;font-weight:600;color:#166534;margin-bottom:6px;">🛡️ Schutzfaktoren (' + schutz.length + ')</div>';
+    schutz.forEach(h => { html += miniCard(h); });
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
 }
 
 function add5PTag(key) {
@@ -6242,45 +6466,24 @@ function delete5P() {
   showToast('5P-Formulierung zurückgesetzt', 'success');
 }
 
-// ---- 5P Suggestion Chips pro Spalte ----
+// ---- 5P Suggestion Chips pro Spalte (simplified — main logic is in gatherAutoSuggestions) ----
 function render5PSuggestions(key, existingTags) {
+  // Minimal static suggestions as quick-add chips
   const suggestions = {
-    presenting: SCREENING_DOMAINS.filter(d => !d.invertiert).map(d => d.label),
-    predisposing: ['Familiäre Vorbelastung', 'Traumatische Erfahrungen', 'Genetische Disposition',
-      'Vernachlässigung', 'Bindungsstörung', 'Institutionserfahrung', 'Migration/Flucht',
-      'Armut', 'Parentifizierung'],
-    precipitating: ['Schulwechsel', 'Trennung der Eltern', 'Verlust/Tod', 'Mobbing',
-      'Umzug', 'Gewalterfahrung', 'Pandemie', 'Freundschaftsbruch', 'Diagnose'],
-    perpetuating: ['Fehlende Tagesstruktur', 'Soziale Isolation', 'Substanzkonsum',
-      'Familiäre Konflikte', 'Schulvermeidung', 'Negative Denkmuster',
-      'Fehlende professionelle Hilfe', 'Mobbingsituation besteht'],
-    protective: ['Stabile Bezugsperson', 'Hobbys/Interessen', 'Schulische Stärken',
-      'Peer-Gruppe', 'Humor', 'Sport/Bewegung', 'Resilienz',
-      'Therapie/Beratung', 'Familiärer Zusammenhalt'],
+    presenting: [],
+    predisposing: ['Familiäre Vorbelastung', 'Bindungsstörung', 'Vernachlässigung'],
+    precipitating: ['Schulwechsel', 'Trennung der Eltern', 'Verlust/Tod', 'Mobbing'],
+    perpetuating: ['Fehlende Tagesstruktur', 'Soziale Isolation', 'Negative Denkmuster'],
+    protective: ['Stabile Bezugsperson', 'Hobbys/Interessen', 'Peer-Gruppe'],
   };
 
-  // ── Hypothesen-basierte Vorschläge priorisieren ──
-  let hypoChips = [];
-  try {
-    const hypothesen = generateHypothesen(APP.currentSchuelerId);
-    const typToKey = { risiko: 'predisposing', schutz: 'protective', differenzial: 'presenting' };
-    const hypoForKey = hypothesen.filter(h => typToKey[h.typ] === key);
-    hypoChips = hypoForKey
-      .map(h => h.titel)
-      .filter(t => !existingTags.includes(t));
-  } catch(e) { /* silent */ }
-
-  const staticChips = (suggestions[key] || []).filter(s => !existingTags.includes(s) && !hypoChips.includes(s));
-  const allChips = [...hypoChips, ...staticChips];
-  if (allChips.length === 0) return '';
+  const chips = (suggestions[key] || []).filter(s => !existingTags.includes(s));
+  if (chips.length === 0) return '';
 
   return '<div class="suggestion-chips" style="margin-top:6px;">' +
-    allChips.slice(0, 8).map((c, i) => {
-      const isHypo = i < hypoChips.length;
-      const style = isHypo ? 'style="border-color:var(--primary);font-weight:500;"' : '';
-      const prefix = isHypo ? '🧠 ' : '';
-      return `<button type="button" class="suggestion-chip" ${style} onclick="add5PTagDirect('${key}','${c.replace(/'/g, "\\'")}')">${prefix}${c}</button>`;
-    }).join('') + '</div>';
+    chips.slice(0, 5).map(c =>
+      `<button type="button" class="suggestion-chip" onclick="add5PTagDirect('${key}','${c.replace(/'/g, "\\'")}')">${c}</button>`
+    ).join('') + '</div>';
 }
 
 function add5PTagDirect(key, value) {
@@ -9143,10 +9346,31 @@ function renderVerhaltensEintrag(e, farbe) {
     }
   }
 
-  // SOAP-Übernahme Button
-  html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid #E5E7EB;display:flex;gap:8px;flex-wrap:wrap;">';
+  // Action Buttons
+  html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid #E5E7EB;display:flex;gap:6px;flex-wrap:wrap;">';
   var soapText = e.titel + ': ' + e.wie_es_aussieht.slice(0, 3).join('; ');
-  html += '<button onclick="uebernehmeInSOAP(\'' + soapText.replace(/'/g, "\\'").replace(/"/g, "&quot;") + '\')" style="font-size:12px;padding:4px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;">→ In SOAP-Objektiv übernehmen</button>';
+  var escapedTitel = e.titel.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+  var escapedId = e.id.replace(/'/g, "\\'");
+  var escapedSoap = soapText.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+  var katIcon = farbe === '#D97706' ? '⚡' : farbe === '#7C3AED' ? '🌊' : farbe === '#059669' ? '🤝' : '🏫';
+
+  // Beobachtet-Toggle
+  html += '<button onclick="toggleVerhaltensBeobachtet(\'' + escapedId + '\', this)" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;" title="Als beobachtet markieren">👁️ Beobachtet</button>';
+
+  // Beobachtung notieren
+  html += '<button onclick="verhaltensBeobachtungNotieren(\'' + escapedId + '\', \'' + escapedTitel + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;" title="Beobachtung notieren">📝 Notieren</button>';
+
+  // In 5P übernehmen
+  html += '<button onclick="verhaltensEintragTo5P(\'' + escapedId + '\', \'' + escapedTitel + '\', \'' + katIcon + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #3B82F6;border-radius:6px;background:#EFF6FF;cursor:pointer;color:#2563EB;" title="In 5P-Analyse übernehmen">🧩 In 5P</button>';
+
+  // SOAP übernehmen
+  html += '<button onclick="uebernehmeInSOAP(\'' + escapedSoap + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;" title="In SOAP-Protokoll übernehmen">📋 SOAP</button>';
+
+  // Sitzung starten
+  var verwandteThemen = (e.verwandte_themen || []);
+  if (verwandteThemen.length > 0) {
+    html += '<button onclick="verhaltensStarteSitzung(\'' + verwandteThemen[0] + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #22C55E;border-radius:6px;background:#F0FDF4;cursor:pointer;color:#166534;" title="Sitzung zum verwandten Thema starten">▶️ Sitzung</button>';
+  }
   html += '</div>';
 
   html += '</div>'; // detail
@@ -9200,6 +9424,66 @@ function uebernehmeInSOAP(text) {
       alert('📋 Text zum Einfügen:\n\n' + text + '\n\nKopiere diesen Text in dein SOAP-Objektiv-Feld.');
     }
   }
+}
+
+// ---- Verhalten Action Buttons ----
+function toggleVerhaltensBeobachtet(eId, btn) {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const s = DB.getSchuelerById(sid);
+  if (!s.verhaltensBeobachtungen) s.verhaltensBeobachtungen = {};
+  s.verhaltensBeobachtungen[eId] = !s.verhaltensBeobachtungen[eId];
+  DB.updateSchueler(sid, { verhaltensBeobachtungen: s.verhaltensBeobachtungen });
+  if (s.verhaltensBeobachtungen[eId]) {
+    btn.style.background = '#DCFCE7';
+    btn.style.borderColor = '#22C55E';
+    btn.style.color = '#166534';
+    btn.textContent = '✅ Beobachtet';
+    showToast('"' + eId + '" als beobachtet markiert', 'success');
+  } else {
+    btn.style.background = '#fff';
+    btn.style.borderColor = '#D1D5DB';
+    btn.style.color = '#6B7280';
+    btn.textContent = '👁️ Beobachtet';
+  }
+}
+
+function verhaltensBeobachtungNotieren(eId, titel) {
+  const notiz = prompt('Beobachtung zu "' + titel + '" notieren:');
+  if (!notiz) return;
+  const sid = APP.currentSchuelerId;
+  DB.addNotiz(sid, {
+    text: '👁️ Verhalten: ' + titel + ' — ' + notiz,
+    kategorie: 'verhalten',
+    datum: new Date().toISOString(),
+    themaId: eId,
+  });
+  showToast('Beobachtung gespeichert', 'success');
+}
+
+function verhaltensEintragTo5P(eId, titel, katIcon) {
+  const sid = APP.currentSchuelerId;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) ff = DB.createFallformulierung(sid);
+
+  const presentingEntry = katIcon + ' ' + titel;
+  if (!ff.presenting.includes(presentingEntry)) {
+    ff.presenting.push(presentingEntry);
+    DB.saveFallformulierung(ff);
+    showToast('"' + titel + '" in 5P-Presenting übernommen', 'success');
+  } else {
+    showToast('Bereits in 5P vorhanden', 'info');
+  }
+}
+
+function verhaltensStarteSitzung(themaId) {
+  showProfilTab('themen');
+  // Try to open the theme
+  setTimeout(function() {
+    if (typeof renderSitzungsStart === 'function') {
+      renderSitzungsStart(themaId);
+    }
+  }, 200);
 }
 
 function renderGenogramm() {

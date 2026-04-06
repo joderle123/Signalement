@@ -4270,6 +4270,42 @@ select {
   .sitzungsvorschlag-actions .btn { flex: 1; }
 }
 
+/* ---- Bibliothek & Interventionen-Katalog ---- */
+.bibliothek-header {
+  margin-bottom: 4px;
+}
+.bibliothek-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.bibliothek-karte {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #E5E7EB);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+.bibliothek-karte:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+.bibliothek-karte-titel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.bibliothek-karte-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+@media (max-width: 640px) {
+  .bibliothek-grid { grid-template-columns: 1fr; }
+}
+
 /* ---- Aktivitäten-Vorschlag im Sitzungsvorschlag ---- */
 .aktivitaeten-vorschlag {
   margin-top: 10px;

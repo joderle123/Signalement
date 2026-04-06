@@ -357,33 +357,40 @@ function renderProfil(schuelerId) {
 // PHASEN-NAVIGATION (5 Haupttabs mit Sub-Tabs)
 // ============================================================
 const PHASE_TABS = {
-  uebersicht: [{ id: 'dashboard', label: 'Übersicht' }],
-  erfassen: [
+  wissen: [
+    { id: 'bibliothek', label: 'Fachwissen' },
+    { id: 'interventionen', label: 'Interventionen' },
+    { id: 'arbeitsblaetter', label: 'Arbeitsblätter' }
+  ],
+  sammeln: [
     { id: 'info', label: 'Aufnahme' },
-    { id: 'genogramm', label: 'Genogramm' },
-    { id: 'staerken', label: 'Stärken' }
-  ],
-  analysieren: [
     { id: 'screening', label: 'Screening' },
-    { id: 'fallformulierung', label: '5P-Analyse' },
-    { id: 'verhalten', label: 'Verhalten' }
-  ],
-  handeln: [
-    { id: 'roadmap', label: 'Förderplan & Ziele' },
-    { id: 'themen', label: 'Themen & Sitzungen' },
+    { id: 'staerken', label: 'Stärken' },
+    { id: 'genogramm', label: 'Genogramm' },
+    { id: 'verhalten', label: 'Verhalten' },
     { id: 'notizen', label: 'Notizen' }
   ],
-  berichte: [{ id: 'berichte', label: 'Berichte' }]
+  leitfaden: [
+    { id: 'dashboard', label: 'Heute' },
+    { id: 'fallformulierung', label: '5P-Analyse' },
+    { id: 'roadmap', label: 'Förderplan & Ziele' },
+    { id: 'themen', label: 'Themen & Sitzungen' }
+  ],
+  analyse: [
+    { id: 'hypothesen-tab', label: 'Hypothesen' },
+    { id: 'treatment-tab', label: 'Verlauf' },
+    { id: 'berichte', label: 'Berichte' }
+  ]
 };
 
 // Track current phase
-APP.currentPhase = 'uebersicht';
+APP.currentPhase = 'leitfaden';
 
 function getPhaseForTab(tabId) {
   for (const [phase, tabs] of Object.entries(PHASE_TABS)) {
     if (tabs.some(t => t.id === tabId)) return phase;
   }
-  return 'uebersicht';
+  return 'leitfaden';
 }
 
 function showPhase(phase, subTabId) {
@@ -444,6 +451,193 @@ function showProfilTab(tab) {
   if (tab === 'berichte') renderBerichte();
   if (tab === 'info') renderInfo();
   if (tab === 'genogramm') renderGenogramm();
+  // Neue Tabs
+  if (tab === 'bibliothek') renderBibliothek();
+  if (tab === 'interventionen') renderInterventionenKatalog();
+  if (tab === 'arbeitsblaetter') renderArbeitsblaetterTab();
+  if (tab === 'hypothesen-tab') renderHypothesenTab();
+  if (tab === 'treatment-tab') renderTreatmentTab();
+}
+
+// ============================================================
+// WISSEN: Fachwissen-Bibliothek
+// ============================================================
+function renderBibliothek() {
+  const container = document.getElementById('bibliothek-container');
+  if (!container) return;
+
+  // Collect all knowledge sources
+  const fachModule = Object.entries(FACHKRAFT_MODULE_DATEIEN);
+  const therapieModule = Object.entries(THERAPIE_MODULE_DATEIEN);
+  const uniqueFiles = new Map();
+  fachModule.forEach(([themaId, datei]) => {
+    if (!uniqueFiles.has(datei)) {
+      // Find theme title
+      let label = themaId;
+      for (const kat of THEMEN_KATEGORIEN) {
+        const t = kat.themen.find(th => th.id === themaId);
+        if (t) { label = t.titel; break; }
+      }
+      uniqueFiles.set(datei, { datei, label, themen: [themaId], typ: 'fachkraft' });
+    } else {
+      uniqueFiles.get(datei).themen.push(themaId);
+    }
+  });
+
+  const allItems = [...uniqueFiles.values()];
+
+  container.innerHTML = `
+    <div class="bibliothek-header">
+      <h2 style="margin:0;font-size:18px;">📚 Fachwissen-Bibliothek</h2>
+      <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">Alle Fachkraft-Module, Therapie-Module und Ressourcen an einem Ort</p>
+    </div>
+    <div class="bibliothek-suche" style="margin:16px 0;">
+      <input type="text" id="bibliothek-suche-input" placeholder="Suche nach Thema, Modul, Stichwort..."
+        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;"
+        oninput="filterBibliothek(this.value)">
+    </div>
+    <div id="bibliothek-liste" class="bibliothek-grid">
+      ${allItems.map(item => `
+        <div class="bibliothek-karte" data-search="${item.label.toLowerCase()} ${item.themen.join(' ')} ${item.datei}">
+          <div class="bibliothek-karte-titel">${item.label}</div>
+          <div class="bibliothek-karte-meta">${item.themen.length > 1 ? item.themen.length + ' Themen' : '1 Thema'}</div>
+          <button class="btn btn-sm btn-primary" onclick="window.open('fachkraft-module/${item.datei}', '_blank')">Öffnen</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function filterBibliothek(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('.bibliothek-karte').forEach(k => {
+    k.style.display = k.dataset.search.includes(q) ? '' : 'none';
+  });
+}
+
+// ============================================================
+// WISSEN: Interventionen-Katalog
+// ============================================================
+function renderInterventionenKatalog() {
+  const container = document.getElementById('interventionen-katalog-container');
+  if (!container) return;
+
+  // Gather all themes
+  const themenListe = [];
+  for (const kat of THEMEN_KATEGORIEN) {
+    for (const t of kat.themen) {
+      const inters = THEMA_INTERVENTIONEN[t.id];
+      if (inters && inters.length > 0) {
+        themenListe.push({ id: t.id, titel: t.titel, farbe: kat.farbe, anzahl: inters.length });
+      }
+    }
+  }
+
+  // Get student age if available
+  let schuelerAlter = null;
+  const sid = APP.currentSchuelerId;
+  if (sid) {
+    const s = DB.getSchuelerById(sid);
+    if (s && s.geburtsdatum) {
+      const h = new Date(), g = new Date(s.geburtsdatum);
+      schuelerAlter = h.getFullYear() - g.getFullYear();
+      if (h.getMonth() < g.getMonth() || (h.getMonth() === g.getMonth() && h.getDate() < g.getDate())) schuelerAlter--;
+    }
+  }
+
+  const total = Object.values(THEMA_INTERVENTIONEN).reduce((s, a) => s + a.length, 0);
+
+  container.innerHTML = `
+    <div class="bibliothek-header">
+      <h2 style="margin:0;font-size:18px;">🎯 Interventionen-Katalog</h2>
+      <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">${total} Interventionen in ${themenListe.length} Themen${schuelerAlter ? ' · Schüler: ' + schuelerAlter + ' Jahre' : ''}</p>
+    </div>
+    <div class="bibliothek-suche" style="margin:16px 0;">
+      <input type="text" id="interventionen-suche-input" placeholder="Suche nach Intervention, Thema, Ansatz, Material..."
+        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;"
+        oninput="filterInterventionenKatalog(this.value)">
+    </div>
+    <div id="interventionen-themen-grid" class="bibliothek-grid">
+      ${themenListe.map(t => `
+        <div class="bibliothek-karte interventionen-thema-karte" data-search="${t.titel.toLowerCase()} ${t.id}"
+          style="border-left:3px solid ${t.farbe || 'var(--primary)'};">
+          <div class="bibliothek-karte-titel">${t.titel}</div>
+          <div class="bibliothek-karte-meta">${t.anzahl} Aktivitäten</div>
+          <button class="btn btn-sm btn-outline-primary" onclick="renderAktivitaetenBrowser('${t.id}')">Anzeigen</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function filterInterventionenKatalog(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('.interventionen-thema-karte').forEach(k => {
+    k.style.display = k.dataset.search.includes(q) ? '' : 'none';
+  });
+}
+
+// ============================================================
+// WISSEN: Arbeitsblätter-Tab
+// ============================================================
+function renderArbeitsblaetterTab() {
+  const container = document.getElementById('arbeitsblaetter-container');
+  if (!container) return;
+
+  const abListe = [];
+  for (const [themaId, blaetter] of Object.entries(ARBEITSBLÄTTER)) {
+    for (const ab of blaetter) {
+      abListe.push({ themaId, ...ab });
+    }
+  }
+  // Deduplicate by datei
+  const unique = new Map();
+  abListe.forEach(ab => {
+    if (!unique.has(ab.datei)) unique.set(ab.datei, ab);
+  });
+
+  container.innerHTML = `
+    <div class="bibliothek-header">
+      <h2 style="margin:0;font-size:18px;">📝 Arbeitsblätter</h2>
+      <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">${unique.size} Arbeitsblätter für Schüler</p>
+    </div>
+    <div class="bibliothek-suche" style="margin:16px 0;">
+      <input type="text" placeholder="Suche..."
+        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;"
+        oninput="this.parentElement.nextElementSibling.querySelectorAll('.bibliothek-karte').forEach(k=>k.style.display=k.dataset.search.includes(this.value.toLowerCase())?'':'none')">
+    </div>
+    <div class="bibliothek-grid">
+      ${[...unique.values()].map(ab => `
+        <div class="bibliothek-karte" data-search="${ab.titel.toLowerCase()} ${ab.datei}">
+          <div class="bibliothek-karte-titel">${ab.titel}</div>
+          <button class="btn btn-sm btn-primary" onclick="window.open('arbeitsblatter/${ab.datei}', '_blank')">Öffnen</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ============================================================
+// ANALYSE: Hypothesen-Tab
+// ============================================================
+function renderHypothesenTab() {
+  const container = document.getElementById('hypothesen-container');
+  if (!container) return;
+  renderHypothesen(APP.currentSchuelerId);
+  const zeitContainer = document.getElementById('hypothesen-zeitstrahl-container');
+  if (zeitContainer) {
+    try { renderHypothesenZeitstrahl(APP.currentSchuelerId); } catch(e) {}
+  }
+}
+
+// ============================================================
+// ANALYSE: Treatment-Response / Verlauf
+// ============================================================
+function renderTreatmentTab() {
+  const container = document.getElementById('treatment-response-container');
+  if (!container) return;
+  renderTreatmentResponse(APP.currentSchuelerId);
+  try { renderScreeningVerlauf(APP.currentSchuelerId); } catch(e) {}
 }
 
 // ============================================================
@@ -3893,22 +4087,19 @@ function quickStartSession(themaId) {
 function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
-  renderQuickEntry('quick-entry-dashboard');
-  renderDashboardSummary();
-  renderDashboardHypothesen();
-  renderDashboardTreatmentResponse();
-  renderDashboardScreeningDelta();
+  // "Heute"-Ansicht: Nur das Wesentliche für den Arbeitstag
   renderSitzungsvorschlag();
-  renderPhaseTransitionPrompt();
   renderNaechsteSchritte();
+  renderPhaseTransitionPrompt();
   renderRueckschrittAlert();
+  renderWohlbefinden();
   renderDashKalender();
   renderDashTodo();
-  renderWohlbefinden();
   renderNotizbuch();
-  renderGespraechsleitfaedenWidget();
-  renderFallbeispieleWidget();
-  renderWikiTeaserWidget();
+  // Kompakte Zusammenfassung statt Informationsflut
+  renderDashboardSummary();
+  renderQuickEntry('quick-entry-dashboard');
+  // Hypothesen + Treatment-Response jetzt unter "Analyse"-Tab
 }
 
 // ---- HYPOTHESEN → 5P ÜBERTRAGUNG ----
@@ -4058,7 +4249,7 @@ function renderDashboardHypothesen() {
         </div>
         ${renderDashboardHypoThemen(hypothesen)}
         <div style="text-align:center;margin-top:10px;">
-          <button class="btn btn-sm btn-secondary" onclick="showPhase('erfassen');setTimeout(()=>showSubTab('info'),100)">
+          <button class="btn btn-sm btn-secondary" onclick="showPhase('sammeln');setTimeout(()=>showSubTab('info'),100)">
             Alle Hypothesen ansehen →
           </button>
         </div>
@@ -4282,7 +4473,7 @@ function renderDashboardSummary() {
         <div style="font-size:16px;font-weight:700;color:${scrFlagged > 0 ? '#EF4444' : '#22C55E'};">${screenings.length === 0 ? 'Ausstehend' : scrFlagged + ' auffällig'}</div>
         <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${screenings.length > 0 ? 'von ' + scrTotal + ' Bereichen' : 'Noch kein Screening'}</div>
       </div>
-      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showPhase('handeln','roadmap')">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showPhase('leitfaden','roadmap')">
         <div style="font-size:22px;margin-bottom:4px;">🎯</div>
         <div style="font-size:11px;color:#6B7280;">Ziele</div>
         <div style="font-size:16px;font-weight:700;color:${zielFarbe};">${ziele.length === 0 ? 'Keine' : avgZiel + '%'}</div>

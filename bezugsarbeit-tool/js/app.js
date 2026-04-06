@@ -23,12 +23,165 @@ const APP = {
   protPVT: null,
 };
 
+// ---- Dirty-Tracking & Auto-Backup ----
+APP._dirty = false;
+APP._lastSaveTime = Date.now();
+
+function markDirty() {
+  APP._dirty = true;
+  updateSaveIndicator('unsaved');
+}
+
+function markClean() {
+  APP._dirty = false;
+  APP._lastSaveTime = Date.now();
+  updateSaveIndicator('saved');
+}
+
+function updateSaveIndicator(state) {
+  const el = document.getElementById('save-indicator');
+  if (!el) return;
+  if (state === 'saved') {
+    el.textContent = '✓ Gespeichert';
+    el.style.color = '#22C55E';
+  } else {
+    el.textContent = '● Ungespeichert';
+    el.style.color = '#F59E0B';
+  }
+}
+
+function autoBackup() {
+  try {
+    const keys = ['cdse_schueler', 'cdse_notizen', 'cdse_termine', 'cdse_screenings', 'cdse_roadmaps', 'cdse_wohlbefinden', 'cdse_fallformulierungen'];
+    const snapshot = {};
+    keys.forEach(k => {
+      const v = localStorage.getItem(k);
+      if (v) snapshot[k] = v;
+    });
+    snapshot._backupTime = Date.now();
+    localStorage.setItem('pathways_autobackup', JSON.stringify(snapshot));
+    markClean();
+  } catch (e) {
+    console.warn('Auto-Backup fehlgeschlagen:', e);
+  }
+}
+
+function checkAutoBackupRecovery() {
+  try {
+    const raw = localStorage.getItem('pathways_autobackup');
+    if (!raw) return;
+    const backup = JSON.parse(raw);
+    if (!backup._backupTime) return;
+    const mainTime = parseInt(localStorage.getItem('pathways_lastSave') || '0');
+    if (backup._backupTime > mainTime + 30000) {
+      const diff = Math.round((backup._backupTime - mainTime) / 60000);
+      if (diff > 1) {
+        showConfirm(
+          `Ein Auto-Backup wurde gefunden (${diff} Min. neuer als die letzten Daten). Backup wiederherstellen?`,
+          () => {
+            Object.entries(backup).forEach(([k, v]) => {
+              if (k !== '_backupTime') localStorage.setItem(k, v);
+            });
+            localStorage.removeItem('pathways_autobackup');
+            location.reload();
+          }
+        );
+      }
+    }
+  } catch (e) {
+    console.warn('Backup-Recovery-Check fehlgeschlagen:', e);
+  }
+}
+
+// ---- Custom Confirm Modal ----
+function showConfirm(text, onJa, onNein) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="font-size:15px;color:#1F2937;line-height:1.6;margin-bottom:20px;">${text}</div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button class="btn btn-secondary" id="confirm-nein" style="padding:8px 20px;">Abbrechen</button>
+        <button class="btn btn-primary" id="confirm-ja" style="padding:8px 20px;">Bestätigen</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#confirm-ja').onclick = () => { overlay.remove(); if (onJa) onJa(); };
+  overlay.querySelector('#confirm-nein').onclick = () => { overlay.remove(); if (onNein) onNein(); };
+  overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.remove(); if (onNein) onNein(); } });
+}
+
 // ---- Init ----
 document.addEventListener('DOMContentLoaded', () => {
   migrateRoadmapsTo7Phasen();
   renderSidebar();
   showView('home');
+
+  // Auto-Backup alle 60 Sekunden
+  setInterval(autoBackup, 60000);
+
+  // Warnung bei ungespeicherten Änderungen
+  window.addEventListener('beforeunload', e => {
+    if (APP._dirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  // Dirty-Tracking: localStorage-Schreibvorgänge abfangen
+  const origSetItem = localStorage.setItem.bind(localStorage);
+  localStorage.setItem = function(key, value) {
+    origSetItem(key, value);
+    if (key.startsWith('cdse_')) {
+      markDirty();
+      localStorage.setItem('pathways_lastSave', String(Date.now()));
+    }
+  };
+
+  // Backup-Recovery prüfen (verzögert, damit showConfirm verfügbar)
+  setTimeout(checkAutoBackupRecovery, 1000);
 });
+
+// ---- Mobile Sidebar Toggle ----
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  sidebar.classList.toggle('mobile-open');
+  backdrop.classList.toggle('visible');
+}
+
+// ---- Loading Overlay ----
+function showLoading(text) {
+  const overlay = document.createElement('div');
+  overlay.className = 'loading-overlay';
+  overlay.id = 'loading-overlay';
+  overlay.innerHTML = `<div style="text-align:center;"><div class="spinner"></div><div class="loading-text">${text || 'Laden...'}</div></div>`;
+  document.body.appendChild(overlay);
+}
+function hideLoading() {
+  const el = document.getElementById('loading-overlay');
+  if (el) el.remove();
+}
+
+// ---- Photo Compression ----
+function compressImage(dataUrl, maxSize, quality, callback) {
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    let w = img.width, h = img.height;
+    if (w > maxSize || h > maxSize) {
+      if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+      else { w = Math.round(w * maxSize / h); h = maxSize; }
+    }
+    canvas.width = w;
+    canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', quality));
+  };
+  img.src = dataUrl;
+}
 
 // ---- Migration: 4 Phasen → 7 Phasen ----
 function migrateRoadmapsTo7Phasen() {
@@ -546,10 +699,24 @@ function renderBibliothek() {
     });
   }
 
+  // ── Ebenen-Zuordnung ──
+  allItems.forEach(item => {
+    if (item.typ === 'arbeitsblatt' || item.typ === 'intervention') {
+      item.ebene = 'praxis';
+    } else if (item.typ === 'therapie') {
+      item.ebene = 'leitfaden';
+    } else {
+      item.ebene = 'fachwissen'; // fachkraft + wiki
+    }
+  });
+
   // ── Filtern ──
   const q = bibliothekSuche.toLowerCase().trim();
   const filtered = allItems.filter(item => {
-    if (bibliothekFilter !== 'alle' && item.typ !== bibliothekFilter) return false;
+    if (bibliothekFilter !== 'alle') {
+      // Support both old typ-based and new ebene-based filtering
+      if (item.ebene !== bibliothekFilter && item.typ !== bibliothekFilter) return false;
+    }
     if (q) {
       const searchText = (item.label + ' ' + (item.datei || '') + ' ' + (item.themen || []).join(' ') + ' ' + (item.wikiId || '') + ' ' + (item.kategorie || '')).toLowerCase();
       if (!searchText.includes(q)) return false;
@@ -560,15 +727,22 @@ function renderBibliothek() {
   // ── Typ-Konfiguration ──
   const typConfig = {
     fachkraft:     { icon: '📚', label: 'Fachwissen',      farbe: '#3B82F6', bg: '#EFF6FF' },
-    therapie:      { icon: '🎓', label: 'Therapie-Module', farbe: '#22C55E', bg: '#F0FDF4' },
-    intervention:  { icon: '🎯', label: 'Interventionen',  farbe: '#F59E0B', bg: '#FFFBEB' },
-    arbeitsblatt:  { icon: '📝', label: 'Arbeitsblätter',  farbe: '#8B5CF6', bg: '#F5F3FF' },
-    wiki:          { icon: '📖', label: 'Wiki',            farbe: '#0D9488', bg: '#F0FDFA' },
+    therapie:      { icon: '🎓', label: 'Sitzungsleitfaden', farbe: '#22C55E', bg: '#F0FDF4' },
+    intervention:  { icon: '🎯', label: 'Aktivitäten',      farbe: '#F59E0B', bg: '#FFFBEB' },
+    arbeitsblatt:  { icon: '📝', label: 'Arbeitsblatt',    farbe: '#8B5CF6', bg: '#F5F3FF' },
+    wiki:          { icon: '📖', label: 'Wissen',            farbe: '#0D9488', bg: '#F0FDFA' },
   };
 
-  // ── Zähler pro Typ ──
-  const counts = {};
-  allItems.forEach(i => { counts[i.typ] = (counts[i.typ] || 0) + 1; });
+  // ── 3-Ebenen-Konfiguration ──
+  const ebenenConfig = {
+    praxis:     { icon: '🛠️', label: 'Praxis',     farbe: '#8B5CF6', desc: 'Arbeitsblätter & Aktivitäten für die Sitzung' },
+    leitfaden:  { icon: '📋', label: 'Leitfaden',  farbe: '#22C55E', desc: 'Sitzungsanleitungen für Therapeuten' },
+    fachwissen: { icon: '🎓', label: 'Fachwissen', farbe: '#3B82F6', desc: 'Hintergrundwissen, ICD-Codes, Fachpersonal-Material' },
+  };
+
+  // ── Zähler pro Ebene ──
+  const ebeneCounts = {};
+  allItems.forEach(i => { ebeneCounts[i.ebene] = (ebeneCounts[i.ebene] || 0) + 1; });
   const totalCount = allItems.length;
 
   // ── Render ──
@@ -587,25 +761,25 @@ function renderBibliothek() {
         onfocus="this.style.borderColor='#3B82F6'" onblur="this.style.borderColor='#E5E7EB'">
     </div>
 
-    <!-- Filter-Pills -->
+    <!-- 3-Ebenen-Filter -->
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
       <button onclick="bibliothekFilter='alle';renderBibliothek()"
-        style="padding:6px 16px;border-radius:20px;border:2px solid ${bibliothekFilter === 'alle' ? '#3B82F6' : '#E5E7EB'};background:${bibliothekFilter === 'alle' ? '#3B82F6' : '#fff'};color:${bibliothekFilter === 'alle' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+        style="padding:8px 18px;border-radius:20px;border:2px solid ${bibliothekFilter === 'alle' ? '#6C5CE7' : '#E5E7EB'};background:${bibliothekFilter === 'alle' ? '#6C5CE7' : '#fff'};color:${bibliothekFilter === 'alle' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
         Alle <span style="opacity:0.7;">${totalCount}</span>
       </button>
-      ${Object.entries(typConfig).map(([typ, cfg]) => {
-        const count = counts[typ] || 0;
+      ${Object.entries(ebenenConfig).map(([ebene, cfg]) => {
+        const count = ebeneCounts[ebene] || 0;
         if (count === 0) return '';
-        const active = bibliothekFilter === typ;
-        return `<button onclick="bibliothekFilter='${typ}';renderBibliothek()"
-          style="padding:6px 16px;border-radius:20px;border:2px solid ${active ? cfg.farbe : '#E5E7EB'};background:${active ? cfg.farbe : '#fff'};color:${active ? '#fff' : '#374151'};font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;">
+        const active = bibliothekFilter === ebene;
+        return `<button onclick="bibliothekFilter='${ebene}';renderBibliothek()"
+          style="padding:8px 18px;border-radius:20px;border:2px solid ${active ? cfg.farbe : '#E5E7EB'};background:${active ? cfg.farbe : '#fff'};color:${active ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
           ${cfg.icon} ${cfg.label} <span style="opacity:0.7;">${count}</span>
         </button>`;
       }).join('')}
     </div>
 
     <!-- Ergebnis-Info -->
-    ${q || bibliothekFilter !== 'alle' ? `<div style="font-size:12px;color:#6B7280;margin-bottom:12px;">${filtered.length} Ergebnis${filtered.length !== 1 ? 'se' : ''}${q ? ' für "' + escapeHtml(q) + '"' : ''}${bibliothekFilter !== 'alle' ? ' in ' + typConfig[bibliothekFilter].label : ''}</div>` : ''}
+    ${q || bibliothekFilter !== 'alle' ? `<div style="font-size:12px;color:#6B7280;margin-bottom:12px;">${filtered.length} Ergebnis${filtered.length !== 1 ? 'se' : ''}${q ? ' für "' + escapeHtml(q) + '"' : ''}${bibliothekFilter !== 'alle' && ebenenConfig[bibliothekFilter] ? ' in ' + ebenenConfig[bibliothekFilter].label : ''}</div>` : ''}
 
     <!-- Karten-Grid -->
     <div class="bibliothek-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
@@ -650,13 +824,19 @@ function renderBibliothekKarte(item, cfg) {
       break;
   }
 
+  const ebene = item.ebene || 'praxis';
+  const ebCfg = { praxis: { label: 'Praxis', icon: '🛠️' }, leitfaden: { label: 'Leitfaden', icon: '📋' }, fachwissen: { label: 'Fachwissen', icon: '🎓' } }[ebene];
+  const fachpersonalBadge = item.typ === 'fachkraft' ? '<span style="font-size:9px;padding:2px 6px;border-radius:8px;background:#FEF3C7;color:#92400E;font-weight:600;margin-left:auto;">Fachpersonal</span>' : '';
+
   return `
     <div class="bibliothek-karte" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:box-shadow 0.2s,transform 0.2s;cursor:default;border-top:3px solid ${cfg.farbe};"
       onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';this.style.transform='translateY(-2px)'"
       onmouseout="this.style.boxShadow='none';this.style.transform='none'">
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <span style="font-size:18px;">${item.icon || cfg.icon}</span>
         <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${cfg.bg};color:${cfg.farbe};font-weight:600;">${cfg.label}</span>
+        <span style="font-size:9px;padding:2px 6px;border-radius:8px;background:#F3F4F6;color:#6B7280;">${ebCfg.icon} ${ebCfg.label}</span>
+        ${fachpersonalBadge}
       </div>
       <div style="font-weight:600;font-size:14px;color:#1F2937;line-height:1.3;">${item.label}</div>
       ${metaHtml}
@@ -681,7 +861,7 @@ function renderHypothesenTab() {
   renderHypothesen(APP.currentSchuelerId);
   const zeitContainer = document.getElementById('hypothesen-zeitstrahl-container');
   if (zeitContainer) {
-    try { renderHypothesenZeitstrahl(APP.currentSchuelerId); } catch(e) {}
+    try { renderHypothesenZeitstrahl(APP.currentSchuelerId); } catch(e) { console.warn('Pathways:', e); }
   }
 }
 
@@ -692,7 +872,7 @@ function renderTreatmentTab() {
   const container = document.getElementById('treatment-response-container');
   if (!container) return;
   renderTreatmentResponse(APP.currentSchuelerId);
-  try { renderScreeningVerlauf(APP.currentSchuelerId); } catch(e) {}
+  try { renderScreeningVerlauf(APP.currentSchuelerId); } catch(e) { console.warn('Pathways:', e); }
 }
 
 // ============================================================
@@ -839,26 +1019,23 @@ function renderArbeitsblaetter(themaId) {
     <div style="margin-bottom:20px;">
       <div class="panel-tabs" id="panel-tabs-${themaId}">
         <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">
-          📋 Arbeitsblatt
-          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 1 · Einstieg</span>
+          🛠️ Praxis
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Arbeitsblätter & Aktivitäten</span>
         </button>
         ${hasModul ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','tm')">
-          🏥 Therapiemodul
-          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 2 · Vertiefung</span>
+          📋 Leitfaden
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Sitzungsanleitung</span>
         </button>` : ''}
         ${hasFachkraft ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','fk')">
-          🎓 Fachkraft
-          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Ebene 3 · Fachwissen</span>
+          🎓 Fachwissen
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Für Fachpersonal</span>
         </button>` : ''}
       </div>
 
       <div id="pt-ab-${themaId}" class="panel-tab-content">
-        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#1D4ED8;">
-          Einstieg in das Thema · 1 Sitzung · Direkt ausfüllbar
-        </div>
-        ${blaetter.length === 0
-          ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Kein Arbeitsblatt verfügbar</p>'
-          : blaetter.map(b => `
+        ${blaetter.length > 0 ? `
+        <div style="font-size:11px;font-weight:600;color:#1D4ED8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">📋 Arbeitsblätter</div>
+        ${blaetter.map(b => `
           <a href="arbeitsblatter/${b.datei}" target="_blank"
              style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;
                     background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;
@@ -866,7 +1043,18 @@ function renderArbeitsblaetter(themaId) {
             <span style="font-size:16px;">📋</span>
             <span style="flex:1;">${b.titel}</span>
             <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
-          </a>`).join('')}
+          </a>`).join('')}` : ''}
+        ${interventionen.length > 0 ? `
+        <div style="font-size:11px;font-weight:600;color:#F59E0B;text-transform:uppercase;letter-spacing:0.5px;margin:${blaetter.length > 0 ? '14px' : '0'} 0 8px;">🎯 Aktivitäten (${interventionen.length})</div>
+        ${interventionen.slice(0, 5).map(iv => `
+          <div style="padding:8px 12px;margin-bottom:6px;background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:6px;">
+            <div style="font-weight:600;font-size:12px;color:#92400E;">${iv.titel}</div>
+            <div style="font-size:11px;color:#78716C;margin-top:2px;">📌 ${iv.ansatz || 'Allgemein'} · ⏱ ${iv.dauer || '—'} · ${iv.setting === 'gruppe' ? '👥 Gruppe' : '👤 Einzel'}</div>
+            <div style="font-size:11px;color:#374151;margin-top:3px;">${iv.beschreibung}</div>
+          </div>`).join('')}
+        ${interventionen.length > 5 ? `<button class="btn btn-secondary btn-sm" onclick="renderAktivitaetenBrowser('${themaId}')" style="width:100%;margin-top:4px;">Alle ${interventionen.length} Aktivitäten anzeigen →</button>` : ''}
+        ` : ''}
+        ${blaetter.length === 0 && interventionen.length === 0 ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Praxis-Materialien verfügbar</p>' : ''}
       </div>
 
       ${hasModul ? `
@@ -1621,10 +1809,11 @@ function addNotiz() {
 }
 
 function deleteNotiz(id) {
-  if (!confirm('Notiz wirklich löschen?')) return;
-  DB.deleteNotiz(id);
-  renderNotizen();
-  showToast('Notiz gelöscht');
+  showConfirm('Notiz wirklich löschen?', () => {
+    DB.deleteNotiz(id);
+    renderNotizen();
+    showToast('Notiz gelöscht');
+  });
 }
 
 // ============================================================
@@ -3164,11 +3353,12 @@ function saveSchueler(schuelerId) {
 
 function deleteSchueler(schuelerId) {
   const s = DB.getSchuelerById(schuelerId);
-  if (!confirm(`Schüler "${s.vorname} ${s.nachname}" wirklich löschen? Alle Daten gehen verloren!`)) return;
-  DB.deleteSchueler(schuelerId);
-  renderSidebar();
-  showView('home');
-  showToast('Schüler gelöscht');
+  showConfirm(`Klient "${s.vorname} ${s.nachname}" wirklich löschen? Alle Daten gehen verloren!`, () => {
+    DB.deleteSchueler(schuelerId);
+    renderSidebar();
+    showView('home');
+    showToast('Klient gelöscht');
+  });
 }
 
 // ============================================================
@@ -3653,15 +3843,21 @@ function importDaten(event) {
       const daten = JSON.parse(e.target.result);
       if (!daten.schueler) throw new Error('Ungültiges Format');
       const exportiertAm = daten.exportiert ? new Date(daten.exportiert).toLocaleString('de-LU') : 'unbekannt';
-      const antwort = confirm(
-        `Datei: ${file.name}\n` +
-        `Exportiert am: ${exportiertAm}\n` +
-        `Inhalt: ${daten.schueler.length} Schüler, ${daten.notizen?.length || 0} Notizen\n\n` +
-        `Zusammenführen mit bestehenden Daten?\n` +
-        `(OK = Zusammenführen, Abbrechen = Abbruch)`
+      showConfirm(
+        `Datei: ${file.name}<br>` +
+        `Exportiert am: ${exportiertAm}<br>` +
+        `Inhalt: ${daten.schueler.length} Klienten, ${daten.notizen?.length || 0} Notizen<br><br>` +
+        `Zusammenführen mit bestehenden Daten?`,
+        () => { doImportMerge(daten); }
       );
-      if (!antwort) return;
+    } catch (err) {
+      showToast('Import fehlgeschlagen: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+}
 
+function doImportMerge(daten) {
       // Schüler zusammenführen: neuere Version (geaendert) gewinnt
       const lokalSchueler = DB.getSchueler();
       const lokalMap = new Map(lokalSchueler.map(s => [s.id, s]));
@@ -3710,13 +3906,7 @@ function importDaten(event) {
 
       renderSidebar();
       renderHome();
-      showToast(`Import erfolgreich: ${lokalMap.size} Schüler gesamt`, 'success');
-    } catch (err) {
-      showToast('Fehler beim Import: ' + err.message, 'error');
-    }
-    event.target.value = '';
-  };
-  reader.readAsText(file);
+      showToast(`Import erfolgreich: ${lokalMap.size} Klienten gesamt`, 'success');
 }
 
 // ============================================================
@@ -3731,10 +3921,12 @@ function uploadFoto(schuelerId) {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = ev => {
-      DB.updateSchueler(schuelerId, { foto: ev.target.result });
-      renderProfil(schuelerId);
-      renderSidebar();
-      showToast('Foto gespeichert', 'success');
+      compressImage(ev.target.result, 200, 0.6, compressed => {
+        DB.updateSchueler(schuelerId, { foto: compressed });
+        renderProfil(schuelerId);
+        renderSidebar();
+        showToast('Foto gespeichert (komprimiert)', 'success');
+      });
     };
     reader.readAsDataURL(file);
   };
@@ -4751,7 +4943,7 @@ function renderSitzungsvorschlag() {
   try {
     const topHypoB = generateHypothesen(sid).find(h => h.typ === 'risiko' && h._konfidenz >= 50);
     if (topHypoB) gruende.push('Hypothese "' + topHypoB.titel + '"');
-  } catch(e) {}
+  } catch(e) { console.warn('Pathways:', e); }
   if (trAnalyse && trAnalyse.bestesThema && empfohlenesThema.id === trAnalyse.bestesThema.themaId) {
     gruende.push(trAnalyse.bestesThema.responseRate + '% Response-Bestätigung');
   } else if (trAnalyse && trAnalyse.gesamtTrend && trAnalyse.gesamtTrend.richtung === 'positiv') {
@@ -5529,11 +5721,12 @@ function deleteNotizbuchSektion(index) {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   const nb = getNotizbuch(s);
   if (nb.sektionen.length <= 1) { showToast('Mindestens eine Sektion behalten', 'error'); return; }
-  if (!confirm(`Sektion "${nb.sektionen[index].titel}" und alle Notizen darin löschen?`)) return;
-  nb.sektionen.splice(index, 1);
-  APP.notizbuchAktivSektion = Math.max(0, index - 1);
-  DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
-  renderNotizbuch();
+  showConfirm(`Sektion "${nb.sektionen[index].titel}" und alle Notizen darin löschen?`, () => {
+    nb.sektionen.splice(index, 1);
+    APP.notizbuchAktivSektion = Math.max(0, index - 1);
+    DB.updateSchueler(APP.currentSchuelerId, { notizbuch: nb });
+    renderNotizbuch();
+  });
 }
 
 function addNotizbuchNotiz(sektionIndex) {
@@ -6207,7 +6400,7 @@ function gatherAutoSuggestions(sid) {
         suggestions.presenting.push({ text: `🔀 ${h.titel}`, source: 'Hypothese', key: h.id, hypo: true });
       }
     });
-  } catch(e) {}
+  } catch(e) { console.warn('Pathways:', e); }
 
   // 5. Verhalten (from Notizen SOAP) → Presenting + Perpetuating
   const notizen = DB.getNotizen(sid);
@@ -6223,12 +6416,137 @@ function gatherAutoSuggestions(sid) {
         );
         if (mentioned) {
           suggestions.presenting.push({ text: `${katIcon} ${e.titel}`, source: 'SOAP', key: e.id });
+          // Perpetuating: Mögliche Ursachen des beobachteten Verhaltens
+          if (e.was_es_bedeuten_kann) {
+            e.was_es_bedeuten_kann.slice(0, 2).forEach(u => {
+              suggestions.perpetuating.push({
+                text: `🔄 ${u.ursache} (→ ${e.titel})`,
+                source: 'Verhalten',
+                key: `perp-${e.id}-${u.ursache}`
+              });
+            });
+          }
         }
       });
     });
   }
 
+  // 6. Precipitating: Erweiterte Anamnese-Items als Auslöser
+  if (typeof ANAMNESE_KATEGORIEN !== 'undefined') {
+    const precipitatingIds = ['scheidung', 'flucht', 'tod_elternteil', 'haeufige_umzuege',
+      'schulwechsel_haeufig', 'haeusliche_gewalt', 'inhaftierung_elternteil',
+      'misshandlung_physisch', 'missbrauch_sexuell', 'vernachlaessigung_emotional',
+      'vernachlaessigung_physisch', 'misshandlung_emotional'];
+    const anamneseData = s.anamnese || [];
+    precipitatingIds.forEach(id => {
+      if (anamneseData.includes(id)) {
+        let label = id;
+        for (const kat of ANAMNESE_KATEGORIEN) {
+          if (kat.items) {
+            const item = kat.items.find(i => i.id === id);
+            if (item) { label = item.label; break; }
+          }
+          if (kat.felder) {
+            for (const f of kat.felder) {
+              const opt = f.optionen.find(o => o.id === id);
+              if (opt) { label = opt.label; break; }
+            }
+          }
+        }
+        if (!suggestions.precipitating.some(p => p.key === id)) {
+          suggestions.precipitating.push({ text: `⚡ ${label}`, source: 'Anamnese', key: id });
+        }
+      }
+    });
+  }
+
+  // 7. Precipitating: Wohlbefinden-Einbrüche
+  const wohlbefinden = DB.getWohlbefinden(sid).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+  if (wohlbefinden.length >= 2) {
+    for (let i = 1; i < wohlbefinden.length; i++) {
+      const prev = wohlbefinden[i - 1].gesamt || 0;
+      const curr = wohlbefinden[i].gesamt || 0;
+      if (prev > 0 && curr < prev * 0.7) {
+        const datum = wohlbefinden[i].datum || '';
+        suggestions.precipitating.push({
+          text: `📉 Wohlbefinden-Einbruch ${datum ? '(' + datum + ')' : ''}`,
+          source: 'Wohlbefinden',
+          key: `wb-drop-${i}`
+        });
+        break; // nur den stärksten Einbruch
+      }
+    }
+  }
+
+  // 8. Perpetuating: Screening-Domains im mittleren Bereich (nicht akut, aber aufrechterhaltend)
+  if (typeof SCREENING_DOMAINS !== 'undefined') {
+    const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+    if (screenings.length > 0) {
+      const latestScr = screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+      const scores = latestScr.scores || {};
+      SCREENING_DOMAINS.forEach(dom => {
+        const score = scores[dom.id] || 0;
+        if (score > 0 && score < (dom.cutoff || 5)) {
+          // Subklinisch aber vorhanden → aufrechterhaltend
+          suggestions.perpetuating.push({
+            text: `📊 Subklinisch: ${dom.label} (Score ${score})`,
+            source: 'Screening',
+            key: `perp-scr-${dom.id}`
+          });
+        }
+      });
+    }
+  }
+
+  // 9. Perpetuating: Wiederkehrende SOAP-Assessment-Themen
+  if (soapNotizen.length >= 2) {
+    const assessments = soapNotizen.filter(n => n.soap && n.soap.assessment).map(n => n.soap.assessment.toLowerCase());
+    if (assessments.length >= 2) {
+      const wordFreq = {};
+      const stopwords = ['der','die','das','und','ist','ein','eine','für','mit','auf','in','zu','von','nicht','sich','hat','wird','auch','noch','dem','den','des','bei','als','nach','aus','wie'];
+      assessments.forEach(a => {
+        a.split(/\s+/).forEach(w => {
+          const clean = w.replace(/[^\wäöüß]/g, '');
+          if (clean.length > 3 && !stopwords.includes(clean)) {
+            wordFreq[clean] = (wordFreq[clean] || 0) + 1;
+          }
+        });
+      });
+      Object.entries(wordFreq)
+        .filter(([, c]) => c >= 2)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .forEach(([word, count]) => {
+          suggestions.perpetuating.push({
+            text: `🔁 Wiederkehrend: "${word}" (${count}× in Assessments)`,
+            source: 'SOAP',
+            key: `perp-soap-${word}`
+          });
+        });
+    }
+  }
+
   return suggestions;
+}
+
+// Navigate from 5P tag to its data source tab
+function navigate5PSource(el) {
+  const source = el.dataset.source;
+  if (!source) return;
+  const tabMap = {
+    'Screening': 'screening',
+    'Anamnese': 'info',
+    'Stärken': 'staerken',
+    'SOAP': 'notizen',
+    'Hypothese': 'hypothesen-tab',
+    'Verhalten': 'verhalten',
+    'Wohlbefinden': 'treatment-tab',
+  };
+  const tab = tabMap[source];
+  if (tab) {
+    showProfilTab(tab);
+    showToast(`Navigiert zu: ${source}`, 'success');
+  }
 }
 
 function renderCollapsible(id, titel, content, open = false) {
@@ -6277,6 +6595,14 @@ function renderFallformulierung() {
     }
   }
 
+  // Build source map for tag navigation
+  const sourceMap = {};
+  ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(key => {
+    (autoSugg[key] || []).forEach(s => {
+      sourceMap[s.text] = s.source;
+    });
+  });
+
   // Get pending suggestions (hypo-based that aren't yet added)
   const pendingSugg = {};
   if (ff) {
@@ -6307,7 +6633,7 @@ function renderFallformulierung() {
     if (hypos && hypos.length > 0) {
       hypothesenHtml = render5PInlineHypothesen(hypos);
     }
-  } catch(e) {}
+  } catch(e) { console.warn('Pathways:', e); }
 
   container.innerHTML = `
     <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
@@ -6343,12 +6669,15 @@ function renderFallformulierung() {
             <div class="fivep-hilfe-box" id="fivep-hilfe-${p.key}" style="display:none;"></div>
             <div class="fivep-col-body">
               <div class="fivep-tags" id="fivep-tags-${p.key}">
-                ${items.map((item, i) => `
-                  <span class="fivep-tag" style="background:${p.bg};border-color:${p.farbe};">
-                    ${item}
-                    <span class="fivep-tag-del" onclick="remove5PTag('${p.key}', ${i})">×</span>
-                  </span>
-                `).join('')}
+                ${items.map((item, i) => {
+                  const src = sourceMap[item] || '';
+                  const navAttr = src ? `data-source="${src}" onclick="navigate5PSource(this)" style="cursor:pointer;background:${p.bg};border-color:${p.farbe};" title="Klicke um zur Quelle (${src}) zu springen"` : `style="background:${p.bg};border-color:${p.farbe};"`;
+                  return `
+                  <span class="fivep-tag" ${navAttr}>
+                    ${item}${src ? `<span style="font-size:9px;opacity:0.5;margin-left:3px;">↗</span>` : ''}
+                    <span class="fivep-tag-del" onclick="event.stopPropagation();remove5PTag('${p.key}', ${i})">×</span>
+                  </span>`;
+                }).join('')}
                 ${pending.map(s => `
                   <span class="fivep-tag fivep-tag-suggestion" style="background:${p.bg}80;border-color:${p.farbe};border-style:dashed;opacity:0.75;">
                     ${s.text}
@@ -6392,6 +6721,19 @@ function renderFallformulierung() {
 
   // Radar-Chart initialisieren
   if (ff) setTimeout(render5PRadar, 50);
+
+  // Auto-Hypothese: Wenn genug Tags vorhanden aber keine Hypothese geschrieben
+  if (ff && !ff.hypothese) {
+    const totalTags = ['presenting','predisposing','precipitating','perpetuating','protective']
+      .reduce((sum, k) => sum + (ff[k] || []).length, 0);
+    if (totalTags >= 5) {
+      setTimeout(() => {
+        generate5PHypothese();
+        const panel = document.getElementById('panel-hypo');
+        if (panel) panel.open = true;
+      }, 200);
+    }
+  }
 }
 
 // Accept a hypothesis-based suggestion into 5P
@@ -6519,12 +6861,13 @@ function save5PHypothese(text) {
 }
 
 function delete5P() {
-  if (!confirm('5P-Formulierung wirklich zurücksetzen?')) return;
-  const sid = APP.currentSchuelerId;
-  const ff = DB.getFallformulierung(sid);
-  if (ff) DB.deleteFallformulierung(ff.id);
-  renderFallformulierung();
-  showToast('5P-Formulierung zurückgesetzt', 'success');
+  showConfirm('5P-Formulierung wirklich zurücksetzen?', () => {
+    const sid = APP.currentSchuelerId;
+    const ff = DB.getFallformulierung(sid);
+    if (ff) DB.deleteFallformulierung(ff.id);
+    renderFallformulierung();
+    showToast('5P-Formulierung zurückgesetzt', 'success');
+  });
 }
 
 // ---- 5P Suggestion Chips pro Spalte (simplified — main logic is in gatherAutoSuggestions) ----
@@ -6798,8 +7141,10 @@ function fivePToRoadmap() {
 // ---- Komorbidität in 5P anzeigen ----
 function render5PKomorbidity(ff) {
   const presenting = (ff.presenting || []).map(p => {
-    const dom = SCREENING_DOMAINS.find(d => d.label === p);
-    return dom ? dom.id : p.toLowerCase().replace(/\s/g, '-');
+    // Strip emoji icons and score suffixes for matching
+    const cleaned = p.replace(/^[^\w\sÄÖÜäöüß]*/u, '').replace(/\s*\(Score:\s*\d+\)$/, '').trim();
+    const dom = SCREENING_DOMAINS.find(d => cleaned.includes(d.label) || d.label.includes(cleaned) || d.id === cleaned.toLowerCase().replace(/\s/g, '-'));
+    return dom ? dom.id : cleaned.toLowerCase().replace(/[\s\/]+/g, '-');
   });
 
   const matches = KOMORBIDITÄT_MUSTER.filter(m => m.bedingung(presenting));
@@ -7920,10 +8265,11 @@ function generateRoadmapFromScreening(screeningId) {
 }
 
 function deleteCurrentRoadmap() {
-  if (!confirm('Förderplan wirklich löschen?')) return;
-  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
-  if (roadmap) DB.deleteRoadmap(roadmap.id);
-  renderRoadmap();
+  showConfirm('Förderplan wirklich löschen?', () => {
+    const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+    if (roadmap) DB.deleteRoadmap(roadmap.id);
+    renderRoadmap();
+  });
 }
 
 function setRoadmapPhaseStatus(nr, status) {
@@ -8756,13 +9102,14 @@ function screeningBearbeiten() {
 
 function screeningLoeschen() {
   if (!APP.currentScreeningId) return;
-  if (!confirm('Screening wirklich löschen?')) return;
-  DB.deleteScreening(APP.currentScreeningId);
-  APP.currentScreeningId = null;
-  scrShowContainer('liste');
-  renderScreeningHistorie(APP.currentSchuelerId);
-  renderSidebar();
-  showToast('Screening gelöscht', 'success');
+  showConfirm('Screening wirklich löschen?', () => {
+    DB.deleteScreening(APP.currentScreeningId);
+    APP.currentScreeningId = null;
+    scrShowContainer('liste');
+    renderScreeningHistorie(APP.currentSchuelerId);
+    renderSidebar();
+    showToast('Screening gelöscht', 'success');
+  });
 }
 
 function scrShowContainer(which) {
@@ -10295,7 +10642,7 @@ function renderWikiTeaserWidget() {
           action: function() { showView('profil', s.id); }
         });
       });
-    } catch(e) {}
+    } catch(e) { console.warn('Pathways:', e); }
 
     // Navigation
     items.push({ icon: '🏠', label: 'Startseite', hint: 'Navigation', action: function() { showView('home'); } });

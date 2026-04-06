@@ -281,7 +281,7 @@ const FACHKRAFT_MODULE_DATEIEN = {
   'gaming':                  'soziale-medien-gaming.html',
   'social-media':            'soziale-medien-gaming.html',
   'gluecksspiel':            'gluecksspiel.html',
-  'selbstmedikation':        'cannabis.html',
+  'selbstmedikation':        'konsum-tabak.html',
   // Schule & Zukunft
   'schulisches-engagement':       'schulisches-engagement.html',
   'konzentration-aufmerksamkeit': 'konzentration-aufmerksamkeit.html',
@@ -293,10 +293,10 @@ const FACHKRAFT_MODULE_DATEIEN = {
   'prüfungsangst':           'pruefungsangst.html',
   // Gesundheit
   'schlaf':                  'schlaf.html',
-  'ernaehrung':              'schlaf.html',
+  'ernaehrung':              'essverhalten.html',
   'essverhalten':            'essverhalten.html',
   'koerperbeschwerden':      'koerperbeschwerden.html',
-  'sport-bewegung':          'schlaf.html',
+  'sport-bewegung':          'koerperbild-sexualitaet.html',
   'sexualitaet':             'koerperbild-sexualitaet.html',
   'koerperbild':             'koerperbild-sexualitaet.html',
   'mentale-gesundheit':      'mentale-gesundheit.html',
@@ -818,7 +818,7 @@ const THEMA_INTERVENTIONEN = {
     { titel: 'Familien-Skulptur (Gruppe)', ansatz: 'Systemisch', beschreibung: 'In der Gruppe stellen Jugendliche jeweils ihre Familienkonstellation mit anderen Gruppenmitgliedern als Stellvertreter nach.', indikation: 'Verständnis für unterschiedliche Familienformen', dauer: '40 Min', alter: [12, 18], setting: 'gruppe', material: '—' },
   ],
   'eltern-kind-beziehung': [
-    { titel: 'Leerer-Stuhl-Technik', ansatz: 'Gestalttherapie', beschreibung: 'Kind richtet Worte an imaginäres Elternteil auf leerem Stuhl – Gefühle ausdrücken ohne Konfrontation.', indikation: 'Unausgesprochene Konflikte, Distanz zu Elternteil', dauer: '20–30 Min' , alter: [6, 18], setting: 'einzel', material: '—'},
+    { titel: 'Leerer-Stuhl-Technik', ansatz: 'Gestalttherapie', beschreibung: 'Kind richtet Worte an imaginäres Elternteil auf leerem Stuhl – Gefühle ausdrücken ohne Konfrontation.', indikation: 'Unausgesprochene Konflikte, Distanz zu Elternteil', dauer: '20–30 Min' , alter: [6, 18], setting: 'einzel', material: '—', fachkraftTauglich: false, warnhinweis: 'Gestalttherapeutische Technik — kann starke Emotionen auslösen. Nur mit therapeutischer Ausbildung oder Supervision anwenden.'},
     { titel: 'Bindungsstil-Psychoedukation', ansatz: 'Bindungstheorie', beschreibung: 'Erklärung von Bindungsstilen (sicher/unsicher) und Reflexion des eigenen Bindungsmusters.', indikation: 'Schwierigkeiten in Beziehungen, Verlassensangst', dauer: '25 Min' , alter: [6, 18], setting: 'einzel', material: '—'},
     { titel: 'Beziehungslinie', ansatz: 'Narrativ', beschreibung: 'Zeitlinie der Eltern-Kind-Beziehung zeichnen: Hochpunkte, Tiefpunkte, Wendepunkte.', indikation: 'Ambivalenz gegenüber Elternteil', dauer: '30 Min' , alter: [6, 18], setting: 'einzel', material: '—'},
     { titel: 'Handpuppen-Dialog', ansatz: 'Spieltherapeutisch', beschreibung: 'Kind spielt mit Handpuppen einen typischen Dialog mit einem Elternteil nach – Gefühle werden sichtbar ohne direkte Konfrontation.', indikation: 'Jüngere Kinder, Scham', dauer: '20 Min', alter: [6, 10], setting: 'einzel', material: 'Handpuppen' },
@@ -1352,7 +1352,7 @@ const THEMA_INTERVENTIONEN = {
   'angstanfaelle': [
     { titel: 'Panikattacke verstehen', ansatz: 'Psychoedukativ', beschreibung: 'Angstkreis erklären: Gedanke → Körper → Verhalten → Gedanke. Normalisieren: Panik ist unangenehm aber nicht gefährlich.', indikation: 'Akute Panikattacken', dauer: '20 Min' , alter: [6, 18], setting: 'einzel', material: '—'},
     { titel: 'Atemtechnik 4-7-8', ansatz: 'Körpertherapeutisch', beschreibung: '4 Sekunden einatmen, 7 Sekunden halten, 8 Sekunden ausatmen. Aktiviert den Parasympathikus und reduziert akute Angst.', indikation: 'Akute Angst, Hyperventilation', dauer: '10 Min' , alter: [6, 18], setting: 'einzel', material: '—'},
-    { titel: 'Angst-Exposition planen', ansatz: 'Kognitiv-behavioral', beschreibung: 'Angsthierarchie erstellen (0-100). Schrittweise Exposition von niedrig nach hoch planen. Erfolge dokumentieren.', indikation: 'Vermeidungsverhalten bei Angst', dauer: '30 Min' , alter: [6, 18], setting: 'einzel', material: '—'},
+    { titel: 'Angst-Exposition planen', ansatz: 'Kognitiv-behavioral', beschreibung: 'Angsthierarchie erstellen (0-100). Schrittweise Exposition von niedrig nach hoch planen. Erfolge dokumentieren.', indikation: 'Vermeidungsverhalten bei Angst', dauer: '30 Min' , alter: [6, 18], setting: 'einzel', material: '—', fachkraftTauglich: false, warnhinweis: 'Expositionstherapie nur durch ausgebildete KVT-Therapeuten. Bezugsarbeiter können Angsthierarchie besprechen, aber NICHT Exposition durchführen.'},
     { titel: 'Angst-Monster besiegen', ansatz: 'Kreativ', beschreibung: 'Die Angst als Monster malen und dann Strategien zeichnen die das Monster kleiner machen.', indikation: 'Jüngere, Angstbewältigung', dauer: '25 Min', alter: [6, 12], setting: 'einzel', material: 'Papier, Buntstifte' },
     { titel: 'Angst-Bewältigungs-Kreis (Gruppe)', ansatz: 'Psychoedukativ', beschreibung: 'Im Kreis teilt jeder eine Angst und eine Strategie – gegenseitige Unterstützung und Normalisierung.', indikation: 'Scham, Isolation', dauer: '25 Min', alter: [10, 18], setting: 'gruppe', material: '—' },
   ],
@@ -1666,7 +1666,7 @@ const SCREENING_DOMAINS = [
       'Hat Konzentrationsschwierigkeiten oder Entscheidungsprobleme',
       'Zieht sich von Freunden und Familie zurück',
     ],
-    worksheets: ['depressive-stimmungen.html', 'selbstwertgefuehl.html', 'emotionsregulation.html', 'resilienz-staerken.html', 'stimmungsextreme.html'],
+    worksheets: ['depressive-stimmungen.html', 'selbstwertgefuehl.html', 'emotionsregulation.html', 'resilienz-staerken.html'],
   },
   {
     id: 'angst-generalisiert',
@@ -1722,7 +1722,7 @@ const SCREENING_DOMAINS = [
     icd: 'F90',
     farbe: '#3DA8A8',
     icon: '⚡',
-    cutoff: 7,
+    cutoff: 5,
     handlung: 'abklaerung',
     ueberweisungAn: 'Kinder-/Jugendpsychiater (CHL / ZNS-Letzebuerg)',
     items: [
@@ -2080,7 +2080,14 @@ const STAERKEN_DIMENSIONEN = [
   { id: 'selbststaendig', label: 'Selbstständigkeit',  icon: '🏠', farbe: '#0EA5E9', beschreibung: 'Eigenverantwortung, Alltagskompetenz, Organisieren' },
   { id: 'mut',            label: 'Mut & Tapferkeit',   icon: '🦁', farbe: '#F97316', beschreibung: 'Sich trauen, Ängste überwinden, Stärke zeigen' },
   { id: 'schulisch',      label: 'Schulische Stärken', icon: '📚', farbe: '#14B8A6', beschreibung: 'Fächer, Lernbereitschaft, kognitive Stärken' },
+  // VIA Character Strengths (Peterson & Seligman 2004) — Erweiterung (H1)
+  { id: 'dankbarkeit',    label: 'Dankbarkeit',         icon: '🙏', farbe: '#D97706', beschreibung: 'Wertschätzung, Dankbarkeit für Erlebtes und Beziehungen' },
+  { id: 'freundlichkeit', label: 'Freundlichkeit & Güte', icon: '💝', farbe: '#DB2777', beschreibung: 'Altruismus, Hilfsbereitschaft, Fürsorge für andere' },
+  { id: 'teamwork',       label: 'Teamwork & Fairness', icon: '⚖️', farbe: '#7C3AED', beschreibung: 'Kooperation, Gerechtigkeit, Gruppenloyalität' },
+  { id: 'hoffnung',       label: 'Hoffnung & Optimismus', icon: '🌟', farbe: '#059669', beschreibung: 'Zukunftsorientierung, positives Denken, Zuversicht' },
 ];
+// Hinweis: Stärken-System angelehnt an Peterson & Seligman (2004) VIA Character Strengths.
+// 10 Kern-Dimensionen + 4 VIA-Erweiterungen. Keine psychometrische Validierung — als Gesprächsgrundlage konzipiert.
 
 // ============================================================
 // STRUKTURIERTE ANAMNESE — Kategorien & Items
@@ -4761,6 +4768,248 @@ const HYPOTHESEN_REGELN = [
     empfehlung: 'Schlafhygiene erfassen. Bildschirmzeit vor dem Schlafen reduzieren. Bei Persistenz ärztliche Abklärung empfehlen.',
     wiki_ids: ['somatoforme-stoerungen', 'schlafstoerungen', 'depression'],
   },
+  // ============================================================
+  // DIFFERENZIALDIAGNOSEN (K1) — 9 neue Regeln
+  // ============================================================
+  {
+    id: 'diff-depression-angst-trauma',
+    titel: 'Differenzial: Depression vs. Angst vs. Trauma',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F32', 'F41.1', 'F43.1'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return (fa.includes('depression') && fa.includes('angst-generalisiert')) ||
+             (fa.includes('depression') && fa.includes('trauma')) ||
+             (fa.includes('angst-generalisiert') && fa.includes('trauma'));
+    },
+    erklaerung: 'Depression, Angst und Trauma überlappen bei Jugendlichen stark (>60% Komorbidität). Schlüsselsymptome wie Konzentrationsstörung, Rückzug und Schlafprobleme treten bei allen drei auf. Die PRIMÄRE Ursache bestimmt die Intervention.',
+    evidenz: 'Cummings et al. (2014): 60-70% der depressiven Jugendlichen haben komorbide Angststörung. Brady et al. (2000): PTBS-Depression-Komorbidität bei 48%. Differenzierung klinisch kritisch für Behandlungswahl.',
+    quelle: 'Cummings et al. (2014); Brady et al. (2000); Kendall et al. (2010)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('depression')) d.push('Depression-Screening auffällig');
+      if (fa.includes('angst-generalisiert')) d.push('Angst-Screening auffällig');
+      if (fa.includes('trauma')) d.push('Trauma-Screening auffällig');
+      return d;
+    },
+    gegenHypothese: 'Falls ein klarer zeitlicher Zusammenhang mit einem traumatischen Ereignis besteht, ist PTBS wahrscheinlicher. Falls die Angst situationsunabhängig ist, spricht dies eher für generalisierte Angst.',
+    empfehlung: 'Zeitliche Abfolge klären: Was kam zuerst? Trauma-Anamnese vertiefen. Bei unklarer Ätiologie: Stabilisierung priorisieren, dann schrittweise Differenzierung.',
+    wiki_ids: ['depression', 'angststoerungen', 'traumafolgestoerungen'],
+  },
+  {
+    id: 'diff-autismus-soziale-angst',
+    titel: 'Differenzial: Autismus vs. Soziale Angst',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F84.0', 'F40.1'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('autismus') && fa.includes('angst-sozial');
+    },
+    erklaerung: 'Autismus und Soziale Angst zeigen oberflächlich ähnliche Symptome (sozialer Rückzug, Blickkontaktvermeidung, Kommunikationsschwierigkeiten). Bei MÄDCHEN wird Autismus systematisch unterdiagnostiziert und als Soziale Angst fehlklassifiziert.',
+    evidenz: 'Lai et al. (2015): Mädchen mit Autismus werden durchschnittlich 2 Jahre später diagnostiziert. "Masking/Camouflaging" führt zu Fehldiagnosen. Soziale Motivation ist der Schlüsselunterschied: Autisten haben oft weniger Wunsch nach sozialer Interaktion.',
+    quelle: 'Lai et al. (2015); Hull et al. (2017); Loomes et al. (2017)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('autismus')) d.push('Autismus-Screening auffällig');
+      if (fa.includes('angst-sozial')) d.push('Soziale Angst auffällig');
+      return d;
+    },
+    gegenHypothese: 'Falls der Jugendliche WÜNSCHT sozial eingebunden zu sein und die Angst situativ auftritt, spricht dies eher für Soziale Angst. Falls soziale Interaktion generell wenig Interesse weckt und sensorische Besonderheiten vorliegen, eher Autismus.',
+    empfehlung: 'Sensorische Verarbeitung erfragen. Spezialinteressen? Soziale Motivation vs. soziale Angst differenzieren. Bei Mädchen: Camouflaging-Fragen stellen. Fachdiagnostik empfehlen.',
+    wiki_ids: ['autismus-spektrum', 'angststoerungen', 'soziale-kompetenz'],
+  },
+  {
+    id: 'diff-autismus-adhs',
+    titel: 'Differenzial: Autismus vs. ADHS',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F84.0', 'F90'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('autismus') && fa.includes('adhs');
+    },
+    erklaerung: 'Autismus und ADHS treten in 30-80% der Fälle gemeinsam auf (Rommelse 2010). Beide zeigen Aufmerksamkeitsprobleme und soziale Schwierigkeiten, aber aus unterschiedlichen Gründen. DSM-5 erlaubt seit 2013 die Doppeldiagnose.',
+    evidenz: 'Rommelse et al. (2010): Komorbidität 30-80%. Antshel et al. (2016): Überlappende exekutive Funktionsdefizite aber unterschiedliche Profile. ADHS: Aufmerksamkeitswechsel. Autismus: Aufmerksamkeitsflexibilität.',
+    quelle: 'Rommelse et al. (2010); Antshel et al. (2016); DSM-5-TR (2022)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('autismus')) d.push('Autismus-Screening auffällig');
+      if (fa.includes('adhs')) d.push('ADHS-Screening auffällig');
+      return d;
+    },
+    gegenHypothese: 'Beide Diagnosen können gleichzeitig vorliegen (Doppeldiagnose). Falls Unaufmerksamkeit nur bei nicht-interessierenden Themen auftritt und Hyperfokus bei Spezialinteressen vorliegt, eher Autismus.',
+    empfehlung: 'Neuropsychologische Diagnostik empfehlen. Aufmerksamkeitsprofil differenzieren. Sensorische Verarbeitung prüfen. Beide Diagnosen parallel abklären lassen.',
+    wiki_ids: ['autismus-spektrum', 'adhs', 'exekutive-funktionen'],
+  },
+  {
+    id: 'diff-conduct-adhs-odd',
+    titel: 'Differenzial: Conduct vs. ADHS vs. ODD',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F91', 'F90', 'F91.3'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('conduct') && fa.includes('adhs');
+    },
+    erklaerung: 'ADHS, ODD und Conduct-Störung bilden ein Spektrum externalisierender Störungen mit massiver Überlappung. ADHS-Impulsivität kann als oppositionelles Verhalten fehlinterpretiert werden. Die Unterscheidung hat direkte therapeutische Konsequenzen.',
+    evidenz: 'Loeber et al. (2000): 50% der ADHS-Kinder entwickeln ODD, 25% Conduct-Störung. Connor et al. (2010): Aggressive Subtypen bei ADHS vs. proaktive Aggression bei Conduct. Intervention bei ADHS: Medikation + Verhaltenstherapie. Bei Conduct: MST/FFT.',
+    quelle: 'Loeber et al. (2000); Connor et al. (2010); NICE NG87 (2018)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('conduct')) d.push('Conduct-Screening auffällig');
+      if (fa.includes('adhs')) d.push('ADHS-Screening auffällig');
+      return d;
+    },
+    gegenHypothese: 'Falls die Verhaltensauffälligkeiten primär impulsiv (nicht geplant) sind und mit Aufmerksamkeitsproblemen einhergehen, eher ADHS. Falls kaltblütig-instrumentell, eher Conduct mit CU-Traits.',
+    empfehlung: 'Art der Aggression differenzieren: reaktiv-impulsiv (ADHS) vs. proaktiv-instrumentell (Conduct). Empathiefähigkeit prüfen. CU-Traits (Callous-Unemotional) erfassen.',
+    wiki_ids: ['adhs', 'oppositionelles-verhalten', 'aggressives-verhalten'],
+  },
+  {
+    id: 'diff-psychose-trauma-flashbacks',
+    titel: 'Differenzial: Psychose vs. Trauma-Flashbacks',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F20', 'F43.1'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('psychose') && fa.includes('trauma');
+    },
+    erklaerung: 'Trauma-Flashbacks können als Halluzinationen fehlinterpretiert werden. Dissoziation kann psychotisch wirken. Die Unterscheidung ist KRITISCH: Antipsychotika bei PTBS sind kontraproduktiv, Traumatherapie bei Psychose ist gefährlich.',
+    evidenz: 'Morrison et al. (2003): 70% der Psychose-Patienten haben Traumageschichte. Trauma-bedingte Halluzinationen sind typischerweise Ich-synton und inhaltlich mit dem Trauma verknüpft. Psychotische Halluzinationen eher Ich-dyston und bizarr.',
+    quelle: 'Morrison et al. (2003); Read et al. (2005); Moskowitz & Corstens (2008)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('psychose')) d.push('Psychose-Screening auffällig');
+      if (fa.includes('trauma')) d.push('Trauma-Screening auffällig');
+      return d;
+    },
+    gegenHypothese: 'Falls die "Halluzinationen" inhaltlich mit erlebtem Trauma zusammenhängen (Stimme des Täters, Geräusche vom Ereignis), sind es wahrscheinlich Flashbacks, nicht Psychose.',
+    empfehlung: 'SOFORT psychiatrische Abklärung. Inhalt der Halluzinationen erfragen (trauma-bezogen?). Keine Traumakonfrontation vor psychiatrischer Einschätzung. Sicherheit gewährleisten.',
+    wiki_ids: ['traumafolgestoerungen', 'psychose', 'dissoziation'],
+  },
+  {
+    id: 'diff-schlaf-adhs-depression',
+    titel: 'Differenzial: Schlafstörung vs. ADHS vs. Depression',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['G47', 'F90', 'F32'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('schlaf') && (fa.includes('adhs') || fa.includes('depression'));
+    },
+    erklaerung: 'Schlafmangel imitiert sowohl ADHS (Unaufmerksamkeit, Hyperaktivität, Impulsivität) als auch Depression (Antriebslosigkeit, Konzentrationsmangel, Reizbarkeit). Schlafstörung sollte IMMER zuerst behandelt werden.',
+    evidenz: 'Gruber et al. (2012): 1 Stunde weniger Schlaf verschlechtert ADHS-Symptome signifikant. Baglioni et al. (2011): Insomnie ist stärkster Prädiktor für Depression. Schlafhygiene als Erstintervention hat die höchste Erfolgswahrscheinlichkeit.',
+    quelle: 'Gruber et al. (2012); Baglioni et al. (2011); Owens (2009)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('schlaf')) d.push('Schlaf-Screening auffällig');
+      if (fa.includes('adhs')) d.push('ADHS-Screening auffällig');
+      if (fa.includes('depression')) d.push('Depression-Screening auffällig');
+      return d;
+    },
+    gegenHypothese: 'Falls die Symptome AUCH bei ausreichend Schlaf bestehen, sind ADHS oder Depression wahrscheinlicher als alleinige Schlafstörung.',
+    empfehlung: 'Schlafhygiene als ERSTE Intervention. Schlaftagebuch führen. Nach 4 Wochen Schlafverbesserung: Restsymptome neu bewerten. Erst dann ADHS/Depression-Diagnostik.',
+    wiki_ids: ['schlafstoerungen', 'adhs', 'depression'],
+  },
+  {
+    id: 'diff-bipolar-depression',
+    titel: 'Differenzial: Unipolare Depression vs. Bipolare Störung',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F32', 'F31'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('depression') && (ctx.anamnese.includes('stimmungsschwankungen_extrem') || ctx.anamnese.includes('diagnose_bipolar') || ctx.anamnese.includes('bipolar_familie'));
+    },
+    erklaerung: 'Bipolare Störung beginnt häufig mit einer depressiven Episode. Antidepressiva bei Bipolar können manische Episoden auslösen (Switch-Risiko). Die Familienanamnese ist der stärkste Prädiktor.',
+    evidenz: 'Baldessarini et al. (2013): 40% der bipolaren Patienten werden initial als unipolar depressiv diagnostiziert. Mittlere Latenz bis Korrektdiagnose: 6-10 Jahre. Familiäre Belastung mit Bipolar erhöht Risiko 10-fach.',
+    quelle: 'Baldessarini et al. (2013); Hirschfeld et al. (2003); NICE CG185 (2014)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('depression')) d.push('Depression-Screening auffällig');
+      if (ctx.anamnese.includes('stimmungsschwankungen_extrem')) d.push('Extreme Stimmungsschwankungen');
+      if (ctx.anamnese.includes('diagnose_bipolar')) d.push('Bipolar-Diagnose');
+      if (ctx.anamnese.includes('bipolar_familie')) d.push('Bipolar in Familie');
+      return d;
+    },
+    gegenHypothese: 'Falls keine Phasen mit erhöhter Energie, vermindertem Schlafbedürfnis oder Größenideen vorliegen und keine familiäre Belastung besteht, ist unipolare Depression wahrscheinlicher.',
+    empfehlung: 'Familiäre Belastung mit Bipolar systematisch erfragen. Auf hypomane Phasen achten (weniger Schlafbedürfnis, erhöhte Aktivität, Größenideen). Bei Verdacht: Psychiatrische Abklärung VOR Medikation.',
+    wiki_ids: ['depression', 'bipolare-stoerung', 'stimmungsschwankungen'],
+  },
+  {
+    id: 'diff-zwang-autismus',
+    titel: 'Differenzial: Zwangsstörung vs. Autistische Rigidität',
+    typ: 'differenzial',
+    ebene: 'kombination',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F42', 'F84.0'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('autismus') && fa.includes('zwang');
+    },
+    erklaerung: 'Autistische Rigidität (Routinen, Rituale, Spezialinteressen) kann als Zwangsstörung fehlinterpretiert werden. Umgekehrt kann OCD bei Autisten überdiagnostiziert werden. Der Unterschied: Autistische Rituale sind ICH-SYNTON (angenehm), Zwänge sind ICH-DYSTON (belastend).',
+    evidenz: 'Ruzzano et al. (2015): 17-37% der Autisten erfüllen OCD-Kriterien. Meier et al. (2015): Autismus erhöht OCD-Risiko 2-fach. Rituale bei Autismus: lustvoll/beruhigend. Zwänge bei OCD: angstgetrieben/belastend.',
+    quelle: 'Ruzzano et al. (2015); Meier et al. (2015); Postorino et al. (2017)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('autismus')) d.push('Autismus-Screening auffällig');
+      if (fa.includes('zwang')) d.push('Zwang-Screening auffällig');
+      return d;
+    },
+    gegenHypothese: 'Falls die Rituale als angenehm und beruhigend erlebt werden (nicht als störend oder angstauslösend), handelt es sich wahrscheinlich um autistische Rigidität, nicht um OCD.',
+    empfehlung: 'Erfragen ob Rituale als belastend (OCD) oder beruhigend (Autismus) erlebt werden. Bei Autismus: Rituale nicht unterbinden sondern kanalisieren. Bei echtem Zwang: ERP (Exposition mit Reaktionsverhinderung) — NUR durch Therapeuten.',
+    wiki_ids: ['autismus-spektrum', 'zwangsstoerungen'],
+  },
+  {
+    id: 'diff-essstoerung-typen',
+    titel: 'Differenzial: Anorexie vs. Bulimie vs. BED',
+    typ: 'differenzial',
+    ebene: 'einzelfaktor',
+    staerke: 'hinweis',
+    staerkeWert: 1,
+    icd10: ['F50.0', 'F50.2', 'F50.8'],
+    bedingung: (ctx) => {
+      const fa = ctx.screening?.flaggedAreas || [];
+      return fa.includes('essstoerung');
+    },
+    erklaerung: 'Anorexia Nervosa, Bulimia Nervosa und Binge-Eating-Störung erfordern unterschiedliche Behandlungsansätze. AN: Gewichtsrehabilitation + FBT. BN: CBT-BN. BED: CBT + Emotionsregulation. Mischformen sind häufig.',
+    evidenz: 'Fairburn & Harrison (2003): Diagnostische Migration zwischen AN und BN bei 30-50%. Lock & Le Grange (2013): FBT ist Goldstandard bei AN im Jugendalter. Bei BN: CBT-BN hat höchste Evidenz.',
+    quelle: 'Fairburn & Harrison (2003); Lock & Le Grange (2013); NICE NG69 (2017)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      const fa = ctx.screening?.flaggedAreas || [];
+      if (fa.includes('essstoerung')) d.push('Essstörung-Screening auffällig');
+      return d;
+    },
+    gegenHypothese: 'Falls primär Essanfälle OHNE Kompensation vorliegen, eher BED. Falls Restriktion dominiert, eher AN. Falls Binge-Purge-Zyklus, eher BN. Mischformen sind häufig.',
+    empfehlung: 'Essverhalten differenziert erfragen: Restriktion? Essanfälle? Kompensation (Erbrechen, Sport, Abführmittel)? Gewichtsverlauf dokumentieren. IMMER medizinische Abklärung (Labor, BMI). Fachspezifische Therapie empfehlen.',
+    wiki_ids: ['essstoerungen', 'koerperbild', 'emotionsregulation'],
+  },
 ];
 
 // ============================================================
@@ -5120,7 +5369,7 @@ const KOMORBIDITÄT_MUSTER = [
     label: 'Komplextrauma-Hinweis',
     beschreibung: 'Trauma + familiäre Belastungen + Dissoziation/Psychose',
     farbe: '#9C4E77',
-    bedingung: (flags) => flags.includes('trauma') && flags.includes('familie'),
+    bedingung: (flags) => flags.includes('trauma') && flags.includes('familie') && (flags.includes('dissoziation') || flags.includes('selbstverletzung') || flags.includes('psychose')),
   },
   {
     id: 'sozial-rueckzug',
@@ -5136,9 +5385,72 @@ const KOMORBIDITÄT_MUSTER = [
     farbe: '#556B2F',
     bedingung: (flags) => flags.includes('substanz') && (flags.includes('depression') || flags.includes('angst-generalisiert') || flags.includes('trauma')),
   },
+  // --- Neue Komorbiditäts-Muster (H4) ---
+  {
+    id: 'neurodiv-komorbid',
+    label: 'Neurodivergenz-Komorbidität',
+    beschreibung: 'Autismus + ADHS — häufige Komorbidität (30-80%, Rommelse 2010). Unterschiedliche Interventionsansätze nötig.',
+    farbe: '#2A7D6E',
+    bedingung: (flags) => flags.includes('autismus') && flags.includes('adhs'),
+  },
+  {
+    id: 'autismus-angst-diff',
+    label: 'Autismus vs. Soziale Angst',
+    beschreibung: 'Autismus + Soziale Angst — Differenzialdiagnostik empfohlen (Lai 2015). Bei Mädchen oft verwechselt.',
+    farbe: '#E07B39',
+    bedingung: (flags) => flags.includes('autismus') && flags.includes('angst-sozial'),
+  },
+  {
+    id: 'adhs-trauma-verwechslung',
+    label: 'ADHS vs. Trauma-Hyperarousal',
+    beschreibung: 'ADHS + Trauma — Hyperarousal kann ADHS-Symptome imitieren. Traumaarbeit VOR ADHS-Diagnostik.',
+    farbe: '#8B5C9A',
+    bedingung: (flags) => flags.includes('adhs') && flags.includes('trauma'),
+  },
+  {
+    id: 'substanz-psychose',
+    label: 'Substanzinduzierte Psychose',
+    beschreibung: 'Substanzkonsum + Psychose-Hinweise — Cannabis-induzierte Psychose ausschließen (Di Forti 2019).',
+    farbe: '#4A2D6B',
+    bedingung: (flags) => flags.includes('substanz') && flags.includes('psychose'),
+  },
+  {
+    id: 'essstoerung-zwang',
+    label: 'Essstörung + Zwang',
+    beschreibung: 'Essstörung + Zwänge — aggressive Komorbidität, spezialisierte Behandlung nötig (Kaye 2004).',
+    farbe: '#8E5EA2',
+    bedingung: (flags) => flags.includes('essstoerung') && flags.includes('zwang'),
+  },
+  {
+    id: 'depression-schlaf',
+    label: 'Depression-Schlaf-Zyklus',
+    beschreibung: 'Depression + Schlafstörung — oft kausal verbunden. Schlafhygiene als Erstintervention (Harvey 2011).',
+    farbe: '#2C5F7A',
+    bedingung: (flags) => flags.includes('depression') && flags.includes('schlaf'),
+  },
+  {
+    id: 'mobbing-syndrom',
+    label: 'Mobbing-Trauma-Syndrom',
+    beschreibung: 'Mobbing + Angst + Depression — chronisches Mobbing als Trauma-Äquivalent (Arseneault 2010).',
+    farbe: '#B05030',
+    bedingung: (flags) => flags.includes('mobbing') && (flags.includes('depression') || flags.includes('angst-generalisiert')),
+  },
 ];
 
 // ============================================================
+// WHO-5 Well-Being Index (H3) — validiert, frei verfügbar (WHO 1998)
+// Deutsche Übersetzung nach Brähler et al. (2007)
+const WHO5_ITEMS = [
+  'Ich war froh und guter Laune',
+  'Ich habe mich ruhig und entspannt gefühlt',
+  'Ich habe mich energisch und aktiv gefühlt',
+  'Ich habe mich beim Aufwachen frisch und ausgeruht gefühlt',
+  'Mein Alltag war voller Dinge, die mich interessieren',
+];
+// Skala: 0 (Zu keinem Zeitpunkt) - 5 (Die ganze Zeit), letzte 2 Wochen
+// Score: Rohsumme (0-25) × 4 = Prozentwert (0-100)
+// Interpretation: ≤28 (Prozentwert) = Depression-Screening positiv → weitere Abklärung empfohlen
+
 // Datenverwaltung (localStorage)
 // ============================================================
 const DB = {
@@ -5186,6 +5498,18 @@ const DB = {
       hypothesenVerlauf: daten.hypothesenVerlauf || [],
       // Treatment-Response: welche Themen wirken
       treatmentResponse: daten.treatmentResponse || [],
+      // Klinische Felder (K6)
+      diagnosen: daten.diagnosen || [],
+      // Format: [{ icd: 'F84.0', label: 'Autismus', diagnostiziertAm: '', diagnostiziertVon: '' }]
+      medikation: daten.medikation || [],
+      // Format: [{ name: '', dosierung: '', arzt: '', seit: '', nebenwirkungen: '' }]
+      sorgerecht: daten.sorgerecht || '',
+      // 'gemeinsam' | 'mutter' | 'vater' | 'andere' | ''
+      notfallKontakte: daten.notfallKontakte || [],
+      // Format: [{ name: '', beziehung: '', telefon: '' }]
+      gesetzlicherVertreter: daten.gesetzlicherVertreter || '',
+      schweigepflichtStatus: daten.schweigepflichtStatus || 'standard',
+      // 'standard' | 'erweitert' | 'eingeschraenkt'
       erstellt: new Date().toISOString(),
       geaendert: new Date().toISOString(),
     };
@@ -5351,15 +5675,23 @@ const DB = {
     const alle = JSON.parse(localStorage.getItem(this.KEYS.WOHLBEFINDEN) || '[]');
     return schuelerId ? alle.filter(w => w.schuelerId === schuelerId) : alle;
   },
-  addWohlbefinden(schuelerId, score, notiz) {
+  addWohlbefinden(schuelerId, score, notiz, who5Items) {
     const alle = this.getWohlbefinden();
-    alle.push({
+    const eintrag = {
       id: this.generateId(),
       schuelerId,
       datum: new Date().toISOString(),
       score,
       notiz: notiz || '',
-    });
+    };
+    // WHO-5 Items: { 0: wert, 1: wert, ... } (je 0-5)
+    if (who5Items && typeof who5Items === 'object') {
+      eintrag.who5Items = who5Items;
+      const rohsumme = Object.values(who5Items).reduce((s, v) => s + (Number(v) || 0), 0);
+      eintrag.who5Score = rohsumme * 4; // 0-100 Prozentwert
+      eintrag.who5DepressionScreening = eintrag.who5Score <= 28; // positives Screening
+    }
+    alle.push(eintrag);
     localStorage.setItem(this.KEYS.WOHLBEFINDEN, JSON.stringify(alle));
   },
   deleteWohlbefinden(id) {
@@ -7011,6 +7343,7 @@ const THEMA_MODULE = {
             titel: 'Duale Aufmerksamkeit',
             ansatz: 'Ressourcenorientiert / EMDR-nah',
             beschreibung: 'Gleichzeitig auf den Schmerz schauen UND auf etwas Stabiles im Hier und Jetzt. Übung: Verlust im Bewusstsein halten, dabei einen sicheren Ort oder eine gute Erinnerung beschreiben.',
+            fachkraftTauglich: false, warnhinweis: 'EMDR-nahe Technik — nur mit entsprechender Fortbildung oder therapeutischer Supervision anwenden.',
             dauer: '20 Min'
           }
         ],
@@ -13128,6 +13461,7 @@ const THEMA_MODULE = {
             titel: 'Ressourcen-Aktivierung',
             ansatz: 'EMDR-informiert',
             beschreibung: 'Positive Ressource aktivieren: Erinnerung an einen Moment, in dem ich mich sicher und stark gefühlt habe. Details ausmalen, Körpergefühl spüren. Diese Ressource als Anker verankern.',
+            fachkraftTauglich: false, warnhinweis: 'EMDR-informierte Technik — Ressourcen-Aktivierung ist als stabilisierende Übung geeignet, aber die Verankerung erfordert therapeutische Kompetenz.',
             dauer: '25 Min'
           }
         ],
@@ -16478,7 +16812,7 @@ const SCREENING_INTERPRETATION = {
     was_bedeutet_auffaellig: 'Hinweise auf gestörtes Essverhalten: Einschränkung, Erbrechen, Essanfälle, starke Gewichtsveränderung, exzessiver Sport. Essstörungen sind LEBENSGEFÄHRLICH und brauchen immer Fachbehandlung.',
     sofort_massnahmen: ['Medizinische Abklärung einleiten (Kinderarzt: Gewicht, Labor)', 'Nicht auf Essen/Gewicht fokussieren sondern auf Gefühle dahinter', 'Keine Kommentare über Aussehen oder Essverhalten', 'Mahlzeiten-Struktur unterstützen (regelmäßig, nicht kontrollierend)'],
     empfohlene_themen: ['essverhalten', 'koerperbild', 'selbstwertgefuehl'],
-    wann_ueberweisen: 'IMMER: Essstörungsspezifische Therapie empfehlen. Bei BMI <17 oder Erbrechen: DRINGEND Kinderarzt + Psychiater.'
+    wann_ueberweisen: 'Fachliche Abklärung empfehlen (Essstörungsspezifische Diagnostik). Bei BMI <17 oder Erbrechen: DRINGEND Kinderarzt + Psychiater. Bei bestätigter Diagnose: Spezialisierte Therapie einleiten.'
   },
   substanz: {
     was_bedeutet_auffaellig: 'Der Jugendliche konsumiert Alkohol, Cannabis, andere Substanzen oder zeigt Anzeichen problematischen Konsums (Regelmäßigkeit, Kontrollverlust, Funktionseinschränkung).',

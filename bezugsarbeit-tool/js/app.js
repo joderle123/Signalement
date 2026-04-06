@@ -2336,6 +2336,25 @@ function renderHypothesen(hypothesen) {
 // ============================================================
 // TREATMENT-RESPONSE-TRACKING
 // ============================================================
+// Reliable Change Index (H2) — vereinfacht, ohne Normstichprobe
+// RCI = (Post - Pre) / SE_diff; SE_diff = SD * sqrt(2 * (1 - r_tt))
+// Konservative Schätzung r_tt = 0.80 (da keine Test-Retest-Daten vorhanden)
+function berechneRCI(werte) {
+  if (werte.length < 4) return null;
+  const pre = (werte[0] + werte[1]) / 2;
+  const post = (werte[werte.length - 2] + werte[werte.length - 1]) / 2;
+  const mean = werte.reduce((a, b) => a + b, 0) / werte.length;
+  const sd = Math.sqrt(werte.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / werte.length);
+  const seDiff = sd * Math.sqrt(2 * (1 - 0.80));
+  if (seDiff === 0) return null;
+  const rci = (post - pre) / seDiff;
+  return {
+    rci: Math.round(rci * 100) / 100,
+    reliable: Math.abs(rci) > 1.96,
+    richtung: rci > 0 ? 'verbessert' : rci < 0 ? 'verschlechtert' : 'stabil',
+  };
+}
+
 function analyzeTreatmentResponse(schuelerId) {
   const notizen = DB.getNotizen(schuelerId).filter(n => n.kategorie === 'session' && n.themaId && n.soap?.srs?.total != null);
   if (notizen.length === 0) return { themen: [], gesamtTrend: null, bestesThema: null };
@@ -2368,11 +2387,13 @@ function analyzeTreatmentResponse(schuelerId) {
       const mitte = Math.floor(srsWerte.length / 2);
       const ersteHaelfte = srsWerte.slice(0, mitte).reduce((a, b) => a + b, 0) / mitte;
       const zweiteHaelfte = srsWerte.slice(mitte).reduce((a, b) => a + b, 0) / (srsWerte.length - mitte);
-      if (zweiteHaelfte - ersteHaelfte > 2) trend = 'steigend';
-      else if (ersteHaelfte - zweiteHaelfte > 2) trend = 'fallend';
+      if (zweiteHaelfte - ersteHaelfte > 3) trend = 'steigend';
+      else if (ersteHaelfte - zweiteHaelfte > 3) trend = 'fallend';
     }
 
     const themaInfo = allThemen.find(t => t.id === themaId);
+
+    const rci = berechneRCI(srsWerte);
 
     return {
       themaId,
@@ -2383,6 +2404,7 @@ function analyzeTreatmentResponse(schuelerId) {
       trend,
       guteSitzungen,
       srsWerte,
+      rci,
     };
   });
 
@@ -4550,6 +4572,48 @@ function renderSitzungsvorschlag() {
 
   if (!empfohlenesThema) { container.innerHTML = ''; return; }
 
+  // ── Sequenzierungs-Guard (K7): Bestimmte Themen NUR nach Voraussetzungen ──
+  const SEQUENZ_REGELN = [
+    { thema: 'trauma', voraussetzung: ['krisenintervention', 'emotionsregulation'],
+      warnung: 'Traumaverarbeitung erst nach Stabilisierung (ISTSS 2019)' },
+    { thema: 'angstanfaelle', voraussetzung: ['stress-angst', 'emotionsregulation'],
+      warnung: 'Exposition erst nach Psychoedukation + Regulationsfertigkeiten' },
+    { thema: 'dissoziative-erfahrungen', voraussetzung: ['emotionserkennung', 'krisenintervention'],
+      warnung: 'Dissoziationsarbeit erst nach Grounding-Fertigkeiten' },
+    { thema: 'suizidpraevention', voraussetzung: ['krisenintervention'],
+      warnung: 'Suizidpräventive Arbeit erst nach Krisenplan-Erstellung' },
+  ];
+  let sequenzWarnung = '';
+  if (!pvtOverride) {
+    const sequenzRegel = SEQUENZ_REGELN.find(r => r.thema === empfohlenesThema.id);
+    if (sequenzRegel) {
+      const alleNotizen = DB.getNotizen(sid).filter(n => n.kategorie === 'session');
+      const bearbeiteteThemen = [...new Set(alleNotizen.map(n => n.themaId).filter(Boolean))];
+      const fehlend = sequenzRegel.voraussetzung.filter(v => !bearbeiteteThemen.includes(v));
+      if (fehlend.length > 0) {
+        const fehlendLabels = fehlend.map(f => {
+          const found = findThemaInKategorien(f);
+          return found ? found.titel : f;
+        }).join(', ');
+        sequenzWarnung = `<div class="sitzungsvorschlag-response-hint warnung" style="margin-top:6px;border-left:3px solid #DC2626;">` +
+          `⛔ <strong>Sequenzierungs-Warnung:</strong> ${sequenzRegel.warnung}<br>` +
+          `<span style="font-size:11px;">Fehlende Voraussetzungen: <strong>${fehlendLabels}</strong></span><br>` +
+          `<span style="font-size:10px;color:var(--text-secondary);">Empfehlung: Zuerst die Voraussetzungen bearbeiten, dann dieses Thema aufnehmen.</span></div>`;
+        // Alternatives Thema aus Phase 1/2 vorschlagen
+        const stabilThemen = ['krisenintervention', 'emotionsregulation', 'emotionserkennung', 'stress-angst'];
+        for (const altId of stabilThemen) {
+          if (!bearbeiteteThemen.includes(altId)) {
+            const altThema = findThemaInKategorien(altId);
+            if (altThema) {
+              sequenzWarnung += `<div style="margin-top:4px;"><button class="btn btn-xs btn-outline-success" onclick="quickStartSession('${altId}')" style="margin:2px;">✅ Stattdessen: ${altThema.titel}</button></div>`;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
   // ── Hypothesen-basierte Themen-Empfehlung ──
   let hypothesenHint = '';
   if (!pvtOverride) {
@@ -4593,6 +4657,18 @@ function renderSitzungsvorschlag() {
       } else if (trAnalyse.bestesThema.responseRate >= 70) {
         treatmentHint = `<div class="sitzungsvorschlag-response-hint info">💊 Höchste Response: ${trAnalyse.bestesThema.label} (${trAnalyse.bestesThema.responseRate}%)</div>`;
       }
+    }
+  }
+
+  // ── Stepped-Care-Logik (M4): Bei Non-Response → Eskalation empfehlen ──
+  let steppedCareHint = '';
+  if (trAnalyse && !pvtOverride) {
+    const empfId = empfohlenesThema.id;
+    const empfResponse = trAnalyse.themen.find(t => t.themaId === empfId);
+    if (empfResponse && empfResponse.responseRate < 20 && empfResponse.anzahl >= 6) {
+      steppedCareHint = `<div class="sitzungsvorschlag-response-hint warnung" style="border-left:3px solid #DC2626;margin-top:6px;">🚨 <strong>Anhaltende Non-Response</strong> nach ${empfResponse.anzahl} Sitzungen (${empfResponse.responseRate}% Response). Dringend: Fallbesprechung mit Team und/oder Überweisung an Kinder-/Jugendpsychiater empfohlen.</div>`;
+    } else if (empfResponse && empfResponse.responseRate < 30 && empfResponse.anzahl >= 4) {
+      steppedCareHint = `<div class="sitzungsvorschlag-response-hint warnung" style="margin-top:6px;">⚠️ <strong>Non-Response</strong> nach ${empfResponse.anzahl} Sitzungen (${empfResponse.responseRate}% Response). Empfehlung: Therapeutischen Ansatz wechseln oder Überweisung an Fachstelle prüfen.</div>`;
     }
   }
 
@@ -4711,7 +4787,9 @@ function renderSitzungsvorschlag() {
           <div class="sitzungsvorschlag-grund">${empfGrund}</div>
           ${begruendung}
           ${overrideHint}
+          ${sequenzWarnung}
           ${treatmentHint}
+          ${steppedCareHint}
           ${hypothesenHint}
           ${ressourcenHint}
           ${aktivitaetenHTML}
@@ -4785,9 +4863,12 @@ function renderAktivitaetenBrowser(themaId) {
       const settingIcon = iv.setting === 'gruppe' ? '👥 Gruppe' : '👤 Einzel';
       const alterBadge = iv.alter ? `${iv.alter[0]}–${iv.alter[1]}J` : '';
       const matLine = iv.material && iv.material !== '—' ? `<div class="aktivitaet-material">📦 ${iv.material}</div>` : '';
-      return `<div class="aktivitaet-karte">
+      const fachkraftWarnung = iv.fachkraftTauglich === false
+        ? `<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;padding:4px 8px;margin-top:6px;font-size:10px;color:#991B1B;">⚠️ <strong>Nur mit Fachausbildung/Supervision</strong>${iv.warnhinweis ? ': ' + iv.warnhinweis : ''}</div>`
+        : '';
+      return `<div class="aktivitaet-karte${iv.fachkraftTauglich === false ? ' fachkraft-warnung' : ''}">
         <div class="aktivitaet-header">
-          <strong>${iv.titel}</strong>
+          <strong>${iv.titel}</strong>${iv.fachkraftTauglich === false ? ' <span title="Nur durch Fachpersonal" style="color:#DC2626;">⚠️</span>' : ''}
           <span class="aktivitaet-dauer">${iv.dauer}</span>
         </div>
         <div class="aktivitaet-badges">
@@ -4798,6 +4879,7 @@ function renderAktivitaetenBrowser(themaId) {
         ${matLine}
         <div class="aktivitaet-beschreibung">${iv.beschreibung}</div>
         ${iv.indikation ? '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Indikation: ' + iv.indikation + '</div>' : ''}
+        ${fachkraftWarnung}
       </div>`;
     }).join('');
 
@@ -5451,6 +5533,27 @@ function renderWohlbefinden() {
     }).join('');
   }
 
+  // WHO-5 Items (H3) — validierter Wohlbefinden-Index
+  const who5Container = document.getElementById('who5-items-container');
+  if (who5Container && typeof WHO5_ITEMS !== 'undefined') {
+    const skalaLabels = ['', 'Zu keinem Zeitpunkt (0)', 'Ab und zu (1)', 'Weniger als die Hälfte der Zeit (2)', 'Etwas mehr als die Hälfte der Zeit (3)', 'Meistens (4)', 'Die ganze Zeit (5)'];
+    who5Container.innerHTML = `
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">
+        <strong>WHO-5 Wohlbefinden</strong> <span style="color:var(--grau);">(letzte 2 Wochen)</span>
+      </div>
+      ${WHO5_ITEMS.map((item, i) => `
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span style="flex:1;font-size:11px;">${item}</span>
+          <select data-who5="${i}" style="font-size:11px;padding:2px 4px;border:1px solid #D1D5DB;border-radius:4px;">
+            <option value="">—</option>
+            ${[0,1,2,3,4,5].map(v => `<option value="${v}">${v}</option>`).join('')}
+          </select>
+        </div>
+      `).join('')}
+      <div style="font-size:10px;color:var(--grau);margin-top:4px;">Skala: 0 = Zu keinem Zeitpunkt, 5 = Die ganze Zeit. Score ≤28/100 = Depression-Screening positiv.</div>
+    `;
+  }
+
   // Render chart
   renderWohlbefindenChart(sid);
 
@@ -5556,12 +5659,34 @@ function saveWohlbefinden() {
   const score = APP.wohlbefindenScore;
   if (!score) return;
   const notiz = document.getElementById('wohlbefinden-notiz')?.value || '';
-  DB.addWohlbefinden(APP.currentSchuelerId, score, notiz);
+  // WHO-5 Items sammeln (falls ausgefüllt)
+  let who5Items = null;
+  const who5Container = document.getElementById('who5-items-container');
+  if (who5Container) {
+    const inputs = who5Container.querySelectorAll('select[data-who5]');
+    if (inputs.length > 0) {
+      who5Items = {};
+      let anyFilled = false;
+      inputs.forEach(inp => {
+        const val = parseInt(inp.value);
+        if (!isNaN(val)) { who5Items[inp.dataset.who5] = val; anyFilled = true; }
+      });
+      if (!anyFilled) who5Items = null;
+    }
+  }
+  DB.addWohlbefinden(APP.currentSchuelerId, score, notiz, who5Items);
   APP.wohlbefindenScore = null;
   const input = document.getElementById('wohlbefinden-notiz');
   if (input) input.value = '';
+  // WHO-5 Selects zurücksetzen
+  if (who5Container) who5Container.querySelectorAll('select[data-who5]').forEach(s => s.value = '');
   renderWohlbefinden();
-  showToast('Wohlbefinden gespeichert', 'success');
+  const who5Score = who5Items ? Object.values(who5Items).reduce((s, v) => s + v, 0) * 4 : null;
+  if (who5Score !== null && who5Score <= 28) {
+    showToast('WHO-5 Score: ' + who5Score + '/100 — Depression-Screening POSITIV. Weitere Abklärung empfohlen.', 'warning');
+  } else {
+    showToast('Wohlbefinden gespeichert', 'success');
+  }
 }
 
 function deleteWohlbefindenEintrag(id) {
@@ -7857,15 +7982,36 @@ function screeningAuswerten() {
     .filter(m => m.bedingung(flaggedAreas))
     .map(m => m.id);
 
-  // Severity
+  // Alert-Items identifizieren (Item-Level Granularität)
+  const alertItems = [];
+  SCREENING_DOMAINS.forEach(domain => {
+    if (!domain.alertItems) return;
+    domain.alertItems.forEach(idx => {
+      const val = antworten[`${domain.id}_${idx}`] || 0;
+      if (val > 1) {
+        alertItems.push({
+          domainId: domain.id,
+          itemIdx: idx,
+          itemText: domain.items[idx],
+          wert: val,
+        });
+      }
+    });
+  });
+
+  // Severity — klinisch kalibriert (K3)
+  // "urgent" nur bei aktiver Suizidalität (alertItems positiv) oder hohem Gesamtscore
+  // Psychose ≥3 statt ≥2 (reduziert False Positives bei normalem Adoleszentenverhalten)
   let severity = 'low';
-  const selfharmDomain = SCREENING_DOMAINS.find(d => d.id === 'selbstverletzung');
   const selfharmScore = scores['selbstverletzung'] || 0;
   const psychoseScore = scores['psychose'] || 0;
+  const svvAlertHit = SCREENING_DOMAINS.find(d => d.id === 'selbstverletzung')?.alertItems?.some(
+    idx => (antworten[`selbstverletzung_${idx}`] || 0) > 1
+  );
 
-  if (selfharmScore >= 4 || psychoseScore >= 2) severity = 'urgent';
+  if (svvAlertHit || selfharmScore >= 6 || psychoseScore >= 3) severity = 'urgent';
   else if (flaggedAreas.length >= 5 || comorbidityPattern.includes('krisenindikator')) severity = 'high';
-  else if (flaggedAreas.length >= 3) severity = 'medium';
+  else if (flaggedAreas.length >= 3 || selfharmScore >= 4 || psychoseScore >= 2) severity = 'medium';
   else severity = 'low';
 
   // Worksheet recommendations
@@ -7888,10 +8034,10 @@ function screeningAuswerten() {
   let scr;
   if (APP.currentScreeningId) {
     scr = DB.getScreenings().find(s => s.id === APP.currentScreeningId);
-    scr = { ...scr, antworten, scores, flaggedAreas, comorbidityPattern, worksheetRecommendations, severity, abgeschlossen: true, geaendert: new Date().toISOString() };
+    scr = { ...scr, antworten, scores, flaggedAreas, comorbidityPattern, worksheetRecommendations, severity, alertItems, abgeschlossen: true, geaendert: new Date().toISOString() };
   } else {
     scr = DB.createScreening(APP.currentSchuelerId);
-    scr = { ...scr, antworten, scores, flaggedAreas, comorbidityPattern, worksheetRecommendations, severity, abgeschlossen: true };
+    scr = { ...scr, antworten, scores, flaggedAreas, comorbidityPattern, worksheetRecommendations, severity, alertItems, abgeschlossen: true };
   }
   DB.saveScreening(scr);
   APP.currentScreeningId = scr.id;
@@ -7900,6 +8046,131 @@ function screeningAuswerten() {
   renderScreeningErgebnis(scr);
   renderSidebar(); // Update urgent indicator
   showToast('Screening ausgewertet', 'success');
+
+  // C-SSRS Trigger (K5): Bei positivem SVV-alertItem → strukturiertes Assessment anbieten
+  const svvAlerts = alertItems.filter(a => a.domainId === 'selbstverletzung');
+  if (svvAlerts.length > 0 || severity === 'urgent') {
+    setTimeout(() => showCSSRSAssessment(scr), 500);
+  }
+}
+
+// ── Strukturiertes Suizid-Assessment (K5) — angelehnt an C-SSRS Screening-Version ──
+function showCSSRSAssessment(screening) {
+  let overlay = document.getElementById('cssrs-overlay');
+  if (overlay) overlay.remove();
+
+  overlay = document.createElement('div');
+  overlay.id = 'cssrs-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:99999;display:flex;align-items:center;justify-content:center;';
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'background:#fff;border-radius:12px;max-width:550px;width:90%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);';
+  modal.innerHTML = `
+    <div style="padding:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <span style="font-size:24px;">🚨</span>
+        <div>
+          <h3 style="margin:0;color:#DC2626;">Strukturiertes Suizid-Assessment</h3>
+          <div style="font-size:11px;color:#6B7280;">Angelehnt an Columbia-Suicide Severity Rating Scale (C-SSRS) Screening-Version</div>
+        </div>
+      </div>
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:10px;margin-bottom:16px;font-size:12px;color:#991B1B;">
+        <strong>Wichtig:</strong> Dieses Assessment ersetzt KEINE psychiatrische Diagnostik. Bei positivem Ergebnis: Sofortige Weiterleitung an Fachstelle.
+      </div>
+      <div id="cssrs-fragen" style="display:flex;flex-direction:column;gap:10px;">
+        ${[
+          { nr: 1, frage: 'Wunsch tot zu sein?', detail: '"Hast du in letzter Zeit gewünscht, du wärst tot oder nicht mehr da?"' },
+          { nr: 2, frage: 'Aktive Suizidgedanken?', detail: '"Hast du tatsächlich daran gedacht, dich umzubringen?"' },
+          { nr: 3, frage: 'Methode überlegt?', detail: '"Hast du darüber nachgedacht, WIE du es tun würdest?"' },
+          { nr: 4, frage: 'Absicht zu handeln?', detail: '"Hattest du die Absicht, danach zu handeln — also es wirklich zu tun?"' },
+          { nr: 5, frage: 'Konkreter Plan?', detail: '"Hast du die Details ausgearbeitet? Weißt du wann, wo, wie?"' },
+        ].map(q => `
+          <div style="padding:10px;border:1px solid #E5E7EB;border-radius:8px;">
+            <div style="font-weight:600;margin-bottom:4px;">${q.nr}. ${q.frage}</div>
+            <div style="font-size:11px;color:#6B7280;margin-bottom:6px;font-style:italic;">${q.detail}</div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-sm" onclick="this.parentNode.querySelectorAll('.btn').forEach(b=>b.style.background='');this.style.background='#FECACA';this.parentNode.dataset.antwort='ja'" style="border:1px solid #E5E7EB;border-radius:6px;padding:4px 16px;">Ja</button>
+              <button class="btn btn-sm" onclick="this.parentNode.querySelectorAll('.btn').forEach(b=>b.style.background='');this.style.background='#D1FAE5';this.parentNode.dataset.antwort='nein'" style="border:1px solid #E5E7EB;border-radius:6px;padding:4px 16px;">Nein</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-danger" onclick="evaluateCSSRS()" style="flex:1;">Auswerten</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('cssrs-overlay').remove()" style="flex:1;">Später</button>
+      </div>
+    </div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function evaluateCSSRS() {
+  const fragen = document.querySelectorAll('#cssrs-fragen > div');
+  const antworten = [];
+  fragen.forEach(f => {
+    const btns = f.querySelector('[data-antwort]');
+    antworten.push(btns ? btns.dataset.antwort : null);
+  });
+
+  const jaCount = antworten.filter(a => a === 'ja').length;
+  const overlay = document.getElementById('cssrs-overlay');
+
+  let ergebnis = '';
+  let farbe = '';
+
+  if (jaCount === 0) {
+    ergebnis = `<div style="color:#059669;font-weight:600;">Kein akutes Suizidrisiko erkannt.</div>
+      <div style="font-size:12px;margin-top:4px;">Weiterhin aufmerksam bleiben. Re-Assessment bei Veränderungen.</div>`;
+    farbe = '#D1FAE5';
+  } else if (jaCount <= 2) {
+    ergebnis = `<div style="color:#D97706;font-weight:600;">Erhöhtes Risiko (${jaCount}/5 positiv)</div>
+      <div style="font-size:12px;margin-top:4px;">
+        <strong>Empfohlen:</strong><br>
+        - Safety-Plan erstellen (Krisenplan-Arbeitsblatt)<br>
+        - Therapeutische Anbindung einleiten<br>
+        - Re-Assessment innerhalb 1 Woche
+      </div>
+      <button class="btn btn-warning btn-sm" onclick="window.open('arbeitsblaetter/krisenplan.html','_blank');document.getElementById('cssrs-overlay').remove();" style="margin-top:8px;">Krisenplan-Arbeitsblatt öffnen</button>`;
+    farbe = '#FEF3C7';
+  } else {
+    ergebnis = `<div style="color:#DC2626;font-weight:600;">AKUTE GEFÄHRDUNG (${jaCount}/5 positiv)</div>
+      <div style="font-size:12px;margin-top:4px;">
+        <strong>SOFORTMASSNAHMEN:</strong><br>
+        - Jugendlichen NICHT alleine lassen<br>
+        - Sofort Kinder-/Jugendpsychiatrie kontaktieren<br>
+        - <strong>CHL KJP: (+352) 4411-6058</strong><br>
+        - <strong>SOS Détresse: 45 45 45</strong><br>
+        - Eltern/Sorgeberechtigte informieren<br>
+        - Krisenprotokoll der Einrichtung aktivieren
+      </div>`;
+    farbe = '#FEE2E2';
+  }
+
+  // Ergebnis in Screening speichern
+  if (APP.currentScreeningId) {
+    const screenings = JSON.parse(localStorage.getItem('cdse_screenings') || '[]');
+    const scr = screenings.find(s => s.id === APP.currentScreeningId);
+    if (scr) {
+      scr.cssrsErgebnis = { jaCount, antworten, datum: new Date().toISOString() };
+      localStorage.setItem('cdse_screenings', JSON.stringify(screenings));
+    }
+  }
+
+  if (overlay) {
+    const modal = overlay.querySelector('div > div');
+    if (modal) {
+      modal.innerHTML = `
+        <div style="padding:20px;">
+          <h3 style="margin:0 0 12px;">C-SSRS Ergebnis</h3>
+          <div style="background:${farbe};border-radius:8px;padding:14px;">
+            ${ergebnis}
+          </div>
+          <button class="btn btn-secondary" onclick="document.getElementById('cssrs-overlay').remove()" style="margin-top:16px;width:100%;">Schließen</button>
+        </div>`;
+    }
+  }
 }
 
 function renderScreeningErgebnis(scr) {

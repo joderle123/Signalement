@@ -106,20 +106,17 @@
 
     <!-- Phasen-Navigation -->
     <div class="profil-tabs-main">
-      <div class="profil-main-tab active" data-phase="uebersicht" onclick="showPhase('uebersicht')">
-        <span class="phase-icon">🏠</span> Übersicht
+      <div class="profil-main-tab" data-phase="wissen" onclick="showPhase('wissen')">
+        <span class="phase-icon">📚</span> Wissen
       </div>
-      <div class="profil-main-tab" data-phase="erfassen" onclick="showPhase('erfassen')">
-        <span class="phase-icon">📋</span> Erfassen
+      <div class="profil-main-tab" data-phase="sammeln" onclick="showPhase('sammeln')">
+        <span class="phase-icon">📋</span> Daten sammeln
       </div>
-      <div class="profil-main-tab" data-phase="analysieren" onclick="showPhase('analysieren')">
-        <span class="phase-icon">🔎</span> Analysieren
+      <div class="profil-main-tab active" data-phase="leitfaden" onclick="showPhase('leitfaden')">
+        <span class="phase-icon">🧭</span> Leitfaden
       </div>
-      <div class="profil-main-tab" data-phase="handeln" onclick="showPhase('handeln')">
-        <span class="phase-icon">🎯</span> Handeln
-      </div>
-      <div class="profil-main-tab" data-phase="berichte" onclick="showPhase('berichte')">
-        <span class="phase-icon">📄</span> Berichte
+      <div class="profil-main-tab" data-phase="analyse" onclick="showPhase('analyse')">
+        <span class="phase-icon">📊</span> Analyse
       </div>
     </div>
     <div class="profil-tabs-sub" id="profil-tabs-sub"></div>
@@ -129,24 +126,17 @@
 
       <!-- DASHBOARD -->
       <div class="profil-tab-content active" data-tab="dashboard">
-        <!-- Quick-Entry: Akutes Thema -->
-        <div id="quick-entry-dashboard"></div>
-
-        <!-- Visuelles Summary: Alles auf einen Blick -->
-        <div id="dashboard-summary-widget"></div>
-
-        <!-- Klinische Hypothesen (auto-generiert) -->
-        <div id="dashboard-hypothesen-widget"></div>
-
-        <!-- Treatment-Response + Screening-Delta -->
-        <div id="dashboard-treatment-widget"></div>
-        <div id="dashboard-screening-delta-widget"></div>
-
-        <!-- Sitzungsvorschlag: Heute empfohlen -->
+        <!-- Sitzungsvorschlag: Was mache ich heute? -->
         <div id="sitzungsvorschlag-widget"></div>
 
         <!-- Nächste Schritte & Fortschritt -->
         <div id="naechste-schritte-widget"></div>
+
+        <!-- Quick-Entry: Akutes Thema -->
+        <div id="quick-entry-dashboard"></div>
+
+        <!-- Kompakte Zusammenfassung -->
+        <div id="dashboard-summary-widget"></div>
 
         <div class="dashboard-grid">
 
@@ -498,6 +488,34 @@
       <!-- BERICHTE -->
       <div class="profil-tab-content" data-tab="berichte">
         <div id="berichte-container"></div>
+      </div>
+
+      <!-- WISSEN: Fachwissen-Bibliothek -->
+      <div class="profil-tab-content" data-tab="bibliothek">
+        <div id="bibliothek-container"></div>
+      </div>
+
+      <!-- WISSEN: Interventionen-Katalog -->
+      <div class="profil-tab-content" data-tab="interventionen">
+        <div id="interventionen-katalog-container"></div>
+      </div>
+
+      <!-- WISSEN: Arbeitsblätter -->
+      <div class="profil-tab-content" data-tab="arbeitsblaetter">
+        <div id="arbeitsblaetter-container"></div>
+      </div>
+
+      <!-- ANALYSE: Hypothesen -->
+      <div class="profil-tab-content" data-tab="hypothesen-tab">
+        <div id="hypothesen-container"></div>
+        <div id="hypothesen-zeitstrahl-container" style="margin-top:16px;"></div>
+      </div>
+
+      <!-- ANALYSE: Treatment-Response / Verlauf -->
+      <div class="profil-tab-content" data-tab="treatment-tab">
+        <div id="treatment-response-container"></div>
+        <div id="screening-verlauf-container" style="margin-top:16px;"></div>
+        <div id="dashboard-screening-delta-container" style="margin-top:16px;"></div>
       </div>
 
       <!-- GENOGRAMM -->

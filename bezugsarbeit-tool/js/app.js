@@ -297,18 +297,27 @@ function renderSidebar() {
     return;
   }
 
-  liste.innerHTML = schueler.map(s => {
+  // Aktive Schüler zuerst, dann pausierte, dann abgeschlossene
+  const sortiert = [...schueler].sort((a, b) => {
+    const ord = { aktiv: 0, pausiert: 1, abgeschlossen: 2 };
+    return (ord[a.status || 'aktiv'] || 0) - (ord[b.status || 'aktiv'] || 0);
+  });
+
+  liste.innerHTML = sortiert.map(s => {
     const screenings = DB.getScreenings(s.id);
     const urgent = screenings.some(scr => scr.severity === 'urgent');
     const latestScr = screenings.filter(scr => scr.abgeschlossen).sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
     const scrDot = urgent ? '<span class="scr-urgent-dot" title="Dringendes Screening">!</span>' : '';
-    return `<div class="schueler-item" data-id="${s.id}" onclick="showView('profil','${s.id}')">
+    const status = s.status || 'aktiv';
+    const isInaktiv = status !== 'aktiv';
+    const statusLabel = status === 'pausiert' ? ' (pausiert)' : status === 'abgeschlossen' ? ' (abg.)' : '';
+    return `<div class="schueler-item" data-id="${s.id}" onclick="showView('profil','${s.id}')" style="${isInaktiv ? 'opacity:0.5;' : ''}">
       <div class="schueler-avatar">${s.foto
         ? `<img src="${s.foto}" alt="">`
         : getInitials(s.vorname, s.nachname)}
       </div>
       <div class="schueler-item-info">
-        <div class="schueler-item-name">${s.vorname} ${s.nachname}${scrDot}</div>
+        <div class="schueler-item-name">${s.vorname} ${s.nachname}${scrDot}<span style="font-size:9px;color:#9CA3AF;">${statusLabel}</span></div>
         <div class="schueler-item-meta">${s.klasse || '—'} · ${alter(s.geburtsdatum)}</div>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
@@ -520,12 +529,23 @@ function renderProfil(schuelerId) {
   risikoEl.className = `risiko-indicator ${s.risiko || 'niedrig'}`;
   risikoEl.innerHTML = `<div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div> ${capitalize(s.risiko || 'niedrig')} Risiko`;
 
+  // Status-Dropdown
+  const statusEl = document.getElementById('profil-status');
+  if (statusEl) statusEl.value = s.status || 'aktiv';
+
   // Profil-Vollständigkeit
   renderProfilCompleteness(s);
 
   // Aktiven Tab rendern (über Phasen-Navigation)
   const phase = getPhaseForTab(APP.currentProfilTab);
   showPhase(phase, APP.currentProfilTab);
+}
+
+function updateSchuelerStatus(status) {
+  if (!APP.currentSchuelerId) return;
+  DB.updateSchueler(APP.currentSchuelerId, { status });
+  renderSidebar();
+  showToast(`Status auf „${status === 'aktiv' ? 'Aktiv' : status === 'pausiert' ? 'Pausiert' : 'Abgeschlossen'}" gesetzt`, 'success');
 }
 
 function renderProfilCompleteness(s) {
@@ -5357,6 +5377,7 @@ function renderDashboard() {
   renderRueckschrittAlert();
 
   // Stufe 6: Allgemeine Übersicht
+  renderIntakeProgress();
   renderWohlbefinden();
   renderDashKalender();
   renderDashTodo();
@@ -5668,6 +5689,38 @@ function renderDashboardScreeningDelta() {
 }
 
 // ---- DASHBOARD SUMMARY — "Alles auf einen Blick" ----
+function renderIntakeProgress() {
+  const container = document.getElementById('intake-progress-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) { container.innerHTML = ''; return; }
+
+  const checks = [
+    { label: 'Stammdaten', done: !!(s.vorname && s.nachname && s.geburtsdatum && s.klasse), tab: 'stammdaten', icon: '📋' },
+    { label: 'Screening', done: DB.getScreenings(sid).some(sc => sc.abgeschlossen), tab: 'screening', icon: '📊' },
+    { label: 'Genogramm', done: (s.genogramm || []).length >= 1, tab: 'genogramm', icon: '👨‍👩‍👦' },
+    { label: 'Ziel definiert', done: (s.ziele || []).length >= 1, tab: 'roadmap', icon: '🎯' },
+  ];
+
+  const done = checks.filter(c => c.done).length;
+  if (done >= checks.length) { container.innerHTML = ''; return; } // Alles erledigt → ausblenden
+
+  container.innerHTML = `
+    <div style="background:#FFFBEB;border:1px solid #F59E0B;border-radius:10px;padding:12px 16px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;color:#92400E;margin-bottom:8px;">📝 Intake-Fortschritt (${done}/${checks.length})</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${checks.map(c => `
+          <div onclick="showProfilTab('${c.tab}')" style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:${c.done ? '#ECFDF5' : '#FFF'};border:1px solid ${c.done ? '#22C55E' : '#D1D5DB'};border-radius:8px;font-size:12px;cursor:pointer;color:${c.done ? '#166534' : '#374151'};">
+            <span>${c.done ? '✅' : c.icon}</span>
+            <span style="${c.done ? 'text-decoration:line-through;' : 'font-weight:500;'}">${c.label}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
 function renderDashboardSummary() {
   const container = document.getElementById('dashboard-summary-widget');
   if (!container) return;
@@ -5748,6 +5801,11 @@ function renderDashboardSummary() {
         <div style="font-size:16px;font-weight:700;color:#6366F1;">${sitzungsCount}</div>
         <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">Letzte: ${tageText}</div>
       </div>
+    </div>
+    <div style="margin-top:12px;padding:8px 12px;background:#F9FAFB;border-radius:8px;border:1px solid #E5E7EB;">
+      <p style="font-size:10px;color:#9CA3AF;margin:0;text-align:center;line-height:1.5;">
+        Pathways ist ein pädagogisches Dokumentations- und Planungstool. Es ersetzt keine psychiatrische oder psychologische Diagnostik. Screening-Ergebnisse sind Orientierungshilfen, keine Diagnosen.
+      </p>
     </div>
   `;
 }

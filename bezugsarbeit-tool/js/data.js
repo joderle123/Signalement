@@ -65,9 +65,12 @@ const ARBEITSBLÄTTER = {
   'kulturelle-identitaet':   [{ titel: 'Wer bin ich? – Meine Identität',   datei: 'identitaet.html' }],
   'lebenssinn':              [{ titel: 'Wer bin ich? – Meine Identität',    datei: 'identitaet.html' }],
   // Soziale Medien & Gaming
-  'social-media':            [{ titel: 'Soziale Medien & Gaming',           datei: 'soziale-medien-gaming.html' }],
-  'gaming':                  [{ titel: 'Soziale Medien & Gaming',           datei: 'soziale-medien-gaming.html' }],
-  'mediennutzung':           [{ titel: 'Soziale Medien & Gaming',           datei: 'soziale-medien-gaming.html' }],
+  'social-media':            [{ titel: 'Soziale Medien & Gaming',           datei: 'soziale-medien-gaming.html' },
+                              { titel: 'Digital & Real — Mein Online-Leben', datei: 'digitales-wohlbefinden.html' }],
+  'gaming':                  [{ titel: 'Soziale Medien & Gaming',           datei: 'soziale-medien-gaming.html' },
+                              { titel: 'Digital & Real — Mein Online-Leben', datei: 'digitales-wohlbefinden.html' }],
+  'mediennutzung':           [{ titel: 'Soziale Medien & Gaming',           datei: 'soziale-medien-gaming.html' },
+                              { titel: 'Digital & Real — Mein Online-Leben', datei: 'digitales-wohlbefinden.html' }],
   // Trauma
   'trauma':                  [{ titel: 'Trauma verstehen & Stabilität finden', datei: 'trauma-stabilisierung.html' }],
   'trennungsangst':          [{ titel: 'Trauma verstehen & Stabilität finden', datei: 'trauma-stabilisierung.html' }],
@@ -126,6 +129,14 @@ const ARBEITSBLÄTTER = {
   'uebergaenge':             [{ titel: 'Übergänge meistern — Veränderung gestalten',     datei: 'uebergaenge.html' }],
   'migration-flucht':        [{ titel: 'Meine zwei Welten — Migration & Flucht',         datei: 'migration-flucht.html' }],
   'bindungsstoerung':        [{ titel: 'Nähe & Distanz — Beziehung verstehen',           datei: 'bindungsstoerung.html' }],
+  // Neue Arbeitsblätter: Achtsamkeit, Beziehungen, Digitales
+  'achtsamkeit':             [{ titel: 'Hier & Jetzt — Achtsamkeit und Grounding',       datei: 'achtsamkeit-grounding.html' }],
+  'grounding':               [{ titel: 'Hier & Jetzt — Achtsamkeit und Grounding',       datei: 'achtsamkeit-grounding.html' }],
+  'dissoziation':            [{ titel: 'Hier & Jetzt — Achtsamkeit und Grounding',       datei: 'achtsamkeit-grounding.html' }],
+  'gesunde-beziehungen':     [{ titel: 'Beziehungen die gut tun',                        datei: 'gesunde-beziehungen.html' }],
+  'consent':                 [{ titel: 'Beziehungen die gut tun',                        datei: 'gesunde-beziehungen.html' }],
+  'digitales-wohlbefinden':  [{ titel: 'Digital & Real — Mein Online-Leben',             datei: 'digitales-wohlbefinden.html' }],
+  'bildschirmzeit':          [{ titel: 'Digital & Real — Mein Online-Leben',             datei: 'digitales-wohlbefinden.html' }],
 };
 
 // ============================================================
@@ -1686,7 +1697,7 @@ const SCREENING_DOMAINS = [
       'Hat körperliche Anzeichen (Zittern, Schwitzen, Herzklopfen)',
       'Schläft schlecht wegen Sorgen',
     ],
-    worksheets: ['stress-angst.html', 'emotionsregulation.html', 'angstanfaelle.html', 'wiederkehrende-gedanken.html'],
+    worksheets: ['stress-angst.html', 'emotionsregulation.html', 'angstanfaelle.html', 'wiederkehrende-gedanken.html', 'achtsamkeit-grounding.html'],
   },
   {
     id: 'angst-sozial',
@@ -1704,7 +1715,7 @@ const SCREENING_DOMAINS = [
       'Errötet, zittert oder schwitzt stark in sozialen Situationen',
       'Spricht kaum in der Gruppe, obwohl er/sie etwas zu sagen hätte',
     ],
-    worksheets: ['stress-angst.html', 'kommunikation-grenzen.html', 'selbstwertgefuehl.html', 'einsamkeit.html', 'soziale-wahrnehmung.html'],
+    worksheets: ['stress-angst.html', 'kommunikation-grenzen.html', 'selbstwertgefuehl.html', 'einsamkeit.html', 'soziale-wahrnehmung.html', 'gesunde-beziehungen.html'],
   },
   {
     id: 'trauma',
@@ -1722,7 +1733,7 @@ const SCREENING_DOMAINS = [
       'Zeigt übermäßige Schreckreaktionen oder ist hypervigilant',
       'Hat Schlafprobleme oder Alpträume in Zusammenhang mit dem Ereignis',
     ],
-    worksheets: ['krisenplan.html', 'trauma-stabilisierung.html', 'dissoziative-erfahrungen.html', 'stress-angst.html', 'resilienz-staerken.html'],
+    worksheets: ['krisenplan.html', 'trauma-stabilisierung.html', 'dissoziative-erfahrungen.html', 'stress-angst.html', 'resilienz-staerken.html', 'achtsamkeit-grounding.html'],
   },
   {
     id: 'adhs',
@@ -1907,7 +1918,7 @@ const SCREENING_DOMAINS = [
       'Erlebt Cybermobbing (Nachrichten, Bilder, Gruppen)',
       'Hat Angst vor bestimmten Schüler/innen oder Situationen in der Schule',
     ],
-    worksheets: ['mobbing-cybermobbing.html', 'kommunikation-grenzen.html', 'selbstwertgefuehl.html', 'einsamkeit.html'],
+    worksheets: ['mobbing-cybermobbing.html', 'kommunikation-grenzen.html', 'selbstwertgefuehl.html', 'einsamkeit.html', 'digitales-wohlbefinden.html'],
   },
   {
     id: 'familie',
@@ -1925,7 +1936,7 @@ const SCREENING_DOMAINS = [
       'Lebt in sehr instabilen oder wechselnden Wohnverhältnissen',
       'Hat keinen oder kaum Kontakt zu einem Elternteil',
     ],
-    worksheets: ['familie.html', 'resilienz-staerken.html', 'krisenplan.html', 'trauma-stabilisierung.html'],
+    worksheets: ['familie.html', 'resilienz-staerken.html', 'krisenplan.html', 'trauma-stabilisierung.html', 'gesunde-beziehungen.html'],
   },
   {
     id: 'diskriminierung',
@@ -5047,6 +5058,260 @@ const HYPOTHESEN_REGELN = [
     gegenHypothese: 'Falls primär Essanfälle OHNE Kompensation vorliegen, eher BED. Falls Restriktion dominiert, eher AN. Falls Binge-Purge-Zyklus, eher BN. Mischformen sind häufig.',
     empfehlung: 'Essverhalten differenziert erfragen: Restriktion? Essanfälle? Kompensation (Erbrechen, Sport, Abführmittel)? Gewichtsverlauf dokumentieren. IMMER medizinische Abklärung (Labor, BMI). Fachspezifische Therapie empfehlen.',
     wiki_ids: ['essstoerungen', 'koerperbild', 'emotionsregulation'],
+  },
+
+  // ── KOMORBIDITÄTS-REGELN (Screening-Kreuzreferenz) ──────────
+  {
+    id: 'adhs-depression-kombi',
+    titel: 'ADHS-Depression Komorbidität',
+    typ: 'differenzial',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F90', 'F32', 'F90.1'],
+    bedingung: (ctx) => {
+      const s = ctx.screening.scores;
+      const adhs = SCREENING_DOMAINS.find(d => d.id === 'adhs');
+      const depr = SCREENING_DOMAINS.find(d => d.id === 'depression');
+      return adhs && depr && (s['adhs'] || 0) >= adhs.cutoff && (s['depression'] || 0) >= depr.cutoff;
+    },
+    erklaerung: 'ADHS und Depression treten in 30-40% der Fälle gemeinsam auf. Die Kombination erschwert die Diagnostik: ADHS-bedingte Misserfolge können sekundäre Depression auslösen, während Depression die Aufmerksamkeitsprobleme verstärkt.',
+    evidenz: 'Biederman et al. (2008): 30-40% der ADHS-Jugendlichen entwickeln komorbide Depression. Die sequenzielle Behandlung (zuerst ADHS-Management, dann KVT für Depression) zeigt bessere Outcomes als isolierte Behandlung.',
+    quelle: 'Biederman et al. (2008); Daviss (2008); MTA Cooperative Group (1999)',
+    ausloesendeDaten: (ctx) => {
+      const s = ctx.screening.scores;
+      const d = [];
+      const adhs = SCREENING_DOMAINS.find(dd => dd.id === 'adhs');
+      const depr = SCREENING_DOMAINS.find(dd => dd.id === 'depression');
+      if (adhs) d.push(`Screening ADHS: ${s['adhs'] || 0}/${adhs.items.length} (Cutoff ${adhs.cutoff})`);
+      if (depr) d.push(`Screening Depression: ${s['depression'] || 0}/${depr.items.length} (Cutoff ${depr.cutoff})`);
+      return d;
+    },
+    gegenHypothese: 'Falls Unaufmerksamkeit NUR bei depressiver Stimmung auftritt → eher primäre Depression mit sekundären Konzentrationsproblemen. Falls Depression NUR nach Schulmisserfolgen → eher ADHS mit sekundärer Demoralisierung.',
+    empfehlung: 'Sequenz klären: Kam ADHS oder Depression zuerst? ADHS-Management priorisieren. KVT für Depression parallel. Ggf. pharmakologische Abklärung (KJP).',
+    wiki_ids: ['adhs', 'depressive-stimmungen', 'konzentration-aufmerksamkeit'],
+  },
+  {
+    id: 'trauma-substanz-kombi',
+    titel: 'Traumabedingte Selbstmedikation',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F43.1', 'F10-F19'],
+    bedingung: (ctx) => {
+      const s = ctx.screening.scores;
+      const trauma = SCREENING_DOMAINS.find(d => d.id === 'trauma');
+      const subst = SCREENING_DOMAINS.find(d => d.id === 'substanz');
+      return trauma && subst && (s['trauma'] || 0) >= trauma.cutoff && (s['substanz'] || 0) >= subst.cutoff;
+    },
+    erklaerung: 'Substanzkonsum bei traumatisierten Jugendlichen dient häufig der Affektregulation (Selbstmedikation). Khantzians Self-Medication Hypothesis: Die Substanz wird gewählt um spezifische Trauma-Symptome zu dämpfen (Cannabis → Hyperarousal, Alkohol → emotionaler Schmerz).',
+    evidenz: 'Khantzian (1997): 60-80% der Jugendlichen mit Substanzstörung haben komorbide Traumaanamnese. Integrierte Trauma-Sucht-Behandlung (Seeking Safety) zeigt signifikant bessere Outcomes als sequenzielle Behandlung.',
+    quelle: 'Khantzian (1997); Najavits (2002); Dube et al. (2003)',
+    ausloesendeDaten: (ctx) => {
+      const s = ctx.screening.scores;
+      const d = [];
+      const trauma = SCREENING_DOMAINS.find(dd => dd.id === 'trauma');
+      const subst = SCREENING_DOMAINS.find(dd => dd.id === 'substanz');
+      if (trauma) d.push(`Screening Trauma: ${s['trauma'] || 0}/${trauma.items.length} (Cutoff ${trauma.cutoff})`);
+      if (subst) d.push(`Screening Substanz: ${s['substanz'] || 0}/${subst.items.length} (Cutoff ${subst.cutoff})`);
+      if (ctx.anamnese.includes('haeusliche_gewalt')) d.push('Anamnese: Häusliche Gewalt');
+      if (ctx.anamnese.includes('misshandlung_physisch')) d.push('Anamnese: Physische Misshandlung');
+      return d;
+    },
+    gegenHypothese: 'Falls Substanzkonsum primär sozial motiviert (Peergruppe) OHNE Traumaanamnese → eher normatives Experimentierverhalten. Falls Trauma-Symptome OHNE Konsum → Selbstmedikation nicht bestätigt.',
+    empfehlung: 'KEINE isolierte Suchtbehandlung — integrierter Ansatz (Seeking Safety). Trauma-Stabilisierung VOR Konsum-Reduktion. Substanz-Funktion explorieren: Welches Gefühl wird reguliert?',
+    wiki_ids: ['trauma-ptbs', 'substanzkonsum', 'selbstmedikation'],
+  },
+  {
+    id: 'angst-depression-kombi',
+    titel: 'Ängstlich-depressive Mischsymptomatik (F41.2)',
+    typ: 'differenzial',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F41.2', 'F32', 'F41.1'],
+    bedingung: (ctx) => {
+      const s = ctx.screening.scores;
+      const angst = SCREENING_DOMAINS.find(d => d.id === 'angst-generalisiert');
+      const depr = SCREENING_DOMAINS.find(d => d.id === 'depression');
+      return angst && depr && (s['angst-generalisiert'] || 0) >= angst.cutoff && (s['depression'] || 0) >= depr.cutoff;
+    },
+    erklaerung: 'Angst und Depression sind die häufigste Komorbidität bei Jugendlichen (50-70%). Die gemischte Symptomatik spricht auf transdiagnostische Ansätze (Emotionsregulation, kognitive Umstrukturierung) besser an als störungsspezifische Behandlung.',
+    evidenz: 'Cummings et al. (2014): 50-70% der depressiven Jugendlichen haben komorbide Angst. Unified Protocol for Transdiagnostic Treatment (Barlow) zeigt gleichwertige Effekte wie störungsspezifische KVT bei niedrigerem Aufwand.',
+    quelle: 'Cummings et al. (2014); Barlow et al. (2011); Weersing et al. (2012)',
+    ausloesendeDaten: (ctx) => {
+      const s = ctx.screening.scores;
+      const d = [];
+      const angst = SCREENING_DOMAINS.find(dd => dd.id === 'angst-generalisiert');
+      const depr = SCREENING_DOMAINS.find(dd => dd.id === 'depression');
+      if (angst) d.push(`Screening Angst: ${s['angst-generalisiert'] || 0}/${angst.items.length} (Cutoff ${angst.cutoff})`);
+      if (depr) d.push(`Screening Depression: ${s['depression'] || 0}/${depr.items.length} (Cutoff ${depr.cutoff})`);
+      return d;
+    },
+    gegenHypothese: 'Falls Angst nur als Folge depressiver Grübelei → primäre Depression. Falls Depression nur als Erschöpfung durch chronische Angst → primäre Angststörung.',
+    empfehlung: 'Transdiagnostisch arbeiten: Emotionsregulation, Verhaltensaktivierung und kognitive Umstrukturierung parallel. Priorisierung: Welche Symptomatik beeinträchtigt am meisten?',
+    wiki_ids: ['depressive-stimmungen', 'stress-angst', 'emotionsregulation'],
+  },
+  {
+    id: 'bindung-conduct-kombi',
+    titel: 'Reaktive Verhaltensstörung bei Bindungsbruch',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F94.1', 'F91'],
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      const hatBindungsbruch = a.includes('heim') || a.includes('pflegefamilie') || a.includes('haeufige_umzuege');
+      const hatVerlust = a.includes('kein_mutter') || a.includes('kein_vater') || a.includes('tod_elternteil');
+      const conductFlag = ctx.screening.flaggedAreas.includes('conduct');
+      return hatBindungsbruch && hatVerlust && conductFlag;
+    },
+    erklaerung: 'Externalisierende Verhaltensauffälligkeiten (Aggression, Regelbrüche) bei fremdplatzierten Jugendlichen sind häufig Ausdruck einer zugrundeliegenden Bindungsstörung — nicht primär antisoziales Verhalten. Die Aggression ist eine Überlebensstrategie.',
+    evidenz: 'Dozier et al. (2012): Fremdplatzierte Kinder mit Bindungsbruch zeigen 3-5x höhere Raten externalisierender Störungen. Beziehungsbasierte Interventionen (MTFC, PCIT) wirksamer als rein verhaltensmodifikatorische Ansätze.',
+    quelle: 'Dozier et al. (2012); van IJzendoorn et al. (1999); Chamberlain (2003)',
+    ausloesendeDaten: (ctx) => {
+      const d = [];
+      if (ctx.anamnese.includes('heim')) d.push('Heimunterbringung');
+      if (ctx.anamnese.includes('pflegefamilie')) d.push('Pflegefamilie');
+      if (ctx.anamnese.includes('haeufige_umzuege')) d.push('Häufige Umzüge');
+      if (ctx.anamnese.includes('kein_mutter')) d.push('Kein Mutterkontakt');
+      if (ctx.anamnese.includes('kein_vater')) d.push('Kein Vaterkontakt');
+      if (ctx.screening.flaggedAreas.includes('conduct')) d.push('Screening: Verhaltensauffälligkeiten erhöht');
+      return d;
+    },
+    gegenHypothese: 'Falls Conduct-Symptome VOR Fremdplatzierung begannen UND keine Bindungsbrüche vorliegen → eher primäre Störung des Sozialverhaltens (F91). Falls Aggression nur in Beziehungskontexten → bindungsgesteuert.',
+    empfehlung: 'NICHT primär bestrafend/verhaltensmodifikatorisch. Beziehungsaufbau priorisieren. Verlässlichkeit demonstrieren. Bindungstherapeutische Haltung. Bei Eskalation: Deeskalation statt Sanktion.',
+    wiki_ids: ['bindungsstoerung', 'wut-aggression', 'impulskontrolle'],
+  },
+  {
+    id: 'mobbing-depression-isolation',
+    titel: 'Viktimisierungs-Depressions-Zyklus',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['Z60.4', 'F32'],
+    bedingung: (ctx) => {
+      const s = ctx.screening.scores;
+      const mob = SCREENING_DOMAINS.find(d => d.id === 'mobbing');
+      const depr = SCREENING_DOMAINS.find(d => d.id === 'depression');
+      const iso = SCREENING_DOMAINS.find(d => d.id === 'soziale-isolation');
+      return mob && depr && iso &&
+        (s['mobbing'] || 0) >= mob.cutoff &&
+        (s['depression'] || 0) >= depr.cutoff &&
+        (s['soziale-isolation'] || 0) >= iso.cutoff;
+    },
+    erklaerung: 'Mobbing → Rückzug → Isolation → Depression → mehr Vulnerabilität → mehr Mobbing. Dieser Teufelskreis verstärkt sich selbst und muss an mehreren Stellen gleichzeitig unterbrochen werden.',
+    evidenz: 'Reijntjes et al. (2010): Bidirektionaler Zusammenhang Viktimisierung↔Depression (OR 2.1). Hawker & Boulton (2000): Mobbing-Opfer haben 3-7x erhöhtes Depressionsrisiko. Intervention muss sowohl Peer-Dynamik als auch internalisierende Symptome adressieren.',
+    quelle: 'Reijntjes et al. (2010); Hawker & Boulton (2000); Olweus (1993)',
+    ausloesendeDaten: (ctx) => {
+      const s = ctx.screening.scores;
+      const d = [];
+      const mob = SCREENING_DOMAINS.find(dd => dd.id === 'mobbing');
+      const depr = SCREENING_DOMAINS.find(dd => dd.id === 'depression');
+      const iso = SCREENING_DOMAINS.find(dd => dd.id === 'soziale-isolation');
+      if (mob) d.push(`Screening Mobbing: ${s['mobbing'] || 0}/${mob.items.length} (Cutoff ${mob.cutoff})`);
+      if (depr) d.push(`Screening Depression: ${s['depression'] || 0}/${depr.items.length} (Cutoff ${depr.cutoff})`);
+      if (iso) d.push(`Screening Isolation: ${s['soziale-isolation'] || 0}/${iso.items.length} (Cutoff ${iso.cutoff})`);
+      return d;
+    },
+    gegenHypothese: 'Falls Isolation gewählt (introvertiert, zufrieden allein) OHNE Depression → kein Zyklus. Falls Mobbing einmalig und bereits beendet → Akutreaktion statt Zyklus.',
+    empfehlung: 'Mehrebenen-Intervention: 1. Akute Sicherheit (Schutzplan), 2. Selbstwertarbeit + KVT für Depression, 3. Soziale-Kompetenz-Training, 4. Peer-Dynamik-Intervention (Schule).',
+    wiki_ids: ['mobbing', 'depressive-stimmungen', 'einsamkeit'],
+  },
+  {
+    id: 'trauma-dissoziation-kombi',
+    titel: 'Dissoziative Verarbeitung — Typ-II-Trauma wahrscheinlich',
+    typ: 'risiko',
+    ebene: 'dynamisch',
+    staerke: 'sehr-wahrscheinlich',
+    staerkeWert: 3,
+    icd10: ['F44', 'F43.1'],
+    bedingung: (ctx) => {
+      const s = ctx.screening.scores;
+      const trauma = SCREENING_DOMAINS.find(d => d.id === 'trauma');
+      const disso = SCREENING_DOMAINS.find(d => d.id === 'dissoziation');
+      return trauma && disso && (s['trauma'] || 0) >= trauma.cutoff && (s['dissoziation'] || 0) >= disso.cutoff;
+    },
+    erklaerung: 'Gleichzeitig erhöhte Trauma- und Dissoziationswerte sprechen für chronische Traumatisierung (Typ II nach Terr). Dissoziation als Schutzreaktion: Das Gehirn „schaltet ab" wenn der Stress zu groß wird. Erfordert phasenorientierte Behandlung.',
+    evidenz: 'van der Hart et al. (2006): Strukturelle Dissoziation korreliert hoch mit chronischem Kindheitstrauma (r=.65). Putnam (1997): 90% der DIS-Patienten berichten Kindheitstrauma. Phasenorientierte Behandlung (Janet) als Goldstandard.',
+    quelle: 'van der Hart et al. (2006); Terr (1991); Putnam (1997)',
+    ausloesendeDaten: (ctx) => {
+      const s = ctx.screening.scores;
+      const d = [];
+      const trauma = SCREENING_DOMAINS.find(dd => dd.id === 'trauma');
+      const disso = SCREENING_DOMAINS.find(dd => dd.id === 'dissoziation');
+      if (trauma) d.push(`Screening Trauma: ${s['trauma'] || 0}/${trauma.items.length} (Cutoff ${trauma.cutoff})`);
+      if (disso) d.push(`Screening Dissoziation: ${s['dissoziation'] || 0}/${disso.items.length} (Cutoff ${disso.cutoff})`);
+      if (ctx.anamnese.includes('misshandlung_physisch')) d.push('Anamnese: Physische Misshandlung');
+      if (ctx.anamnese.includes('missbrauch_sexuell')) d.push('Anamnese: Sexueller Missbrauch');
+      return d;
+    },
+    gegenHypothese: 'Falls Dissoziation OHNE Traumaanamnese → neuropsychiatrische Abklärung (Epilepsie, Migräne). Falls Trauma OHNE Dissoziation → eher Typ-I-Einzeltrauma mit anderer Verarbeitungsstrategie.',
+    empfehlung: 'SOFORT: Stabilisierung + Grounding-Techniken. KEINE Traumaexposition. STOPP-Protokoll für Dissoziationsepisoden. Fachärztliche Traumatherapie empfehlen (EMDR/SE bei spezialisierten Therapeuten).',
+    wiki_ids: ['trauma-ptbs', 'dissoziation', 'krisenintervention'],
+  },
+  {
+    id: 'essstoerung-koerperbild-selbstwert',
+    titel: 'Körperbild-gesteuerte Essstörung',
+    typ: 'differenzial',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['F50', 'F50.0', 'F50.2'],
+    bedingung: (ctx) => {
+      const s = ctx.screening.scores;
+      const ess = SCREENING_DOMAINS.find(d => d.id === 'essstoerung');
+      const depr = SCREENING_DOMAINS.find(d => d.id === 'depression');
+      return ess && depr && (s['essstoerung'] || 0) >= ess.cutoff && (s['depression'] || 0) >= (depr.cutoff - 1);
+    },
+    erklaerung: 'Essgestörtes Verhalten in Kombination mit depressiver Symptomatik deutet auf Selbstwert-Defizit als treibenden Faktor hin. Das Essverhalten reguliert nicht primär Hunger, sondern Kontrollerleben und Selbstwert.',
+    evidenz: 'Fairburn et al. (2003): Niedriger Selbstwert ist der stärkste Aufrechterhaltungsfaktor bei Essstörungen (transdiagnostisch). Enhanced CBT (CBT-E) adressiert gezielt die Kernpsychopathologie: überbewertete Kontrolle über Essen, Figur und Gewicht.',
+    quelle: 'Fairburn et al. (2003); Stice (2002); Treasure et al. (2010)',
+    ausloesendeDaten: (ctx) => {
+      const s = ctx.screening.scores;
+      const d = [];
+      const ess = SCREENING_DOMAINS.find(dd => dd.id === 'essstoerung');
+      const depr = SCREENING_DOMAINS.find(dd => dd.id === 'depression');
+      if (ess) d.push(`Screening Essstörung: ${s['essstoerung'] || 0}/${ess.items.length} (Cutoff ${ess.cutoff})`);
+      if (depr) d.push(`Screening Depression: ${s['depression'] || 0}/${depr.items.length} (Cutoff ${depr.cutoff})`);
+      return d;
+    },
+    gegenHypothese: 'Falls Essverhalten primär durch Kontrollverlust (Binge Eating) OHNE Körperbildsorgen → eher emotionsregulatorische Funktion. Falls nur bei Stress → eher Stressreaktion als Essstörung.',
+    empfehlung: 'Medizinische Abklärung IMMER (BMI, Labor). Selbstwertarbeit parallel zur Ernährungsberatung. Körperbild-Interventionen (Körperdankbarkeit, Medienreflexion). Fachspezifische Therapie empfehlen.',
+    wiki_ids: ['essstoerungen', 'koerperbild', 'selbstwertgefuehl'],
+  },
+  {
+    id: 'schlaf-depression-kombi',
+    titel: 'Bidirektionale Schlaf-Depression-Spirale',
+    typ: 'differenzial',
+    ebene: 'dynamisch',
+    staerke: 'wahrscheinlich',
+    staerkeWert: 2,
+    icd10: ['G47', 'F32'],
+    bedingung: (ctx) => {
+      const s = ctx.screening.scores;
+      const schlaf = SCREENING_DOMAINS.find(d => d.id === 'schlaf');
+      const depr = SCREENING_DOMAINS.find(d => d.id === 'depression');
+      return schlaf && depr && (s['schlaf'] || 0) >= schlaf.cutoff && (s['depression'] || 0) >= depr.cutoff;
+    },
+    erklaerung: 'Schlafstörungen und Depression verstärken sich gegenseitig: Schlechter Schlaf → Erschöpfung → depressive Stimmung → Grübeln → schlechterer Schlaf. Bei Jugendlichen ist Schlaf oft der bessere Behandlungseinstieg (weniger Stigma, schnellere Wirkung).',
+    evidenz: 'Harvey (2011): Schlafbehandlung (CBT-I) reduziert depressive Symptome um 50% auch OHNE explizite Depressionsbehandlung. Gregory et al. (2009): Schlafprobleme im Jugendalter sind der stärkste Prädiktor für Depression im jungen Erwachsenenalter.',
+    quelle: 'Harvey (2011); Gregory et al. (2009); Blake et al. (2018)',
+    ausloesendeDaten: (ctx) => {
+      const s = ctx.screening.scores;
+      const d = [];
+      const schlaf = SCREENING_DOMAINS.find(dd => dd.id === 'schlaf');
+      const depr = SCREENING_DOMAINS.find(dd => dd.id === 'depression');
+      if (schlaf) d.push(`Screening Schlaf: ${s['schlaf'] || 0}/${schlaf.items.length} (Cutoff ${schlaf.cutoff})`);
+      if (depr) d.push(`Screening Depression: ${s['depression'] || 0}/${depr.items.length} (Cutoff ${depr.cutoff})`);
+      return d;
+    },
+    gegenHypothese: 'Falls Schlafprobleme durch externe Faktoren (Lärm, Schichtarbeit, Medienkonsum bis 3 Uhr) → primär Schlafhygiene. Falls Depression ohne Schlafstörung → andere Aufrechterhaltungsfaktoren dominieren.',
+    empfehlung: 'Schlafhygiene als First-Line-Intervention (oft akzeptabler als „Depressionsbehandlung"). Blaulicht-Reduktion, feste Zeiten, Schlafprotokoll. Falls nach 4 Wochen keine Besserung → KVT für Depression ergänzen.',
+    wiki_ids: ['schlaf', 'depressive-stimmungen', 'stress-angst'],
   },
 ];
 

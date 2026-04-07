@@ -2589,8 +2589,42 @@ function renderInfo() {
   if (notizEl) notizEl.value = s.allgemeineNotizen || '';
 }
 
+// Screening-Kontext für Anamnese: welche Items passen zu auffälligen Screening-Domains?
+function _getAnamneseScreeningContext() {
+  const result = { flaggedDomains: [], matchedItems: new Set() };
+  const sid = APP.currentSchuelerId;
+  if (!sid) return result;
+  const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen);
+  if (screenings.length === 0) return result;
+  const latest = screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+  result.flaggedDomains = latest.flaggedAreas || [];
+
+  // Mapping: Screening-Domain → relevante Anamnese-Item-IDs
+  const domainItemMap = {
+    trauma: ['haeusliche_gewalt', 'misshandlung_physisch', 'misshandlung_emotional', 'missbrauch_sexuell', 'vernachlaessigung_emotional', 'vernachlaessigung_physisch', 'kriegserfahrung', 'flucht'],
+    depression: ['tod_elternteil', 'verlust_bezugsperson', 'soziale_isolation', 'psychische_erkrankung_eltern'],
+    angst: ['haeusliche_gewalt', 'mobbing', 'schulwechsel_haeufig', 'migration', 'psychische_erkrankung_eltern'],
+    adhs: ['schulwechsel_haeufig', 'lernschwaeche', 'schulverweigerung', 'schulausschluss'],
+    selbstverletzung: ['misshandlung_physisch', 'missbrauch_sexuell', 'vernachlaessigung_emotional', 'psychische_erkrankung_eltern'],
+    suizidalitaet: ['tod_elternteil', 'verlust_bezugsperson', 'haeusliche_gewalt', 'missbrauch_sexuell', 'psychische_erkrankung_eltern'],
+    substanz: ['substanzkonsum_eltern', 'peers_negativ', 'schulverweigerung'],
+    essstoerung: ['mobbing', 'leistungsdruck'],
+    soziale_isolation: ['migration', 'haeufige_umzuege', 'mobbing', 'pflegefamilie', 'heim'],
+    conduct: ['haeusliche_gewalt', 'misshandlung_physisch', 'vernachlaessigung_emotional', 'inkonsistente_erziehung', 'kein_vater', 'kein_mutter'],
+    bindung: ['kein_vater', 'kein_mutter', 'pflegefamilie', 'heim', 'haeufige_umzuege', 'vernachlaessigung_emotional', 'wechselnde_bezugspersonen'],
+    schlaf: ['haeusliche_gewalt', 'leistungsdruck', 'digitale_medien_exzessiv'],
+    mobbing: ['mobbing', 'soziale_isolation', 'migration'],
+  };
+  result.flaggedDomains.forEach(domId => {
+    (domainItemMap[domId] || []).forEach(itemId => result.matchedItems.add(itemId));
+  });
+  return result;
+}
+
 function renderAnamneseChips(kat, anamnese) {
   const activeCount = kat.items.filter(it => anamnese.includes(it.id)).length;
+  // Screening-Kontext: welche Domains sind auffällig?
+  const scrContext = _getAnamneseScreeningContext();
   return `
     <div class="anamnese-kategorie">
       <div class="anamnese-kategorie-header" style="border-left:4px solid ${kat.farbe}">
@@ -2598,34 +2632,47 @@ function renderAnamneseChips(kat, anamnese) {
         <span class="anamnese-count">${activeCount > 0 ? activeCount + ' ausgewählt' : ''}</span>
       </div>
       <div class="anamnese-chips">
-        ${kat.items.map(item => `
-          <div class="anamnese-chip ${anamnese.includes(item.id) ? 'active' : ''}"
+        ${kat.items.map(item => {
+          const isHochGewichtet = item.gewicht >= 2;
+          const scrMatch = scrContext.matchedItems.has(item.id);
+          const badges = [];
+          if (isHochGewichtet) badges.push('<span class="anamnese-gewicht-badge" title="Hohes Risiko-Gewicht — besonders beachten">⚠️</span>');
+          if (scrMatch) badges.push('<span class="anamnese-scr-badge" title="Passt zum auffälligen Screening-Ergebnis">📊</span>');
+          return `
+          <div class="anamnese-chip ${anamnese.includes(item.id) ? 'active' : ''} ${isHochGewichtet ? 'anamnese-wichtig' : ''} ${scrMatch ? 'anamnese-scr-match' : ''}"
                style="--chip-color:${kat.farbe}"
                onclick="toggleAnamneseItem('${item.id}')"
-               title="${item.evidenz}">
-            ${item.label}
-          </div>
-        `).join('')}
+               title="${item.evidenz}${isHochGewichtet ? ' · ⚠️ Hohes Gewicht' : ''}${scrMatch ? ' · 📊 Screening-Match' : ''}">
+            ${item.label}${badges.length > 0 ? ' ' + badges.join('') : ''}
+          </div>`;
+        }).join('')}
       </div>
     </div>
   `;
 }
 
 function renderAnamneseFelder(kat, anamnese) {
+  const scrContext = _getAnamneseScreeningContext();
   const felderHtml = kat.felder.map(feld => {
     const isMulti = feld.typ === 'multi';
     return `
       <div class="anamnese-feld">
         <div class="anamnese-feld-label">${feld.label}${!isMulti ? ' <span class="anamnese-feld-hint">(eines wählen)</span>' : ''}</div>
         <div class="anamnese-chips">
-          ${feld.optionen.map(opt => `
-            <div class="anamnese-chip ${anamnese.includes(opt.id) ? 'active' : ''}"
+          ${feld.optionen.map(opt => {
+            const isHochGewichtet = (opt.gewicht || 0) >= 2;
+            const scrMatch = scrContext.matchedItems.has(opt.id);
+            const badges = [];
+            if (isHochGewichtet) badges.push('<span class="anamnese-gewicht-badge" title="Hohes Risiko-Gewicht">⚠️</span>');
+            if (scrMatch) badges.push('<span class="anamnese-scr-badge" title="Passt zum Screening">📊</span>');
+            return `
+            <div class="anamnese-chip ${anamnese.includes(opt.id) ? 'active' : ''} ${isHochGewichtet ? 'anamnese-wichtig' : ''} ${scrMatch ? 'anamnese-scr-match' : ''}"
                  style="--chip-color:${kat.farbe}"
                  onclick="toggleAnamneseItem('${opt.id}', '${feld.id}', '${feld.typ}')"
-                 title="${opt.evidenz || ''}">
-              ${opt.label}
-            </div>
-          `).join('')}
+                 title="${opt.evidenz || ''}${isHochGewichtet ? ' · ⚠️ Hohes Gewicht' : ''}${scrMatch ? ' · 📊 Screening-Match' : ''}">
+              ${opt.label}${badges.length > 0 ? ' ' + badges.join('') : ''}
+            </div>`;
+          }).join('')}
         </div>
       </div>
     `;
@@ -3046,6 +3093,46 @@ function renderHypothesen(hypothesen) {
 
     const daten = h._ausloesendeDaten || [];
 
+    // Screening-Score-Badges: erkennen und anreichern
+    const screeningBadges = [];
+    const textDaten = [];
+    daten.forEach(d => {
+      const m = d.match(/^Screening\s+(.+?):\s*(\d+)\/(\d+)\s*\(Cutoff\s*(\d+)\)/i);
+      if (m) {
+        const [, label, score, max, cutoff] = m;
+        const pct = Math.round(((+score) / (+max)) * 100);
+        const ueber = +score - +cutoff;
+        const farbe = ueber >= 3 ? '#DC2626' : ueber >= 1 ? '#F59E0B' : '#6B7280';
+        screeningBadges.push(`<span style="display:inline-flex;align-items:center;gap:3px;background:${farbe}11;border:1px solid ${farbe}44;color:${farbe};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;" title="${label}: ${score}/${max} (Cutoff ${cutoff}, +${ueber})">📊 ${label}: ${score}/${max} <span style="font-size:9px;opacity:.8;">(Cut ${cutoff})</span></span>`);
+      } else {
+        textDaten.push(d);
+      }
+    });
+
+    // Quick-Actions bestimmen
+    const quickActions = [];
+    // 5P übernehmen
+    const p5Ziel = h.typ === 'schutz' ? 'protective' : h.typ === 'differenzial' ? 'presenting' : 'predisposing';
+    quickActions.push(`<button class="hypo-quick-btn" onclick="event.stopPropagation();quickHypo5P('${h.id}','${p5Ziel}')" title="In 5P-Fallformulierung übernehmen">→ 5P</button>`);
+    // Fachkraft-Modul (wenn wiki_ids vorhanden)
+    if (h.wiki_ids && h.wiki_ids.length > 0) {
+      const fkLinks = [];
+      h.wiki_ids.forEach(wId => {
+        const wiki = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.find(a => a.id === wId) : null;
+        if (!wiki) return;
+        const themenIds = wiki.themen_ids || [];
+        const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
+        if (fkTid) fkLinks.push({ datei: FACHKRAFT_MODULE_DATEIEN[fkTid], label: wiki.titel });
+      });
+      if (fkLinks.length > 0) {
+        quickActions.push(`<button class="hypo-quick-btn hypo-quick-fk" onclick="event.stopPropagation();window.open('fachkraft-module/${fkLinks[0].datei}','_blank')" title="Fachkraft-Modul: ${fkLinks[0].label}">🎓 Modul</button>`);
+      }
+    }
+    // Abklärung empfehlen (bei handlung oder empfehlung mit "abklär" / "KJP" / "fachärzt")
+    if (h.empfehlung && /abklär|KJP|fachärzt|psychiatr/i.test(h.empfehlung)) {
+      quickActions.push(`<button class="hypo-quick-btn hypo-quick-warn" onclick="event.stopPropagation();quickHypoAbklaerung('${h.id}')" title="Abklärungsempfehlung in SOAP-Notiz übernehmen">⚕️ Abklärung</button>`);
+    }
+
     // Dynamische Verlaufs-Info
     let verlaufHtml = '';
     if (h._dynamischHochgestuft) {
@@ -3074,7 +3161,8 @@ function renderHypothesen(hypothesen) {
           ${h._konfidenz != null ? `<span class="hypothese-konfidenz" title="Konfidenz: ${h._konfidenz}% — basierend auf Datenpunkten, Verlauf und Screening">${h._konfidenz}%</span>` : ''}
           <span class="hypothese-badge" style="background:${badgeBg};color:${badgeText}">${staerkeLabel}</span>
         </div>
-        ${daten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${daten.join(' · ')}</div>` : ''}
+        ${screeningBadges.length > 0 ? `<div class="hypothese-screening-scores" style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px;">${screeningBadges.join('')}</div>` : ''}
+        ${textDaten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${textDaten.join(' · ')}</div>` : ''}
         <details class="hypothese-details">
           <summary>Erklärung & Evidenz</summary>
           <div class="hypothese-details-body">
@@ -3102,6 +3190,7 @@ function renderHypothesen(hypothesen) {
             </div>
           </div>
         ` : ''}
+        ${quickActions.length > 0 ? `<div class="hypo-quick-actions" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;padding-top:6px;border-top:1px solid #F1F5F9;">${quickActions.join('')}</div>` : ''}
       </div>
     `;
   }
@@ -5498,6 +5587,69 @@ function transferHypothesen5P() {
   showToast(`${count} Hypothese${count !== 1 ? 'n' : ''} in 5P-Analyse übernommen`, 'success');
 }
 
+// Quick-Action: Einzelne Hypothese direkt in 5P übernehmen
+function quickHypo5P(hypoId, zielFeld) {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const regel = HYPOTHESEN_REGELN.find(r => r.id === hypoId);
+  if (!regel) return;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) ff = DB.createFallformulierung(sid);
+  if (!ff[zielFeld]) ff[zielFeld] = [];
+  const text = regel.titel;
+  if (ff[zielFeld].includes(text)) {
+    showToast(`"${text}" ist bereits in 5P (${zielFeld})`, 'info');
+    return;
+  }
+  ff[zielFeld].push(text);
+  DB.saveFallformulierung(ff);
+  markDirty();
+  showToast(`✓ "${text}" → 5P ${zielFeld.charAt(0).toUpperCase() + zielFeld.slice(1)}`, 'success');
+}
+
+// Quick-Action: Abklärungsempfehlung anzeigen
+function quickHypoAbklaerung(hypoId) {
+  const regel = HYPOTHESEN_REGELN.find(r => r.id === hypoId);
+  if (!regel || !regel.empfehlung) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'hypo-abklaerung-modal';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <span>⚕️</span>
+        <span>Abklärungsempfehlung</span>
+        <button class="modal-close" onclick="document.getElementById('hypo-abklaerung-modal').remove()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-weight:600;margin-bottom:8px;">${regel.titel}</p>
+        <p style="font-size:13px;line-height:1.6;">${regel.empfehlung}</p>
+        ${regel.icd10 && regel.icd10.length > 0 ? `<p style="margin-top:8px;font-size:12px;color:var(--text-muted);">ICD-10: ${regel.icd10.join(', ')}</p>` : ''}
+        <div style="margin-top:12px;padding:10px;background:#FEF3C7;border-radius:8px;font-size:12px;">
+          <strong>📋 Nächster Schritt:</strong> Diese Empfehlung in die nächste SOAP-Notiz (Plan) übernehmen und mit der Leitung besprechen.
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;padding:12px;">
+        <button class="btn btn-secondary" onclick="document.getElementById('hypo-abklaerung-modal').remove()">Schliessen</button>
+        <button class="btn btn-primary" onclick="quickCopyAbklaerung('${hypoId}')">📋 Text kopieren</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function quickCopyAbklaerung(hypoId) {
+  const regel = HYPOTHESEN_REGELN.find(r => r.id === hypoId);
+  if (!regel) return;
+  const text = `Abklärungsempfehlung (${regel.titel}): ${regel.empfehlung}${regel.icd10 ? ' [' + regel.icd10.join(', ') + ']' : ''}`;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Empfehlung in Zwischenablage kopiert', 'success');
+    document.getElementById('hypo-abklaerung-modal')?.remove();
+  }).catch(() => {
+    showToast('Kopieren fehlgeschlagen — bitte manuell markieren', 'warning');
+  });
+}
+
 // ---- DASHBOARD HYPOTHESEN — Kompakte Übersicht ----
 function renderDashboardHypothesen() {
   const container = document.getElementById('dashboard-hypothesen-widget');
@@ -7715,6 +7867,36 @@ function navigate5PSource(el) {
   }
 }
 
+// Alle pending 5P-Vorschläge (inkl. Hypothesen) auf einmal übernehmen
+function autoAcceptAll5PSuggestions() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  let ff = DB.getFallformulierung(sid);
+  if (!ff) ff = DB.createFallformulierung(sid);
+  const suggestions = gatherAutoSuggestions(sid);
+  let count = 0;
+  ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(key => {
+    if (!ff[key]) ff[key] = [];
+    const dismissed = (ff._dismissed && ff._dismissed[key]) || [];
+    (suggestions[key] || []).forEach(s => {
+      const isDuplicate = ff[key].some(e => e.includes(s.key) || e === s.text || (s.key && e.includes(s.key)));
+      const isDismissed = dismissed.includes(s.key);
+      if (!isDuplicate && !isDismissed) {
+        ff[key].push(s.text);
+        count++;
+      }
+    });
+  });
+  if (count > 0) {
+    DB.saveFallformulierung(ff);
+    markDirty();
+    renderFallformulierung();
+    showToast(`✓ ${count} Vorschläge in 5P übernommen — bitte prüfen und anpassen`, 'success');
+  } else {
+    showToast('Alle Vorschläge sind bereits in der 5P-Analyse enthalten', 'info');
+  }
+}
+
 function renderCollapsible(id, titel, content, open = false) {
   return `<details class="collapsible-panel" ${open ? 'open' : ''} id="panel-${id}">
     <summary class="collapsible-header">${titel}</summary>
@@ -7809,6 +7991,7 @@ function renderFallformulierung() {
       </div>
       <div style="display:flex;gap:8px;">
         ${typeof FIVEP_BEISPIEL_KOMPLETT !== 'undefined' ? `<button class="btn btn-secondary btn-sm" onclick="open5PBeispiel()">📖 Beispiel</button>` : ''}
+        ${ff ? `<button class="btn btn-secondary btn-sm" onclick="autoAcceptAll5PSuggestions()">⚡ Alle Vorschläge übernehmen</button>` : ''}
         ${ff ? `<button class="btn btn-secondary btn-sm" onclick="generate5PHypothese()">💡 Hypothese generieren</button>` : ''}
         ${ff ? `<button class="btn btn-secondary btn-sm" onclick="fivePToRoadmap()">🗺️ → Förderplan</button>` : ''}
         ${ff ? `<button class="btn btn-outline btn-sm" onclick="delete5P()">🗑</button>` : ''}
@@ -10396,9 +10579,130 @@ function renderScreeningErgebnis(scr) {
   renderScrRadarChart(scr);
   renderScrEmpfehlungen(scr);
   renderScrVerlauf(scr.schuelerId);
+  renderScrNaechsteSchritte(scr);
 
   // Tab reset
   showScrTab('risikoprofil');
+}
+
+// ── Nächster-Schritt-Wizard nach Screening-Abschluss ──
+function renderScrNaechsteSchritte(scr) {
+  const el = document.getElementById('scr-naechste-schritte');
+  if (!el) return;
+
+  const flagged = scr.flaggedAreas || [];
+  if (flagged.length === 0) {
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = 'block';
+
+  // Relevante Anamnese-Kategorien basierend auf flagged domains
+  const domainAnamneseMap = {
+    depression: ['psychische_gesundheit', 'verluste'],
+    angst: ['psychische_gesundheit', 'schule'],
+    trauma: ['trauma_gewalt', 'verluste', 'migration'],
+    adhs: ['schule', 'psychische_gesundheit'],
+    selbstverletzung: ['psychische_gesundheit', 'risikoverhalten'],
+    suizidalitaet: ['psychische_gesundheit', 'risikoverhalten', 'verluste'],
+    substanz: ['risikoverhalten', 'peers'],
+    essstoerung: ['psychische_gesundheit', 'koerper'],
+    soziale_isolation: ['peers', 'schule', 'migration'],
+    conduct: ['familie', 'peers', 'schule'],
+    bindung: ['familie', 'fruehe_kindheit', 'betreuungsgeschichte'],
+    schlaf: ['psychische_gesundheit', 'alltag'],
+    mobbing: ['peers', 'schule', 'digitale_medien'],
+  };
+
+  const relevanteAnamnese = new Set();
+  flagged.forEach(fId => {
+    (domainAnamneseMap[fId] || []).forEach(k => relevanteAnamnese.add(k));
+  });
+
+  // Hypothesen zählen
+  const hypothesen = generateHypothesen(scr.schuelerId);
+  const neueHypo = hypothesen.filter(h => h.ebene === 'dynamisch').length;
+
+  // Fachkraft-Module basierend auf flagged domains
+  const relevanteModule = [];
+  flagged.forEach(fId => {
+    const domain = SCREENING_DOMAINS.find(d => d.id === fId);
+    if (!domain) return;
+    if (typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined') {
+      const datei = FACHKRAFT_MODULE_DATEIEN[fId];
+      if (datei) relevanteModule.push({ label: domain.label, icon: domain.icon, datei });
+    }
+  });
+
+  // Krise erkannt?
+  const krisenDomains = flagged.filter(f => ['selbstverletzung', 'suizidalitaet', 'psychose'].includes(f));
+
+  el.innerHTML = `
+    <div class="card" style="margin-top:16px;border:2px solid #3B82F6;background:linear-gradient(135deg,#EFF6FF,#F8FAFC);">
+      <div class="card-header" style="background:#3B82F6;color:white;border-radius:8px 8px 0 0;">
+        <span>🧭</span>
+        <div class="card-title" style="color:white;">Nächste Schritte nach dem Screening</div>
+      </div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+          ${flagged.length} Bereich${flagged.length !== 1 ? 'e' : ''} auffällig — hier ist dein Fahrplan:
+        </p>
+
+        ${krisenDomains.length > 0 ? `
+        <div class="scr-wizard-step scr-wizard-krise" style="background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:12px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="font-size:18px;">🚨</span>
+            <strong style="color:#DC2626;">PRIORITÄT: Krisenprotokoll prüfen</strong>
+          </div>
+          <p style="font-size:12px;margin:0 0 8px;">Krisenrelevante Bereiche erkannt: ${krisenDomains.map(k => SCREENING_DOMAINS.find(d => d.id === k)?.label || k).join(', ')}</p>
+          <button class="btn btn-sm" style="background:#DC2626;color:white;border:none;" onclick="showProfilTab('risiko');showView('profil',APP.currentSchuelerId);">→ Risikocheck öffnen</button>
+        </div>` : ''}
+
+        <div class="scr-wizard-steps" style="display:flex;flex-direction:column;gap:8px;">
+          <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
+            <span class="scr-wizard-nr" style="background:#3B82F6;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">1</span>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:13px;">Anamnese vertiefen</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Relevante Kategorien: ${[...relevanteAnamnese].slice(0, 5).map(k => {
+                const kat = typeof ANAMNESE_KATEGORIEN !== 'undefined' ? ANAMNESE_KATEGORIEN.find(c => c.id === k) : null;
+                return kat ? kat.label : k;
+              }).join(', ')}</div>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="showProfilTab('info');showView('profil','${scr.schuelerId}');">Anamnese →</button>
+          </div>
+
+          <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
+            <span class="scr-wizard-nr" style="background:#8B5CF6;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">2</span>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:13px;">Hypothesen prüfen</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${hypothesen.length} Hypothesen generiert${neueHypo > 0 ? `, davon ${neueHypo} dynamisch (Screening + Anamnese)` : ''}</div>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="showProfilTab('hypothesen-tab');showView('profil','${scr.schuelerId}');">Hypothesen →</button>
+          </div>
+
+          ${relevanteModule.length > 0 ? `
+          <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
+            <span class="scr-wizard-nr" style="background:#059669;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">3</span>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:13px;">Fachkraft-Module lesen</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">
+                ${relevanteModule.slice(0, 4).map(m => `<span onclick="window.open('fachkraft-module/${m.datei}','_blank')" style="cursor:pointer;background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:2px 8px;border-radius:8px;font-size:11px;">${m.icon} ${m.label}</span>`).join('')}
+              </div>
+            </div>
+          </div>` : ''}
+
+          <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
+            <span class="scr-wizard-nr" style="background:#D97706;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${relevanteModule.length > 0 ? '4' : '3'}</span>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:13px;">Förderplan erstellen</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Screening-basierte Roadmap mit priorisierten Themen und Sitzungsvorschlägen</div>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="showProfilTab('roadmap');showView('profil','${scr.schuelerId}');">Roadmap →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function renderScrProfilChart(scr) {

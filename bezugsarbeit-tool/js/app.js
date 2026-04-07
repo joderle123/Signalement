@@ -144,6 +144,21 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(checkAutoBackupRecovery, 1000);
 });
 
+// ---- Dark Mode Toggle ----
+function toggleDarkMode() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('pathways_theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('dark-mode-btn');
+  if (btn) btn.textContent = isDark ? '🌙' : '☀️';
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('pathways_theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+
 // ---- Mobile Sidebar Toggle ----
 function toggleMobileSidebar() {
   const sidebar = document.getElementById('sidebar');
@@ -505,9 +520,59 @@ function renderProfil(schuelerId) {
   risikoEl.className = `risiko-indicator ${s.risiko || 'niedrig'}`;
   risikoEl.innerHTML = `<div class="risiko-badge risiko-${s.risiko || 'niedrig'}"></div> ${capitalize(s.risiko || 'niedrig')} Risiko`;
 
+  // Profil-Vollständigkeit
+  renderProfilCompleteness(s);
+
   // Aktiven Tab rendern (über Phasen-Navigation)
   const phase = getPhaseForTab(APP.currentProfilTab);
   showPhase(phase, APP.currentProfilTab);
+}
+
+function renderProfilCompleteness(s) {
+  const el = document.getElementById('profil-completeness');
+  if (!el) return;
+
+  const checks = [
+    { label: 'Stammdaten', done: !!(s.vorname && s.nachname && s.geburtsdatum) },
+    { label: 'Anamnese', done: (s.anamnese || []).length >= 3 },
+    { label: 'Screening', done: DB.getScreenings(s.id).some(sc => sc.abgeschlossen) },
+    { label: 'Stärken', done: !!(s.staerkenProfil && Object.keys(s.staerkenProfil.ratings || {}).length >= 3) },
+    { label: '5P-Analyse', done: (() => { const ff = DB.getFallformulierung(s.id); return ff && ['presenting','predisposing','precipitating','perpetuating','protective'].reduce((sum,k) => sum + (ff[k]||[]).length, 0) >= 3; })() },
+    { label: 'Förderplan', done: !!DB.getRoadmap(s.id) },
+    { label: 'Notizen', done: DB.getNotizen(s.id).length >= 1 },
+    { label: 'Wohlbefinden', done: DB.getWohlbefinden(s.id).length >= 1 },
+  ];
+
+  const done = checks.filter(c => c.done).length;
+  const total = checks.length;
+  const pct = Math.round(done / total * 100);
+  const radius = 24;
+  const circ = 2 * Math.PI * radius;
+  const offset = circ - (pct / 100) * circ;
+  const color = pct >= 80 ? '#22C55E' : pct >= 50 ? '#F59E0B' : '#EF4444';
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.querySelector('.completeness-details').style.display=this.querySelector('.completeness-details').style.display==='none'?'block':'none'" title="Profil-Vollständigkeit">
+      <svg width="58" height="58" viewBox="0 0 58 58">
+        <circle cx="29" cy="29" r="${radius}" fill="none" stroke="#E5E7EB" stroke-width="4"/>
+        <circle cx="29" cy="29" r="${radius}" fill="none" stroke="${color}" stroke-width="4"
+          stroke-dasharray="${circ}" stroke-dashoffset="${offset}"
+          stroke-linecap="round" transform="rotate(-90 29 29)"
+          style="transition:stroke-dashoffset 0.6s ease;"/>
+        <text x="29" y="29" text-anchor="middle" dominant-baseline="central"
+          font-size="13" font-weight="700" fill="${color}">${pct}%</text>
+      </svg>
+      <div class="completeness-details" style="display:none;position:absolute;top:100%;left:0;z-index:100;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:200px;margin-top:4px;">
+        <div style="font-size:12px;font-weight:700;color:#1F2937;margin-bottom:8px;">Profil-Vollständigkeit</div>
+        ${checks.map(c => `
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;padding:3px 0;color:${c.done ? '#22C55E' : '#9CA3AF'};">
+            <span>${c.done ? '✓' : '○'}</span>
+            <span style="color:${c.done ? '#374151' : '#9CA3AF'};">${c.label}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
 }
 
 // ============================================================
@@ -1557,6 +1622,81 @@ function toggleNotizModus(modus) {
     const d = document.getElementById('prot-datum');
     if (!d.value) d.value = new Date().toISOString().split('T')[0];
   }
+}
+
+// ---- SOAP-Vorlagen ----
+const SOAP_VORLAGEN = {
+  erstgespraech: {
+    subjektiv: '• Anlass der Vorstellung:\n• Aktuelle Situation aus Sicht des Jugendlichen:\n• Erwartungen an die Zusammenarbeit:\n• Bisherige Erfahrungen mit Beratung/Therapie:',
+    objektiv: '• Erster Eindruck (Erscheinung, Kontaktverhalten):\n• Emotionale Grundstimmung:\n• Kooperationsbereitschaft:\n• Sprache und Kommunikation:',
+    assessment: '• Vorläufige Einschätzung der Problemlage:\n• Risikobewertung (Selbst-/Fremdgefährdung):\n• Ressourcen und Schutzfaktoren:\n• Dringlichkeit:',
+    plan: '• Vereinbarte Frequenz der Sitzungen:\n• Screening durchführen: ☐\n• Anamnese vervollständigen: ☐\n• Nächster Termin:\n• Ggf. Überweisung an:',
+    setting: 'Einzelgespräch',
+  },
+  regulaer: {
+    subjektiv: '• Wie geht es dir seit letztem Mal?\n• Was ist seit der letzten Sitzung passiert?\n• Gibt es aktuelle Belastungen?\n• Was möchtest du heute besprechen?',
+    objektiv: '• Stimmung heute im Vergleich zur letzten Sitzung:\n• Beobachtetes Verhalten:\n• Reaktion auf Interventionen:\n• Nonverbale Signale:',
+    assessment: '• Fortschritt in Bezug auf Ziele:\n• Wirksamkeit der eingesetzten Methoden:\n• Veränderungen im Gesamtbild:\n• Anpassungsbedarf:',
+    plan: '• Vereinbarung für die Woche:\n• Hausaufgabe/Übung:\n• Thema nächste Sitzung:\n• Nächster Termin:',
+    setting: 'Einzelgespräch',
+  },
+  krise: {
+    subjektiv: '• Auslöser der Krise:\n• Aktuelle Gefühlslage:\n• Suizidalität abgeklärt: ☐ Ja ☐ Nein\n• Selbstverletzung: ☐ Ja ☐ Nein\n• Sicherheitsgefühl (0-10):',
+    objektiv: '• Affektlage (aufgelöst/dissoziiert/aggressiv/...):\n• Vitalzeichen (Zittern, Hyperventilation, ...):\n• Realitätsprüfung:\n• Ansprechbarkeit/Kooperation:',
+    assessment: '• Risikobewertung: ☐ Niedrig ☐ Mittel ☐ Hoch ☐ Akut\n• Stabilisierung erreicht: ☐ Ja ☐ Teilweise ☐ Nein\n• Auslösende Faktoren:\n• Schutzfaktoren vorhanden:',
+    plan: '• Sicherheitsplan erstellt/aktualisiert: ☐\n• Eltern/Erziehungsberechtigte informiert: ☐\n• Fachstelle kontaktiert: ☐\n• Engmaschiger Folgetermin:\n• Notfallnummern besprochen: ☐',
+    setting: 'Krisenintervention',
+  },
+  eltern: {
+    subjektiv: '• Anliegen der Eltern:\n• Beobachtungen zu Hause:\n• Sorgen und Wünsche:\n• Veränderungen seit letztem Gespräch:',
+    objektiv: '• Eltern-Kind-Dynamik:\n• Kooperationsbereitschaft der Eltern:\n• Übereinstimmung mit Sicht des Jugendlichen:\n• Familienressourcen:',
+    assessment: '• Einschätzung der familiären Situation:\n• Erziehungskompetenzen:\n• Unterstützungsbedarf:\n• Risiko- und Schutzfaktoren im Umfeld:',
+    plan: '• Vereinbarungen mit den Eltern:\n• Empfehlungen für zu Hause:\n• Nächstes Elterngespräch:\n• Ggf. Familienberatung empfohlen: ☐',
+    setting: 'Elterngespräch',
+  },
+  abschluss: {
+    subjektiv: '• Rückblick des Jugendlichen auf die Zusammenarbeit:\n• Was hat geholfen?\n• Was hätte besser sein können?\n• Wie fühlt sich der Abschluss an?',
+    objektiv: '• Veränderungen seit Beginn der Begleitung:\n• Erreichung der vereinbarten Ziele:\n• Aktuelle Stabilität:\n• Verbleibende Risikofaktoren:',
+    assessment: '• Gesamteinschätzung des Verlaufs:\n• Prognose:\n• Verbleibender Unterstützungsbedarf:\n• Empfehlung für weiterführende Maßnahmen:',
+    plan: '• Nachsorge-Vereinbarung:\n• Notfallplan bei Rückfall:\n• Übergabe an: ☐ Niemand ☐ Fachstelle ☐ Therapeut\n• Abschlussbericht erstellt: ☐',
+    setting: 'Einzelgespräch',
+  },
+  verlauf: {
+    subjektiv: '• Allgemeines Befinden:\n• Veränderungen bemerkt?\n• Zufriedenheit mit der Arbeit (0-10):',
+    objektiv: '• Vergleich mit Baseline-Screening:\n• Verhaltensbeobachtungen:\n• Wohlbefinden-Trend:',
+    assessment: '• Zielerreichung:\n• Anpassung der Ziele notwendig: ☐\n• Phase im Förderplan:\n• Wirksamkeit der Interventionen:',
+    plan: '• Ziele anpassen: ☐\n• Neue Themen aufnehmen: ☐\n• Re-Screening durchführen: ☐\n• Nächste Verlaufskontrolle in ___ Wochen',
+    setting: 'Einzelgespräch',
+  },
+};
+
+function applySoapVorlage(vorlageId) {
+  if (!vorlageId) return;
+  const v = SOAP_VORLAGEN[vorlageId];
+  if (!v) return;
+
+  const s = document.getElementById('prot-subjektiv');
+  const o = document.getElementById('prot-objektiv');
+  const a = document.getElementById('prot-assessment');
+  const p = document.getElementById('prot-plan');
+
+  // Only fill empty fields to not overwrite user input
+  if (s && !s.value.trim()) s.value = v.subjektiv;
+  if (o && !o.value.trim()) o.value = v.objektiv;
+  if (a && !a.value.trim()) a.value = v.assessment;
+  if (p && !p.value.trim()) p.value = v.plan;
+
+  // Set setting if specified
+  if (v.setting) {
+    const sel = document.getElementById('prot-setting');
+    if (sel) {
+      for (const opt of sel.options) {
+        if (opt.text === v.setting) { sel.value = opt.value; break; }
+      }
+    }
+  }
+
+  showToast(`Vorlage "${vorlageId}" geladen`, 'success');
 }
 
 function addProtokoll() {
@@ -3811,6 +3951,126 @@ function druckeProfilbericht(schuelerId) {
 // ============================================================
 // BACKUP / RESTORE
 // ============================================================
+function exportProfilPDF(schuelerId) {
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) return;
+
+  const notizen = DB.getNotizen(schuelerId).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const screenings = DB.getScreenings(schuelerId).filter(sc => sc.abgeschlossen).sort((a, b) => b.datum.localeCompare(a.datum));
+  const ff = DB.getFallformulierung(schuelerId);
+  const roadmap = DB.getRoadmap(schuelerId);
+  const wb = DB.getWohlbefinden(schuelerId).sort((a, b) => a.datum.localeCompare(b.datum));
+  const profil = s.staerkenProfil || {};
+
+  const sec = (title, content) => content ? `<div class="sec"><div class="sec-t">${title}</div>${content}</div>` : '';
+
+  // 5P Section
+  let fivePHtml = '';
+  if (ff) {
+    const pDefs = [
+      { key: 'presenting', label: 'Presenting', color: '#EF4444' },
+      { key: 'predisposing', label: 'Predisposing', color: '#F97316' },
+      { key: 'precipitating', label: 'Precipitating', color: '#EAB308' },
+      { key: 'perpetuating', label: 'Perpetuating', color: '#3B82F6' },
+      { key: 'protective', label: 'Protective', color: '#22C55E' },
+    ];
+    fivePHtml = pDefs.map(p => {
+      const items = ff[p.key] || [];
+      if (items.length === 0) return '';
+      return `<div style="margin-bottom:8px;"><strong style="color:${p.color};">${p.label}:</strong> ${items.map(i => `<span class="tag" style="border-color:${p.color}30;color:${p.color};">${escapeHtml(i)}</span>`).join(' ')}</div>`;
+    }).join('');
+    if (ff.hypothese) {
+      fivePHtml += `<div style="margin-top:8px;padding:8px 10px;background:#F9FAFB;border-radius:6px;font-size:10px;font-style:italic;white-space:pre-wrap;">${escapeHtml(ff.hypothese)}</div>`;
+    }
+  }
+
+  // Screening
+  let scrHtml = '';
+  if (screenings.length > 0) {
+    const scr = screenings[0];
+    const flagged = scr.flaggedAreas || [];
+    scrHtml = `<div>Datum: ${formatDatum(scr.datum)} · ${flagged.length} auffällige Bereiche</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${flagged.map(fId => {
+        const d = SCREENING_DOMAINS.find(dd => dd.id === fId);
+        return d ? `<span class="tag">${d.icon} ${d.label} (${scr.scores[d.id]||0})</span>` : '';
+      }).join('')}</div>`;
+  }
+
+  // Stärken
+  const ratings = profil.ratings || {};
+  const ratedDims = (typeof STAERKEN_DIMENSIONEN !== 'undefined' ? STAERKEN_DIMENSIONEN : []).filter(d => (ratings[d.id] || 0) > 0);
+  let staerkenHtml = ratedDims.length > 0 ? `<div style="display:flex;flex-wrap:wrap;gap:4px;">${ratedDims.sort((a,b) => ratings[b.id]-ratings[a.id]).map(d =>
+    `<span class="tag">${d.icon} ${d.label}: ${ratings[d.id]}/10</span>`).join('')}</div>` : '';
+
+  // Roadmap
+  let roadmapHtml = '';
+  if (roadmap && roadmap.phasen) {
+    roadmapHtml = roadmap.phasen.filter(p => p.themen.length > 0 || p.status !== 'offen').map(p => {
+      const pDef = ROADMAP_PHASEN.find(rp => rp.nr === p.nr);
+      return `<div style="margin-bottom:4px;"><strong>${pDef ? pDef.label : 'Phase ' + p.nr}:</strong> ${p.status} ${p.themen.length > 0 ? '(' + p.themen.join(', ') + ')' : ''}</div>`;
+    }).join('');
+  }
+
+  // Notizen (letzte 10)
+  const notizenHtml = notizen.slice(0, 10).map(n => {
+    const kat = n.kategorie === 'session' ? '💬' : n.kategorie === 'fortschritt' ? '📈' : n.kategorie === 'krise' ? '🚨' : '📝';
+    return `<div style="padding:6px 0;border-bottom:1px solid #eee;font-size:10px;">
+      <strong>${kat} ${formatDatum(n.datum)}</strong> — ${escapeHtml((n.inhalt || '').substring(0, 200))}${(n.inhalt||'').length > 200 ? '...' : ''}
+    </div>`;
+  }).join('');
+
+  // Wohlbefinden
+  let wbHtml = '';
+  if (wb.length > 0) {
+    wbHtml = `<div style="display:flex;gap:8px;flex-wrap:wrap;">${wb.slice(-8).map(w =>
+      `<span class="tag">${formatDatum(w.datum)}: ${w.gesamt || '—'}/10</span>`
+    ).join('')}</div>`;
+  }
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
+    <title>Fallbericht — ${s.vorname} ${s.nachname}</title>
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box;}
+      body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#1F2937;padding:20mm 18mm;font-size:11px;line-height:1.5;}
+      h1{font-size:18px;color:#1e3a5f;margin-bottom:2px;}
+      .meta{font-size:10px;color:#6B7280;}
+      .header{display:flex;align-items:center;gap:14px;border-bottom:2px solid #1e3a5f;padding-bottom:10px;margin-bottom:16px;}
+      .avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#1e3a5f,#3A7AB8);display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:700;flex-shrink:0;}
+      .sec{margin-bottom:14px;}
+      .sec-t{font-size:12px;font-weight:700;color:#1e3a5f;border-bottom:1px solid #E5E7EB;padding-bottom:3px;margin-bottom:6px;}
+      .tag{display:inline-block;padding:2px 7px;border:1px solid #ddd;border-radius:10px;font-size:9px;margin:1px;}
+      .footer{text-align:center;font-size:8px;color:#9CA3AF;border-top:1px solid #E5E7EB;padding-top:8px;margin-top:20px;}
+      .no-print{text-align:center;margin-bottom:16px;}
+      @media print{.no-print{display:none;}body{padding:15mm;}}
+    </style>
+  </head><body>
+    <div class="no-print">
+      <button onclick="window.print()" style="padding:10px 24px;background:#1e3a5f;color:white;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">📄 Als PDF speichern (Drucker → "Als PDF speichern" wählen)</button>
+    </div>
+    <div class="header">
+      <div class="avatar">${getInitials(s.vorname, s.nachname)}</div>
+      <div>
+        <h1>Fallbericht — ${s.vorname} ${s.nachname}</h1>
+        <div class="meta">Klasse: ${s.klasse||'—'} · ${alter(s.geburtsdatum)} · Risiko: ${capitalize(s.risiko||'niedrig')} · Erstellt: ${formatDatum(new Date().toISOString().split('T')[0])}</div>
+      </div>
+    </div>
+    ${sec('🔍 Screening', scrHtml)}
+    ${sec('🧩 5P-Fallformulierung', fivePHtml)}
+    ${sec('💪 Stärken & Ressourcen', staerkenHtml)}
+    ${sec('🗺️ Förderplan', roadmapHtml)}
+    ${sec('😊 Wohlbefinden-Verlauf', wbHtml)}
+    ${sec('📋 Sitzungsnotizen (letzte 10)', notizenHtml)}
+    <div class="footer">Vertraulich · Pathways · ${new Date().toLocaleDateString('de-DE')} ${new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</div>
+  </body></html>`;
+
+  const win = window.open('', '_blank');
+  if (!win) { showToast('Pop-up blockiert — bitte Pop-ups erlauben', 'error'); return; }
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 800);
+}
+
 function exportDaten() {
   const daten = {
     version: 3,

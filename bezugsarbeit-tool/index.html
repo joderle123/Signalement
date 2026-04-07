@@ -66,9 +66,10 @@
     <div class="schueler-liste" id="schueler-sidebar-liste"></div>
   </div>
 
-  <div class="sidebar-footer">
+  <div class="sidebar-footer" style="display:flex;align-items:center;gap:6px;justify-content:center;">
+    <button id="dark-mode-btn" onclick="toggleDarkMode()" style="background:none;border:none;cursor:pointer;font-size:16px;padding:2px;" title="Dark Mode">🌙</button>
     <span id="save-indicator" style="font-size:11px;color:#22C55E;">✓ Gespeichert</span>
-    <span style="opacity:0.5;">·</span> Pathways v2.0 · by Joey Guedes
+    <span style="opacity:0.5;">·</span> Pathways v2.0
   </div>
 </aside>
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
@@ -116,9 +117,11 @@
           <div id="profil-risiko" class="risiko-indicator niedrig"></div>
         </div>
       </div>
+      <div id="profil-completeness" class="profil-completeness"></div>
       <div class="profil-actions">
         <button class="btn btn-secondary btn-sm" onclick="openSchuelerModal(APP.currentSchuelerId)">✏️ Bearbeiten</button>
-        <button class="btn btn-secondary btn-sm" onclick="druckeProfilbericht(APP.currentSchuelerId)">🖨️ Bericht drucken</button>
+        <button class="btn btn-secondary btn-sm" onclick="druckeProfilbericht(APP.currentSchuelerId)">🖨️ Drucken</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportProfilPDF(APP.currentSchuelerId)">📄 PDF</button>
         <button class="btn btn-secondary btn-sm" onclick="showView('home')">← Zurück</button>
         <button class="btn btn-danger btn-sm" onclick="deleteSchueler(APP.currentSchuelerId)">🗑 Löschen</button>
       </div>
@@ -382,8 +385,20 @@
             </select>
           </div>
 
-          <!-- SOAP-Felder mit Beispiel-Buttons -->
-          <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+          <!-- Vorlagen + SOAP-Felder -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:12px;color:#6B7280;">📝 Vorlage:</span>
+              <select id="soap-vorlage" onchange="applySoapVorlage(this.value)" style="padding:4px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:12px;cursor:pointer;color:#374151;">
+                <option value="">— Leer —</option>
+                <option value="erstgespraech">Erstgespräch</option>
+                <option value="regulaer">Reguläre Sitzung</option>
+                <option value="krise">Krisenintervention</option>
+                <option value="eltern">Elterngespräch</option>
+                <option value="abschluss">Abschlussgespräch</option>
+                <option value="verlauf">Verlaufskontrolle</option>
+              </select>
+            </div>
             <button onclick="showToolLegitimation('soap')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist SOAP?</button>
           </div>
           <div class="protokoll-soap">

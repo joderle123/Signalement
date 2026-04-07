@@ -115,6 +115,11 @@
           <div class="profil-meta-item">🎂 <span id="profil-alter"></span></div>
           <div class="profil-meta-item">📅 <span id="profil-seit"></span></div>
           <div id="profil-risiko" class="risiko-indicator niedrig"></div>
+          <select id="profil-status" onchange="updateSchuelerStatus(this.value)" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid #D1D5DB;background:#fff;cursor:pointer;margin-left:4px;">
+            <option value="aktiv">Aktiv</option>
+            <option value="pausiert">Pausiert</option>
+            <option value="abgeschlossen">Abgeschlossen</option>
+          </select>
         </div>
       </div>
       <div id="profil-completeness" class="profil-completeness"></div>
@@ -154,6 +159,9 @@
 
         <!-- Quick-Entry: Akutes Thema -->
         <div id="quick-entry-dashboard"></div>
+
+        <!-- Intake-Fortschritt -->
+        <div id="intake-progress-widget"></div>
 
         <!-- Kompakte Zusammenfassung -->
         <div id="dashboard-summary-widget"></div>
@@ -501,6 +509,10 @@
               </div>
               <div id="soap-sicherheitsplan-pflicht" style="display:none;margin-top:10px;padding:10px;background:#7F1D1D10;border:2px solid #7F1D1D;border-radius:8px;">
                 <div style="font-size:12px;font-weight:700;color:#7F1D1D;">🚨 Sicherheitsplan PFLICHT bei Stufe 3+</div>
+                <div style="font-size:11px;color:#7F1D1D;margin-top:6px;padding:6px 8px;background:#FEF2F2;border-radius:6px;line-height:1.5;">
+                  Sicherheitsplan mit dem Arbeitsblatt <strong>«Mein Sicherheitsplan»</strong> (Stanley &amp; Brown, 6 Schritte) ausfüllen und in der Akte dokumentieren.
+                  <br><a href="arbeitsblaetter/krisenplan.html" target="_blank" style="color:#7F1D1D;font-weight:600;text-decoration:underline;cursor:pointer;">Arbeitsblatt «Mein Sicherheitsplan» öffnen</a>
+                </div>
                 <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;cursor:pointer;">
                   <input type="checkbox" id="soap-sicherheitsplan-check">
                   Sicherheitsplan wurde besprochen und dokumentiert

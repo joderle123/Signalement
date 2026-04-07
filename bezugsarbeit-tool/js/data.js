@@ -1864,6 +1864,8 @@ const SCREENING_DOMAINS = [
     icon: '🧩',
     cutoff: 6,
     handlung: 'abklaerung',
+    instrument: 'AQ-10 (Autism Spectrum Quotient)',
+    cutoffQuelle: 'Allison et al. 2012',
     ueberweisungAn: 'CHL Autismus-Zentrum / ZNS-Letzebuerg (2843 41-1)',
     items: [
       'Hat große Schwierigkeiten mit sozialer Kommunikation',
@@ -1881,6 +1883,8 @@ const SCREENING_DOMAINS = [
     icon: '🏠',
     cutoff: 4,
     handlung: 'intervention',
+    instrument: 'SCARED — Trennungsangst-Subskala',
+    cutoffQuelle: 'Birmaher et al. 1999',
     items: [
       'Hat übermäßige Angst, von Bezugspersonen getrennt zu werden',
       'Weigert sich, alleine zu sein oder ohne Bezugspersonen zur Schule zu gehen',
@@ -1896,6 +1900,8 @@ const SCREENING_DOMAINS = [
     icon: '👊',
     cutoff: 4,
     handlung: 'intervention',
+    instrument: 'Olweus Bully/Victim Questionnaire adaptiert',
+    cutoffQuelle: 'Olweus 1996',
     items: [
       'Wird von Peers regelmäßig ausgegrenzt, gehänselt oder schikaniert',
       'Erlebt Cybermobbing (Nachrichten, Bilder, Gruppen)',
@@ -1911,6 +1917,8 @@ const SCREENING_DOMAINS = [
     icon: '👨‍👩‍👦',
     cutoff: 5,
     handlung: 'intervention',
+    instrument: 'ACE-Screener adaptiert (Adverse Childhood Experiences)',
+    cutoffQuelle: 'Felitti et al. 1998',
     items: [
       'Erlebt oder erlebte häusliche Gewalt (direkt oder als Zeuge)',
       'Hat einen Elternteil mit psychischer Erkrankung oder Suchtproblem',
@@ -1927,6 +1935,8 @@ const SCREENING_DOMAINS = [
     icon: '⚖️',
     cutoff: 4,
     handlung: 'intervention',
+    instrument: 'EDS (Everyday Discrimination Scale) adaptiert',
+    cutoffQuelle: 'Williams et al. 1997',
     items: [
       'Erlebt Diskriminierung aufgrund von Herkunft, Religion oder Aussehen',
       'Hat Schwierigkeiten mit der eigenen kulturellen oder religiösen Identität',
@@ -1942,6 +1952,8 @@ const SCREENING_DOMAINS = [
     icon: '🏝️',
     cutoff: 4,
     handlung: 'intervention',
+    instrument: 'UCLA Loneliness Scale (Kurzversion)',
+    cutoffQuelle: 'Russell 1996',
     items: [
       'Hat keine oder kaum Freundschaften',
       'Verbringt die meiste Freizeit allein (ohne bewusste Wahl)',
@@ -1992,6 +2004,8 @@ const SCREENING_DOMAINS = [
     icon: '🫀',
     cutoff: 5,
     handlung: 'intervention',
+    instrument: 'PHQ-15 (Patient Health Questionnaire — Somatische Symptome)',
+    cutoffQuelle: 'Kroenke et al. 2002',
     items: [
       'Hat häufig körperliche Beschwerden ohne medizinische Ursache (Bauch, Kopf)',
       'Die körperlichen Beschwerden treten besonders in Stresssituationen auf',
@@ -2025,6 +2039,8 @@ const SCREENING_DOMAINS = [
     icon: '💪',
     cutoff: 0,
     handlung: 'beobachtung',
+    instrument: 'CD-RISC-10 (Connor-Davidson Resilience Scale)',
+    cutoffQuelle: 'Campbell-Sills & Stein 2007',
     invertiert: true, // Höherer Score = besser (Ressourcen)
     items: [
       'Hat mindestens eine stabile Vertrauensperson (Familie oder Peers)',

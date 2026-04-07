@@ -768,7 +768,7 @@ function renderBibliothek() {
     });
   }
 
-  // ── Ebenen-Zuordnung ──
+  // ── Ebenen-Zuordnung + Evidenz-Level ──
   allItems.forEach(item => {
     if (item.typ === 'arbeitsblatt' || item.typ === 'intervention') {
       item.ebene = 'praxis';
@@ -777,12 +777,30 @@ function renderBibliothek() {
     } else {
       item.ebene = 'fachwissen'; // fachkraft + wiki
     }
+
+    // Evidenz-Level zuweisen (1-3 Sterne)
+    // 3 = evidenzbasiert/manualisiert, 2 = praxisbewährt, 1 = ergänzend
+    if (item.typ === 'therapie') item.evidenz = 3;
+    else if (item.typ === 'fachkraft') item.evidenz = 3;
+    else if (item.typ === 'wiki') item.evidenz = 2;
+    else if (item.typ === 'intervention') item.evidenz = 2;
+    else item.evidenz = 1;
   });
+
+  // ── Favoriten laden ──
+  const favKey = 'pathways_bibliothek_favoriten';
+  let favoriten = [];
+  try { favoriten = JSON.parse(localStorage.getItem(favKey) || '[]'); } catch(e) { favoriten = []; }
+
+  // Favoriten-Status setzen
+  allItems.forEach(item => { item.favorit = favoriten.includes(item.id); });
 
   // ── Filtern ──
   const q = bibliothekSuche.toLowerCase().trim();
   const filtered = allItems.filter(item => {
-    if (bibliothekFilter !== 'alle') {
+    if (bibliothekFilter === 'favoriten') {
+      if (!item.favorit) return false;
+    } else if (bibliothekFilter !== 'alle') {
       // Support both old typ-based and new ebene-based filtering
       if (item.ebene !== bibliothekFilter && item.typ !== bibliothekFilter) return false;
     }
@@ -792,6 +810,9 @@ function renderBibliothek() {
     }
     return true;
   });
+
+  // Favoriten zuerst sortieren
+  filtered.sort((a, b) => (b.favorit ? 1 : 0) - (a.favorit ? 1 : 0));
 
   // ── Typ-Konfiguration ──
   const typConfig = {
@@ -830,11 +851,15 @@ function renderBibliothek() {
         onfocus="this.style.borderColor='#3B82F6'" onblur="this.style.borderColor='#E5E7EB'">
     </div>
 
-    <!-- 3-Ebenen-Filter -->
+    <!-- 3-Ebenen-Filter + Favoriten -->
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
       <button onclick="bibliothekFilter='alle';renderBibliothek()"
         style="padding:8px 18px;border-radius:20px;border:2px solid ${bibliothekFilter === 'alle' ? '#6C5CE7' : '#E5E7EB'};background:${bibliothekFilter === 'alle' ? '#6C5CE7' : '#fff'};color:${bibliothekFilter === 'alle' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
         Alle <span style="opacity:0.7;">${totalCount}</span>
+      </button>
+      <button onclick="bibliothekFilter='favoriten';renderBibliothek()"
+        style="padding:8px 18px;border-radius:20px;border:2px solid ${bibliothekFilter === 'favoriten' ? '#F59E0B' : '#E5E7EB'};background:${bibliothekFilter === 'favoriten' ? '#F59E0B' : '#fff'};color:${bibliothekFilter === 'favoriten' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+        ⭐ Favoriten <span style="opacity:0.7;">${favoriten.length}</span>
       </button>
       ${Object.entries(ebenenConfig).map(([ebene, cfg]) => {
         const count = ebeneCounts[ebene] || 0;
@@ -897,20 +922,33 @@ function renderBibliothekKarte(item, cfg) {
   const ebCfg = { praxis: { label: 'Praxis', icon: '🛠️' }, leitfaden: { label: 'Leitfaden', icon: '📋' }, fachwissen: { label: 'Fachwissen', icon: '🎓' } }[ebene];
   const fachpersonalBadge = item.typ === 'fachkraft' ? '<span style="font-size:9px;padding:2px 6px;border-radius:8px;background:#FEF3C7;color:#92400E;font-weight:600;margin-left:auto;">Fachpersonal</span>' : '';
 
+  // Evidenz-Sterne (1-3)
+  const evidenz = item.evidenz || 1;
+  const evidenzLabels = { 1: 'Ergänzend', 2: 'Praxisbewährt', 3: 'Evidenzbasiert' };
+  const sterne = '★'.repeat(evidenz) + '☆'.repeat(3 - evidenz);
+  const evidenzHtml = `<span style="font-size:10px;color:#F59E0B;" title="${evidenzLabels[evidenz]}">${sterne}</span>`;
+
+  // Favorit-Button
+  const favStar = item.favorit ? '⭐' : '☆';
+  const favBtnHtml = `<button onclick="event.stopPropagation();toggleBibliothekFavorit('${item.id}')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;line-height:1;" title="${item.favorit ? 'Favorit entfernen' : 'Als Favorit merken'}">${favStar}</button>`;
+
   return `
-    <div class="bibliothek-karte" style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:box-shadow 0.2s,transform 0.2s;cursor:default;border-top:3px solid ${cfg.farbe};"
+    <div class="bibliothek-karte" style="background:#fff;border:1px solid ${item.favorit ? '#FDE68A' : '#E5E7EB'};border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:box-shadow 0.2s,transform 0.2s;cursor:default;border-top:3px solid ${cfg.farbe};"
       onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';this.style.transform='translateY(-2px)'"
       onmouseout="this.style.boxShadow='none';this.style.transform='none'">
       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <span style="font-size:18px;">${item.icon || cfg.icon}</span>
         <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${cfg.bg};color:${cfg.farbe};font-weight:600;">${cfg.label}</span>
         <span style="font-size:9px;padding:2px 6px;border-radius:8px;background:#F3F4F6;color:#6B7280;">${ebCfg.icon} ${ebCfg.label}</span>
+        ${evidenzHtml}
         ${fachpersonalBadge}
+        <span style="margin-left:auto;">${favBtnHtml}</span>
       </div>
       <div style="font-weight:600;font-size:14px;color:#1F2937;line-height:1.3;">${item.label}</div>
       ${metaHtml}
-      <div style="margin-top:auto;padding-top:8px;">
+      <div style="margin-top:auto;padding-top:8px;display:flex;align-items:center;gap:8px;">
         ${actionHtml}
+        <span style="font-size:10px;color:#9CA3AF;margin-left:auto;">${evidenzLabels[evidenz]}</span>
       </div>
     </div>
   `;
@@ -918,6 +956,21 @@ function renderBibliothekKarte(item, cfg) {
 
 function filterBibliothek(query) {
   bibliothekSuche = query;
+  renderBibliothek();
+}
+
+function toggleBibliothekFavorit(itemId) {
+  const favKey = 'pathways_bibliothek_favoriten';
+  let favoriten = [];
+  try { favoriten = JSON.parse(localStorage.getItem(favKey) || '[]'); } catch(e) { favoriten = []; }
+
+  const idx = favoriten.indexOf(itemId);
+  if (idx >= 0) {
+    favoriten.splice(idx, 1);
+  } else {
+    favoriten.push(itemId);
+  }
+  localStorage.setItem(favKey, JSON.stringify(favoriten));
   renderBibliothek();
 }
 
@@ -1729,17 +1782,26 @@ function renderNotizKarte(notiz) {
     metaLine = `<div style="font-size:11px;color:#9CA3AF;margin-top:4px;">${parts.join(' · ')}</div>`;
   }
 
+  // Safety-Flag: Keyword-Detection
+  const safetyKeywords = /suizid|selbstverletz|selbstmord|umbringen|sterben.*will|nicht.*leben|missbrauch|misshandlung|gewalt|vergewaltig|schlag|übergriff/i;
+  const inhaltText = (notiz.inhalt || '') + (soap ? [soap.subjektiv, soap.objektiv, soap.assessment, soap.plan].filter(Boolean).join(' ') : '');
+  const hatSafetyFlag = safetyKeywords.test(inhaltText);
+  const safetyBadge = hatSafetyFlag ? '<span style="font-size:11px;padding:1px 6px;border-radius:8px;background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;font-weight:600;">🚨 Safety</span>' : '';
+  const safetyBanner = hatSafetyFlag ? '<div style="padding:4px 8px;background:#FEF2F2;border:1px solid #FECACA;border-radius:4px;font-size:11px;color:#991B1B;margin-top:4px;">⚠️ Safety-relevanter Inhalt erkannt — <a href="#" onclick="showPhase(\'analyse\');setTimeout(()=>showSubTab(\'verlauf-tracker\'),100);return false;" style="color:#DC2626;font-weight:600;">Risiko-Check empfohlen</a></div>' : '';
+
   return `
-    <div class="notiz-karte-v2" style="border-left-color:${kat.farbe};">
+    <div class="notiz-karte-v2" style="border-left-color:${hatSafetyFlag ? '#DC2626' : kat.farbe};">
       <div class="notiz-karte-v2-header">
         <span class="notiz-badge" style="background:${kat.farbe}22;color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.label}</span>
         ${themaLink}
         ${srsBadge}
+        ${safetyBadge}
         <span class="notiz-datum" style="margin-left:auto;">${formatDatum(notiz.datum)}</span>
         <button class="notiz-delete" onclick="deleteNotiz('${notiz.id}')" style="margin-left:4px;">🗑</button>
       </div>
       ${hasSoap ? soapPreview : `<div class="notiz-inhalt" style="font-size:13px;line-height:1.5;color:#374151;margin-top:6px;">${escapeHtml(notiz.inhalt)}</div>`}
       ${metaLine}
+      ${safetyBanner}
     </div>`;
 }
 
@@ -3915,10 +3977,68 @@ function renderKalender() {
   const tageImMonat = new Date(jahr, monat + 1, 0).getDate();
 
   const heute = new Date();
+  const heuteStr = heute.toISOString().split('T')[0];
   const alleTermine = DB.getTermine();
   const sessionDates = getSessionDatesForKalender();
 
+  // Klinische Kalender-Features: Krisen-Daten und Fehltermine sammeln
+  const krisenDaten = new Set();
+  const fehlterminDaten = new Set();
+  const schueler = DB.getSchueler();
+
+  schueler.forEach(s => {
+    // Krisen-Daten: SOAP-Einträge mit Krise oder Risiko-rot-Wechsel
+    const protokolle = DB.getProtokolle(s.id);
+    protokolle.forEach(p => {
+      if (p.krise || p.cssrsSchweregrad >= 3) {
+        krisenDaten.add(p.datum);
+      }
+    });
+
+    // Risiko-Audit: rot-Wechsel-Daten
+    const risiko = DB.getRisiko(s.id);
+    risiko.forEach(r => {
+      if (r.wert === 'rot' && r.datum) krisenDaten.add(r.datum);
+    });
+  });
+
+  // Fehltermine: Geplante Termine in der Vergangenheit ohne zugehörige Sitzungsdokumentation
+  alleTermine.forEach(t => {
+    if (t.datum < heuteStr && t.schuelerId && (t.typ === 'sitzung' || t.typ === 'termin')) {
+      const hatSitzung = sessionDates[t.datum] && sessionDates[t.datum].some(s => s.schuelerId === t.schuelerId);
+      if (!hatSitzung) fehlterminDaten.add(t.datum);
+    }
+  });
+
+  // Risiko-Schüler: Warnung wenn kein Termin seit >2 Wochen
+  let risikoOhneTermin = [];
+  schueler.forEach(s => {
+    const risiko = DB.getRisiko(s.id);
+    const hatRot = risiko.some(r => r.wert === 'rot');
+    if (!hatRot) return;
+    const protokolle = DB.getProtokolle(s.id).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+    const letzteSitzung = protokolle.length > 0 ? new Date(protokolle[0].datum) : null;
+    const tage = letzteSitzung ? Math.floor((heute - letzteSitzung) / (1000 * 60 * 60 * 24)) : 999;
+    if (tage > 14) {
+      risikoOhneTermin.push({ name: s.vorname + ' ' + s.nachname, tage });
+    }
+  });
+
   let html = '';
+
+  // Risiko-Warnung: Schüler ohne Termin
+  if (risikoOhneTermin.length > 0) {
+    html = `<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:11px;">`;
+    html += `<div style="font-weight:600;color:#DC2626;margin-bottom:4px;">⚠️ Risiko-Schüler ohne Termin:</div>`;
+    risikoOhneTermin.forEach(r => {
+      html += `<div style="color:#7F1D1D;">• ${escapeHtml(r.name)} — kein Termin seit ${r.tage} Tagen</div>`;
+    });
+    html += '</div>';
+    const warnContainer = document.getElementById('kalender-risiko-warnung');
+    if (warnContainer) warnContainer.innerHTML = html;
+    html = '';
+  }
+
   // Leere Felder am Anfang
   for (let i = 0; i < startOffset; i++) {
     html += '<div class="kalender-tag leer"></div>';
@@ -3929,10 +4049,14 @@ function renderKalender() {
     const isHeute = heute.getFullYear() === jahr && heute.getMonth() === monat && heute.getDate() === tag;
     const termine = alleTermine.filter(t => t.datum === datumStr);
     const sessions = sessionDates[datumStr] || [];
+    const istKrise = krisenDaten.has(datumStr);
+    const istFehltermin = fehlterminDaten.has(datumStr);
+
+    const extraClasses = [isHeute ? 'heute' : '', istKrise ? 'krise-tag' : ''].filter(Boolean).join(' ');
 
     html += `
-      <div class="kalender-tag ${isHeute ? 'heute' : ''}" onclick="openTerminModal('${datumStr}')">
-        <div class="tag-nummer">${tag}</div>
+      <div class="kalender-tag ${extraClasses}" onclick="openTerminModal('${datumStr}')" ${istKrise ? 'style="background:#FEF2F2;border:1px solid #FECACA;"' : ''}>
+        <div class="tag-nummer">${tag}${istKrise ? ' <span title="Krisenereignis" style="color:#DC2626;">🔴</span>' : ''}${istFehltermin ? ' <span title="Fehltermin" style="color:#F59E0B;">⊘</span>' : ''}</div>
         <div class="tag-events">
           ${sessions.map(s =>
             `<div class="tag-event tag-event-session" style="background:#6366F1;" title="Sitzung: ${s.schuelerName}">📋 ${s.schuelerName.split(' ')[0] || 'Sitzung'}</div>`
@@ -5212,24 +5336,33 @@ function renderSafetyBanner(containerId) {
 function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
-  // Safety-Kaskade ganz oben
+
+  // === PRIORITÄTSBASIERTE WIDGET-REIHENFOLGE ===
+  // Stufe 1: Safety (nicht wegklickbar)
   renderSafetyBanner('safety-banner-dashboard');
-  // "Heute"-Ansicht: Nur das Wesentliche für den Arbeitstag
+
+  // Stufe 2: Risiko-Monitoring
   renderRisikoWidget();
+
+  // Stufe 3: Engagement-Warnung bei kritischem Status (Risiko-Schüler ohne Kontakt)
+  renderKontaktNachfassWidget();
+
+  // Stufe 4: Verlauf-Warnungen (Sudden-Change, Verschlechterung)
+  renderVerlaufWidget();
+
+  // Stufe 5: Klinische Planung
   renderSitzungsvorschlag();
   renderNaechsteSchritte();
   renderPhaseTransitionPrompt();
   renderRueckschrittAlert();
-  renderKontaktNachfassWidget();
-  renderVerlaufWidget();
+
+  // Stufe 6: Allgemeine Übersicht
   renderWohlbefinden();
   renderDashKalender();
   renderDashTodo();
   renderNotizbuch();
-  // Kompakte Zusammenfassung statt Informationsflut
   renderDashboardSummary();
   renderQuickEntry('quick-entry-dashboard');
-  // Hypothesen + Treatment-Response jetzt unter "Analyse"-Tab
 }
 
 // ---- HYPOTHESEN → 5P ÜBERTRAGUNG ----
@@ -8616,12 +8749,33 @@ function generateSCASBericht(s, name, notizen, scr, roadmap, ff, wb, heute) {
           <p>Letzte Kontakte: ${kontakte.slice(0, 3).map(k => `${k.kontaktperson} (${formatDatum(k.datum)}, ${(KONTAKT_ARTEN[k.art] || KONTAKT_ARTEN.telefon).label})`).join('; ')}</p>`;
       })()}
 
-      <h4>9. Empfehlung</h4>
+      <h4>9. Risikobewertung (Pflichtsektion)</h4>
+      <div style="border:2px solid #DC2626;border-radius:6px;padding:10px;margin-bottom:12px;">
+        ${(() => {
+          const risiko = DB.getRisiko(s.id).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+          const cssrsItems = RISIKO_ITEMS.filter(i => i.kategorie === 'cssrs');
+          const kindeswohlItems = RISIKO_ITEMS.filter(i => i.kategorie === 'kindeswohl');
+          if (risiko.length > 0) {
+            const letzter = risiko[0];
+            const cssrsRot = cssrsItems.filter(i => letzter.werte[i.id] === 'rot').map(i => i.label);
+            const kindeswohlAuffaellig = kindeswohlItems.filter(i => letzter.werte[i.id] !== 'gruen').map(i => i.label);
+            return `<p><strong>Suizidalitäts-Screening (C-SSRS):</strong> ${cssrsRot.length > 0 ? '⚠️ Auffällig: ' + cssrsRot.join(', ') : '✅ Keine akuten Hinweise'}</p>
+              <p><strong>Kindeswohl:</strong> ${kindeswohlAuffaellig.length > 0 ? '⚠️ ' + kindeswohlAuffaellig.join(', ') : '✅ Keine Hinweise'}</p>
+              <p style="font-size:11px;color:#6B7280;">Letzter Check: ${formatDatum(letzter.datum)}</p>`;
+          }
+          return '<p style="color:#DC2626;">⚠️ Kein Sicherheits-Check dokumentiert. Bitte vor Berichtversand durchführen.</p>';
+        })()}
+      </div>
+
+      <h4>10. Empfehlung</h4>
       <p><em>[Hier Empfehlung einfügen]</em></p>
 
       <div class="bericht-footer">
         <br><br>
         <p>_________________________<br>Bezugspädagoge/in</p>
+        <div style="margin-top:16px;padding:10px;border-top:2px solid #E5E7EB;font-size:10px;color:#9CA3AF;line-height:1.5;">
+          <strong>Haftungsausschluss:</strong> Dieser Bericht basiert auf pädagogischen Beobachtungen und standardisierten Screening-Instrumenten. Er ersetzt keine psychiatrische oder psychologische Diagnostik. Die Risikobewertung ist eine Momentaufnahme und erfordert kontinuierliche Überprüfung. Bei akuter Gefährdung sind die zuständigen Notdienste zu kontaktieren (CHL Kinder-/Jugendpsychiatrie: 4411-6100, Krisentelefon: 45 45 45). Vertraulich — nur für autorisierte Empfänger bestimmt.
+        </div>
       </div>
     </div>
   `;
@@ -8669,6 +8823,9 @@ function generateElternbrief(s, name, notizen, roadmap, wb, heute) {
 
       <p>Mit freundlichen Grüßen,<br>
       <em>Bezugspädagogisches Team</em></p>
+      <div style="margin-top:16px;padding:8px;border-top:1px solid #E5E7EB;font-size:9px;color:#9CA3AF;line-height:1.4;">
+        Dieser Brief basiert auf pädagogischen Beobachtungen und ersetzt keine ärztliche Diagnostik. Bei Fragen wenden Sie sich an das Bezugspädagogik-Team. Vertraulich.
+      </div>
     </div>
   `;
 }
@@ -8718,8 +8875,23 @@ function generateUebergabe(s, name, notizen, scr, roadmap, ff, wb, heute) {
         </div>
       `).join('') : '<p>Keine Sitzungsprotokolle vorhanden.</p>'}
 
+      <h4>Risiko-Einschätzung</h4>
+      ${(() => {
+        const risiko = DB.getRisiko(s.id).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+        if (risiko.length > 0) {
+          const letzter = risiko[0];
+          const maxStufe = Object.values(letzter.werte).includes('rot') ? '🔴 Handeln' : Object.values(letzter.werte).includes('gelb') ? '🟡 Beobachten' : '🟢 Unauffällig';
+          return `<p>Status: <strong>${maxStufe}</strong> (${formatDatum(letzter.datum)})</p>`;
+        }
+        return '<p style="color:#DC2626;">⚠️ Kein Sicherheits-Check dokumentiert.</p>';
+      })()}
+
       <h4>Wichtige Hinweise für die Übernahme</h4>
       <p><em>[Hier individuelle Hinweise einfügen]</em></p>
+
+      <div style="margin-top:16px;padding:8px;border-top:1px solid #E5E7EB;font-size:9px;color:#9CA3AF;line-height:1.4;">
+        <strong>Vertraulich — Nur für autorisierte Fachpersonen.</strong> Dieser Bericht basiert auf pädagogischen Beobachtungen und standardisierten Screening-Instrumenten. Er ersetzt keine psychiatrische/psychologische Diagnostik. Bei akuter Gefährdung: CHL KJP 4411-6100.
+      </div>
     </div>
   `;
 }
@@ -11213,10 +11385,38 @@ function renderGenogramm() {
   const erweitert = geno.filter(p => ['grossmutter','grossvater','tante-onkel'].includes(p.rolle));
   const andere = geno.filter(p => !eltern.includes(p) && !geschwister.includes(p) && !erweitert.includes(p));
 
+  // ── Risiko-Flagging: Automatische Warnungen ──
+  const genoWarnungen = [];
+  const hatMutter = geno.some(p => ['mutter', 'stiefmutter', 'pflegemutter'].includes(p.rolle));
+  const hatVater = geno.some(p => ['vater', 'stiefvater', 'pflegevater'].includes(p.rolle));
+  if (!hatMutter && !hatVater) {
+    genoWarnungen.push({ stufe: 'rot', text: 'Kein Elternteil im Genogramm erfasst — Abklärung Familiensituation empfohlen' });
+  } else if (!hatMutter || !hatVater) {
+    genoWarnungen.push({ stufe: 'gelb', text: 'Nur ein Elternteil erfasst — fehlender Elternteil klären' });
+  }
+
+  const konflikte = geno.filter(p => p.beziehung === 'konflikt');
+  const abbrueche = geno.filter(p => p.beziehung === 'abbruch');
+  if (konflikte.length + abbrueche.length === geno.length && geno.length >= 2) {
+    genoWarnungen.push({ stufe: 'rot', text: 'Alle Beziehungen sind konflikthaft oder abgebrochen — hohe familiäre Belastung' });
+  } else if (konflikte.length + abbrueche.length > geno.length / 2) {
+    genoWarnungen.push({ stufe: 'gelb', text: 'Mehrheit der Beziehungen belastet (' + (konflikte.length + abbrueche.length) + '/' + geno.length + ')' });
+  }
+
+  // Keyword-Detection in Notizen
+  const risikoKeywords = /psychisch|depression|sucht|alkohol|drogen|gewalt|missbrauch|misshandl|vernachläss|suizid|psychiatr/i;
+  geno.forEach(p => {
+    if (p.notiz && risikoKeywords.test(p.notiz)) {
+      genoWarnungen.push({ stufe: 'gelb', text: 'Risiko-Hinweis bei ' + p.name + ': "' + p.notiz.substring(0, 60) + '"', person: p.name });
+    }
+  });
+
   function personCard(p) {
     const bez = GENO_BEZ_STYLES[p.beziehung] || GENO_BEZ_STYLES.normal;
     const rolleLabel = GENO_ROLLEN_LABELS[p.rolle] || p.rolle;
+    const hatRisikoNotiz = p.notiz && risikoKeywords.test(p.notiz);
     return '<div style="background:#fff;border:' + bez.border + ';border-radius:10px;padding:8px 10px;min-width:100px;text-align:center;position:relative;">'
+      + (hatRisikoNotiz ? '<div style="position:absolute;top:-6px;left:-6px;font-size:14px;" title="Risiko-Hinweis in Notiz">⚠️</div>' : '')
       + '<div style="font-size:13px;font-weight:600;">' + escapeHtml(p.name) + '</div>'
       + '<div style="font-size:10px;color:#6B7280;">' + rolleLabel + '</div>'
       + '<div style="font-size:9px;color:' + bez.farbe + ';font-weight:600;margin-top:2px;">' + bez.label + '</div>'
@@ -11225,7 +11425,20 @@ function renderGenogramm() {
       + '</div>';
   }
 
-  let vHtml = '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">';
+  let vHtml = '';
+
+  // Risiko-Warnungen anzeigen
+  if (genoWarnungen.length > 0) {
+    const warnFarben = { rot: { bg: '#FEF2F2', border: '#FECACA', text: '#DC2626' }, gelb: { bg: '#FFFBEB', border: '#FDE68A', text: '#92400E' } };
+    vHtml += '<div style="margin-bottom:12px;">';
+    genoWarnungen.forEach(w => {
+      const f = warnFarben[w.stufe] || warnFarben.gelb;
+      vHtml += `<div style="background:${f.bg};border:1px solid ${f.border};border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:11px;color:${f.text};">${w.stufe === 'rot' ? '🔴' : '🟡'} ${w.text}</div>`;
+    });
+    vHtml += '</div>';
+  }
+
+  vHtml += '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">';
 
   if (erweitert.length > 0) {
     vHtml += '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;opacity:0.8;">'
@@ -12356,10 +12569,29 @@ function renderKontaktlog() {
   const kontakte = DB.getKontakte(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
   const geno = getGenogramm();
 
+  // Engagement-Score berechnen
+  const engagement = calculateEngagementScore(sid);
+  const engFarben = { gruen: '#22C55E', gelb: '#F59E0B', rot: '#EF4444' };
+  const engBg = { gruen: '#F0FDF4', gelb: '#FFFBEB', rot: '#FEF2F2' };
+
   let html = '<div class="section-header" style="margin-bottom:18px;">';
   html += '<h3 style="margin:0;font-size:18px;">📞 Kontaktlog — Bezugspersonen</h3>';
   html += '<p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Dokumentation aller Kontakte mit Eltern, Lehrpersonen und Bezugspersonen</p>';
   html += '</div>';
+
+  // Engagement-Score Anzeige
+  html += `<div class="card" style="margin-bottom:14px;border-left:4px solid ${engFarben[engagement.stufe]};background:${engBg[engagement.stufe]};">`;
+  html += '<div class="card-body" style="padding:10px 14px;">';
+  html += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">`;
+  html += `<div style="font-weight:700;font-size:13px;color:${engFarben[engagement.stufe]};">`;
+  html += engagement.stufe === 'gruen' ? '🟢' : engagement.stufe === 'gelb' ? '🟡' : '🔴';
+  html += ` Engagement: ${engagement.label}</div>`;
+  html += `<div style="font-size:11px;color:#6B7280;">${engagement.score}/100 Punkte</div>`;
+  html += '</div>';
+  engagement.details.forEach(d => {
+    html += `<div style="font-size:11px;color:#374151;padding:1px 0;">• ${escapeHtml(d)}</div>`;
+  });
+  html += '</div></div>';
 
   // Nachfass-Erinnerungen
   const heute = new Date().toISOString().split('T')[0];
@@ -12466,22 +12698,119 @@ function deleteKontaktEintrag(id) {
   showToast('Kontakt gelöscht');
 }
 
-// Dashboard: Kontakt-Nachfass-Widget
+// Engagement-Score Berechnung
+function calculateEngagementScore(schuelerId) {
+  const sid = schuelerId || APP.currentSchuelerId;
+  const kontakte = DB.getKontakte(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const termine = DB.getTermine().filter(t => t.schuelerId === sid);
+  const protokolle = DB.getProtokolle(sid);
+
+  const heute = new Date();
+  const result = { score: 0, stufe: 'gruen', label: 'Regelmässig', details: [] };
+
+  if (kontakte.length === 0 && termine.length === 0) {
+    result.score = 0; result.stufe = 'rot'; result.label = 'Kein Kontakt';
+    result.details.push('Keine Kontakte dokumentiert');
+    return result;
+  }
+
+  let punkte = 0;
+  const maxPunkte = 100;
+
+  // 1. Kontaktfrequenz (max 40 Punkte)
+  if (kontakte.length > 0) {
+    const letzterKontakt = new Date(kontakte[0].datum);
+    const tageSeither = Math.floor((heute - letzterKontakt) / (1000 * 60 * 60 * 24));
+    if (tageSeither <= 7) { punkte += 40; result.details.push('Letzter Kontakt: vor ' + tageSeither + ' Tagen'); }
+    else if (tageSeither <= 14) { punkte += 30; result.details.push('Letzter Kontakt: vor ' + tageSeither + ' Tagen'); }
+    else if (tageSeither <= 21) { punkte += 15; result.details.push('Letzter Kontakt: vor ' + tageSeither + ' Tagen — lückenhaft'); }
+    else { punkte += 0; result.details.push('Kein Kontakt seit ' + tageSeither + ' Tagen — kritisch'); }
+
+    // Kontakte in letzten 30 Tagen
+    const vor30 = new Date(heute); vor30.setDate(vor30.getDate() - 30);
+    const kontakte30 = kontakte.filter(k => new Date(k.datum) >= vor30).length;
+    if (kontakte30 >= 4) punkte += 10;
+    else if (kontakte30 >= 2) punkte += 5;
+  }
+
+  // 2. Vereinbarungs-Einhaltung (max 30 Punkte)
+  const mitVereinbarung = kontakte.filter(k => k.vereinbarungen && k.vereinbarungen.trim());
+  const mitNachfass = kontakte.filter(k => k.nachfassDatum);
+  const erledigteNachfass = mitNachfass.filter(k => {
+    // Prüfe ob ein Folgekontakt nach dem Nachfass-Datum existiert
+    return kontakte.some(f => f.id !== k.id && new Date(f.datum) >= new Date(k.nachfassDatum) && f.kontaktperson === k.kontaktperson);
+  });
+  if (mitNachfass.length > 0) {
+    const quote = erledigteNachfass.length / mitNachfass.length;
+    punkte += Math.round(quote * 30);
+    result.details.push('Nachfass-Quote: ' + Math.round(quote * 100) + '% (' + erledigteNachfass.length + '/' + mitNachfass.length + ')');
+  } else if (mitVereinbarung.length > 0) {
+    punkte += 15; // Vereinbarungen dokumentiert, aber kein Nachfass-Tracking
+  } else {
+    punkte += 10; // Basispunkte für vorhandene Kontakte
+  }
+
+  // 3. Terminwahrnehmung (max 20 Punkte)
+  if (protokolle.length > 0) {
+    const vor60 = new Date(heute); vor60.setDate(vor60.getDate() - 60);
+    const recentSessions = protokolle.filter(p => new Date(p.datum) >= vor60).length;
+    if (recentSessions >= 4) { punkte += 20; result.details.push(recentSessions + ' Sitzungen in 60 Tagen'); }
+    else if (recentSessions >= 2) { punkte += 12; result.details.push(recentSessions + ' Sitzungen in 60 Tagen'); }
+    else if (recentSessions >= 1) { punkte += 6; result.details.push(recentSessions + ' Sitzung in 60 Tagen — wenig'); }
+    else { result.details.push('Keine Sitzung in 60 Tagen'); }
+  }
+
+  result.score = Math.min(punkte, maxPunkte);
+
+  // Stufe bestimmen
+  if (result.score >= 60) { result.stufe = 'gruen'; result.label = 'Regelmässig'; }
+  else if (result.score >= 30) { result.stufe = 'gelb'; result.label = 'Lückenhaft'; }
+  else { result.stufe = 'rot'; result.label = 'Kritisch'; }
+
+  // Spezialfall: Risiko-Schüler ohne Kontakt seit >3 Wochen
+  if (kontakte.length > 0) {
+    const tageSeither = Math.floor((heute - new Date(kontakte[0].datum)) / (1000 * 60 * 60 * 24));
+    if (tageSeither > 21) {
+      const risiko = DB.getRisiko(sid);
+      const hatRotRisiko = risiko.some(r => r.wert === 'rot');
+      if (hatRotRisiko) {
+        result.stufe = 'rot';
+        result.label = 'Kritisch — Risiko-Schüler';
+        result.details.push('WARNUNG: Risiko-Schüler ohne Kontakt seit >3 Wochen');
+      }
+    }
+  }
+
+  return result;
+}
+
+// Dashboard: Kontakt-Nachfass-Widget (mit Engagement-Badge)
 function renderKontaktNachfassWidget() {
   const container = document.getElementById('kontakt-nachfass-widget');
   if (!container) return;
   const sid = APP.currentSchuelerId;
   const heute = new Date().toISOString().split('T')[0];
   const kontakte = DB.getKontakte(sid).filter(k => k.nachfassDatum && k.nachfassDatum <= heute);
-  if (kontakte.length === 0) { container.innerHTML = ''; return; }
 
-  let html = '<div class="card" style="margin-bottom:12px;border-left:4px solid #F59E0B;">';
+  // Engagement-Badge immer anzeigen
+  const engagement = calculateEngagementScore(sid);
+  const engFarben = { gruen: '#22C55E', gelb: '#F59E0B', rot: '#EF4444' };
+  const engIcons = { gruen: '🟢', gelb: '🟡', rot: '🔴' };
+
+  let html = `<div class="card" style="margin-bottom:12px;border-left:4px solid ${engFarben[engagement.stufe]};">`;
   html += '<div class="card-body" style="padding:10px 14px;">';
-  html += '<div style="font-weight:600;font-size:12px;color:#92400E;margin-bottom:6px;">⏰ Offene Kontakt-Nachfass-Aktionen</div>';
-  kontakte.forEach(k => {
-    const art = KONTAKT_ARTEN[k.art] || KONTAKT_ARTEN.telefon;
-    html += `<div style="font-size:12px;padding:3px 0;">${art.icon} <strong>${escapeHtml(k.kontaktperson)}</strong>: ${escapeHtml(k.vereinbarungen || k.inhalt).substring(0, 60)} <button class="btn btn-xs btn-secondary" onclick="showPhase('sammeln');setTimeout(()=>showSubTab('kontaktlog'),100);" style="margin-left:4px;">Anzeigen</button></div>`;
-  });
+  html += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:${kontakte.length > 0 ? '8' : '0'}px;">`;
+  html += `<div style="font-weight:600;font-size:12px;color:${engFarben[engagement.stufe]};">${engIcons[engagement.stufe]} Engagement: ${engagement.label} (${engagement.score}/100)</div>`;
+  html += `<button class="btn btn-xs btn-secondary" onclick="showPhase('sammeln');setTimeout(()=>showSubTab('kontaktlog'),100);">Kontaktlog</button>`;
+  html += '</div>';
+
+  if (kontakte.length > 0) {
+    html += '<div style="font-weight:600;font-size:11px;color:#92400E;margin-bottom:4px;">⏰ Offene Nachfass-Aktionen:</div>';
+    kontakte.forEach(k => {
+      const art = KONTAKT_ARTEN[k.art] || KONTAKT_ARTEN.telefon;
+      html += `<div style="font-size:11px;padding:2px 0;">${art.icon} <strong>${escapeHtml(k.kontaktperson)}</strong>: ${escapeHtml(k.vereinbarungen || k.inhalt).substring(0, 50)}</div>`;
+    });
+  }
   html += '</div></div>';
   container.innerHTML = html;
 }

@@ -6811,3 +6811,426 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 [data-theme="dark"] .roadmap-zukunft-item { background: var(--bg-card); border-color: var(--border); }
 [data-theme="dark"] .roadmap-zukunft-label { color: var(--text-muted); }
 [data-theme="dark"] .roadmap-add-thema-fokus select { background: var(--bg-input); color: var(--text); border-color: var(--border); }
+
+/* ============================================================
+   SOAP WIZARD-STEPPER
+   ============================================================ */
+.soap-wizard-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 16px;
+  margin-bottom: 20px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+}
+.soap-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.soap-step-dot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fff;
+  color: #9CA3AF;
+  border: 1.5px solid #E5E7EB;
+  white-space: nowrap;
+}
+.soap-step-dot:hover { border-color: #D1D5DB; color: #6B7280; }
+.soap-step-dot.active {
+  background: #7F77DD;
+  color: #fff;
+  border-color: #7F77DD;
+  box-shadow: 0 2px 8px rgba(127,119,221,0.25);
+}
+.soap-step-dot.done {
+  background: #059669;
+  color: #fff;
+  border-color: #059669;
+}
+.soap-step-line {
+  width: 20px;
+  height: 2px;
+  background: #E5E7EB;
+  flex-shrink: 0;
+}
+.soap-step-line.done { background: #059669; }
+
+/* Wizard Step Container */
+.soap-wizard-step {
+  animation: fadeInStep 0.25s ease;
+}
+@keyframes fadeInStep {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.soap-wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #E5E7EB;
+  gap: 12px;
+}
+.soap-wizard-nav .btn-wizard-next {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.soap-wizard-nav .btn-wizard-next.primary {
+  background: #7F77DD;
+  color: #fff;
+}
+.soap-wizard-nav .btn-wizard-next.primary:hover {
+  background: #6B63C9;
+  box-shadow: 0 2px 8px rgba(127,119,221,0.3);
+}
+.soap-wizard-nav .btn-wizard-back {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  color: #6B7280;
+  cursor: pointer;
+}
+.soap-wizard-nav .btn-wizard-back:hover { background: #F9FAFB; }
+
+/* SOAP Vorschau (Step 4) */
+.soap-vorschau {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 20px;
+}
+.soap-vorschau-section {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E5E7EB;
+}
+.soap-vorschau-section:last-child { border-bottom: none; margin-bottom: 0; }
+.soap-vorschau-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6B7280;
+  margin-bottom: 4px;
+}
+.soap-vorschau-value {
+  font-size: 13px;
+  color: #1F2937;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.soap-vorschau-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.soap-vorschau-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #374151;
+  background: #fff;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+/* ============================================================
+   SITZUNGSVORSCHLAG — Strukturierte Aktionskarte
+   ============================================================ */
+.sitzungsvorschlag-dashboard {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.sitzungsvorschlag-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+}
+.sitzungsvorschlag-empfehlung {
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border-bottom: 1px solid #F3F4F6;
+}
+.sitzungsvorschlag-empfehlung-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.sitzungsvorschlag-empfehlung-body {
+  flex: 1;
+  min-width: 0;
+}
+.sitzungsvorschlag-empfehlung-titel {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1F2937;
+  margin-bottom: 4px;
+}
+.sitzungsvorschlag-empfehlung-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.sv-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.sv-badge-phase { background: #EEF2FF; color: #4338CA; }
+.sv-badge-pvt-safe { background: #F0FDF4; color: #166534; }
+.sv-badge-pvt-activated { background: #FFFBEB; color: #92400E; }
+.sv-badge-pvt-frozen { background: #F5F3FF; color: #5B21B6; }
+.sv-badge-response-good { background: #F0FDF4; color: #166534; }
+.sv-badge-response-bad { background: #FEF2F2; color: #991B1B; }
+
+.sitzungsvorschlag-materialien {
+  padding: 12px 20px;
+  border-bottom: 1px solid #F3F4F6;
+}
+.sitzungsvorschlag-materialien-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6B7280;
+  margin-bottom: 8px;
+}
+
+.sitzungsvorschlag-kontext {
+  padding: 12px 20px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.sitzungsvorschlag-warnungen {
+  padding: 12px 20px;
+}
+.sv-warnung {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.sv-warnung.sequenz {
+  background: #FEF2F2;
+  border-left: 3px solid #DC2626;
+  color: #991B1B;
+}
+.sv-warnung.stepped-care {
+  background: #FFFBEB;
+  border-left: 3px solid #D97706;
+  color: #92400E;
+}
+.sv-warnung.hypothese {
+  background: #EFF6FF;
+  border-left: 3px solid #3B82F6;
+  color: #1E40AF;
+}
+
+.sitzungsvorschlag-aktionen {
+  padding: 14px 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  background: #FAFAFA;
+}
+
+/* ============================================================
+   NOTIZEN FILTER-PILLS + SOAP-PREVIEW KARTEN
+   ============================================================ */
+.notizen-filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E5E7EB;
+}
+.notizen-filter-pill {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.notizen-filter-pill:hover { background: #F9FAFB; border-color: #D1D5DB; }
+.notizen-filter-pill.active {
+  background: #7F77DD;
+  color: #fff;
+  border-color: #7F77DD;
+}
+.notizen-filter-count {
+  font-size: 10px;
+  background: rgba(255,255,255,0.3);
+  padding: 0 5px;
+  border-radius: 8px;
+  margin-left: 4px;
+}
+
+/* Verbesserte Notiz-Karte */
+.notiz-karte-v2 {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: all 0.15s;
+  border-left: 3px solid #D1D5DB;
+}
+.notiz-karte-v2:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.notiz-karte-v2-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.notiz-srs-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.notiz-srs-badge.gut { background: #F0FDF4; color: #166534; }
+.notiz-srs-badge.mittel { background: #FFFBEB; color: #92400E; }
+.notiz-srs-badge.schlecht { background: #FEF2F2; color: #991B1B; }
+
+.notiz-soap-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.notiz-soap-field {
+  background: #F9FAFB;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.notiz-soap-field-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+.notiz-soap-field-label.s { color: #3B82F6; }
+.notiz-soap-field-label.o { color: #8B5CF6; }
+.notiz-soap-field-label.a { color: #D97706; }
+.notiz-soap-field-label.p { color: #059669; }
+.notiz-soap-field-text {
+  color: #374151;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.notiz-soap-field.expanded .notiz-soap-field-text {
+  -webkit-line-clamp: unset;
+  display: block;
+}
+.notiz-thema-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #4338CA;
+  cursor: pointer;
+  padding: 1px 8px;
+  border-radius: 8px;
+  background: #EEF2FF;
+}
+.notiz-thema-link:hover { background: #E0E7FF; }
+
+/* Mobile SOAP Wizard */
+@media (max-width: 768px) {
+  .soap-wizard-stepper {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .soap-step-dot { padding: 5px 10px; font-size: 11px; }
+  .soap-step-line { width: 12px; }
+  .notiz-soap-preview { grid-template-columns: 1fr; }
+  .sitzungsvorschlag-empfehlung { flex-direction: column; }
+  .sitzungsvorschlag-aktionen { flex-direction: column; }
+  .sitzungsvorschlag-kontext { flex-direction: column; }
+}
+
+/* Dark mode für SOAP + Sitzungsvorschlag + Notizen */
+[data-theme="dark"] .soap-wizard-stepper { background: var(--bg-card); border-color: var(--border); }
+[data-theme="dark"] .soap-step-dot { background: var(--bg-card); border-color: var(--border); color: var(--text-muted); }
+[data-theme="dark"] .soap-step-dot.active { background: #7F77DD; color: #fff; border-color: #7F77DD; }
+[data-theme="dark"] .soap-step-dot.done { background: #059669; color: #fff; border-color: #059669; }
+[data-theme="dark"] .soap-wizard-nav { border-color: var(--border); }
+[data-theme="dark"] .soap-wizard-nav .btn-wizard-back { background: var(--bg-card); color: var(--text-muted); border-color: var(--border); }
+[data-theme="dark"] .soap-vorschau { background: var(--bg-hover); border-color: var(--border); }
+[data-theme="dark"] .soap-vorschau-section { border-color: var(--border); }
+[data-theme="dark"] .soap-vorschau-value { color: var(--text); }
+[data-theme="dark"] .soap-vorschau-meta-item { background: var(--bg-card); border-color: var(--border); color: var(--text); }
+[data-theme="dark"] .sitzungsvorschlag-dashboard { background: var(--bg-card); border-color: var(--border); }
+[data-theme="dark"] .sitzungsvorschlag-header { background: var(--bg-hover); border-color: var(--border); color: var(--text); }
+[data-theme="dark"] .sitzungsvorschlag-empfehlung { border-color: var(--border); }
+[data-theme="dark"] .sitzungsvorschlag-empfehlung-titel { color: var(--text); }
+[data-theme="dark"] .sitzungsvorschlag-materialien { border-color: var(--border); }
+[data-theme="dark"] .sitzungsvorschlag-kontext { border-color: var(--border); }
+[data-theme="dark"] .sitzungsvorschlag-aktionen { background: var(--bg-hover); }
+[data-theme="dark"] .notizen-filter-bar { border-color: var(--border); }
+[data-theme="dark"] .notizen-filter-pill { background: var(--bg-card); border-color: var(--border); color: var(--text-muted); }
+[data-theme="dark"] .notiz-karte-v2 { background: var(--bg-card); border-color: var(--border); }
+[data-theme="dark"] .notiz-karte-v2:hover { background: var(--bg-hover); }
+[data-theme="dark"] .notiz-soap-field { background: var(--bg-hover); }
+[data-theme="dark"] .notiz-soap-field-text { color: var(--text); }

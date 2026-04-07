@@ -301,93 +301,112 @@
             placeholder="Notiz, Beobachtung oder Protokoll eingeben..."></textarea>
         </div>
 
-        <!-- Sitzungsprotokoll-Template (SOAP) -->
+        <!-- Sitzungsprotokoll-Template (SOAP) — Wizard-Stepper -->
         <div id="notiz-modus-protokoll" class="notiz-form" style="display:none;">
           <div class="protokoll-titel">📋 Sitzungsprotokoll (SOAP)</div>
 
-          <!-- Meta -->
-          <div class="protokoll-meta-grid">
-            <div class="form-group">
-              <label>Datum</label>
-              <input type="date" id="prot-datum">
+          <!-- Wizard-Stepper Navigation -->
+          <div class="soap-wizard-stepper">
+            <div class="soap-step-item">
+              <div class="soap-step-dot active" data-step="1" onclick="soapWizardGo(1)">① Setup</div>
             </div>
+            <div class="soap-step-line" id="soap-line-1"></div>
+            <div class="soap-step-item">
+              <div class="soap-step-dot" data-step="2" onclick="soapWizardGo(2)">② SOAP</div>
+            </div>
+            <div class="soap-step-line" id="soap-line-2"></div>
+            <div class="soap-step-item">
+              <div class="soap-step-dot" data-step="3" onclick="soapWizardGo(3)">③ Bewertung</div>
+            </div>
+            <div class="soap-step-line" id="soap-line-3"></div>
+            <div class="soap-step-item">
+              <div class="soap-step-dot" data-step="4" onclick="soapWizardGo(4)">④ Abschluss</div>
+            </div>
+          </div>
+
+          <!-- ═══ STEP 1: Setup ═══ -->
+          <div class="soap-wizard-step" id="soap-step-1">
+            <div class="protokoll-meta-grid">
+              <div class="form-group">
+                <label>Datum</label>
+                <input type="date" id="prot-datum">
+              </div>
+              <div class="form-group">
+                <label>Dauer</label>
+                <select id="prot-dauer">
+                  <option value="15">15 Min.</option>
+                  <option value="30">30 Min.</option>
+                  <option value="45" selected>45 Min.</option>
+                  <option value="60">60 Min.</option>
+                  <option value="90">90 Min.</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Setting</label>
+                <select id="prot-setting">
+                  <option>Einzelgespräch</option>
+                  <option>Gruppengespräch</option>
+                  <option>Elterngespräch</option>
+                  <option>Telefon</option>
+                  <option>Außenaktivität</option>
+                  <option>Krisenintervention</option>
+                  <option>Hausbesuch</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Sitzungsnr.</label>
+                <input type="number" id="prot-nr" min="1" placeholder="#" style="width:70px;">
+              </div>
+            </div>
+
+            <!-- Stimmung -->
+            <div class="prot-stimmung-row">
+              <label>Stimmung des Jugendlichen:</label>
+              <div class="prot-stimmung-btns" id="prot-stimmung-btns">
+                <button class="prot-stimmung-btn" data-val="sehr-schlecht" onclick="selectProtStimmung(this)">😫<span>Sehr schlecht</span></button>
+                <button class="prot-stimmung-btn" data-val="schlecht" onclick="selectProtStimmung(this)">😞<span>Schlecht</span></button>
+                <button class="prot-stimmung-btn" data-val="neutral" onclick="selectProtStimmung(this)">😐<span>Neutral</span></button>
+                <button class="prot-stimmung-btn" data-val="gut" onclick="selectProtStimmung(this)">🙂<span>Gut</span></button>
+                <button class="prot-stimmung-btn" data-val="sehr-gut" onclick="selectProtStimmung(this)">😄<span>Sehr gut</span></button>
+              </div>
+            </div>
+
+            <!-- Polyvagal Check-in -->
+            <div class="pvt-checkin">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <label class="pvt-label">🧠 Polyvagal Check-in — Wo ist der Jugendliche heute?</label>
+                <button onclick="showToolLegitimation('pvt')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist PVT?</button>
+              </div>
+              <div class="pvt-cards" id="pvt-cards">
+                <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVT(this)">
+                  <span class="pvt-dot" style="background:#22C55E;"></span>
+                  <span class="pvt-card-titel">Sicher & offen</span>
+                  <span class="pvt-card-desc">Entspannt, neugierig, Augenkontakt, bereit zu arbeiten</span>
+                </button>
+                <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVT(this)">
+                  <span class="pvt-dot" style="background:#F59E0B;"></span>
+                  <span class="pvt-card-titel">Angespannt / unruhig</span>
+                  <span class="pvt-card-desc">Nervös, ausweichend, Körper angespannt, schwer erreichbar</span>
+                </button>
+                <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVT(this)">
+                  <span class="pvt-dot" style="background:#8B5CF6;"></span>
+                  <span class="pvt-card-titel">Eingefroren / abwesend</span>
+                  <span class="pvt-card-desc">Leer, einsilbig, kein Kontakt, dissoziiert wirkend</span>
+                </button>
+              </div>
+              <div id="pvt-empfehlung" class="pvt-empfehlung" style="display:none;"></div>
+            </div>
+
+            <!-- Themen-Verknüpfung -->
             <div class="form-group">
-              <label>Dauer</label>
-              <select id="prot-dauer">
-                <option value="15">15 Min.</option>
-                <option value="30">30 Min.</option>
-                <option value="45" selected>45 Min.</option>
-                <option value="60">60 Min.</option>
-                <option value="90">90 Min.</option>
+              <label>Bearbeitetes Thema</label>
+              <select id="prot-thema-id">
+                <option value="">— Kein Thema verknüpft —</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>Setting</label>
-              <select id="prot-setting">
-                <option>Einzelgespräch</option>
-                <option>Gruppengespräch</option>
-                <option>Elterngespräch</option>
-                <option>Telefon</option>
-                <option>Außenaktivität</option>
-                <option>Krisenintervention</option>
-                <option>Hausbesuch</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Sitzungsnr.</label>
-              <input type="number" id="prot-nr" min="1" placeholder="#" style="width:70px;">
-            </div>
-          </div>
 
-          <!-- Stimmung -->
-          <div class="prot-stimmung-row">
-            <label>Stimmung des Jugendlichen:</label>
-            <div class="prot-stimmung-btns" id="prot-stimmung-btns">
-              <button class="prot-stimmung-btn" data-val="sehr-schlecht" onclick="selectProtStimmung(this)">😫<span>Sehr schlecht</span></button>
-              <button class="prot-stimmung-btn" data-val="schlecht" onclick="selectProtStimmung(this)">😞<span>Schlecht</span></button>
-              <button class="prot-stimmung-btn" data-val="neutral" onclick="selectProtStimmung(this)">😐<span>Neutral</span></button>
-              <button class="prot-stimmung-btn" data-val="gut" onclick="selectProtStimmung(this)">🙂<span>Gut</span></button>
-              <button class="prot-stimmung-btn" data-val="sehr-gut" onclick="selectProtStimmung(this)">😄<span>Sehr gut</span></button>
-            </div>
-          </div>
-
-          <!-- Polyvagal Check-in -->
-          <div class="pvt-checkin">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <label class="pvt-label">🧠 Polyvagal Check-in — Wo ist der Jugendliche heute?</label>
-              <button onclick="showToolLegitimation('pvt')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist PVT?</button>
-            </div>
-            <div class="pvt-cards" id="pvt-cards">
-              <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVT(this)">
-                <span class="pvt-dot" style="background:#22C55E;"></span>
-                <span class="pvt-card-titel">Sicher & offen</span>
-                <span class="pvt-card-desc">Entspannt, neugierig, Augenkontakt, bereit zu arbeiten</span>
-              </button>
-              <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVT(this)">
-                <span class="pvt-dot" style="background:#F59E0B;"></span>
-                <span class="pvt-card-titel">Angespannt / unruhig</span>
-                <span class="pvt-card-desc">Nervös, ausweichend, Körper angespannt, schwer erreichbar</span>
-              </button>
-              <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVT(this)">
-                <span class="pvt-dot" style="background:#8B5CF6;"></span>
-                <span class="pvt-card-titel">Eingefroren / abwesend</span>
-                <span class="pvt-card-desc">Leer, einsilbig, kein Kontakt, dissoziiert wirkend</span>
-              </button>
-            </div>
-            <div id="pvt-empfehlung" class="pvt-empfehlung" style="display:none;"></div>
-          </div>
-
-          <!-- Themen-Verknüpfung -->
-          <div class="form-group">
-            <label>Bearbeitetes Thema</label>
-            <select id="prot-thema-id">
-              <option value="">— Kein Thema verknüpft —</option>
-            </select>
-          </div>
-
-          <!-- Vorlagen + SOAP-Felder -->
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;">
-            <div style="display:flex;align-items:center;gap:6px;">
+            <!-- Vorlage -->
+            <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
               <span style="font-size:12px;color:#6B7280;">📝 Vorlage:</span>
               <select id="soap-vorlage" onchange="applySoapVorlage(this.value)" style="padding:4px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:12px;cursor:pointer;color:#374151;">
                 <option value="">— Leer —</option>
@@ -399,88 +418,118 @@
                 <option value="verlauf">Verlaufskontrolle</option>
               </select>
             </div>
-            <button onclick="showToolLegitimation('soap')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist SOAP?</button>
-          </div>
-          <div class="protokoll-soap">
-            <div class="soap-section soap-s">
-              <div class="soap-header"><span class="soap-letter">S</span> Subjektiv — Was berichtet der Jugendliche? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('subjektiv')" title="Beispiel anzeigen">💡</button></div>
-              <div class="soap-beispiel-box" id="soap-beispiel-subjektiv" style="display:none;"></div>
-              <textarea id="prot-subjektiv" class="notiz-textarea" rows="3"
-                placeholder="Eigene Aussagen, Sorgen, Wünsche, Themen die aufkamen..."></textarea>
-            </div>
-            <div class="soap-section soap-o">
-              <div class="soap-header"><span class="soap-letter">O</span> Objektiv — Was beobachtest du? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('objektiv')" title="Beispiel anzeigen">💡</button></div>
-              <div class="soap-beispiel-box" id="soap-beispiel-objektiv" style="display:none;"></div>
-              <textarea id="prot-objektiv" class="notiz-textarea" rows="3"
-                placeholder="Verhalten, Stimmung, Körpersprache, Veränderungen..."></textarea>
-            </div>
-            <div class="soap-section soap-a">
-              <div class="soap-header"><span class="soap-letter">A</span> Assessment — Deine fachliche Einschätzung <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('assessment')" title="Beispiel anzeigen">💡</button></div>
-              <div class="soap-beispiel-box" id="soap-beispiel-assessment" style="display:none;"></div>
-              <textarea id="prot-assessment" class="notiz-textarea" rows="3"
-                placeholder="Einordnung, Hypothesen, Risiken, Fortschritte..."></textarea>
-            </div>
-            <div class="soap-section soap-p">
-              <div class="soap-header"><span class="soap-letter">P</span> Plan — Nächste Schritte <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('plan')" title="Beispiel anzeigen">💡</button></div>
-              <div class="soap-beispiel-box" id="soap-beispiel-plan" style="display:none;"></div>
-              <textarea id="prot-plan" class="notiz-textarea" rows="3"
-                placeholder="Vereinbarungen, Interventionen, Überweisungen, Ziele bis nächste Sitzung..."></textarea>
+
+            <div class="soap-wizard-nav">
+              <span></span>
+              <button class="btn-wizard-next primary" onclick="soapWizardGo(2)">Weiter: SOAP-Dokumentation →</button>
             </div>
           </div>
 
-          <!-- Zusatzinfos -->
-          <div class="protokoll-zusatz">
-            <div class="form-group">
-              <label>Eingesetzte Materialien / Methoden</label>
-              <input type="text" id="prot-materialien" placeholder="z.B. Arbeitsblatt Emotionen, Rollenspiel, Genogramm...">
+          <!-- ═══ STEP 2: SOAP Felder ═══ -->
+          <div class="soap-wizard-step" id="soap-step-2" style="display:none;">
+            <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+              <button onclick="showToolLegitimation('soap')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;">📚 Was ist SOAP?</button>
+            </div>
+            <div class="protokoll-soap">
+              <div class="soap-section soap-s">
+                <div class="soap-header"><span class="soap-letter">S</span> Subjektiv — Was berichtet der Jugendliche? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('subjektiv')" title="Beispiel anzeigen">💡</button></div>
+                <div class="soap-beispiel-box" id="soap-beispiel-subjektiv" style="display:none;"></div>
+                <textarea id="prot-subjektiv" class="notiz-textarea" rows="4"
+                  placeholder="Eigene Aussagen, Sorgen, Wünsche, Themen die aufkamen..."></textarea>
+              </div>
+              <div class="soap-section soap-o">
+                <div class="soap-header"><span class="soap-letter">O</span> Objektiv — Was beobachtest du? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('objektiv')" title="Beispiel anzeigen">💡</button></div>
+                <div class="soap-beispiel-box" id="soap-beispiel-objektiv" style="display:none;"></div>
+                <textarea id="prot-objektiv" class="notiz-textarea" rows="4"
+                  placeholder="Verhalten, Stimmung, Körpersprache, Veränderungen..."></textarea>
+              </div>
+              <div class="soap-section soap-a">
+                <div class="soap-header"><span class="soap-letter">A</span> Assessment — Deine fachliche Einschätzung <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('assessment')" title="Beispiel anzeigen">💡</button></div>
+                <div class="soap-beispiel-box" id="soap-beispiel-assessment" style="display:none;"></div>
+                <textarea id="prot-assessment" class="notiz-textarea" rows="4"
+                  placeholder="Einordnung, Hypothesen, Risiken, Fortschritte..."></textarea>
+              </div>
+              <div class="soap-section soap-p">
+                <div class="soap-header"><span class="soap-letter">P</span> Plan — Nächste Schritte <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('plan')" title="Beispiel anzeigen">💡</button></div>
+                <div class="soap-beispiel-box" id="soap-beispiel-plan" style="display:none;"></div>
+                <textarea id="prot-plan" class="notiz-textarea" rows="4"
+                  placeholder="Vereinbarungen, Interventionen, Überweisungen, Ziele bis nächste Sitzung..."></textarea>
+              </div>
+            </div>
+
+            <div class="soap-wizard-nav">
+              <button class="btn-wizard-back" onclick="soapWizardGo(1)">← Setup</button>
+              <button class="btn-wizard-next primary" onclick="soapWizardGo(3)">Weiter: Bewertung →</button>
             </div>
           </div>
 
-          <!-- SRS Session Rating Scale -->
-          <div class="srs-section">
-            <div class="srs-header">📊 Sitzungsbewertung <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span> <button onclick="showToolLegitimation('srs')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist SRS?</button></div>
-            <div class="srs-sliders">
-              <div class="srs-row">
-                <label>Beziehung <span>— Ich fühlte mich gehört und verstanden</span></label>
-                <div class="srs-slider-wrap">
-                  <input type="range" min="0" max="10" value="7" id="srs-relationship" class="srs-range" oninput="updateSRS()">
-                  <span class="srs-val" id="srs-val-relationship">7</span>
-                </div>
-              </div>
-              <div class="srs-row">
-                <label>Ziele & Themen <span>— Wir haben an dem gearbeitet was wichtig war</span></label>
-                <div class="srs-slider-wrap">
-                  <input type="range" min="0" max="10" value="7" id="srs-goals" class="srs-range" oninput="updateSRS()">
-                  <span class="srs-val" id="srs-val-goals">7</span>
-                </div>
-              </div>
-              <div class="srs-row">
-                <label>Ansatz & Methode <span>— Die Vorgehensweise hat gepasst</span></label>
-                <div class="srs-slider-wrap">
-                  <input type="range" min="0" max="10" value="7" id="srs-approach" class="srs-range" oninput="updateSRS()">
-                  <span class="srs-val" id="srs-val-approach">7</span>
-                </div>
-              </div>
-              <div class="srs-row">
-                <label>Gesamteindruck <span>— Insgesamt war diese Sitzung gut für mich</span></label>
-                <div class="srs-slider-wrap">
-                  <input type="range" min="0" max="10" value="7" id="srs-overall" class="srs-range" oninput="updateSRS()">
-                  <span class="srs-val" id="srs-val-overall">7</span>
-                </div>
+          <!-- ═══ STEP 3: Bewertung + Materialien ═══ -->
+          <div class="soap-wizard-step" id="soap-step-3" style="display:none;">
+            <!-- Materialien -->
+            <div class="protokoll-zusatz">
+              <div class="form-group">
+                <label>Eingesetzte Materialien / Methoden</label>
+                <input type="text" id="prot-materialien" placeholder="z.B. Arbeitsblatt Emotionen, Rollenspiel, Genogramm...">
               </div>
             </div>
-            <div class="srs-total">
-              <span class="srs-total-zahl" id="srs-total-zahl">28</span>
-              <span class="srs-total-text">von 40 Punkten</span>
+
+            <!-- SRS Session Rating Scale -->
+            <div class="srs-section">
+              <div class="srs-header">📊 Sitzungsbewertung <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span> <button onclick="showToolLegitimation('srs')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist SRS?</button></div>
+              <div class="srs-sliders">
+                <div class="srs-row">
+                  <label>Beziehung <span>— Ich fühlte mich gehört und verstanden</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="7" id="srs-relationship" class="srs-range" oninput="updateSRS()">
+                    <span class="srs-val" id="srs-val-relationship">7</span>
+                  </div>
+                </div>
+                <div class="srs-row">
+                  <label>Ziele & Themen <span>— Wir haben an dem gearbeitet was wichtig war</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="7" id="srs-goals" class="srs-range" oninput="updateSRS()">
+                    <span class="srs-val" id="srs-val-goals">7</span>
+                  </div>
+                </div>
+                <div class="srs-row">
+                  <label>Ansatz & Methode <span>— Die Vorgehensweise hat gepasst</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="7" id="srs-approach" class="srs-range" oninput="updateSRS()">
+                    <span class="srs-val" id="srs-val-approach">7</span>
+                  </div>
+                </div>
+                <div class="srs-row">
+                  <label>Gesamteindruck <span>— Insgesamt war diese Sitzung gut für mich</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="7" id="srs-overall" class="srs-range" oninput="updateSRS()">
+                    <span class="srs-val" id="srs-val-overall">7</span>
+                  </div>
+                </div>
+              </div>
+              <div class="srs-total">
+                <span class="srs-total-zahl" id="srs-total-zahl">28</span>
+                <span class="srs-total-text">von 40 Punkten</span>
+              </div>
+              <div id="srs-alert" class="srs-alert" style="display:none;">
+                ⚠️ <strong>Score unter 25 — Reflexion empfohlen.</strong><br>
+                Mögliche Fragen: Was könnte die Beziehung belastet haben? War das Thema zu früh? War der Schüler reguliert genug?
+              </div>
             </div>
-            <div id="srs-alert" class="srs-alert" style="display:none;">
-              ⚠️ <strong>Score unter 25 — Reflexion empfohlen.</strong><br>
-              Mögliche Fragen: Was könnte die Beziehung belastet haben? War das Thema zu früh? War der Schüler reguliert genug?
+
+            <div class="soap-wizard-nav">
+              <button class="btn-wizard-back" onclick="soapWizardGo(2)">← SOAP</button>
+              <button class="btn-wizard-next primary" onclick="soapWizardGo(4)">Weiter: Vorschau & Speichern →</button>
             </div>
           </div>
 
-          <div class="protokoll-footer">
-            <button class="btn btn-primary" onclick="addProtokoll()">📋 Protokoll speichern</button>
+          <!-- ═══ STEP 4: Zusammenfassung + Speichern ═══ -->
+          <div class="soap-wizard-step" id="soap-step-4" style="display:none;">
+            <div id="soap-vorschau"></div>
+
+            <div class="soap-wizard-nav" style="margin-top:20px;">
+              <button class="btn-wizard-back" onclick="soapWizardGo(3)">← Bewertung</button>
+              <button class="btn btn-primary" onclick="addProtokoll()" style="padding:12px 28px;font-size:15px;">📋 Protokoll speichern</button>
+            </div>
           </div>
         </div>
 

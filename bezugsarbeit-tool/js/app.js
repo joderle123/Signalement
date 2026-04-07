@@ -1572,35 +1572,144 @@ function addThemaNotiz(themaId) {
 // ============================================================
 // NOTIZEN TAB
 // ============================================================
+APP.notizenFilter = 'alle';
+
 function renderNotizen() {
   populateProtThemen();
 
-  const notizen = DB.getNotizen(APP.currentSchuelerId)
+  const alleNotizen = DB.getNotizen(APP.currentSchuelerId)
     .sort((a, b) => new Date(b.datum) - new Date(a.datum));
 
   const liste = document.getElementById('notizen-liste');
-  if (notizen.length === 0) {
-    liste.innerHTML = '<div style="text-align:center;padding:24px 16px;">'
+
+  // Zähler pro Kategorie
+  const counts = { alle: alleNotizen.length };
+  alleNotizen.forEach(n => {
+    const k = n.kategorie || 'session';
+    counts[k] = (counts[k] || 0) + 1;
+  });
+
+  // Filtern
+  const aktFilter = APP.notizenFilter || 'alle';
+  const notizen = aktFilter === 'alle' ? alleNotizen : alleNotizen.filter(n => (n.kategorie || 'session') === aktFilter);
+
+  // Filter-Pills
+  const filterKats = [
+    { id: 'alle', label: 'Alle', icon: '' },
+    { id: 'session', label: 'Sitzungen', icon: '💬' },
+    { id: 'beobachtung', label: 'Beobachtungen', icon: '👁' },
+    { id: 'wichtig', label: 'Wichtig', icon: '⚠️' },
+    { id: 'elternkontakt', label: 'Eltern', icon: '📞' },
+    { id: 'fortschritt', label: 'Fortschritt', icon: '📈' },
+  ];
+
+  let html = '<div class="notizen-filter-bar">';
+  filterKats.forEach(f => {
+    const count = counts[f.id] || 0;
+    if (f.id !== 'alle' && count === 0) return;
+    html += `<button class="notizen-filter-pill ${aktFilter === f.id ? 'active' : ''}" onclick="setNotizenFilter('${f.id}')">
+      ${f.icon} ${f.label} <span class="notizen-filter-count">${count}</span>
+    </button>`;
+  });
+  html += '</div>';
+
+  if (notizen.length === 0 && alleNotizen.length === 0) {
+    html += '<div style="text-align:center;padding:24px 16px;">'
       + '<div style="font-size:28px;margin-bottom:8px;">📝</div>'
       + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;">Noch keine Sitzungsprotokolle</div>'
-      + '<div style="font-size:12px;color:var(--text-muted,#6B7280);line-height:1.5;">Sitzungsprotokolle dokumentieren den Verlauf und sichern die Qualität deiner Arbeit.<br>Nutze das SOAP-Format oben um die erste Sitzung zu dokumentieren.</div>'
+      + '<div style="font-size:12px;color:var(--text-muted,#6B7280);line-height:1.5;">Nutze das SOAP-Format oben um die erste Sitzung zu dokumentieren.</div>'
       + '</div>';
+  } else if (notizen.length === 0) {
+    html += '<div style="text-align:center;padding:16px;color:#9CA3AF;font-size:13px;">Keine Einträge in dieser Kategorie.</div>';
   } else {
-    liste.innerHTML = notizen.map(n => renderNotizKarte(n)).join('');
+    html += notizen.map(n => renderNotizKarte(n)).join('');
   }
+
+  liste.innerHTML = html;
+}
+
+function setNotizenFilter(filter) {
+  APP.notizenFilter = filter;
+  renderNotizen();
 }
 
 function renderNotizKarte(notiz) {
   const kat = NOTIZ_KATEGORIEN[notiz.kategorie] || NOTIZ_KATEGORIEN.session;
+  const soap = notiz.soap;
+  const hasSoap = soap && (soap.subjektiv || soap.objektiv || soap.assessment || soap.plan);
+  const srsTotal = soap && soap.srs ? soap.srs.total : null;
+
+  // SRS Badge
+  let srsBadge = '';
+  if (srsTotal !== null && srsTotal !== undefined) {
+    const srsClass = srsTotal >= 30 ? 'gut' : srsTotal >= 25 ? 'mittel' : 'schlecht';
+    srsBadge = `<span class="notiz-srs-badge ${srsClass}">SRS ${srsTotal}/40</span>`;
+  }
+
+  // Thema-Link
+  let themaLink = '';
+  if (notiz.themaId) {
+    let themaLabel = notiz.themaId;
+    if (soap && soap.themaLabel) themaLabel = soap.themaLabel;
+    else {
+      for (const k of THEMEN_KATEGORIEN) {
+        const t = k.themen.find(th => th.id === notiz.themaId);
+        if (t) { themaLabel = t.titel; break; }
+      }
+    }
+    themaLink = `<span class="notiz-thema-link" onclick="openRoadmapThema('${notiz.themaId}')">📌 ${themaLabel}</span>`;
+  }
+
+  // SOAP Preview (expandierbar)
+  let soapPreview = '';
+  if (hasSoap) {
+    const fields = [
+      { key: 'subjektiv', letter: 'S', label: 's', val: soap.subjektiv },
+      { key: 'objektiv', letter: 'O', label: 'o', val: soap.objektiv },
+      { key: 'assessment', letter: 'A', label: 'a', val: soap.assessment },
+      { key: 'plan', letter: 'P', label: 'p', val: soap.plan },
+    ].filter(f => f.val);
+
+    if (fields.length > 0) {
+      soapPreview = '<div class="notiz-soap-preview">';
+      fields.forEach(f => {
+        soapPreview += `<div class="notiz-soap-field" onclick="this.classList.toggle('expanded')">
+          <div class="notiz-soap-field-label ${f.label}">${f.letter}</div>
+          <div class="notiz-soap-field-text">${escapeHtml(f.val)}</div>
+        </div>`;
+      });
+      soapPreview += '</div>';
+    }
+  }
+
+  // Meta-Zeile für SOAP-Notizen
+  let metaLine = '';
+  if (soap && soap.dauer) {
+    const parts = [];
+    if (soap.dauer) parts.push(`⏱ ${soap.dauer} Min.`);
+    if (soap.setting) parts.push(`📍 ${soap.setting}`);
+    if (soap.stimmung) {
+      const stMap = { 'sehr-schlecht': '😫', 'schlecht': '😞', 'neutral': '😐', 'gut': '🙂', 'sehr-gut': '😄' };
+      parts.push(stMap[soap.stimmung] || soap.stimmung);
+    }
+    if (soap.pvt) {
+      const pvtMap = { safe: '🟢', activated: '🟡', frozen: '🟣' };
+      parts.push(pvtMap[soap.pvt] || soap.pvt);
+    }
+    metaLine = `<div style="font-size:11px;color:#9CA3AF;margin-top:4px;">${parts.join(' · ')}</div>`;
+  }
+
   return `
-    <div class="notiz-karte" style="border-left-color:${kat.farbe};">
-      <div class="notiz-karte-header">
+    <div class="notiz-karte-v2" style="border-left-color:${kat.farbe};">
+      <div class="notiz-karte-v2-header">
         <span class="notiz-badge" style="background:${kat.farbe}22;color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.label}</span>
-        ${notiz.themaId ? `<span class="notiz-badge" style="background:#EBF5FB;color:#2980B9;">📌 Thema</span>` : ''}
-        <span class="notiz-datum">${formatDatum(notiz.datum)}</span>
-        <button class="notiz-delete" onclick="deleteNotiz('${notiz.id}')">🗑</button>
+        ${themaLink}
+        ${srsBadge}
+        <span class="notiz-datum" style="margin-left:auto;">${formatDatum(notiz.datum)}</span>
+        <button class="notiz-delete" onclick="deleteNotiz('${notiz.id}')" style="margin-left:4px;">🗑</button>
       </div>
-      <div class="notiz-inhalt">${escapeHtml(notiz.inhalt)}</div>
+      ${hasSoap ? soapPreview : `<div class="notiz-inhalt" style="font-size:13px;line-height:1.5;color:#374151;margin-top:6px;">${escapeHtml(notiz.inhalt)}</div>`}
+      ${metaLine}
     </div>`;
 }
 
@@ -1621,7 +1730,122 @@ function toggleNotizModus(modus) {
     btnFrei.classList.remove('active');
     const d = document.getElementById('prot-datum');
     if (!d.value) d.value = new Date().toISOString().split('T')[0];
+    // Reset wizard to step 1
+    soapWizardGo(1);
   }
+}
+
+// ── SOAP Wizard Navigation ──
+APP.soapWizardStep = 1;
+
+function soapWizardGo(step) {
+  const totalSteps = 4;
+  if (step < 1 || step > totalSteps) return;
+
+  // Wenn Step 4: Vorschau generieren
+  if (step === 4) renderSoapVorschau();
+
+  // Alle Steps ausblenden
+  for (let i = 1; i <= totalSteps; i++) {
+    const el = document.getElementById(`soap-step-${i}`);
+    if (el) el.style.display = i === step ? '' : 'none';
+  }
+
+  // Stepper-Dots aktualisieren
+  document.querySelectorAll('.soap-step-dot').forEach(dot => {
+    const dotStep = parseInt(dot.dataset.step);
+    dot.classList.remove('active', 'done');
+    if (dotStep === step) dot.classList.add('active');
+    else if (dotStep < step) dot.classList.add('done');
+  });
+
+  // Stepper-Lines aktualisieren
+  for (let i = 1; i < totalSteps; i++) {
+    const line = document.getElementById(`soap-line-${i}`);
+    if (line) {
+      line.classList.toggle('done', i < step);
+    }
+  }
+
+  APP.soapWizardStep = step;
+}
+
+function renderSoapVorschau() {
+  const container = document.getElementById('soap-vorschau');
+  if (!container) return;
+
+  const datum = document.getElementById('prot-datum')?.value || '—';
+  const dauer = document.getElementById('prot-dauer')?.value || '—';
+  const setting = document.getElementById('prot-setting')?.value || '—';
+  const nr = document.getElementById('prot-nr')?.value || '';
+  const stimmung = APP.protStimmung || '';
+  const pvt = APP.protPVT || '';
+  const themaId = document.getElementById('prot-thema-id')?.value || '';
+  const subjektiv = document.getElementById('prot-subjektiv')?.value || '';
+  const objektiv = document.getElementById('prot-objektiv')?.value || '';
+  const assessment = document.getElementById('prot-assessment')?.value || '';
+  const plan = document.getElementById('prot-plan')?.value || '';
+  const materialien = document.getElementById('prot-materialien')?.value || '';
+  const srsTotal = (parseInt(document.getElementById('srs-relationship')?.value || 0)) +
+    (parseInt(document.getElementById('srs-goals')?.value || 0)) +
+    (parseInt(document.getElementById('srs-approach')?.value || 0)) +
+    (parseInt(document.getElementById('srs-overall')?.value || 0));
+
+  const stimmungMap = { 'sehr-schlecht': '😫 Sehr schlecht', 'schlecht': '😞 Schlecht', 'neutral': '😐 Neutral', 'gut': '🙂 Gut', 'sehr-gut': '😄 Sehr gut' };
+  const pvtMap = { safe: '🟢 Sicher', activated: '🟡 Angespannt', frozen: '🟣 Eingefroren' };
+
+  let themaLabel = '';
+  if (themaId) {
+    for (const kat of THEMEN_KATEGORIEN) {
+      const t = kat.themen.find(th => th.id === themaId);
+      if (t) { themaLabel = t.titel; break; }
+    }
+  }
+
+  const srsColor = srsTotal >= 30 ? '#059669' : srsTotal >= 25 ? '#D97706' : '#DC2626';
+
+  container.innerHTML = `
+    <div class="soap-vorschau">
+      <div style="font-size:15px;font-weight:700;color:#1F2937;margin-bottom:16px;">Zusammenfassung</div>
+
+      <div class="soap-vorschau-meta">
+        <div class="soap-vorschau-meta-item">📅 ${datum}</div>
+        <div class="soap-vorschau-meta-item">⏱ ${dauer} Min.</div>
+        <div class="soap-vorschau-meta-item">📍 ${setting}</div>
+        ${nr ? `<div class="soap-vorschau-meta-item">#${nr}</div>` : ''}
+        ${stimmung ? `<div class="soap-vorschau-meta-item">${stimmungMap[stimmung] || stimmung}</div>` : ''}
+        ${pvt ? `<div class="soap-vorschau-meta-item">${pvtMap[pvt] || pvt}</div>` : ''}
+        ${themaLabel ? `<div class="soap-vorschau-meta-item">📌 ${themaLabel}</div>` : ''}
+        <div class="soap-vorschau-meta-item" style="color:${srsColor};font-weight:700;">📊 SRS: ${srsTotal}/40</div>
+      </div>
+
+      ${subjektiv ? `<div class="soap-vorschau-section">
+        <div class="soap-vorschau-label" style="color:#3B82F6;">S — Subjektiv</div>
+        <div class="soap-vorschau-value">${escapeHtml(subjektiv)}</div>
+      </div>` : ''}
+      ${objektiv ? `<div class="soap-vorschau-section">
+        <div class="soap-vorschau-label" style="color:#8B5CF6;">O — Objektiv</div>
+        <div class="soap-vorschau-value">${escapeHtml(objektiv)}</div>
+      </div>` : ''}
+      ${assessment ? `<div class="soap-vorschau-section">
+        <div class="soap-vorschau-label" style="color:#D97706;">A — Assessment</div>
+        <div class="soap-vorschau-value">${escapeHtml(assessment)}</div>
+      </div>` : ''}
+      ${plan ? `<div class="soap-vorschau-section">
+        <div class="soap-vorschau-label" style="color:#059669;">P — Plan</div>
+        <div class="soap-vorschau-value">${escapeHtml(plan)}</div>
+      </div>` : ''}
+      ${materialien ? `<div class="soap-vorschau-section">
+        <div class="soap-vorschau-label">Materialien</div>
+        <div class="soap-vorschau-value">${escapeHtml(materialien)}</div>
+      </div>` : ''}
+
+      ${!subjektiv && !objektiv && !assessment && !plan ? `
+        <div style="text-align:center;padding:20px;color:#9CA3AF;">
+          <div style="font-size:24px;margin-bottom:8px;">⚠️</div>
+          Noch keine SOAP-Felder ausgefüllt. Gehe zurück zu Schritt 2.
+        </div>` : ''}
+    </div>`;
 }
 
 // ---- SOAP-Vorlagen ----
@@ -5284,31 +5508,87 @@ function renderSitzungsvorschlag() {
     }
   } catch(e) { /* silent */ }
 
+  // ── Material für empfohlenes Thema sammeln ──
+  const empfAB = ARBEITSBLÄTTER[empfohlenesThema.id] || [];
+  const empfIV = THEMA_INTERVENTIONEN[empfohlenesThema.id] || [];
+  const empfWiki = typeof findWikiForThema === 'function' ? findWikiForThema(empfohlenesThema.id) : null;
+  const empfPrio = typeof getThemaPrioritaet === 'function' ? getThemaPrioritaet(empfohlenesThema.id, DB.getRoadmap(sid)) : null;
+
+  let materialHTML = '';
+  if (empfAB.length > 0 || empfIV.length > 0 || empfWiki) {
+    materialHTML = `<div class="sitzungsvorschlag-materialien">
+      <div class="sitzungsvorschlag-materialien-header">Materialien & Interventionen</div>
+      <div class="roadmap-material-links">
+        ${empfAB.map(ab => `<a href="arbeitsblatter/${ab.datei}" target="_blank" class="roadmap-material-btn arbeitsblatt">📋 ${ab.titel}</a>`).join('')}
+        ${empfIV.slice(0, 3).map(iv => `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${empfohlenesThema.id}')" title="${(iv.beschreibung || '').substring(0, 100)}">🔧 ${iv.titel} <span style="font-size:10px;opacity:.7;">${iv.dauer || ''}</span></button>`).join('')}
+        ${empfIV.length > 3 ? `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${empfohlenesThema.id}')">+${empfIV.length - 3} weitere</button>` : ''}
+        ${empfWiki ? `<button class="roadmap-material-btn wiki" onclick="openWikiArtikel('${empfWiki.id}')">📚 Wiki</button>` : ''}
+      </div>
+    </div>`;
+  }
+
+  // ── Kontext-Badges ──
+  const pvtBadgeClass = lastPVT === 'safe' ? 'sv-badge-pvt-safe' : lastPVT === 'activated' ? 'sv-badge-pvt-activated' : lastPVT === 'frozen' ? 'sv-badge-pvt-frozen' : '';
+  const trAnalyseEmpf = trAnalyse ? trAnalyse.themen.find(t => t.themaId === empfohlenesThema.id) : null;
+
+  let kontextHTML = '';
+  const badges = [];
+  if (lastPVT) badges.push(`<span class="sv-badge ${pvtBadgeClass}">${pvtLabels[lastPVT] || lastPVT}</span>`);
+  if (aktivePhase) badges.push(`<span class="sv-badge sv-badge-phase">Phase ${aktivePhase.nr}: ${ROADMAP_PHASEN[aktivePhase.nr]?.label || ''}</span>`);
+  if (empfPrio && empfPrio.level === 'essentiell') badges.push(`<span class="sv-badge" style="background:#FEE2E2;color:#DC2626;">⚡ Essentiell</span>`);
+  if (trAnalyseEmpf && trAnalyseEmpf.anzahl >= 2) {
+    const rr = trAnalyseEmpf.responseRate;
+    badges.push(`<span class="sv-badge ${rr >= 60 ? 'sv-badge-response-good' : 'sv-badge-response-bad'}">📊 Response: ${rr}%</span>`);
+  }
+  if (badges.length > 0) {
+    kontextHTML = `<div class="sitzungsvorschlag-kontext">${badges.join('')}</div>`;
+  }
+
+  // ── Warnungen sammeln ──
+  let warnungenHTML = '';
+  const warnungen = [];
+  if (sequenzWarnung) warnungen.push(sequenzWarnung);
+  if (steppedCareHint) warnungen.push(steppedCareHint);
+  if (hypothesenHint) warnungen.push(hypothesenHint);
+  if (treatmentHint) warnungen.push(treatmentHint);
+  if (warnungen.length > 0) {
+    warnungenHTML = `<div class="sitzungsvorschlag-warnungen">${warnungen.join('')}</div>`;
+  }
+
   container.innerHTML = `
-    <div class="card sitzungsvorschlag-card ${pvtOverride ? 'pvt-override' : ''}">
-      <div class="card-body" style="display:flex;align-items:center;gap:14px;padding:14px 18px;">
-        <div class="sitzungsvorschlag-icon">💡</div>
-        <div style="flex:1;">
-          <div class="sitzungsvorschlag-label">Heute empfohlen ${pvtBadge}</div>
-          <div class="sitzungsvorschlag-thema">${empfohlenesThema.titel}</div>
-          <div class="sitzungsvorschlag-grund">${empfGrund}</div>
+    <div class="sitzungsvorschlag-dashboard">
+      <div class="sitzungsvorschlag-header">💡 Heutige Sitzung</div>
+
+      <!-- Empfehlung -->
+      <div class="sitzungsvorschlag-empfehlung">
+        <div class="sitzungsvorschlag-empfehlung-icon" style="background:${empfohlenesThema.farbe || '#EEF2FF'}20;">
+          ${empfohlenesThema.icon ? renderIcon(empfohlenesThema.icon) : '📌'}
+        </div>
+        <div class="sitzungsvorschlag-empfehlung-body">
+          <div class="sitzungsvorschlag-empfehlung-titel">${empfohlenesThema.titel}</div>
+          <div style="font-size:12px;color:#6B7280;margin-top:2px;">${empfGrund}</div>
           ${begruendung}
           ${overrideHint}
-          ${sequenzWarnung}
-          ${treatmentHint}
-          ${steppedCareHint}
-          ${hypothesenHint}
           ${ressourcenHint}
-          ${aktivitaetenHTML}
         </div>
-        <div class="sitzungsvorschlag-actions">
-          <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">
-            Sitzung starten
-          </button>
-          <button class="btn btn-secondary btn-sm" onclick="showQuickEntryPanel('${empfohlenesThema.id}', '${empfohlenesThema.katId || ''}')">
-            Details
-          </button>
-        </div>
+      </div>
+
+      <!-- Materialien -->
+      ${materialHTML}
+
+      <!-- Kontext-Badges -->
+      ${kontextHTML}
+
+      <!-- Warnungen (nur wenn nötig) -->
+      ${warnungenHTML}
+
+      <!-- Aktivitäten -->
+      ${aktivitaetenHTML ? `<div style="padding:0 20px 12px;">${aktivitaetenHTML}</div>` : ''}
+
+      <!-- Aktionen -->
+      <div class="sitzungsvorschlag-aktionen">
+        <button class="btn btn-secondary btn-sm" onclick="showQuickEntryPanel('${empfohlenesThema.id}', '${empfohlenesThema.katId || ''}')">Details</button>
+        <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">Sitzung starten</button>
       </div>
     </div>
   `;

@@ -5451,6 +5451,31 @@ const WHO5_ITEMS = [
 // Score: Rohsumme (0-25) × 4 = Prozentwert (0-100)
 // Interpretation: ≤28 (Prozentwert) = Depression-Screening positiv → weitere Abklärung empfohlen
 
+// ============================================================
+// VERLAUFS-TRACKER — Dimensionen für sitzungsweises Tracking
+// ============================================================
+const VERLAUF_ITEMS = [
+  { id: 'stimmung',    label: 'Stimmung',     icon: '😊', farbe: '#3B82F6', desc: 'Allgemeine Stimmungslage' },
+  { id: 'energie',     label: 'Energie',      icon: '⚡', farbe: '#F59E0B', desc: 'Energielevel & Antrieb' },
+  { id: 'beziehungen', label: 'Beziehungen',  icon: '🤝', farbe: '#8B5CF6', desc: 'Qualität sozialer Beziehungen' },
+  { id: 'schule',      label: 'Schule',       icon: '📚', farbe: '#22C55E', desc: 'Schulisches Engagement & Erfolg' },
+  { id: 'schlaf',      label: 'Schlaf',       icon: '🌙', farbe: '#6366F1', desc: 'Schlafqualität' },
+];
+
+// ============================================================
+// RISIKO-MONITOR — Ampel-Items für Sicherheits-Check
+// ============================================================
+const RISIKO_ITEMS = [
+  { id: 'sicherheit',       label: 'Sicherheit',       icon: '🛡️', desc: 'Fühlt sich der Jugendliche sicher? Gibt es Bedrohungen?' },
+  { id: 'selbstverletzung',  label: 'Selbstverletzung', icon: '⚠️', desc: 'Anzeichen von Selbstverletzung oder Suizidgedanken?' },
+  { id: 'substanzen',        label: 'Substanzkonsum',   icon: '🚬', desc: 'Auffälliger Konsum von Alkohol, Cannabis oder anderen Substanzen?' },
+];
+const RISIKO_STUFEN = {
+  gruen:  { label: 'Unauffällig',  farbe: '#22C55E', icon: '🟢' },
+  gelb:   { label: 'Beobachten',   farbe: '#F59E0B', icon: '🟡' },
+  rot:    { label: 'Handeln',      farbe: '#EF4444', icon: '🔴' },
+};
+
 // Datenverwaltung (localStorage)
 // ============================================================
 const DB = {
@@ -5462,6 +5487,9 @@ const DB = {
     ROADMAPS: 'cdse_roadmaps',
     WOHLBEFINDEN: 'cdse_wohlbefinden',
     FALLFORMULIERUNGEN: 'cdse_fallformulierungen',
+    VERLAUF: 'cdse_verlauf',
+    KONTAKTE: 'cdse_kontakte',
+    RISIKO: 'cdse_risiko',
   },
 
   generateId() {
@@ -5733,6 +5761,74 @@ const DB = {
   deleteFallformulierung(id) {
     const alle = this.getFallformulierungen().filter(f => f.id !== id);
     localStorage.setItem(this.KEYS.FALLFORMULIERUNGEN, JSON.stringify(alle));
+  },
+
+  // Verlaufs-Tracker
+  getVerlauf(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.VERLAUF) || '[]');
+    return schuelerId ? alle.filter(v => v.schuelerId === schuelerId) : alle;
+  },
+  addVerlauf(schuelerId, werte) {
+    const alle = this.getVerlauf();
+    const eintrag = {
+      id: this.generateId(),
+      schuelerId,
+      datum: new Date().toISOString(),
+      werte, // { stimmung: 7, energie: 5, beziehungen: 6, schule: 4, schlaf: 8 }
+    };
+    alle.push(eintrag);
+    localStorage.setItem(this.KEYS.VERLAUF, JSON.stringify(alle));
+    return eintrag;
+  },
+  deleteVerlauf(id) {
+    const alle = this.getVerlauf().filter(v => v.id !== id);
+    localStorage.setItem(this.KEYS.VERLAUF, JSON.stringify(alle));
+  },
+
+  // Kontaktlog
+  getKontakte(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.KONTAKTE) || '[]');
+    return schuelerId ? alle.filter(k => k.schuelerId === schuelerId) : alle;
+  },
+  addKontakt(daten) {
+    const alle = this.getKontakte();
+    const neu = {
+      id: this.generateId(),
+      schuelerId: daten.schuelerId,
+      kontaktperson: daten.kontaktperson || '',
+      art: daten.art || 'telefon', // telefon | email | vor-ort | meeting
+      datum: daten.datum || new Date().toISOString().split('T')[0],
+      dauer: daten.dauer || '',
+      inhalt: daten.inhalt || '',
+      vereinbarungen: daten.vereinbarungen || '',
+      nachfassDatum: daten.nachfassDatum || '',
+      erstellt: new Date().toISOString(),
+    };
+    alle.push(neu);
+    localStorage.setItem(this.KEYS.KONTAKTE, JSON.stringify(alle));
+    return neu;
+  },
+  deleteKontakt(id) {
+    const alle = this.getKontakte().filter(k => k.id !== id);
+    localStorage.setItem(this.KEYS.KONTAKTE, JSON.stringify(alle));
+  },
+
+  // Risiko-Monitor
+  getRisiko(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.RISIKO) || '[]');
+    return schuelerId ? alle.filter(r => r.schuelerId === schuelerId) : alle;
+  },
+  addRisiko(schuelerId, werte) {
+    const alle = this.getRisiko();
+    const eintrag = {
+      id: this.generateId(),
+      schuelerId,
+      datum: new Date().toISOString(),
+      werte, // { sicherheit: 'gruen', selbstverletzung: 'gruen', substanzen: 'gelb' }
+    };
+    alle.push(eintrag);
+    localStorage.setItem(this.KEYS.RISIKO, JSON.stringify(alle));
+    return eintrag;
   },
 };
 

@@ -135,11 +135,20 @@
 
       <!-- DASHBOARD -->
       <div class="profil-tab-content active" data-tab="dashboard">
+        <!-- Risiko-Ampel (prominent, ganz oben!) -->
+        <div id="risiko-ampel-widget"></div>
+
         <!-- Sitzungsvorschlag: Was mache ich heute? -->
         <div id="sitzungsvorschlag-widget"></div>
 
         <!-- Nächste Schritte & Fortschritt -->
         <div id="naechste-schritte-widget"></div>
+
+        <!-- Kontakt-Nachfass-Erinnerungen -->
+        <div id="kontakt-nachfass-widget"></div>
+
+        <!-- Verlaufs-Trend -->
+        <div id="verlauf-trend-widget"></div>
 
         <!-- Quick-Entry: Akutes Thema -->
         <div id="quick-entry-dashboard"></div>
@@ -465,6 +474,9 @@
 
           <!-- ═══ STEP 3: Bewertung + Materialien ═══ -->
           <div class="soap-wizard-step" id="soap-step-3" style="display:none;">
+            <!-- Risiko-Check (Sicherheits-Ampel) -->
+            <div id="risiko-check-section"></div>
+
             <!-- Materialien -->
             <div class="protokoll-zusatz">
               <div class="form-group">
@@ -574,6 +586,17 @@
         <div id="treatment-response-container"></div>
         <div id="screening-verlauf-container" style="margin-top:16px;"></div>
         <div id="dashboard-screening-delta-container" style="margin-top:16px;"></div>
+      </div>
+
+      <!-- ANALYSE: Verlaufs-Tracker -->
+      <div class="profil-tab-content" data-tab="verlauf-tracker">
+        <div id="verlauf-tracker-container"></div>
+        <div id="risiko-timeline-container"></div>
+      </div>
+
+      <!-- KONTAKTLOG -->
+      <div class="profil-tab-content" data-tab="kontaktlog">
+        <div id="kontaktlog-container"></div>
       </div>
 
       <!-- GENOGRAMM -->

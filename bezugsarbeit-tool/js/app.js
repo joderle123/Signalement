@@ -588,7 +588,8 @@ const PHASE_TABS = {
     { id: 'staerken', label: 'Stärken' },
     { id: 'genogramm', label: 'Genogramm' },
     { id: 'verhalten', label: 'Verhalten' },
-    { id: 'notizen', label: 'Notizen' }
+    { id: 'notizen', label: 'Notizen' },
+    { id: 'kontaktlog', label: 'Kontakte' }
   ],
   leitfaden: [
     { id: 'dashboard', label: 'Heute' },
@@ -599,6 +600,7 @@ const PHASE_TABS = {
   analyse: [
     { id: 'hypothesen-tab', label: 'Hypothesen' },
     { id: 'treatment-tab', label: 'Verlauf' },
+    { id: 'verlauf-tracker', label: 'Verlaufs-Tracker' },
     { id: 'berichte', label: 'Berichte' }
   ]
 };
@@ -675,6 +677,8 @@ function showProfilTab(tab) {
   if (tab === 'bibliothek') renderBibliothek();
   if (tab === 'hypothesen-tab') renderHypothesenTab();
   if (tab === 'treatment-tab') renderTreatmentTab();
+  if (tab === 'verlauf-tracker') { renderVerlaufTracker(); renderRisikoTimeline(); }
+  if (tab === 'kontaktlog') renderKontaktlog();
 }
 
 // ============================================================
@@ -1742,6 +1746,8 @@ function soapWizardGo(step) {
   const totalSteps = 4;
   if (step < 1 || step > totalSteps) return;
 
+  // Wenn Step 3: Risiko-Check initialisieren
+  if (step === 3 && typeof renderRisikoCheck === 'function') renderRisikoCheck();
   // Wenn Step 4: Vorschau generieren
   if (step === 4) renderSoapVorschau();
 
@@ -1987,6 +1993,11 @@ function addProtokoll() {
     DB.addWohlbefinden(APP.currentSchuelerId, moodScore[stimmung] || 5, `Sitzung: ${themaLabel || setting}`);
   }
 
+  // Save risk assessment if any non-green values
+  if (typeof saveRisikoFromProtokoll === 'function') {
+    saveRisikoFromProtokoll();
+  }
+
   // Reset form
   ['prot-subjektiv','prot-objektiv','prot-assessment','prot-plan','prot-materialien'].forEach(id => {
     document.getElementById(id).value = '';
@@ -2204,6 +2215,17 @@ function renderZiele() {
   const avgFortschritt = Math.round(ziele.reduce((sum, z) => sum + (z.fortschritt || (z.erledigt ? 100 : 0)), 0) / ziele.length);
   const avgColor = avgFortschritt >= 70 ? '#22C55E' : (avgFortschritt >= 30 ? '#F59E0B' : '#EF4444');
 
+  // Get roadmap themes for linking
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  const roadmapThemen = [];
+  if (roadmap) {
+    roadmap.phasen.forEach(phase => {
+      (phase.themen || []).forEach(t => {
+        roadmapThemen.push({ id: t.id || t, titel: t.titel || t, phase: phase.nr });
+      });
+    });
+  }
+
   liste.innerHTML = `
     <div class="ziel-gesamt-fortschritt" style="margin-bottom:14px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
@@ -2217,6 +2239,9 @@ function renderZiele() {
     ${ziele.map((z, i) => {
       const pct = z.fortschritt || (z.erledigt ? 100 : 0);
       const farbe = pct >= 70 ? '#22C55E' : (pct >= 30 ? '#F59E0B' : '#EF4444');
+      const meilensteine = z.meilensteine || [];
+      const erledigteMeilensteine = meilensteine.filter(m => m.erledigt).length;
+      const roadmapLink = z.roadmapThema ? roadmapThemen.find(t => (t.id || t) === z.roadmapThema) : null;
       return `
         <div class="ziel-item-enhanced">
           <div class="ziel-item-header">
@@ -2226,10 +2251,31 @@ function renderZiele() {
             <span class="ziel-pct" style="color:${farbe};">${pct}%</span>
             <button class="btn-icon btn-sm" style="font-size:12px;" onclick="deleteZiel(${i})">🗑</button>
           </div>
+          ${roadmapLink ? `<div style="font-size:10px;color:#6366F1;margin:2px 0 2px 24px;">🗺️ Verknüpft: ${escapeHtml(roadmapLink.titel)} (Phase ${roadmapLink.phase})</div>` : ''}
           <div class="ziel-slider-row">
             <input type="range" min="0" max="100" step="5" value="${pct}"
               class="ziel-slider" style="--ziel-farbe:${farbe};"
               oninput="updateZielFortschritt(${i}, this.value)">
+          </div>
+          ${meilensteine.length > 0 ? `
+            <div class="meilensteine-liste" style="margin:4px 0 4px 24px;">
+              ${meilensteine.map((m, mi) => `
+                <div style="display:flex;align-items:center;gap:6px;padding:2px 0;">
+                  <input type="checkbox" ${m.erledigt ? 'checked' : ''} onchange="toggleMeilenstein(${i},${mi})" style="margin:0;">
+                  <span style="font-size:11px;color:${m.erledigt ? '#22C55E' : '#6B7280'};${m.erledigt ? 'text-decoration:line-through;' : ''}">${escapeHtml(m.text)}</span>
+                  <button style="background:none;border:none;font-size:10px;cursor:pointer;color:#D1D5DB;" onclick="deleteMeilenstein(${i},${mi})">✕</button>
+                </div>
+              `).join('')}
+              <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">✅ ${erledigteMeilensteine}/${meilensteine.length} Meilensteine</div>
+            </div>
+          ` : ''}
+          <div style="display:flex;gap:4px;margin:4px 0 2px 24px;">
+            <input type="text" id="meilenstein-input-${i}" placeholder="Meilenstein hinzufügen..." style="font-size:11px;padding:3px 8px;border:1px solid #E5E7EB;border-radius:6px;flex:1;" onkeydown="if(event.key==='Enter')addMeilenstein(${i})">
+            <button class="btn btn-xs btn-secondary" onclick="addMeilenstein(${i})" style="font-size:10px;">+</button>
+            ${roadmapThemen.length > 0 && !z.roadmapThema ? `<select onchange="linkZielRoadmap(${i},this.value)" style="font-size:10px;padding:2px 4px;border:1px solid #E5E7EB;border-radius:6px;">
+              <option value="">🗺️ Verknüpfen...</option>
+              ${roadmapThemen.map(t => `<option value="${t.id || t}">${escapeHtml(t.titel)}</option>`).join('')}
+            </select>` : ''}
           </div>
         </div>`;
     }).join('')}
@@ -2315,6 +2361,52 @@ function deleteZiel(index) {
   ziele.splice(index, 1);
   DB.updateSchueler(APP.currentSchuelerId, { ziele });
   renderZiele();
+}
+
+function addMeilenstein(zielIndex) {
+  const input = document.getElementById(`meilenstein-input-${zielIndex}`);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  if (!ziele[zielIndex].meilensteine) ziele[zielIndex].meilensteine = [];
+  ziele[zielIndex].meilensteine.push({ text, erledigt: false });
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  renderZiele();
+}
+
+function toggleMeilenstein(zielIndex, meilensteinIndex) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  const ms = ziele[zielIndex].meilensteine || [];
+  ms[meilensteinIndex].erledigt = !ms[meilensteinIndex].erledigt;
+  // Auto-update Fortschritt basierend auf Meilensteinen
+  if (ms.length > 0) {
+    const erledigt = ms.filter(m => m.erledigt).length;
+    ziele[zielIndex].fortschritt = Math.round((erledigt / ms.length) * 100);
+    ziele[zielIndex].erledigt = ziele[zielIndex].fortschritt >= 100;
+  }
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  renderZiele();
+}
+
+function deleteMeilenstein(zielIndex, meilensteinIndex) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  ziele[zielIndex].meilensteine.splice(meilensteinIndex, 1);
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  renderZiele();
+}
+
+function linkZielRoadmap(zielIndex, themaId) {
+  if (!themaId) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const ziele = s.ziele || [];
+  ziele[zielIndex].roadmapThema = themaId;
+  DB.updateSchueler(APP.currentSchuelerId, { ziele });
+  renderZiele();
+  showToast('Ziel mit Roadmap verknüpft', 'success');
 }
 
 // ============================================================
@@ -3742,6 +3834,7 @@ function renderKalender() {
 
   const heute = new Date();
   const alleTermine = DB.getTermine();
+  const sessionDates = getSessionDatesForKalender();
 
   let html = '';
   // Leere Felder am Anfang
@@ -3753,16 +3846,20 @@ function renderKalender() {
     const datumStr = `${jahr}-${String(monat+1).padStart(2,'0')}-${String(tag).padStart(2,'0')}`;
     const isHeute = heute.getFullYear() === jahr && heute.getMonth() === monat && heute.getDate() === tag;
     const termine = alleTermine.filter(t => t.datum === datumStr);
+    const sessions = sessionDates[datumStr] || [];
 
     html += `
       <div class="kalender-tag ${isHeute ? 'heute' : ''}" onclick="openTerminModal('${datumStr}')">
         <div class="tag-nummer">${tag}</div>
         <div class="tag-events">
-          ${termine.slice(0,3).map(t => {
+          ${sessions.map(s =>
+            `<div class="tag-event tag-event-session" style="background:#6366F1;" title="Sitzung: ${s.schuelerName}">📋 ${s.schuelerName.split(' ')[0] || 'Sitzung'}</div>`
+          ).join('')}
+          ${termine.slice(0,3 - sessions.length).map(t => {
             const typ = TERMIN_TYPEN[t.typ] || TERMIN_TYPEN.termin;
             return `<div class="tag-event" style="background:${typ.farbe};" title="${t.titel}">${t.uhrzeit ? t.uhrzeit + ' ' : ''}${t.titel}</div>`;
           }).join('')}
-          ${termine.length > 3 ? `<div style="font-size:10px;color:var(--text-muted);">+${termine.length - 3} mehr</div>` : ''}
+          ${(termine.length + sessions.length) > 3 ? `<div style="font-size:10px;color:var(--text-muted);">+${termine.length + sessions.length - 3} mehr</div>` : ''}
         </div>
       </div>`;
   }
@@ -4306,6 +4403,9 @@ function exportDaten() {
     roadmaps: DB.getRoadmaps(),
     wohlbefinden: DB.getWohlbefinden(),
     fallformulierungen: DB.getFallformulierungen(),
+    verlauf: DB.getVerlauf(),
+    kontakte: DB.getKontakte(),
+    risiko: DB.getRisiko(),
   };
   const json = JSON.stringify(daten, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -4386,6 +4486,27 @@ function doImportMerge(daten) {
         const lokalFFIds = new Set(DB.getFallformulierungen().map(f => f.id));
         const alleFF = [...DB.getFallformulierungen(), ...daten.fallformulierungen.filter(f => !lokalFFIds.has(f.id))];
         localStorage.setItem(DB.KEYS.FALLFORMULIERUNGEN, JSON.stringify(alleFF));
+      }
+
+      // Verlauf zusammenführen
+      if (daten.verlauf) {
+        const lokalVIds = new Set(DB.getVerlauf().map(v => v.id));
+        const alleV = [...DB.getVerlauf(), ...daten.verlauf.filter(v => !lokalVIds.has(v.id))];
+        localStorage.setItem(DB.KEYS.VERLAUF, JSON.stringify(alleV));
+      }
+
+      // Kontakte zusammenführen
+      if (daten.kontakte) {
+        const lokalKIds = new Set(DB.getKontakte().map(k => k.id));
+        const alleK = [...DB.getKontakte(), ...daten.kontakte.filter(k => !lokalKIds.has(k.id))];
+        localStorage.setItem(DB.KEYS.KONTAKTE, JSON.stringify(alleK));
+      }
+
+      // Risiko zusammenführen
+      if (daten.risiko) {
+        const lokalRisikoIds = new Set(DB.getRisiko().map(r => r.id));
+        const alleRisiko = [...DB.getRisiko(), ...daten.risiko.filter(r => !lokalRisikoIds.has(r.id))];
+        localStorage.setItem(DB.KEYS.RISIKO, JSON.stringify(alleRisiko));
       }
 
       renderSidebar();
@@ -4841,10 +4962,13 @@ function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
   // "Heute"-Ansicht: Nur das Wesentliche für den Arbeitstag
+  renderRisikoWidget();
   renderSitzungsvorschlag();
   renderNaechsteSchritte();
   renderPhaseTransitionPrompt();
   renderRueckschrittAlert();
+  renderKontaktNachfassWidget();
+  renderVerlaufWidget();
   renderWohlbefinden();
   renderDashKalender();
   renderDashTodo();
@@ -5403,6 +5527,37 @@ function renderSitzungsvorschlag() {
     }
   }
 
+  // ── Verlaufs-Warnung bei Verschlechterung ──
+  let verlaufHint = '';
+  try {
+    const verlaufDaten = DB.getVerlauf(sid).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+    if (verlaufDaten.length >= 2) {
+      const letzter = verlaufDaten[verlaufDaten.length - 1];
+      const vorLetzter = verlaufDaten[verlaufDaten.length - 2];
+      let verschlechtert = [];
+      VERLAUF_ITEMS.forEach(item => {
+        const diff = (letzter.werte[item.id] || 5) - (vorLetzter.werte[item.id] || 5);
+        if (diff <= -2) verschlechtert.push(item.label + ' (' + (letzter.werte[item.id] || 5) + '/10)');
+      });
+      if (verschlechtert.length >= 2) {
+        verlaufHint = `<div class="sitzungsvorschlag-response-hint warnung" style="margin-top:6px;">📉 <strong>Verlaufs-Verschlechterung:</strong> ${verschlechtert.join(', ')} — Reflexion empfohlen</div>`;
+      }
+    }
+  } catch(e) { /* silent */ }
+
+  // ── Risiko-Override bei Rot ──
+  let risikoHint = '';
+  try {
+    const risikoDaten = DB.getRisiko(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+    if (risikoDaten.length > 0) {
+      const letzterR = risikoDaten[0];
+      if (Object.values(letzterR.werte).includes('rot')) {
+        risikoHint = `<div class="sitzungsvorschlag-response-hint warnung" style="margin-top:6px;border-left:3px solid #DC2626;">🔴 <strong>Risiko-Alarm:</strong> Letzter Sicherheits-Check enthält rote Ampel — Krisenintervention priorisieren!
+          <button class="btn btn-xs" style="background:#EF4444;color:#fff;border:none;margin-left:8px;" onclick="quickStartSession('krisenintervention')">Krisenintervention starten</button></div>`;
+      }
+    }
+  } catch(e) { /* silent */ }
+
   // ── Schutzfaktoren / Ressourcen-Hint ──
   let ressourcenHint = '';
   try {
@@ -5551,6 +5706,8 @@ function renderSitzungsvorschlag() {
   if (steppedCareHint) warnungen.push(steppedCareHint);
   if (hypothesenHint) warnungen.push(hypothesenHint);
   if (treatmentHint) warnungen.push(treatmentHint);
+  if (risikoHint) warnungen.push(risikoHint);
+  if (verlaufHint) warnungen.push(verlaufHint);
   if (warnungen.length > 0) {
     warnungenHTML = `<div class="sitzungsvorschlag-warnungen">${warnungen.join('')}</div>`;
   }
@@ -7421,11 +7578,21 @@ function render5PSuggestions(key, existingTags) {
     protective: ['Stabile Bezugsperson', 'Hobbys/Interessen', 'Peer-Gruppe'],
   };
 
+  // Genogramm-basierte Vorschläge hinzufügen
+  if (typeof getGenogramm5PSuggestions === 'function') {
+    const genoSugg = getGenogramm5PSuggestions();
+    if (genoSugg[key]) {
+      genoSugg[key].forEach(s => {
+        if (!suggestions[key].includes(s.text)) suggestions[key].push(s.text);
+      });
+    }
+  }
+
   const chips = (suggestions[key] || []).filter(s => !existingTags.includes(s));
   if (chips.length === 0) return '';
 
   return '<div class="suggestion-chips" style="margin-top:6px;">' +
-    chips.slice(0, 5).map(c =>
+    chips.slice(0, 7).map(c =>
       `<button type="button" class="suggestion-chip" onclick="add5PTagDirect('${key}','${c.replace(/'/g, "\\'")}')">${c}</button>`
     ).join('') + '</div>';
 }
@@ -8158,7 +8325,34 @@ function generateSCASBericht(s, name, notizen, scr, roadmap, ff, wb, heute) {
       ${ffAbschnitt}
       ${roadmapAbschnitt}
 
-      <h4>6. Empfehlung</h4>
+      ${(() => {
+        const verlauf = DB.getVerlauf(s.id).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+        if (verlauf.length === 0) return '';
+        const letzter = verlauf[verlauf.length - 1];
+        return `<h4>6. Verlaufs-Tracking</h4>
+          <p>${verlauf.length} Erfassungen dokumentiert.</p>
+          <p>Letzte Werte: ${VERLAUF_ITEMS.map(item => `${item.label}: ${letzter.werte[item.id] || '—'}/10`).join(' | ')}</p>`;
+      })()}
+
+      ${(() => {
+        const risiko = DB.getRisiko(s.id).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+        if (risiko.length === 0) return '';
+        const letzter = risiko[0];
+        const maxStufe = Object.values(letzter.werte).includes('rot') ? 'Handeln' : Object.values(letzter.werte).includes('gelb') ? 'Beobachten' : 'Unauffällig';
+        return `<h4>7. Risiko-Einschätzung</h4>
+          <p>Letzter Sicherheits-Check: <strong>${maxStufe}</strong></p>
+          <p>${RISIKO_ITEMS.map(item => `${item.label}: ${RISIKO_STUFEN[letzter.werte[item.id] || 'gruen'].label}`).join(' | ')}</p>`;
+      })()}
+
+      ${(() => {
+        const kontakte = DB.getKontakte(s.id).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+        if (kontakte.length === 0) return '';
+        return `<h4>8. Bezugspersonen-Kontakte</h4>
+          <p>${kontakte.length} dokumentierte Kontakte.</p>
+          <p>Letzte Kontakte: ${kontakte.slice(0, 3).map(k => `${k.kontaktperson} (${formatDatum(k.datum)}, ${(KONTAKT_ARTEN[k.art] || KONTAKT_ARTEN.telefon).label})`).join('; ')}</p>`;
+      })()}
+
+      <h4>9. Empfehlung</h4>
       <p><em>[Hier Empfehlung einfügen]</em></p>
 
       <div class="bericht-footer">
@@ -11356,6 +11550,568 @@ function renderWikiTeaserWidget() {
   html += '</div></div>';
 
   container.insertAdjacentHTML('beforeend', html);
+}
+
+// ============================================================
+// VERLAUFS-TRACKER — Sitzungsweises Tracking von Dimensionen
+// ============================================================
+function renderVerlaufTracker() {
+  const container = document.getElementById('verlauf-tracker-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  const verlaufDaten = DB.getVerlauf(sid).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+  const screenings = DB.getScreenings(sid).filter(s => s.abgeschlossen);
+  const latestScr = screenings.length ? screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0] : null;
+
+  // Baseline aus Screening (wenn vorhanden)
+  const baselineMap = {};
+  if (latestScr && latestScr.scores) {
+    const scrDomMap = { depression: 'stimmung', angst: 'energie', soziale_angst: 'beziehungen', schulverweigerung: 'schule', schlaf: 'schlaf' };
+    for (const [domId, score] of Object.entries(latestScr.scores)) {
+      const vId = scrDomMap[domId];
+      if (vId) {
+        const dom = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS.find(d => d.id === domId) : null;
+        const maxScore = dom ? dom.items.length * 3 : 10;
+        baselineMap[vId] = Math.round(10 - (score / maxScore) * 10);
+      }
+    }
+  }
+
+  let html = '<div class="section-header" style="margin-bottom:18px;">';
+  html += '<h3 style="margin:0;font-size:18px;">📈 Verlaufs-Tracker</h3>';
+  html += '<p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Systematische Erfassung der Entwicklung über die Zeit</p>';
+  html += '</div>';
+
+  // Eingabe-Formular
+  html += '<div class="card" style="margin-bottom:20px;">';
+  html += '<div class="card-header"><span>➕</span><div class="card-title">Neue Erfassung</div></div>';
+  html += '<div class="card-body">';
+  html += '<div class="verlauf-eingabe-grid">';
+  VERLAUF_ITEMS.forEach(item => {
+    html += `<div class="verlauf-eingabe-item">
+      <div class="verlauf-eingabe-label">${item.icon} ${item.label}</div>
+      <div class="verlauf-slider-row">
+        <input type="range" min="1" max="10" value="5" id="verlauf-${item.id}" class="verlauf-slider" style="--verlauf-farbe:${item.farbe};" oninput="document.getElementById('verlauf-val-${item.id}').textContent=this.value">
+        <span class="verlauf-slider-val" id="verlauf-val-${item.id}">5</span>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  html += '<button class="btn btn-primary btn-sm" onclick="saveVerlaufEintrag()" style="margin-top:12px;">📊 Erfassung speichern</button>';
+  html += '</div></div>';
+
+  // Trend-Chart (Sparklines)
+  if (verlaufDaten.length > 0) {
+    html += '<div class="card" style="margin-bottom:20px;">';
+    html += '<div class="card-header"><span>📊</span><div class="card-title">Trend-Übersicht</div><span style="font-size:11px;color:#6B7280;">' + verlaufDaten.length + ' Erfassungen</span></div>';
+    html += '<div class="card-body">';
+
+    VERLAUF_ITEMS.forEach(item => {
+      const werte = verlaufDaten.map(v => v.werte[item.id] || 0);
+      const baseline = baselineMap[item.id];
+      const letzter = werte[werte.length - 1];
+      const erster = werte[0];
+      const trend = letzter - erster;
+      const trendIcon = trend > 0 ? '↑' : trend < 0 ? '↓' : '→';
+      const trendColor = trend > 0 ? '#22C55E' : trend < 0 ? '#EF4444' : '#6B7280';
+
+      html += `<div class="verlauf-trend-row">
+        <div class="verlauf-trend-label">${item.icon} ${item.label}</div>
+        <div class="verlauf-sparkline" id="sparkline-${item.id}"></div>
+        <div class="verlauf-trend-wert" style="color:${trendColor};">${letzter}/10 <span style="font-size:10px;">${trendIcon}${Math.abs(trend)}</span></div>
+        ${baseline != null ? `<div class="verlauf-baseline" title="Screening-Baseline">Baseline: ${baseline}/10 (${letzter > baseline ? '+' : ''}${letzter - baseline})</div>` : ''}
+      </div>`;
+    });
+    html += '</div></div>';
+
+    // Historie
+    html += '<div class="card">';
+    html += '<div class="card-header"><span>📋</span><div class="card-title">Verlauf-Historie</div></div>';
+    html += '<div class="card-body">';
+    verlaufDaten.slice().reverse().forEach(v => {
+      const datum = new Date(v.datum).toLocaleDateString('de-DE');
+      html += `<div class="verlauf-historie-item">
+        <div class="verlauf-historie-datum">${datum}</div>
+        <div class="verlauf-historie-werte">
+          ${VERLAUF_ITEMS.map(item => {
+            const w = v.werte[item.id] || 0;
+            const farbe = w >= 7 ? '#22C55E' : w >= 4 ? '#F59E0B' : '#EF4444';
+            return `<span class="verlauf-historie-chip" style="background:${farbe}15;color:${farbe};border:1px solid ${farbe}30;">${item.icon} ${w}</span>`;
+          }).join('')}
+        </div>
+        <button class="btn-icon btn-sm" style="font-size:11px;" onclick="deleteVerlaufEintrag('${v.id}')">🗑</button>
+      </div>`;
+    });
+    html += '</div></div>';
+  } else {
+    html += '<div style="text-align:center;padding:32px;color:#9CA3AF;font-size:13px;">Noch keine Verlaufsdaten erfasst. Nutze das Formular oben für die erste Erfassung.</div>';
+  }
+
+  container.innerHTML = html;
+
+  // Sparklines rendern
+  if (verlaufDaten.length >= 2) {
+    setTimeout(() => {
+      VERLAUF_ITEMS.forEach(item => {
+        const werte = verlaufDaten.map(v => v.werte[item.id] || 0);
+        renderSparkline(`sparkline-${item.id}`, werte, item.farbe);
+      });
+    }, 50);
+  }
+}
+
+function renderSparkline(containerId, werte, farbe) {
+  const container = document.getElementById(containerId);
+  if (!container || werte.length < 2) return;
+  const w = 120, h = 30;
+  const maxVal = 10, minVal = 1;
+  const step = w / (werte.length - 1);
+  let path = '';
+  werte.forEach((v, i) => {
+    const x = i * step;
+    const y = h - ((v - minVal) / (maxVal - minVal)) * h;
+    path += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  });
+  container.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <path d="${path}" fill="none" stroke="${farbe}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${(werte.length - 1) * step}" cy="${h - ((werte[werte.length - 1] - minVal) / (maxVal - minVal)) * h}" r="3" fill="${farbe}"/>
+  </svg>`;
+}
+
+function saveVerlaufEintrag() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const werte = {};
+  VERLAUF_ITEMS.forEach(item => {
+    const el = document.getElementById(`verlauf-${item.id}`);
+    werte[item.id] = el ? parseInt(el.value) : 5;
+  });
+  DB.addVerlauf(sid, werte);
+  renderVerlaufTracker();
+  showToast('Verlauf erfasst', 'success');
+}
+
+function deleteVerlaufEintrag(id) {
+  DB.deleteVerlauf(id);
+  renderVerlaufTracker();
+  showToast('Eintrag gelöscht');
+}
+
+// Dashboard: Verlaufs-Trend-Widget
+function renderVerlaufWidget() {
+  const container = document.getElementById('verlauf-trend-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const verlaufDaten = DB.getVerlauf(sid).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+  if (verlaufDaten.length < 2) { container.innerHTML = ''; return; }
+
+  const letzter = verlaufDaten[verlaufDaten.length - 1];
+  const vorLetzter = verlaufDaten[verlaufDaten.length - 2];
+
+  let verschlechtert = 0;
+  VERLAUF_ITEMS.forEach(item => {
+    const diff = (letzter.werte[item.id] || 5) - (vorLetzter.werte[item.id] || 5);
+    if (diff <= -2) verschlechtert++;
+  });
+
+  let html = '<div class="card" style="margin-bottom:12px;">';
+  html += '<div class="card-header"><span>📈</span><div class="card-title">Verlaufs-Trend</div></div>';
+  html += '<div class="card-body" style="padding:10px 14px;">';
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  VERLAUF_ITEMS.forEach(item => {
+    const w = letzter.werte[item.id] || 5;
+    const prev = vorLetzter.werte[item.id] || 5;
+    const diff = w - prev;
+    const trendIcon = diff > 0 ? '↑' : diff < 0 ? '↓' : '→';
+    const trendColor = diff > 0 ? '#22C55E' : diff < 0 ? '#EF4444' : '#6B7280';
+    html += `<span style="font-size:11px;padding:3px 8px;border-radius:10px;background:${trendColor}10;color:${trendColor};border:1px solid ${trendColor}25;">${item.icon} ${w}/10 ${trendIcon}</span>`;
+  });
+  html += '</div>';
+  if (verschlechtert >= 2) {
+    html += '<div style="margin-top:8px;padding:6px 10px;background:#FEF2F2;border-radius:6px;font-size:11px;color:#991B1B;">⚠️ Verschlechterung in ' + verschlechtert + ' Bereichen — Reflexion empfohlen</div>';
+  }
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// RISIKO-MONITOR — Ampelsystem für Sicherheits-Check
+// ============================================================
+function renderRisikoCheck() {
+  const container = document.getElementById('risiko-check-section');
+  if (!container) return;
+
+  let html = '<div class="risiko-check-box">';
+  html += '<div class="risiko-check-header">🛡️ Sicherheits-Check <span style="font-size:11px;color:#6B7280;">(optional)</span></div>';
+  RISIKO_ITEMS.forEach(item => {
+    html += `<div class="risiko-check-row">
+      <div class="risiko-check-label">${item.icon} ${item.label}</div>
+      <div class="risiko-ampel-group" id="risiko-ampel-${item.id}">
+        ${Object.entries(RISIKO_STUFEN).map(([key, stufe]) =>
+          `<button class="risiko-ampel-btn ${key === 'gruen' ? 'active' : ''}" data-item="${item.id}" data-stufe="${key}" onclick="setRisikoAmpel('${item.id}','${key}')" style="--ampel-farbe:${stufe.farbe};" title="${stufe.label}">${stufe.icon}</button>`
+        ).join('')}
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function setRisikoAmpel(itemId, stufe) {
+  const group = document.getElementById(`risiko-ampel-${itemId}`);
+  if (!group) return;
+  group.querySelectorAll('.risiko-ampel-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.stufe === stufe);
+  });
+}
+
+function getRisikoFromForm() {
+  const werte = {};
+  RISIKO_ITEMS.forEach(item => {
+    const group = document.getElementById(`risiko-ampel-${item.id}`);
+    if (group) {
+      const active = group.querySelector('.risiko-ampel-btn.active');
+      werte[item.id] = active ? active.dataset.stufe : 'gruen';
+    }
+  });
+  return werte;
+}
+
+function saveRisikoFromProtokoll() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const werte = getRisikoFromForm();
+  const hatRisiko = Object.values(werte).some(v => v !== 'gruen');
+  if (hatRisiko) {
+    DB.addRisiko(sid, werte);
+  }
+}
+
+// Dashboard: Risiko-Ampel-Widget
+function renderRisikoWidget() {
+  const container = document.getElementById('risiko-ampel-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const risikoDaten = DB.getRisiko(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  if (risikoDaten.length === 0) { container.innerHTML = ''; return; }
+
+  const letzter = risikoDaten[0];
+  const maxStufe = Object.values(letzter.werte).includes('rot') ? 'rot' : Object.values(letzter.werte).includes('gelb') ? 'gelb' : 'gruen';
+  const stufeInfo = RISIKO_STUFEN[maxStufe];
+
+  let html = '';
+  if (maxStufe !== 'gruen') {
+    html = `<div class="card risiko-widget risiko-widget-${maxStufe}" style="margin-bottom:12px;border-left:4px solid ${stufeInfo.farbe};">
+      <div class="card-body" style="padding:12px 14px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:20px;">${stufeInfo.icon}</span>
+          <strong style="color:${stufeInfo.farbe};">Risiko-Status: ${stufeInfo.label}</strong>
+          <span style="font-size:10px;color:#6B7280;margin-left:auto;">${new Date(letzter.datum).toLocaleDateString('de-DE')}</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          ${RISIKO_ITEMS.map(item => {
+            const w = letzter.werte[item.id] || 'gruen';
+            const s = RISIKO_STUFEN[w];
+            return `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${s.farbe}15;color:${s.farbe};border:1px solid ${s.farbe}30;">${item.icon} ${item.label}: ${s.icon} ${s.label}</span>`;
+          }).join('')}
+        </div>
+        ${maxStufe === 'rot' ? '<div style="margin-top:8px;padding:6px 10px;background:#FEF2F2;border-radius:6px;font-size:12px;color:#991B1B;font-weight:600;">⚠️ Krisenplan aktivieren — Fachperson informieren! <button class="btn btn-xs" style="background:#EF4444;color:#fff;border:none;margin-left:8px;" onclick="showPhase(\'leitfaden\');setTimeout(()=>showSubTab(\'themen\'),100);setTimeout(()=>quickStartSession(\'krisenintervention\'),300);">Krisenintervention starten</button></div>' : ''}
+        ${maxStufe === 'gelb' ? '<div style="margin-top:8px;padding:6px 10px;background:#FFFBEB;border-radius:6px;font-size:12px;color:#92400E;">👁 Situation beobachten und in nächster Sitzung thematisieren</div>' : ''}
+      </div>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+// Risiko-Timeline in Verlauf
+function renderRisikoTimeline() {
+  const container = document.getElementById('risiko-timeline-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const risikoDaten = DB.getRisiko(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  if (risikoDaten.length === 0) { container.innerHTML = ''; return; }
+
+  let html = '<div class="card" style="margin-top:16px;">';
+  html += '<div class="card-header"><span>🛡️</span><div class="card-title">Risiko-Verlauf</div></div>';
+  html += '<div class="card-body">';
+  risikoDaten.forEach(r => {
+    const datum = new Date(r.datum).toLocaleDateString('de-DE');
+    const maxStufe = Object.values(r.werte).includes('rot') ? 'rot' : Object.values(r.werte).includes('gelb') ? 'gelb' : 'gruen';
+    html += `<div class="risiko-timeline-item" style="border-left:3px solid ${RISIKO_STUFEN[maxStufe].farbe};padding:6px 12px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:10px;color:#6B7280;min-width:70px;">${datum}</span>
+        ${RISIKO_ITEMS.map(item => {
+          const s = RISIKO_STUFEN[r.werte[item.id] || 'gruen'];
+          return `<span style="font-size:10px;">${s.icon}</span>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// KONTAKTLOG — Bezugspersonen-Kontakte tracken
+// ============================================================
+const KONTAKT_ARTEN = {
+  telefon: { icon: '📞', label: 'Telefon' },
+  email: { icon: '📧', label: 'E-Mail' },
+  'vor-ort': { icon: '🏠', label: 'Vor-Ort-Gespräch' },
+  meeting: { icon: '🤝', label: 'Meeting/Besprechung' },
+};
+
+function renderKontaktlog() {
+  const container = document.getElementById('kontaktlog-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  const kontakte = DB.getKontakte(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const geno = getGenogramm();
+
+  let html = '<div class="section-header" style="margin-bottom:18px;">';
+  html += '<h3 style="margin:0;font-size:18px;">📞 Kontaktlog — Bezugspersonen</h3>';
+  html += '<p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Dokumentation aller Kontakte mit Eltern, Lehrpersonen und Bezugspersonen</p>';
+  html += '</div>';
+
+  // Nachfass-Erinnerungen
+  const heute = new Date().toISOString().split('T')[0];
+  const faellig = kontakte.filter(k => k.nachfassDatum && k.nachfassDatum <= heute);
+  if (faellig.length > 0) {
+    html += '<div class="card" style="margin-bottom:14px;border-left:4px solid #F59E0B;">';
+    html += '<div class="card-body" style="padding:10px 14px;">';
+    html += '<div style="font-weight:600;font-size:12px;color:#92400E;margin-bottom:6px;">⏰ Fällige Nachfass-Aktionen</div>';
+    faellig.forEach(k => {
+      html += `<div style="font-size:12px;padding:3px 0;">• <strong>${escapeHtml(k.kontaktperson)}</strong>: ${escapeHtml(k.vereinbarungen)} <span style="color:#9CA3AF;">(${formatDatum(k.nachfassDatum)})</span></div>`;
+    });
+    html += '</div></div>';
+  }
+
+  // Eingabe-Formular
+  html += '<div class="card" style="margin-bottom:20px;">';
+  html += '<div class="card-header"><span>➕</span><div class="card-title">Neuer Kontakt</div></div>';
+  html += '<div class="card-body">';
+  html += '<div class="form-grid">';
+  html += `<div class="form-group"><label>Kontaktperson</label>
+    <select id="kontakt-person">
+      <option value="">— Auswählen —</option>
+      ${geno.map(p => `<option value="${escapeHtml(p.name)}">${escapeHtml(p.name)} (${GENO_ROLLEN_LABELS[p.rolle] ? GENO_ROLLEN_LABELS[p.rolle].replace(/^[^ ]+ /, '') : p.rolle})</option>`).join('')}
+      <option value="__custom__">✏️ Andere Person...</option>
+    </select>
+  </div>`;
+  html += `<div class="form-group" id="kontakt-custom-name-wrap" style="display:none;"><label>Name</label><input type="text" id="kontakt-custom-name" placeholder="Name der Person"></div>`;
+  html += `<div class="form-group"><label>Art</label>
+    <select id="kontakt-art">
+      ${Object.entries(KONTAKT_ARTEN).map(([k, v]) => `<option value="${k}">${v.icon} ${v.label}</option>`).join('')}
+    </select>
+  </div>`;
+  html += `<div class="form-group"><label>Datum</label><input type="date" id="kontakt-datum" value="${heute}"></div>`;
+  html += `<div class="form-group"><label>Dauer</label><input type="text" id="kontakt-dauer" placeholder="z.B. 15 Min."></div>`;
+  html += `<div class="form-group full"><label>Inhalt</label><textarea id="kontakt-inhalt" rows="2" placeholder="Was wurde besprochen?"></textarea></div>`;
+  html += `<div class="form-group full"><label>Vereinbarungen</label><input type="text" id="kontakt-vereinbarungen" placeholder="Was wurde vereinbart?"></div>`;
+  html += `<div class="form-group"><label>Nachfass-Datum</label><input type="date" id="kontakt-nachfass"></div>`;
+  html += '</div>';
+  html += '<button class="btn btn-primary btn-sm" onclick="addKontaktEintrag()" style="margin-top:8px;">📞 Kontakt speichern</button>';
+  html += '</div></div>';
+
+  // Liste
+  if (kontakte.length > 0) {
+    html += '<div class="card">';
+    html += '<div class="card-header"><span>📋</span><div class="card-title">Kontakt-Verlauf</div><span style="font-size:11px;color:#6B7280;">' + kontakte.length + ' Kontakte</span></div>';
+    html += '<div class="card-body">';
+    kontakte.forEach(k => {
+      const art = KONTAKT_ARTEN[k.art] || KONTAKT_ARTEN.telefon;
+      html += `<div class="kontakt-item">
+        <div class="kontakt-item-header">
+          <span class="kontakt-art-badge">${art.icon}</span>
+          <strong>${escapeHtml(k.kontaktperson)}</strong>
+          <span style="font-size:11px;color:#6B7280;">${formatDatum(k.datum)}${k.dauer ? ' · ' + escapeHtml(k.dauer) : ''}</span>
+          <button class="btn-icon btn-sm" style="font-size:11px;margin-left:auto;" onclick="deleteKontaktEintrag('${k.id}')">🗑</button>
+        </div>
+        <div class="kontakt-item-body">
+          <div style="font-size:12px;color:#374151;">${escapeHtml(k.inhalt)}</div>
+          ${k.vereinbarungen ? `<div style="font-size:11px;color:#0369A1;margin-top:4px;">📝 ${escapeHtml(k.vereinbarungen)}</div>` : ''}
+          ${k.nachfassDatum ? `<div style="font-size:10px;color:#92400E;margin-top:2px;">⏰ Nachfassen: ${formatDatum(k.nachfassDatum)}</div>` : ''}
+        </div>
+      </div>`;
+    });
+    html += '</div></div>';
+  }
+
+  container.innerHTML = html;
+
+  // Toggle für custom name
+  const personSelect = document.getElementById('kontakt-person');
+  if (personSelect) {
+    personSelect.addEventListener('change', function() {
+      const wrap = document.getElementById('kontakt-custom-name-wrap');
+      if (wrap) wrap.style.display = this.value === '__custom__' ? '' : 'none';
+    });
+  }
+}
+
+function addKontaktEintrag() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  let person = document.getElementById('kontakt-person')?.value || '';
+  if (person === '__custom__') person = document.getElementById('kontakt-custom-name')?.value?.trim() || '';
+  if (!person) { showToast('Bitte Kontaktperson auswählen', 'error'); return; }
+  const inhalt = document.getElementById('kontakt-inhalt')?.value?.trim() || '';
+  if (!inhalt) { showToast('Bitte Inhalt eingeben', 'error'); return; }
+
+  DB.addKontakt({
+    schuelerId: sid,
+    kontaktperson: person,
+    art: document.getElementById('kontakt-art')?.value || 'telefon',
+    datum: document.getElementById('kontakt-datum')?.value || new Date().toISOString().split('T')[0],
+    dauer: document.getElementById('kontakt-dauer')?.value?.trim() || '',
+    inhalt,
+    vereinbarungen: document.getElementById('kontakt-vereinbarungen')?.value?.trim() || '',
+    nachfassDatum: document.getElementById('kontakt-nachfass')?.value || '',
+  });
+  renderKontaktlog();
+  showToast('Kontakt gespeichert', 'success');
+}
+
+function deleteKontaktEintrag(id) {
+  DB.deleteKontakt(id);
+  renderKontaktlog();
+  showToast('Kontakt gelöscht');
+}
+
+// Dashboard: Kontakt-Nachfass-Widget
+function renderKontaktNachfassWidget() {
+  const container = document.getElementById('kontakt-nachfass-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  const heute = new Date().toISOString().split('T')[0];
+  const kontakte = DB.getKontakte(sid).filter(k => k.nachfassDatum && k.nachfassDatum <= heute);
+  if (kontakte.length === 0) { container.innerHTML = ''; return; }
+
+  let html = '<div class="card" style="margin-bottom:12px;border-left:4px solid #F59E0B;">';
+  html += '<div class="card-body" style="padding:10px 14px;">';
+  html += '<div style="font-weight:600;font-size:12px;color:#92400E;margin-bottom:6px;">⏰ Offene Kontakt-Nachfass-Aktionen</div>';
+  kontakte.forEach(k => {
+    const art = KONTAKT_ARTEN[k.art] || KONTAKT_ARTEN.telefon;
+    html += `<div style="font-size:12px;padding:3px 0;">${art.icon} <strong>${escapeHtml(k.kontaktperson)}</strong>: ${escapeHtml(k.vereinbarungen || k.inhalt).substring(0, 60)} <button class="btn btn-xs btn-secondary" onclick="showPhase('sammeln');setTimeout(()=>showSubTab('kontaktlog'),100);" style="margin-left:4px;">Anzeigen</button></div>`;
+  });
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// GENOGRAMM → 5P VERBINDUNG — Familien-Risikofaktoren vorschlagen
+// ============================================================
+function getGenogramm5PSuggestions() {
+  const geno = getGenogramm();
+  if (!geno || geno.length === 0) return {};
+
+  const suggestions = { predisposing: [], precipitating: [], perpetuating: [], protective: [] };
+
+  // Beziehungsqualität → Faktoren
+  const konflikte = geno.filter(p => p.beziehung === 'konflikt');
+  const abbrueche = geno.filter(p => p.beziehung === 'abbruch');
+  const enge = geno.filter(p => p.beziehung === 'eng');
+  const distanziert = geno.filter(p => p.beziehung === 'distanziert');
+
+  // Familiäre Risikofaktoren → Predisposing
+  if (konflikte.length > 0) {
+    suggestions.predisposing.push({
+      key: 'geno_konflikt',
+      text: 'Familiäre Konflikte (' + konflikte.map(p => p.name).join(', ') + ')',
+    });
+  }
+  if (abbrueche.length > 0) {
+    suggestions.predisposing.push({
+      key: 'geno_abbruch',
+      text: 'Beziehungsabbruch (' + abbrueche.map(p => p.name).join(', ') + ')',
+    });
+  }
+
+  // Eltern nicht vorhanden → Predisposing
+  const hatMutter = geno.some(p => ['mutter', 'stiefmutter', 'pflegemutter'].includes(p.rolle));
+  const hatVater = geno.some(p => ['vater', 'stiefvater', 'pflegevater'].includes(p.rolle));
+  const hatPflegeeltern = geno.some(p => ['pflegemutter', 'pflegevater'].includes(p.rolle));
+  if (hatPflegeeltern) {
+    suggestions.predisposing.push({ key: 'geno_pflege', text: 'Fremdplatzierung (Pflegefamilie)' });
+  }
+
+  // Distanzierte Beziehungen → Perpetuating
+  if (distanziert.length > 0) {
+    suggestions.perpetuating.push({
+      key: 'geno_distanz',
+      text: 'Distanzierte Familienbeziehungen (' + distanziert.map(p => p.name).join(', ') + ')',
+    });
+  }
+
+  // Enge Beziehungen → Protective
+  if (enge.length > 0) {
+    suggestions.protective.push({
+      key: 'geno_enge',
+      text: 'Enge Bezugspersonen (' + enge.map(p => p.name).join(', ') + ')',
+    });
+  }
+
+  // Notizen mit Schlüsselwörtern → Risikofaktoren
+  geno.forEach(p => {
+    if (!p.notiz) return;
+    const lower = p.notiz.toLowerCase();
+    if (lower.includes('psychisch') || lower.includes('depression') || lower.includes('sucht') || lower.includes('alkohol')) {
+      suggestions.predisposing.push({
+        key: 'geno_psych_' + p.id,
+        text: 'Psych. Belastung bei ' + p.name + ' (' + p.notiz + ')',
+      });
+    }
+    if (lower.includes('gewalt') || lower.includes('missbrauch') || lower.includes('vernach')) {
+      suggestions.precipitating.push({
+        key: 'geno_gewalt_' + p.id,
+        text: 'Belastungserfahrung: ' + p.name + ' (' + p.notiz + ')',
+      });
+    }
+  });
+
+  return suggestions;
+}
+
+// ============================================================
+// MEILENSTEIN-ZIELE + ROADMAP-VERKNÜPFUNG
+// ============================================================
+function renderZieleMeilensteine() {
+  // This extends the existing renderZiele with milestone UI
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  if (!s) return;
+  const ziele = s.ziele || [];
+  const roadmap = DB.getRoadmap(APP.currentSchuelerId);
+
+  // For each goal, show linked roadmap theme and milestones
+  ziele.forEach((z, i) => {
+    if (!z.meilensteine) z.meilensteine = [];
+    if (!z.roadmapThema) z.roadmapThema = null;
+  });
+}
+
+// ============================================================
+// KALENDER ↔ SITZUNGEN VERBINDUNG
+// ============================================================
+function getSessionDatesForKalender() {
+  const notizen = DB.getNotizen();
+  const sessions = {};
+  notizen.forEach(n => {
+    if (n.kategorie === 'session' && n.datum) {
+      if (!sessions[n.datum]) sessions[n.datum] = [];
+      const schueler = n.schuelerId ? DB.getSchuelerById(n.schuelerId) : null;
+      sessions[n.datum].push({
+        id: n.id,
+        schuelerId: n.schuelerId,
+        schuelerName: schueler ? `${schueler.vorname} ${schueler.nachname}` : '',
+        themaId: n.themaId || null,
+      });
+    }
+  });
+  return sessions;
 }
 
 // ============================================================

@@ -1534,6 +1534,32 @@ function getStatusFarbe(key) {
 function setThemaStatus(themaId, status, btn) {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   const topicStatus = s.topicStatus || {};
+
+  // Abschluss-Kriterien: Mindestens 2 Sitzungen dokumentiert
+  if (status === 'abgeschlossen') {
+    const themaNotizen = DB.getNotizen(APP.currentSchuelerId).filter(n => n.kategorie === 'session' && n.themaId === themaId);
+    if (themaNotizen.length < 2) {
+      showToast(`⚠️ Thema kann erst abgeschlossen werden, wenn mindestens 2 Sitzungen dokumentiert sind (aktuell: ${themaNotizen.length}).`, 'warning', 5000);
+      return;
+    }
+
+    // Outcome-Messung: SRS-Vergleich erste vs. letzte Sitzung
+    const srsWerte = themaNotizen.filter(n => n.soap?.srs?.total != null).map(n => n.soap.srs.total);
+    if (srsWerte.length >= 2) {
+      const ersteHaelfte = srsWerte.slice(0, Math.ceil(srsWerte.length / 2));
+      const zweiteHaelfte = srsWerte.slice(Math.floor(srsWerte.length / 2));
+      const preAvg = ersteHaelfte.reduce((a, b) => a + b, 0) / ersteHaelfte.length;
+      const postAvg = zweiteHaelfte.reduce((a, b) => a + b, 0) / zweiteHaelfte.length;
+      const outcome = Math.round((postAvg - preAvg) * 10) / 10;
+      // Outcome im Topic-Status speichern
+      if (!s.topicOutcomes) s.topicOutcomes = {};
+      s.topicOutcomes[themaId] = { preSrs: Math.round(preAvg * 10) / 10, postSrs: Math.round(postAvg * 10) / 10, diff: outcome, sitzungen: themaNotizen.length, datum: new Date().toISOString().split('T')[0] };
+      DB.updateSchueler(APP.currentSchuelerId, { topicOutcomes: s.topicOutcomes });
+      const outcomeIcon = outcome > 0 ? '📈' : outcome < 0 ? '📉' : '➡️';
+      showToast(`${outcomeIcon} Outcome: SRS ${outcome > 0 ? '+' : ''}${outcome} (${Math.round(preAvg)}→${Math.round(postAvg)}/40)`, outcome >= 0 ? 'success' : 'warning', 5000);
+    }
+  }
+
   topicStatus[themaId] = status;
   DB.updateSchueler(APP.currentSchuelerId, { topicStatus });
 
@@ -3184,7 +3210,26 @@ function analyzeTreatmentResponse(schuelerId) {
 
   const besterAnsatz = ansatzAnalyse.length > 0 && ansatzAnalyse[0].responseRate >= 60 ? ansatzAnalyse[0] : null;
 
-  return { themen: themenAnalyse, gesamtTrend, bestesThema, ansatzAnalyse, besterAnsatz };
+  // Sudden-Change-Detection: SRS-Absturz >= 15 Punkte zwischen Sitzungen
+  let suddenChange = null;
+  if (alleSrs.length >= 2) {
+    for (let i = 1; i < alleSrs.length; i++) {
+      const diff = alleSrs[i] - alleSrs[i - 1];
+      if (diff <= -15) {
+        const betroffeneNotiz = notizen.sort((a, b) => a.datum.localeCompare(b.datum))[i];
+        suddenChange = {
+          vonSrs: alleSrs[i - 1],
+          nachSrs: alleSrs[i],
+          diff: diff,
+          datum: betroffeneNotiz ? betroffeneNotiz.datum : null,
+          sitzungNr: i + 1,
+        };
+        break; // Nur den ersten (neuesten wäre besser, aber erster reicht)
+      }
+    }
+  }
+
+  return { themen: themenAnalyse, gesamtTrend, bestesThema, ansatzAnalyse, besterAnsatz, suddenChange };
 }
 
 function renderTreatmentResponse(schuelerId) {
@@ -3201,7 +3246,17 @@ function renderTreatmentResponse(schuelerId) {
   const trendColor = (t) => t === 'steigend' ? '#22C55E' : t === 'fallend' ? '#EF4444' : '#9CA3AF';
   const responseColor = (r) => r >= 75 ? '#22C55E' : r >= 50 ? '#F59E0B' : '#EF4444';
 
+  // Sudden-Change Alert
+  const scAlert = analyse.suddenChange;
+  const suddenHtml = scAlert ? `<div style="margin-bottom:12px;padding:10px 14px;background:#FEF2F2;border:2px solid #EF4444;border-radius:8px;">
+    <div style="font-size:13px;font-weight:700;color:#DC2626;">⚠️ Plötzliche Verschlechterung erkannt</div>
+    <div style="font-size:12px;color:#374151;margin-top:4px;">SRS fiel von <strong>${scAlert.vonSrs}</strong> auf <strong>${scAlert.nachSrs}</strong> (${scAlert.diff} Punkte) in Sitzung #${scAlert.sitzungNr}${scAlert.datum ? ' am ' + formatDatum(scAlert.datum) : ''}.</div>
+    <div style="font-size:11px;color:#991B1B;margin-top:6px;font-weight:500;">Empfehlung: Risiko-Check durchführen und therapeutische Beziehung reflektieren.</div>
+    <button class="btn btn-xs" style="margin-top:6px;background:#EF4444;color:#fff;border:none;" onclick="showPhase('analyse');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
+  </div>` : '';
+
   el.innerHTML = `
+    ${suddenHtml}
     <div class="card" style="margin-bottom:16px;">
       <div class="card-header">
         <span>💊</span>
@@ -5625,7 +5680,7 @@ function renderSitzungsvorschlag() {
 
   if (!empfohlenesThema) { container.innerHTML = ''; return; }
 
-  // ── Sequenzierungs-Guard (K7): Bestimmte Themen NUR nach Voraussetzungen ──
+  // ── Sequenzierungs-Guard (K7) + Kontraindikations-Matrix: Bestimmte Themen NUR nach Voraussetzungen ──
   const SEQUENZ_REGELN = [
     { thema: 'trauma', voraussetzung: ['krisenintervention', 'emotionsregulation'],
       warnung: 'Traumaverarbeitung erst nach Stabilisierung (ISTSS 2019)' },
@@ -5635,6 +5690,17 @@ function renderSitzungsvorschlag() {
       warnung: 'Dissoziationsarbeit erst nach Grounding-Fertigkeiten' },
     { thema: 'suizidpraevention', voraussetzung: ['krisenintervention'],
       warnung: 'Suizidpräventive Arbeit erst nach Krisenplan-Erstellung' },
+    // Erweiterte Kontraindikationen
+    { thema: 'ptbs', voraussetzung: ['krisenintervention', 'emotionsregulation', 'emotionserkennung'],
+      warnung: 'PTBS-Behandlung erfordert sichere therapeutische Beziehung + Emotionsregulation (NICE 2018)' },
+    { thema: 'traumaverarbeitung', voraussetzung: ['krisenintervention', 'emotionsregulation'],
+      warnung: 'Konfrontative Traumaarbeit erst nach Phase 1 Stabilisierung (Herman 1992)' },
+    { thema: 'sexualitaet', voraussetzung: ['emotionserkennung', 'kommunikation-grenzen'],
+      warnung: 'Sexualitätsthemen erst nach Aufbau von Grenzsetzungskompetenz' },
+    { thema: 'familiengeheimnis', voraussetzung: ['emotionsregulation', 'krisenintervention'],
+      warnung: 'Aufdeckungsarbeit erfordert Stabilisierung + Sicherheitsnetz' },
+    { thema: 'trauer-verlust', voraussetzung: ['emotionserkennung'],
+      warnung: 'Trauerarbeit setzt Emotionserkennungsfähigkeit voraus (Worden 2009)' },
   ];
   let sequenzWarnung = '';
   if (!pvtOverride) {
@@ -8893,11 +8959,13 @@ function renderPhasenStepper(roadmap) {
   let html = '<div class="roadmap-stepper">';
   roadmap.phasen.forEach((phase, idx) => {
     const def = ROADMAP_PHASEN[idx];
-    const dotClass = phase.status === 'erledigt' ? 'erledigt' : phase.status === 'aktiv' ? 'aktiv' : '';
+    const gate = checkPhaseGate(roadmap, phase.nr);
+    const isLocked = !gate.erlaubt && phase.status === 'offen';
+    const dotClass = phase.status === 'erledigt' ? 'erledigt' : phase.status === 'aktiv' ? 'aktiv' : isLocked ? 'locked' : '';
     html += `<div class="stepper-step">
       <div class="stepper-dot-wrap">
-        <div class="stepper-dot ${dotClass}" onclick="focusRoadmapPhase(${phase.nr})" title="Phase ${def.nr}: ${def.label}">
-          ${phase.status === 'erledigt' ? '✓' : def.nr}
+        <div class="stepper-dot ${dotClass}" onclick="focusRoadmapPhase(${phase.nr})" title="${isLocked ? '🔒 ' + gate.grund : 'Phase ' + def.nr + ': ' + def.label}">
+          ${phase.status === 'erledigt' ? '✓' : isLocked ? '🔒' : def.nr}
         </div>
       </div>`;
     if (idx < roadmap.phasen.length - 1) {
@@ -9423,22 +9491,83 @@ function deleteCurrentRoadmap() {
   });
 }
 
+// Phase-Gate: Trauma-relevante Themen, die Stabilisierung voraussetzen (ISTSS 2019)
+const TRAUMA_THEMEN = ['trauma', 'dissoziative-erfahrungen', 'angstanfaelle', 'ptbs', 'traumaverarbeitung'];
+const STABILISIERUNGS_PHASEN = [0, 1]; // Phasen 0 + 1 müssen ≥80% erledigt sein
+
+function checkPhaseGate(roadmap, targetPhaseNr) {
+  if (targetPhaseNr < 3) return { erlaubt: true }; // Phasen 0-2 immer erlaubt
+
+  // Prüfe ob Stabilisierungsphasen (0+1) ≥80% erledigt
+  let totalThemen = 0, doneThemen = 0;
+  STABILISIERUNGS_PHASEN.forEach(phNr => {
+    const ph = roadmap.phasen.find(p => p.nr === phNr);
+    if (ph) {
+      totalThemen += ph.themen.length;
+      doneThemen += ph.themen.filter(t => t.status === 'abgeschlossen').length;
+    }
+  });
+
+  const pct = totalThemen > 0 ? Math.round(doneThemen / totalThemen * 100) : 100;
+  if (pct < 80 && totalThemen > 0) {
+    return {
+      erlaubt: false,
+      grund: `Phase ${targetPhaseNr} kann erst aktiviert werden, wenn die Stabilisierungsphasen (Phase 0+1) zu ≥80% abgeschlossen sind (aktuell: ${pct}%).`,
+      zitat: 'ISTSS 2019: Trauma-fokussierte Interventionen erfordern eine vorherige Stabilisierungsphase.',
+      pct
+    };
+  }
+
+  // Prüfe ob Trauma-Themen in dieser Phase sind und Stabilisierung fehlt
+  const targetPhase = roadmap.phasen.find(p => p.nr === targetPhaseNr);
+  if (targetPhase) {
+    const hatTraumaThema = targetPhase.themen.some(t => TRAUMA_THEMEN.includes(t.id));
+    if (hatTraumaThema && pct < 100 && totalThemen > 0) {
+      return {
+        erlaubt: true,
+        warnung: `⚠️ Diese Phase enthält Trauma-Themen. Stabilisierungsphasen sind erst ${pct}% erledigt. Vorsicht empfohlen (ISTSS 2019).`
+      };
+    }
+  }
+
+  return { erlaubt: true };
+}
+
 function setRoadmapPhaseStatus(nr, status) {
   const roadmap = DB.getRoadmap(APP.currentSchuelerId);
   if (!roadmap) return;
   const phase = roadmap.phasen.find(p => p.nr === nr);
   if (!phase) return;
+
+  // Phase-Gate prüfen bei Aktivierung
+  if (status === 'aktiv') {
+    const gate = checkPhaseGate(roadmap, nr);
+    if (!gate.erlaubt) {
+      showToast(`🔒 ${gate.grund}\n\n📚 ${gate.zitat}`, 'error', 8000);
+      return;
+    }
+    if (gate.warnung) {
+      showToast(gate.warnung, 'warning', 6000);
+    }
+  }
+
   phase.status = status;
   if (status === 'aktiv' && !phase.startDatum) {
     phase.startDatum = new Date().toISOString().split('T')[0];
   }
   if (status === 'erledigt') {
     phase.endDatum = new Date().toISOString().split('T')[0];
-    // Auto-start next phase
+    // Auto-start next phase (mit Gate-Check)
     const next = roadmap.phasen.find(p => p.nr === nr + 1);
     if (next && next.status === 'offen') {
-      next.status = 'aktiv';
-      next.startDatum = new Date().toISOString().split('T')[0];
+      const gate = checkPhaseGate(roadmap, nr + 1);
+      if (gate.erlaubt) {
+        next.status = 'aktiv';
+        next.startDatum = new Date().toISOString().split('T')[0];
+        if (gate.warnung) showToast(gate.warnung, 'warning', 6000);
+      } else {
+        showToast(`🔒 Nächste Phase nicht automatisch aktiviert: ${gate.grund}`, 'warning', 6000);
+      }
     }
   }
   DB.saveRoadmap(roadmap);
@@ -10002,7 +10131,8 @@ function renderScreeningErgebnis(scr) {
           <span style="font-size:12px;color:${d.farbe};font-weight:700;">${score}/${max}</span>
         </div>
         <div class="scr-mini-bar"><div class="scr-mini-bar-fill" style="width:${pct}%;background:${d.farbe};"></div></div>
-        ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:3px;">ICD-10: ${d.icd}</div>` : ''}
+        ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:3px;">ICD-10: ${d.icd}${d.instrument ? ` · Instrument: <em>${d.instrument}</em>` : ''}</div>` : ''}
+        ${d.cutoffQuelle ? `<div style="font-size:10px;color:#9CA3AF;margin-top:2px;">Cutoff ≥${d.cutoff}: ${d.cutoffQuelle}</div>` : ''}
         <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
         ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#3B82F6;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#F0F9FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1E40AF;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
         ${(typeof findWikiForScreeningDomain === 'function' && findWikiForScreeningDomain(d.id)) ? renderWikiLink(findWikiForScreeningDomain(d.id).id) : ''}
@@ -11824,7 +11954,16 @@ function renderVerlaufTracker() {
   html += '<div class="card-header"><span>➕</span><div class="card-title">Neue Erfassung</div></div>';
   html += '<div class="card-body">';
   html += '<div class="verlauf-eingabe-grid">';
-  VERLAUF_ITEMS.forEach(item => {
+  // Prüfe ob Trauma-Dimensionen aktiviert werden sollen
+  const hatTraumaScreening = latestScr && (latestScr.flaggedAreas || []).includes('trauma');
+  const alleVerlaufItems = hatTraumaScreening && typeof VERLAUF_TRAUMA_ITEMS !== 'undefined'
+    ? [...VERLAUF_ITEMS, ...VERLAUF_TRAUMA_ITEMS] : VERLAUF_ITEMS;
+
+  alleVerlaufItems.forEach((item, idx) => {
+    // Separator vor Trauma-Items
+    if (hatTraumaScreening && idx === VERLAUF_ITEMS.length) {
+      html += '<div style="grid-column:1/-1;border-top:2px dashed #9C4E77;margin:8px 0;padding-top:8px;"><span style="font-size:11px;font-weight:600;color:#9C4E77;">⚡ Trauma-spezifische Dimensionen (aktiviert durch Screening)</span></div>';
+    }
     html += `<div class="verlauf-eingabe-item">
       <div class="verlauf-eingabe-label">${item.icon} ${item.label}</div>
       <div class="verlauf-slider-row">
@@ -11843,8 +11982,9 @@ function renderVerlaufTracker() {
     html += '<div class="card-header"><span>📊</span><div class="card-title">Trend-Übersicht</div><span style="font-size:11px;color:#6B7280;">' + verlaufDaten.length + ' Erfassungen</span></div>';
     html += '<div class="card-body">';
 
-    VERLAUF_ITEMS.forEach(item => {
+    alleVerlaufItems.forEach(item => {
       const werte = verlaufDaten.map(v => v.werte[item.id] || 0);
+      if (werte.every(w => w === 0) && !VERLAUF_ITEMS.includes(item)) return; // Skip leere Trauma-Items
       const baseline = baselineMap[item.id];
       const letzter = werte[werte.length - 1];
       const erster = werte[0];
@@ -11919,10 +12059,18 @@ function saveVerlaufEintrag() {
   const sid = APP.currentSchuelerId;
   if (!sid) return;
   const werte = {};
+  // Standard-Items
   VERLAUF_ITEMS.forEach(item => {
     const el = document.getElementById(`verlauf-${item.id}`);
     werte[item.id] = el ? parseInt(el.value) : 5;
   });
+  // Trauma-Items (falls vorhanden)
+  if (typeof VERLAUF_TRAUMA_ITEMS !== 'undefined') {
+    VERLAUF_TRAUMA_ITEMS.forEach(item => {
+      const el = document.getElementById(`verlauf-${item.id}`);
+      if (el) werte[item.id] = parseInt(el.value);
+    });
+  }
   DB.addVerlauf(sid, werte);
   renderVerlaufTracker();
   showToast('Verlauf erfasst', 'success');

@@ -27,9 +27,11 @@ const APP = {
 APP._dirty = false;
 APP._lastSaveTime = Date.now();
 
+let _dirtyTimer = null;
 function markDirty() {
   APP._dirty = true;
-  updateSaveIndicator('unsaved');
+  if (_dirtyTimer) clearTimeout(_dirtyTimer);
+  _dirtyTimer = setTimeout(() => updateSaveIndicator('unsaved'), 500);
 }
 
 function markClean() {
@@ -346,6 +348,10 @@ function renderHome() {
     const alleNotizen = schueler.reduce((n, s) => n + DB.getNotizen(s.id).length, 0);
     const aktiveThemen = schueler.reduce((n, s) => n + countStatus(s, 'in-bearbeitung'), 0);
     const hochrisiko = schueler.filter(s => s.risiko === 'hoch').length;
+    const offeneIntake = schueler.filter(s => (s.status || 'aktiv') === 'aktiv' && !DB.getScreenings(s.id).some(sc => sc.abgeschlossen)).length;
+    const statusAktiv = schueler.filter(s => (s.status || 'aktiv') === 'aktiv').length;
+    const statusPausiert = schueler.filter(s => s.status === 'pausiert').length;
+    const statusAbgeschlossen = schueler.filter(s => s.status === 'abgeschlossen').length;
     statsEl.innerHTML = `
       <div class="stat-box">
         <div class="stat-box-zahl">${schueler.length}</div>
@@ -362,6 +368,14 @@ function renderHome() {
       <div class="stat-box">
         <div class="stat-box-zahl ${hochrisiko > 0 ? 'red' : ''}">${hochrisiko}</div>
         <div class="stat-box-label">Hochrisiko</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-zahl ${offeneIntake > 0 ? 'orange' : ''}">${offeneIntake}</div>
+        <div class="stat-box-label">Offene Intake</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-zahl">${statusAktiv}<span style="font-size:10px;color:#9CA3AF;">/${statusPausiert}/${statusAbgeschlossen}</span></div>
+        <div class="stat-box-label">Aktiv / Paus. / Abg.</div>
       </div>`;
   } else if (statsEl) {
     statsEl.innerHTML = '';

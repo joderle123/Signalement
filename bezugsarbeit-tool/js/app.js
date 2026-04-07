@@ -4178,6 +4178,56 @@ function druckeProfilbericht(schuelerId) {
     </div>`;
   }).join('');
 
+  // -- Kontaktlog Section --
+  const kontakte = DB.getKontakte(schuelerId).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  let kontaktHTML = '';
+  if (kontakte.length > 0) {
+    const offeneNachfass = kontakte.filter(k => k.nachfassDatum && new Date(k.nachfassDatum) >= new Date());
+    kontaktHTML = `
+      <div class="section">
+        <div class="section-title">📞 Kontaktlog (${kontakte.length} Kontakte)</div>
+        ${offeneNachfass.length > 0 ? `<div style="margin-bottom:8px;padding:6px 10px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;font-size:10px;color:#92400E;">⏰ ${offeneNachfass.length} offene Nachfass-Termine</div>` : ''}
+        ${kontakte.slice(0, 5).map(k => {
+          const artIcons = { telefon: '📞', email: '📧', vor_ort: '🏠', meeting: '🤝' };
+          return `<div style="padding:4px 0;border-bottom:1px solid #F3F4F6;font-size:11px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span>${artIcons[k.art] || '📋'}</span>
+              <strong>${escapeHtml(k.kontaktperson || '—')}</strong>
+              <span style="color:#6B7280;">${formatDatum(k.datum)}${k.dauer ? ' · ' + k.dauer + ' Min.' : ''}</span>
+            </div>
+            ${k.inhalt ? `<div style="color:#374151;margin-top:2px;padding-left:22px;">${escapeHtml(k.inhalt.substring(0, 150))}${k.inhalt.length > 150 ? '...' : ''}</div>` : ''}
+            ${k.vereinbarungen ? `<div style="color:#059669;font-size:10px;margin-top:2px;padding-left:22px;">📌 ${escapeHtml(k.vereinbarungen.substring(0, 100))}</div>` : ''}
+          </div>`;
+        }).join('')}
+        ${kontakte.length > 5 ? `<div style="font-size:10px;color:#9CA3AF;margin-top:4px;">+ ${kontakte.length - 5} weitere Kontakte</div>` : ''}
+      </div>`;
+  }
+
+  // -- Verlauf-Tracker Section --
+  const verlaufDaten = DB.getVerlauf(schuelerId).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+  let verlaufHTML = '';
+  if (verlaufDaten.length > 0 && typeof VERLAUF_ITEMS !== 'undefined') {
+    const letzter = verlaufDaten[verlaufDaten.length - 1];
+    const vorLetzter = verlaufDaten.length >= 2 ? verlaufDaten[verlaufDaten.length - 2] : null;
+    verlaufHTML = `
+      <div class="section">
+        <div class="section-title">📊 Verlauf-Tracker (${verlaufDaten.length} Einträge, letzter: ${formatDatum(letzter.datum)})</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${VERLAUF_ITEMS.map(item => {
+            const wert = letzter.werte[item.id] || 0;
+            const vorWert = vorLetzter ? (vorLetzter.werte[item.id] || 0) : null;
+            const trend = vorWert !== null ? (wert > vorWert ? '↑' : wert < vorWert ? '↓' : '→') : '';
+            const trendFarbe = trend === '↑' ? '#22C55E' : trend === '↓' ? '#EF4444' : '#6B7280';
+            const wertFarbe = wert <= 3 ? '#EF4444' : wert <= 5 ? '#F59E0B' : '#22C55E';
+            return `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:10px;font-size:11px;background:${wertFarbe}12;border:1px solid ${wertFarbe}30;">
+              ${item.icon} ${item.label}: <strong style="color:${wertFarbe};">${wert}/10</strong>
+              ${trend ? `<span style="color:${trendFarbe};font-weight:700;">${trend}</span>` : ''}
+            </span>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }
+
   // -- Ziele Section --
   const zieleHTML = (s.ziele || []).map(z =>
     `<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px;">
@@ -4241,6 +4291,8 @@ function druckeProfilbericht(schuelerId) {
       ${screeningHTML}
       ${staerkenHTML}
       ${wbHTML}
+      ${verlaufHTML}
+      ${kontaktHTML}
 
       <div class="section">
         <div class="section-title">📋 Bearbeitete Themen</div>
@@ -4348,6 +4400,30 @@ function exportProfilPDF(schuelerId) {
     ).join('')}</div>`;
   }
 
+  // Kontaktlog
+  const kontakte2 = DB.getKontakte(schuelerId).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  let kontaktHtml = '';
+  if (kontakte2.length > 0) {
+    const artIcons = { telefon: '📞', email: '📧', vor_ort: '🏠', meeting: '🤝' };
+    kontaktHtml = kontakte2.slice(0, 5).map(k =>
+      `<div style="padding:3px 0;border-bottom:1px solid #eee;font-size:10px;">${artIcons[k.art] || '📋'} <strong>${escapeHtml(k.kontaktperson || '—')}</strong> · ${formatDatum(k.datum)}${k.inhalt ? ' — ' + escapeHtml(k.inhalt.substring(0, 120)) : ''}</div>`
+    ).join('') + (kontakte2.length > 5 ? `<div style="font-size:9px;color:#9CA3AF;">+ ${kontakte2.length - 5} weitere</div>` : '');
+  }
+
+  // Verlauf-Tracker
+  const verlauf2 = DB.getVerlauf(schuelerId).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+  let verlaufHtml = '';
+  if (verlauf2.length > 0 && typeof VERLAUF_ITEMS !== 'undefined') {
+    const letzter = verlauf2[verlauf2.length - 1];
+    const vorLetzter = verlauf2.length >= 2 ? verlauf2[verlauf2.length - 2] : null;
+    verlaufHtml = `<div style="display:flex;flex-wrap:wrap;gap:4px;">${VERLAUF_ITEMS.map(item => {
+      const w = letzter.werte[item.id] || 0;
+      const vw = vorLetzter ? (vorLetzter.werte[item.id] || 0) : null;
+      const trend = vw !== null ? (w > vw ? '↑' : w < vw ? '↓' : '→') : '';
+      return `<span class="tag">${item.icon} ${item.label}: ${w}/10 ${trend}</span>`;
+    }).join('')}</div>`;
+  }
+
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
     <title>Fallbericht — ${s.vorname} ${s.nachname}</title>
     <style>
@@ -4380,6 +4456,8 @@ function exportProfilPDF(schuelerId) {
     ${sec('💪 Stärken & Ressourcen', staerkenHtml)}
     ${sec('🗺️ Förderplan', roadmapHtml)}
     ${sec('😊 Wohlbefinden-Verlauf', wbHtml)}
+    ${sec('📊 Verlauf-Tracker', verlaufHtml)}
+    ${sec('📞 Kontaktlog (' + kontakte2.length + ')', kontaktHtml)}
     ${sec('📋 Sitzungsnotizen (letzte 10)', notizenHtml)}
     <div class="footer">Vertraulich · Pathways · ${new Date().toLocaleDateString('de-DE')} ${new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</div>
   </body></html>`;
@@ -8719,6 +8797,25 @@ function renderFokusThemaKarte(thema, themaIdx, phase, roadmap) {
   const prio = getThemaPrioritaet(thema.id, roadmap);
   const isDone = thema.status === 'abgeschlossen';
 
+  // Verknüpfte Ziele finden
+  const schueler = DB.getSchuelerById(APP.currentSchuelerId);
+  const verknuepfteZiele = (schueler && schueler.ziele || []).filter(z => z.roadmapThema === thema.id);
+  let zielBadgeHtml = '';
+  if (verknuepfteZiele.length > 0) {
+    zielBadgeHtml = verknuepfteZiele.map(z => {
+      const pct = z.fortschritt || (z.erledigt ? 100 : 0);
+      const farbe = pct >= 70 ? '#22C55E' : (pct >= 30 ? '#F59E0B' : '#EF4444');
+      return `<div style="display:flex;align-items:center;gap:6px;padding:4px 8px;margin-top:4px;background:${farbe}10;border:1px solid ${farbe}30;border-radius:6px;font-size:11px;">
+        <span style="font-size:13px;">🎯</span>
+        <span style="color:var(--text);font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(z.text)}</span>
+        <span style="color:${farbe};font-weight:700;flex-shrink:0;">${pct}%</span>
+        <div style="width:40px;height:4px;background:#E5E7EB;border-radius:2px;flex-shrink:0;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${farbe};border-radius:2px;"></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
   // Material sammeln
   const arbeitsblaetter = ARBEITSBLÄTTER[thema.id] || [];
   const interventionen = THEMA_INTERVENTIONEN[thema.id] || [];
@@ -8757,6 +8854,7 @@ function renderFokusThemaKarte(thema, themaIdx, phase, roadmap) {
             <button class="btn-icon btn-xs" title="Entfernen" onclick="removeRoadmapThema(${phase.nr}, ${themaIdx})">✕</button>
           </div>
         </div>
+        ${zielBadgeHtml}
         ${materialHtml}
       </div>
     </div>`;
@@ -9232,8 +9330,25 @@ function toggleRoadmapThema(phaseNr, themaIdx) {
   if (!roadmap) return;
   const phase = roadmap.phasen.find(p => p.nr === phaseNr);
   if (!phase || !phase.themen[themaIdx]) return;
-  phase.themen[themaIdx].status = phase.themen[themaIdx].status === 'abgeschlossen' ? 'offen' : 'abgeschlossen';
+  const themaId = phase.themen[themaIdx].id;
+  const wirdAbgeschlossen = phase.themen[themaIdx].status !== 'abgeschlossen';
+  phase.themen[themaIdx].status = wirdAbgeschlossen ? 'abgeschlossen' : 'offen';
   DB.saveRoadmap(roadmap);
+
+  // Meilenstein-Check: Verknüpfte Ziele prüfen
+  if (wirdAbgeschlossen) {
+    const schueler = DB.getSchuelerById(APP.currentSchuelerId);
+    const verknuepfteZiele = (schueler && schueler.ziele || []).filter(z => z.roadmapThema === themaId);
+    verknuepfteZiele.forEach(z => {
+      const offeneMeilensteine = (z.meilensteine || []).filter(m => !m.erledigt);
+      if (offeneMeilensteine.length > 0) {
+        showToast(`🎯 Thema abgeschlossen! Prüfe Meilensteine für Ziel "${z.text}" (${offeneMeilensteine.length} offen)`, 'info', 5000);
+      } else if (z.fortschritt < 100) {
+        showToast(`🎯 Thema abgeschlossen! Ziel "${z.text}" aktualisieren?`, 'success', 4000);
+      }
+    });
+  }
+
   renderRoadmap();
 }
 

@@ -5466,10 +5466,40 @@ const VERLAUF_ITEMS = [
 // RISIKO-MONITOR — Ampel-Items für Sicherheits-Check
 // ============================================================
 const RISIKO_ITEMS = [
-  { id: 'sicherheit',       label: 'Sicherheit',       icon: '🛡️', desc: 'Fühlt sich der Jugendliche sicher? Gibt es Bedrohungen?' },
-  { id: 'selbstverletzung',  label: 'Selbstverletzung', icon: '⚠️', desc: 'Anzeichen von Selbstverletzung oder Suizidgedanken?' },
-  { id: 'substanzen',        label: 'Substanzkonsum',   icon: '🚬', desc: 'Auffälliger Konsum von Alkohol, Cannabis oder anderen Substanzen?' },
+  { id: 'sicherheit',       label: 'Sicherheit',       icon: '🛡️', desc: 'Fühlt sich der Jugendliche sicher? Gibt es Bedrohungen?', kategorie: 'allgemein' },
+  { id: 'selbstverletzung',  label: 'Selbstverletzung', icon: '⚠️', desc: 'Anzeichen von Selbstverletzung oder Suizidgedanken?', kategorie: 'allgemein' },
+  { id: 'substanzen',        label: 'Substanzkonsum',   icon: '🚬', desc: 'Auffälliger Konsum von Alkohol, Cannabis oder anderen Substanzen?', kategorie: 'allgemein' },
+  // C-SSRS-angelehnte strukturierte Suizidalitäts-Items
+  { id: 'cssrs_gedanken',    label: 'Suizidgedanken',   icon: '💭', desc: 'Hat der Jugendliche Gedanken daran, sich das Leben zu nehmen?', kategorie: 'cssrs', cssrsLevel: 1 },
+  { id: 'cssrs_plan',        label: 'Suizidplan',       icon: '📋', desc: 'Gibt es einen konkreten Plan, wie/wann/wo?', kategorie: 'cssrs', cssrsLevel: 2 },
+  { id: 'cssrs_absicht',     label: 'Handlungsabsicht', icon: '⚡', desc: 'Besteht die Absicht, den Plan tatsächlich auszuführen?', kategorie: 'cssrs', cssrsLevel: 3 },
+  { id: 'cssrs_mittel',      label: 'Zugang zu Mitteln', icon: '🔒', desc: 'Hat der Jugendliche Zugang zu Mitteln (Medikamente, scharfe Gegenstände etc.)?', kategorie: 'cssrs', cssrsLevel: 4 },
+  { id: 'cssrs_verhalten',   label: 'Vorbereitendes Verhalten', icon: '🚨', desc: 'Gibt es vorbereitende Handlungen (Abschiedsbriefe, Verschenken, Rückzug)?', kategorie: 'cssrs', cssrsLevel: 5 },
+  // Missbrauch/Kindeswohlgefährdung
+  { id: 'missbrauch',        label: 'Missbrauch/Gewalt', icon: '🔴', desc: 'Anzeichen von körperlichem, sexuellem oder emotionalem Missbrauch?', kategorie: 'kindeswohl' },
+  { id: 'vernachlaessigung', label: 'Vernachlässigung', icon: '🏚️', desc: 'Anzeichen von Vernachlässigung (Hygiene, Ernährung, Aufsicht)?', kategorie: 'kindeswohl' },
 ];
+
+// C-SSRS Entscheidungsregeln
+const RISIKO_ENTSCHEIDUNGSREGELN = [
+  { bedingung: items => items.cssrs_verhalten === 'rot' || items.cssrs_absicht === 'rot',
+    stufe: 'akut', label: 'AKUTE GEFAHR — Sofortige psychiatrische Vorstellung erforderlich',
+    aktion: 'Jugendlichen nicht allein lassen. Notarzt/Psychiatrie kontaktieren. Eltern informieren.',
+    farbe: '#7F1D1D', icon: '🚑' },
+  { bedingung: items => items.cssrs_plan === 'rot' || items.cssrs_mittel === 'rot',
+    stufe: 'hoch', label: 'HOHES RISIKO — Fachärztliche Abklärung innerhalb 24h',
+    aktion: 'Sicherheitsplan erstellen. Mittelzugang einschränken. Psychiater-Termin organisieren.',
+    farbe: '#991B1B', icon: '🔴' },
+  { bedingung: items => items.cssrs_gedanken === 'rot' || items.cssrs_gedanken === 'gelb',
+    stufe: 'erhoht', label: 'ERHÖHTES RISIKO — Engmaschige Begleitung + Sicherheitsplan',
+    aktion: 'Sicherheitsplan besprechen. Nächste Sitzung innerhalb 48h. Bezugspersonen einbinden.',
+    farbe: '#DC2626', icon: '⚠️' },
+  { bedingung: items => items.missbrauch === 'rot' || items.missbrauch === 'gelb',
+    stufe: 'kindeswohl', label: 'KINDESWOHLGEFÄHRDUNG — Meldepflicht prüfen',
+    aktion: 'Dokumentation sicherstellen. Meldung an zuständige Behörde prüfen (Art. 7 Loi aide à l\'enfance).',
+    farbe: '#7C3AED', icon: '⚖️' },
+];
+
 const RISIKO_STUFEN = {
   gruen:  { label: 'Unauffällig',  farbe: '#22C55E', icon: '🟢' },
   gelb:   { label: 'Beobachten',   farbe: '#F59E0B', icon: '🟡' },

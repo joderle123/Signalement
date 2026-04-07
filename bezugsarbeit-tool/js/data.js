@@ -1659,6 +1659,8 @@ const SCREENING_DOMAINS = [
     icon: '😔',
     cutoff: 6,
     handlung: 'intervention',
+    instrument: 'PHQ-A (Patient Health Questionnaire – Adolescent)',
+    cutoffQuelle: 'Kroenke et al. 2001; Richardson et al. 2010',
     items: [
       'Fühlt sich die meiste Zeit traurig oder leer',
       'Hat kaum Freude oder Interesse an Dingen, die früher Spaß gemacht haben',
@@ -1676,6 +1678,8 @@ const SCREENING_DOMAINS = [
     icon: '😰',
     cutoff: 5,
     handlung: 'intervention',
+    instrument: 'GAD-7 (Generalized Anxiety Disorder Scale)',
+    cutoffQuelle: 'Spitzer et al. 2006',
     items: [
       'Sorgt sich übermäßig und unkontrollierbar um viele Dinge',
       'Fühlt sich angespannt, nervös oder innerlich unruhig',
@@ -1692,6 +1696,8 @@ const SCREENING_DOMAINS = [
     icon: '😶',
     cutoff: 5,
     handlung: 'intervention',
+    instrument: 'SPIN (Social Phobia Inventory) / SCARED Subskala',
+    cutoffQuelle: 'Connor et al. 2000; Birmaher et al. 1999',
     items: [
       'Vermeidet soziale Situationen (Klasse, Gruppenarbeit, Mensa)',
       'Fürchtet, bewertet oder ausgelacht zu werden',
@@ -1708,6 +1714,8 @@ const SCREENING_DOMAINS = [
     icon: '⚡',
     cutoff: 4,
     handlung: 'intervention',
+    instrument: 'CATS (Child & Adolescent Trauma Screen) / PCL-5 adaptiert',
+    cutoffQuelle: 'Sachser et al. 2017; Weathers et al. 2013',
     items: [
       'Erlebt Flashbacks oder aufdringliche Erinnerungen an belastende Ereignisse',
       'Vermeidet Orte, Menschen oder Situationen, die an das Ereignis erinnern',
@@ -1724,6 +1732,8 @@ const SCREENING_DOMAINS = [
     icon: '⚡',
     cutoff: 5,
     handlung: 'abklaerung',
+    instrument: 'SNAP-IV / Conners-3 Kurzform',
+    cutoffQuelle: 'Swanson et al. 2001; Conners 2008',
     ueberweisungAn: 'Kinder-/Jugendpsychiater (CHL / ZNS-Letzebuerg)',
     items: [
       'Hat große Schwierigkeiten, die Aufmerksamkeit aufrechtzuerhalten',
@@ -1742,6 +1752,8 @@ const SCREENING_DOMAINS = [
     icon: '🔥',
     cutoff: 5,
     handlung: 'intervention',
+    instrument: 'SDQ (Strengths & Difficulties Questionnaire) – Conduct Subskala',
+    cutoffQuelle: 'Goodman 1997; Woerner et al. 2004',
     items: [
       'Zeigt aggressives Verhalten gegenüber Personen oder Tieren',
       'Verstößt wiederholt gegen Regeln (Schule, Heimregeln)',
@@ -1758,6 +1770,8 @@ const SCREENING_DOMAINS = [
     icon: '⚠️',
     cutoff: 2,
     handlung: 'krise',
+    instrument: 'C-SSRS (Columbia Suicide Severity Rating Scale) / SIQ-JR',
+    cutoffQuelle: 'Posner et al. 2011; Reynolds 1988',
     ueberweisungAn: 'CHL Kinder- und Jugendpsychiatrie (4411-6100)',
     items: [
       'Verletzt sich absichtlich (Schneiden, Kratzen, Verbrennen)',
@@ -1776,6 +1790,8 @@ const SCREENING_DOMAINS = [
     icon: '🍽️',
     cutoff: 5,
     handlung: 'abklaerung',
+    instrument: 'SCOFF / EAT-26 adaptiert',
+    cutoffQuelle: 'Morgan et al. 1999; Garner et al. 1982',
     ueberweisungAn: 'CHL/KJP oder Mondorf Clinique (23 666-1)',
     items: [
       'Hat ein sehr negatives Körperbild oder fühlt sich zu dick/dünn',
@@ -1793,6 +1809,8 @@ const SCREENING_DOMAINS = [
     icon: '🚬',
     cutoff: 5,
     handlung: 'intervention',
+    instrument: 'CRAFFT (Car, Relax, Alone, Forget, Friends, Trouble)',
+    cutoffQuelle: 'Knight et al. 2002',
     items: [
       'Konsumiert regelmäßig Alkohol (mehr als 1x/Woche)',
       'Konsumiert Cannabis oder andere Drogen',
@@ -1809,6 +1827,8 @@ const SCREENING_DOMAINS = [
     icon: '🌙',
     cutoff: 5,
     handlung: 'intervention',
+    instrument: 'PSQI (Pittsburgh Sleep Quality Index) adaptiert',
+    cutoffQuelle: 'Buysse et al. 1989',
     items: [
       'Hat anhaltende Ein- oder Durchschlafprobleme',
       'Schläft am Tag sehr viel (mehr als 10h) oder ist tagsüber sehr müde',
@@ -1825,6 +1845,8 @@ const SCREENING_DOMAINS = [
     icon: '🔮',
     cutoff: 2,
     handlung: 'krise',
+    instrument: 'PQ-16 (Prodromal Questionnaire)',
+    cutoffQuelle: 'Ising et al. 2012',
     ueberweisungAn: 'CHL Psychiatrie — SOFORT (4411-6100)',
     items: [
       'Berichtet über Stimmen oder Wahrnehmungen ohne äußere Ursache',
@@ -5460,6 +5482,12 @@ const VERLAUF_ITEMS = [
   { id: 'beziehungen', label: 'Beziehungen',  icon: '🤝', farbe: '#8B5CF6', desc: 'Qualität sozialer Beziehungen' },
   { id: 'schule',      label: 'Schule',       icon: '📚', farbe: '#22C55E', desc: 'Schulisches Engagement & Erfolg' },
   { id: 'schlaf',      label: 'Schlaf',       icon: '🌙', farbe: '#6366F1', desc: 'Schlafqualität' },
+];
+// Trauma-spezifische Dimensionen — nur angezeigt wenn Trauma im Screening flagged
+const VERLAUF_TRAUMA_ITEMS = [
+  { id: 'albtraeume',     label: 'Albträume',         icon: '🌑', farbe: '#9C4E77', desc: 'Häufigkeit von Albträumen/Schlafstörungen durch Trauma' },
+  { id: 'intrusionen',    label: 'Intrusionen',       icon: '⚡', farbe: '#7B2D2D', desc: 'Flashbacks, aufdringliche Erinnerungen, plötzliche Bilder' },
+  { id: 'hypervigilanz',  label: 'Hypervigilanz',     icon: '👁️', farbe: '#DC2626', desc: 'Übermäßige Wachsamkeit, Schreckreaktionen, ständige Anspannung' },
 ];
 
 // ============================================================

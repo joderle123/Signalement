@@ -1953,6 +1953,18 @@ function addProtokoll() {
     showToast('Bitte mindestens ein SOAP-Feld ausfüllen', 'error'); return;
   }
 
+  // C-SSRS Schweregrad-Prüfung: Bei Stufe 3+ → Sicherheitsplan muss angehakt sein
+  const cssrsSchweregradEl = document.querySelector('input[name="cssrs-schweregrad"]:checked');
+  const cssrsSchweregrad = cssrsSchweregradEl ? parseInt(cssrsSchweregradEl.value) : 0;
+  if (cssrsSchweregrad >= 3) {
+    const sicherheitsplanOk = document.getElementById('soap-sicherheitsplan-check')?.checked;
+    if (!sicherheitsplanOk) {
+      showToast('⚠️ Bei Suizidalitäts-Schweregrad ≥ 3 muss der Sicherheitsplan dokumentiert werden!', 'error');
+      soapWizardGo(3); // Zurück zu Step 3
+      return;
+    }
+  }
+
   // Find theme title
   let themaLabel = '';
   if (themaId) {
@@ -1984,8 +1996,23 @@ function addProtokoll() {
     inhalt: text,
     kategorie: 'session',
     themaId: themaId || null,
-    soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel, pvt: pvtState, srs: { relationship: srsR, goals: srsG, approach: srsA, overall: srsO, total: srsTotal } },
+    soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel, pvt: pvtState, srs: { relationship: srsR, goals: srsG, approach: srsA, overall: srsO, total: srsTotal },
+      cssrsSchweregrad: cssrsSchweregrad || null,
+      sicherheitsplanDokumentiert: cssrsSchweregrad >= 3 ? !!document.getElementById('soap-sicherheitsplan-check')?.checked : null,
+      supervisorInformiert: cssrsSchweregrad >= 3 ? !!document.getElementById('soap-supervisor-check')?.checked : null,
+    },
   });
+
+  // Auto-Update Risiko-Monitor wenn C-SSRS Schweregrad gesetzt
+  if (cssrsSchweregrad >= 3) {
+    const risikoWerte = getRisikoFromForm();
+    // Falls C-SSRS Items noch nicht auf rot stehen, automatisch setzen
+    if (cssrsSchweregrad >= 4) risikoWerte.cssrs_absicht = 'rot';
+    if (cssrsSchweregrad >= 3) risikoWerte.cssrs_plan = 'rot';
+    if (cssrsSchweregrad >= 2) risikoWerte.cssrs_gedanken = 'rot';
+    DB.addRisiko(APP.currentSchuelerId, risikoWerte);
+    showToast('🛡️ Risiko-Monitor automatisch aktualisiert (C-SSRS Stufe ' + cssrsSchweregrad + ')', 'warning', 5000);
+  }
 
   // Also log wellbeing if mood was set
   if (stimmung) {
@@ -5036,9 +5063,102 @@ function quickStartSession(themaId) {
 // DASHBOARD
 // ============================================================
 
+// ── Safety-Kaskade: Cross-Tool Risiko-Eskalation ──
+function checkSafetyEscalation(schuelerId) {
+  const sid = schuelerId || APP.currentSchuelerId;
+  if (!sid) return { active: false, alerts: [] };
+
+  const alerts = [];
+
+  // 1. Risiko-Monitor: Rot in C-SSRS oder Kindeswohl
+  try {
+    const risikoDaten = DB.getRisiko(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+    if (risikoDaten.length > 0) {
+      const letzter = risikoDaten[0];
+      const cssrsItems = RISIKO_ITEMS.filter(i => i.kategorie === 'cssrs');
+      const cssrsRot = cssrsItems.filter(i => letzter.werte[i.id] === 'rot');
+      if (cssrsRot.length > 0) {
+        alerts.push({ typ: 'suizid', stufe: 'akut', label: 'Suizidalitäts-Alarm', detail: cssrsRot.map(i => i.label).join(', '), farbe: '#7F1D1D', icon: '🚑' });
+      }
+      const kindeswohlItems = RISIKO_ITEMS.filter(i => i.kategorie === 'kindeswohl');
+      const kindeswohlRot = kindeswohlItems.filter(i => letzter.werte[i.id] === 'rot');
+      if (kindeswohlRot.length > 0) {
+        alerts.push({ typ: 'kindeswohl', stufe: 'meldung', label: 'Kindeswohlgefährdung', detail: kindeswohlRot.map(i => i.label).join(', '), farbe: '#7C3AED', icon: '⚖️' });
+      }
+    }
+  } catch(e) { /* silent */ }
+
+  // 2. Screening: Krise-Level
+  try {
+    const screenings = DB.getScreenings(sid).filter(sc => sc.abgeschlossen).sort((a, b) => b.datum.localeCompare(a.datum));
+    if (screenings.length > 0 && screenings[0].severity === 'urgent') {
+      alerts.push({ typ: 'screening', stufe: 'urgent', label: 'Screening: Dringend', detail: 'Letztes Screening ergab dringende Auffälligkeiten', farbe: '#DC2626', icon: '🔍' });
+    }
+  } catch(e) { /* silent */ }
+
+  // 3. Hypothesen: Suizid-/Selbstverletzungs-Hypothese aktiv
+  try {
+    const hypothesen = generateHypothesen(sid);
+    const suizidHypo = hypothesen.find(h => h.typ === 'risiko' && h._konfidenz >= 60 &&
+      (h.id || '').match(/suizid|selbstverletz|autolyse/i));
+    if (suizidHypo) {
+      alerts.push({ typ: 'hypothese', stufe: 'hoch', label: 'Hypothese: ' + suizidHypo.titel, detail: 'Konfidenz ' + suizidHypo._konfidenz + '%', farbe: '#991B1B', icon: '🧠' });
+    }
+  } catch(e) { /* silent */ }
+
+  // 4. Verlauf: Starke Verschlechterung
+  try {
+    const verlaufDaten = DB.getVerlauf(sid).sort((a, b) => new Date(a.datum) - new Date(b.datum));
+    if (verlaufDaten.length >= 2) {
+      const letzter = verlaufDaten[verlaufDaten.length - 1];
+      const vorLetzter = verlaufDaten[verlaufDaten.length - 2];
+      let starkVerschlechtert = 0;
+      VERLAUF_ITEMS.forEach(item => {
+        const diff = (letzter.werte[item.id] || 5) - (vorLetzter.werte[item.id] || 5);
+        if (diff <= -3) starkVerschlechtert++;
+      });
+      if (starkVerschlechtert >= 3) {
+        alerts.push({ typ: 'verlauf', stufe: 'warnung', label: 'Starke Verlaufs-Verschlechterung', detail: starkVerschlechtert + ' Dimensionen stark verschlechtert', farbe: '#EA580C', icon: '📉' });
+      }
+    }
+  } catch(e) { /* silent */ }
+
+  return { active: alerts.length > 0, alerts };
+}
+
+function renderSafetyBanner(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const { active, alerts } = checkSafetyEscalation();
+  if (!active) { container.innerHTML = ''; return; }
+
+  const akut = alerts.find(a => a.stufe === 'akut');
+  const bannerFarbe = akut ? '#7F1D1D' : '#DC2626';
+
+  let html = `<div class="safety-banner" style="padding:12px 16px;background:${bannerFarbe}10;border:2px solid ${bannerFarbe};border-radius:10px;margin-bottom:12px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="font-size:18px;">${akut ? '🚑' : '🚨'}</span>
+      <strong style="color:${bannerFarbe};font-size:14px;">${akut ? 'AKUTE KRISE — Sofortige Intervention erforderlich' : 'Sicherheits-Warnung — Handlungsbedarf'}</strong>
+    </div>
+    ${alerts.map(a => `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;">
+      <span>${a.icon}</span>
+      <strong style="color:${a.farbe};">${a.label}</strong>
+      <span style="color:#6B7280;">${a.detail}</span>
+    </div>`).join('')}
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-xs" style="background:${bannerFarbe};color:#fff;border:none;" onclick="showPhase('leitfaden');setTimeout(()=>showSubTab('themen'),100);setTimeout(()=>quickStartSession('krisenintervention'),300);">Krisenintervention starten</button>
+      <button class="btn btn-xs" style="background:#fff;color:${bannerFarbe};border:1px solid ${bannerFarbe};" onclick="showPhase('analyse');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
+    </div>
+  </div>`;
+  container.innerHTML = html;
+}
+
 function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
+  // Safety-Kaskade ganz oben
+  renderSafetyBanner('safety-banner-dashboard');
   // "Heute"-Ansicht: Nur das Wesentliche für den Arbeitstag
   renderRisikoWidget();
   renderSitzungsvorschlag();
@@ -11858,18 +11978,40 @@ function renderRisikoCheck() {
   const container = document.getElementById('risiko-check-section');
   if (!container) return;
 
+  const kategorien = [
+    { id: 'allgemein', label: 'Allgemeine Sicherheit', icon: '🛡️' },
+    { id: 'cssrs', label: 'Suizidalitäts-Screening (C-SSRS angelehnt)', icon: '💭',
+      hinweis: 'Columbia Suicide Severity Rating Scale — strukturierte Abklärung in 5 Stufen' },
+    { id: 'kindeswohl', label: 'Kindeswohlgefährdung', icon: '⚖️' },
+  ];
+
   let html = '<div class="risiko-check-box">';
-  html += '<div class="risiko-check-header">🛡️ Sicherheits-Check <span style="font-size:11px;color:#6B7280;">(optional)</span></div>';
-  RISIKO_ITEMS.forEach(item => {
-    html += `<div class="risiko-check-row">
-      <div class="risiko-check-label">${item.icon} ${item.label}</div>
-      <div class="risiko-ampel-group" id="risiko-ampel-${item.id}">
-        ${Object.entries(RISIKO_STUFEN).map(([key, stufe]) =>
-          `<button class="risiko-ampel-btn ${key === 'gruen' ? 'active' : ''}" data-item="${item.id}" data-stufe="${key}" onclick="setRisikoAmpel('${item.id}','${key}')" style="--ampel-farbe:${stufe.farbe};" title="${stufe.label}">${stufe.icon}</button>`
-        ).join('')}
-      </div>
+  html += '<div class="risiko-check-header">🛡️ Sicherheits-Check <span style="font-size:11px;color:#6B7280;">(strukturiert)</span></div>';
+
+  kategorien.forEach(kat => {
+    const items = RISIKO_ITEMS.filter(i => i.kategorie === kat.id);
+    if (items.length === 0) return;
+    html += `<div style="margin-top:10px;margin-bottom:4px;">
+      <div style="font-size:12px;font-weight:700;color:#374151;display:flex;align-items:center;gap:6px;">${kat.icon} ${kat.label}</div>
+      ${kat.hinweis ? `<div style="font-size:10px;color:#6B7280;margin-top:2px;font-style:italic;">${kat.hinweis}</div>` : ''}
     </div>`;
+    items.forEach(item => {
+      html += `<div class="risiko-check-row" title="${item.desc}">
+        <div class="risiko-check-label">
+          ${item.icon} ${item.label}
+          ${item.cssrsLevel ? `<span style="font-size:9px;color:#9CA3AF;margin-left:4px;">Stufe ${item.cssrsLevel}</span>` : ''}
+        </div>
+        <div class="risiko-ampel-group" id="risiko-ampel-${item.id}">
+          ${Object.entries(RISIKO_STUFEN).map(([key, stufe]) =>
+            `<button class="risiko-ampel-btn ${key === 'gruen' ? 'active' : ''}" data-item="${item.id}" data-stufe="${key}" onclick="setRisikoAmpel('${item.id}','${key}')" style="--ampel-farbe:${stufe.farbe};" title="${stufe.label}: ${item.desc}">${stufe.icon}</button>`
+          ).join('')}
+        </div>
+      </div>`;
+    });
   });
+
+  // Entscheidungsregeln-Ergebnis (wird dynamisch aktualisiert)
+  html += '<div id="risiko-entscheidung-result" style="margin-top:10px;"></div>';
   html += '</div>';
   container.innerHTML = html;
 }
@@ -11877,10 +12019,65 @@ function renderRisikoCheck() {
 function setRisikoAmpel(itemId, stufe) {
   const group = document.getElementById(`risiko-ampel-${itemId}`);
   if (!group) return;
+
+  // Bestätigung bei Rot-Wechsel für kritische Items
+  const item = RISIKO_ITEMS.find(i => i.id === itemId);
+  if (stufe === 'rot' && item && (item.kategorie === 'cssrs' || item.kategorie === 'kindeswohl')) {
+    showConfirm(
+      `⚠️ "${item.label}" wird auf ROT gesetzt.\n\nBitte dokumentieren Sie die Beobachtungen und ergriffenen Maßnahmen.\n\nFortfahren?`,
+      () => {
+        applyRisikoAmpel(group, stufe);
+        updateRisikoEntscheidung();
+      }
+    );
+    return;
+  }
+
+  applyRisikoAmpel(group, stufe);
+  updateRisikoEntscheidung();
+}
+
+function applyRisikoAmpel(group, stufe) {
   group.querySelectorAll('.risiko-ampel-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.stufe === stufe);
   });
 }
+
+function updateRisikoEntscheidung() {
+  const result = document.getElementById('risiko-entscheidung-result');
+  if (!result) return;
+  if (typeof RISIKO_ENTSCHEIDUNGSREGELN === 'undefined') { result.innerHTML = ''; return; }
+
+  const werte = getRisikoFromForm();
+  let html = '';
+  RISIKO_ENTSCHEIDUNGSREGELN.forEach(regel => {
+    if (regel.bedingung(werte)) {
+      html += `<div style="margin-top:8px;padding:10px 14px;background:${regel.farbe}08;border:2px solid ${regel.farbe};border-radius:8px;">
+        <div style="font-size:13px;font-weight:700;color:${regel.farbe};display:flex;align-items:center;gap:6px;">${regel.icon} ${regel.label}</div>
+        <div style="font-size:11px;color:#374151;margin-top:6px;line-height:1.5;">${regel.aktion}</div>
+        ${regel.stufe === 'akut' ? '<div style="margin-top:8px;padding:6px;background:#FEF2F2;border-radius:4px;font-size:11px;color:#7F1D1D;font-weight:600;">🚑 Jugendlichen NICHT allein lassen! Sofort handeln!</div>' : ''}
+      </div>`;
+    }
+  });
+  result.innerHTML = html;
+
+  // C-SSRS Schweregrad-Panel anzeigen wenn C-SSRS-Items nicht alle grün
+  const cssrsPanel = document.getElementById('soap-cssrs-schweregrad');
+  if (cssrsPanel) {
+    const cssrsItems = RISIKO_ITEMS.filter(i => i.kategorie === 'cssrs');
+    const hatCSSRSAuffaellig = cssrsItems.some(i => werte[i.id] && werte[i.id] !== 'gruen');
+    cssrsPanel.style.display = hatCSSRSAuffaellig ? '' : 'none';
+  }
+}
+
+// C-SSRS Schweregrad Radiobutton-Handler: Bei Stufe 3+ Sicherheitsplan-Pflicht anzeigen
+document.addEventListener('change', function(e) {
+  if (e.target.name === 'cssrs-schweregrad') {
+    const stufe = parseInt(e.target.value);
+    const pflichtBox = document.getElementById('soap-sicherheitsplan-pflicht');
+    if (pflichtBox) pflichtBox.style.display = stufe >= 3 ? '' : 'none';
+  }
+});
 
 function getRisikoFromForm() {
   const werte = {};
@@ -11900,7 +12097,14 @@ function saveRisikoFromProtokoll() {
   const werte = getRisikoFromForm();
   const hatRisiko = Object.values(werte).some(v => v !== 'gruen');
   if (hatRisiko) {
-    DB.addRisiko(sid, werte);
+    // Audit-Log: Zeitstempel + Werte + Begruendung
+    const auditEntry = {
+      datum: new Date().toISOString(),
+      werte: { ...werte },
+      hatRotCSSRS: RISIKO_ITEMS.filter(i => i.kategorie === 'cssrs').some(i => werte[i.id] === 'rot'),
+      hatKindeswohl: RISIKO_ITEMS.filter(i => i.kategorie === 'kindeswohl').some(i => werte[i.id] !== 'gruen'),
+    };
+    DB.addRisiko(sid, werte, auditEntry);
   }
 }
 
@@ -11916,6 +12120,22 @@ function renderRisikoWidget() {
   const maxStufe = Object.values(letzter.werte).includes('rot') ? 'rot' : Object.values(letzter.werte).includes('gelb') ? 'gelb' : 'gruen';
   const stufeInfo = RISIKO_STUFEN[maxStufe];
 
+  // Entscheidungsregeln auswerten
+  let entscheidungHtml = '';
+  if (typeof RISIKO_ENTSCHEIDUNGSREGELN !== 'undefined') {
+    RISIKO_ENTSCHEIDUNGSREGELN.forEach(regel => {
+      if (regel.bedingung(letzter.werte)) {
+        entscheidungHtml += `<div style="margin-top:8px;padding:8px 12px;background:${regel.farbe}08;border:2px solid ${regel.farbe};border-radius:6px;">
+          <div style="font-size:12px;font-weight:700;color:${regel.farbe};">${regel.icon} ${regel.label}</div>
+          <div style="font-size:11px;color:#374151;margin-top:4px;">${regel.aktion}</div>
+        </div>`;
+      }
+    });
+  }
+
+  // Nur nicht-grüne Items anzeigen
+  const auffaelligeItems = RISIKO_ITEMS.filter(i => (letzter.werte[i.id] || 'gruen') !== 'gruen');
+
   let html = '';
   if (maxStufe !== 'gruen') {
     html = `<div class="card risiko-widget risiko-widget-${maxStufe}" style="margin-bottom:12px;border-left:4px solid ${stufeInfo.farbe};">
@@ -11926,14 +12146,15 @@ function renderRisikoWidget() {
           <span style="font-size:10px;color:#6B7280;margin-left:auto;">${new Date(letzter.datum).toLocaleDateString('de-DE')}</span>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          ${RISIKO_ITEMS.map(item => {
+          ${auffaelligeItems.map(item => {
             const w = letzter.werte[item.id] || 'gruen';
             const s = RISIKO_STUFEN[w];
             return `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${s.farbe}15;color:${s.farbe};border:1px solid ${s.farbe}30;">${item.icon} ${item.label}: ${s.icon} ${s.label}</span>`;
           }).join('')}
         </div>
-        ${maxStufe === 'rot' ? '<div style="margin-top:8px;padding:6px 10px;background:#FEF2F2;border-radius:6px;font-size:12px;color:#991B1B;font-weight:600;">⚠️ Krisenplan aktivieren — Fachperson informieren! <button class="btn btn-xs" style="background:#EF4444;color:#fff;border:none;margin-left:8px;" onclick="showPhase(\'leitfaden\');setTimeout(()=>showSubTab(\'themen\'),100);setTimeout(()=>quickStartSession(\'krisenintervention\'),300);">Krisenintervention starten</button></div>' : ''}
-        ${maxStufe === 'gelb' ? '<div style="margin-top:8px;padding:6px 10px;background:#FFFBEB;border-radius:6px;font-size:12px;color:#92400E;">👁 Situation beobachten und in nächster Sitzung thematisieren</div>' : ''}
+        ${entscheidungHtml}
+        ${maxStufe === 'rot' && !entscheidungHtml ? '<div style="margin-top:8px;padding:6px 10px;background:#FEF2F2;border-radius:6px;font-size:12px;color:#991B1B;font-weight:600;">⚠️ Krisenplan aktivieren — Fachperson informieren! <button class="btn btn-xs" style="background:#EF4444;color:#fff;border:none;margin-left:8px;" onclick="showPhase(\'leitfaden\');setTimeout(()=>showSubTab(\'themen\'),100);setTimeout(()=>quickStartSession(\'krisenintervention\'),300);">Krisenintervention starten</button></div>' : ''}
+        ${maxStufe === 'gelb' && !entscheidungHtml ? '<div style="margin-top:8px;padding:6px 10px;background:#FFFBEB;border-radius:6px;font-size:12px;color:#92400E;">👁 Situation beobachten und in nächster Sitzung thematisieren</div>' : ''}
       </div>
     </div>`;
   }

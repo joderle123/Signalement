@@ -8177,6 +8177,270 @@ function druckeBericht() {
 // FÖRDERPLAN / ROADMAP MODULE
 // ============================================================
 
+// ── Helfer: Thema-Titel und Kategorie nachschlagen ──
+function getThemaTitel(themaId) {
+  for (const kat of THEMEN_KATEGORIEN) {
+    const t = kat.themen.find(th => th.id === themaId);
+    if (t) return t.titel;
+  }
+  return themaId;
+}
+function getThemaKat(themaId) {
+  for (const kat of THEMEN_KATEGORIEN) {
+    if (kat.themen.find(th => th.id === themaId)) return kat;
+  }
+  return null;
+}
+
+// ── Priorität aus Screening-Score berechnen ──
+function getThemaPrioritaet(themaId, roadmap) {
+  if (!roadmap || !roadmap.screeningId) return { level: 'optional', label: '💡 Optional', css: 'roadmap-prioritaet-optional', score: 0 };
+  const scr = DB.getScreenings().find(s => s.id === roadmap.screeningId);
+  if (!scr || !scr.scores) return { level: 'optional', label: '💡 Optional', css: 'roadmap-prioritaet-optional', score: 0 };
+
+  let maxSeverity = 0;
+  for (const domId in SCREENING_THEMA_MAP) {
+    const themen = SCREENING_THEMA_MAP[domId] || [];
+    if (themen.includes(themaId)) {
+      const domain = SCREENING_DOMAINS.find(d => d.id === domId);
+      if (domain && scr.scores[domId] !== undefined) {
+        const max = domain.items.length * 3;
+        const severity = max > 0 ? scr.scores[domId] / max : 0;
+        if (severity > maxSeverity) maxSeverity = severity;
+      }
+    }
+  }
+
+  if (maxSeverity >= 0.7) return { level: 'essentiell', label: '⚡ Essentiell', css: 'roadmap-prioritaet-essentiell', score: maxSeverity };
+  if (maxSeverity >= 0.4) return { level: 'empfohlen', label: '📌 Empfohlen', css: 'roadmap-prioritaet-empfohlen', score: maxSeverity };
+  return { level: 'optional', label: '💡 Optional', css: 'roadmap-prioritaet-optional', score: maxSeverity };
+}
+
+// ── Phasen-Stepper (horizontale Dot-Navigation) ──
+function renderPhasenStepper(roadmap) {
+  let html = '<div class="roadmap-stepper">';
+  roadmap.phasen.forEach((phase, idx) => {
+    const def = ROADMAP_PHASEN[idx];
+    const dotClass = phase.status === 'erledigt' ? 'erledigt' : phase.status === 'aktiv' ? 'aktiv' : '';
+    html += `<div class="stepper-step">
+      <div class="stepper-dot-wrap">
+        <div class="stepper-dot ${dotClass}" onclick="focusRoadmapPhase(${phase.nr})" title="Phase ${def.nr}: ${def.label}">
+          ${phase.status === 'erledigt' ? '✓' : def.nr}
+        </div>
+      </div>`;
+    if (idx < roadmap.phasen.length - 1) {
+      const lineClass = phase.status === 'erledigt' ? 'erledigt' : phase.status === 'aktiv' ? 'aktiv' : '';
+      html += `<div class="stepper-line ${lineClass}"></div>`;
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ── Fokus Thema-Aktionskarte ──
+function renderFokusThemaKarte(thema, themaIdx, phase, roadmap) {
+  const titel = getThemaTitel(thema.id);
+  const kat = getThemaKat(thema.id);
+  const prio = getThemaPrioritaet(thema.id, roadmap);
+  const isDone = thema.status === 'abgeschlossen';
+
+  // Material sammeln
+  const arbeitsblaetter = ARBEITSBLÄTTER[thema.id] || [];
+  const interventionen = THEMA_INTERVENTIONEN[thema.id] || [];
+  const wiki = typeof findWikiForThema === 'function' ? findWikiForThema(thema.id) : null;
+
+  let materialHtml = '';
+  if (arbeitsblaetter.length > 0 || interventionen.length > 0 || wiki) {
+    materialHtml = '<div class="roadmap-material-links">';
+    arbeitsblaetter.forEach(ab => {
+      materialHtml += `<a href="arbeitsblatter/${ab.datei}" target="_blank" class="roadmap-material-btn arbeitsblatt">📋 ${ab.titel}</a>`;
+    });
+    interventionen.slice(0, 3).forEach(iv => {
+      materialHtml += `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${thema.id}')" title="${iv.beschreibung || ''}">🔧 ${iv.titel}</button>`;
+    });
+    if (interventionen.length > 3) {
+      materialHtml += `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${thema.id}')">+${interventionen.length - 3} weitere</button>`;
+    }
+    if (wiki) {
+      materialHtml += `<button class="roadmap-material-btn wiki" onclick="openWikiArtikel('${wiki.id}')">📚 Wiki</button>`;
+    }
+    materialHtml += '</div>';
+  }
+
+  return `
+    <div class="roadmap-thema-karte ${isDone ? 'done' : ''}">
+      <div class="roadmap-karte-check ${isDone ? 'checked' : ''}" onclick="toggleRoadmapThema(${phase.nr}, ${themaIdx})">
+        ${isDone ? '✓' : ''}
+      </div>
+      <div class="roadmap-karte-body">
+        <div class="roadmap-karte-top">
+          <span class="roadmap-karte-titel">${titel}</span>
+          ${kat ? `<span class="roadmap-karte-kat" style="border-left:3px solid ${kat.farbe};padding-left:6px;">${renderIcon(kat.icon)} ${kat.titel}</span>` : ''}
+          <span class="roadmap-prioritaet ${prio.css}">${prio.label}</span>
+          <div class="roadmap-karte-actions-btn">
+            <button class="btn-icon btn-xs" title="Thema öffnen" onclick="openRoadmapThema('${thema.id}')">📋</button>
+            <button class="btn-icon btn-xs" title="Entfernen" onclick="removeRoadmapThema(${phase.nr}, ${themaIdx})">✕</button>
+          </div>
+        </div>
+        ${materialHtml}
+      </div>
+    </div>`;
+}
+
+// ── Aktive Phase (voll expandiert mit Fokus-Karten) ──
+function renderAktivePhase(roadmap, phase, idx) {
+  const def = ROADMAP_PHASEN[idx];
+  const themenDone = phase.themen.filter(t => t.status === 'abgeschlossen').length;
+  const themenTotal = phase.themen.length;
+  const phasePct = themenTotal > 0 ? Math.round((themenDone / themenTotal) * 100) : 0;
+
+  // Themen sortiert: Essentiell > Empfohlen > Optional, erledigte am Ende
+  const sortedThemen = phase.themen.map((t, i) => ({ ...t, _origIdx: i, _prio: getThemaPrioritaet(t.id, roadmap) }));
+  sortedThemen.sort((a, b) => {
+    if (a.status === 'abgeschlossen' && b.status !== 'abgeschlossen') return 1;
+    if (b.status === 'abgeschlossen' && a.status !== 'abgeschlossen') return -1;
+    const prioOrder = { essentiell: 0, empfohlen: 1, optional: 2 };
+    return (prioOrder[a._prio.level] || 2) - (prioOrder[b._prio.level] || 2);
+  });
+
+  return `
+    <div class="roadmap-fokus-phase" id="roadmap-fokus-${phase.nr}">
+      <div class="roadmap-fokus-phase-header">
+        <div class="roadmap-fokus-phase-title">
+          <div class="roadmap-fokus-icon" style="background:${def.farbe}15;color:${def.farbe};">
+            ${renderIcon(def.icon)}
+          </div>
+          <div>
+            <div class="roadmap-fokus-label">Phase ${def.nr}: ${def.label}</div>
+            <div class="roadmap-fokus-desc">${def.beschreibung}</div>
+            <div class="roadmap-fokus-timing">
+              ${def.dauer}
+              ${phase.startDatum ? ` · Gestartet: ${new Date(phase.startDatum).toLocaleDateString('de-DE')}` : ''}
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+          <span class="roadmap-phase-status-badge roadmap-status-aktiv">▶ Aktiv</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="roadmap-fokus-stats">
+        <div class="roadmap-fokus-stat">
+          <div class="roadmap-fokus-stat-value">${themenTotal}</div>
+          <div class="roadmap-fokus-stat-label">Themen</div>
+        </div>
+        <div class="roadmap-fokus-stat">
+          <div class="roadmap-fokus-stat-value">${themenDone}/${themenTotal}</div>
+          <div class="roadmap-fokus-stat-label">Erledigt</div>
+        </div>
+        <div class="roadmap-fokus-stat">
+          <div class="roadmap-fokus-stat-value" style="color:${def.farbe};">${phasePct}%</div>
+          <div class="roadmap-fokus-stat-label">Fortschritt</div>
+        </div>
+      </div>
+
+      <!-- Fortschrittsbalken -->
+      ${themenTotal > 0 ? `
+      <div class="roadmap-progress-bar-container" style="margin-bottom:16px;">
+        <div class="roadmap-progress-bar">
+          <div class="roadmap-progress-fill" style="width:${phasePct}%;background:${def.farbe};"></div>
+        </div>
+      </div>` : ''}
+
+      <!-- WAS JETZT ZU TUN IST -->
+      <div class="roadmap-section-header">📋 Was jetzt zu tun ist</div>
+
+      <div class="roadmap-themen-liste">
+        ${themenTotal === 0
+          ? `<div class="roadmap-themen-empty">Noch keine Themen zugewiesen — füge unten Themen hinzu.</div>`
+          : sortedThemen.map(t => renderFokusThemaKarte(t, t._origIdx, phase, roadmap)).join('')}
+      </div>
+
+      <!-- Thema hinzufügen -->
+      <div class="roadmap-add-thema-fokus">
+        <select id="roadmap-add-select-${phase.nr}">
+          <option value="">+ Thema hinzufügen...</option>
+          ${THEMEN_KATEGORIEN.map(kat =>
+            `<optgroup label="${renderIcon(kat.icon)} ${kat.titel}">
+              ${kat.themen.map(t => `<option value="${t.id}">${t.titel}</option>`).join('')}
+            </optgroup>`
+          ).join('')}
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="addRoadmapThema(${phase.nr})">Hinzufügen</button>
+      </div>
+
+      <!-- Phase-Notizen -->
+      <div class="roadmap-phase-notizen" style="margin-top:16px;">
+        <textarea class="roadmap-notiz-input" placeholder="Notizen zu dieser Phase..."
+          id="roadmap-notiz-${phase.nr}"
+          onchange="saveRoadmapNotiz(${phase.nr}, this.value)">${phase.notizen || ''}</textarea>
+      </div>
+
+      <!-- Phase-Aktionen -->
+      <div class="roadmap-phase-actions" style="margin-top:16px;">
+        <button class="btn" style="background:${def.farbe};color:#fff;border:none;padding:10px 20px;font-size:15px;font-weight:600;border-radius:8px;box-shadow:0 2px 8px ${def.farbe}40;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>
+      </div>
+
+      <!-- Phasen-Ressourcen -->
+      ${typeof renderPhaseRessourcen === 'function' ? renderPhaseRessourcen(phase, idx, roadmap) : ''}
+    </div>`;
+}
+
+// ── Nächste Phase Vorschau ──
+function renderNaechstePhaseVorschau(roadmap, phase, idx) {
+  const def = ROADMAP_PHASEN[idx];
+  const themenCount = phase.themen.length;
+  return `
+    <div class="roadmap-section-header" style="margin-top:24px;">⏭️ Nächste Phase</div>
+    <div class="roadmap-naechste-vorschau" id="roadmap-fokus-${phase.nr}">
+      <div class="roadmap-naechste-vorschau-icon" style="background:${def.farbe}15;color:${def.farbe};">
+        ${renderIcon(def.icon)}
+      </div>
+      <div>
+        <div class="roadmap-naechste-vorschau-label">Phase ${def.nr}: ${def.label}</div>
+        <div class="roadmap-naechste-vorschau-desc">${def.beschreibung} · ${def.dauer}</div>
+      </div>
+      <span class="roadmap-naechste-themen-count">${themenCount} Themen</span>
+      <button class="btn btn-secondary btn-sm" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')" style="margin-left:8px;flex-shrink:0;">▶ Starten</button>
+    </div>`;
+}
+
+// ── Erledigte Phase (kompakt) ──
+function renderPhaseKompakt(phase, idx, type) {
+  const def = ROADMAP_PHASEN[idx];
+  const themenDone = phase.themen.filter(t => t.status === 'abgeschlossen').length;
+  const themenTotal = phase.themen.length;
+
+  if (type === 'erledigt') {
+    return `
+      <div class="roadmap-erledigt-item" id="roadmap-fokus-${phase.nr}">
+        <div class="roadmap-erledigt-dot">✓</div>
+        <div class="roadmap-erledigt-info">
+          <div class="roadmap-erledigt-label">Phase ${def.nr}: ${def.label}</div>
+          <div class="roadmap-erledigt-meta">${themenDone}/${themenTotal} Themen · ${phase.endDatum ? 'Abgeschlossen: ' + new Date(phase.endDatum).toLocaleDateString('de-DE') : ''}</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')" style="flex-shrink:0;">↺ Öffnen</button>
+      </div>`;
+  }
+
+  // Zukünftig (offen)
+  return `
+    <div class="roadmap-zukunft-item" id="roadmap-fokus-${phase.nr}">
+      <div class="roadmap-zukunft-dot">${def.nr}</div>
+      <span class="roadmap-zukunft-label">Phase ${def.nr}: ${def.label}</span>
+      <span class="roadmap-zukunft-themen">${themenTotal > 0 ? themenTotal + ' Themen' : '—'}</span>
+    </div>`;
+}
+
+// ── Fokus auf bestimmte Phase (vom Stepper aufgerufen) ──
+function focusRoadmapPhase(nr) {
+  const el = document.getElementById(`roadmap-fokus-${nr}`);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ── HAUPTFUNKTION: renderRoadmap() als Fokus-Dashboard ──
 function renderRoadmap() {
   const sid = APP.currentSchuelerId;
   if (!sid) return;
@@ -8188,7 +8452,7 @@ function renderRoadmap() {
   const latestScreening = screenings.length ? screenings.sort((a,b) => b.datum.localeCompare(a.datum))[0] : null;
   const s = DB.getSchuelerById(sid);
 
-  // No roadmap yet — show creation UI
+  // Kein Förderplan → Erstellungs-UI
   if (!roadmap) {
     container.innerHTML = `
       <div class="roadmap-empty">
@@ -8214,174 +8478,109 @@ function renderRoadmap() {
     return;
   }
 
-  // Render existing roadmap
+  // Berechne Statistiken
   const totalThemen = roadmap.phasen.reduce((sum, p) => sum + p.themen.length, 0);
   const erledigteThemen = roadmap.phasen.reduce((sum, p) => sum + p.themen.filter(t => t.status === 'abgeschlossen').length, 0);
   const gesamtFortschritt = totalThemen > 0 ? Math.round((erledigteThemen / totalThemen) * 100) : 0;
-  const aktivePhasenNr = roadmap.phasen.find(p => p.status === 'aktiv')?.nr || 0;
 
-  container.innerHTML = `
+  // Phasen gruppieren
+  const aktivePhase = roadmap.phasen.find(p => p.status === 'aktiv');
+  const aktivIdx = aktivePhase ? roadmap.phasen.indexOf(aktivePhase) : -1;
+  const erledigtePhasen = roadmap.phasen.filter(p => p.status === 'erledigt');
+  const naechstePhase = aktivIdx >= 0 && aktivIdx < roadmap.phasen.length - 1 ? roadmap.phasen[aktivIdx + 1] : null;
+  const naechsteIdx = naechstePhase ? roadmap.phasen.indexOf(naechstePhase) : -1;
+  const zukuenftigePhasen = roadmap.phasen.filter((p, i) => p.status === 'offen' && i !== naechsteIdx);
+
+  let html = '';
+
+  // Header
+  html += `
     <div class="roadmap-header">
       <div class="roadmap-header-left">
         <h2 class="roadmap-titel">🗺️ Förderplan — ${s.vorname} ${s.nachname}</h2>
         <div class="roadmap-meta">
           Erstellt: ${new Date(roadmap.erstellt).toLocaleDateString('de-DE')} ·
-          ${totalThemen} Themen · Phase ${aktivePhasenNr}/6
+          ${totalThemen} Themen · ${gesamtFortschritt}% gesamt
         </div>
       </div>
       <div class="roadmap-header-actions">
-        ${latestScreening ? `<button class="btn btn-secondary btn-sm" onclick="generateRoadmapFromScreening('${latestScreening.id}')">🔄 Aus Screening aktualisieren</button>` : ''}
-        <button class="btn btn-secondary btn-sm" onclick="druckeRoadmap()">🖨️ Drucken</button>
+        ${latestScreening ? `<button class="btn btn-secondary btn-sm" onclick="generateRoadmapFromScreening('${latestScreening.id}')">🔄 Aktualisieren</button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="druckeRoadmap()">🖨️</button>
         <button class="btn btn-danger btn-sm" onclick="deleteCurrentRoadmap()">🗑</button>
       </div>
-    </div>
+    </div>`;
 
-    <!-- Gesamtfortschritt -->
+  // Gesamtfortschritt
+  html += `
     <div class="roadmap-progress-bar-container">
       <div class="roadmap-progress-label">
         <span>Gesamtfortschritt</span>
-        <span>${gesamtFortschritt}% (${erledigteThemen}/${totalThemen} Themen)</span>
+        <span>${gesamtFortschritt}% (${erledigteThemen}/${totalThemen})</span>
       </div>
       <div class="roadmap-progress-bar">
         <div class="roadmap-progress-fill" style="width:${gesamtFortschritt}%;"></div>
       </div>
-    </div>
+    </div>`;
 
-    <!-- Phasen-Timeline -->
-    <div class="roadmap-timeline">
-      ${roadmap.phasen.map((phase, idx) => renderRoadmapPhase(roadmap, phase, idx)).join('')}
-    </div>
-  `;
+  // Phasen-Stepper
+  html += renderPhasenStepper(roadmap);
+
+  // Aktive Phase (Fokus-Dashboard)
+  if (aktivePhase) {
+    html += renderAktivePhase(roadmap, aktivePhase, aktivIdx);
+  } else {
+    html += `<div style="text-align:center;padding:40px;color:#6B7280;">
+      <div style="font-size:32px;margin-bottom:12px;">🎉</div>
+      <div style="font-size:16px;font-weight:600;">Alle Phasen abgeschlossen!</div>
+      <p style="font-size:13px;">Oder starte eine Phase über den Stepper oben.</p>
+    </div>`;
+  }
+
+  // Nächste Phase Vorschau
+  if (naechstePhase && naechstePhase.status === 'offen') {
+    html += renderNaechstePhaseVorschau(roadmap, naechstePhase, naechsteIdx);
+  }
+
+  // Erledigte Phasen (collapsible)
+  if (erledigtePhasen.length > 0) {
+    html += `
+      <div class="roadmap-erledigt-section">
+        <div class="roadmap-erledigt-toggle" onclick="toggleErledigtePhasen()">
+          <span>✓ Abgeschlossene Phasen (${erledigtePhasen.length})</span>
+          <span id="erledigt-toggle-arrow" style="font-size:11px;">▼</span>
+        </div>
+        <div id="erledigt-phasen-body" style="display:none;">
+          ${erledigtePhasen.map(p => renderPhaseKompakt(p, roadmap.phasen.indexOf(p), 'erledigt')).join('')}
+        </div>
+      </div>`;
+  }
+
+  // Zukünftige Phasen (kompakt, ohne nächste)
+  if (zukuenftigePhasen.length > 0) {
+    html += `
+      <div class="roadmap-zukunft-section">
+        <div class="roadmap-section-header" style="margin-top:20px;">🔮 Weitere Phasen</div>
+        ${zukuenftigePhasen.map(p => renderPhaseKompakt(p, roadmap.phasen.indexOf(p), 'zukunft')).join('')}
+      </div>`;
+  }
+
+  container.innerHTML = html;
 }
 
+// ── Toggle erledigte Phasen ──
+function toggleErledigtePhasen() {
+  const body = document.getElementById('erledigt-phasen-body');
+  const arrow = document.getElementById('erledigt-toggle-arrow');
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.textContent = open ? '▼' : '▲';
+}
+
+// Legacy-Kompatibilität: renderRoadmapPhase wird nicht mehr direkt aufgerufen,
+// aber wir behalten die Signatur für eventuelle externe Aufrufe
 function renderRoadmapPhase(roadmap, phase, idx) {
-  const def = ROADMAP_PHASEN[idx];
-  const isAktiv = phase.status === 'aktiv';
-  const isErledigt = phase.status === 'erledigt';
-  const isOffen = phase.status === 'offen';
-  const themenDone = phase.themen.filter(t => t.status === 'abgeschlossen').length;
-  const themenTotal = phase.themen.length;
-  const phasePct = themenTotal > 0 ? Math.round((themenDone / themenTotal) * 100) : 0;
-
-  // Find theme titles
-  const getThemaTitel = (themaId) => {
-    for (const kat of THEMEN_KATEGORIEN) {
-      const t = kat.themen.find(th => th.id === themaId);
-      if (t) return t.titel;
-    }
-    return themaId;
-  };
-
-  const getThemaKat = (themaId) => {
-    for (const kat of THEMEN_KATEGORIEN) {
-      if (kat.themen.find(th => th.id === themaId)) return kat;
-    }
-    return null;
-  };
-
-  return `
-    <div class="roadmap-phase ${isAktiv ? 'aktiv' : ''} ${isErledigt ? 'erledigt' : ''} ${isOffen ? 'offen' : ''}">
-      <!-- Phase-Marker -->
-      <div class="roadmap-phase-marker" style="--phase-farbe:${def.farbe};">
-        <div class="roadmap-phase-dot">
-          ${isErledigt ? '✓' : def.nr}
-        </div>
-        ${idx < ROADMAP_PHASEN.length - 1 ? '<div class="roadmap-phase-line"></div>' : ''}
-      </div>
-
-      <!-- Phase-Content -->
-      <div class="roadmap-phase-content">
-        <div class="roadmap-phase-header" onclick="toggleRoadmapPhase(${phase.nr})">
-          <div class="roadmap-phase-header-left">
-            <span class="roadmap-phase-icon">${renderIcon(def.icon)}</span>
-            <div>
-              <div class="roadmap-phase-label">Phase ${def.nr}: ${def.label}</div>
-              <div class="roadmap-phase-desc">${def.beschreibung}</div>
-              <div class="roadmap-phase-timing">
-                ${def.dauer}
-                ${phase.startDatum ? ` · Start: ${new Date(phase.startDatum).toLocaleDateString('de-DE')}` : ''}
-                ${phase.endDatum ? ` · Ende: ${new Date(phase.endDatum).toLocaleDateString('de-DE')}` : ''}
-              </div>
-            </div>
-          </div>
-          <div class="roadmap-phase-header-right">
-            <span class="roadmap-phase-status-badge roadmap-status-${phase.status}">
-              ${phase.status === 'aktiv' ? '▶ Aktiv' : phase.status === 'erledigt' ? '✓ Erledigt' : '○ Offen'}
-            </span>
-            ${themenTotal > 0 ? `<span class="roadmap-phase-count">${themenDone}/${themenTotal}</span>` : ''}
-            <span class="roadmap-phase-arrow" id="roadmap-arrow-${phase.nr}">▼</span>
-          </div>
-        </div>
-
-        <!-- Phase-Body (collapsible) -->
-        <div class="roadmap-phase-body" id="roadmap-body-${phase.nr}" style="display:${isAktiv ? 'block' : 'none'};">
-          <!-- Progress -->
-          ${themenTotal > 0 ? `
-          <div class="roadmap-phase-progress">
-            <div class="roadmap-mini-bar"><div class="roadmap-mini-bar-fill" style="width:${phasePct}%;background:${def.farbe};"></div></div>
-            <span>${phasePct}%</span>
-          </div>` : ''}
-
-          <!-- Themen-Liste -->
-          <div class="roadmap-themen-liste">
-            ${phase.themen.length === 0
-              ? `<div class="roadmap-themen-empty">Noch keine Themen zugewiesen</div>`
-              : phase.themen.map((t, ti) => {
-                  const kat = getThemaKat(t.id);
-                  return `
-                  <div class="roadmap-thema-item ${t.status === 'abgeschlossen' ? 'done' : ''}">
-                    <button class="roadmap-thema-check"
-                      onclick="toggleRoadmapThema(${phase.nr}, ${ti})"
-                      style="border-color:${def.farbe};${t.status === 'abgeschlossen' ? `background:${def.farbe};color:#fff;` : ''}">
-                      ${t.status === 'abgeschlossen' ? '✓' : ''}
-                    </button>
-                    <div class="roadmap-thema-info">
-                      <span class="roadmap-thema-titel">${getThemaTitel(t.id)}</span>
-                      ${kat ? `<span class="roadmap-thema-kat" style="color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.titel}</span>` : ''}
-                    </div>
-                    <div class="roadmap-thema-actions">
-                      ${typeof findWikiForThema === 'function' && findWikiForThema(t.id) ? `<button class="btn-icon btn-xs" title="Wiki-Artikel" onclick="openWikiArtikel('${findWikiForThema(t.id).id}')" style="color:#3B82F6;">📚</button>` : ''}
-                      <button class="btn-icon btn-xs" title="Thema öffnen" onclick="openRoadmapThema('${t.id}')">📋</button>
-                      <button class="btn-icon btn-xs" title="Entfernen" onclick="removeRoadmapThema(${phase.nr}, ${ti})">✕</button>
-                    </div>
-                  </div>`;
-                }).join('')}
-          </div>
-
-          <!-- Thema hinzufügen -->
-          <div class="roadmap-add-thema">
-            <select id="roadmap-add-select-${phase.nr}" class="roadmap-select">
-              <option value="">+ Thema hinzufügen...</option>
-              ${THEMEN_KATEGORIEN.map(kat =>
-                `<optgroup label="${renderIcon(kat.icon)} ${kat.titel}">
-                  ${kat.themen.map(t =>
-                    `<option value="${t.id}">${t.titel}</option>`
-                  ).join('')}
-                </optgroup>`
-              ).join('')}
-            </select>
-            <button class="btn btn-secondary btn-sm" onclick="addRoadmapThema(${phase.nr})">Hinzufügen</button>
-          </div>
-
-          <!-- Phase-Notizen -->
-          <div class="roadmap-phase-notizen">
-            <textarea class="roadmap-notiz-input" placeholder="Notizen zu dieser Phase..."
-              id="roadmap-notiz-${phase.nr}"
-              onchange="saveRoadmapNotiz(${phase.nr}, this.value)">${phase.notizen || ''}</textarea>
-          </div>
-
-          <!-- Phase-Aktionen -->
-          <div class="roadmap-phase-actions">
-            ${phase.status === 'offen' ? `<button class="btn" style="background:${def.farbe};color:#fff;border:none;padding:10px 20px;font-size:15px;font-weight:600;border-radius:8px;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">▶ Phase starten</button>` : ''}
-            ${phase.status === 'aktiv' ? `<button class="btn" style="background:${def.farbe};color:#fff;border:none;padding:10px 20px;font-size:15px;font-weight:600;border-radius:8px;box-shadow:0 2px 8px ${def.farbe}40;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>` : ''}
-            ${phase.status === 'erledigt' ? `<button class="btn btn-secondary" style="padding:8px 16px;font-size:14px;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'aktiv')">↺ Wieder öffnen</button>` : ''}
-          </div>
-
-          <!-- Phasen-Ressourcen -->
-          ${renderPhaseRessourcen(phase, idx, roadmap)}
-        </div>
-      </div>
-    </div>`;
+  return renderAktivePhase(roadmap, phase, idx);
 }
 
 function toggleRoadmapPhase(nr) {

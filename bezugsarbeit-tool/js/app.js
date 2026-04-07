@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     origSetItem(key, value);
     if (key.startsWith('cdse_')) {
       markDirty();
-      localStorage.setItem('pathways_lastSave', String(Date.now()));
+      origSetItem('pathways_lastSave', String(Date.now()));
     }
   };
 

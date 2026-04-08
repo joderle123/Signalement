@@ -45,7 +45,7 @@ function updateSaveIndicator(state) {
   if (!el) return;
   if (state === 'saved') {
     el.textContent = '✓ Gespeichert';
-    el.style.color = '#22C55E';
+    el.style.color = '#10B981';
   } else {
     el.textContent = '● Ungespeichert';
     el.style.color = '#F59E0B';
@@ -583,7 +583,7 @@ function renderProfilCompleteness(s) {
   const radius = 24;
   const circ = 2 * Math.PI * radius;
   const offset = circ - (pct / 100) * circ;
-  const color = pct >= 80 ? '#22C55E' : pct >= 50 ? '#F59E0B' : '#EF4444';
+  const color = pct >= 80 ? '#10B981' : pct >= 50 ? '#F59E0B' : '#EF4444';
 
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.querySelector('.completeness-details').style.display=this.querySelector('.completeness-details').style.display==='none'?'block':'none'" title="Profil-Vollständigkeit">
@@ -599,7 +599,7 @@ function renderProfilCompleteness(s) {
       <div class="completeness-details" style="display:none;position:absolute;top:100%;left:0;z-index:100;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:200px;margin-top:4px;">
         <div style="font-size:12px;font-weight:700;color:#1F2937;margin-bottom:8px;">Profil-Vollständigkeit</div>
         ${checks.map(c => `
-          <div style="display:flex;align-items:center;gap:6px;font-size:12px;padding:3px 0;color:${c.done ? '#22C55E' : '#9CA3AF'};">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;padding:3px 0;color:${c.done ? '#10B981' : '#9CA3AF'};">
             <span>${c.done ? '✓' : '○'}</span>
             <span style="color:${c.done ? '#374151' : '#9CA3AF'};">${c.label}</span>
           </div>
@@ -850,18 +850,18 @@ function renderBibliothek() {
 
   // ── Typ-Konfiguration ──
   const typConfig = {
-    fachkraft:     { icon: '📚', label: 'Fachwissen',      farbe: '#3B82F6', bg: '#EFF6FF' },
-    therapie:      { icon: '🎓', label: 'Sitzungsleitfaden', farbe: '#22C55E', bg: '#F0FDF4' },
+    fachkraft:     { icon: '📚', label: 'Fachwissen',      farbe: '#2563EB', bg: '#EFF6FF' },
+    therapie:      { icon: '🎓', label: 'Sitzungsleitfaden', farbe: '#10B981', bg: '#ECFDF5' },
     intervention:  { icon: '🎯', label: 'Aktivitäten',      farbe: '#F59E0B', bg: '#FFFBEB' },
-    arbeitsblatt:  { icon: '📝', label: 'Arbeitsblatt',    farbe: '#8B5CF6', bg: '#F5F3FF' },
+    arbeitsblatt:  { icon: '📝', label: 'Arbeitsblatt',    farbe: '#6366F1', bg: '#EEF2FF' },
     wiki:          { icon: '📖', label: 'Wissen',            farbe: '#0D9488', bg: '#F0FDFA' },
   };
 
   // ── 3-Ebenen-Konfiguration ──
   const ebenenConfig = {
-    praxis:     { icon: '🛠️', label: 'Praxis',     farbe: '#8B5CF6', desc: 'Arbeitsblätter & Aktivitäten für die Sitzung' },
-    leitfaden:  { icon: '📋', label: 'Leitfaden',  farbe: '#22C55E', desc: 'Sitzungsanleitungen für Therapeuten' },
-    fachwissen: { icon: '🎓', label: 'Fachwissen', farbe: '#3B82F6', desc: 'Hintergrundwissen, ICD-Codes, Fachpersonal-Material' },
+    praxis:     { icon: '🛠️', label: 'Praxis',     farbe: '#6366F1', desc: 'Arbeitsblätter & Aktivitäten für die Sitzung' },
+    leitfaden:  { icon: '📋', label: 'Leitfaden',  farbe: '#10B981', desc: 'Sitzungsanleitungen für Therapeuten' },
+    fachwissen: { icon: '🎓', label: 'Fachwissen', farbe: '#2563EB', desc: 'Hintergrundwissen, ICD-Codes, Fachpersonal-Material' },
   };
 
   // ── Zähler pro Ebene ──
@@ -882,13 +882,13 @@ function renderBibliothek() {
         value="${escapeHtml(bibliothekSuche)}"
         oninput="bibliothekSuche=this.value;renderBibliothek()"
         style="width:100%;padding:12px 16px;border:2px solid #E5E7EB;border-radius:12px;font-size:15px;box-sizing:border-box;transition:border-color 0.2s;outline:none;"
-        onfocus="this.style.borderColor='#3B82F6'" onblur="this.style.borderColor='#E5E7EB'">
+        onfocus="this.style.borderColor='#2563EB'" onblur="this.style.borderColor='#E5E7EB'">
     </div>
 
     <!-- 3-Ebenen-Filter + Favoriten -->
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
       <button onclick="bibliothekFilter='alle';renderBibliothek()"
-        style="padding:8px 18px;border-radius:20px;border:2px solid ${bibliothekFilter === 'alle' ? '#6C5CE7' : '#E5E7EB'};background:${bibliothekFilter === 'alle' ? '#6C5CE7' : '#fff'};color:${bibliothekFilter === 'alle' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+        style="padding:8px 18px;border-radius:20px;border:2px solid ${bibliothekFilter === 'alle' ? '#2563EB' : '#E5E7EB'};background:${bibliothekFilter === 'alle' ? '#2563EB' : '#fff'};color:${bibliothekFilter === 'alle' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
         Alle <span style="opacity:0.7;">${totalCount}</span>
       </button>
       <button onclick="bibliothekFilter='favoriten';renderBibliothek()"
@@ -1194,8 +1194,8 @@ function renderArbeitsblaetter(themaId) {
         ${blaetter.map(b => `
           <a href="arbeitsblatter/${b.datei}" target="_blank"
              style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;
-                    background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;
-                    text-decoration:none;color:#0369A1;font-size:12px;font-weight:600;">
+                    background:#EFF6FF;border:1.5px solid #BAE6FD;border-radius:6px;
+                    text-decoration:none;color:#1D4ED8;font-size:12px;font-weight:600;">
             <span style="font-size:16px;">📋</span>
             <span style="flex:1;">${b.titel}</span>
             <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
@@ -1216,14 +1216,14 @@ function renderArbeitsblaetter(themaId) {
       ${hasModul ? `
       <div id="pt-tm-${themaId}" class="panel-tab-content" style="display:none;">
         ${tmDatei ? `
-        <div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+        <div style="background:#EEF2FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#4338CA;line-height:1.5;">
           <strong>Therapiemodul (Ebene 2)</strong> · Druckbare Sitzungsanleitung<br>
           <span style="opacity:0.75;">Detaillierter Leitfaden mit Timing, Skript &amp; Übungen für jede Sitzung.</span>
         </div>
         <a href="therapie-module/${tmDatei}" target="_blank"
            style="display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:10px;
-                  background:#F5F3FF;border:1.5px solid #C4B5FD;border-radius:8px;
-                  text-decoration:none;color:#5B21B6;font-size:13px;font-weight:600;">
+                  background:#EEF2FF;border:1.5px solid #93C5FD;border-radius:8px;
+                  text-decoration:none;color:#4338CA;font-size:13px;font-weight:600;">
           <span style="font-size:20px;">🏥</span>
           <span style="flex:1;">Therapiemodul öffnen (druckbar)</span>
           <span style="font-size:12px;opacity:0.7;">Öffnen →</span>
@@ -1253,9 +1253,9 @@ function renderArbeitsblaetter(themaId) {
 }
 
 function renderTherapiemodul(modul, themaId) {
-  const sitzungFarben = ['#7C3AED','#0369A1','#166534','#92400E','#B91C1C','#0F766E'];
+  const sitzungFarben = ['#4F46E5','#1D4ED8','#065F46','#92400E','#B91C1C','#0F766E'];
 
-  let html = `<div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+  let html = `<div style="background:#EEF2FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#4338CA;line-height:1.5;">
     <strong>Therapiemodul (Ebene 2)</strong> · ${modul.dauer}<br>
     <span style="opacity:0.75;">${modul.zielgruppe || 'Für Schüler, bei denen dieses Thema ein zentraler Arbeitsbereich ist.'}</span>
   </div>`;
@@ -1281,10 +1281,10 @@ function renderTherapiemodul(modul, themaId) {
     if (s.materialien || s.gruppenformat) {
       html += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">`;
       if (s.gruppenformat) {
-        html += `<span style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:5px;padding:3px 8px;font-size:10px;color:#0369A1;">👥 ${s.gruppenformat}</span>`;
+        html += `<span style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:5px;padding:3px 8px;font-size:10px;color:#1D4ED8;">👥 ${s.gruppenformat}</span>`;
       }
       if (s.materialien) {
-        html += `<span style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:5px;padding:3px 8px;font-size:10px;color:#166534;">📋 ${s.materialien.join(', ')}</span>`;
+        html += `<span style="background:#ECFDF5;border:1px solid #A7F3D0;border-radius:5px;padding:3px 8px;font-size:10px;color:#065F46;">📋 ${s.materialien.join(', ')}</span>`;
       }
       html += `</div>`;
     }
@@ -1298,7 +1298,7 @@ function renderTherapiemodul(modul, themaId) {
 
     if (s.psychoedukation) {
       html += `<div style="margin-bottom:12px;">
-        <div style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">📚 Psychoedukation</div>
+        <div style="font-size:10px;font-weight:700;color:#4F46E5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">📚 Psychoedukation</div>
         <div style="background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;padding:10px 12px;">
           <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:4px;">${s.psychoedukation.titel}</div>
           <div style="font-size:12px;color:#374151;line-height:1.6;">${s.psychoedukation.inhalt}</div>
@@ -1308,11 +1308,11 @@ function renderTherapiemodul(modul, themaId) {
 
     if (s.interventionen && s.interventionen.length > 0) {
       html += `<div style="margin-bottom:12px;">
-        <div style="font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🧠 Interventionen</div>
+        <div style="font-size:10px;font-weight:700;color:#1D4ED8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🧠 Interventionen</div>
         ${s.interventionen.map(i => `
-        <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
-          <div style="font-weight:600;font-size:12px;color:#0369A1;margin-bottom:2px;">${i.titel}</div>
-          <div style="font-size:10px;color:#0369A1;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+        <div style="background:#EFF6FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:12px;color:#1D4ED8;margin-bottom:2px;">${i.titel}</div>
+          <div style="font-size:10px;color:#1D4ED8;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
           <div style="font-size:12px;color:#374151;line-height:1.6;">${i.beschreibung}</div>
         </div>`).join('')}
       </div>`;
@@ -1320,10 +1320,10 @@ function renderTherapiemodul(modul, themaId) {
 
     if (s.uebungen && s.uebungen.length > 0) {
       html += `<div style="margin-bottom:12px;">
-        <div style="font-size:10px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🎯 Übungen</div>
+        <div style="font-size:10px;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">🎯 Übungen</div>
         ${s.uebungen.map(u => `
-        <div style="background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
-          <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:2px;">${u.titel} <span style="font-weight:400;opacity:0.7;">(${u.dauer})</span></div>
+        <div style="background:#ECFDF5;border:1.5px solid #A7F3D0;border-radius:6px;padding:10px 12px;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:12px;color:#065F46;margin-bottom:2px;">${u.titel} <span style="font-weight:400;opacity:0.7;">(${u.dauer})</span></div>
           <div style="font-size:12px;color:#374151;line-height:1.6;">${u.beschreibung}</div>
         </div>`).join('')}
       </div>`;
@@ -1351,8 +1351,8 @@ function renderTherapiemodul(modul, themaId) {
 
     if (s.reflexion && s.reflexion.length > 0) {
       html += `<div>
-        <div style="font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">💭 Reflexion</div>
-        <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;font-size:12px;color:#374151;">
+        <div style="font-size:10px;font-weight:700;color:#1D4ED8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">💭 Reflexion</div>
+        <div style="background:#EFF6FF;border:1.5px solid #BAE6FD;border-radius:6px;padding:10px 12px;font-size:12px;color:#374151;">
           <ul style="margin:0;padding-left:16px;line-height:1.9;">
             ${s.reflexion.map(f => `<li>${f}</li>`).join('')}
           </ul>
@@ -1421,7 +1421,7 @@ function generatePrintSheetHTML(themaLabel, modul, s) {
   .meta { font-size: 9pt; color: #555; margin-bottom: 14pt; }
   .badge { display: inline-block; border: 1pt solid #aaa; border-radius: 4pt; padding: 2pt 7pt; font-size: 8.5pt; margin-right: 5pt; margin-bottom: 4pt; }
   .badge.group { border-color: #0369a1; color: #0369a1; }
-  .badge.mat { border-color: #166534; color: #166534; }
+  .badge.mat { border-color: #065F46; color: #065F46; }
   .section { margin-bottom: 12pt; }
   .section-label { font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5pt; color: #444; margin-bottom: 4pt; border-left: 3pt solid #1e3a5f; padding-left: 5pt; }
   .section-body { font-size: 10.5pt; line-height: 1.6; color: #333; background: #f7f7f7; border: 1pt solid #ddd; border-radius: 4pt; padding: 8pt 10pt; }
@@ -1528,18 +1528,18 @@ function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
   const hausaufgaben = aktivitaeten.filter(a => a.dauer && a.dauer.toLowerCase().includes('täglich'));
   const uebungen = aktivitaeten.filter(a => !a.dauer || !a.dauer.toLowerCase().includes('täglich'));
 
-  let html = `<div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#5B21B6;line-height:1.5;">
+  let html = `<div style="background:#EEF2FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#4338CA;line-height:1.5;">
     <strong>Therapiemodul (Ebene 2)</strong> · Vollständige Behandlungseinheit · 2–8 Stunden<br>
     <span style="opacity:0.75;">Für Schüler, bei denen dieses Thema ein zentraler Arbeitsbereich ist.</span>
   </div>`;
 
   if (psychoedukativ.length > 0) {
     html += `<div style="margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">📚 Psychoedukation</div>
+      <div style="font-size:11px;font-weight:700;color:#4F46E5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">📚 Psychoedukation</div>
       ${psychoedukativ.map(i => `
         <div style="padding:10px 12px;margin-bottom:6px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
           <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">${i.titel}</div>
-          <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:11px;color:#4F46E5;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
           <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
           <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
         </div>`).join('')}
@@ -1548,11 +1548,11 @@ function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
 
   if (therapeutisch.length > 0) {
     html += `<div style="margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🧠 Interventionen</div>
+      <div style="font-size:11px;font-weight:700;color:#4F46E5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🧠 Interventionen</div>
       ${therapeutisch.map(i => `
         <div style="padding:10px 12px;margin-bottom:6px;background:#FDF4FF;border:1.5px solid #E9D5FF;border-radius:6px;">
           <div style="font-weight:600;font-size:12px;color:#6B21A8;margin-bottom:2px;">${i.titel}</div>
-          <div style="font-size:11px;color:#7C3AED;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
+          <div style="font-size:11px;color:#4F46E5;margin-bottom:4px;">📌 ${i.ansatz} · ⏱ ${i.dauer}</div>
           <div style="font-size:12px;color:#374151;margin-bottom:3px;">${i.beschreibung}</div>
           <div style="font-size:11px;color:#6B7280;font-style:italic;">Indikation: ${i.indikation}</div>
         </div>`).join('')}
@@ -1561,10 +1561,10 @@ function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
 
   if (uebungen.length > 0) {
     html += `<div style="margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🎯 Übungen</div>
+      <div style="font-size:11px;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">🎯 Übungen</div>
       ${uebungen.map(a => `
-        <div style="padding:10px 12px;margin-bottom:6px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:6px;">
-          <div style="font-weight:600;font-size:12px;color:#166534;margin-bottom:4px;">${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
+        <div style="padding:10px 12px;margin-bottom:6px;background:#ECFDF5;border:1.5px solid #A7F3D0;border-radius:6px;">
+          <div style="font-weight:600;font-size:12px;color:#065F46;margin-bottom:4px;">${a.titel} <span style="font-weight:400;opacity:0.7;">(${a.dauer})</span></div>
           <div style="font-size:12px;color:#374151;">${a.beschreibung}</div>
         </div>`).join('')}
     </div>`;
@@ -1582,8 +1582,8 @@ function renderTherapiemodul_legacy(aktivitaeten, interventionen) {
   }
 
   html += `<div style="margin-bottom:8px;">
-    <div style="font-size:11px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">💭 Reflexion</div>
-    <div style="padding:10px 12px;background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:6px;font-size:12px;color:#374151;">
+    <div style="font-size:11px;font-weight:700;color:#1D4ED8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;">💭 Reflexion</div>
+    <div style="padding:10px 12px;background:#EFF6FF;border:1.5px solid #BAE6FD;border-radius:6px;font-size:12px;color:#374151;">
       <ul style="margin:0;padding-left:16px;line-height:1.9;">
         <li>Was war für dich in diesem Modul besonders wichtig?</li>
         <li>Was hat sich seit Beginn der Arbeit an diesem Thema verändert?</li>
@@ -1948,11 +1948,11 @@ function renderSoapVorschau() {
       </div>
 
       ${subjektiv ? `<div class="soap-vorschau-section">
-        <div class="soap-vorschau-label" style="color:#3B82F6;">S — Subjektiv</div>
+        <div class="soap-vorschau-label" style="color:#2563EB;">S — Subjektiv</div>
         <div class="soap-vorschau-value">${escapeHtml(subjektiv)}</div>
       </div>` : ''}
       ${objektiv ? `<div class="soap-vorschau-section">
-        <div class="soap-vorschau-label" style="color:#8B5CF6;">O — Objektiv</div>
+        <div class="soap-vorschau-label" style="color:#6366F1;">O — Objektiv</div>
         <div class="soap-vorschau-value">${escapeHtml(objektiv)}</div>
       </div>` : ''}
       ${assessment ? `<div class="soap-vorschau-section">
@@ -2188,8 +2188,8 @@ function toggleSoapBeispiel(feld) {
   }
   const data = SOAP_BEISPIELE[feld];
   if (!data) return;
-  box.innerHTML = '<div style="font-size:11px;padding:10px 12px;background:#F0F7FF;border-radius:8px;border-left:3px solid #3B82F6;margin-bottom:6px;line-height:1.6;">'
-    + '<div style="font-weight:600;color:#3B82F6;margin-bottom:4px;">' + data.label + '</div>'
+  box.innerHTML = '<div style="font-size:11px;padding:10px 12px;background:#F0F7FF;border-radius:8px;border-left:3px solid #2563EB;margin-bottom:6px;line-height:1.6;">'
+    + '<div style="font-weight:600;color:#2563EB;margin-bottom:4px;">' + data.label + '</div>'
     + '<div style="color:#6B7280;margin-bottom:6px;font-style:italic;">' + data.erklaerung + '</div>'
     + '<div style="color:#374151;background:#fff;padding:8px;border-radius:6px;border:1px dashed #D1D5DB;white-space:pre-line;">' + data.beispiel + '</div>'
     + '</div>';
@@ -2213,20 +2213,20 @@ function showToolLegitimation(toolKey) {
         <div style="font-size:18px;font-weight:700;color:#1F2937;">📚 ${data.name}</div>
         <button onclick="document.getElementById('tool-legit-overlay').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#9CA3AF;">✕</button>
       </div>
-      <div style="background:#F0F9FF;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #3B82F6;">
-        <div style="font-weight:600;color:#1E40AF;font-size:13px;margin-bottom:6px;">Was ist das?</div>
+      <div style="background:#EFF6FF;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #2563EB;">
+        <div style="font-weight:600;color:#1D4ED8;font-size:13px;margin-bottom:6px;">Was ist das?</div>
         <div style="font-size:13px;color:#374151;line-height:1.6;">${data.was}</div>
       </div>
-      <div style="background:#F0FDF4;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #22C55E;">
-        <div style="font-weight:600;color:#166534;font-size:13px;margin-bottom:6px;">Warum dieses Tool?</div>
+      <div style="background:#ECFDF5;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #10B981;">
+        <div style="font-weight:600;color:#065F46;font-size:13px;margin-bottom:6px;">Warum dieses Tool?</div>
         <div style="font-size:13px;color:#374151;line-height:1.6;">${data.warum}</div>
       </div>
       <div style="background:#FFF7ED;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #F97316;">
         <div style="font-weight:600;color:#9A3412;font-size:13px;margin-bottom:6px;">Evidenz</div>
         <div style="font-size:13px;color:#374151;line-height:1.6;">${data.evidenz}</div>
       </div>
-      <div style="background:#F5F3FF;border-radius:10px;padding:14px;border-left:4px solid #8B5CF6;">
-        <div style="font-weight:600;color:#6D28D9;font-size:13px;margin-bottom:6px;">Quelle</div>
+      <div style="background:#EEF2FF;border-radius:10px;padding:14px;border-left:4px solid #6366F1;">
+        <div style="font-weight:600;color:#4338CA;font-size:13px;margin-bottom:6px;">Quelle</div>
         <div style="font-size:12px;color:#6B7280;line-height:1.5;font-style:italic;">${data.quelle}</div>
         <div style="font-size:12px;color:#9CA3AF;margin-top:4px;">Entwickelt von: ${data.entwickler}</div>
       </div>
@@ -2247,12 +2247,12 @@ function toggle5PHilfe(key) {
   if (!h) return;
   box.innerHTML = '<div style="font-size:12px;padding:12px 14px;background:#F9FAFB;border-radius:10px;margin:0 8px 8px;line-height:1.7;">'
     + '<div style="color:#374151;margin-bottom:8px;font-size:13px;">' + h.erklaerung + '</div>'
-    + (h.zweck ? '<div style="background:#EFF6FF;border-radius:6px;padding:8px 10px;margin-bottom:8px;color:#1E40AF;font-size:12px;"><strong>Zweck:</strong> ' + h.zweck + '</div>' : '')
+    + (h.zweck ? '<div style="background:#EFF6FF;border-radius:6px;padding:8px 10px;margin-bottom:8px;color:#1D4ED8;font-size:12px;"><strong>Zweck:</strong> ' + h.zweck + '</div>' : '')
     + (h.abgrenzung ? '<div style="color:#D97706;font-weight:600;margin-bottom:8px;font-size:12px;">' + h.abgrenzung + '</div>' : '')
-    + (h.vorgehen ? '<div style="background:#F0FDF4;border-radius:6px;padding:8px 10px;margin-bottom:8px;color:#166534;font-size:12px;white-space:pre-line;">' + h.vorgehen + '</div>' : '')
+    + (h.vorgehen ? '<div style="background:#ECFDF5;border-radius:6px;padding:8px 10px;margin-bottom:8px;color:#065F46;font-size:12px;white-space:pre-line;">' + h.vorgehen + '</div>' : '')
     + '<div style="margin-bottom:4px;font-weight:600;color:#6B7280;">Beispiele:</div>'
     + '<ul style="margin:0;padding-left:16px;color:#374151;">' + h.beispiele.map(b => '<li>' + b + '</li>').join('') + '</ul>'
-    + (h.tipp ? '<div style="margin-top:8px;color:#3B82F6;">' + h.tipp + '</div>' : '')
+    + (h.tipp ? '<div style="margin-top:8px;color:#2563EB;">' + h.tipp + '</div>' : '')
     + '</div>';
   box.style.display = 'block';
 }
@@ -2271,11 +2271,11 @@ function selectPVT(btn) {
 
   const empf = document.getElementById('pvt-empfehlung');
   const map = {
-    safe: { farbe: '#059669', bg: '#F0FDF4', border: '#BBF7D0',
+    safe: { farbe: '#059669', bg: '#ECFDF5', border: '#A7F3D0',
       text: '✅ <strong>Tiefenarbeit möglich.</strong> Starte mit dem geplanten Thema. Der Jugendliche ist reguliert und kontaktfähig.' },
     activated: { farbe: '#D97706', bg: '#FFFBEB', border: '#FDE68A',
       text: '⚠️ <strong>Erst regulieren.</strong> Starte mit Atemübungen oder Körperübungen. Kein neues Material heute — Stabilisierung hat Vorrang.' },
-    frozen: { farbe: '#7C3AED', bg: '#F5F3FF', border: '#DDD6FE',
+    frozen: { farbe: '#4F46E5', bg: '#EEF2FF', border: '#BFDBFE',
       text: '🟣 <strong>Nur Grounding heute.</strong> 5-4-3-2-1 Übung, sanfte Bewegung, warmes Getränk. Die Allianz halten ist das Ziel dieser Sitzung.' },
   };
   const m = map[APP.protPVT];
@@ -2362,7 +2362,7 @@ function renderZiele() {
 
   // Gesamt-Fortschritt
   const avgFortschritt = Math.round(ziele.reduce((sum, z) => sum + (z.fortschritt || (z.erledigt ? 100 : 0)), 0) / ziele.length);
-  const avgColor = avgFortschritt >= 70 ? '#22C55E' : (avgFortschritt >= 30 ? '#F59E0B' : '#EF4444');
+  const avgColor = avgFortschritt >= 70 ? '#10B981' : (avgFortschritt >= 30 ? '#F59E0B' : '#EF4444');
 
   // Get roadmap themes for linking
   const roadmap = DB.getRoadmap(APP.currentSchuelerId);
@@ -2387,7 +2387,7 @@ function renderZiele() {
     </div>
     ${ziele.map((z, i) => {
       const pct = z.fortschritt || (z.erledigt ? 100 : 0);
-      const farbe = pct >= 70 ? '#22C55E' : (pct >= 30 ? '#F59E0B' : '#EF4444');
+      const farbe = pct >= 70 ? '#10B981' : (pct >= 30 ? '#F59E0B' : '#EF4444');
       const meilensteine = z.meilensteine || [];
       const erledigteMeilensteine = meilensteine.filter(m => m.erledigt).length;
       const roadmapLink = z.roadmapThema ? roadmapThemen.find(t => (t.id || t) === z.roadmapThema) : null;
@@ -2411,7 +2411,7 @@ function renderZiele() {
               ${meilensteine.map((m, mi) => `
                 <div style="display:flex;align-items:center;gap:6px;padding:2px 0;">
                   <input type="checkbox" ${m.erledigt ? 'checked' : ''} onchange="toggleMeilenstein(${i},${mi})" style="margin:0;">
-                  <span style="font-size:11px;color:${m.erledigt ? '#22C55E' : '#6B7280'};${m.erledigt ? 'text-decoration:line-through;' : ''}">${escapeHtml(m.text)}</span>
+                  <span style="font-size:11px;color:${m.erledigt ? '#10B981' : '#6B7280'};${m.erledigt ? 'text-decoration:line-through;' : ''}">${escapeHtml(m.text)}</span>
                   <button style="background:none;border:none;font-size:10px;cursor:pointer;color:#D1D5DB;" onclick="deleteMeilenstein(${i},${mi})">✕</button>
                 </div>
               `).join('')}
@@ -2452,8 +2452,8 @@ function renderScreeningZielVorschlaege() {
   }
   if (vorschlaege.length === 0) { container.innerHTML = ''; return; }
 
-  container.innerHTML = '<div style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:10px;padding:12px;margin-bottom:12px;">'
-    + '<div style="font-size:12px;font-weight:600;color:#0369A1;margin-bottom:8px;">💡 Zielvorschläge aus Screening-Ergebnissen</div>'
+  container.innerHTML = '<div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:10px;padding:12px;margin-bottom:12px;">'
+    + '<div style="font-size:12px;font-weight:600;color:#1D4ED8;margin-bottom:8px;">💡 Zielvorschläge aus Screening-Ergebnissen</div>'
     + '<div style="display:flex;flex-direction:column;gap:4px;">'
     + vorschlaege.map(v =>
       '<button class="btn btn-outline btn-sm" style="font-size:11px;text-align:left;white-space:normal;line-height:1.4;padding:6px 10px;border-color:' + v.domain.farbe + '40;" onclick="quickAddZiel(\'' + v.text.replace(/'/g, "\\'") + '\')">'
@@ -2771,7 +2771,7 @@ function renderAnamneseZusammenfassung(s) {
   if (risikoScore >= 8) { ampel = '#DC2626'; ampelLabel = 'Hoch'; }
   else if (risikoScore >= 4) { ampel = '#F59E0B'; ampelLabel = 'Mittel'; }
   else if (risikoScore > 0) { ampel = '#6B7280'; ampelLabel = 'Niedrig'; }
-  else { ampel = '#22C55E'; ampelLabel = 'Geschützt'; }
+  else { ampel = '#10B981'; ampelLabel = 'Geschützt'; }
 
   // ACE-Warnung
   let aceWarnung = '';
@@ -2800,7 +2800,7 @@ function renderAnamneseZusammenfassung(s) {
             <div class="anamnese-summary-label">Risikofaktoren</div>
           </div>
           <div class="anamnese-summary-stat">
-            <div class="anamnese-summary-number" style="color:#22C55E">${schutz.length}</div>
+            <div class="anamnese-summary-number" style="color:#10B981">${schutz.length}</div>
             <div class="anamnese-summary-label">Schutzfaktoren</div>
           </div>
           <div class="anamnese-summary-stat">
@@ -2815,7 +2815,7 @@ function renderAnamneseZusammenfassung(s) {
               <div class="anamnese-risiko-item">
                 <span class="anamnese-risiko-dot" style="background:${r.gewicht >= 3 ? '#DC2626' : r.gewicht >= 2 ? '#F59E0B' : '#6B7280'}"></span>
                 <span>${r.label}</span>
-                <span style="font-size:10px;color:#8B5CF6;font-style:italic;margin-left:4px;">📖 ${r.evidenz}</span>
+                <span style="font-size:10px;color:#6366F1;font-style:italic;margin-left:4px;">📖 ${r.evidenz}</span>
               </div>
             `).join('')}
           </div>
@@ -3072,9 +3072,9 @@ function renderHypothesen(hypothesen) {
     let borderColor, badgeBg, badgeText;
     const isEskalation = h.staerkeWert >= 5;
     if (h.typ === 'schutz') {
-      borderColor = '#22C55E'; badgeBg = '#F0FDF4'; badgeText = '#166534';
+      borderColor = '#10B981'; badgeBg = '#ECFDF5'; badgeText = '#065F46';
     } else if (h.typ === 'differenzial') {
-      borderColor = '#8B5CF6'; badgeBg = '#F5F3FF'; badgeText = '#5B21B6';
+      borderColor = '#6366F1'; badgeBg = '#EEF2FF'; badgeText = '#4338CA';
     } else if (isEskalation) {
       borderColor = '#991B1B'; badgeBg = '#991B1B'; badgeText = '#FFFFFF';
     } else if (h.staerkeWert >= 3) {
@@ -3147,7 +3147,7 @@ function renderHypothesen(hypothesen) {
     // Treatment-Response Badge
     let trBadgeHtml = '';
     if (h._trBestaetigt) {
-      trBadgeHtml = `<span style="background:#F0FDF4;color:#166534;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px;" title="${h._trHinweis || ''}">✅ Durch Verlauf bestätigt</span>`;
+      trBadgeHtml = `<span style="background:#ECFDF5;color:#065F46;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px;" title="${h._trHinweis || ''}">✅ Durch Verlauf bestätigt</span>`;
     } else if (h._trHinterfragen) {
       trBadgeHtml = `<span style="background:#FFFBEB;color:#92400E;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px;" title="${h._trHinweis || ''}">🔄 Response niedrig — überprüfen</span>`;
     }
@@ -3163,7 +3163,7 @@ function renderHypothesen(hypothesen) {
         </div>
         ${screeningBadges.length > 0 ? `<div class="hypothese-screening-scores" style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px;">${screeningBadges.join('')}</div>` : ''}
         ${textDaten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${textDaten.join(' · ')}</div>` : ''}
-        ${h.quelle ? `<div style="font-size:11px;color:#8B5CF6;margin-top:4px;line-height:1.4;font-style:italic;">📚 ${h.quelle}</div>` : ''}
+        ${h.quelle ? `<div style="font-size:11px;color:#6366F1;margin-top:4px;line-height:1.4;font-style:italic;">📚 ${h.quelle}</div>` : ''}
         <details class="hypothese-details">
           <summary>Erklärung & Evidenz</summary>
           <div class="hypothese-details-body">
@@ -3184,8 +3184,8 @@ function renderHypothesen(hypothesen) {
                 const themenIds = wiki.themen_ids || [];
                 const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
                 const fkDatei = fkTid ? FACHKRAFT_MODULE_DATEIEN[fkTid] : null;
-                return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
-                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '')
+                return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
+                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '')
                   + renderArbeitsblattChipsFromThemenIds(themenIds);
               }).join('')}
               ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => '<span style="background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:6px;font-size:10px;font-family:monospace;">' + c + '</span>').join('') : ''}
@@ -3430,8 +3430,8 @@ function renderTreatmentResponse(schuelerId) {
   }
 
   const trendIcon = (t) => t === 'steigend' ? '📈' : t === 'fallend' ? '📉' : '➡️';
-  const trendColor = (t) => t === 'steigend' ? '#22C55E' : t === 'fallend' ? '#EF4444' : '#9CA3AF';
-  const responseColor = (r) => r >= 75 ? '#22C55E' : r >= 50 ? '#F59E0B' : '#EF4444';
+  const trendColor = (t) => t === 'steigend' ? '#10B981' : t === 'fallend' ? '#EF4444' : '#9CA3AF';
+  const responseColor = (r) => r >= 75 ? '#10B981' : r >= 50 ? '#F59E0B' : '#EF4444';
 
   // Sudden-Change Alert
   const scAlert = analyse.suddenChange;
@@ -3480,7 +3480,7 @@ function renderTreatmentResponse(schuelerId) {
                 </span>
               </div>
               <div class="treatment-srs-mini">
-                ${t.srsWerte.map(v => `<span class="treatment-srs-dot" style="background:${v >= 30 ? '#22C55E' : v >= 20 ? '#F59E0B' : '#EF4444'}" title="SRS: ${v}/40"></span>`).join('')}
+                ${t.srsWerte.map(v => `<span class="treatment-srs-dot" style="background:${v >= 30 ? '#10B981' : v >= 20 ? '#F59E0B' : '#EF4444'}" title="SRS: ${v}/40"></span>`).join('')}
               </div>
             </div>
           `).join('')}
@@ -3497,7 +3497,7 @@ function renderTreatmentResponse(schuelerId) {
             <div class="treatment-ansatz-grid">
               ${analyse.ansatzAnalyse.map(a => {
                 const barWidth = Math.min(100, a.responseRate);
-                const barColor = a.responseRate >= 75 ? '#22C55E' : a.responseRate >= 50 ? '#F59E0B' : '#EF4444';
+                const barColor = a.responseRate >= 75 ? '#10B981' : a.responseRate >= 50 ? '#F59E0B' : '#EF4444';
                 return `
                   <div class="treatment-ansatz-row">
                     <span class="treatment-ansatz-label">${a.ansatz}</span>
@@ -3570,12 +3570,12 @@ function generateHypothesenBericht() {
         .hypo.risiko-hoch { border-color:#EF4444; }
         .hypo.risiko-mittel { border-color:#F59E0B; }
         .hypo.risiko-niedrig { border-color:#9CA3AF; }
-        .hypo.schutz { border-color:#22C55E; }
-        .hypo.diff { border-color:#8B5CF6; }
+        .hypo.schutz { border-color:#10B981; }
+        .hypo.diff { border-color:#6366F1; }
         .hypo-titel { font-weight:600; }
         .hypo-detail { font-size:11px; color:#6B7280; margin-top:3px; }
         .hypo-evidenz { font-size:10px; color:#9CA3AF; margin-top:2px; font-style:italic; }
-        .treatment { padding:6px 10px; background:#F0FDF4; border-radius:6px; margin-bottom:4px; }
+        .treatment { padding:6px 10px; background:#ECFDF5; border-radius:6px; margin-bottom:4px; }
         .screening-row { padding:3px 0; font-size:11px; }
         .disclaimer { font-size:10px; color:#9CA3AF; margin-top:20px; padding-top:10px; border-top:1px solid #E5E7EB; text-align:center; }
         .hochgestuft { color:#DC2626; font-weight:600; font-size:10px; }
@@ -3717,8 +3717,8 @@ function renderHypothesenZeitstrahl(schuelerId) {
   const typFarbe = (id) => {
     const r = regelMap[id];
     if (!r) return '#9CA3AF';
-    if (r.typ === 'schutz') return '#22C55E';
-    if (r.typ === 'differenzial') return '#8B5CF6';
+    if (r.typ === 'schutz') return '#10B981';
+    if (r.typ === 'differenzial') return '#6366F1';
     if (r.staerkeWert >= 3) return '#EF4444';
     if (r.staerkeWert >= 2) return '#F59E0B';
     return '#9CA3AF';
@@ -3760,8 +3760,8 @@ function renderHypothesenZeitstrahl(schuelerId) {
         <div class="hypo-zeitstrahl-legende">
           <span><span class="hypo-zeitstrahl-dot" style="background:#EF4444"></span> Hohes Risiko</span>
           <span><span class="hypo-zeitstrahl-dot" style="background:#F59E0B"></span> Mittleres Risiko</span>
-          <span><span class="hypo-zeitstrahl-dot" style="background:#22C55E"></span> Schutzfaktor</span>
-          <span><span class="hypo-zeitstrahl-dot" style="background:#8B5CF6"></span> Differenzial</span>
+          <span><span class="hypo-zeitstrahl-dot" style="background:#10B981"></span> Schutzfaktor</span>
+          <span><span class="hypo-zeitstrahl-dot" style="background:#6366F1"></span> Differenzial</span>
           <span style="color:var(--text-muted);font-size:10px;">Intensität = Anzahl Datenpunkte</span>
         </div>
       </div>
@@ -3842,7 +3842,7 @@ function renderScreeningVerlauf(schuelerId) {
     const kommentare = [];
 
     for (const d of verbessert) {
-      kommentare.push(`<span style="color:#22C55E">↓ ${d.label}-Score gesunken um ${Math.abs(d.prozent)}% seit ${delta.von}</span>`);
+      kommentare.push(`<span style="color:#10B981">↓ ${d.label}-Score gesunken um ${Math.abs(d.prozent)}% seit ${delta.von}</span>`);
     }
     for (const d of verschlechtert) {
       kommentare.push(`<span style="color:#EF4444">↑ ${d.label}-Score gestiegen um ${d.prozent}% seit ${delta.von}</span>`);
@@ -3852,7 +3852,7 @@ function renderScreeningVerlauf(schuelerId) {
     for (const d of delta.domains) {
       const vorherDomain = deltas.length > 0 ? null : null; // simplified
       if (d.scoreVorher >= d.cutoff && d.scoreAktuell < d.cutoff) {
-        kommentare.push(`<span style="color:#22C55E">✓ ${d.label} unter klinischem Cutoff gefallen</span>`);
+        kommentare.push(`<span style="color:#10B981">✓ ${d.label} unter klinischem Cutoff gefallen</span>`);
       } else if (d.scoreVorher < d.cutoff && d.scoreAktuell >= d.cutoff) {
         kommentare.push(`<span style="color:#EF4444">⚠ ${d.label} über klinischen Cutoff gestiegen</span>`);
       }
@@ -3885,7 +3885,7 @@ function renderScreeningVerlauf(schuelerId) {
                 const fillVorher = Math.min(100, (d.scoreVorher / d.maxScore) * 100);
                 const fillAktuell = Math.min(100, (d.scoreAktuell / d.maxScore) * 100);
                 const diffLabel = d.diff > 0 ? `+${d.diff}` : d.diff < 0 ? `${d.diff}` : '±0';
-                const diffColor = d.diff < 0 ? '#22C55E' : d.diff > 0 ? '#EF4444' : '#9CA3AF';
+                const diffColor = d.diff < 0 ? '#10B981' : d.diff > 0 ? '#EF4444' : '#9CA3AF';
                 return `
                   <div class="screening-verlauf-delta">
                     <span style="min-width:120px;font-size:11px;">${d.label}</span>
@@ -4418,7 +4418,7 @@ function druckeProfilbericht(schuelerId) {
     const scr = screenings[0];
     const flagged = (scr.flaggedAreas || []);
     const severityMap = { low: 'Unauffällig', medium: 'Erhöhter Bedarf', high: 'Hoher Bedarf', urgent: 'Dringend' };
-    const severityColor = { low: '#166534', medium: '#854D0E', high: '#991B1B', urgent: '#7F1D1D' };
+    const severityColor = { low: '#065F46', medium: '#854D0E', high: '#991B1B', urgent: '#7F1D1D' };
     screeningHTML = `
       <div class="section">
         <div class="section-title">🔍 Screening (${new Date(scr.datum).toLocaleDateString('de-DE')})</div>
@@ -4470,7 +4470,7 @@ function druckeProfilbericht(schuelerId) {
           return `<div style="margin-bottom:10px;padding:8px 10px;border-left:4px solid ${def.farbe};background:#F9FAFB;border-radius:0 6px 6px 0;">
             <div style="font-size:12px;font-weight:700;color:${def.farbe};">${renderIcon(def.icon)} Phase ${def.nr}: ${def.label} <span style="font-weight:400;color:#6B7280;font-size:10px;">(${statusLabel})</span></div>
             ${phase.themen.length > 0 ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">
-              ${phase.themen.map(t => `<span style="font-size:10px;padding:1px 6px;border-radius:8px;background:${t.status==='abgeschlossen'?'#DCFCE7':'#F3F4F6'};color:${t.status==='abgeschlossen'?'#166534':'#374151'};">${t.status==='abgeschlossen'?'✓':' '} ${getThemaTitel(t.id)}</span>`).join('')}
+              ${phase.themen.map(t => `<span style="font-size:10px;padding:1px 6px;border-radius:8px;background:${t.status==='abgeschlossen'?'#DCFCE7':'#F3F4F6'};color:${t.status==='abgeschlossen'?'#065F46':'#374151'};">${t.status==='abgeschlossen'?'✓':' '} ${getThemaTitel(t.id)}</span>`).join('')}
             </div>` : ''}
             ${phase.notizen ? `<div style="font-size:10px;font-style:italic;color:#6B7280;margin-top:4px;">${escapeHtml(phase.notizen)}</div>` : ''}
           </div>`;
@@ -4488,7 +4488,7 @@ function druckeProfilbericht(schuelerId) {
         <div class="section-title">📈 Wohlbefindens-Verlauf (Ø ${avg}/10, ${wb.length} Einträge)</div>
         <div style="display:flex;gap:4px;flex-wrap:wrap;">
           ${last10.map(w => {
-            const farbe = w.score <= 3 ? '#EF4444' : w.score <= 5 ? '#F59E0B' : '#22C55E';
+            const farbe = w.score <= 3 ? '#EF4444' : w.score <= 5 ? '#F59E0B' : '#10B981';
             return `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;background:${farbe}15;color:${farbe};border:1px solid ${farbe}33;">
               ${new Date(w.datum).toLocaleDateString('de-DE', {day:'2-digit',month:'2-digit'})} <strong>${w.score}</strong>
             </span>`;
@@ -4548,8 +4548,8 @@ function druckeProfilbericht(schuelerId) {
             const wert = letzter.werte[item.id] || 0;
             const vorWert = vorLetzter ? (vorLetzter.werte[item.id] || 0) : null;
             const trend = vorWert !== null ? (wert > vorWert ? '↑' : wert < vorWert ? '↓' : '→') : '';
-            const trendFarbe = trend === '↑' ? '#22C55E' : trend === '↓' ? '#EF4444' : '#6B7280';
-            const wertFarbe = wert <= 3 ? '#EF4444' : wert <= 5 ? '#F59E0B' : '#22C55E';
+            const trendFarbe = trend === '↑' ? '#10B981' : trend === '↓' ? '#EF4444' : '#6B7280';
+            const wertFarbe = wert <= 3 ? '#EF4444' : wert <= 5 ? '#F59E0B' : '#10B981';
             return `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:10px;font-size:11px;background:${wertFarbe}12;border:1px solid ${wertFarbe}30;">
               ${item.icon} ${item.label}: <strong style="color:${wertFarbe};">${wert}/10</strong>
               ${trend ? `<span style="color:${trendFarbe};font-weight:700;">${trend}</span>` : ''}
@@ -4610,11 +4610,11 @@ function druckeProfilbericht(schuelerId) {
       </div>
 
       <div class="stat-row">
-        <span class="stat-chip" style="background:#DCFCE7;color:#166534;">✅ ${abgeschlossen} abgeschlossen</span>
+        <span class="stat-chip" style="background:#DCFCE7;color:#065F46;">✅ ${abgeschlossen} abgeschlossen</span>
         <span class="stat-chip" style="background:#DBEAFE;color:#1D4ED8;">◐ ${inBearbeitung} in Bearbeitung</span>
         <span class="stat-chip" style="background:#FEF3C7;color:#92400E;">💬 ${notizen.length} Notizen</span>
         <span class="stat-chip" style="background:#F3F4F6;color:#374151;">🎯 ${(s.ziele||[]).length} Ziele</span>
-        ${screenings.length ? `<span class="stat-chip" style="background:#EDE9FE;color:#5B21B6;">🔍 ${screenings.length} Screening(s)</span>` : ''}
+        ${screenings.length ? `<span class="stat-chip" style="background:#DBEAFE;color:#4338CA;">🔍 ${screenings.length} Screening(s)</span>` : ''}
       </div>
 
       ${s.allgemeineNotizen ? `<div class="section"><div class="section-title">ℹ️ Allgemeine Informationen</div><div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:8px;font-size:11px;">${escapeHtml(s.allgemeineNotizen)}</div></div>` : ''}
@@ -4675,8 +4675,8 @@ function exportProfilPDF(schuelerId) {
       { key: 'presenting', label: 'Presenting', color: '#EF4444' },
       { key: 'predisposing', label: 'Predisposing', color: '#F97316' },
       { key: 'precipitating', label: 'Precipitating', color: '#EAB308' },
-      { key: 'perpetuating', label: 'Perpetuating', color: '#3B82F6' },
-      { key: 'protective', label: 'Protective', color: '#22C55E' },
+      { key: 'perpetuating', label: 'Perpetuating', color: '#2563EB' },
+      { key: 'protective', label: 'Protective', color: '#10B981' },
     ];
     fivePHtml = pDefs.map(p => {
       const items = ff[p.key] || [];
@@ -5230,28 +5230,28 @@ function showQuickEntryPanel(themaId, katId) {
         <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">${thema.beschreibung}</p>
 
         <!-- Handlungsweg -->
-        <div style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
-          <div style="font-weight:700;font-size:13px;color:#0369A1;margin-bottom:10px;">${icon('clipboard', 16)} Sofort-Handlungsweg</div>
+        <div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
+          <div style="font-weight:700;font-size:13px;color:#1D4ED8;margin-bottom:10px;">${icon('clipboard', 16)} Sofort-Handlungsweg</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
             ${arbeitsblaetter.length > 0 ? arbeitsblaetter.map(ab => `
               <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-                <span style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span>
+                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span>
                 <span><strong>Arbeitsblatt:</strong> ${ab.titel}</span>
-                <a href="arbeitsblaetter/${ab.datei}" target="_blank" style="margin-left:auto;color:#0369A1;font-size:11px;">Öffnen →</a>
+                <a href="arbeitsblaetter/${ab.datei}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
               </div>
             `).join('') : '<div style="font-size:12px;color:#6B7280;">Kein Arbeitsblatt verfügbar</div>'}
             ${therapieModul ? `
               <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-                <span style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span>
+                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span>
                 <span><strong>Therapiemodul:</strong> Detaillierter Sitzungsleitfaden</span>
-                <a href="therapie-module/${therapieModul}" target="_blank" style="margin-left:auto;color:#0369A1;font-size:11px;">Öffnen →</a>
+                <a href="therapie-module/${therapieModul}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
               </div>
             ` : ''}
             ${fachkraftModul ? `
               <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-                <span style="width:20px;height:20px;border-radius:50%;background:#0369A1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span>
+                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span>
                 <span><strong>Fachkraft-Hintergrund:</strong> Klinisches Wissen</span>
-                <a href="fachkraft-module/${fachkraftModul}" target="_blank" style="margin-left:auto;color:#0369A1;font-size:11px;">Öffnen →</a>
+                <a href="fachkraft-module/${fachkraftModul}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
               </div>
             ` : ''}
           </div>
@@ -5387,7 +5387,7 @@ function checkSafetyEscalation(schuelerId) {
       const kindeswohlItems = RISIKO_ITEMS.filter(i => i.kategorie === 'kindeswohl');
       const kindeswohlRot = kindeswohlItems.filter(i => letzter.werte[i.id] === 'rot');
       if (kindeswohlRot.length > 0) {
-        alerts.push({ typ: 'kindeswohl', stufe: 'meldung', label: 'Kindeswohlgefährdung', detail: kindeswohlRot.map(i => i.label).join(', '), farbe: '#7C3AED', icon: '⚖️' });
+        alerts.push({ typ: 'kindeswohl', stufe: 'meldung', label: 'Kindeswohlgefährdung', detail: kindeswohlRot.map(i => i.label).join(', '), farbe: '#4F46E5', icon: '⚖️' });
       }
     }
   } catch(e) { /* silent */ }
@@ -5670,8 +5670,8 @@ function renderDashboardHypothesen() {
 
   function miniCard(h) {
     let borderColor;
-    if (h.typ === 'schutz') borderColor = '#22C55E';
-    else if (h.typ === 'differenzial') borderColor = '#8B5CF6';
+    if (h.typ === 'schutz') borderColor = '#10B981';
+    else if (h.typ === 'differenzial') borderColor = '#6366F1';
     else if (h.staerkeWert >= 3) borderColor = '#EF4444';
     else if (h.staerkeWert >= 2) borderColor = '#F59E0B';
     else borderColor = '#9CA3AF';
@@ -5755,7 +5755,7 @@ function renderDashboardTreatmentResponse() {
   }
 
   const trendIcon = (t) => t === 'steigend' ? '📈' : t === 'fallend' ? '📉' : '➡️';
-  const responseColor = (r) => r >= 75 ? '#22C55E' : r >= 50 ? '#F59E0B' : '#EF4444';
+  const responseColor = (r) => r >= 75 ? '#10B981' : r >= 50 ? '#F59E0B' : '#EF4444';
 
   el.innerHTML = `
     <div class="card" style="margin-bottom:12px;">
@@ -5765,7 +5765,7 @@ function renderDashboardTreatmentResponse() {
       </div>
       <div class="card-body" style="padding:10px 14px;">
         ${analyse.bestesThema ? `
-          <div style="font-size:12px;margin-bottom:8px;padding:6px 10px;background:#F0FDF4;border-radius:6px;color:#166534;">
+          <div style="font-size:12px;margin-bottom:8px;padding:6px 10px;background:#ECFDF5;border-radius:6px;color:#065F46;">
             ✨ <strong>Respondiert gut auf: ${analyse.bestesThema.label}</strong> (${analyse.bestesThema.responseRate}%)
           </div>
         ` : ''}
@@ -5782,7 +5782,7 @@ function renderDashboardTreatmentResponse() {
           </div>
         ` : ''}
         ${analyse.besterAnsatz ? `
-          <div style="font-size:11px;margin-top:6px;padding:4px 8px;background:#F0F9FF;border-radius:4px;color:#0C4A6E;">
+          <div style="font-size:11px;margin-top:6px;padding:4px 8px;background:#EFF6FF;border-radius:4px;color:#0C4A6E;">
             🧪 Bester Ansatz: <strong>${analyse.besterAnsatz.ansatz}</strong> (${analyse.besterAnsatz.responseRate}%)
           </div>
         ` : ''}
@@ -5839,7 +5839,7 @@ function renderDashboardScreeningDelta() {
           <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:6px;">
             ${signifikant.map(d => {
               const icon = d.diff < 0 ? '↓' : '↑';
-              const color = d.diff < 0 ? '#22C55E' : '#EF4444';
+              const color = d.diff < 0 ? '#10B981' : '#EF4444';
               return `<span style="font-size:12px;color:${color}">${icon} ${d.label}: ${d.diff < 0 ? '' : '+'}${d.prozent}%</span>`;
             }).join('')}
           </div>
@@ -5847,7 +5847,7 @@ function renderDashboardScreeningDelta() {
         <div style="display:flex;flex-wrap:wrap;gap:4px;">
           ${deltas.map(d => {
             const diffLabel = d.diff > 0 ? `+${d.diff}` : `${d.diff}`;
-            const bg = d.diff < 0 ? '#F0FDF4' : d.diff > 0 ? '#FEF2F2' : '#F9FAFB';
+            const bg = d.diff < 0 ? '#ECFDF5' : d.diff > 0 ? '#FEF2F2' : '#F9FAFB';
             return `<span class="dash-screening-chip" style="background:${bg};border-left:2px solid ${d.farbe}">${d.label}: ${d.s2} (${diffLabel})</span>`;
           }).join('')}
         </div>
@@ -5879,7 +5879,7 @@ function renderIntakeProgress() {
       <div style="font-size:13px;font-weight:700;color:#92400E;margin-bottom:8px;">📝 Intake-Fortschritt (${done}/${checks.length})</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         ${checks.map(c => `
-          <div onclick="showProfilTab('${c.tab}')" style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:${c.done ? '#ECFDF5' : '#FFF'};border:1px solid ${c.done ? '#22C55E' : '#D1D5DB'};border-radius:8px;font-size:12px;cursor:pointer;color:${c.done ? '#166534' : '#374151'};">
+          <div onclick="showProfilTab('${c.tab}')" style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:${c.done ? '#ECFDF5' : '#FFF'};border:1px solid ${c.done ? '#10B981' : '#D1D5DB'};border-radius:8px;font-size:12px;cursor:pointer;color:${c.done ? '#065F46' : '#374151'};">
             <span>${c.done ? '✅' : c.icon}</span>
             <span style="${c.done ? 'text-decoration:line-through;' : 'font-weight:500;'}">${c.label}</span>
           </div>
@@ -5935,7 +5935,7 @@ function renderDashboardSummary() {
 
   // Ziele-Fortschritt
   const avgZiel = ziele.length > 0 ? Math.round(ziele.reduce((sum, z) => sum + (z.fortschritt || (z.erledigt ? 100 : 0)), 0) / ziele.length) : 0;
-  const zielFarbe = avgZiel >= 70 ? '#22C55E' : (avgZiel >= 30 ? '#F59E0B' : '#EF4444');
+  const zielFarbe = avgZiel >= 70 ? '#10B981' : (avgZiel >= 30 ? '#F59E0B' : '#EF4444');
 
   // Sitzungen
   const sitzungsCount = notizen.length;
@@ -5951,10 +5951,10 @@ function renderDashboardSummary() {
         <div style="height:4px;background:#E5E7EB;border-radius:2px;margin-top:6px;"><div style="height:100%;width:${phasePct}%;background:${phaseFarbe};border-radius:2px;"></div></div>
         <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${phasePct}% erledigt</div>
       </div>
-      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${scrFlagged > 0 ? '#EF4444' : '#22C55E'};text-align:center;cursor:pointer;" onclick="showProfilTab('screening')">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${scrFlagged > 0 ? '#EF4444' : '#10B981'};text-align:center;cursor:pointer;" onclick="showProfilTab('screening')">
         <div style="font-size:22px;margin-bottom:4px;">📊</div>
         <div style="font-size:11px;color:#6B7280;">Screening</div>
-        <div style="font-size:16px;font-weight:700;color:${scrFlagged > 0 ? '#EF4444' : '#22C55E'};">${screenings.length === 0 ? 'Ausstehend' : scrFlagged + ' auffällig'}</div>
+        <div style="font-size:16px;font-weight:700;color:${scrFlagged > 0 ? '#EF4444' : '#10B981'};">${screenings.length === 0 ? 'Ausstehend' : scrFlagged + ' auffällig'}</div>
         <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${screenings.length > 0 ? 'von ' + scrTotal + ' Bereichen' : 'Noch kein Screening'}</div>
       </div>
       <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showPhase('leitfaden','roadmap')">
@@ -6192,8 +6192,8 @@ function renderSitzungsvorschlag() {
     schutzHypos.forEach(h => { if (!items.includes(h.titel)) items.push(h.titel); });
     protectiveItems.forEach(p => { if (!items.includes(p) && items.length < 4) items.push(p); });
     if (items.length > 0) {
-      const chips = items.map(i => '<span style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:2px 8px;font-size:10px;color:#166534;">' + i + '</span>').join(' ');
-      ressourcenHint = '<div style="margin-top:6px;font-size:11px;color:#166534;">💪 Ressourcen nutzen: ' + chips + '</div>';
+      const chips = items.map(i => '<span style="background:#ECFDF5;border:1px solid #A7F3D0;border-radius:12px;padding:2px 8px;font-size:10px;color:#065F46;">' + i + '</span>').join(' ');
+      ressourcenHint = '<div style="margin-top:6px;font-size:11px;color:#065F46;">💪 Ressourcen nutzen: ' + chips + '</div>';
     }
   } catch(e) { /* silent */ }
 
@@ -6743,7 +6743,7 @@ function renderNaechsteSchritte() {
         <!-- Fortschrittsbalken -->
         <div style="margin-bottom:16px;">
           <div class="progress-bar" style="height:10px;border-radius:5px;">
-            <div class="progress-bar-fill" style="width:${fortschritt}%;background:linear-gradient(90deg,#6366F1,#8B5CF6);border-radius:5px;transition:width 0.5s;"></div>
+            <div class="progress-bar-fill" style="width:${fortschritt}%;background:linear-gradient(90deg,#6366F1,#6366F1);border-radius:5px;transition:width 0.5s;"></div>
           </div>
         </div>
 
@@ -6752,8 +6752,8 @@ function renderNaechsteSchritte() {
           ${phasen.map(p => `
             <div onclick="showProfilTab('${p.tab}')" style="
               display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;
-              background:${p.done ? '#F0FDF4' : '#F9FAFB'};
-              border:1px solid ${p.done ? '#BBF7D0' : '#E5E7EB'};
+              background:${p.done ? '#ECFDF5' : '#F9FAFB'};
+              border:1px solid ${p.done ? '#A7F3D0' : '#E5E7EB'};
               color:${p.done ? '#15803D' : '#6B7280'};
             ">
               <span style="font-size:13px;">${p.done ? icon('check-circle', 16) : renderIcon(p.icon, 16)}</span>
@@ -7090,7 +7090,7 @@ function renderWohlbefinden() {
   const skala = document.getElementById('wohlbefinden-skala');
   if (skala) {
     const emojis = ['😫','😢','😞','😕','😐','🙂','😊','😄','😁','🤩'];
-    const farben = ['#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#22C55E','#10B981','#059669','#047857'];
+    const farben = ['#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#10B981','#10B981','#059669','#047857'];
     skala.innerHTML = emojis.map((e, i) => {
       const nr = i + 1;
       return `<button class="wohlbefinden-btn" style="--wb-farbe:${farben[i]};"
@@ -7138,7 +7138,7 @@ function renderWohlbefinden() {
       historie.innerHTML = '<div style="color:#9CA3AF;font-size:12px;text-align:center;padding:8px;">Noch keine Einträge</div>';
     } else {
       historie.innerHTML = eintraege.slice(0, 5).map(w => {
-        const farben = ['','#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#22C55E','#10B981','#059669','#047857'];
+        const farben = ['','#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#10B981','#10B981','#059669','#047857'];
         return `<div class="wb-eintrag">
           <span class="wb-eintrag-score" style="background:${farben[w.score]};">${w.score}</span>
           <span class="wb-eintrag-datum">${new Date(w.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}</span>
@@ -7181,7 +7181,7 @@ function renderWohlbefindenMiniTrend(letzte8) {
   }
 
   const avg = (letzte8.reduce((s, w) => s + w.score, 0) / letzte8.length).toFixed(1);
-  const wbFarben = ['','#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#22C55E','#10B981','#059669','#047857'];
+  const wbFarben = ['','#DC2626','#EF4444','#F97316','#F59E0B','#EAB308','#84CC16','#10B981','#10B981','#059669','#047857'];
 
   // Mini-Balken (Sparkline-artig)
   const maxH = 28;
@@ -7298,7 +7298,7 @@ function renderWohlbefindenChart(schuelerId) {
         pointBackgroundColor: data.map(v => {
           if (v <= 3) return '#EF4444';
           if (v <= 5) return '#F59E0B';
-          return '#22C55E';
+          return '#10B981';
         }),
         pointRadius: 4,
         pointHoverRadius: 6,
@@ -7398,7 +7398,7 @@ function renderStaerken() {
                 if (!anker || !val) return '';
                 const stufe = val <= 3 ? 'niedrig' : (val <= 6 ? 'mittel' : 'hoch');
                 const label = val <= 3 ? '1–3 Wenig ausgeprägt' : (val <= 6 ? '4–6 Durchschnittlich' : '7–10 Stark ausgeprägt');
-                const fc = val <= 3 ? '#EF4444' : (val <= 6 ? '#F59E0B' : '#22C55E');
+                const fc = val <= 3 ? '#EF4444' : (val <= 6 ? '#F59E0B' : '#10B981');
                 return '<div class="staerken-anker" id="staerken-anker-' + d.id + '" style="font-size:11px;margin-top:4px;padding:6px 8px;background:' + fc + '10;border-radius:6px;border-left:3px solid ' + fc + ';"><span style="font-weight:600;color:' + fc + ';">' + label + ':</span> <span style="color:#6B7280;">' + anker[stufe] + '</span></div>';
               })()}
             </div>`;
@@ -7561,7 +7561,7 @@ function updateStaerkenWert(dimId, value, el) {
     const v = parseInt(value);
     const stufe = v <= 3 ? 'niedrig' : (v <= 6 ? 'mittel' : 'hoch');
     const label = v <= 3 ? '1–3 Wenig ausgeprägt' : (v <= 6 ? '4–6 Durchschnittlich' : '7–10 Stark ausgeprägt');
-    const fc = v <= 3 ? '#EF4444' : (v <= 6 ? '#F59E0B' : '#22C55E');
+    const fc = v <= 3 ? '#EF4444' : (v <= 6 ? '#F59E0B' : '#10B981');
     if (ankerEl) {
       ankerEl.style.background = fc + '10';
       ankerEl.style.borderLeftColor = fc;
@@ -7972,8 +7972,8 @@ function renderFallformulierung() {
     { key: 'presenting',     label: 'Presenting',     farbe: '#EF4444', bg: '#FEF2F2', desc: 'Aktuelle Symptome & Probleme' },
     { key: 'predisposing',   label: 'Predisposing',   farbe: '#F97316', bg: '#FFF7ED', desc: 'Vorbestehende Risikofaktoren' },
     { key: 'precipitating',  label: 'Precipitating',  farbe: '#EAB308', bg: '#FEFCE8', desc: 'Auslösende Ereignisse' },
-    { key: 'perpetuating',   label: 'Perpetuating',   farbe: '#3B82F6', bg: '#EFF6FF', desc: 'Aufrechterhaltende Faktoren' },
-    { key: 'protective',     label: 'Protective',     farbe: '#22C55E', bg: '#F0FDF4', desc: 'Schutzfaktoren & Ressourcen' },
+    { key: 'perpetuating',   label: 'Perpetuating',   farbe: '#2563EB', bg: '#EFF6FF', desc: 'Aufrechterhaltende Faktoren' },
+    { key: 'protective',     label: 'Protective',     farbe: '#10B981', bg: '#ECFDF5', desc: 'Schutzfaktoren & Ressourcen' },
   ];
 
   // Hypothesen-Zusammenfassung (kompakt statt volle Inline-Liste)
@@ -8043,7 +8043,7 @@ function renderFallformulierung() {
                 ${pending.map(s => `
                   <span class="fivep-tag fivep-tag-suggestion" style="background:${p.bg}80;border-color:${p.farbe};border-style:dashed;opacity:0.75;">
                     ${s.text}
-                    <span class="fivep-tag-accept" onclick="accept5PSuggestion('${p.key}','${s.key.replace(/'/g, "\\'")}','${s.text.replace(/'/g, "\\'")}')" title="Übernehmen" style="cursor:pointer;color:#22C55E;font-weight:bold;margin-left:4px;">✓</span>
+                    <span class="fivep-tag-accept" onclick="accept5PSuggestion('${p.key}','${s.key.replace(/'/g, "\\'")}','${s.text.replace(/'/g, "\\'")}')" title="Übernehmen" style="cursor:pointer;color:#10B981;font-weight:bold;margin-left:4px;">✓</span>
                     <span class="fivep-tag-del" onclick="dismiss5PSuggestion('${p.key}','${s.key.replace(/'/g, "\\'")}')" title="Ablehnen">×</span>
                   </span>
                 `).join('')}
@@ -8132,7 +8132,7 @@ function render5PInlineHypothesen(hypothesen) {
   const schutz = hypothesen.filter(h => h.typ === 'schutz').slice(0, 5);
 
   function miniCard(h) {
-    const borderColor = h.typ === 'schutz' ? '#22C55E' : h.typ === 'differenzial' ? '#8B5CF6'
+    const borderColor = h.typ === 'schutz' ? '#10B981' : h.typ === 'differenzial' ? '#6366F1'
       : h.staerkeWert >= 4 ? '#991B1B' : h.staerkeWert >= 3 ? '#EF4444' : '#F59E0B';
     const typIcon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
     const staerkeLabel = h.staerkeWert >= 4 ? 'Sehr wahrsch.' : h.staerkeWert >= 2 ? 'Wahrsch.' : 'Hinweis';
@@ -8163,7 +8163,7 @@ function render5PInlineHypothesen(hypothesen) {
   // Differenzialdiagnosen (prominently)
   if (diffs.length > 0) {
     html += '<div style="margin-bottom:14px;">';
-    html += '<div style="font-size:12px;font-weight:600;color:#5B21B6;margin-bottom:6px;">🔀 Differenzialdiagnosen (' + diffs.length + ')</div>';
+    html += '<div style="font-size:12px;font-weight:600;color:#4338CA;margin-bottom:6px;">🔀 Differenzialdiagnosen (' + diffs.length + ')</div>';
     diffs.forEach(h => { html += miniCard(h); });
     html += '</div>';
   }
@@ -8179,7 +8179,7 @@ function render5PInlineHypothesen(hypothesen) {
   // Schutz-Hypothesen
   if (schutz.length > 0) {
     html += '<div style="margin-bottom:14px;">';
-    html += '<div style="font-size:12px;font-weight:600;color:#166534;margin-bottom:6px;">🛡️ Schutzfaktoren (' + schutz.length + ')</div>';
+    html += '<div style="font-size:12px;font-weight:600;color:#065F46;margin-bottom:6px;">🛡️ Schutzfaktoren (' + schutz.length + ')</div>';
     schutz.forEach(h => { html += miniCard(h); });
     html += '</div>';
   }
@@ -8558,7 +8558,7 @@ function render5PRadar() {
       backgroundColor: 'rgba(99, 102, 241, 0.15)',
       borderColor: '#6366F1',
       borderWidth: 2,
-      pointBackgroundColor: ['#EF4444', '#F97316', '#EAB308', '#3B82F6', '#22C55E'],
+      pointBackgroundColor: ['#EF4444', '#F97316', '#EAB308', '#2563EB', '#10B981'],
       pointRadius: 5,
     }]
   };
@@ -8639,11 +8639,11 @@ function render5PPatternAnalysis(ff) {
     const topThemen = Object.entries(themenHits).sort((a, b) => b[1] - a[1]).slice(0, 4);
     if (topThemen.length > 0) {
       interventionHtml = `
-        <div style="margin-top:10px;padding:10px 12px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;">
-          <div style="font-size:12px;font-weight:600;color:#166534;margin-bottom:6px;">🎯 Empfohlene Interventions-Themen</div>
+        <div style="margin-top:10px;padding:10px 12px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:8px;">
+          <div style="font-size:12px;font-weight:600;color:#065F46;margin-bottom:6px;">🎯 Empfohlene Interventions-Themen</div>
           <div style="display:flex;flex-wrap:wrap;gap:6px;">
             ${topThemen.map(([thema, count]) =>
-              `<span style="padding:3px 10px;background:#DCFCE7;border:1px solid #86EFAC;border-radius:12px;font-size:12px;color:#166534;">
+              `<span style="padding:3px 10px;background:#DCFCE7;border:1px solid #86EFAC;border-radius:12px;font-size:12px;color:#065F46;">
                 ${thema} <span style="color:#15803D;font-weight:600;">(${count}×)</span>
               </span>`
             ).join('')}
@@ -8691,7 +8691,7 @@ function render5PPatternAnalysis(ff) {
           <span class="fivep-stat-label">Risikofaktoren</span>
         </div>
         <div class="fivep-analysis-stat">
-          <span class="fivep-stat-num" style="color:#22C55E;">${protCount}</span>
+          <span class="fivep-stat-num" style="color:#10B981;">${protCount}</span>
           <span class="fivep-stat-label">Schutzfaktoren</span>
         </div>
       </div>
@@ -8765,14 +8765,14 @@ function renderHandlungsTriage(ff, sid) {
   // Abklärung
   if (grouped.abklaerung.length > 0) {
     html += `
-      <div style="padding:12px 16px;background:#F5F3FF;border-bottom:1px solid #DDD6FE;">
-        <div style="font-size:13px;font-weight:700;color:#7C3AED;margin-bottom:8px;">\u{1F52C} FACHDIAGNOSTIK EMPFOHLEN</div>`;
+      <div style="padding:12px 16px;background:#EEF2FF;border-bottom:1px solid #BFDBFE;">
+        <div style="font-size:13px;font-weight:700;color:#4F46E5;margin-bottom:8px;">\u{1F52C} FACHDIAGNOSTIK EMPFOHLEN</div>`;
     grouped.abklaerung.forEach(({ dom, score }) => {
       const themen = getThemenForDomain(dom.id);
       html += `
-        <div style="padding:8px 12px;background:#fff;border:1px solid #DDD6FE;border-left:4px solid #7C3AED;border-radius:6px;margin-bottom:6px;">
-          <div style="font-weight:600;color:#5B21B6;">${dom.icon} ${dom.label} <span style="font-weight:400;color:#6B7280;">(Score: ${score})</span></div>
-          ${dom.ueberweisungAn ? `<div style="font-size:12px;color:#7C3AED;margin-top:4px;">\u{1F4CB} \u00DCberweisung an: <strong>${dom.ueberweisungAn}</strong></div>` : ''}
+        <div style="padding:8px 12px;background:#fff;border:1px solid #BFDBFE;border-left:4px solid #4F46E5;border-radius:6px;margin-bottom:6px;">
+          <div style="font-weight:600;color:#4338CA;">${dom.icon} ${dom.label} <span style="font-weight:400;color:#6B7280;">(Score: ${score})</span></div>
+          ${dom.ueberweisungAn ? `<div style="font-size:12px;color:#4F46E5;margin-top:4px;">\u{1F4CB} \u00DCberweisung an: <strong>${dom.ueberweisungAn}</strong></div>` : ''}
           ${themen.length > 0 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">Was wir parallel tun k\u00F6nnen: ${themen.map(t => `<em>${t}</em>`).join(', ')}</div>` : ''}
         </div>`;
     });
@@ -8850,7 +8850,7 @@ function renderBerichte() {
       </div>
 
       <div class="bericht-card" onclick="generateBericht('eltern')">
-        <div class="bericht-card-icon" style="background:#EFF6FF;color:#3B82F6;">👨‍👩‍👧</div>
+        <div class="bericht-card-icon" style="background:#EFF6FF;color:#2563EB;">👨‍👩‍👧</div>
         <div class="bericht-card-body">
           <strong>Elternbrief</strong>
           <p>Zusammenfassung für Eltern/Erziehungsberechtigte</p>
@@ -8859,7 +8859,7 @@ function renderBerichte() {
       </div>
 
       <div class="bericht-card" onclick="generateBericht('uebergabe')">
-        <div class="bericht-card-icon" style="background:#F0FDF4;color:#22C55E;">🤝</div>
+        <div class="bericht-card-icon" style="background:#ECFDF5;color:#10B981;">🤝</div>
         <div class="bericht-card-body">
           <strong>Kollegenübergabe</strong>
           <p>Fallübergabe an Kolleg:innen mit allen relevanten Informationen</p>
@@ -9434,7 +9434,7 @@ function renderFokusThemaKarte(thema, themaIdx, phase, roadmap) {
   if (verknuepfteZiele.length > 0) {
     zielBadgeHtml = verknuepfteZiele.map(z => {
       const pct = z.fortschritt || (z.erledigt ? 100 : 0);
-      const farbe = pct >= 70 ? '#22C55E' : (pct >= 30 ? '#F59E0B' : '#EF4444');
+      const farbe = pct >= 70 ? '#10B981' : (pct >= 30 ? '#F59E0B' : '#EF4444');
       return `<div style="display:flex;align-items:center;gap:6px;padding:4px 8px;margin-top:4px;background:${farbe}10;border:1px solid ${farbe}30;border-radius:6px;font-size:11px;">
         <span style="font-size:13px;">🎯</span>
         <span style="color:var(--text);font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(z.text)}</span>
@@ -10576,7 +10576,7 @@ function renderScreeningErgebnis(scr) {
         ${d.icd ? `<div style="font-size:11px;color:#888;margin-top:3px;">ICD-10: ${d.icd}${d.instrument ? ` · Instrument: <em>${d.instrument}</em>` : ''}</div>` : ''}
         ${d.cutoffQuelle ? `<div style="font-size:10px;color:#9CA3AF;margin-top:2px;">Cutoff ≥${d.cutoff}: ${d.cutoffQuelle}</div>` : ''}
         <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
-        ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#3B82F6;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#F0F9FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1E40AF;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
+        ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#2563EB;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#EFF6FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1D4ED8;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
         ${(() => { const _wiki = (typeof findWikiForScreeningDomain === 'function') ? findWikiForScreeningDomain(d.id) : null; return _wiki ? '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;align-items:center;">' + renderWikiLink(_wiki.id) + renderArbeitsblattChipsFromThemenIds(_wiki.themen_ids) + '</div>' : ''; })()}
       </div>`;
     }).join('') + '</div>'
@@ -10663,8 +10663,8 @@ function renderScrNaechsteSchritte(scr) {
   const krisenDomains = flagged.filter(f => ['selbstverletzung', 'suizidalitaet', 'psychose'].includes(f));
 
   el.innerHTML = `
-    <div class="card" style="margin-top:16px;border:2px solid #3B82F6;background:linear-gradient(135deg,#EFF6FF,#F8FAFC);">
-      <div class="card-header" style="background:#3B82F6;color:white;border-radius:8px 8px 0 0;">
+    <div class="card" style="margin-top:16px;border:2px solid #2563EB;background:linear-gradient(135deg,#EFF6FF,#F8FAFC);">
+      <div class="card-header" style="background:#2563EB;color:white;border-radius:8px 8px 0 0;">
         <span>🧭</span>
         <div class="card-title" style="color:white;">Nächste Schritte nach dem Screening</div>
       </div>
@@ -10685,7 +10685,7 @@ function renderScrNaechsteSchritte(scr) {
 
         <div class="scr-wizard-steps" style="display:flex;flex-direction:column;gap:8px;">
           <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
-            <span class="scr-wizard-nr" style="background:#3B82F6;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">1</span>
+            <span class="scr-wizard-nr" style="background:#2563EB;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">1</span>
             <div style="flex:1;">
               <div style="font-weight:600;font-size:13px;">Anamnese vertiefen</div>
               <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Relevante Kategorien: ${[...relevanteAnamnese].slice(0, 5).map(k => {
@@ -10697,7 +10697,7 @@ function renderScrNaechsteSchritte(scr) {
           </div>
 
           <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
-            <span class="scr-wizard-nr" style="background:#8B5CF6;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">2</span>
+            <span class="scr-wizard-nr" style="background:#6366F1;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">2</span>
             <div style="flex:1;">
               <div style="font-weight:600;font-size:13px;">Hypothesen prüfen</div>
               <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${hypothesen.length} Hypothesen generiert${neueHypo > 0 ? `, davon ${neueHypo} dynamisch (Screening + Anamnese)` : ''}</div>
@@ -10711,7 +10711,7 @@ function renderScrNaechsteSchritte(scr) {
             <div style="flex:1;">
               <div style="font-weight:600;font-size:13px;">Fachkraft-Module lesen</div>
               <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">
-                ${relevanteModule.slice(0, 4).map(m => `<span onclick="window.open('fachkraft-module/${m.datei}','_blank')" style="cursor:pointer;background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:2px 8px;border-radius:8px;font-size:11px;">${m.icon} ${m.label}</span>`).join('')}
+                ${relevanteModule.slice(0, 4).map(m => `<span onclick="window.open('fachkraft-module/${m.datei}','_blank')" style="cursor:pointer;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;padding:2px 8px;border-radius:8px;font-size:11px;">${m.icon} ${m.label}</span>`).join('')}
               </div>
             </div>
           </div>` : ''}
@@ -11002,7 +11002,7 @@ function scrShowContainer(which) {
 
 function severityBadgeHtml(severity, large = false) {
   const map = {
-    low:    { label: 'Unauffällig', bg: '#DCFCE7', color: '#166534' },
+    low:    { label: 'Unauffällig', bg: '#DCFCE7', color: '#065F46' },
     medium: { label: 'Erhöhter Bedarf', bg: '#FEF9C3', color: '#854D0E' },
     high:   { label: 'Hoher Bedarf', bg: '#FEE2E2', color: '#991B1B' },
     urgent: { label: '🚨 Dringend', bg: '#7F1D1D', color: '#FEF2F2' },
@@ -11120,7 +11120,7 @@ function renderScreeningEmbedded() {
 // Handlungskategorien-Konfiguration
 const HANDLUNG_CONFIG = {
   krise:       { icon: '\u{1F6A8}', label: 'SOFORT HANDELN', farbe: '#991B1B', bg: '#FEF2F2', prefix: 'KRISENPROTOKOLL' },
-  abklaerung:  { icon: '\u{1F52C}', label: 'FACHDIAGNOSTIK EMPFOHLEN', farbe: '#7C3AED', bg: '#F5F3FF', prefix: 'Fachdiagnostik' },
+  abklaerung:  { icon: '\u{1F52C}', label: 'FACHDIAGNOSTIK EMPFOHLEN', farbe: '#4F46E5', bg: '#EEF2FF', prefix: 'Fachdiagnostik' },
   intervention:{ icon: '\u{1F3AF}', label: 'UNSERE ARBEIT', farbe: '#2563EB', bg: '#EFF6FF', prefix: '' },
   beobachtung: { icon: '\u{1F441}', label: 'BEOBACHTEN', farbe: '#6B7280', bg: '#F9FAFB', prefix: 'beobachten' },
 };
@@ -11414,8 +11414,8 @@ const GENO_ROLLEN_LABELS = {
   'betreuer-in': '🧑‍⚕️ Betreuer/in', 'lehrer-in': '🧑‍🏫 Lehrer/in', sonstige: '👤 Sonstige',
 };
 const GENO_BEZ_STYLES = {
-  eng: { farbe: '#22C55E', label: 'Eng', border: '3px solid #22C55E' },
-  normal: { farbe: '#3B82F6', label: 'Normal', border: '2px solid #3B82F6' },
+  eng: { farbe: '#10B981', label: 'Eng', border: '3px solid #10B981' },
+  normal: { farbe: '#2563EB', label: 'Normal', border: '2px solid #2563EB' },
   distanziert: { farbe: '#EAB308', label: 'Distanziert', border: '2px dashed #EAB308' },
   konflikt: { farbe: '#EF4444', label: 'Konflikt', border: '2px solid #EF4444' },
   abbruch: { farbe: '#374151', label: 'Abbruch', border: '2px dotted #374151' },
@@ -11486,7 +11486,7 @@ function renderVerhalten() {
   for (var t = 0; t < quickTags.length; t++) {
     var tag = quickTags[t];
     var isActive = query && tag.toLowerCase().indexOf(query) !== -1;
-    html += '<button onclick="verhaltensFilter=\'' + tag + '\';renderVerhalten();" style="padding:4px 12px;border-radius:16px;border:1px solid ' + (isActive ? '#3B82F6' : '#E5E7EB') + ';background:' + (isActive ? '#EFF6FF' : '#fff') + ';font-size:12px;cursor:pointer;color:' + (isActive ? '#2563EB' : '#6B7280') + ';">' + tag + '</button>';
+    html += '<button onclick="verhaltensFilter=\'' + tag + '\';renderVerhalten();" style="padding:4px 12px;border-radius:16px;border:1px solid ' + (isActive ? '#2563EB' : '#E5E7EB') + ';background:' + (isActive ? '#EFF6FF' : '#fff') + ';font-size:12px;cursor:pointer;color:' + (isActive ? '#2563EB' : '#6B7280') + ';">' + tag + '</button>';
   }
   if (query) {
     html += '<button onclick="verhaltensFilter=\'\';renderVerhalten();" style="padding:4px 12px;border-radius:16px;border:1px solid #FCA5A5;background:#FEF2F2;font-size:12px;cursor:pointer;color:#DC2626;">✕ Filter löschen</button>';
@@ -11564,7 +11564,7 @@ function renderVerhaltensEintrag(e, farbe) {
   html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:' + farbe + ';">🧠 Was es bedeuten kann</h4>';
   for (var j = 0; j < e.was_es_bedeuten_kann.length; j++) {
     var u = e.was_es_bedeuten_kann[j];
-    var pvtColor = u.pvt === 'ventral' ? '#059669' : (u.pvt === 'sympathikus' ? '#D97706' : '#7C3AED');
+    var pvtColor = u.pvt === 'ventral' ? '#059669' : (u.pvt === 'sympathikus' ? '#D97706' : '#4F46E5');
     var pvtLabel = u.pvt === 'ventral' ? '🟢 Ventral' : (u.pvt === 'sympathikus' ? '🟡 Sympathikus' : '🟣 Dorsal');
     html += '<div style="background:#F9FAFB;border-radius:6px;padding:10px 12px;margin-bottom:6px;">';
     html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">';
@@ -11599,8 +11599,8 @@ function renderVerhaltensEintrag(e, farbe) {
   html += '<h4 style="margin:0 0 8px 0;font-size:14px;color:' + farbe + ';">💬 Konkrete Gesprächsskripte</h4>';
   for (var s = 0; s < e.skripte.length; s++) {
     var sk = e.skripte[s];
-    html += '<div style="background:#F0F9FF;border-left:3px solid #3B82F6;border-radius:4px;padding:10px 12px;margin-bottom:8px;">';
-    html += '<div style="font-size:11px;font-weight:600;color:#1E40AF;margin-bottom:4px;">Situation: ' + sk.situation + '</div>';
+    html += '<div style="background:#EFF6FF;border-left:3px solid #2563EB;border-radius:4px;padding:10px 12px;margin-bottom:8px;">';
+    html += '<div style="font-size:11px;font-weight:600;color:#1D4ED8;margin-bottom:4px;">Situation: ' + sk.situation + '</div>';
     html += '<div style="font-size:13px;color:#1E3A5F;font-style:italic;line-height:1.6;">' + sk.text + '</div>';
     html += '</div>';
   }
@@ -11642,7 +11642,7 @@ function renderVerhaltensEintrag(e, farbe) {
   var escapedTitel = e.titel.replace(/'/g, "\\'").replace(/"/g, "&quot;");
   var escapedId = e.id.replace(/'/g, "\\'");
   var escapedSoap = soapText.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-  var katIcon = farbe === '#D97706' ? '⚡' : farbe === '#7C3AED' ? '🌊' : farbe === '#059669' ? '🤝' : '🏫';
+  var katIcon = farbe === '#D97706' ? '⚡' : farbe === '#4F46E5' ? '🌊' : farbe === '#059669' ? '🤝' : '🏫';
 
   // Beobachtet-Toggle
   html += '<button onclick="toggleVerhaltensBeobachtet(\'' + escapedId + '\', this)" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;" title="Als beobachtet markieren">👁️ Beobachtet</button>';
@@ -11651,7 +11651,7 @@ function renderVerhaltensEintrag(e, farbe) {
   html += '<button onclick="verhaltensBeobachtungNotieren(\'' + escapedId + '\', \'' + escapedTitel + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;" title="Beobachtung notieren">📝 Notieren</button>';
 
   // In 5P übernehmen
-  html += '<button onclick="verhaltensEintragTo5P(\'' + escapedId + '\', \'' + escapedTitel + '\', \'' + katIcon + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #3B82F6;border-radius:6px;background:#EFF6FF;cursor:pointer;color:#2563EB;" title="In 5P-Analyse übernehmen">🧩 In 5P</button>';
+  html += '<button onclick="verhaltensEintragTo5P(\'' + escapedId + '\', \'' + escapedTitel + '\', \'' + katIcon + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #2563EB;border-radius:6px;background:#EFF6FF;cursor:pointer;color:#2563EB;" title="In 5P-Analyse übernehmen">🧩 In 5P</button>';
 
   // SOAP übernehmen
   html += '<button onclick="uebernehmeInSOAP(\'' + escapedSoap + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #D1D5DB;border-radius:6px;background:#fff;cursor:pointer;color:#6B7280;" title="In SOAP-Protokoll übernehmen">📋 SOAP</button>';
@@ -11659,7 +11659,7 @@ function renderVerhaltensEintrag(e, farbe) {
   // Sitzung starten
   var verwandteThemen = (e.verwandte_themen || []);
   if (verwandteThemen.length > 0) {
-    html += '<button onclick="verhaltensStarteSitzung(\'' + verwandteThemen[0] + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #22C55E;border-radius:6px;background:#F0FDF4;cursor:pointer;color:#166534;" title="Sitzung zum verwandten Thema starten">▶️ Sitzung</button>';
+    html += '<button onclick="verhaltensStarteSitzung(\'' + verwandteThemen[0] + '\')" class="verhalten-action-btn" style="font-size:12px;padding:5px 12px;border:1px solid #10B981;border-radius:6px;background:#ECFDF5;cursor:pointer;color:#065F46;" title="Sitzung zum verwandten Thema starten">▶️ Sitzung</button>';
   }
   html += '</div>';
 
@@ -11726,8 +11726,8 @@ function toggleVerhaltensBeobachtet(eId, btn) {
   DB.updateSchueler(sid, { verhaltensBeobachtungen: s.verhaltensBeobachtungen });
   if (s.verhaltensBeobachtungen[eId]) {
     btn.style.background = '#DCFCE7';
-    btn.style.borderColor = '#22C55E';
-    btn.style.color = '#166534';
+    btn.style.borderColor = '#10B981';
+    btn.style.color = '#065F46';
     btn.textContent = '✅ Beobachtet';
     showToast('"' + eId + '" als beobachtet markiert', 'success');
   } else {
@@ -11864,7 +11864,7 @@ function renderGenogramm() {
       + '<div style="color:#D1D5DB;font-size:16px;">│</div>';
   }
 
-  vHtml += '<div style="background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border-radius:12px;padding:10px 20px;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(99,102,241,0.3);">'
+  vHtml += '<div style="background:linear-gradient(135deg,#6366F1,#6366F1);color:#fff;border-radius:12px;padding:10px 20px;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(99,102,241,0.3);">'
     + '⭐ ' + escapeHtml(schuelerName) + '</div>';
 
   if (geschwister.length > 0) {
@@ -11964,7 +11964,7 @@ function openGespraechsleitfaden(id) {
     // Skripte
     html += '<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:600;color:#6B7280;margin-bottom:6px;">💬 Gesprächsskripte</div>';
     p.skripte.forEach(function(s) {
-      html += '<div style="background:#EFF6FF;border-left:3px solid #3B82F6;padding:8px 10px;margin-bottom:4px;border-radius:0 6px 6px 0;font-size:12px;color:#1E40AF;font-style:italic;">' + s + '</div>';
+      html += '<div style="background:#EFF6FF;border-left:3px solid #2563EB;padding:8px 10px;margin-bottom:4px;border-radius:0 6px 6px 0;font-size:12px;color:#1D4ED8;font-style:italic;">' + s + '</div>';
     });
     html += '</div>';
 
@@ -11994,9 +11994,9 @@ function openGespraechsleitfaden(id) {
   html += '</div></div>';
 
   // Nachbereitung & Dokumentation
-  html += '<div style="background:#F0F9FF;border-radius:10px;padding:14px;margin-top:16px;">';
+  html += '<div style="background:#EFF6FF;border-radius:10px;padding:14px;margin-top:16px;">';
   html += '<div style="font-weight:600;font-size:13px;color:#0C4A6E;margin-bottom:6px;">📄 Nachbereitung & Dokumentation</div>';
-  html += '<div style="font-size:12px;color:#0369A1;margin-bottom:6px;">' + g.nachbereitung + '</div>';
+  html += '<div style="font-size:12px;color:#1D4ED8;margin-bottom:6px;">' + g.nachbereitung + '</div>';
   html += '<div style="font-size:11px;color:#6B7280;border-top:1px solid #BAE6FD;padding-top:6px;margin-top:6px;">📋 ' + g.dokumentation + '</div>';
   html += '</div>';
 
@@ -12088,8 +12088,8 @@ function openFallbeispiel(id) {
     });
     html += '</div>';
   });
-  html += '<div style="background:#EFF6FF;border-radius:8px;padding:10px;margin-top:8px;"><div style="font-weight:600;font-size:12px;color:#1E40AF;margin-bottom:4px;">💡 Hypothese</div>';
-  html += '<div style="font-size:12px;color:#1E40AF;line-height:1.5;font-style:italic;">' + f.fivep.hypothese + '</div></div>';
+  html += '<div style="background:#EFF6FF;border-radius:8px;padding:10px;margin-top:8px;"><div style="font-weight:600;font-size:12px;color:#1D4ED8;margin-bottom:4px;">💡 Hypothese</div>';
+  html += '<div style="font-size:12px;color:#1D4ED8;line-height:1.5;font-style:italic;">' + f.fivep.hypothese + '</div></div>';
   html += '</div></details>';
 
   // SMART-Ziele
@@ -12109,11 +12109,11 @@ function openFallbeispiel(id) {
     html += '<div style="border:1px solid #E5E7EB;border-radius:10px;padding:12px;margin-bottom:10px;">';
     html += '<div style="display:flex;justify-content:space-between;margin-bottom:8px;">';
     html += '<span style="font-weight:600;font-size:13px;">Sitzung ' + s.sitzung + ': ' + s.thema + '</span>';
-    var pvtColors = { dorsal: '#8B5CF6', sympathikus: '#EF4444', ventral: '#10B981', 'sympathikus-ventral': '#F59E0B', 'dorsal-sympathikus': '#F97316', 'dorsal-ventral': '#6366F1', 'ventral-sympathikus': '#14B8A6' };
+    var pvtColors = { dorsal: '#6366F1', sympathikus: '#EF4444', ventral: '#10B981', 'sympathikus-ventral': '#F59E0B', 'dorsal-sympathikus': '#F97316', 'dorsal-ventral': '#6366F1', 'ventral-sympathikus': '#14B8A6' };
     html += '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:' + (pvtColors[s.pvt] || '#6B7280') + '20;color:' + (pvtColors[s.pvt] || '#6B7280') + ';font-weight:500;">' + s.pvt + '</span></div>';
     ['s', 'o', 'a', 'p'].forEach(function(k) {
       var labels = { s: 'S — Subjektiv', o: 'O — Objektiv', a: 'A — Assessment', p: 'P — Plan' };
-      var colors = { s: '#3B82F6', o: '#10B981', a: '#F59E0B', p: '#8B5CF6' };
+      var colors = { s: '#2563EB', o: '#10B981', a: '#F59E0B', p: '#6366F1' };
       html += '<div style="margin-bottom:6px;"><span style="font-size:10px;font-weight:600;color:' + colors[k] + ';">' + labels[k] + '</span>';
       html += '<div style="font-size:11px;color:#374151;line-height:1.5;margin-top:2px;">' + s.soap[k] + '</div></div>';
     });
@@ -12125,7 +12125,7 @@ function openFallbeispiel(id) {
   html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🧠 PVT-Verlauf</summary>';
   html += '<div style="padding:8px 0;display:flex;gap:10px;flex-wrap:wrap;">';
   f.pvt_verlauf.forEach(function(p) {
-    var pvtColors = { dorsal: '#8B5CF6', sympathikus: '#EF4444', ventral: '#10B981', 'sympathikus-ventral': '#F59E0B', 'dorsal-sympathikus': '#F97316', 'dorsal-ventral': '#6366F1', 'ventral-sympathikus': '#14B8A6' };
+    var pvtColors = { dorsal: '#6366F1', sympathikus: '#EF4444', ventral: '#10B981', 'sympathikus-ventral': '#F59E0B', 'dorsal-sympathikus': '#F97316', 'dorsal-ventral': '#6366F1', 'ventral-sympathikus': '#14B8A6' };
     html += '<div style="flex:1;min-width:180px;background:' + (pvtColors[p.zustand] || '#6B7280') + '10;border:1px solid ' + (pvtColors[p.zustand] || '#6B7280') + '30;border-radius:8px;padding:10px;">';
     html += '<div style="font-weight:600;font-size:12px;color:' + (pvtColors[p.zustand] || '#6B7280') + ';">Sitzung ' + p.sitzung + '</div>';
     html += '<div style="font-size:11px;color:#374151;margin-top:4px;">' + p.beschreibung + '</div></div>';
@@ -12133,7 +12133,7 @@ function openFallbeispiel(id) {
   html += '</div></details>';
 
   // Outcome
-  html += '<div style="background:linear-gradient(135deg,#ECFDF5,#EFF6FF);border:1px solid #BBF7D0;border-radius:10px;padding:14px;">';
+  html += '<div style="background:linear-gradient(135deg,#ECFDF5,#EFF6FF);border:1px solid #A7F3D0;border-radius:10px;padding:14px;">';
   html += '<div style="font-weight:600;font-size:13px;color:#065F46;margin-bottom:6px;">🏆 Outcome</div>';
   html += '<div style="font-size:12px;color:#047857;line-height:1.6;">' + f.outcome + '</div>';
   html += '</div>';
@@ -12155,7 +12155,7 @@ function open5PBeispiel() {
   var html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove()">';
   html += '<div style="background:white;border-radius:16px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;padding:0;" onclick="event.stopPropagation()">';
 
-  html += '<div style="background:linear-gradient(135deg,#3B82F6,#6366F1);color:white;padding:24px;border-radius:16px 16px 0 0;">';
+  html += '<div style="background:linear-gradient(135deg,#2563EB,#6366F1);color:white;padding:24px;border-radius:16px 16px 0 0;">';
   html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
   html += '<div><span style="font-size:36px;">📖</span>';
   html += '<h2 style="margin:8px 0 4px;font-size:20px;">' + b.titel + '</h2>';
@@ -12168,7 +12168,7 @@ function open5PBeispiel() {
   var sectionColors = { presenting: { bg: '#FEF2F2', border: '#EF4444', title: '🔴 Presenting — Was zeigt sich?' },
     predisposing: { bg: '#FFFBEB', border: '#F59E0B', title: '🟡 Predisposing — Was macht anfällig?' },
     precipitating: { bg: '#FFF7ED', border: '#F97316', title: '🟠 Precipitating — Was hat es ausgelöst?' },
-    perpetuating: { bg: '#EFF6FF', border: '#3B82F6', title: '🔵 Perpetuating — Was hält es aufrecht?' },
+    perpetuating: { bg: '#EFF6FF', border: '#2563EB', title: '🔵 Perpetuating — Was hält es aufrecht?' },
     protective: { bg: '#ECFDF5', border: '#10B981', title: '🟢 Protective — Was schützt?' } };
 
   ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(function(key) {
@@ -12183,9 +12183,9 @@ function open5PBeispiel() {
   });
 
   // Hypothese
-  html += '<div style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:2px solid #3B82F6;border-radius:10px;padding:16px;">';
-  html += '<div style="font-weight:600;font-size:14px;color:#1E40AF;margin-bottom:8px;">💡 Hypothese — So hängt alles zusammen</div>';
-  html += '<div style="font-size:12px;color:#1E40AF;line-height:1.7;">' + b.hypothese + '</div>';
+  html += '<div style="background:linear-gradient(135deg,#EFF6FF,#ECFDF5);border:2px solid #2563EB;border-radius:10px;padding:16px;">';
+  html += '<div style="font-weight:600;font-size:14px;color:#1D4ED8;margin-bottom:8px;">💡 Hypothese — So hängt alles zusammen</div>';
+  html += '<div style="font-size:12px;color:#1D4ED8;line-height:1.7;">' + b.hypothese + '</div>';
   html += '</div>';
 
   html += '</div></div></div>';
@@ -12231,13 +12231,13 @@ function renderWiki() {
 
   // Suchfeld
   html += '<div style="margin-bottom:14px;">';
-  html += '<input type="text" id="wiki-search" placeholder="Suche (z.B. ADHS, Bindung, ODD, Trauma...)" value="' + escapeHtml(wikiFilter) + '" oninput="wikiFilter=this.value;renderWiki();" style="width:100%;padding:10px 14px;border:2px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor=\'#3B82F6\'" onblur="this.style.borderColor=\'#E5E7EB\'">';
+  html += '<input type="text" id="wiki-search" placeholder="Suche (z.B. ADHS, Bindung, ODD, Trauma...)" value="' + escapeHtml(wikiFilter) + '" oninput="wikiFilter=this.value;renderWiki();" style="width:100%;padding:10px 14px;border:2px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor=\'#2563EB\'" onblur="this.style.borderColor=\'#E5E7EB\'">';
   html += '</div>';
 
   // Kategorie-Filter
   if (typeof WIKI_KATEGORIEN !== 'undefined') {
     html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">';
-    html += '<button onclick="wikiKategorieFilter=\'\';renderWiki();" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (!wikiKategorieFilter ? '#3B82F6' : '#E5E7EB') + ';background:' + (!wikiKategorieFilter ? '#3B82F6' : 'white') + ';color:' + (!wikiKategorieFilter ? 'white' : '#374151') + ';font-size:12px;cursor:pointer;">Alle</button>';
+    html += '<button onclick="wikiKategorieFilter=\'\';renderWiki();" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (!wikiKategorieFilter ? '#2563EB' : '#E5E7EB') + ';background:' + (!wikiKategorieFilter ? '#2563EB' : 'white') + ';color:' + (!wikiKategorieFilter ? 'white' : '#374151') + ';font-size:12px;cursor:pointer;">Alle</button>';
     WIKI_KATEGORIEN.forEach(function(k) {
       var active = wikiKategorieFilter === k.id;
       html += '<button onclick="wikiKategorieFilter=\'' + k.id + '\';renderWiki();" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (active ? k.farbe : '#E5E7EB') + ';background:' + (active ? k.farbe : 'white') + ';color:' + (active ? 'white' : '#374151') + ';font-size:12px;cursor:pointer;">' + k.icon + ' ' + k.titel + '</button>';
@@ -12344,7 +12344,7 @@ function openWikiArtikel(id) {
     html += '<details style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">🔗 Häufige Komorbiditäten</summary>';
     html += '<div style="padding:8px 0;display:flex;gap:6px;flex-wrap:wrap;">';
     a.komorbiditaeten.forEach(function(k) {
-      html += '<span style="font-size:12px;background:#EFF6FF;color:#1E40AF;padding:4px 10px;border-radius:12px;">' + k + '</span>';
+      html += '<span style="font-size:12px;background:#EFF6FF;color:#1D4ED8;padding:4px 10px;border-radius:12px;">' + k + '</span>';
     });
     html += '</div></details>';
   }
@@ -12368,7 +12368,7 @@ function openWikiArtikel(id) {
     html += '<details open style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">💡 Praxis-Tipps für Bezugspersonen</summary>';
     html += '<div style="padding:8px 0;">';
     a.praxis_tipps.forEach(function(t) {
-      html += '<div style="font-size:12px;color:#374151;padding:6px 10px;background:#F0FDF4;border-radius:6px;margin-bottom:4px;display:flex;gap:6px;"><span style="color:#10B981;font-weight:bold;">✓</span>' + t + '</div>';
+      html += '<div style="font-size:12px;color:#374151;padding:6px 10px;background:#ECFDF5;border-radius:6px;margin-bottom:4px;display:flex;gap:6px;"><span style="color:#10B981;font-weight:bold;">✓</span>' + t + '</div>';
     });
     html += '</div></details>';
   }
@@ -12383,7 +12383,7 @@ function openWikiArtikel(id) {
   // Luxemburg-spezifisch
   if (a.luxemburg_spezifisch) {
     html += '<div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;margin-bottom:14px;">';
-    html += '<div style="font-weight:600;font-size:13px;color:#1E40AF;margin-bottom:4px;">🇱🇺 Luxemburg-spezifisch</div>';
+    html += '<div style="font-weight:600;font-size:13px;color:#1D4ED8;margin-bottom:4px;">🇱🇺 Luxemburg-spezifisch</div>';
     html += '<div style="font-size:12px;color:#1D4ED8;line-height:1.5;">' + a.luxemburg_spezifisch + '</div></div>';
   }
 
@@ -12407,7 +12407,7 @@ function openWikiArtikel(id) {
   // Quellen — erste 3 sichtbar, Rest in Details
   if (a.quellen && a.quellen.length) {
     var previewQuellen = a.quellen.slice(0, 3);
-    html += '<div style="margin-top:14px;font-size:11px;color:#8B5CF6;font-style:italic;line-height:1.6;">';
+    html += '<div style="margin-top:14px;font-size:11px;color:#6366F1;font-style:italic;line-height:1.6;">';
     html += '📖 ';
     previewQuellen.forEach(function(q, i) {
       html += '[' + (i + 1) + '] ' + q + (i < previewQuellen.length - 1 ? ' · ' : '');
@@ -12497,7 +12497,7 @@ function renderWikiLink(artikelId) {
   if (typeof WIKI_ARTIKEL === 'undefined') return '';
   var a = WIKI_ARTIKEL.find(function(x) { return x.id === artikelId; });
   if (!a) return '';
-  return '<span onclick="openWikiArtikel(\'' + artikelId + '\')" style="cursor:pointer;font-size:11px;color:#3B82F6;font-weight:500;display:inline-flex;align-items:center;gap:3px;">📚 ' + a.titel + '</span>';
+  return '<span onclick="openWikiArtikel(\'' + artikelId + '\')" style="cursor:pointer;font-size:11px;color:#2563EB;font-weight:500;display:inline-flex;align-items:center;gap:3px;">📚 ' + a.titel + '</span>';
 }
 
 function renderArbeitsblattChipsFromThemenIds(themenIds) {
@@ -12551,15 +12551,15 @@ function renderWikiTeaserWidget() {
   html += '<span>📚</span><div class="card-title">Wiki-Artikel des Tages</div>';
   html += '</div>';
   html += '<div class="card-body" style="padding:14px;">';
-  html += '<div onclick="openWikiArtikel(\'' + artikel.id + '\')" style="cursor:pointer;padding:14px;border-radius:10px;background:' + (artikel.farbe || '#3B82F6') + '10;border:1px solid ' + (artikel.farbe || '#3B82F6') + '25;transition:transform 0.15s;">';
+  html += '<div onclick="openWikiArtikel(\'' + artikel.id + '\')" style="cursor:pointer;padding:14px;border-radius:10px;background:' + (artikel.farbe || '#2563EB') + '10;border:1px solid ' + (artikel.farbe || '#2563EB') + '25;transition:transform 0.15s;">';
   html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">';
   html += '<span style="font-size:28px;">' + (artikel.icon || '📖') + '</span>';
   html += '<div>';
-  html += '<div style="font-weight:700;font-size:14px;color:' + (artikel.farbe || '#1E40AF') + ';">' + artikel.titel + '</div>';
+  html += '<div style="font-weight:700;font-size:14px;color:' + (artikel.farbe || '#1D4ED8') + ';">' + artikel.titel + '</div>';
   if (kat) html += '<div style="font-size:11px;color:#6B7280;">' + kat.icon + ' ' + kat.titel + '</div>';
   html += '</div></div>';
   html += '<div style="font-size:12px;color:#374151;line-height:1.5;">' + (artikel.definition || '').substring(0, 180) + '...</div>';
-  html += '<div style="margin-top:8px;font-size:11px;color:#3B82F6;font-weight:600;">📚 Artikel lesen →</div>';
+  html += '<div style="margin-top:8px;font-size:11px;color:#2563EB;font-weight:600;">📚 Artikel lesen →</div>';
   html += '</div>';
   html += '<div style="text-align:center;margin-top:10px;"><button class="btn btn-sm" onclick="toggleWikiPanel()" style="font-size:11px;padding:4px 14px;background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;border-radius:6px;cursor:pointer;">Alle ' + WIKI_ARTIKEL.length + ' Wiki-Artikel anzeigen</button></div>';
   html += '</div></div>';
@@ -12640,7 +12640,7 @@ function renderVerlaufTracker() {
       const erster = werte[0];
       const trend = letzter - erster;
       const trendIcon = trend > 0 ? '↑' : trend < 0 ? '↓' : '→';
-      const trendColor = trend > 0 ? '#22C55E' : trend < 0 ? '#EF4444' : '#6B7280';
+      const trendColor = trend > 0 ? '#10B981' : trend < 0 ? '#EF4444' : '#6B7280';
 
       html += `<div class="verlauf-trend-row">
         <div class="verlauf-trend-label">${item.icon} ${item.label}</div>
@@ -12662,7 +12662,7 @@ function renderVerlaufTracker() {
         <div class="verlauf-historie-werte">
           ${VERLAUF_ITEMS.map(item => {
             const w = v.werte[item.id] || 0;
-            const farbe = w >= 7 ? '#22C55E' : w >= 4 ? '#F59E0B' : '#EF4444';
+            const farbe = w >= 7 ? '#10B981' : w >= 4 ? '#F59E0B' : '#EF4444';
             return `<span class="verlauf-historie-chip" style="background:${farbe}15;color:${farbe};border:1px solid ${farbe}30;">${item.icon} ${w}</span>`;
           }).join('')}
         </div>
@@ -12758,7 +12758,7 @@ function renderVerlaufWidget() {
     const prev = vorLetzter.werte[item.id] || 5;
     const diff = w - prev;
     const trendIcon = diff > 0 ? '↑' : diff < 0 ? '↓' : '→';
-    const trendColor = diff > 0 ? '#22C55E' : diff < 0 ? '#EF4444' : '#6B7280';
+    const trendColor = diff > 0 ? '#10B981' : diff < 0 ? '#EF4444' : '#6B7280';
     html += `<span style="font-size:11px;padding:3px 8px;border-radius:10px;background:${trendColor}10;color:${trendColor};border:1px solid ${trendColor}25;">${item.icon} ${w}/10 ${trendIcon}</span>`;
   });
   html += '</div>';
@@ -13008,8 +13008,8 @@ function renderKontaktlog() {
 
   // Engagement-Score berechnen
   const engagement = calculateEngagementScore(sid);
-  const engFarben = { gruen: '#22C55E', gelb: '#F59E0B', rot: '#EF4444' };
-  const engBg = { gruen: '#F0FDF4', gelb: '#FFFBEB', rot: '#FEF2F2' };
+  const engFarben = { gruen: '#10B981', gelb: '#F59E0B', rot: '#EF4444' };
+  const engBg = { gruen: '#ECFDF5', gelb: '#FFFBEB', rot: '#FEF2F2' };
 
   let html = '<div class="section-header" style="margin-bottom:18px;">';
   html += '<h3 style="margin:0;font-size:18px;">📞 Kontaktlog — Bezugspersonen</h3>';
@@ -13086,7 +13086,7 @@ function renderKontaktlog() {
         </div>
         <div class="kontakt-item-body">
           <div style="font-size:12px;color:#374151;">${escapeHtml(k.inhalt)}</div>
-          ${k.vereinbarungen ? `<div style="font-size:11px;color:#0369A1;margin-top:4px;">📝 ${escapeHtml(k.vereinbarungen)}</div>` : ''}
+          ${k.vereinbarungen ? `<div style="font-size:11px;color:#1D4ED8;margin-top:4px;">📝 ${escapeHtml(k.vereinbarungen)}</div>` : ''}
           ${k.nachfassDatum ? `<div style="font-size:10px;color:#92400E;margin-top:2px;">⏰ Nachfassen: ${formatDatum(k.nachfassDatum)}</div>` : ''}
         </div>
       </div>`;
@@ -13231,7 +13231,7 @@ function renderKontaktNachfassWidget() {
 
   // Engagement-Badge immer anzeigen
   const engagement = calculateEngagementScore(sid);
-  const engFarben = { gruen: '#22C55E', gelb: '#F59E0B', rot: '#EF4444' };
+  const engFarben = { gruen: '#10B981', gelb: '#F59E0B', rot: '#EF4444' };
   const engIcons = { gruen: '🟢', gelb: '🟡', rot: '🔴' };
 
   let html = `<div class="card" style="margin-bottom:12px;border-left:4px solid ${engFarben[engagement.stufe]};">`;

@@ -2,6 +2,61 @@
 // Pathways — Therapeutic Case Management
 // ============================================================
 
+// ============================================================
+// GLOBAL ERROR HANDLER
+// ============================================================
+window.onerror = function(msg, url, line, col, error) {
+  console.error('Global error:', { msg, url, line, col, error });
+  const container = document.getElementById('toast-container');
+  if (container) {
+    const toast = document.createElement('div');
+    toast.className = 'toast error';
+    toast.setAttribute('role', 'alert');
+    toast.textContent = 'Ein Fehler ist aufgetreten. Bitte lade die Seite neu.';
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
+  }
+  return false;
+};
+
+window.addEventListener('unhandledrejection', function(event) {
+  console.error('Unhandled promise rejection:', event.reason);
+});
+
+// ============================================================
+// SANITIZATION — DOMPurify wrapper with fallback
+// ============================================================
+function sanitize(html) {
+  if (typeof DOMPurify !== 'undefined') {
+    return DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'br', 'p', 'span', 'div', 'ul', 'ol', 'li',
+                      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'img', 'table', 'thead',
+                      'tbody', 'tr', 'th', 'td', 'blockquote', 'code', 'pre', 'hr', 'small',
+                      'sub', 'sup', 'mark', 'details', 'summary', 'svg', 'path', 'circle',
+                      'line', 'rect', 'polygon', 'polyline', 'g', 'defs', 'use', 'text',
+                      'tspan', 'clipPath', 'input', 'label', 'select', 'option', 'textarea',
+                      'button', 'canvas', 'section', 'header', 'footer', 'nav', 'article'],
+      ALLOWED_ATTR: ['class', 'style', 'id', 'href', 'target', 'src', 'alt', 'title',
+                      'width', 'height', 'viewBox', 'fill', 'stroke', 'stroke-width',
+                      'stroke-linecap', 'stroke-linejoin', 'd', 'cx', 'cy', 'r', 'x', 'y',
+                      'x1', 'y1', 'x2', 'y2', 'points', 'opacity', 'transform',
+                      'xmlns', 'role', 'aria-label', 'aria-hidden', 'tabindex', 'for',
+                      'type', 'name', 'value', 'placeholder', 'checked', 'disabled',
+                      'data-id', 'data-val', 'data-phase', 'data-domain', 'data-idx',
+                      'data-thema', 'data-schritt', 'data-kat', 'data-toggle',
+                      'colspan', 'rowspan', 'min', 'max', 'step', 'rows', 'cols',
+                      'readonly', 'multiple', 'selected', 'required', 'pattern',
+                      'clip-path', 'clip-rule', 'fill-rule', 'font-size', 'text-anchor',
+                      'dominant-baseline', 'data-action', 'data-nr', 'data-sitzung'],
+      ADD_ATTR: ['onclick', 'onchange', 'oninput', 'onkeydown', 'onkeyup'],
+    });
+  }
+  // Fallback: basic escaping of script tags
+  return (html || '').replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                      .replace(/javascript:/gi, '')
+                      .replace(/on(?:error|load|click|mouse|focus|blur|key|submit|reset|change|input|select|drag|drop|copy|paste|cut)\s*=/gi, 'data-removed=');
+}
+
 // ---- State ----
 const APP = {
   currentView: 'home',
@@ -116,7 +171,18 @@ function showConfirm(text, onJa, onNein) {
 }
 
 // ---- Init ----
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // PIN Lock check
+  const pinIsSetup = await PinLock.isSetup();
+  if (pinIsSetup && !PinLock.isSessionValid()) {
+    showPinLockScreen();
+    return; // Don't init app until unlocked
+  }
+
+  initApp();
+});
+
+async function initApp() {
   migrateRoadmapsTo7Phasen();
   renderSidebar();
   showView('home');
@@ -144,7 +210,150 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Backup-Recovery prüfen (verzögert, damit showConfirm verfügbar)
   setTimeout(checkAutoBackupRecovery, 1000);
-});
+
+  // Register Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register('./sw.js');
+    } catch (e) {
+      console.warn('SW registration failed:', e);
+    }
+  }
+
+  // Accessibility: add skip-to-content link
+  const skipLink = document.createElement('a');
+  skipLink.href = '#main';
+  skipLink.className = 'skip-to-content';
+  skipLink.textContent = 'Zum Hauptinhalt springen';
+  document.body.prepend(skipLink);
+
+  // Accessibility: keyboard navigation for nav items
+  document.querySelectorAll('.nav-item, .sidebar-phase-item').forEach(el => {
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
+
+  // Accessibility: modal focus trap
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const modals = document.querySelectorAll('.modal-overlay, .wiki-panel.visible');
+      modals.forEach(m => m.remove ? m.remove() : m.classList.remove('visible'));
+    }
+  });
+}
+
+// ---- PIN Lock Screen ----
+function showPinLockScreen() {
+  document.getElementById('sidebar').style.display = 'none';
+  document.getElementById('main').style.display = 'none';
+
+  const lock = document.createElement('div');
+  lock.id = 'pin-lock-screen';
+  lock.setAttribute('role', 'dialog');
+  lock.setAttribute('aria-label', 'PIN-Eingabe');
+  lock.innerHTML = sanitize(`
+    <div class="pin-lock-container">
+      <div class="pin-lock-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.5">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          <circle cx="12" cy="16" r="1"/>
+        </svg>
+      </div>
+      <h2 class="pin-lock-title">Pathways</h2>
+      <p class="pin-lock-subtitle">PIN eingeben um fortzufahren</p>
+      <div class="pin-lock-input-wrap">
+        <input type="password" id="pin-input" class="pin-lock-input" maxlength="8"
+               placeholder="PIN" autocomplete="off" inputmode="numeric"
+               aria-label="PIN eingeben">
+      </div>
+      <div id="pin-error" class="pin-lock-error" role="alert"></div>
+      <button class="btn btn-primary pin-lock-btn" id="pin-submit-btn">Entsperren</button>
+    </div>
+  `);
+  document.body.appendChild(lock);
+
+  const input = document.getElementById('pin-input');
+  const errorEl = document.getElementById('pin-error');
+  const submitBtn = document.getElementById('pin-submit-btn');
+
+  setTimeout(() => input.focus(), 100);
+
+  async function tryUnlock() {
+    const pin = input.value.trim();
+    if (!pin) return;
+    const ok = await PinLock.unlock(pin);
+    if (ok) {
+      lock.remove();
+      document.getElementById('sidebar').style.display = '';
+      document.getElementById('main').style.display = '';
+      initApp();
+    } else {
+      errorEl.textContent = 'Falscher PIN. Bitte erneut versuchen.';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  submitBtn.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+}
+
+// ---- PIN Setup / Change (called from settings) ----
+function openPinSetup() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-label', 'PIN einrichten');
+  overlay.innerHTML = sanitize(`
+    <div style="background:#fff;border-radius:12px;padding:28px 32px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <h3 style="margin:0 0 8px;font-size:16px;font-weight:700;color:#111827;">PIN-Schutz einrichten</h3>
+      <p style="font-size:13px;color:#6B7280;margin:0 0 16px;">Schütze deine Daten mit einem PIN-Code (4-8 Ziffern).</p>
+      <input type="password" id="pin-setup-input" placeholder="Neuer PIN" maxlength="8"
+             inputmode="numeric" autocomplete="off"
+             style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;margin-bottom:10px;box-sizing:border-box;">
+      <input type="password" id="pin-setup-confirm" placeholder="PIN bestätigen" maxlength="8"
+             inputmode="numeric" autocomplete="off"
+             style="width:100%;padding:10px 14px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;margin-bottom:10px;box-sizing:border-box;">
+      <div id="pin-setup-error" style="color:#EF4444;font-size:12px;min-height:18px;margin-bottom:8px;" role="alert"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button class="btn btn-secondary" id="pin-setup-cancel" style="padding:8px 20px;">Abbrechen</button>
+        <button class="btn btn-primary" id="pin-setup-save" style="padding:8px 20px;">Speichern</button>
+      </div>
+    </div>
+  `);
+  document.body.appendChild(overlay);
+
+  const pinInput = overlay.querySelector('#pin-setup-input');
+  const confirmInput = overlay.querySelector('#pin-setup-confirm');
+  const errorEl = overlay.querySelector('#pin-setup-error');
+
+  setTimeout(() => pinInput.focus(), 100);
+
+  overlay.querySelector('#pin-setup-cancel').onclick = () => overlay.remove();
+  overlay.querySelector('#pin-setup-save').onclick = async () => {
+    const pin = pinInput.value.trim();
+    const confirm = confirmInput.value.trim();
+    if (pin.length < 4) { errorEl.textContent = 'PIN muss mindestens 4 Zeichen lang sein.'; return; }
+    if (pin !== confirm) { errorEl.textContent = 'PINs stimmen nicht überein.'; return; }
+    await PinLock.setPin(pin);
+    await SecureStorage.init(pin);
+    overlay.remove();
+    showToast('PIN-Schutz aktiviert', 'success');
+  };
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+}
+
+function removePinLock() {
+  showConfirm('PIN-Schutz wirklich entfernen? Daten werden nicht mehr verschlüsselt.', () => {
+    PinLock.removePin();
+    showToast('PIN-Schutz entfernt', 'success');
+  });
+}
 
 // ---- Dark Mode Toggle ----
 function toggleDarkMode() {
@@ -9357,14 +9566,7 @@ function druckeBericht() {
 // FÖRDERPLAN / ROADMAP MODULE
 // ============================================================
 
-// ── Helfer: Thema-Titel und Kategorie nachschlagen ──
-function getThemaTitel(themaId) {
-  for (const kat of THEMEN_KATEGORIEN) {
-    const t = kat.themen.find(th => th.id === themaId);
-    if (t) return t.titel;
-  }
-  return themaId;
-}
+// ── Helfer: Thema-Kategorie nachschlagen ──
 function getThemaKat(themaId) {
   for (const kat of THEMEN_KATEGORIEN) {
     if (kat.themen.find(th => th.id === themaId)) return kat;
@@ -13574,3 +13776,218 @@ function getSessionDatesForKalender() {
     }, 3000);
   }
 })();
+
+// ============================================================
+// CSV EXPORT
+// ============================================================
+function exportCSV() {
+  const schueler = DB.getSchueler();
+  if (!schueler.length) {
+    showToast('Keine Klienten zum Exportieren', 'error');
+    return;
+  }
+
+  const headers = ['ID', 'Vorname', 'Nachname', 'Geburtsdatum', 'Klasse', 'Eintrittsdatum', 'Risiko', 'Erstellt', 'Geändert'];
+  const rows = schueler.map(s => [
+    s.id,
+    s.vorname || '',
+    s.nachname || '',
+    s.geburtsdatum || '',
+    s.klasse || '',
+    s.eintrittsdatum || '',
+    s.risiko || '',
+    s.erstellt || '',
+    s.geaendert || '',
+  ]);
+
+  const csvContent = [
+    headers.join(';'),
+    ...rows.map(row => row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(';'))
+  ].join('\n');
+
+  const BOM = '\uFEFF'; // UTF-8 BOM for Excel compatibility
+  const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pathways-klienten-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exportiert', 'success');
+}
+
+function exportNotizenCSV(schuelerId) {
+  const notizen = DB.getNotizen(schuelerId);
+  if (!notizen.length) {
+    showToast('Keine Notizen zum Exportieren', 'error');
+    return;
+  }
+
+  const schueler = DB.getSchuelerById(schuelerId);
+  const name = schueler ? (schueler.vorname + ' ' + schueler.nachname).trim() : 'Unbekannt';
+
+  const headers = ['Datum', 'Kategorie', 'Thema', 'Inhalt', 'SOAP-S', 'SOAP-O', 'SOAP-A', 'SOAP-P'];
+  const rows = notizen.map(n => [
+    n.datum || '',
+    n.kategorie || '',
+    n.themaId || '',
+    (n.inhalt || '').replace(/\n/g, ' '),
+    n.soap ? (n.soap.s || '') : '',
+    n.soap ? (n.soap.o || '') : '',
+    n.soap ? (n.soap.a || '') : '',
+    n.soap ? (n.soap.p || '') : '',
+  ]);
+
+  const csvContent = [
+    headers.join(';'),
+    ...rows.map(row => row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(';'))
+  ].join('\n');
+
+  const BOM = '\uFEFF';
+  const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pathways-notizen-' + name.replace(/\s+/g, '-') + '-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Notizen als CSV exportiert', 'success');
+}
+
+// ============================================================
+// AUDIT LOG
+// ============================================================
+const AuditLog = {
+  KEY: 'pathways_audit_log',
+  MAX_ENTRIES: 500,
+
+  log(action, details) {
+    try {
+      const entries = JSON.parse(localStorage.getItem(this.KEY) || '[]');
+      entries.push({
+        timestamp: new Date().toISOString(),
+        action,
+        details: details || '',
+      });
+      // Keep only last MAX_ENTRIES
+      if (entries.length > this.MAX_ENTRIES) {
+        entries.splice(0, entries.length - this.MAX_ENTRIES);
+      }
+      localStorage.setItem(this.KEY, JSON.stringify(entries));
+    } catch (e) {
+      console.warn('Audit log write failed:', e);
+    }
+  },
+
+  getEntries(limit) {
+    try {
+      const entries = JSON.parse(localStorage.getItem(this.KEY) || '[]');
+      return limit ? entries.slice(-limit) : entries;
+    } catch { return []; }
+  },
+
+  clear() {
+    localStorage.removeItem(this.KEY);
+  },
+};
+
+// ============================================================
+// ACCESSIBILITY HELPERS
+// ============================================================
+function announceToScreenReader(message) {
+  const el = document.getElementById('toast-container');
+  if (el) {
+    el.setAttribute('aria-label', message);
+  }
+}
+
+function trapFocus(element) {
+  const focusableEls = element.querySelectorAll(
+    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+  );
+  const firstEl = focusableEls[0];
+  const lastEl = focusableEls[focusableEls.length - 1];
+
+  element.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === firstEl) { e.preventDefault(); lastEl.focus(); }
+    } else {
+      if (document.activeElement === lastEl) { e.preventDefault(); firstEl.focus(); }
+    }
+  });
+
+  if (firstEl) firstEl.focus();
+}
+
+// ============================================================
+// DATA RETENTION / GDPR
+// ============================================================
+function exportPersonalData(schuelerId) {
+  const schueler = DB.getSchuelerById(schuelerId);
+  if (!schueler) { showToast('Klient nicht gefunden', 'error'); return; }
+
+  const daten = {
+    _exportInfo: {
+      exportiert: new Date().toISOString(),
+      zweck: 'Datenauskunft gemäss Art. 15 DSGVO',
+    },
+    stammdaten: schueler,
+    notizen: DB.getNotizen(schuelerId),
+    termine: DB.getTermine(schuelerId),
+    screenings: DB.getScreenings(schuelerId),
+    wohlbefinden: DB.getWohlbefinden(schuelerId),
+    verlauf: DB.getVerlauf(schuelerId),
+    kontakte: DB.getKontakte(schuelerId),
+    risiko: DB.getRisiko(schuelerId),
+  };
+
+  const json = JSON.stringify(daten, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const name = ((schueler.vorname || '') + '-' + (schueler.nachname || '')).replace(/\s+/g, '-') || 'klient';
+  a.download = 'dsgvo-auskunft-' + name + '-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  AuditLog.log('dsgvo-export', 'Datenauskunft für ' + (schueler.vorname || '') + ' ' + (schueler.nachname || ''));
+  showToast('Personenbezogene Daten exportiert (DSGVO)', 'success');
+}
+
+function deletePersonalData(schuelerId) {
+  const schueler = DB.getSchuelerById(schuelerId);
+  if (!schueler) return;
+  const name = (schueler.vorname || '') + ' ' + (schueler.nachname || '');
+  showConfirm(
+    'Alle Daten von <strong>' + escapeHtml(name) + '</strong> unwiderruflich löschen?<br><br>' +
+    'Dies umfasst: Profil, Notizen, Termine, Screenings, Wohlbefinden-Daten, Verlauf, Kontakte und Risikobewertungen.<br><br>' +
+    '<strong>Diese Aktion kann nicht rückgängig gemacht werden.</strong>',
+    () => {
+      // Delete all associated data
+      const notizenAlle = JSON.parse(localStorage.getItem('cdse_notizen') || '[]').filter(n => n.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_notizen', JSON.stringify(notizenAlle));
+      const termineAlle = JSON.parse(localStorage.getItem('cdse_termine') || '[]').filter(t => t.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_termine', JSON.stringify(termineAlle));
+      const screeningsAlle = JSON.parse(localStorage.getItem('cdse_screenings') || '[]').filter(s => s.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_screenings', JSON.stringify(screeningsAlle));
+      const roadmapsAlle = JSON.parse(localStorage.getItem('cdse_roadmaps') || '[]').filter(r => r.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_roadmaps', JSON.stringify(roadmapsAlle));
+      const wbAlle = JSON.parse(localStorage.getItem('cdse_wohlbefinden') || '[]').filter(w => w.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_wohlbefinden', JSON.stringify(wbAlle));
+      const ffAlle = JSON.parse(localStorage.getItem('cdse_fallformulierungen') || '[]').filter(f => f.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_fallformulierungen', JSON.stringify(ffAlle));
+      const vlAlle = JSON.parse(localStorage.getItem('cdse_verlauf') || '[]').filter(v => v.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_verlauf', JSON.stringify(vlAlle));
+      const ktAlle = JSON.parse(localStorage.getItem('cdse_kontakte') || '[]').filter(k => k.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_kontakte', JSON.stringify(ktAlle));
+      const rsAlle = JSON.parse(localStorage.getItem('cdse_risiko') || '[]').filter(r => r.schuelerId !== schuelerId);
+      localStorage.setItem('cdse_risiko', JSON.stringify(rsAlle));
+
+      DB.deleteSchueler(schuelerId);
+      AuditLog.log('dsgvo-loeschung', 'Vollständige Datenlöschung für ' + name);
+      showToast('Alle Daten gelöscht (Recht auf Löschung)', 'success');
+      showView('home');
+    }
+  );
+}

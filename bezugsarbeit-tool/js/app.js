@@ -3163,6 +3163,7 @@ function renderHypothesen(hypothesen) {
         </div>
         ${screeningBadges.length > 0 ? `<div class="hypothese-screening-scores" style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px;">${screeningBadges.join('')}</div>` : ''}
         ${textDaten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${textDaten.join(' · ')}</div>` : ''}
+        ${h.quelle ? `<div style="font-size:11px;color:#8B5CF6;margin-top:4px;line-height:1.4;font-style:italic;">📚 ${h.quelle}</div>` : ''}
         <details class="hypothese-details">
           <summary>Erklärung & Evidenz</summary>
           <div class="hypothese-details-body">
@@ -3183,8 +3184,14 @@ function renderHypothesen(hypothesen) {
                 const themenIds = wiki.themen_ids || [];
                 const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
                 const fkDatei = fkTid ? FACHKRAFT_MODULE_DATEIEN[fkTid] : null;
+                const abLinks = themenIds.flatMap(tid => {
+                  const abs = typeof ARBEITSBLÄTTER !== 'undefined' ? ARBEITSBLÄTTER[tid] : null;
+                  return abs ? abs : [];
+                });
+                const uniqueAb = [...new Map(abLinks.map(a => [a.datei, a])).values()];
                 return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
-                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '');
+                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '')
+                  + uniqueAb.map(ab => '<a href="arbeitsblatter/' + ab.datei + '" target="_blank" style="cursor:pointer;background:#FFF7ED;border:1px solid #FED7AA;color:#C2410C;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;">📝 ' + ab.titel + '</a>').join('');
               }).join('')}
               ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => '<span style="background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:6px;font-size:10px;font-family:monospace;">' + c + '</span>').join('') : ''}
             </div>
@@ -7974,12 +7981,23 @@ function renderFallformulierung() {
     { key: 'protective',     label: 'Protective',     farbe: '#22C55E', bg: '#F0FDF4', desc: 'Schutzfaktoren & Ressourcen' },
   ];
 
-  // Inline hypotheses
-  let hypothesenHtml = '';
+  // Hypothesen-Zusammenfassung (kompakt statt volle Inline-Liste)
+  let hypoSummaryHtml = '';
   try {
     const hypos = generateHypothesen(sid);
     if (hypos && hypos.length > 0) {
-      hypothesenHtml = render5PInlineHypothesen(hypos);
+      const top3 = hypos.slice(0, 3).map(h => {
+        const icon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
+        return `<span style="font-size:12px;">${icon} ${h.titel}</span>`;
+      }).join(' · ');
+      hypoSummaryHtml = `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;margin-top:12px;">
+          <span style="font-size:14px;">🧠</span>
+          <div style="flex:1;font-size:12px;color:#374151;">
+            <strong>${hypos.length} Hypothesen aktiv</strong> — ${top3}${hypos.length > 3 ? ` <span style="color:#9CA3AF;">+${hypos.length - 3} weitere</span>` : ''}
+          </div>
+          <button class="btn btn-sm btn-secondary" onclick="showProfilTab('hypothesen-tab')" style="font-size:11px;white-space:nowrap;">Alle anzeigen →</button>
+        </div>`;
     }
   } catch(e) { console.warn('Pathways:', e); }
 
@@ -8047,18 +8065,20 @@ function renderFallformulierung() {
       }).join('')}
     </div>
 
+    ${ff ? `
+    <div style="margin-top:12px;">
+      <div style="font-size:12px;font-weight:600;color:#6B7280;margin-bottom:4px;">💡 Zusammenfassende Hypothese</div>
+      <textarea class="fivep-hypothese-input" id="fivep-hypothese" rows="3"
+        style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:8px;padding:8px 12px;resize:vertical;"
+        placeholder="Zusammenfassende klinische Hypothese basierend auf den 5P-Faktoren…"
+        onchange="save5PHypothese(this.value)">${ff.hypothese || ''}</textarea>
+    </div>` : ''}
+
+    ${hypoSummaryHtml}
+
     <div style="margin-top:16px;">
-      ${renderCollapsible('hypo', '💡 Klinische Hypothese', `
-        <textarea class="fivep-hypothese-input" id="fivep-hypothese" rows="4"
-          placeholder="Zusammenfassende klinische Hypothese basierend auf den 5P-Faktoren…"
-          onchange="save5PHypothese(this.value)">${ff ? (ff.hypothese || '') : ''}</textarea>
-      `, !!(ff && ff.hypothese))}
-
       ${ff ? renderCollapsible('triage', '🚦 Handlungstriage', renderHandlungsTriage(ff, sid), ff.triageOpen || false) : ''}
-      ${ff ? renderCollapsible('muster', '📊 Muster-Analyse', render5PPatternAnalysis(ff)) : ''}
-      ${ff ? renderCollapsible('komorb', '⚡ Erkannte Muster', render5PKomorbidity(ff)) : ''}
-
-      ${hypothesenHtml ? renderCollapsible('hypos', '🧠 Klinische Hypothesen', hypothesenHtml) : ''}
+      ${ff ? renderCollapsible('muster', '📊 Muster & Analyse', render5PPatternAnalysis(ff) + render5PKomorbidity(ff)) : ''}
 
       ${renderCollapsible('radar', '📈 Radar-Visualisierung', `
         <div id="fivep-radar-container" style="max-width:400px;margin:0 auto;">

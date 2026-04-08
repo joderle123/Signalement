@@ -2815,7 +2815,7 @@ function renderAnamneseZusammenfassung(s) {
               <div class="anamnese-risiko-item">
                 <span class="anamnese-risiko-dot" style="background:${r.gewicht >= 3 ? '#DC2626' : r.gewicht >= 2 ? '#F59E0B' : '#6B7280'}"></span>
                 <span>${r.label}</span>
-                <span class="anamnese-risiko-evidenz" title="${r.evidenz}">📖</span>
+                <span style="font-size:10px;color:#8B5CF6;font-style:italic;margin-left:4px;">📖 ${r.evidenz}</span>
               </div>
             `).join('')}
           </div>
@@ -3184,14 +3184,9 @@ function renderHypothesen(hypothesen) {
                 const themenIds = wiki.themen_ids || [];
                 const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
                 const fkDatei = fkTid ? FACHKRAFT_MODULE_DATEIEN[fkTid] : null;
-                const abLinks = themenIds.flatMap(tid => {
-                  const abs = typeof ARBEITSBLÄTTER !== 'undefined' ? ARBEITSBLÄTTER[tid] : null;
-                  return abs ? abs : [];
-                });
-                const uniqueAb = [...new Map(abLinks.map(a => [a.datei, a])).values()];
                 return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
                   + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '')
-                  + uniqueAb.map(ab => '<a href="arbeitsblatter/' + ab.datei + '" target="_blank" style="cursor:pointer;background:#FFF7ED;border:1px solid #FED7AA;color:#C2410C;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;">📝 ' + ab.titel + '</a>').join('');
+                  + renderArbeitsblattChipsFromThemenIds(themenIds);
               }).join('')}
               ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => '<span style="background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:6px;font-size:10px;font-family:monospace;">' + c + '</span>').join('') : ''}
             </div>
@@ -10582,7 +10577,7 @@ function renderScreeningErgebnis(scr) {
         ${d.cutoffQuelle ? `<div style="font-size:10px;color:#9CA3AF;margin-top:2px;">Cutoff ≥${d.cutoff}: ${d.cutoffQuelle}</div>` : ''}
         <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
         ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#3B82F6;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#F0F9FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1E40AF;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
-        ${(typeof findWikiForScreeningDomain === 'function' && findWikiForScreeningDomain(d.id)) ? renderWikiLink(findWikiForScreeningDomain(d.id).id) : ''}
+        ${(() => { const _wiki = (typeof findWikiForScreeningDomain === 'function') ? findWikiForScreeningDomain(d.id) : null; return _wiki ? '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;align-items:center;">' + renderWikiLink(_wiki.id) + renderArbeitsblattChipsFromThemenIds(_wiki.themen_ids) + '</div>' : ''; })()}
       </div>`;
     }).join('') + '</div>'
     + '<div style="font-size:11px;color:#6B7280;padding:8px 12px;margin-top:8px;background:#F9FAFB;border-radius:6px;line-height:1.5;">ℹ️ <strong>Was bedeutet „auffällig"?</strong> Scores über dem Cutoff-Wert deuten auf erhöhte Belastung hin. Diese Bereiche sollten im Förderplan priorisiert und bei der 5P-Analyse als „Presenting" aufgenommen werden.</div>';
@@ -10654,6 +10649,16 @@ function renderScrNaechsteSchritte(scr) {
     }
   });
 
+  // Arbeitsblätter basierend auf flagged domains via Wiki
+  const relevanteThemenIds = [];
+  flagged.forEach(fId => {
+    const wiki = typeof findWikiForScreeningDomain === 'function' ? findWikiForScreeningDomain(fId) : null;
+    if (wiki && wiki.themen_ids) wiki.themen_ids.forEach(tid => {
+      if (relevanteThemenIds.indexOf(tid) === -1) relevanteThemenIds.push(tid);
+    });
+  });
+  const abChipsHtml = renderArbeitsblattChipsFromThemenIds(relevanteThemenIds);
+
   // Krise erkannt?
   const krisenDomains = flagged.filter(f => ['selbstverletzung', 'suizidalitaet', 'psychose'].includes(f));
 
@@ -10711,8 +10716,19 @@ function renderScrNaechsteSchritte(scr) {
             </div>
           </div>` : ''}
 
+          ${abChipsHtml ? `
           <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
-            <span class="scr-wizard-nr" style="background:#D97706;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${relevanteModule.length > 0 ? '4' : '3'}</span>
+            <span class="scr-wizard-nr" style="background:#C2410C;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${relevanteModule.length > 0 ? '4' : '3'}</span>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:13px;">Arbeitsblätter für die Sitzung</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">
+                ${abChipsHtml}
+              </div>
+            </div>
+          </div>` : ''}
+
+          <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
+            <span class="scr-wizard-nr" style="background:#D97706;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${(relevanteModule.length > 0 ? 1 : 0) + (abChipsHtml ? 1 : 0) + 3}</span>
             <div style="flex:1;">
               <div style="font-weight:600;font-size:13px;">Förderplan erstellen</div>
               <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Screening-basierte Roadmap mit priorisierten Themen und Sitzungsvorschlägen</div>
@@ -11616,7 +11632,7 @@ function renderVerhaltensEintrag(e, farbe) {
   if (typeof findWikiForVerhalten === 'function') {
     var wikiArt = findWikiForVerhalten(e.id);
     if (wikiArt) {
-      html += '<div style="margin-top:8px;">' + renderWikiLink(wikiArt.id) + '</div>';
+      html += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">' + renderWikiLink(wikiArt.id) + renderArbeitsblattChipsFromThemenIds(wikiArt.themen_ids) + '</div>';
     }
   }
 
@@ -12051,7 +12067,7 @@ function openFallbeispiel(id) {
   html += '</div>';
 
   // Screening-Ergebnis
-  html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🔍 Screening-Ergebnis</summary>';
+  html += '<details open style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🔍 Screening-Ergebnis</summary>';
   html += '<div style="padding:8px 0;">';
   f.screening_ergebnis.auffaellig.forEach(function(s) {
     html += '<div style="background:#FEF2F2;border-left:3px solid #EF4444;padding:8px 10px;margin-bottom:6px;border-radius:0 6px 6px 0;">';
@@ -12062,7 +12078,7 @@ function openFallbeispiel(id) {
   html += '</div></details>';
 
   // 5P-Formulierung
-  html += '<details style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🧩 5P-Fallformulierung</summary>';
+  html += '<details open style="margin-bottom:12px;"><summary style="font-weight:600;font-size:13px;cursor:pointer;padding:8px 0;">🧩 5P-Fallformulierung</summary>';
   html += '<div style="padding:8px 0;">';
   var pLabels = { presenting: '🔴 Presenting', predisposing: '🟡 Predisposing', precipitating: '🟠 Precipitating', perpetuating: '🔵 Perpetuating', protective: '🟢 Protective' };
   ['presenting', 'predisposing', 'precipitating', 'perpetuating', 'protective'].forEach(function(key) {
@@ -12301,7 +12317,7 @@ function openWikiArtikel(id) {
 
   // Ursachen
   if (a.ursachen && a.ursachen.length) {
-    html += '<details style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">🔍 Ursachen & Risikofaktoren</summary>';
+    html += '<details open style="margin-bottom:14px;"><summary style="font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;">🔍 Ursachen & Risikofaktoren</summary>';
     html += '<div style="padding:8px 0;">';
     a.ursachen.forEach(function(u) {
       html += '<div style="background:#F9FAFB;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-left:3px solid ' + a.farbe + ';">';
@@ -12388,14 +12404,23 @@ function openWikiArtikel(id) {
     html += '</div></div>';
   }
 
-  // Quellen
+  // Quellen — erste 3 sichtbar, Rest in Details
   if (a.quellen && a.quellen.length) {
-    html += '<details style="margin-top:14px;"><summary style="font-size:11px;color:#9CA3AF;cursor:pointer;">📖 Quellen (' + a.quellen.length + ')</summary>';
-    html += '<div style="padding:6px 0;">';
-    a.quellen.forEach(function(q, i) {
-      html += '<div style="font-size:11px;color:#9CA3AF;padding:2px 0;">[' + (i + 1) + '] ' + q + '</div>';
+    var previewQuellen = a.quellen.slice(0, 3);
+    html += '<div style="margin-top:14px;font-size:11px;color:#8B5CF6;font-style:italic;line-height:1.6;">';
+    html += '📖 ';
+    previewQuellen.forEach(function(q, i) {
+      html += '[' + (i + 1) + '] ' + q + (i < previewQuellen.length - 1 ? ' · ' : '');
     });
-    html += '</div></details>';
+    html += '</div>';
+    if (a.quellen.length > 3) {
+      html += '<details style="margin-top:4px;"><summary style="font-size:10px;color:#9CA3AF;cursor:pointer;">alle ' + a.quellen.length + ' Quellen anzeigen</summary>';
+      html += '<div style="padding:6px 0;">';
+      a.quellen.forEach(function(q, i) {
+        html += '<div style="font-size:11px;color:#9CA3AF;padding:2px 0;">[' + (i + 1) + '] ' + q + '</div>';
+      });
+      html += '</div></details>';
+    }
   }
 
   html += '</div></div></div>';
@@ -12473,6 +12498,22 @@ function renderWikiLink(artikelId) {
   var a = WIKI_ARTIKEL.find(function(x) { return x.id === artikelId; });
   if (!a) return '';
   return '<span onclick="openWikiArtikel(\'' + artikelId + '\')" style="cursor:pointer;font-size:11px;color:#3B82F6;font-weight:500;display:inline-flex;align-items:center;gap:3px;">📚 ' + a.titel + '</span>';
+}
+
+function renderArbeitsblattChipsFromThemenIds(themenIds) {
+  if (!themenIds || !themenIds.length || typeof ARBEITSBLÄTTER === 'undefined') return '';
+  var seen = {};
+  var chips = [];
+  themenIds.forEach(function(tid) {
+    var abs = ARBEITSBLÄTTER[tid];
+    if (abs) abs.forEach(function(ab) {
+      if (!seen[ab.datei]) {
+        seen[ab.datei] = true;
+        chips.push('<a href="arbeitsblatter/' + ab.datei + '" target="_blank" style="cursor:pointer;background:#FFF7ED;border:1px solid #FED7AA;color:#C2410C;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;">📝 ' + ab.titel + '</a>');
+      }
+    });
+  });
+  return chips.join('');
 }
 
 function findWikiForScreeningDomain(domainId) {

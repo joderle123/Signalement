@@ -1,13 +1,21 @@
-const CACHE_NAME = 'pathways-v1';
+const CACHE_NAME = 'pathways-v2';
 
 const PRECACHE_ASSETS = [
   'index.html',
   'css/style.css',
+  'css/arbeitsblatt.css',
+  'css/fachkraft-modul.css',
+  'css/therapiemodul.css',
+  'fachkraft-modul.css',
+  'therapiemodul.css',
   'js/app.js',
   'js/data.js',
   'js/icons.js',
   'js/phase-ressourcen.js',
+  'icons/icon-192.svg',
+  'icons/icon-512.svg',
   'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+  'https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 

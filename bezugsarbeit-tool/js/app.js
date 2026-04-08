@@ -3473,7 +3473,7 @@ function renderHypothesen(hypothesen) {
   if (!el) return;
 
   if (hypothesen.length === 0) {
-    el.innerHTML = '';
+    el.innerHTML = renderEmptyState('🔍', 'Keine Hypothesen', 'Hypothesen werden automatisch aus Anamnese-Daten und Screening-Ergebnissen generiert.');
     return;
   }
 
@@ -14035,8 +14035,10 @@ function getSessionDatesForKalender() {
 // CSV EXPORT
 // ============================================================
 function exportCSV() {
+  showLoading('CSV exportieren...');
   const schueler = DB.getSchueler();
   if (!schueler.length) {
+    hideLoading();
     showToast('Keine Klienten zum Exportieren', 'error');
     return;
   }
@@ -14067,6 +14069,7 @@ function exportCSV() {
   a.download = 'pathways-klienten-' + new Date().toISOString().split('T')[0] + '.csv';
   a.click();
   URL.revokeObjectURL(url);
+  hideLoading();
   showToast('CSV exportiert', 'success');
 }
 
@@ -14178,8 +14181,9 @@ function trapFocus(element) {
 // DATA RETENTION / GDPR
 // ============================================================
 function exportPersonalData(schuelerId) {
+  showLoading('Daten exportieren...');
   const schueler = DB.getSchuelerById(schuelerId);
-  if (!schueler) { showToast('Klient nicht gefunden', 'error'); return; }
+  if (!schueler) { hideLoading(); showToast('Klient nicht gefunden', 'error'); return; }
 
   const daten = {
     _exportInfo: {
@@ -14206,6 +14210,7 @@ function exportPersonalData(schuelerId) {
   a.click();
   URL.revokeObjectURL(url);
   AuditLog.log('dsgvo-export', 'Datenauskunft für ' + (schueler.vorname || '') + ' ' + (schueler.nachname || ''));
+  hideLoading();
   showToast('Personenbezogene Daten exportiert (DSGVO)', 'success');
 }
 
@@ -14782,4 +14787,45 @@ function renderHelp() {
   html += '</div>';
 
   container.innerHTML = html;
+}
+
+// ============================================================
+// UNSAVED CHANGES WARNING
+// ============================================================
+var _formDirty = false;
+
+function markFormDirty() { _formDirty = true; }
+function clearFormDirty() { _formDirty = false; }
+
+function guardUnsavedChanges(callback) {
+  if (_formDirty) {
+    showConfirm('Ungespeicherte Änderungen verwerfen?', () => {
+      _formDirty = false;
+      callback();
+    });
+  } else {
+    callback();
+  }
+}
+
+// Attach to SOAP form fields
+document.addEventListener('input', function(e) {
+  const soapFields = ['prot-subjektiv', 'prot-objektiv', 'prot-assessment', 'prot-plan'];
+  const medFields = ['med-name', 'med-dosierung', 'med-arzt', 'med-seit', 'med-nebenwirkungen'];
+  const diagnoseFields = ['diagnose-icd', 'diagnose-label', 'diagnose-am', 'diagnose-von'];
+  const allWatched = [...soapFields, ...medFields, ...diagnoseFields, 'kontakt-inhalt', 'kontakt-vereinbarungen'];
+  if (allWatched.includes(e.target.id)) {
+    _formDirty = true;
+  }
+});
+
+// ============================================================
+// EMPTY STATES HELPER
+// ============================================================
+function renderEmptyState(icon, title, text) {
+  return '<div class="empty-state">'
+    + '<div class="empty-state-icon">' + icon + '</div>'
+    + '<div class="empty-state-title">' + escapeHtml(title) + '</div>'
+    + '<div class="empty-state-text">' + escapeHtml(text) + '</div>'
+    + '</div>';
 }

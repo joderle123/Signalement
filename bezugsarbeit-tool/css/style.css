@@ -7788,6 +7788,62 @@ button:focus-visible,
   font-size: 11px; font-family: monospace; border: 1px solid var(--border);
 }
 
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+@media print {
+  /* Hide non-printable elements */
+  #sidebar, .sidebar, .wiki-fab, .help-fab, .wiki-panel, .help-panel,
+  .wiki-overlay, .help-overlay, .topbar-actions, .profil-actions,
+  .btn, button, .loading-overlay, #toast-container,
+  .profil-tabs-sub, .sidebar-phase-nav { display: none !important; }
+
+  /* Main content full width */
+  main, .main-content { margin-left: 0 !important; width: 100% !important; }
+  .view { padding: 0 !important; }
+  .content { overflow: visible !important; }
+
+  /* Cards print cleanly */
+  .card { box-shadow: none !important; border: 1px solid #D1D5DB !important; page-break-inside: avoid; }
+  .card-header { background: #F9FAFB !important; }
+
+  /* Typography */
+  body { font-size: 12px !important; color: #000 !important; background: #fff !important; }
+  h1, h2, h3 { color: #000 !important; }
+
+  /* Charts get reasonable size */
+  canvas { max-height: 200px !important; }
+
+  /* Page breaks */
+  .med-card, .diagnose-card, .followup-card { page-break-inside: avoid; }
+  .profil-header { page-break-after: avoid; }
+
+  /* Profil header compact for print */
+  .profil-avatar { width: 48px !important; height: 48px !important; font-size: 16px !important; }
+  .profil-name { font-size: 18px !important; }
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  text-align: center; padding: 32px 16px; color: var(--text-muted);
+}
+.empty-state-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.6; }
+.empty-state-title { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+.empty-state-text { font-size: 12px; line-height: 1.5; }
+
+/* ============================================================
+   FORM VALIDATION
+   ============================================================ */
+input:required:invalid:not(:placeholder-shown),
+textarea:required:invalid:not(:placeholder-shown) {
+  border-color: var(--danger, #EF4444);
+}
+.form-error {
+  font-size: 11px; color: var(--danger, #EF4444); margin-top: 2px;
+}
+
 /* High contrast mode support */
 @media (forced-colors: active) {
   .btn-primary {

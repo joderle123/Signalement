@@ -127,6 +127,7 @@
           <div class="profil-meta-item">🎂 <span id="profil-alter"></span></div>
           <div class="profil-meta-item">📅 <span id="profil-seit"></span></div>
           <div id="profil-risiko" class="risiko-indicator niedrig"></div>
+          <span id="profil-badges-container" style="display:inline-flex;gap:4px;flex-wrap:wrap;align-items:center;"></span>
           <select id="profil-status" onchange="updateSchuelerStatus(this.value)" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid #D1D5DB;background:#fff;cursor:pointer;margin-left:4px;">
             <option value="aktiv">Aktiv</option>
             <option value="pausiert">Pausiert</option>
@@ -165,6 +166,12 @@
 
         <!-- Kontakt-Nachfass-Erinnerungen -->
         <div id="kontakt-nachfass-widget"></div>
+
+        <!-- Follow-Up Erinnerungen -->
+        <div id="followup-reminders-widget"></div>
+
+        <!-- Medikation Widget -->
+        <div id="medikation-dashboard-widget"></div>
 
         <!-- Verlaufs-Trend -->
         <div id="verlauf-trend-widget"></div>
@@ -708,6 +715,7 @@
                 <input type="text" id="geno-notiz" placeholder="Notiz (optional)" style="font-size:13px;">
               </div>
               <button class="btn btn-primary btn-sm" onclick="addGenogrammPerson()">+ Person hinzufügen</button>
+              <button class="btn btn-secondary btn-sm" onclick="druckeGenogramm()" style="margin-left:6px;">🖨️ Drucken</button>
             </div>
           </div>
         </div>
@@ -721,6 +729,8 @@
         <div id="hypothesen-zeitstrahl"></div>
         <div id="screening-verlauf-container"></div>
         <div id="anamnese-container"></div>
+        <div id="medikation-container"></div>
+        <div id="diagnosen-container"></div>
         <details class="anamnese-notizen-details" style="margin-top:16px;">
           <summary style="cursor:pointer;font-size:13px;color:var(--text-muted);">📝 Zusätzliche Notizen (optional)</summary>
           <div class="card" style="margin-top:8px;">
@@ -965,6 +975,17 @@
   <div class="wiki-panel-body" id="wiki-container"></div>
 </div>
 <div class="wiki-overlay" id="wiki-overlay" onclick="toggleWikiPanel()"></div>
+
+<!-- Help Panel -->
+<button class="help-fab" id="help-fab" onclick="toggleHelpPanel()" title="Kontexthilfe">?</button>
+<div class="help-panel" id="help-panel">
+  <div class="help-panel-header">
+    <h3>Hilfe</h3>
+    <button class="help-panel-close" onclick="toggleHelpPanel()">&times;</button>
+  </div>
+  <div class="help-panel-body" id="help-container"></div>
+</div>
+<div class="help-overlay" id="help-overlay" onclick="toggleHelpPanel()"></div>
 
 <!-- Toast Container -->
 <div id="toast-container" role="status" aria-live="polite"></div>

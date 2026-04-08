@@ -759,6 +759,9 @@ function renderProfil(schuelerId) {
   // Profil-Vollständigkeit
   renderProfilCompleteness(s);
 
+  // Diagnosen + Medikamenten-Badges im Header
+  renderProfilBadges(s);
+
   // Aktiven Tab rendern (über Phasen-Navigation)
   const phase = getPhaseForTab(APP.currentProfilTab);
   showPhase(phase, APP.currentProfilTab);
@@ -2794,8 +2797,250 @@ function renderInfo() {
   renderHypothesenZeitstrahl(APP.currentSchuelerId);
   renderScreeningVerlauf(APP.currentSchuelerId);
 
+  // Medikation & Diagnosen
+  renderMedikation();
+  renderDiagnosen();
+
   const notizEl = document.getElementById('info-allgemein');
   if (notizEl) notizEl.value = s.allgemeineNotizen || '';
+}
+
+// ============================================================
+// MEDIKAMENTEN-MANAGEMENT
+// ============================================================
+function renderMedikation() {
+  const container = document.getElementById('medikation-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const s = DB.getSchuelerById(sid);
+  const meds = s.medikation || [];
+
+  let html = '<div class="med-section">';
+  html += '<div class="med-section-header">';
+  html += '<h3>💊 Medikation</h3>';
+  html += '<button class="btn btn-primary btn-sm" onclick="addMedikament()">+ Medikament</button>';
+  html += '</div>';
+
+  html += '<div id="med-form-container"></div>';
+
+  if (meds.length === 0) {
+    html += '<div class="med-empty">Keine Medikamente erfasst</div>';
+  } else {
+    meds.forEach((med, idx) => {
+      html += '<div class="med-card">';
+      html += '<div class="med-card-header">';
+      html += '<span class="med-card-name">' + escapeHtml(med.name || 'Unbenannt') + '</span>';
+      html += med.seit ? '<span class="med-card-since">seit ' + escapeHtml(med.seit) + '</span>' : '';
+      html += '</div>';
+      html += '<div class="med-card-fields">';
+      if (med.dosierung) {
+        html += '<div class="med-field"><span class="med-field-label">Dosierung</span><span class="med-field-value">' + escapeHtml(med.dosierung) + '</span></div>';
+      }
+      if (med.arzt) {
+        html += '<div class="med-field"><span class="med-field-label">Verordnet von</span><span class="med-field-value">' + escapeHtml(med.arzt) + '</span></div>';
+      }
+      if (med.nebenwirkungen) {
+        html += '<div class="med-field"><span class="med-field-label">Nebenwirkungen / Hinweise</span><span class="med-field-value">' + escapeHtml(med.nebenwirkungen) + '</span></div>';
+      }
+      html += '</div>';
+      html += '<div class="med-card-actions">';
+      html += '<button class="btn btn-secondary btn-xs" onclick="editMedikament(' + idx + ')">Bearbeiten</button>';
+      html += '<button class="btn btn-danger btn-xs" onclick="deleteMedikament(' + idx + ')">Entfernen</button>';
+      html += '</div>';
+      html += '</div>';
+    });
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function addMedikament() {
+  const formContainer = document.getElementById('med-form-container');
+  if (!formContainer) return;
+  formContainer.innerHTML = renderMedForm();
+}
+
+function editMedikament(idx) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const med = (s.medikation || [])[idx];
+  if (!med) return;
+  const formContainer = document.getElementById('med-form-container');
+  if (!formContainer) return;
+  formContainer.innerHTML = renderMedForm(med, idx);
+}
+
+function renderMedForm(med, idx) {
+  const isEdit = idx !== undefined;
+  return '<div class="med-form">'
+    + '<div class="med-form-grid">'
+    + '<div class="form-group"><label>Medikament *</label><input type="text" id="med-name" placeholder="z.B. Ritalin, Sertralin..." value="' + escapeHtml((med && med.name) || '') + '"></div>'
+    + '<div class="form-group"><label>Dosierung</label><input type="text" id="med-dosierung" placeholder="z.B. 10mg 2x täglich" value="' + escapeHtml((med && med.dosierung) || '') + '"></div>'
+    + '<div class="form-group"><label>Verordnet von</label><input type="text" id="med-arzt" placeholder="Arzt / Fachperson" value="' + escapeHtml((med && med.arzt) || '') + '"></div>'
+    + '<div class="form-group"><label>Seit</label><input type="date" id="med-seit" value="' + ((med && med.seit) || '') + '"></div>'
+    + '<div class="form-group" style="grid-column:1/-1;"><label>Nebenwirkungen / Hinweise</label><textarea id="med-nebenwirkungen" rows="2" placeholder="Bekannte Nebenwirkungen, Wechselwirkungen, Einnahmehinweise...">' + escapeHtml((med && med.nebenwirkungen) || '') + '</textarea></div>'
+    + '</div>'
+    + '<div class="med-form-actions">'
+    + '<button class="btn btn-secondary btn-sm" onclick="cancelMedForm()">Abbrechen</button>'
+    + '<button class="btn btn-primary btn-sm" onclick="saveMedikament(' + (isEdit ? idx : -1) + ')">' + (isEdit ? 'Aktualisieren' : 'Speichern') + '</button>'
+    + '</div></div>';
+}
+
+function cancelMedForm() {
+  const formContainer = document.getElementById('med-form-container');
+  if (formContainer) formContainer.innerHTML = '';
+}
+
+function saveMedikament(idx) {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const name = document.getElementById('med-name')?.value?.trim();
+  if (!name) { showToast('Bitte Medikamentenname eingeben', 'error'); return; }
+
+  const entry = {
+    name,
+    dosierung: document.getElementById('med-dosierung')?.value?.trim() || '',
+    arzt: document.getElementById('med-arzt')?.value?.trim() || '',
+    seit: document.getElementById('med-seit')?.value || '',
+    nebenwirkungen: document.getElementById('med-nebenwirkungen')?.value?.trim() || '',
+  };
+
+  const s = DB.getSchuelerById(sid);
+  const meds = [...(s.medikation || [])];
+  if (idx >= 0) {
+    meds[idx] = entry;
+  } else {
+    meds.push(entry);
+  }
+  DB.updateSchueler(sid, { medikation: meds });
+  renderMedikation();
+  showToast(idx >= 0 ? 'Medikament aktualisiert' : 'Medikament hinzugefügt', 'success');
+}
+
+function deleteMedikament(idx) {
+  showConfirm('Medikament wirklich entfernen?', () => {
+    const s = DB.getSchuelerById(APP.currentSchuelerId);
+    const meds = [...(s.medikation || [])];
+    meds.splice(idx, 1);
+    DB.updateSchueler(APP.currentSchuelerId, { medikation: meds });
+    renderMedikation();
+    showToast('Medikament entfernt');
+  });
+}
+
+// ============================================================
+// DIAGNOSEN-MANAGEMENT
+// ============================================================
+function renderDiagnosen() {
+  const container = document.getElementById('diagnosen-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const s = DB.getSchuelerById(sid);
+  const diagnosen = s.diagnosen || [];
+
+  let html = '<div class="diagnose-section">';
+  html += '<div class="med-section-header">';
+  html += '<h3>🏥 Diagnosen</h3>';
+  html += '<button class="btn btn-primary btn-sm" onclick="addDiagnose()">+ Diagnose</button>';
+  html += '</div>';
+
+  html += '<div id="diagnose-form-container"></div>';
+
+  if (diagnosen.length === 0) {
+    html += '<div class="med-empty">Keine Diagnosen erfasst</div>';
+  } else {
+    diagnosen.forEach((d, idx) => {
+      html += '<div class="diagnose-card">';
+      html += '<div class="diagnose-card-header">';
+      html += '<div><span class="diagnose-badge"><span class="icd-code">' + escapeHtml(d.icd || '—') + '</span> ' + escapeHtml(d.label || 'Unbenannt') + '</span></div>';
+      html += '<div style="display:flex;gap:6px;">';
+      html += '<button class="btn btn-secondary btn-xs" onclick="editDiagnose(' + idx + ')">Bearbeiten</button>';
+      html += '<button class="btn btn-danger btn-xs" onclick="deleteDiagnose(' + idx + ')">Entfernen</button>';
+      html += '</div>';
+      html += '</div>';
+      if (d.diagnostiziertAm || d.diagnostiziertVon) {
+        html += '<div class="diagnose-card-meta">';
+        if (d.diagnostiziertAm) html += 'Diagnostiziert: ' + new Date(d.diagnostiziertAm).toLocaleDateString('de-DE') + ' ';
+        if (d.diagnostiziertVon) html += '· von ' + escapeHtml(d.diagnostiziertVon);
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function addDiagnose() {
+  const formContainer = document.getElementById('diagnose-form-container');
+  if (!formContainer) return;
+  formContainer.innerHTML = renderDiagnoseForm();
+}
+
+function editDiagnose(idx) {
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  const d = (s.diagnosen || [])[idx];
+  if (!d) return;
+  const formContainer = document.getElementById('diagnose-form-container');
+  if (!formContainer) return;
+  formContainer.innerHTML = renderDiagnoseForm(d, idx);
+}
+
+function renderDiagnoseForm(d, idx) {
+  const isEdit = idx !== undefined;
+  return '<div class="med-form">'
+    + '<div class="med-form-grid">'
+    + '<div class="form-group"><label>ICD-Code</label><input type="text" id="diagnose-icd" placeholder="z.B. F84.0, F90.0" value="' + escapeHtml((d && d.icd) || '') + '"></div>'
+    + '<div class="form-group"><label>Bezeichnung *</label><input type="text" id="diagnose-label" placeholder="z.B. Autismus-Spektrum-Störung" value="' + escapeHtml((d && d.label) || '') + '"></div>'
+    + '<div class="form-group"><label>Diagnostiziert am</label><input type="date" id="diagnose-am" value="' + ((d && d.diagnostiziertAm) || '') + '"></div>'
+    + '<div class="form-group"><label>Diagnostiziert von</label><input type="text" id="diagnose-von" placeholder="Arzt / Klinik" value="' + escapeHtml((d && d.diagnostiziertVon) || '') + '"></div>'
+    + '</div>'
+    + '<div class="med-form-actions">'
+    + '<button class="btn btn-secondary btn-sm" onclick="cancelDiagnoseForm()">Abbrechen</button>'
+    + '<button class="btn btn-primary btn-sm" onclick="saveDiagnose(' + (isEdit ? idx : -1) + ')">' + (isEdit ? 'Aktualisieren' : 'Speichern') + '</button>'
+    + '</div></div>';
+}
+
+function cancelDiagnoseForm() {
+  const formContainer = document.getElementById('diagnose-form-container');
+  if (formContainer) formContainer.innerHTML = '';
+}
+
+function saveDiagnose(idx) {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const label = document.getElementById('diagnose-label')?.value?.trim();
+  if (!label) { showToast('Bitte Diagnose-Bezeichnung eingeben', 'error'); return; }
+
+  const entry = {
+    icd: document.getElementById('diagnose-icd')?.value?.trim() || '',
+    label,
+    diagnostiziertAm: document.getElementById('diagnose-am')?.value || '',
+    diagnostiziertVon: document.getElementById('diagnose-von')?.value?.trim() || '',
+  };
+
+  const s = DB.getSchuelerById(sid);
+  const diagnosen = [...(s.diagnosen || [])];
+  if (idx >= 0) {
+    diagnosen[idx] = entry;
+  } else {
+    diagnosen.push(entry);
+  }
+  DB.updateSchueler(sid, { diagnosen });
+  renderDiagnosen();
+  showToast(idx >= 0 ? 'Diagnose aktualisiert' : 'Diagnose hinzugefügt', 'success');
+}
+
+function deleteDiagnose(idx) {
+  showConfirm('Diagnose wirklich entfernen?', () => {
+    const s = DB.getSchuelerById(APP.currentSchuelerId);
+    const diagnosen = [...(s.diagnosen || [])];
+    diagnosen.splice(idx, 1);
+    DB.updateSchueler(APP.currentSchuelerId, { diagnosen });
+    renderDiagnosen();
+    showToast('Diagnose entfernt');
+  });
 }
 
 // Screening-Kontext für Anamnese: welche Items passen zu auffälligen Screening-Domains?
@@ -5690,6 +5935,10 @@ function renderDashboard() {
   renderPhaseTransitionPrompt();
   renderRueckschrittAlert();
 
+  // Stufe 5b: Follow-Up Erinnerungen & Medikation
+  renderFollowUpReminders();
+  renderMedikationWidget();
+
   // Stufe 6: Allgemeine Übersicht
   renderIntakeProgress();
   renderWohlbefinden();
@@ -6577,6 +6826,7 @@ function renderSitzungsvorschlag() {
       <!-- Aktionen -->
       <div class="sitzungsvorschlag-aktionen">
         <button class="btn btn-secondary btn-sm" onclick="showQuickEntryPanel('${empfohlenesThema.id}', '${empfohlenesThema.katId || ''}')">Details</button>
+        <button class="btn btn-secondary btn-sm" onclick="druckeSitzungsvorbereitung()">🖨️ Vorbereitung</button>
         <button class="btn btn-primary btn-sm" onclick="quickStartSession('${empfohlenesThema.id}')">Sitzung starten</button>
       </div>
     </div>
@@ -13172,6 +13422,8 @@ function renderRisikoTimeline() {
   let html = '<div class="card" style="margin-top:16px;">';
   html += '<div class="card-header"><span>🛡️</span><div class="card-title">Risiko-Verlauf</div></div>';
   html += '<div class="card-body">';
+  // Chart canvas for risk timeline visualization
+  html += '<div class="risiko-chart-container"><canvas id="risiko-chart"></canvas></div>';
   risikoDaten.forEach(r => {
     const datum = new Date(r.datum).toLocaleDateString('de-DE');
     const maxStufe = Object.values(r.werte).includes('rot') ? 'rot' : Object.values(r.werte).includes('gelb') ? 'gelb' : 'gruen';
@@ -13187,6 +13439,8 @@ function renderRisikoTimeline() {
   });
   html += '</div></div>';
   container.innerHTML = html;
+  // Render the chart after innerHTML is set
+  renderRisikoChart(sid);
 }
 
 // ============================================================
@@ -13990,4 +14244,542 @@ function deletePersonalData(schuelerId) {
       showView('home');
     }
   );
+}
+
+// ============================================================
+// FEATURE 2: FOLLOW-UP ERINNERUNGEN (Dashboard)
+// ============================================================
+function renderFollowUpReminders() {
+  const container = document.getElementById('followup-reminders-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  const heute = new Date();
+  heute.setHours(0,0,0,0);
+  const in7Tagen = new Date(heute);
+  in7Tagen.setDate(in7Tagen.getDate() + 7);
+
+  const reminders = [];
+
+  // Check screenings for followUpDate
+  const screenings = DB.getScreenings(sid);
+  screenings.forEach(sc => {
+    if (!sc.followUpDate) return;
+    const fDate = new Date(sc.followUpDate);
+    fDate.setHours(0,0,0,0);
+    if (fDate <= heute) {
+      reminders.push({ typ: 'Screening', label: sc.tool || 'Screening', datum: sc.followUpDate, status: 'overdue', diff: Math.floor((heute - fDate) / 86400000) });
+    } else if (fDate <= in7Tagen) {
+      reminders.push({ typ: 'Screening', label: sc.tool || 'Screening', datum: sc.followUpDate, status: 'upcoming', diff: Math.floor((fDate - heute) / 86400000) });
+    }
+  });
+
+  // Check contacts for nachfassDatum
+  const kontakte = DB.getKontakte(sid);
+  kontakte.forEach(k => {
+    if (!k.nachfassDatum) return;
+    const fDate = new Date(k.nachfassDatum);
+    fDate.setHours(0,0,0,0);
+    if (fDate <= heute) {
+      reminders.push({ typ: 'Kontakt', label: k.kontaktperson || 'Kontakt', datum: k.nachfassDatum, status: 'overdue', diff: Math.floor((heute - fDate) / 86400000) });
+    } else if (fDate <= in7Tagen) {
+      reminders.push({ typ: 'Kontakt', label: k.kontaktperson || 'Kontakt', datum: k.nachfassDatum, status: 'upcoming', diff: Math.floor((fDate - heute) / 86400000) });
+    }
+  });
+
+  if (reminders.length === 0) { container.innerHTML = ''; return; }
+
+  // Sort: overdue first (oldest first), then upcoming (soonest first)
+  reminders.sort((a, b) => {
+    if (a.status !== b.status) return a.status === 'overdue' ? -1 : 1;
+    return a.status === 'overdue' ? b.diff - a.diff : a.diff - b.diff;
+  });
+
+  let html = '<div class="card" style="margin-bottom:12px;">';
+  html += '<div class="card-header"><span>🔔</span><div class="card-title">Follow-Up Erinnerungen</div>';
+  html += '<span style="font-size:11px;color:var(--text-muted);">' + reminders.length + ' offen</span></div>';
+  html += '<div class="card-body" style="padding:8px 12px;">';
+
+  reminders.forEach(r => {
+    const isOverdue = r.status === 'overdue';
+    const cssClass = isOverdue ? 'followup-overdue' : 'followup-upcoming';
+    const icon = r.typ === 'Screening' ? '📊' : '📞';
+    const datumStr = new Date(r.datum).toLocaleDateString('de-DE');
+    const diffStr = isOverdue
+      ? (r.diff === 0 ? 'Heute fällig' : r.diff + ' Tag' + (r.diff > 1 ? 'e' : '') + ' überfällig')
+      : ('in ' + r.diff + ' Tag' + (r.diff > 1 ? 'en' : ''));
+
+    html += '<div class="followup-card ' + cssClass + '">';
+    html += '<span class="followup-icon">' + icon + '</span>';
+    html += '<div class="followup-info">';
+    html += '<div class="followup-name">' + escapeHtml(r.label) + '</div>';
+    html += '<div class="followup-detail">' + r.typ + ' · ' + datumStr + '</div>';
+    html += '</div>';
+    html += '<span class="followup-date" style="color:' + (isOverdue ? 'var(--danger)' : '#92400E') + ';">' + diffStr + '</span>';
+    html += '</div>';
+  });
+
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// FEATURE 1b: MEDIKATION DASHBOARD WIDGET
+// ============================================================
+function renderMedikationWidget() {
+  const container = document.getElementById('medikation-dashboard-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const s = DB.getSchuelerById(sid);
+  const meds = s.medikation || [];
+  const diagnosen = s.diagnosen || [];
+
+  if (meds.length === 0 && diagnosen.length === 0) { container.innerHTML = ''; return; }
+
+  let html = '<div class="card" style="margin-bottom:12px;">';
+  html += '<div class="card-header"><span>💊</span><div class="card-title">Medikation & Diagnosen</div></div>';
+  html += '<div class="card-body" style="padding:10px 14px;">';
+
+  if (diagnosen.length > 0) {
+    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:' + (meds.length > 0 ? '10px' : '0') + ';">';
+    diagnosen.forEach(d => {
+      html += '<span class="diagnose-badge"><span class="icd-code">' + escapeHtml(d.icd || '—') + '</span> ' + escapeHtml(d.label) + '</span>';
+    });
+    html += '</div>';
+  }
+
+  if (meds.length > 0) {
+    meds.forEach(m => {
+      html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border-light, #F3F4F6);font-size:12px;">';
+      html += '<span style="font-weight:600;">' + escapeHtml(m.name) + '</span>';
+      if (m.dosierung) html += '<span style="color:var(--text-muted);">' + escapeHtml(m.dosierung) + '</span>';
+      if (m.arzt) html += '<span style="color:var(--text-muted);margin-left:auto;">(' + escapeHtml(m.arzt) + ')</span>';
+      html += '</div>';
+    });
+  }
+
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// FEATURE 3: PROFIL-HEADER BADGES
+// ============================================================
+function renderProfilBadges(s) {
+  const container = document.getElementById('profil-badges-container');
+  if (!container) return;
+  let html = '';
+
+  const diagnosen = s.diagnosen || [];
+  diagnosen.forEach(d => {
+    html += '<span class="profil-diagnose-badge">' + escapeHtml(d.icd || d.label) + '</span>';
+  });
+
+  const meds = s.medikation || [];
+  if (meds.length > 0) {
+    html += '<span class="profil-med-badge">' + meds.length + ' Medikament' + (meds.length > 1 ? 'e' : '') + '</span>';
+  }
+
+  container.innerHTML = html;
+}
+
+// ============================================================
+// FEATURE 4: RISIKO-TIMELINE CHART (Chart.js)
+// ============================================================
+function renderRisikoChart(schuelerId) {
+  const ctx = document.getElementById('risiko-chart');
+  if (!ctx) return;
+
+  if (APP.risikoChart) {
+    APP.risikoChart.destroy();
+    APP.risikoChart = null;
+  }
+
+  const risikoDaten = DB.getRisiko(schuelerId)
+    .sort((a, b) => a.datum.localeCompare(b.datum))
+    .slice(-20);
+
+  if (risikoDaten.length < 2) {
+    APP.risikoChart = null;
+    const parent = ctx.parentElement;
+    if (parent) parent.innerHTML = '<div style="text-align:center;padding:8px;font-size:11px;color:var(--text-muted);">Mindestens 2 Bewertungen nötig für den Chart</div>';
+    return;
+  }
+
+  const labels = risikoDaten.map(r =>
+    new Date(r.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })
+  );
+
+  // Map color values to numbers: gruen=0, gelb=1, rot=2
+  const colorToNum = v => v === 'rot' ? 2 : v === 'gelb' ? 1 : 0;
+
+  // Main risk categories
+  const sicherheitData = risikoDaten.map(r => colorToNum(r.werte.sicherheit || 'gruen'));
+  const selbstverletzungData = risikoDaten.map(r => colorToNum(r.werte.selbstverletzung || 'gruen'));
+  const cssrsData = risikoDaten.map(r => {
+    // Highest C-SSRS level
+    const vals = ['cssrs_gedanken', 'cssrs_plan', 'cssrs_absicht', 'cssrs_mittel', 'cssrs_verhalten']
+      .map(k => colorToNum(r.werte[k] || 'gruen'));
+    return Math.max(...vals);
+  });
+
+  APP.risikoChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Sicherheit',
+          data: sicherheitData,
+          borderColor: '#3B82F6',
+          backgroundColor: 'rgba(59,130,246,0.1)',
+          borderWidth: 2, pointRadius: 3, tension: 0.3, fill: false,
+        },
+        {
+          label: 'Selbstverletzung',
+          data: selbstverletzungData,
+          borderColor: '#F59E0B',
+          backgroundColor: 'rgba(245,158,11,0.1)',
+          borderWidth: 2, pointRadius: 3, tension: 0.3, fill: false,
+        },
+        {
+          label: 'Suizidalität (C-SSRS)',
+          data: cssrsData,
+          borderColor: '#EF4444',
+          backgroundColor: 'rgba(239,68,68,0.1)',
+          borderWidth: 2, pointRadius: 3, tension: 0.3, fill: false,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 12 } },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const stufen = ['Grün', 'Gelb', 'Rot'];
+              return ctx.dataset.label + ': ' + (stufen[ctx.raw] || 'Grün');
+            },
+          },
+        },
+      },
+      scales: {
+        y: {
+          min: 0, max: 2,
+          ticks: {
+            stepSize: 1,
+            font: { size: 10 },
+            callback: v => ['Grün', 'Gelb', 'Rot'][v] || '',
+          },
+        },
+        x: { ticks: { font: { size: 10 }, maxRotation: 45 } },
+      },
+    },
+  });
+}
+
+// ============================================================
+// FEATURE 5: GENOGRAMM DRUCKEN
+// ============================================================
+function druckeGenogramm() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+  const geno = getGenogramm();
+
+  if (geno.length === 0) { showToast('Kein Genogramm vorhanden', 'warning'); return; }
+
+  const rolleLabels = typeof GENO_ROLLEN_LABELS !== 'undefined' ? GENO_ROLLEN_LABELS : {};
+  const bezStyles = typeof GENO_BEZ_STYLES !== 'undefined' ? GENO_BEZ_STYLES : {};
+
+  const personenHtml = geno.map(p => {
+    const rolleLabel = rolleLabels[p.rolle] || p.rolle || '';
+    const bez = bezStyles[p.beziehung] || { label: p.beziehung || '', farbe: '#6B7280' };
+    return '<div style="display:inline-block;border:1px solid #D1D5DB;border-radius:8px;padding:8px 14px;margin:4px;text-align:center;min-width:100px;">'
+      + '<div style="font-weight:600;font-size:13px;">' + escapeHtml(p.name || '') + '</div>'
+      + '<div style="font-size:11px;color:#6B7280;">' + escapeHtml(rolleLabel) + '</div>'
+      + '<div style="font-size:10px;color:' + bez.farbe + ';font-weight:600;">' + escapeHtml(bez.label) + '</div>'
+      + (p.notiz ? '<div style="font-size:10px;color:#9CA3AF;font-style:italic;margin-top:2px;">' + escapeHtml(p.notiz) + '</div>' : '')
+      + '</div>';
+  }).join('');
+
+  const html = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">'
+    + '<title>Genogramm – ' + escapeHtml(s.vorname + ' ' + s.nachname) + '</title>'
+    + '<style>body{font-family:"Segoe UI",system-ui,sans-serif;margin:40px;color:#1F2937;font-size:13px;line-height:1.6;}'
+    + 'h1{font-size:20px;margin-bottom:4px;}.meta{color:#6B7280;font-size:12px;margin-bottom:20px;}'
+    + '.center{text-align:center;margin:20px 0;padding:12px;background:#EEF2FF;border-radius:10px;font-weight:700;font-size:15px;}'
+    + '@media print{body{margin:20px;}}</style></head><body>'
+    + '<h1>Genogramm — ' + escapeHtml(s.vorname + ' ' + s.nachname) + '</h1>'
+    + '<div class="meta">Klasse: ' + escapeHtml(s.klasse || '—') + ' · Gedruckt: ' + new Date().toLocaleDateString('de-DE') + '</div>'
+    + '<div class="center">' + escapeHtml(s.vorname + ' ' + s.nachname) + '</div>'
+    + '<div style="text-align:center;">' + personenHtml + '</div>'
+    + '</body></html>';
+
+  const win = window.open('', '_blank');
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 600);
+}
+
+// ============================================================
+// FEATURE 6: SITZUNGSVORBEREITUNGS-PDF
+// ============================================================
+function druckeSitzungsvorbereitung() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+
+  // Last SOAP note
+  const notizen = DB.getNotizen(sid)
+    .filter(n => n.soap)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const lastSOAP = notizen.length > 0 ? notizen[0] : null;
+
+  // Active roadmap phase
+  const roadmap = DB.getRoadmap(sid);
+  const aktivePhase = roadmap ? roadmap.phasen.find(p => p.status === 'aktiv') : null;
+  const phaseDef = aktivePhase ? ROADMAP_PHASEN[aktivePhase.nr] : null;
+
+  // Session recommendation
+  let empfThema = null;
+  if (aktivePhase) {
+    empfThema = findNextPhaseThema(aktivePhase, sid);
+  }
+
+  // Active goals
+  const ziele = (s.ziele || []).filter(z => z.status !== 'erreicht');
+
+  // Risk status
+  const risikoDaten = DB.getRisiko(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+  const letzterRisiko = risikoDaten.length > 0 ? risikoDaten[0] : null;
+
+  // Medications
+  const meds = s.medikation || [];
+  const diagnosen = s.diagnosen || [];
+
+  let body = '';
+
+  // Header
+  body += '<h1>Sitzungsvorbereitung</h1>';
+  body += '<div class="meta">' + escapeHtml(s.vorname + ' ' + s.nachname) + ' · Klasse: ' + escapeHtml(s.klasse || '—') + ' · Datum: ' + new Date().toLocaleDateString('de-DE') + '</div>';
+
+  // Active phase
+  if (phaseDef) {
+    body += '<div class="section"><h2>Aktuelle Phase</h2>';
+    body += '<div class="phase-box">Phase ' + phaseDef.nr + ': ' + escapeHtml(phaseDef.label) + ' — ' + escapeHtml(phaseDef.beschreibung || '') + '</div></div>';
+  }
+
+  // Last SOAP
+  if (lastSOAP) {
+    body += '<div class="section"><h2>Letzte Sitzung (' + new Date(lastSOAP.datum).toLocaleDateString('de-DE') + ')</h2>';
+    const soap = lastSOAP.soap;
+    if (soap.subjektiv) body += '<div class="soap-item"><strong>S (Subjektiv):</strong> ' + escapeHtml(soap.subjektiv) + '</div>';
+    if (soap.objektiv) body += '<div class="soap-item"><strong>O (Objektiv):</strong> ' + escapeHtml(soap.objektiv) + '</div>';
+    if (soap.assessment) body += '<div class="soap-item"><strong>A (Assessment):</strong> ' + escapeHtml(soap.assessment) + '</div>';
+    if (soap.plan) body += '<div class="soap-item"><strong>P (Plan):</strong> ' + escapeHtml(soap.plan) + '</div>';
+    body += '</div>';
+  }
+
+  // Session recommendation
+  if (empfThema) {
+    body += '<div class="section"><h2>Empfohlenes Thema heute</h2>';
+    body += '<div class="highlight">' + escapeHtml(empfThema.titel || empfThema.id) + '</div></div>';
+  }
+
+  // Active goals
+  if (ziele.length > 0) {
+    body += '<div class="section"><h2>Offene Ziele</h2>';
+    ziele.forEach(z => {
+      body += '<div class="goal-item">☐ ' + escapeHtml(z.text || z.titel || '') + '</div>';
+    });
+    body += '</div>';
+  }
+
+  // Risk status
+  if (letzterRisiko) {
+    const maxStufe = Object.values(letzterRisiko.werte).includes('rot') ? 'rot' : Object.values(letzterRisiko.werte).includes('gelb') ? 'gelb' : 'gruen';
+    const farben = { rot: '#EF4444', gelb: '#F59E0B', gruen: '#10B981' };
+    body += '<div class="section"><h2>Risiko-Status</h2>';
+    body += '<div class="risk-badge" style="color:' + farben[maxStufe] + ';border-color:' + farben[maxStufe] + ';">' + maxStufe.charAt(0).toUpperCase() + maxStufe.slice(1) + ' (' + new Date(letzterRisiko.datum).toLocaleDateString('de-DE') + ')</div></div>';
+  }
+
+  // Medications & Diagnoses
+  if (meds.length > 0 || diagnosen.length > 0) {
+    body += '<div class="section"><h2>Medikation & Diagnosen</h2>';
+    if (diagnosen.length > 0) {
+      body += '<div style="margin-bottom:6px;">';
+      diagnosen.forEach(d => { body += '<span class="diag-pill">' + escapeHtml(d.icd || '') + ' ' + escapeHtml(d.label) + '</span> '; });
+      body += '</div>';
+    }
+    if (meds.length > 0) {
+      meds.forEach(m => {
+        body += '<div class="med-line">' + escapeHtml(m.name) + (m.dosierung ? ' — ' + escapeHtml(m.dosierung) : '') + '</div>';
+      });
+    }
+    body += '</div>';
+  }
+
+  // Notes field for print
+  body += '<div class="section"><h2>Notizen</h2>';
+  body += '<div class="notes-box"></div></div>';
+
+  const html = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">'
+    + '<title>Sitzungsvorbereitung – ' + escapeHtml(s.vorname + ' ' + s.nachname) + '</title>'
+    + '<style>'
+    + 'body{font-family:"Segoe UI",system-ui,sans-serif;margin:40px;color:#1F2937;font-size:13px;line-height:1.6;}'
+    + 'h1{font-size:20px;margin-bottom:4px;} h2{font-size:14px;margin:16px 0 6px;color:#374151;border-bottom:1px solid #E5E7EB;padding-bottom:4px;}'
+    + '.meta{color:#6B7280;font-size:12px;margin-bottom:20px;}'
+    + '.section{margin-bottom:16px;page-break-inside:avoid;}'
+    + '.phase-box{background:#EEF2FF;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:500;}'
+    + '.soap-item{padding:3px 0;font-size:12px;}'
+    + '.highlight{background:#ECFDF5;padding:8px 12px;border-radius:6px;font-weight:600;font-size:13px;border-left:3px solid #10B981;}'
+    + '.goal-item{padding:3px 0;font-size:12px;}'
+    + '.risk-badge{display:inline-block;padding:4px 12px;border:2px solid;border-radius:6px;font-weight:600;font-size:12px;}'
+    + '.diag-pill{display:inline-block;background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;margin:2px;}'
+    + '.med-line{font-size:12px;padding:2px 0;}'
+    + '.notes-box{border:1px solid #D1D5DB;border-radius:6px;min-height:120px;margin-top:4px;}'
+    + '@media print{body{margin:20px;}.notes-box{min-height:150px;}}'
+    + '</style></head><body>' + body + '</body></html>';
+
+  const win = window.open('', '_blank');
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 600);
+}
+
+// ============================================================
+// FEATURE 7: KONTEXTHILFE / HELP-PANEL
+// ============================================================
+const HELP_CONTENT = {
+  'home': {
+    titel: 'Klientenübersicht',
+    abschnitte: [
+      { titel: 'Übersicht', text: 'Hier siehst du alle erfassten Klientinnen und Klienten. Klicke auf einen Namen, um das Profil zu öffnen.' },
+      { titel: 'Neuen Klienten anlegen', text: 'Klicke auf "+ Neuer Klient" um einen neuen Klienten zu erfassen. Mindestens Vor- und Nachname sind erforderlich.' },
+      { titel: 'Suche', text: 'Nutze das Suchfeld, um Klienten nach Name oder Klasse zu filtern.' },
+    ],
+  },
+  'dashboard': {
+    titel: 'Klienten-Dashboard',
+    abschnitte: [
+      { titel: 'Prioritäten', text: 'Das Dashboard zeigt Informationen in Prioritätsreihenfolge: Sicherheitswarnungen zuerst, dann Risiko-Status, Engagement, Verlaufs-Trends und Sitzungsvorschläge.' },
+      { titel: 'Sitzungsvorschlag', text: 'Basierend auf dem aktuellen Förderplan und dem PVT-Zustand wird automatisch ein Thema für die nächste Sitzung empfohlen.' },
+      { titel: 'Follow-Ups', text: 'Überfällige und kommende Nachfass-Termine aus Screenings und Kontakten werden hier angezeigt.' },
+    ],
+  },
+  'screening': {
+    titel: 'Screening-Durchführung',
+    abschnitte: [
+      { titel: 'Ablauf', text: 'Wähle ein Screening-Tool und beantworte die Fragen. Die Auswertung erfolgt automatisch mit Cut-Off-Werten und Empfehlungen.' },
+      { titel: 'Follow-Up', text: 'Nach Abschluss kannst du ein Follow-Up-Datum setzen, um die Wiederholung des Screenings zu planen.' },
+      { titel: 'Verlauf', text: 'Im Aufnahme-Tab siehst du den Verlauf aller durchgeführten Screenings als Grafik.' },
+    ],
+  },
+  'info': {
+    titel: 'Aufnahme / Anamnese',
+    abschnitte: [
+      { titel: 'Anamnese', text: 'Erfasse systematisch biografische und psychosoziale Informationen. Die Chip-Auswahl ergänzt automatische Hypothesen.' },
+      { titel: 'Medikation', text: 'Dokumentiere aktuelle Medikamente mit Dosierung, verordnendem Arzt und Nebenwirkungen. Diese Informationen erscheinen auch im Dashboard.' },
+      { titel: 'Diagnosen', text: 'Erfasse ICD-Diagnosen mit Code, Bezeichnung und diagnostizierender Stelle. Diagnosen werden als Badges im Profil-Header angezeigt.' },
+    ],
+  },
+  'roadmap': {
+    titel: 'Förderplan (Roadmap)',
+    abschnitte: [
+      { titel: '7-Phasen-Modell', text: 'Der Förderplan besteht aus 7 aufeinander aufbauenden Phasen: Krisenintervention, Beziehungsaufbau, Diagnostik, Psychoedukation, Kompetenzaufbau, Vertiefung und Abschluss.' },
+      { titel: 'Themen zuweisen', text: 'Weise jeder Phase Themen aus dem Themenkatalog zu. Die Reihenfolge berücksichtigt automatisch Voraussetzungen (Sequenzierung).' },
+      { titel: 'Drucken', text: 'Den Förderplan kannst du als übersichtliches PDF drucken.' },
+    ],
+  },
+  'verlauf': {
+    titel: 'Verlauf & Notizen',
+    abschnitte: [
+      { titel: 'SOAP-Notizen', text: 'Dokumentiere Sitzungen im SOAP-Format: Subjektiv (Schüler-Bericht), Objektiv (Beobachtungen), Assessment (Einschätzung) und Plan (nächste Schritte).' },
+      { titel: 'Risiko-Bewertung', text: 'Erfasse regelmässig den Risiko-Status. Bei mehreren Bewertungen wird ein Verlaufs-Chart angezeigt.' },
+    ],
+  },
+  'genogramm': {
+    titel: 'Genogramm',
+    abschnitte: [
+      { titel: 'Familien-Darstellung', text: 'Das Genogramm visualisiert Familienmitglieder und Bezugspersonen mit ihren Beziehungsqualitäten (eng, distanziert, konflikthaft etc.).' },
+      { titel: 'Risiko-Erkennung', text: 'Automatische Warnungen bei fehlenden Elternteilen, vielen Konflikten oder Risiko-Hinweisen in Notizen.' },
+      { titel: 'Drucken', text: 'Das Genogramm kann über den Druck-Button exportiert werden.' },
+    ],
+  },
+  'kontaktlog': {
+    titel: 'Kontaktlog',
+    abschnitte: [
+      { titel: 'Dokumentation', text: 'Dokumentiere alle Kontakte mit Eltern, Lehrpersonen und anderen Bezugspersonen. Der Engagement-Score zeigt die Kontaktqualität.' },
+      { titel: 'Nachfass-Termine', text: 'Setze Nachfass-Daten für vereinbarte Follow-Ups. Überfällige Termine erscheinen als Erinnerung im Dashboard.' },
+    ],
+  },
+  'kalender': {
+    titel: 'Kalender',
+    abschnitte: [
+      { titel: 'Terminplanung', text: 'Erstelle und verwalte Termine für alle Klienten. Termine erscheinen auch im Dashboard-Mini-Kalender.' },
+    ],
+  },
+};
+
+function toggleHelpPanel() {
+  const panel = document.getElementById('help-panel');
+  const overlay = document.getElementById('help-overlay');
+  if (!panel || !overlay) return;
+
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+  } else {
+    renderHelp();
+    panel.classList.add('open');
+    overlay.classList.add('open');
+  }
+}
+
+function renderHelp() {
+  const container = document.getElementById('help-container');
+  if (!container) return;
+
+  // Determine context
+  let contextKey = APP.currentView || 'home';
+  if (contextKey === 'profil' && APP.currentProfilTab) {
+    contextKey = APP.currentProfilTab;
+  }
+
+  const content = HELP_CONTENT[contextKey] || HELP_CONTENT['home'];
+
+  let html = '<div style="margin-bottom:16px;">';
+  html += '<div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Aktuelle Ansicht</div>';
+  html += '<div style="font-size:16px;font-weight:600;">' + escapeHtml(content.titel) + '</div>';
+  html += '</div>';
+
+  content.abschnitte.forEach(a => {
+    html += '<div class="help-section">';
+    html += '<h4>' + escapeHtml(a.titel) + '</h4>';
+    html += '<p>' + escapeHtml(a.text) + '</p>';
+    html += '</div>';
+  });
+
+  // General tips
+  html += '<div class="help-tip"><strong>Tipp:</strong> Die Hilfe passt sich automatisch an die aktuelle Ansicht an. Navigiere zu einem anderen Bereich und öffne die Hilfe erneut für kontextsensitive Informationen.</div>';
+
+  // Keyboard shortcuts
+  html += '<div class="help-section"><h4>Nützliche Hinweise</h4>';
+  html += '<div class="help-shortcut"><span>Alle Daten werden lokal gespeichert</span><span>localStorage</span></div>';
+  html += '<div class="help-shortcut"><span>PIN-Schutz aktivieren</span><span>Sidebar</span></div>';
+  html += '<div class="help-shortcut"><span>Daten exportieren</span><span>JSON/CSV</span></div>';
+  html += '</div>';
+
+  container.innerHTML = html;
 }

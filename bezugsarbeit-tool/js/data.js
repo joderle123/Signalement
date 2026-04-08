@@ -5971,6 +5971,32 @@ const DB = {
     RISIKO: 'cdse_risiko',
   },
 
+  // Safe localStorage wrapper with quota protection
+  _save(key, data) {
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {
+      if (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014) {
+        if (typeof showToast === 'function') {
+          showToast('Speicher voll! Bitte Daten exportieren und alte Einträge löschen.', 'error');
+        }
+        console.error('localStorage quota exceeded for key:', key);
+      }
+      throw e;
+    }
+  },
+
+  // Storage usage info
+  getStorageUsage() {
+    let total = 0;
+    for (const key in localStorage) {
+      if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
+        total += localStorage.getItem(key).length * 2; // UTF-16
+      }
+    }
+    return { usedBytes: total, usedMB: (total / 1024 / 1024).toFixed(2) };
+  },
+
   generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   },
@@ -5980,7 +6006,7 @@ const DB = {
     return JSON.parse(localStorage.getItem(this.KEYS.SCHUELER) || '[]');
   },
   saveSchueler(schuelerListe) {
-    localStorage.setItem(this.KEYS.SCHUELER, JSON.stringify(schuelerListe));
+    this._save(this.KEYS.SCHUELER, schuelerListe);
   },
   getSchuelerById(id) {
     return this.getSchueler().find(s => s.id === id) || null;
@@ -6037,9 +6063,9 @@ const DB = {
     this.saveSchueler(schuelerListe);
     // Notizen und Termine auch löschen
     const notizen = this.getNotizen().filter(n => n.schuelerId !== id);
-    localStorage.setItem(this.KEYS.NOTIZEN, JSON.stringify(notizen));
+    this._save(this.KEYS.NOTIZEN, notizen);
     const termine = this.getTermine().filter(t => t.schuelerId !== id);
-    localStorage.setItem(this.KEYS.TERMINE, JSON.stringify(termine));
+    this._save(this.KEYS.TERMINE, termine);
   },
 
   // Notizen
@@ -6060,12 +6086,12 @@ const DB = {
       erstellt: new Date().toISOString(),
     };
     alle.push(neu);
-    localStorage.setItem(this.KEYS.NOTIZEN, JSON.stringify(alle));
+    this._save(this.KEYS.NOTIZEN, alle);
     return neu;
   },
   deleteNotiz(id) {
     const alle = this.getNotizen().filter(n => n.id !== id);
-    localStorage.setItem(this.KEYS.NOTIZEN, JSON.stringify(alle));
+    this._save(this.KEYS.NOTIZEN, alle);
   },
 
   // Termine / Kalender
@@ -6086,12 +6112,12 @@ const DB = {
       erstellt: new Date().toISOString(),
     };
     alle.push(neu);
-    localStorage.setItem(this.KEYS.TERMINE, JSON.stringify(alle));
+    this._save(this.KEYS.TERMINE, alle);
     return neu;
   },
   deleteTermin(id) {
     const alle = this.getTermine().filter(t => t.id !== id);
-    localStorage.setItem(this.KEYS.TERMINE, JSON.stringify(alle));
+    this._save(this.KEYS.TERMINE, alle);
   },
 
   // Screenings
@@ -6107,7 +6133,7 @@ const DB = {
     } else {
       alle.push(data);
     }
-    localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
+    this._save(this.KEYS.SCREENINGS, alle);
     return data;
   },
   createScreening(schuelerId) {
@@ -6129,12 +6155,12 @@ const DB = {
     };
     const alle = this.getScreenings();
     alle.push(neu);
-    localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
+    this._save(this.KEYS.SCREENINGS, alle);
     return neu;
   },
   deleteScreening(id) {
     const alle = this.getScreenings().filter(s => s.id !== id);
-    localStorage.setItem(this.KEYS.SCREENINGS, JSON.stringify(alle));
+    this._save(this.KEYS.SCREENINGS, alle);
   },
 
   // Roadmaps
@@ -6152,7 +6178,7 @@ const DB = {
     const idx = alle.findIndex(r => r.id === roadmap.id);
     roadmap.geaendert = new Date().toISOString();
     if (idx >= 0) { alle[idx] = roadmap; } else { alle.push(roadmap); }
-    localStorage.setItem(this.KEYS.ROADMAPS, JSON.stringify(alle));
+    this._save(this.KEYS.ROADMAPS, alle);
     return roadmap;
   },
   createRoadmap(schuelerId) {
@@ -6174,7 +6200,7 @@ const DB = {
   },
   deleteRoadmap(id) {
     const alle = this.getRoadmaps().filter(r => r.id !== id);
-    localStorage.setItem(this.KEYS.ROADMAPS, JSON.stringify(alle));
+    this._save(this.KEYS.ROADMAPS, alle);
   },
 
   // Wohlbefinden
@@ -6199,11 +6225,11 @@ const DB = {
       eintrag.who5DepressionScreening = eintrag.who5Score <= 28; // positives Screening
     }
     alle.push(eintrag);
-    localStorage.setItem(this.KEYS.WOHLBEFINDEN, JSON.stringify(alle));
+    this._save(this.KEYS.WOHLBEFINDEN, alle);
   },
   deleteWohlbefinden(id) {
     const alle = this.getWohlbefinden().filter(w => w.id !== id);
-    localStorage.setItem(this.KEYS.WOHLBEFINDEN, JSON.stringify(alle));
+    this._save(this.KEYS.WOHLBEFINDEN, alle);
   },
 
   // Fallformulierungen (5P)
@@ -6220,7 +6246,7 @@ const DB = {
     const idx = alle.findIndex(f => f.id === ff.id);
     ff.geaendert = new Date().toISOString();
     if (idx >= 0) { alle[idx] = ff; } else { alle.push(ff); }
-    localStorage.setItem(this.KEYS.FALLFORMULIERUNGEN, JSON.stringify(alle));
+    this._save(this.KEYS.FALLFORMULIERUNGEN, alle);
     return ff;
   },
   createFallformulierung(schuelerId) {
@@ -6239,7 +6265,7 @@ const DB = {
   },
   deleteFallformulierung(id) {
     const alle = this.getFallformulierungen().filter(f => f.id !== id);
-    localStorage.setItem(this.KEYS.FALLFORMULIERUNGEN, JSON.stringify(alle));
+    this._save(this.KEYS.FALLFORMULIERUNGEN, alle);
   },
 
   // Verlaufs-Tracker
@@ -6256,12 +6282,12 @@ const DB = {
       werte, // { stimmung: 7, energie: 5, beziehungen: 6, schule: 4, schlaf: 8 }
     };
     alle.push(eintrag);
-    localStorage.setItem(this.KEYS.VERLAUF, JSON.stringify(alle));
+    this._save(this.KEYS.VERLAUF, alle);
     return eintrag;
   },
   deleteVerlauf(id) {
     const alle = this.getVerlauf().filter(v => v.id !== id);
-    localStorage.setItem(this.KEYS.VERLAUF, JSON.stringify(alle));
+    this._save(this.KEYS.VERLAUF, alle);
   },
 
   // Kontaktlog
@@ -6284,12 +6310,12 @@ const DB = {
       erstellt: new Date().toISOString(),
     };
     alle.push(neu);
-    localStorage.setItem(this.KEYS.KONTAKTE, JSON.stringify(alle));
+    this._save(this.KEYS.KONTAKTE, alle);
     return neu;
   },
   deleteKontakt(id) {
     const alle = this.getKontakte().filter(k => k.id !== id);
-    localStorage.setItem(this.KEYS.KONTAKTE, JSON.stringify(alle));
+    this._save(this.KEYS.KONTAKTE, alle);
   },
 
   // Risiko-Monitor
@@ -6306,7 +6332,7 @@ const DB = {
       werte, // { sicherheit: 'gruen', selbstverletzung: 'gruen', substanzen: 'gelb' }
     };
     alle.push(eintrag);
-    localStorage.setItem(this.KEYS.RISIKO, JSON.stringify(alle));
+    this._save(this.KEYS.RISIKO, alle);
     return eintrag;
   },
 };

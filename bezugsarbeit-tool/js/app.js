@@ -482,6 +482,10 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-kalender').classList.add('active');
     document.getElementById('nav-kalender').classList.add('active');
     renderKalender();
+  } else if (view === 'bibliothek') {
+    document.getElementById('view-bibliothek').classList.add('active');
+    document.getElementById('nav-bibliothek').classList.add('active');
+    renderBibliothek();
   } else if (view === 'weiterbildung') {
     document.getElementById('view-weiterbildung').classList.add('active');
     document.getElementById('nav-weiterbildung').classList.add('active');
@@ -938,6 +942,8 @@ function renderProfil(schuelerId) {
 
   // Header
   document.getElementById('profil-name').textContent = `${s.vorname} ${s.nachname}`;
+  const klientLabel = document.getElementById('sidebar-klient-label');
+  if (klientLabel) klientLabel.textContent = `Klient: ${s.vorname} ${s.nachname}`;
   document.getElementById('profil-klasse').textContent = s.klasse || '—';
   document.getElementById('profil-alter').textContent = alter(s.geburtsdatum);
   document.getElementById('profil-seit').textContent = s.eintrittsdatum
@@ -1694,25 +1700,24 @@ function renderWBSelbstfuersorge(container) {
 // PHASEN-NAVIGATION (5 Haupttabs mit Sub-Tabs)
 // ============================================================
 const PHASE_TABS = {
-  wissen: [
-    { id: 'bibliothek', label: 'Bibliothek' }
-  ],
-  sammeln: [
+  fallakte: [
     { id: 'info', label: 'Aufnahme' },
-    { id: 'screening', label: 'Screening' },
-    { id: 'staerken', label: 'Stärken' },
     { id: 'genogramm', label: 'Genogramm' },
-    { id: 'verhalten', label: 'Verhalten' },
-    { id: 'notizen', label: 'Notizen' },
     { id: 'kontaktlog', label: 'Kontakte' }
   ],
-  leitfaden: [
+  diagnostik: [
+    { id: 'screening', label: 'Screening' },
+    { id: 'staerken', label: 'Stärken' },
+    { id: 'verhalten', label: 'Verhalten' }
+  ],
+  begleitung: [
     { id: 'dashboard', label: 'Heute' },
     { id: 'fallformulierung', label: '5P-Analyse' },
     { id: 'roadmap', label: 'Förderplan & Ziele' },
-    { id: 'themen', label: 'Themen & Sitzungen' }
+    { id: 'themen', label: 'Themen & Sitzungen' },
+    { id: 'notizen', label: 'Notizen' }
   ],
-  analyse: [
+  auswertung: [
     { id: 'hypothesen-tab', label: 'Hypothesen' },
     { id: 'treatment-tab', label: 'Verlauf' },
     { id: 'verlauf-tracker', label: 'Verlaufs-Tracker' },
@@ -1721,13 +1726,13 @@ const PHASE_TABS = {
 };
 
 // Track current phase
-APP.currentPhase = 'leitfaden';
+APP.currentPhase = 'begleitung';
 
 function getPhaseForTab(tabId) {
   for (const [phase, tabs] of Object.entries(PHASE_TABS)) {
     if (tabs.some(t => t.id === tabId)) return phase;
   }
-  return 'leitfaden';
+  return 'begleitung';
 }
 
 function showPhase(phase, subTabId) {
@@ -4903,7 +4908,7 @@ function renderTreatmentResponse(schuelerId) {
     <div style="font-size:13px;font-weight:700;color:#DC2626;">⚠️ Plötzliche Verschlechterung erkannt</div>
     <div style="font-size:12px;color:#374151;margin-top:4px;">SRS fiel von <strong>${scAlert.vonSrs}</strong> auf <strong>${scAlert.nachSrs}</strong> (${scAlert.diff} Punkte) in Sitzung #${scAlert.sitzungNr}${scAlert.datum ? ' am ' + formatDatum(scAlert.datum) : ''}.</div>
     <div style="font-size:11px;color:#991B1B;margin-top:6px;font-weight:500;">Empfehlung: Risiko-Check durchführen und therapeutische Beziehung reflektieren.</div>
-    <button class="btn btn-xs" style="margin-top:6px;background:#EF4444;color:#fff;border:none;" onclick="showPhase('analyse');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
+    <button class="btn btn-xs" style="margin-top:6px;background:#EF4444;color:#fff;border:none;" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
   </div>` : '';
 
   el.innerHTML = `
@@ -6959,8 +6964,8 @@ function renderSafetyBanner(containerId) {
       <span style="color:#6B7280;">${a.detail}</span>
     </div>`).join('')}
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn btn-xs" style="background:${bannerFarbe};color:#fff;border:none;" onclick="showPhase('leitfaden');setTimeout(()=>showSubTab('themen'),100);setTimeout(()=>quickStartSession('krisenintervention'),300);">Krisenintervention starten</button>
-      <button class="btn btn-xs" style="background:#fff;color:${bannerFarbe};border:1px solid ${bannerFarbe};" onclick="showPhase('analyse');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
+      <button class="btn btn-xs" style="background:${bannerFarbe};color:#fff;border:none;" onclick="showPhase('begleitung');setTimeout(()=>showSubTab('themen'),100);setTimeout(()=>quickStartSession('krisenintervention'),300);">Krisenintervention starten</button>
+      <button class="btn btn-xs" style="background:#fff;color:${bannerFarbe};border:1px solid ${bannerFarbe};" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
     </div>
   </div>`;
   container.innerHTML = html;
@@ -7409,7 +7414,7 @@ function renderDashboardHypothesen() {
         </div>
         ${renderDashboardHypoThemen(hypothesen)}
         <div style="text-align:center;margin-top:10px;">
-          <button class="btn btn-sm btn-secondary" onclick="showPhase('sammeln');setTimeout(()=>showSubTab('info'),100)">
+          <button class="btn btn-sm btn-secondary" onclick="showPhase('fallakte');setTimeout(()=>showSubTab('info'),100)">
             Alle Hypothesen ansehen →
           </button>
         </div>
@@ -7665,7 +7670,7 @@ function renderDashboardSummary() {
         <div style="font-size:16px;font-weight:700;color:${scrFlagged > 0 ? '#EF4444' : '#10B981'};">${screenings.length === 0 ? 'Ausstehend' : scrFlagged + ' auffällig'}</div>
         <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${screenings.length > 0 ? 'von ' + scrTotal + ' Bereichen' : 'Noch kein Screening'}</div>
       </div>
-      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showPhase('leitfaden','roadmap')">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;border-top:3px solid ${zielFarbe};text-align:center;cursor:pointer;" onclick="showPhase('begleitung','roadmap')">
         <div style="font-size:22px;margin-bottom:4px;">🎯</div>
         <div style="font-size:11px;color:#6B7280;">Ziele</div>
         <div style="font-size:16px;font-weight:700;color:${zielFarbe};">${ziele.length === 0 ? 'Keine' : avgZiel + '%'}</div>
@@ -9866,7 +9871,7 @@ function render5PInlineHypothesen(hypothesen) {
   html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
   html += '<h3 style="margin:0;font-size:16px;">🧠 Klinische Hypothesen</h3>';
   html += `<span style="font-size:12px;color:#6B7280;">${hypothesen.length} aktiv</span>`;
-  html += `<button class="btn btn-sm btn-outline-primary" style="margin-left:auto;font-size:11px;" onclick="showPhase('analyse', 'hypothesen-tab')">Alle anzeigen →</button>`;
+  html += `<button class="btn btn-sm btn-outline-primary" style="margin-left:auto;font-size:11px;" onclick="showPhase('auswertung', 'hypothesen-tab')">Alle anzeigen →</button>`;
   html += '</div>';
 
   // Differenzialdiagnosen (prominently)
@@ -15223,7 +15228,7 @@ function renderKontaktNachfassWidget() {
   html += '<div class="card-body" style="padding:10px 14px;">';
   html += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:${kontakte.length > 0 ? '8' : '0'}px;">`;
   html += `<div style="font-weight:600;font-size:12px;color:${engFarben[engagement.stufe]};">${engIcons[engagement.stufe]} Engagement: ${engagement.label} (${engagement.score}/100)</div>`;
-  html += `<button class="btn btn-xs btn-secondary" onclick="showPhase('sammeln');setTimeout(()=>showSubTab('kontaktlog'),100);">Kontaktlog</button>`;
+  html += `<button class="btn btn-xs btn-secondary" onclick="showPhase('fallakte');setTimeout(()=>showSubTab('kontaktlog'),100);">Kontaktlog</button>`;
   html += '</div>';
 
   if (kontakte.length > 0) {

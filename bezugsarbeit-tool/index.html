@@ -34,31 +34,40 @@
   </div>
 
   <nav class="sidebar-nav" aria-label="Hauptmenü">
+    <div class="sidebar-section-label">Arbeitsbereich</div>
     <div class="nav-item active" id="nav-home" onclick="showView('home')" role="button" tabindex="0" aria-current="page">
-      <span class="nav-item-icon" aria-hidden="true">🏠</span> Übersicht
+      <span class="nav-item-icon" aria-hidden="true">🏠</span> Dashboard
     </div>
     <div class="nav-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0">
       <span class="nav-item-icon" aria-hidden="true">📅</span> Kalender
     </div>
-    <div class="nav-item" id="nav-weiterbildung" onclick="showView('weiterbildung')" role="button" tabindex="0">
-      <span class="nav-item-icon" aria-hidden="true">🎓</span> Weiterbildung
-    </div>
   </nav>
 
-  <!-- Phasen-Navigation (nur sichtbar wenn Profil offen) -->
+  <!-- Klient-Navigation (nur sichtbar wenn Profil offen) -->
   <div class="sidebar-phase-nav" id="sidebar-phase-nav" style="display:none;">
-    <div class="sidebar-section-label">Bereiche</div>
-    <div class="sidebar-phase-item" data-phase="wissen" onclick="showPhase('wissen')">
-      <span class="nav-item-icon">📚</span> Wissen
+    <div class="sidebar-section-label" id="sidebar-klient-label">Klient</div>
+    <div class="sidebar-phase-item" data-phase="fallakte" onclick="showPhase('fallakte')">
+      <span class="nav-item-icon">📋</span> Fallakte
     </div>
-    <div class="sidebar-phase-item" data-phase="sammeln" onclick="showPhase('sammeln')">
-      <span class="nav-item-icon">📋</span> Daten sammeln
+    <div class="sidebar-phase-item" data-phase="diagnostik" onclick="showPhase('diagnostik')">
+      <span class="nav-item-icon">🔍</span> Diagnostik
     </div>
-    <div class="sidebar-phase-item active" data-phase="leitfaden" onclick="showPhase('leitfaden')">
-      <span class="nav-item-icon">🧭</span> Leitfaden
+    <div class="sidebar-phase-item active" data-phase="begleitung" onclick="showPhase('begleitung')">
+      <span class="nav-item-icon">🧭</span> Begleitung
     </div>
-    <div class="sidebar-phase-item" data-phase="analyse" onclick="showPhase('analyse')">
-      <span class="nav-item-icon">📊</span> Analyse
+    <div class="sidebar-phase-item" data-phase="auswertung" onclick="showPhase('auswertung')">
+      <span class="nav-item-icon">📊</span> Auswertung
+    </div>
+  </div>
+
+  <!-- Ressourcen -->
+  <div class="sidebar-ressourcen-nav">
+    <div class="sidebar-section-label">Ressourcen</div>
+    <div class="nav-item" id="nav-bibliothek" onclick="showView('bibliothek')" role="button" tabindex="0">
+      <span class="nav-item-icon" aria-hidden="true">📚</span> Bibliothek
+    </div>
+    <div class="nav-item" id="nav-weiterbildung" onclick="showView('weiterbildung')" role="button" tabindex="0">
+      <span class="nav-item-icon" aria-hidden="true">🎓</span> Weiterbildung
     </div>
   </div>
 
@@ -694,10 +703,7 @@
         <div id="berichte-container"></div>
       </div>
 
-      <!-- WISSEN: Unified Bibliothek -->
-      <div class="profil-tab-content" data-tab="bibliothek">
-        <div id="bibliothek-container"></div>
-      </div>
+      <!-- Bibliothek ist jetzt eine eigenständige View (siehe view-bibliothek) -->
 
       <!-- ANALYSE: Hypothesen -->
       <div class="profil-tab-content" data-tab="hypothesen-tab">
@@ -858,6 +864,18 @@
     </div>
     <div class="content" id="weiterbildung-content">
       <!-- Wird von renderWeiterbildung() gefüllt -->
+    </div>
+  </div>
+
+  <!-- ---- BIBLIOTHEK VIEW ---- -->
+  <div class="view" id="view-bibliothek">
+    <div class="topbar">
+      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
+      <div class="topbar-title">Bibliothek</div>
+      <div class="topbar-actions"></div>
+    </div>
+    <div class="content" style="flex:1;overflow-y:auto;">
+      <div id="bibliothek-container"></div>
     </div>
   </div>
 

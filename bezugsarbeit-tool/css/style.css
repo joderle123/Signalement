@@ -437,6 +437,23 @@ body {
   opacity: 1;
 }
 
+/* Ressourcen-Sektion */
+.sidebar-ressourcen-nav {
+  padding: 4px 10px 8px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.sidebar-ressourcen-nav .nav-item {
+  padding: 8px 16px;
+  font-size: 12px;
+}
+
+#sidebar-klient-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ============================================================
    MAIN CONTENT
    ============================================================ */
@@ -6302,6 +6319,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 [data-theme="dark"] .schueler-item:hover { background: var(--bg-hover); }
 [data-theme="dark"] .sidebar-phase-item { color: var(--text-muted); }
 [data-theme="dark"] .sidebar-phase-item.active { color: #fff; }
+[data-theme="dark"] .sidebar-ressourcen-nav .nav-item { color: var(--text-muted); }
+[data-theme="dark"] .sidebar-ressourcen-nav .nav-item.active { color: #fff; }
 [data-theme="dark"] .toast { background: var(--bg-card); color: var(--text); border-color: var(--border); }
 [data-theme="dark"] .search-input input { background: var(--bg-input); color: var(--text); border-color: var(--border); }
 [data-theme="dark"] .panel-tab { background: var(--bg-hover); color: var(--text-muted); border-color: var(--border); }
@@ -7800,7 +7819,7 @@ button:focus-visible,
   #sidebar, .sidebar, .wiki-fab, .help-fab, .wiki-panel, .help-panel,
   .wiki-overlay, .help-overlay, .topbar-actions, .profil-actions,
   .btn, button, .loading-overlay, #toast-container,
-  .profil-tabs-sub, .sidebar-phase-nav { display: none !important; }
+  .profil-tabs-sub, .sidebar-phase-nav, .sidebar-ressourcen-nav { display: none !important; }
 
   /* Main content full width */
   main, .main-content { margin-left: 0 !important; width: 100% !important; }

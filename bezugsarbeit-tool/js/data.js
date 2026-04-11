@@ -24419,7 +24419,93 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'opposition', titel: 'Oppositionelles Verhalten / Regelverweigerung', icon: '🚫', farbe: '#B91C1C', kategorie: 'externalisierend', icd: 'F91.3', beschreibung: 'Aktive Verweigerung, Provokation, Grenztestung', variablen: [], empfehlungen: [] },
+  {
+    id: 'opposition', titel: 'Oppositionelles Verhalten / Regelverweigerung', icon: '🚫', farbe: '#B91C1C', kategorie: 'externalisierend', icd: 'F91.3',
+    beschreibung: 'Aktive Verweigerung, Provokation, Grenztestung',
+    variablen: [
+      {
+        id: 'opp-verhalten', frage: 'Welche oppositionellen Verhaltensweisen zeigen sich?', typ: 'multi',
+        optionen: [
+          { id: 'verweigerung', label: 'Aktive Verweigerung ("Nein, mache ich nicht")', tags: ['opp-verweigerung'] },
+          { id: 'provokation', label: 'Provokation / Grenztestung', tags: ['opp-provokation'] },
+          { id: 'streiten', label: 'Ständiges Streiten mit Erwachsenen', tags: ['opp-konfrontativ'] },
+          { id: 'schuld-andere', label: 'Anderen die Schuld geben', tags: ['opp-externalisierung'] },
+          { id: 'empfindlich', label: 'Leicht reizbar / empfindlich', tags: ['opp-gereizt'] },
+          { id: 'rachsuechtig', label: 'Rachsüchtig / nachtragend', tags: ['opp-rachsuechtig'] }
+        ]
+      },
+      {
+        id: 'opp-zielgruppe', frage: 'Gegenüber wem zeigt sich das Verhalten hauptsächlich?', typ: 'single',
+        optionen: [
+          { id: 'lehrer', label: 'Lehrer / Schulpersonal', tags: ['opp-schule'] },
+          { id: 'eltern', label: 'Eltern / Betreuungspersonen', tags: ['opp-eltern'] },
+          { id: 'alle-erwachsene', label: 'Alle Autoritätspersonen', tags: ['opp-generalisiert'] },
+          { id: 'peers', label: 'Auch gegenüber Gleichaltrigen', tags: ['opp-generalisiert', 'sozial-defizit'] }
+        ]
+      },
+      {
+        id: 'opp-funktion', frage: 'Welche Funktion hat das Verhalten vermutlich?', typ: 'single',
+        optionen: [
+          { id: 'autonomie', label: 'Autonomie / Selbstbestimmung einfordern', tags: ['opp-autonomie', 'entwicklungsbedingt'] },
+          { id: 'aufmerksamkeit', label: 'Aufmerksamkeit / Zuwendung bekommen', tags: ['opp-aufmerksamkeit'] },
+          { id: 'vermeidung', label: 'Anforderungen / Aufgaben vermeiden', tags: ['opp-vermeidung'] },
+          { id: 'kontrolle', label: 'Kontrolle / Macht über Situation haben', tags: ['opp-kontrolle'] },
+          { id: 'unklar', label: 'Unklar / wechselnd', tags: [] }
+        ]
+      },
+      {
+        id: 'opp-reaktion-umfeld', frage: 'Wie reagiert das Umfeld typischerweise?', typ: 'single',
+        optionen: [
+          { id: 'eskalation', label: 'Eskalation — Machtkampf / lauter werden', tags: ['umfeld-eskaliert'] },
+          { id: 'nachgeben', label: 'Nachgeben — Regeln werden aufgeweicht', tags: ['umfeld-inkonsequent'] },
+          { id: 'strafen', label: 'Immer härtere Strafen (wirken nicht)', tags: ['umfeld-straft'] },
+          { id: 'hilflos', label: 'Hilflosigkeit / Resignation', tags: ['umfeld-hilflos'] },
+          { id: 'konsistent', label: 'Relativ konsistent — trotzdem schwierig', tags: ['umfeld-konsistent'] }
+        ]
+      },
+      {
+        id: 'opp-komorbid', frage: 'Gibt es begleitende Auffälligkeiten?', typ: 'multi',
+        optionen: [
+          { id: 'adhs', label: 'ADHS / Impulskontrolldefizit', tags: ['komorbid-adhs'] },
+          { id: 'angst', label: 'Angst / Unsicherheit hinter der Fassade', tags: ['komorbid-angst'] },
+          { id: 'depression', label: 'Depressive Stimmung', tags: ['komorbid-depression'] },
+          { id: 'lernstoerung', label: 'Lernstörung / schulische Überforderung', tags: ['komorbid-lernstoerung'] },
+          { id: 'keine', label: 'Keine erkennbaren Begleitstörungen', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'opp-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'opp-verweigerung': 1, 'opp-provokation': 2, 'opp-konfrontativ': 2, 'umfeld-eskaliert': 3, 'umfeld-inkonsequent': 3, 'opp-autonomie': 1, 'entwicklungsbedingt': 1 },
+        risiko: 'gelb',
+        einschaetzung: 'Oppositionelles Trotzverhalten (F91.3/ODD) — Bei Kindern/Jugendlichen oft Ausdruck von fehlender Selbstwirksamkeit, unerkannter Angst oder dysfunktionaler Interaktionsmuster. Zentral: Nicht den Machtkampf gewinnen wollen, sondern die Beziehung erhalten. Das Verhalten hat eine Funktion — diese verstehen ist der Schlüssel.',
+        sofort: [
+          'Machtkampf vermeiden: Nicht "Du musst!", sondern Wahlmöglichkeiten geben ("Möchtest du zuerst X oder Y machen?")',
+          'Positive Aufmerksamkeit für erwünschtes Verhalten VERSTÄRKEN (5:1 Ratio positiv:negativ)',
+          'Klare, wenige Regeln mit vorhersehbaren Konsequenzen (nicht im Affekt festlegen)',
+          'Gesprächseröffnung: "Mir ist aufgefallen, dass es in letzter Zeit oft Streit gibt. Ich glaube, das nervt dich genauso wie mich. Was bräuchtest du, damit es besser läuft?"'
+        ],
+        mittelfristig: [
+          'Elterntraining: Triple P, Incredible Years, oder Parent-Child Interaction Therapy (PCIT)',
+          'Funktionale Verhaltensanalyse: Auslöser → Verhalten → Konsequenz → Alternative',
+          'Beziehungsaufbau: 1:1-Zeit ohne Anforderungen, gemeinsame Aktivitäten',
+          'Kollaboratives Problemlösen nach Greene: "Plan B" — Bedürfnisse beider Seiten einbeziehen'
+        ],
+        ueberweisung: 'Bei Persistenz >6 Monate und Generalisierung: KJP-Abklärung (Differenzialdiagnostik: ADHS, Angst, Bindung). In Luxemburg: CHNP, CePAS (Centre Psycho-Social et d\'Accompagnement Scolaires).',
+        elternarbeit: 'Kernbotschaft: Das Kind IST nicht oppositionell — es VERHÄLT SICH so. Eltern aus dem Machtkampf holen. "Pick your battles": Nicht jede Verweigerung ist ein Kampf wert. Struktur + Wärme = Authoritative Parenting.',
+        materialien: { arbeitsblaetter: ['wut-management', 'soziale-kompetenz'], therapiemodule: ['therapiemodul-opposition'], fachmodule: ['opposition'] },
+        referenzen: [
+          'Greene, R.W. (2014): The Explosive Child (5th ed.) — Collaborative & Proactive Solutions (CPS).',
+          'Eyberg, S.M. et al. (2008): Evidence-based treatments for child and adolescent disruptive behavior. JCCAP.',
+          'Burke, J.D. et al. (2014): Irritable and defiant sub-dimensions of ODD. JAACAP.',
+          'NICE Guideline CG158 (2013/2017): Antisocial behaviour and conduct disorders — parent training recommended first-line.'
+        ]
+      }
+    ]
+  },
   { id: 'mobbing-taeter', titel: 'Mobbing (als Täter)', icon: '👊', farbe: '#991B1B', kategorie: 'externalisierend', icd: 'F91', beschreibung: 'Systematisches Schikanieren, Ausgrenzung, Cybermobbing', variablen: [], empfehlungen: [] },
   { id: 'wutausbrueche', titel: 'Regulationsstörung / Wutausbrüche', icon: '🌋', farbe: '#EF4444', kategorie: 'externalisierend', icd: 'F91 / F63', beschreibung: 'Unkontrollierte emotionale Ausbrüche, Impulskontrollprobleme', variablen: [], empfehlungen: [] },
 

@@ -23620,3 +23620,103 @@ const WB_KATEGORIEN = {
   eltern: { label: 'Schwierige Eltern-Konstellationen', icon: '👨‍👩‍👧', farbe: '#0EA5E9', beschreibung: 'Helikopter-Eltern, Fach-Eltern, verweigernde Eltern, psychisch belastete Eltern, Trennung, kulturelle Divergenz' },
   situationen: { label: 'Besondere Situationen', icon: '🎯', farbe: '#16A34A', beschreibung: 'Schweigende Jugendliche, Migration, LGBTQ+, Schulverweigerung, Substanzkonsum, Leaving Care' }
 };
+
+// ============================================================
+// CDSS — Gemeinsame Variablen (bei jedem Problem abgefragt)
+// ============================================================
+const CDSS_GEMEINSAME_VARIABLEN = [
+  {
+    id: 'alter', frage: 'Wie alt ist der/die Jugendliche?', typ: 'single',
+    optionen: [
+      { id: '6-9', label: '6–9 Jahre (Zyklus 2–3)', tags: ['kind', 'grundschule'] },
+      { id: '10-12', label: '10–12 Jahre (Zyklus 4)', tags: ['praepubertaer', 'uebergang'] },
+      { id: '13-15', label: '13–15 Jahre (Sekundarstufe)', tags: ['adoleszent'] },
+      { id: '16-18', label: '16–18 Jahre (Sekundarstufe+)', tags: ['spaetadoleszent'] }
+    ]
+  },
+  {
+    id: 'geschlecht', frage: 'Geschlecht?', typ: 'single',
+    optionen: [
+      { id: 'maennlich', label: 'Männlich', tags: ['maennlich'] },
+      { id: 'weiblich', label: 'Weiblich', tags: ['weiblich'] },
+      { id: 'divers', label: 'Divers / Non-binär', tags: ['divers', 'gender-thema'] }
+    ]
+  },
+  {
+    id: 'dauer', frage: 'Seit wann besteht das Problem?', typ: 'single',
+    optionen: [
+      { id: 'akut', label: 'Akut — weniger als 2 Wochen', tags: ['akut'] },
+      { id: 'subakut', label: 'Subakut — 2 bis 8 Wochen', tags: ['subakut'] },
+      { id: 'chronisch', label: 'Chronisch — länger als 2 Monate', tags: ['chronisch'] },
+      { id: 'episodisch', label: 'Episodisch — kommt und geht', tags: ['episodisch', 'rezidivierend'] }
+    ]
+  },
+  {
+    id: 'schweregrad', frage: 'Wie stark ist die Beeinträchtigung im Alltag?', typ: 'single',
+    optionen: [
+      { id: 'leicht', label: 'Leicht — Alltag noch funktionsfähig', tags: ['leicht'] },
+      { id: 'mittel', label: 'Mittel — deutliche Einschränkung in Schule/Sozialem', tags: ['mittel'] },
+      { id: 'schwer', label: 'Schwer — massive Beeinträchtigung, kaum Funktionsfähigkeit', tags: ['schwer', 'dringend'] }
+    ]
+  },
+  {
+    id: 'familienkontext', frage: 'In welchem familiären Kontext lebt der/die Jugendliche?', typ: 'single',
+    optionen: [
+      { id: 'intakt', label: 'Intakte Familie (beide Eltern)', tags: ['familie-intakt'] },
+      { id: 'getrennt', label: 'Getrennt / Geschieden', tags: ['familie-getrennt'] },
+      { id: 'alleinerziehend', label: 'Alleinerziehend', tags: ['alleinerziehend', 'wenig-ressourcen'] },
+      { id: 'patchwork', label: 'Patchwork-Familie', tags: ['patchwork'] },
+      { id: 'pflege-heim', label: 'Pflegefamilie / Heim / Foyer', tags: ['fremdplatziert', 'bindungs-thema'] },
+      { id: 'umf', label: 'Unbegleiteter minderjähriger Flüchtling', tags: ['umf', 'migration', 'ohne-eltern'] }
+    ]
+  },
+  {
+    id: 'elternkooperation', frage: 'Wie kooperativ sind die Eltern / Sorgeberechtigten?', typ: 'single',
+    optionen: [
+      { id: 'kooperativ', label: 'Kooperativ & engagiert', tags: ['eltern-kooperativ'] },
+      { id: 'ambivalent', label: 'Ambivalent / überfordert', tags: ['eltern-ambivalent'] },
+      { id: 'verweigend', label: 'Verweigend / feindlich', tags: ['eltern-verweigend', 'kooperation-schwierig'] },
+      { id: 'nicht-erreichbar', label: 'Nicht erreichbar / abwesend', tags: ['eltern-abwesend'] },
+      { id: 'teil-des-problems', label: 'Eltern sind selbst Teil des Problems', tags: ['eltern-belastet', 'eltern-teil-des-problems'] }
+    ]
+  },
+  {
+    id: 'schulkontext', frage: 'Wie ist die aktuelle schulische Situation?', typ: 'single',
+    optionen: [
+      { id: 'regelschule-ok', label: 'Regelschule — unauffällig', tags: ['schule-ok'] },
+      { id: 'regelschule-schwierig', label: 'Regelschule — mit Schwierigkeiten', tags: ['schule-schwierig'] },
+      { id: 'foerderschule', label: 'Förderschule / Spezialklasse', tags: ['foerderbedarf'] },
+      { id: 'cdse', label: 'CDSE-Begleitung aktiv', tags: ['cdse-aktiv'] },
+      { id: 'kein-schulbesuch', label: 'Kein Schulbesuch aktuell', tags: ['kein-schulbesuch', 'dringend'] }
+    ]
+  },
+  {
+    id: 'peers', frage: 'Wie sieht das soziale Umfeld (Gleichaltrige) aus?', typ: 'single',
+    optionen: [
+      { id: 'altersgemass', label: 'Altersgemäße Kontakte vorhanden', tags: ['peers-ok'] },
+      { id: 'wenige', label: 'Wenige Kontakte', tags: ['peers-wenig'] },
+      { id: 'isoliert', label: 'Sozial isoliert', tags: ['isoliert', 'einsamkeit'] },
+      { id: 'negativ', label: 'Negative Peergroup (Delinquenz, Substanzen)', tags: ['negative-peers', 'risiko-peers'] },
+      { id: 'online', label: 'Ausschließlich Online-Kontakte', tags: ['nur-online', 'medien-thema'] }
+    ]
+  },
+  {
+    id: 'vorbehandlung', frage: 'Gibt es eine Vorbehandlung / frühere Maßnahmen?', typ: 'single',
+    optionen: [
+      { id: 'keine', label: 'Keine bisherige Behandlung', tags: ['erstbehandlung'] },
+      { id: 'ambulant', label: 'Ambulante Therapie laufend', tags: ['vorbehandelt', 'ambulant'] },
+      { id: 'stationaer', label: 'War stationär (Psychiatrie/Klinik)', tags: ['vorbehandelt', 'stationaer-vorgeschichte'] },
+      { id: 'abbruch', label: 'Therapieabbruch', tags: ['therapieabbruch', 'compliance-thema'] },
+      { id: 'warteliste', label: 'Auf Warteliste', tags: ['wartet', 'unterversorgt'] }
+    ]
+  },
+  {
+    id: 'migration', frage: 'Migrationshintergrund?', typ: 'single',
+    optionen: [
+      { id: 'keiner', label: 'Keiner', tags: [] },
+      { id: 'erste-zweite', label: '1. oder 2. Generation', tags: ['migration'] },
+      { id: 'umf-flucht', label: 'UMF / Fluchthintergrund', tags: ['migration', 'flucht', 'trauma-risiko'] },
+      { id: 'neu-in-lu', label: 'Neu in Luxemburg (< 1 Jahr)', tags: ['migration', 'neu-in-lu', 'sprachbarriere'] }
+    ]
+  }
+];

@@ -3123,8 +3123,15 @@ function renderSoapVorschau() {
     (parseInt(document.getElementById('ors-social')?.value || 0)) +
     (parseInt(document.getElementById('ors-overall')?.value || 0));
 
+  const engagement = document.getElementById('prot-engagement')?.value || '';
+  const interventionstyp = document.getElementById('prot-interventionstyp')?.value || '';
+  const externeEreignisse = [...document.querySelectorAll('.ext-ereignis-cb:checked')].map(cb => cb.value);
+  const pvtEnde = APP._selectedPVTEnde || '';
+
   const stimmungMap = { 'sehr-schlecht': '😫 Sehr schlecht', 'schlecht': '😞 Schlecht', 'neutral': '😐 Neutral', 'gut': '🙂 Gut', 'sehr-gut': '😄 Sehr gut' };
   const pvtMap = { safe: '🟢 Sicher', activated: '🟡 Angespannt', frozen: '🟣 Eingefroren' };
+  const interventionsMap = { gespraechsfuehrung: 'Gesprächsführung', psychoedukation: 'Psychoedukation', rollenspiel: 'Rollenspiel', achtsamkeit: 'Achtsamkeit/Grounding', kreativ: 'Kreativ/Kunst', outdoor: 'Outdoor/Erlebnis', sozialkompetenz: 'Sozialkompetenz', krisenintervention: 'Krisenintervention', arbeitsblatt: 'Arbeitsblatt/Übung', elternarbeit: 'Elterngespräch', motivational: 'Motivational Interviewing', verhaltensaktivierung: 'Verhaltensaktivierung' };
+  const ereignisMap = { 'streit-zuhause': 'Streit zu Hause', 'schulprobleme': 'Schulprobleme', 'positiv': 'Positives Erlebnis', 'krise': 'Krise/Notfall', 'veraenderung': 'Veränderung', 'krankheit': 'Krankheit', 'keine': 'Keine besonderen' };
 
   let themaLabel = '';
   if (themaId) {
@@ -3151,6 +3158,10 @@ function renderSoapVorschau() {
         ${themaLabel ? `<div class="soap-vorschau-meta-item">📌 ${themaLabel}</div>` : ''}
         <div class="soap-vorschau-meta-item" style="color:${orsColor};font-weight:700;">📈 ORS: ${orsTotal}/40</div>
         <div class="soap-vorschau-meta-item" style="color:${srsColor};font-weight:700;">📊 SRS: ${srsTotal}/40</div>
+        ${engagement ? `<div class="soap-vorschau-meta-item">🎯 Engagement: ${engagement}/10</div>` : ''}
+        ${interventionstyp ? `<div class="soap-vorschau-meta-item">🛠️ ${interventionsMap[interventionstyp] || interventionstyp}</div>` : ''}
+        ${externeEreignisse.length > 0 ? `<div class="soap-vorschau-meta-item">📌 ${externeEreignisse.map(e => ereignisMap[e] || e).join(', ')}</div>` : ''}
+        ${pvtEnde ? `<div class="soap-vorschau-meta-item">🧠 PVT-Ende: ${pvtMap[pvtEnde] || pvtEnde}</div>` : ''}
       </div>
 
       ${subjektiv ? `<div class="soap-vorschau-section">
@@ -3331,6 +3342,10 @@ function addProtokoll() {
     kategorie: 'session',
     themaId: themaId || null,
     soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel, pvt: pvtState, ors: { individual: orsI, interpersonal: orsIP, social: orsS, overall: orsO, total: orsTotal }, srs: { relationship: srsR, goals: srsG, approach: srsA, overall: srsO, total: srsTotal },
+      engagement: parseInt(document.getElementById('prot-engagement')?.value) || null,
+      interventionstyp: document.getElementById('prot-interventionstyp')?.value || null,
+      externeEreignisse: [...document.querySelectorAll('.ext-ereignis-cb:checked')].map(cb => cb.value),
+      pvtEnde: APP._selectedPVTEnde || null,
       cssrsSchweregrad: cssrsSchweregrad || null,
       sicherheitsplanDokumentiert: cssrsSchweregrad >= 3 ? !!document.getElementById('soap-sicherheitsplan-check')?.checked : null,
       supervisorInformiert: cssrsSchweregrad >= 3 ? !!document.getElementById('soap-supervisor-check')?.checked : null,
@@ -3368,11 +3383,23 @@ function addProtokoll() {
   APP.protStimmung = null;
   document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
 
-  // Reset PVT
+  // Reset PVT (Start + Ende)
   APP.protPVT = null;
+  APP._selectedPVTEnde = null;
   document.querySelectorAll('.pvt-card').forEach(b => b.classList.remove('selected'));
   const pvtEmpf = document.getElementById('pvt-empfehlung');
   if (pvtEmpf) pvtEmpf.style.display = 'none';
+  const pvtEndeFb = document.getElementById('pvt-ende-feedback');
+  if (pvtEndeFb) pvtEndeFb.style.display = 'none';
+
+  // Reset neue Felder (Engagement, Interventionstyp, Externe Ereignisse)
+  const engSlider = document.getElementById('prot-engagement');
+  if (engSlider) { engSlider.value = 5; }
+  const engVal = document.getElementById('prot-engagement-val');
+  if (engVal) engVal.textContent = '5';
+  const intTyp = document.getElementById('prot-interventionstyp');
+  if (intTyp) intTyp.value = '';
+  document.querySelectorAll('.ext-ereignis-cb').forEach(cb => cb.checked = false);
 
   // Reset SRS
   ['relationship', 'goals', 'approach', 'overall'].forEach(id => {
@@ -3496,6 +3523,42 @@ function selectPVT(btn) {
   empf.style.borderColor = m.border;
   empf.style.color = m.farbe;
   empf.innerHTML = m.text;
+}
+
+// ---- PVT Ende (Post-Session) ----
+function selectPVTEnde(btn) {
+  document.querySelectorAll('#pvt-ende-cards .pvt-card').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  APP._selectedPVTEnde = btn.dataset.val;
+
+  const fb = document.getElementById('pvt-ende-feedback');
+  if (!fb) return;
+  const pvtStart = APP.protPVT;
+  const pvtEnde = btn.dataset.val;
+  const states = { safe: 0, activated: 1, frozen: 2 };
+  const labels = { safe: 'Sicher & offen', activated: 'Angespannt', frozen: 'Eingefroren' };
+
+  if (pvtStart && pvtEnde) {
+    const delta = states[pvtStart] - states[pvtEnde];
+    let text, bg, border, color;
+    if (delta > 0) {
+      text = `✅ <strong>Regulation gelungen.</strong> ${labels[pvtStart]} → ${labels[pvtEnde]}. Die Sitzung hat den Jugendlichen in einen sichereren Zustand gebracht.`;
+      bg = '#ECFDF5'; border = '#A7F3D0'; color = '#059669';
+    } else if (delta === 0) {
+      text = `➡️ <strong>Zustand stabil.</strong> ${labels[pvtStart]} → ${labels[pvtEnde]}. Keine Veränderung des Regulationszustands.`;
+      bg = '#F3F4F6'; border = '#D1D5DB'; color = '#4B5563';
+    } else {
+      text = `⚠️ <strong>Dysregulation beachten.</strong> ${labels[pvtStart]} → ${labels[pvtEnde]}. Der Jugendliche verlässt die Sitzung weniger reguliert — Nachbetreuung prüfen.`;
+      bg = '#FEF3C7'; border = '#FDE68A'; color = '#D97706';
+    }
+    fb.style.display = 'block';
+    fb.style.background = bg;
+    fb.style.borderColor = border;
+    fb.style.color = color;
+    fb.innerHTML = text;
+  } else {
+    fb.style.display = 'none';
+  }
 }
 
 // ---- SRS Session Rating Scale ----

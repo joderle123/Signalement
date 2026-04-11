@@ -459,6 +459,65 @@
               <div id="pvt-empfehlung" class="pvt-empfehlung" style="display:none;"></div>
             </div>
 
+            <!-- Engagement-Einschätzung -->
+            <div class="form-group" style="margin-top:12px;">
+              <label>🎯 Engagement des Jugendlichen</label>
+              <div class="srs-slider-wrap">
+                <span style="font-size:11px;color:#9CA3AF;">Gering</span>
+                <input type="range" min="0" max="10" value="5" id="prot-engagement" class="srs-range" style="accent-color:#8B5CF6;" oninput="document.getElementById('prot-engagement-val').textContent=this.value">
+                <span style="font-size:11px;color:#9CA3AF;">Hoch</span>
+                <span class="srs-val" id="prot-engagement-val">5</span>
+              </div>
+            </div>
+
+            <!-- Interventionstyp -->
+            <div class="form-group">
+              <label>🛠️ Hauptintervention</label>
+              <select id="prot-interventionstyp" style="width:100%;">
+                <option value="">— Nicht angegeben —</option>
+                <option value="gespraechsfuehrung">Gesprächsführung</option>
+                <option value="psychoedukation">Psychoedukation</option>
+                <option value="rollenspiel">Rollenspiel</option>
+                <option value="achtsamkeit">Achtsamkeit / Grounding</option>
+                <option value="kreativ">Kreativ / Kunst</option>
+                <option value="outdoor">Outdoor / Erlebnispädagogik</option>
+                <option value="sozialkompetenz">Sozialkompetenz-Training</option>
+                <option value="krisenintervention">Krisenintervention</option>
+                <option value="arbeitsblatt">Arbeitsblatt / Übung</option>
+                <option value="elternarbeit">Elterngespräch-Nachbereitung</option>
+                <option value="motivational">Motivational Interviewing</option>
+                <option value="verhaltensaktivierung">Verhaltensaktivierung</option>
+              </select>
+            </div>
+
+            <!-- Externe Ereignisse -->
+            <div class="form-group">
+              <label>📌 Externe Ereignisse diese Woche</label>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
+                  <input type="checkbox" class="ext-ereignis-cb" value="streit-zuhause"> Streit zu Hause
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
+                  <input type="checkbox" class="ext-ereignis-cb" value="schulprobleme"> Schulprobleme
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
+                  <input type="checkbox" class="ext-ereignis-cb" value="positiv"> Positives Erlebnis
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
+                  <input type="checkbox" class="ext-ereignis-cb" value="krise"> Krise / Notfall
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
+                  <input type="checkbox" class="ext-ereignis-cb" value="veraenderung"> Veränderung (Umzug etc.)
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
+                  <input type="checkbox" class="ext-ereignis-cb" value="krankheit"> Krankheit
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
+                  <input type="checkbox" class="ext-ereignis-cb" value="keine"> Keine besonderen Ereignisse
+                </label>
+              </div>
+            </div>
+
             <!-- Themen-Verknüpfung -->
             <div class="form-group">
               <label>Bearbeitetes Thema</label>
@@ -659,6 +718,31 @@
                 ⚠️ <strong>Score unter 25 — Reflexion empfohlen.</strong><br>
                 Mögliche Fragen: Was könnte die Beziehung belastet haben? War das Thema zu früh? War der Schüler reguliert genug?
               </div>
+            </div>
+
+            <!-- PVT-Check am Ende der Sitzung -->
+            <div class="pvt-checkin" style="margin-top:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <label class="pvt-label">🧠 PVT-Check am Ende — Wo ist der Jugendliche jetzt?</label>
+              </div>
+              <div class="pvt-cards" id="pvt-ende-cards">
+                <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVTEnde(this)">
+                  <span class="pvt-dot" style="background:#22C55E;"></span>
+                  <span class="pvt-card-titel">Sicher & offen</span>
+                  <span class="pvt-card-desc">Entspannt, reguliert, guter Kontakt</span>
+                </button>
+                <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVTEnde(this)">
+                  <span class="pvt-dot" style="background:#F59E0B;"></span>
+                  <span class="pvt-card-titel">Angespannt / unruhig</span>
+                  <span class="pvt-card-desc">Noch aktiviert, nicht vollständig reguliert</span>
+                </button>
+                <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVTEnde(this)">
+                  <span class="pvt-dot" style="background:#8B5CF6;"></span>
+                  <span class="pvt-card-titel">Eingefroren / abwesend</span>
+                  <span class="pvt-card-desc">Noch dissoziiert, wenig Kontakt</span>
+                </button>
+              </div>
+              <div id="pvt-ende-feedback" style="display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:13px;border:1px solid;"></div>
             </div>
 
             <div class="soap-wizard-nav">

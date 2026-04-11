@@ -23583,3 +23583,40 @@ var WIKI_ARTIKEL = [
     quellen: ['UN-Kinderrechtskonvention (1989). Convention on the Rights of the Child.', 'UNICEF (2007). Implementation Handbook for the Convention on the Rights of the Child.', 'OKaJu (2022). Rapport annuel. Ombudsman fir Kanner a Jugendlecher Luxembourg.']
   },
 ];
+
+// ============================================================
+// WEITERBILDUNG — Praxis-Lernpfade
+// ============================================================
+const WB_LERNPFADE = [
+  // Kategorie A: Störungsbilder in der Praxis
+  { id: '01-internalisierende', titel: 'Internalisierende Störungen', kategorie: 'stoerungsbilder', icon: '🌧️', farbe: '#3B82F6', datei: 'weiterbildung/01-internalisierende.html', beschreibung: 'Depression, Angst, Rückzug, Somatisierung erkennen & begleiten', dauer: '45 Min.' },
+  { id: '02-externalisierende', titel: 'Externalisierende Störungen', kategorie: 'stoerungsbilder', icon: '🔥', farbe: '#EF4444', datei: 'weiterbildung/02-externalisierende.html', beschreibung: 'ODD, Aggression, Regelbruch, Impulskontrolle: Deeskalation & Grenzen', dauer: '45 Min.' },
+  { id: '03-trauma', titel: 'Trauma & Traumafolgestörungen', kategorie: 'stoerungsbilder', icon: '🌪️', farbe: '#6366F1', datei: 'weiterbildung/03-trauma.html', beschreibung: 'PTBS, komplexes Trauma, sequenzielle Traumatisierung, Stabilisierung', dauer: '60 Min.' },
+  { id: '04-bindungsstoerung', titel: 'Bindungsstörung', kategorie: 'stoerungsbilder', icon: '🔗', farbe: '#8B5CF6', datei: 'weiterbildung/04-bindungsstoerung.html', beschreibung: 'Unsichere/desorganisierte Bindung erkennen, Beziehungsaufbau, Grenzen', dauer: '45 Min.' },
+  { id: '05-selbstverletzung-suizidalitaet', titel: 'Selbstverletzung & Suizidalität', kategorie: 'stoerungsbilder', icon: '🆘', farbe: '#DC2626', datei: 'weiterbildung/05-selbstverletzung-suizidalitaet.html', beschreibung: 'SVV erkennen, ansprechen, Sicherheitsplanung, Krisengespräch', dauer: '50 Min.' },
+  { id: '06-adhs-praxis', titel: 'ADHS im Bezugsalltag', kategorie: 'stoerungsbilder', icon: '⚡', farbe: '#F59E0B', datei: 'weiterbildung/06-adhs-praxis.html', beschreibung: 'Hyperaktivität vs. Tagträumerei, Klassenraum-Strategien, Elternarbeit', dauer: '40 Min.' },
+  { id: '07-dissoziation', titel: 'Dissoziation & Wahrnehmungsveränderungen', kategorie: 'stoerungsbilder', icon: '🌫️', farbe: '#64748B', datei: 'weiterbildung/07-dissoziation.html', beschreibung: 'Erkennen, Erdung, wann überweisen', dauer: '35 Min.' },
+  { id: '08-essstoerungen', titel: 'Essstörungen & Körperbeziehung', kategorie: 'stoerungsbilder', icon: '🪞', farbe: '#EC4899', datei: 'weiterbildung/08-essstoerungen.html', beschreibung: 'Anzeichen, Ansprechen, Grenzen der Bezugsarbeit', dauer: '40 Min.' },
+
+  // Kategorie B: Schwierige Eltern-Konstellationen
+  { id: '09-helikopter-eltern', titel: 'Helikopter-Eltern', kategorie: 'eltern', icon: '🚁', farbe: '#0EA5E9', datei: 'weiterbildung/09-helikopter-eltern.html', beschreibung: 'Überprotektive Eltern, Autonomie des Jugendlichen, Grenzen setzen', dauer: '35 Min.' },
+  { id: '10-eltern-vom-fach', titel: 'Eltern vom Fach', kategorie: 'eltern', icon: '🎓', farbe: '#0D9488', datei: 'weiterbildung/10-eltern-vom-fach.html', beschreibung: 'Psychologen/Ärzte/Pädagogen als Eltern: Doppelrolle, Konkurrenz, Kooperation', dauer: '30 Min.' },
+  { id: '11-verweigernde-eltern', titel: 'Verweigernde/feindliche Eltern', kategorie: 'eltern', icon: '🚫', farbe: '#B91C1C', datei: 'weiterbildung/11-verweigernde-eltern.html', beschreibung: 'Kooperationsaufbau, Widerstand, wann Meldung nötig', dauer: '40 Min.' },
+  { id: '12-psychisch-belastete-eltern', titel: 'Psychisch belastete Eltern', kategorie: 'eltern', icon: '💔', farbe: '#7C3AED', datei: 'weiterbildung/12-psychisch-belastete-eltern.html', beschreibung: 'Depression, Sucht, Persönlichkeitsstörung: Kind schützen & Eltern einbinden', dauer: '45 Min.' },
+  { id: '13-hochstrittige-trennung', titel: 'Hochstrittige Trennung', kategorie: 'eltern', icon: '⚖️', farbe: '#D97706', datei: 'weiterbildung/13-hochstrittige-trennung.html', beschreibung: 'Kind im Loyalitätskonflikt, Umgangsrecht, Neutralität wahren', dauer: '40 Min.' },
+  { id: '14-kulturelle-erziehung', titel: 'Kulturell divergierende Erziehung', kategorie: 'eltern', icon: '🌍', farbe: '#059669', datei: 'weiterbildung/14-kulturelle-erziehung.html', beschreibung: 'Körperstrafe, Geschlechterrollen, Ehre: kultursensibel intervenieren', dauer: '45 Min.' },
+
+  // Kategorie C: Besondere Situationen
+  { id: '15-schweigender-jugendlicher', titel: 'Der schweigende Jugendliche', kategorie: 'situationen', icon: '🤐', farbe: '#475569', datei: 'weiterbildung/15-schweigender-jugendlicher.html', beschreibung: 'Zugang finden, non-verbale Methoden, Geduld vs. Druck', dauer: '35 Min.' },
+  { id: '16-migration-flucht', titel: 'Migration & Flucht', kategorie: 'situationen', icon: '🌐', farbe: '#2563EB', datei: 'weiterbildung/16-migration-flucht.html', beschreibung: 'UMF, Sprachbarrieren, kulturelle Codes, Dolmetscher', dauer: '50 Min.' },
+  { id: '17-lgbtq-jugendliche', titel: 'LGBTQ+ Jugendliche', kategorie: 'situationen', icon: '🏳️‍🌈', farbe: '#A855F7', datei: 'weiterbildung/17-lgbtq-jugendliche.html', beschreibung: 'Affirmativer Ansatz, Coming Out, Umgang mit homo-/transphoben Eltern', dauer: '35 Min.' },
+  { id: '18-schulverweigerung', titel: 'Schulverweigerung', kategorie: 'situationen', icon: '🏫', farbe: '#EA580C', datei: 'weiterbildung/18-schulverweigerung.html', beschreibung: 'Angstbedingt vs. oppositionell, Reintegrationsplanung', dauer: '40 Min.' },
+  { id: '19-substanzkonsum', titel: 'Substanzkonsum', kategorie: 'situationen', icon: '🧪', farbe: '#BE185D', datei: 'weiterbildung/19-substanzkonsum.html', beschreibung: 'Motivational Interviewing, Risikominimierung, Eltern informieren', dauer: '40 Min.' },
+  { id: '20-uebergaenge-leaving-care', titel: 'Übergänge & Leaving Care', kategorie: 'situationen', icon: '🚪', farbe: '#16A34A', datei: 'weiterbildung/20-uebergaenge-leaving-care.html', beschreibung: 'Verselbstständigung, Loslassen, Nachsorge', dauer: '35 Min.' }
+];
+
+const WB_KATEGORIEN = {
+  stoerungsbilder: { label: 'Störungsbilder in der Praxis', icon: '🧠', farbe: '#6366F1', beschreibung: 'Internalisierende & externalisierende Störungen, Trauma, Bindung, Selbstverletzung, ADHS, Dissoziation, Essstörungen' },
+  eltern: { label: 'Schwierige Eltern-Konstellationen', icon: '👨‍👩‍👧', farbe: '#0EA5E9', beschreibung: 'Helikopter-Eltern, Fach-Eltern, verweigernde Eltern, psychisch belastete Eltern, Trennung, kulturelle Divergenz' },
+  situationen: { label: 'Besondere Situationen', icon: '🎯', farbe: '#16A34A', beschreibung: 'Schweigende Jugendliche, Migration, LGBTQ+, Schulverweigerung, Substanzkonsum, Leaving Care' }
+};

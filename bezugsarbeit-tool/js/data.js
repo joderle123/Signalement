@@ -23807,7 +23807,65 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'depression', titel: 'Depressive Stimmung / Antriebslosigkeit', icon: '🌧️', farbe: '#3B82F6', kategorie: 'emotional', icd: 'F32 / F33', beschreibung: 'Anhaltende Traurigkeit, Interessenverlust, Rückzug, Energielosigkeit', variablen: [], empfehlungen: [] },
+  { id: 'depression', titel: 'Depressive Stimmung / Antriebslosigkeit', icon: '🌧️', farbe: '#3B82F6', kategorie: 'emotional', icd: 'F32 / F33', beschreibung: 'Anhaltende Traurigkeit, Interessenverlust, Rückzug, Energielosigkeit',
+    variablen: [
+      { id: 'dep-hauptsymptome', frage: 'Welche Hauptsymptome beobachtest du? (Mehrfachauswahl)', typ: 'multi', optionen: [
+        { id: 'traurigkeit', label: 'Anhaltende Traurigkeit / Weinen', tags: ['traurigkeit'] },
+        { id: 'interessenverlust', label: 'Interessenverlust / kein Spaß mehr', tags: ['anhedonie'] },
+        { id: 'rueckzug', label: 'Sozialer Rückzug', tags: ['rueckzug', 'isoliert'] },
+        { id: 'reizbar', label: 'Gereiztheit / Dünnhäutigkeit (typisch bei Jugendlichen)', tags: ['reizbar', 'adoleszent-depression'] },
+        { id: 'antriebslos', label: 'Antriebslosigkeit / Erschöpfung', tags: ['antriebslos'] },
+        { id: 'schlaf', label: 'Schlafstörungen (zu viel oder zu wenig)', tags: ['schlaf-problem'] },
+        { id: 'konzentration', label: 'Konzentrations-/Entscheidungsprobleme', tags: ['kognitiv-beeintraechtigt'] },
+        { id: 'wertlosigkeit', label: 'Wertlosigkeit / übermäßige Schuldgefühle', tags: ['wertlosigkeit', 'negatives-selbstbild'] },
+        { id: 'appetit', label: 'Appetitveränderung (mehr oder weniger)', tags: ['appetit-veraendert'] }
+      ]},
+      { id: 'dep-suizidalitaet', frage: 'Gibt es Hinweise auf Suizidalität?', typ: 'single', optionen: [
+        { id: 'nein', label: 'Keine Hinweise', tags: [] },
+        { id: 'passiv', label: 'Passive Todesgedanken ("Wäre besser, wenn ich nicht da wäre")', tags: ['suizidal-passiv', 'risiko'] },
+        { id: 'aktiv', label: 'Aktive Suizidgedanken (denkt an konkretes Vorgehen)', tags: ['suizidal-aktiv', 'akut', 'dringend'] },
+        { id: 'versuch', label: 'Suizidversuch in der Vorgeschichte', tags: ['suizidversuch-vorgeschichte', 'hochrisiko'] }
+      ]},
+      { id: 'dep-ausloeser', frage: 'Gibt es einen erkennbaren Auslöser?', typ: 'single', optionen: [
+        { id: 'verlust', label: 'Verlust / Trennung (Tod, Scheidung, Freundschaft)', tags: ['ausloeser-verlust', 'trauer'] },
+        { id: 'mobbing', label: 'Mobbing / soziale Ausgrenzung', tags: ['ausloeser-mobbing'] },
+        { id: 'leistung', label: 'Schulischer Leistungsdruck / Versagen', tags: ['ausloeser-leistung'] },
+        { id: 'familie', label: 'Familiäre Belastung', tags: ['ausloeser-familie'] },
+        { id: 'kein', label: 'Kein klarer Auslöser erkennbar', tags: ['endogen-moeglich'] },
+        { id: 'mehrere', label: 'Mehrere Faktoren', tags: ['multifaktoriell'] }
+      ]},
+      { id: 'dep-funktionsniveau', frage: 'Wie stark ist das Funktionsniveau eingeschränkt?', typ: 'single', optionen: [
+        { id: 'leicht', label: 'Geht noch zur Schule, trifft noch Freunde (mit Mühe)', tags: ['funktional-leicht'] },
+        { id: 'mittel', label: 'Schulbesuch unregelmäßig, Rückzug von Freunden', tags: ['funktional-mittel'] },
+        { id: 'schwer', label: 'Bleibt im Bett, kein Schulbesuch, kompletter Rückzug', tags: ['funktional-schwer', 'dringend'] }
+      ]},
+      { id: 'dep-vorgeschichte', frage: 'Gab es frühere depressive Episoden?', typ: 'single', optionen: [
+        { id: 'erste', label: 'Erste Episode', tags: ['erste-episode'] },
+        { id: 'rezidiv', label: 'Wiederholte Episode (rezidivierend)', tags: ['rezidivierend', 'chronifizierungsrisiko'] },
+        { id: 'dysthymie', label: 'Dauerhaft gedrückte Stimmung seit >1 Jahr', tags: ['dysthym', 'chronisch'] }
+      ]}
+    ],
+    empfehlungen: [
+      { id: 'dep-leicht-mittel', tags_erforderlich: [], tags_gewichtung: { 'funktional-leicht': 2, 'erste-episode': 1, 'eltern-kooperativ': 2 }, tags_ausschluss: ['suizidal-aktiv', 'hochrisiko', 'funktional-schwer'], risiko: 'gelb',
+        einschaetzung: 'Leichte bis mittelschwere depressive Episode (F32.0/F32.1). Bei Jugendlichen zeigt sich Depression häufig durch Gereiztheit und Rückzug statt durch klassische Traurigkeit (NICE, 2019). PHQ-A Score und klinischer Eindruck deuten auf interventionsbedürftige Symptomatik hin.',
+        sofort: ['Depressive Symptomatik validieren: "Was du fühlst hat einen Namen, und es gibt Hilfe."', 'Sicherheitsabfrage: Suizidgedanken direkt und offen ansprechen (NICHT vermeiden aus Angst)', 'Tagesstruktur besprechen: Mindestmaß an Aktivität aufrechterhalten (Verhaltensaktivierung)', 'Schlafhygiene erfragen und optimieren'],
+        mittelfristig: ['Verhaltensaktivierung: Aktivitäten-Tagebuch, angenehme Aktivitäten schrittweise steigern', 'Kognitive Umstrukturierung: Negative Denkmuster identifizieren und hinterfragen', 'Soziale Kontakte gezielt fördern (1 Aktivität/Woche mit Peers)', 'Bewegung/Sport als antidepressive Intervention (mind. 3x/Woche, 30 Min.)', 'Bi-wöchentliches Screening mit PHQ-A zur Verlaufskontrolle'],
+        ueberweisung: 'Wenn nach 6-8 Wochen pädagogischer Intervention keine Besserung: Überweisung an Kinder- und Jugendpsychotherapeut. Bei mittelschwerer Episode: KVT (Kognitive Verhaltenstherapie) als Erstlinienbehandlung (NICE, 2019).',
+        elternarbeit: 'Eltern psychoedukation: Depression ist keine Faulheit oder Schwäche. Nicht "Reiß dich zusammen" sagen. Gemeinsam Tagesstruktur unterstützen. Auf eigene Belastung achten.',
+        materialien: { arbeitsblaetter: ['depressive-stimmungen.html', 'selbstwertgefuehl.html', 'emotionsregulation.html'], therapiemodule: ['therapiemodul-depression.html'], elterninfo: ['depression-eltern.html'] },
+        referenzen: ['NICE (2019). Depression in children and young people: identification and management. NG134.', 'Weisz, J.R. et al. (2006). Effects of psychotherapy for depression in children and adolescents: A meta-analysis. Psychological Bulletin, 132(1), 132-149.', 'Lewinsohn, P.M. et al. (1990). Cognitive-behavioral treatment for depressed adolescents. Behavior Therapy, 21(4), 385-401.', 'Thapar, A. et al. (2012). Depression in adolescence. The Lancet, 379(9820), 1056-1067.']
+      },
+      { id: 'dep-schwer-suizidal', tags_erforderlich: ['dringend'], tags_gewichtung: { 'suizidal-aktiv': 10, 'hochrisiko': 10, 'funktional-schwer': 5, 'suizidal-passiv': 3, 'komorbid-svv': 5 }, tags_ausschluss: [], risiko: 'rot',
+        einschaetzung: 'Schwere depressive Episode mit möglicher Suizidalität (F32.2/F32.3). SOFORTIGE Sicherheitsabklärung erforderlich. Bei aktiven Suizidgedanken, konkretem Plan oder Zugang zu Mitteln: psychiatrische Notfallvorstellung. C-SSRS (Columbia Suicide Severity Rating Scale) durchführen.',
+        sofort: ['SOFORT: Suizidalität direkt abfragen (C-SSRS: Gedanken → Plan → Absicht → Mittel)', 'Jugendlichen NICHT allein lassen bei akuter Suizidalität', 'Sicherheitsplan erstellen: Warnsignale, Bewältigungsstrategien, Kontaktpersonen, Krisennummern', 'Eltern informieren (Schweigepflichtdurchbrechung bei Lebensgefahr)', 'Zugang zu Mitteln einschränken (Medikamente, scharfe Gegenstände)'],
+        mittelfristig: ['Psychiatrische Anbindung sicherstellen (Termin innerhalb 1 Woche)', 'Engmaschige Kontakte (2-3x/Woche) bis psychiatrische Versorgung greift', 'Sicherheitsplan regelmäßig aktualisieren', 'Medikamentöse Behandlung ggf. durch Psychiater (SSRI ab 12 Jahren — Fluoxetin Erstlinienmedikation)'],
+        ueberweisung: 'DRINGEND: Kinder-/Jugendpsychiater — CHL Kannerklinik (Tel: 4411-6666) oder ZNS-Letzebuerg. Bei akuter Suizidalität: Notaufnahme CHL oder Notruf 112. Krisennummer Kanner-Jugendtelefon: 116 111.',
+        elternarbeit: 'Eltern sofort einbeziehen. Häusliche Sicherheit gewährleisten (Medikamente wegsperren, scharfe Gegenstände entfernen). Eltern brauchen eigene Unterstützung — Verweis auf CePAS Elternberatung.',
+        materialien: { arbeitsblaetter: ['depressive-stimmungen.html', 'krisenplan.html'], therapiemodule: [], elterninfo: ['depression-eltern.html'] },
+        referenzen: ['Posner, K. et al. (2011). The Columbia-Suicide Severity Rating Scale (C-SSRS). American Journal of Psychiatry, 168(12), 1266-1277.', 'NICE (2019). Depression in children and young people. NG134.', 'AACAP (2007). Practice parameter for the assessment and treatment of children and adolescents with depressive disorders. JAACAP, 46(11), 1503-1526.', 'Bridge, J.A. et al. (2007). Clinical response and risk for reported suicidal ideation and suicide attempts in pediatric antidepressant treatment. JAMA, 297(15), 1683-1696.']
+      }
+    ]
+  },
   { id: 'angst-panik', titel: 'Angst / Panikattacken', icon: '😰', farbe: '#F59E0B', kategorie: 'emotional', icd: 'F41.0 / F41.1', beschreibung: 'Übermäßige Sorgen, Panikattacken, körperliche Angstsymptome', variablen: [], empfehlungen: [] },
   { id: 'soziale-angst', titel: 'Soziale Angst / Rückzug', icon: '😶', farbe: '#E07B39', kategorie: 'emotional', icd: 'F40.1', beschreibung: 'Vermeidung sozialer Situationen, Angst vor Bewertung', variablen: [], empfehlungen: [] },
   { id: 'zwang', titel: 'Zwangssymptome / Zwangshandlungen', icon: '🔄', farbe: '#7C3AED', kategorie: 'emotional', icd: 'F42', beschreibung: 'Wiederkehrende Gedanken, Rituale, Kontrollzwang', variablen: [], empfehlungen: [] },

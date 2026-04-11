@@ -24689,7 +24689,131 @@ const CDSS_PROBLEME = [
   },
 
   // C. Krisen / Risiko
-  { id: 'selbstverletzung', titel: 'Selbstverletzung (SVV)', icon: '🩹', farbe: '#BE185D', kategorie: 'krisen', icd: 'X78 / Z91.5', beschreibung: 'Ritzen, Schneiden, Verbrennen, Selbstschädigung', variablen: [], empfehlungen: [] },
+  {
+    id: 'selbstverletzung', titel: 'Selbstverletzung (SVV)', icon: '🩹', farbe: '#BE185D', kategorie: 'krisen', icd: 'X78 / Z91.5',
+    beschreibung: 'Ritzen, Schneiden, Verbrennen, Selbstschädigung',
+    variablen: [
+      {
+        id: 'svv-art', frage: 'Welche Art der Selbstverletzung liegt vor?', typ: 'multi',
+        optionen: [
+          { id: 'ritzen', label: 'Ritzen / Schneiden', tags: ['svv-ritzen'] },
+          { id: 'verbrennen', label: 'Verbrennen / Verbrühen', tags: ['svv-verbrennen'] },
+          { id: 'schlagen', label: 'Sich selbst schlagen / gegen Wand', tags: ['svv-schlagen'] },
+          { id: 'kratzen', label: 'Kratzen / Wunden aufkratzen', tags: ['svv-kratzen'] },
+          { id: 'haare', label: 'Haare ausreißen (Trichotillomanie)', tags: ['svv-haare'] },
+          { id: 'andere', label: 'Andere (Beißen, Nadeln, Chemikalien)', tags: ['svv-andere'] }
+        ]
+      },
+      {
+        id: 'svv-frequenz', frage: 'Wie häufig kommt es zur Selbstverletzung?', typ: 'single',
+        optionen: [
+          { id: 'einmalig', label: 'Einmalig / erstmalig', tags: ['svv-einmalig'] },
+          { id: 'gelegentlich', label: 'Gelegentlich (monatlich)', tags: ['svv-gelegentlich'] },
+          { id: 'regelmaessig', label: 'Regelmäßig (wöchentlich)', tags: ['svv-regelmaessig', 'svv-mittel'] },
+          { id: 'taeglich', label: 'Täglich / fast täglich', tags: ['svv-taeglich', 'svv-schwer', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'svv-funktion', frage: 'Welche Funktion hat die Selbstverletzung?', typ: 'single',
+        optionen: [
+          { id: 'regulation', label: 'Emotionsregulation (Spannung abbauen, "wieder fühlen")', tags: ['svv-regulation'] },
+          { id: 'bestrafung', label: 'Selbstbestrafung / Schuldgefühle', tags: ['svv-bestrafung'] },
+          { id: 'kommunikation', label: 'Hilferuf / Kommunikation ("Seht, wie schlecht es mir geht")', tags: ['svv-kommunikation'] },
+          { id: 'dissoziation', label: 'Dissoziation beenden ("wieder spüren")', tags: ['svv-anti-dissoziation'] },
+          { id: 'peer', label: 'Peer-Einfluss / Nachahmung', tags: ['svv-peer'] },
+          { id: 'unklar', label: 'Unklar / mehrere Gründe', tags: [] }
+        ]
+      },
+      {
+        id: 'svv-geheimhaltung', frage: 'Wie geht der/die Jugendliche mit der SVV um?', typ: 'single',
+        optionen: [
+          { id: 'versteckt', label: 'Versteckt aktiv (lange Ärmel, Ausreden)', tags: ['svv-versteckt'] },
+          { id: 'zeigt', label: 'Zeigt gezielt bestimmten Personen', tags: ['svv-zeigt'] },
+          { id: 'offen', label: 'Offen sichtbar / scheint egal', tags: ['svv-offen'] }
+        ]
+      },
+      {
+        id: 'svv-suizidalitaet', frage: 'Gibt es Hinweise auf Suizidalität?', typ: 'single',
+        optionen: [
+          { id: 'keine', label: 'Nein — SVV als Bewältigungsstrategie, NICHT suizidal', tags: ['svv-nicht-suizidal'] },
+          { id: 'passiv', label: 'Passive Todesgedanken ("Wäre besser, wenn ich nicht mehr da wäre")', tags: ['suizidal-passiv', 'risiko-hoch'] },
+          { id: 'aktiv', label: 'Aktive Suizidgedanken', tags: ['suizidal-aktiv', 'risiko-akut'] },
+          { id: 'versuch', label: 'Suizidversuch in der Vorgeschichte', tags: ['suizidal-versuch', 'risiko-akut'] }
+        ]
+      },
+      {
+        id: 'svv-komorbid', frage: 'Welche begleitenden Probleme bestehen?', typ: 'multi',
+        optionen: [
+          { id: 'depression', label: 'Depression / Hoffnungslosigkeit', tags: ['komorbid-depression'] },
+          { id: 'trauma', label: 'Trauma / Missbrauch', tags: ['komorbid-trauma'] },
+          { id: 'borderline', label: 'Emotionale Instabilität / Borderline-Züge', tags: ['komorbid-borderline'] },
+          { id: 'essstoerung', label: 'Essstörung', tags: ['komorbid-essstoerung'] },
+          { id: 'dissoziation', label: 'Dissoziation', tags: ['komorbid-dissoziation'] },
+          { id: 'keine', label: 'Keine erkennbar', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'svv-nssi-standard',
+        tags_erforderlich: ['svv-nicht-suizidal'],
+        tags_ausschluss: ['suizidal-aktiv', 'risiko-akut'],
+        tags_gewichtung: { 'svv-regulation': 3, 'svv-einmalig': 1, 'svv-gelegentlich': 2, 'svv-versteckt': 1, 'komorbid-depression': 2, 'komorbid-trauma': 3 },
+        risiko: 'gelb',
+        einschaetzung: 'Nicht-suizidale Selbstverletzung (NSSI) — Eine dysfunktionale Bewältigungsstrategie, KEIN Suizidversuch. SVV dient meist der Emotionsregulation (Spannungsabbau, Affektmodulation). Wichtig: Nicht verurteilen, nicht ignorieren. SVV ist ein Zeichen, dass dem Jugendlichen keine besseren Strategien zur Verfügung stehen.',
+        sofort: [
+          'Ruhig bleiben — keine Panik, kein Entsetzen zeigen, aber auch nicht bagatellisieren',
+          'Wunden versorgen lassen (Schulkrankenpfleger) — medizinische Einschätzung',
+          'Offenes Gespräch: "Ich habe gesehen, dass du dich verletzt hast. Ich mache dir keinen Vorwurf. Ich möchte verstehen, was passiert."',
+          'NICHT: Versprechen verlangen ("Versprich mir, dass du aufhörst") — das erzeugt Druck und verhindert Offenheit'
+        ],
+        mittelfristig: [
+          'Alternative Strategien erarbeiten: Eiswürfel, rote Farbe, Gummiband, intensive Sinnesreize',
+          'Emotionsregulation stärken: TIPP-Skill (Temperatur, Intensive Bewegung, Paced Breathing, Paired Muscle Relaxation)',
+          'Spannungskurve erkennen: Ab welchem Punkt greifst du zur Klinge? Was ist davor?',
+          'Bei Trauma-Hintergrund: Traumaspezifische Behandlung empfehlen'
+        ],
+        ueberweisung: 'KJP-Vorstellung bei: Regelmäßiger SVV (wöchentlich+), tiefen Wunden, Verdacht auf Borderline-Persönlichkeitsentwicklung. In Luxemburg: CHNP, Kanner-Jugendtelefon 12345, Urgences CHL.',
+        elternarbeit: 'Eltern informieren (CAVE: Nicht gegen den Willen des Jugendlichen — erst besprechen). Eltern brauchen: Psychoedukation (SVV ≠ Suizid), Handlungsanweisungen (nicht bestrafen, nicht ignorieren), eigene Unterstützung (Angst, Schuldgefühle).',
+        materialien: { arbeitsblaetter: ['selbstverletzung-alternativen', 'notfallkoffer'], therapiemodule: ['therapiemodul-svv'], fachmodule: ['selbstverletzung'] },
+        referenzen: [
+          'Nock, M.K. (2010): Self-injury — Annual Review of Clinical Psychology.',
+          'NICE Guideline CG133 (2011/2022): Self-harm — longer-term management in children and young people.',
+          'Plener, P.L. et al. (2016): NSSI in adolescents — ESSSB position paper. European Child & Adolescent Psychiatry.',
+          'Klonsky, E.D. (2007): The functions of deliberate self-injury — a review. Clinical Psychology Review.'
+        ]
+      },
+      {
+        id: 'svv-mit-suizidalitaet',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'suizidal-aktiv': 10, 'risiko-akut': 10, 'suizidal-passiv': 5, 'suizidal-versuch': 8, 'svv-schwer': 4, 'svv-taeglich': 3, 'komorbid-depression': 3, 'komorbid-borderline': 2 },
+        risiko: 'rot',
+        einschaetzung: 'SVV mit Suizidalität — Akute Risikolage. SVV und Suizidalität sind nicht dasselbe, ABER: SVV ist einer der stärksten Risikofaktoren für Suizid. Jede Suizidäußerung ernst nehmen. Sicherheit geht vor alles.',
+        sofort: [
+          '⚠️ SOFORT: Suizidrisiko explizit abfragen — direkt fragen: "Denkst du daran, dir das Leben zu nehmen?"',
+          'Nicht alleine lassen — kontinuierliche Begleitung sicherstellen',
+          'Zugang zu Mitteln reduzieren (Medikamente, scharfe Gegenstände)',
+          'Krisentelefon: 112 (Notfall), 12345 (Kanner-Jugendtelefon), 454545 (SOS Détresse)'
+        ],
+        mittelfristig: [
+          'Dringende KJP-Vorstellung — gleicher Tag / nächster Werktag',
+          'Sicherheitsplan erstellen: Warnsignale → Strategien → Kontaktpersonen → Notfallnummern',
+          'Engmaschige Begleitung: Täglicher Kontakt in der akuten Phase',
+          'Eltern sofort informieren (Schweigepflicht entfällt bei Lebensgefahr)'
+        ],
+        ueberweisung: 'DRINGEND: KJP-Notfallambulanz CHNP Ettelbruck, CHL Urgences pédiatriques. Bei akuter Suizidalität: 112. Art. 7 Meldepflicht prüfen.',
+        elternarbeit: 'Sofortige Elterninformation. Eltern brauchen: Klare Anweisungen (nicht alleine lassen, Mittel sichern), Notfallnummern, eigene emotionale Unterstützung. Keine Schuldzuweisungen.',
+        materialien: { arbeitsblaetter: ['sicherheitsplan', 'notfallkoffer'], therapiemodule: ['therapiemodul-suizidalitaet'], fachmodule: ['suizidalitaet'] },
+        referenzen: [
+          'Hawton, K. et al. (2012): Self-harm and suicide in adolescents. The Lancet.',
+          'AACAP Practice Parameter (2001/2021): Assessment and Treatment of Suicidal Behavior.',
+          'Stanley, B. & Brown, G.K. (2012): Safety Planning Intervention — a brief intervention. Cognitive and Behavioral Practice.',
+          'DGKJP S2k-Leitlinie (2016): Suizidalität im Kindes- und Jugendalter.'
+        ]
+      }
+    ]
+  },
   { id: 'suizidalitaet', titel: 'Suizidgedanken / Suizidalität', icon: '🚨', farbe: '#7F1D1D', kategorie: 'krisen', icd: 'X71-X83 / Z91.5', beschreibung: 'Passive/aktive Todesgedanken, Suizidpläne, -versuche', variablen: [], empfehlungen: [] },
   { id: 'akute-krise', titel: 'Akute Krise / Zusammenbruch', icon: '⚡', farbe: '#DC2626', kategorie: 'krisen', icd: 'F43.0', beschreibung: 'Akute Belastungsreaktion, emotionaler Zusammenbruch, Erstarrung', variablen: [], empfehlungen: [] },
   { id: 'substanzkonsum', titel: 'Substanzkonsum / Suchtverhalten', icon: '🧪', farbe: '#BE185D', kategorie: 'krisen', icd: 'F10-F19', beschreibung: 'Alkohol, Cannabis, andere Substanzen, Mischkonsum', variablen: [], empfehlungen: [] },

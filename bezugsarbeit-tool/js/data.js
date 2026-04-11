@@ -26525,12 +26525,188 @@ const CDSS_PROBLEME = [
   },
 
   // H. Körper & Alltag
-  { id: 'enuresis', titel: 'Einnässen / Einkoten (Enuresis/Enkopresis)', icon: '💧', farbe: '#0891B2', kategorie: 'koerper', icd: 'F98.0 / F98.1', beschreibung: 'Primär oder sekundär, tags- oder nachts', variablen: [], empfehlungen: [] },
-  { id: 'schlafstoerung', titel: 'Schlafstörungen / Albträume', icon: '🌙', farbe: '#1E40AF', kategorie: 'koerper', icd: 'F51', beschreibung: 'Ein-/Durchschlafprobleme, Albträume, Schlafangst', variablen: [], empfehlungen: [] },
-  { id: 'tics', titel: 'Tics / Stereotypien', icon: '🔁', farbe: '#059669', kategorie: 'koerper', icd: 'F95', beschreibung: 'Motorische oder vokale Tics, repetitive Bewegungen', variablen: [], empfehlungen: [] },
-  { id: 'hygiene', titel: 'Hygieneverweigerung / Verwahrlosung', icon: '🚿', farbe: '#64748B', kategorie: 'koerper', icd: 'R46.0', beschreibung: 'Keine Körperpflege, verwahrlostes Erscheinungsbild', variablen: [], empfehlungen: [] },
+  {
+    id: 'enuresis', titel: 'Einnässen / Einkoten (Enuresis/Enkopresis)', icon: '💧', farbe: '#0891B2', kategorie: 'koerper', icd: 'F98.0 / F98.1',
+    beschreibung: 'Primär oder sekundär, tags- oder nachts',
+    variablen: [
+      { id: 'enu-typ', frage: 'Welche Form liegt vor?', typ: 'single', optionen: [
+        { id: 'nocturnal', label: 'Enuresis nocturna (nachts einnässen)', tags: ['enu-nacht'] },
+        { id: 'diurnal', label: 'Enuresis diurna (tagsüber einnässen)', tags: ['enu-tag'] },
+        { id: 'enkopresis', label: 'Enkopresis (Einkoten)', tags: ['enu-kot'] },
+        { id: 'kombiniert', label: 'Kombiniert', tags: ['enu-kombiniert'] }
+      ]},
+      { id: 'enu-verlauf', frage: 'Primär oder sekundär?', typ: 'single', optionen: [
+        { id: 'primaer', label: 'Primär — war nie trocken/sauber (>6 Monate)', tags: ['enu-primaer'] },
+        { id: 'sekundaer', label: 'Sekundär — war trocken, dann Rückfall', tags: ['enu-sekundaer', 'enu-regression'] }
+      ]},
+      { id: 'enu-belastung', frage: 'Wie belastend ist es für den Jugendlichen?', typ: 'single', optionen: [
+        { id: 'sehr', label: 'Sehr belastend (Scham, Vermeidung von Übernachtungen)', tags: ['enu-scham'] },
+        { id: 'mittel', label: 'Mäßig belastend', tags: [] },
+        { id: 'wenig', label: 'Wenig belastend', tags: [] }
+      ]}
+    ],
+    empfehlungen: [{
+      id: 'enu-standard', tags_erforderlich: [], tags_ausschluss: [], tags_gewichtung: { 'enu-sekundaer': 3, 'enu-regression': 3, 'enu-scham': 2, 'enu-kot': 3 }, risiko: 'gelb',
+      einschaetzung: 'Enuresis/Enkopresis — Häufiger als gedacht (Enuresis nocturna: 10% bei 7-Jährigen, 1-2% bei 15-Jährigen). KEIN Willensakt! Sekundäre Form deutet oft auf psychische Belastung oder Trauma hin. Absolute Scham-Thematik — niemals bloßstellen.',
+      sofort: ['NICHT beschämen — niemals vor anderen erwähnen', 'Medizinische Abklärung (urologisch/gastroenterologisch) empfehlen', 'Normalisieren: "Das passiert mehr Kindern als du denkst. Es ist nicht deine Schuld."', 'Gesprächseröffnung: "Ich weiß, das ist ein schwieriges Thema. Aber es gibt Hilfe — und es wird besser."'],
+      mittelfristig: ['Bei primärer Enuresis: Klingelhose/Alarmtherapie (Goldstandard, 70% Erfolg)', 'Bei sekundärer: Psychische Belastung explorieren (Stress, Trauma, Veränderung)', 'Trinkprotokoll und Toilettentraining', 'Selbstwert stärken: Das Kind ist NICHT das Problem'],
+      ueberweisung: 'Kinderarzt/Urologie: Organische Ursachen ausschließen. KJP bei sekundärer Enuresis + psych. Belastung. In Luxemburg: CHL Kannerklinik (Urologie), CHNP.',
+      elternarbeit: 'Nicht bestrafen! Kein Schimpfen, keine nassen Laken zeigen. Eltern brauchen Geduld und Wissen: Es ist KEIN Erziehungsfehler. Klingelhose als praktische Hilfe erklären.',
+      materialien: { arbeitsblaetter: [], therapiemodule: [], fachmodule: ['enuresis'] },
+      referenzen: ['NICE Guideline CG111 (2010): Nocturnal enuresis — management.', 'Nevéus, T. et al. (2020): ICCS standardization for enuresis. Journal of Pediatric Urology.', 'Fritz, G.K. et al. (2004): Practice parameter for enuresis. JAACAP.']
+    }]
+  },
+  {
+    id: 'schlafstoerung', titel: 'Schlafstörungen / Albträume', icon: '🌙', farbe: '#1E40AF', kategorie: 'koerper', icd: 'F51',
+    beschreibung: 'Ein-/Durchschlafprobleme, Albträume, Schlafangst',
+    variablen: [
+      { id: 'schlaf-art', frage: 'Welches Schlafproblem liegt vor?', typ: 'multi', optionen: [
+        { id: 'einschlaf', label: 'Einschlafprobleme (>30 Min wach)', tags: ['schlaf-einschlaf'] },
+        { id: 'durchschlaf', label: 'Durchschlafprobleme (häufiges Aufwachen)', tags: ['schlaf-durchschlaf'] },
+        { id: 'albtraeume', label: 'Albträume / Nachtschreck', tags: ['schlaf-albtraum'] },
+        { id: 'rhythmus', label: 'Verschobener Rhythmus (schläft erst um 2-4 Uhr)', tags: ['schlaf-rhythmus'] },
+        { id: 'schlafangst', label: 'Angst vor dem Einschlafen / Schlafangst', tags: ['schlaf-angst'] }
+      ]},
+      { id: 'schlaf-ursache', frage: 'Mögliche Ursache?', typ: 'single', optionen: [
+        { id: 'medien', label: 'Mediennutzung vor dem Schlafen (Handy, Gaming)', tags: ['schlaf-medien'] },
+        { id: 'sorgen', label: 'Grübeln / Sorgen im Bett', tags: ['schlaf-sorgen'] },
+        { id: 'trauma', label: 'Trauma-Albträume / Angst', tags: ['schlaf-trauma'] },
+        { id: 'hygiene', label: 'Schlechte Schlafhygiene (Koffein, unregelmäßig)', tags: ['schlaf-hygiene-schlecht'] },
+        { id: 'unklar', label: 'Unklar', tags: [] }
+      ]}
+    ],
+    empfehlungen: [{
+      id: 'schlaf-standard', tags_erforderlich: [], tags_ausschluss: [], tags_gewichtung: { 'schlaf-einschlaf': 2, 'schlaf-medien': 2, 'schlaf-sorgen': 3, 'schlaf-trauma': 4, 'schlaf-angst': 3, 'schlaf-rhythmus': 2 }, risiko: 'gruen',
+      einschaetzung: 'Schlafstörungen bei Jugendlichen — Extrem häufig (30-40%!). Hauptursachen: Handy im Bett, verschobener circadianer Rhythmus (biologisch normal in Pubertät), Sorgen/Grübeln. Schlafmangel verschlechtert ALLES: Stimmung, Konzentration, Impulskontrolle, Angst.',
+      sofort: ['Schlafhygiene-Beratung: Feste Zeiten, kein Handy 1h vor Bett, dunkler/kühler Raum', 'Bei Grübeln: "Sorgenstuhl" — alle Sorgen vor dem Bett aufschreiben und weglegen', 'Bei Albträumen: Imagery Rehearsal (Albtraum tagsüber umschreiben → gutes Ende)', 'Gesprächseröffnung: "Wie schläfst du? Wann gehst du ins Bett, wann ist dein Handy aus? Viele Probleme tagsüber hängen mit dem Schlaf zusammen."'],
+      mittelfristig: ['Stimulus-Kontrolle: Bett nur zum Schlafen (nicht Gaming, Social Media, lernen)', 'Schlafrestriktion bei chronischer Insomnie (nur unter fachlicher Anleitung)', 'Bei Trauma-Albträumen: Traumatherapie notwendig', 'Schlafprotokoll führen: Wann ins Bett, wann eingeschlafen, wann aufgewacht'],
+      ueberweisung: 'Bei: Chronischer Insomnie (>3 Monate), Verdacht auf Schlafapnoe, extremer Tagesschläfrigkeit → Schlaflabor/KJP. In Luxemburg: CHL (Schlaflabor), CHNP.',
+      elternarbeit: 'Handy-Regelung: Handys NICHT im Schlafzimmer (für die GANZE Familie!). Feste Bettgehzeiten auch am Wochenende (max 1h Unterschied). Modelllernen: Eigene Screen-Nutzung am Abend reflektieren.',
+      materialien: { arbeitsblaetter: ['schlafhygiene', 'atemtechniken'], therapiemodule: ['therapiemodul-schlaf'], fachmodule: ['schlaf'] },
+      referenzen: ['Owens, J.A. (2014): Insufficient sleep in adolescents. Pediatrics.', 'Harvey, A.G. (2002): A cognitive model of insomnia. Behaviour Research and Therapy.', 'Krakow, B. & Zadra, A. (2006): Imagery Rehearsal Therapy for chronic nightmares. Sleep Medicine Reviews.']
+    }]
+  },
+  {
+    id: 'tics', titel: 'Tics / Stereotypien', icon: '🔁', farbe: '#059669', kategorie: 'koerper', icd: 'F95',
+    beschreibung: 'Motorische oder vokale Tics, repetitive Bewegungen',
+    variablen: [
+      { id: 'tic-art', frage: 'Welche Art von Tics/Stereotypien?', typ: 'multi', optionen: [
+        { id: 'motorisch-einfach', label: 'Einfache motorische Tics (Blinzeln, Zucken, Kopfwerfen)', tags: ['tic-motorisch'] },
+        { id: 'motorisch-komplex', label: 'Komplexe motorische Tics (Springen, Berühren, Gesten)', tags: ['tic-motorisch-komplex'] },
+        { id: 'vokal-einfach', label: 'Einfache vokale Tics (Räuspern, Schniefen, Summen)', tags: ['tic-vokal'] },
+        { id: 'vokal-komplex', label: 'Komplexe vokale Tics (Wörter, Echolalie, Koprolalie)', tags: ['tic-vokal-komplex', 'tic-schwer'] },
+        { id: 'stereotypien', label: 'Stereotypien (Schaukeln, Flattern, repetitive Bewegungen)', tags: ['tic-stereotypie', 'autismus-moeglich'] }
+      ]},
+      { id: 'tic-belastung', frage: 'Wie belastend sind die Tics?', typ: 'single', optionen: [
+        { id: 'leicht', label: 'Kaum belastend — stört nicht im Alltag', tags: ['tic-leicht'] },
+        { id: 'mittel', label: 'Mäßig — soziale Scham, Hänseleien', tags: ['tic-mittel'] },
+        { id: 'schwer', label: 'Schwer — massive Beeinträchtigung (Schmerzen, soziale Isolation)', tags: ['tic-schwer'] }
+      ]}
+    ],
+    empfehlungen: [{
+      id: 'tic-standard', tags_erforderlich: [], tags_ausschluss: [], tags_gewichtung: { 'tic-schwer': 3, 'tic-vokal-komplex': 3, 'tic-mittel': 2, 'autismus-moeglich': 2 }, risiko: 'gruen',
+      einschaetzung: 'Tics (F95) — Unwillkürliche, schnelle Bewegungen oder Lautäußerungen. Sehr häufig im Kindesalter (10-20%), meist transient. Tourette-Syndrom: Motorische + vokale Tics >1 Jahr. Tics NICHT unterdrücken lassen — das verstärkt sie. Stress erhöht Tics, Entspannung verringert sie.',
+      sofort: ['NICHT darauf aufmerksam machen: "Hör auf damit!" verstärkt Tics', 'Umfeld informieren: Lehrer, Mitschüler — Tics sind unwillkürlich, nicht absichtlich', 'Stress reduzieren: Tics werden bei Anspannung stärker', 'Gesprächseröffnung: "Mir ist aufgefallen, dass du manchmal [Beschreibung] machst. Stört dich das? Ich wollte nur sagen: Hier ist das kein Problem."'],
+      mittelfristig: ['KJP-Vorstellung bei: >1 Jahr Dauer, sozialer Beeinträchtigung, komplexen Tics', 'Habit Reversal Training (HRT) / CBIT als evidenzbasierte Therapie', 'Entspannungsverfahren: Progressive Muskelrelaxation, Achtsamkeit', 'Selbstwert schützen: Tics definieren NICHT die Person'],
+      ueberweisung: 'Bei Tourette-Verdacht (motorisch + vokal >1 Jahr): KJP/Neuropädiatrie. In Luxemburg: CHNP, CHL Neuropädiatrie.',
+      elternarbeit: 'Psychoedukation: Tics kommen und gehen, wechseln die Form, sind nicht willentlich. NICHT: "Kontrollier dich!", "Hör auf!". Stressreduktion im Familienalltag.',
+      materialien: { arbeitsblaetter: [], therapiemodule: [], fachmodule: ['tics'] },
+      referenzen: ['Piacentini, J. et al. (2010): CBIT for tics — randomized controlled trial. JAMA.', 'NICE: No specific guideline — treated under movement disorder pathways.', 'Robertson, M.M. (2015): Tourette syndrome — a review. The Lancet.']
+    }]
+  },
+  {
+    id: 'hygiene', titel: 'Hygieneverweigerung / Verwahrlosung', icon: '🚿', farbe: '#64748B', kategorie: 'koerper', icd: 'R46.0',
+    beschreibung: 'Keine Körperpflege, verwahrlostes Erscheinungsbild',
+    variablen: [
+      { id: 'hyg-form', frage: 'Wie zeigt sich das Problem?', typ: 'multi', optionen: [
+        { id: 'waschen', label: 'Wäscht sich nicht (Dusche, Hände, Zähne)', tags: ['hyg-waschen'] },
+        { id: 'kleidung', label: 'Schmutzige/unpassende Kleidung', tags: ['hyg-kleidung'] },
+        { id: 'geruch', label: 'Auffälliger Körpergeruch', tags: ['hyg-geruch'] },
+        { id: 'zimmer', label: 'Verwahrlostes Zimmer / Horten', tags: ['hyg-raum'] }
+      ]},
+      { id: 'hyg-ursache', frage: 'Was könnte die Ursache sein?', typ: 'single', optionen: [
+        { id: 'vernachlaessigung', label: 'Elterliche Vernachlässigung (niemand kümmert sich)', tags: ['hyg-vernachlaessigung', 'kw-moeglich'] },
+        { id: 'depression', label: 'Depression / Antriebslosigkeit', tags: ['hyg-depression'] },
+        { id: 'trotz', label: 'Trotz / Autonomie-Statement', tags: ['hyg-trotz'] },
+        { id: 'sensorisch', label: 'Sensorische Probleme (Wassertemperatur, Texturen)', tags: ['hyg-sensorisch', 'autismus-moeglich'] },
+        { id: 'koerperbild', label: 'Problematisches Körperbild / will Körper nicht berühren', tags: ['hyg-koerperbild'] }
+      ]}
+    ],
+    empfehlungen: [{
+      id: 'hyg-standard', tags_erforderlich: [], tags_ausschluss: [], tags_gewichtung: { 'hyg-vernachlaessigung': 5, 'hyg-depression': 3, 'hyg-sensorisch': 2, 'hyg-koerperbild': 3, 'kw-moeglich': 5 }, risiko: 'gelb',
+      einschaetzung: 'Hygieneverweigerung — Immer Ursache klären! Kann Zeichen von: Depression (kein Antrieb), Vernachlässigung (niemand bringt es bei/fordert es ein), Trauma (will Körper nicht berühren), Autismus (sensorische Überempfindlichkeit), oder Trotz. Bei Vernachlässigung: Kindeswohl prüfen.',
+      sofort: ['Ursache klären: Depression? Vernachlässigung? Sensorik?', 'Nicht beschämen — besonders nicht vor Peers', 'Praktisch helfen: Duschzeiten in Einrichtung ermöglichen, saubere Kleidung bereitstellen', 'Gesprächseröffnung: "Mir ist aufgefallen, dass Duschen/Zähneputzen gerade nicht so dein Ding ist. Ich möchte dich nicht ärgern — aber ich möchte verstehen, was dahintersteckt."'],
+      mittelfristig: ['Bei Vernachlässigung: Kindeswohl-Prüfung → ggf. Art. 7 Meldung', 'Bei Depression: Stimmung behandeln — Hygiene kommt mit Besserung von allein', 'Bei Sensorik: Angepasste Produkte (geruchlos, andere Temperatur, weiche Texturen)', 'Routine aufbauen: Kleine Schritte, nicht alles auf einmal'],
+      ueberweisung: 'Bei Vernachlässigung: OPJ/ONE. Bei Depression: KJP. Bei V.a. Autismus: Diagnostik. CHL.',
+      elternarbeit: 'Klären: Wird Hygiene zu Hause ermöglicht und eingefordert? Wenn nicht → Vernachlässigung? Wenn ja → andere Ursache. Eltern nicht beschämen.',
+      materialien: { arbeitsblaetter: [], therapiemodule: [], fachmodule: [] },
+      referenzen: ['Glaser, D. (2002): Emotional abuse and neglect — a conceptual framework. Child Abuse & Neglect.', 'NICE Guideline CG89 (2009): Child maltreatment — neglect indicators.']
+    }]
+  },
 
   // I. Familiäre Alltagssituationen
-  { id: 'parentifizierung', titel: 'Parentifizierung', icon: '👧‍👦', farbe: '#7C3AED', kategorie: 'familie', icd: 'Z62.1', beschreibung: 'Kind übernimmt Elternrolle, sorgt für Geschwister/Eltern', variablen: [], empfehlungen: [] },
-  { id: 'geschwistergewalt', titel: 'Geschwisterrivalität / -gewalt', icon: '👊', farbe: '#B91C1C', kategorie: 'familie', icd: 'Z62.8', beschreibung: 'Massive Konflikte, physische Gewalt unter Geschwistern', variablen: [], empfehlungen: [] }
+  {
+    id: 'parentifizierung', titel: 'Parentifizierung', icon: '👧‍👦', farbe: '#7C3AED', kategorie: 'familie', icd: 'Z62.1',
+    beschreibung: 'Kind übernimmt Elternrolle, sorgt für Geschwister/Eltern',
+    variablen: [
+      { id: 'par-form', frage: 'Welche Form der Parentifizierung liegt vor?', typ: 'multi', optionen: [
+        { id: 'instrumental', label: 'Instrumentell (Haushalt, Kochen, Geschwister betreuen)', tags: ['par-instrumental'] },
+        { id: 'emotional', label: 'Emotional (Tröster/Berater für Elternteil, Partnerersatz)', tags: ['par-emotional', 'par-schwer'] },
+        { id: 'uebersetzung', label: 'Sprach-/Kulturmittler für Eltern', tags: ['par-uebersetzer'] },
+        { id: 'finanziell', label: 'Finanzielle Verantwortung (arbeitet für Familie)', tags: ['par-finanziell'] }
+      ]},
+      { id: 'par-ursache', frage: 'Warum übernimmt das Kind diese Rolle?', typ: 'single', optionen: [
+        { id: 'psychisch-krank', label: 'Elternteil psychisch krank', tags: ['par-eltern-krank'] },
+        { id: 'sucht', label: 'Elternteil suchtkrank', tags: ['par-eltern-sucht'] },
+        { id: 'abwesend', label: 'Elternteil abwesend (Arbeit, getrennt)', tags: ['par-eltern-abwesend'] },
+        { id: 'kulturell', label: 'Kulturelle Erwartung (ältestes Kind = Verantwortung)', tags: ['par-kulturell'] },
+        { id: 'ueberforderung', label: 'Elterliche Überforderung (viele Kinder, allein)', tags: ['par-ueberforderung'] }
+      ]},
+      { id: 'par-auswirkung', frage: 'Welche Auswirkungen zeigen sich beim Kind?', typ: 'multi', optionen: [
+        { id: 'erschoepfung', label: 'Erschöpfung / keine Freizeit', tags: ['par-erschoepft'] },
+        { id: 'schulprobleme', label: 'Schulprobleme (keine Zeit für Hausaufgaben)', tags: ['par-schulprobleme'] },
+        { id: 'überangepasst', label: 'Überangepasst / kann nicht "Kind sein"', tags: ['par-ueberangepasst'] },
+        { id: 'schuldgefuehle', label: 'Schuldgefühle wenn eigene Bedürfnisse', tags: ['par-schuld'] },
+        { id: 'stolz', label: 'Stolz auf die Rolle / Identität daraus', tags: ['par-stolz'] }
+      ]}
+    ],
+    empfehlungen: [{
+      id: 'par-standard', tags_erforderlich: [], tags_ausschluss: [], tags_gewichtung: { 'par-emotional': 4, 'par-schwer': 3, 'par-eltern-krank': 3, 'par-eltern-sucht': 3, 'par-erschoepft': 2, 'par-schulprobleme': 2 }, risiko: 'gelb',
+      einschaetzung: 'Parentifizierung — Das Kind übernimmt Erwachsenen-Rollen. Instrumentelle Parentifizierung (Haushalt helfen) kann in Maßen okay sein. EMOTIONALE Parentifizierung (Tröster/Berater/Partnerersatz) ist immer schädlich — das Kind opfert seine Entwicklung für den Elternteil.',
+      sofort: ['Rolle des Kindes ANERKENNEN: "Du machst unglaublich viel für deine Familie. Das zeigt, wie verantwortungsvoll du bist."', 'UND gleichzeitig: "Aber du darfst auch Kind/Jugendlicher sein. Das ist DEINE Zeit."', 'Nicht sofort die Rolle wegnehmen — das kann Identitätskrise auslösen', 'Gesprächseröffnung: "Wer kümmert sich eigentlich um DICH?"'],
+      mittelfristig: ['Entlastung organisieren: Familienhilfe, Haushaltshilfe, Betreuung für Geschwister', 'Kindliche Räume schaffen: Zeit für Spiel, Peers, Freizeit — OHNE schlechtes Gewissen', 'Elternteil stärken (wenn möglich): Therapie, Suchtberatung, Alltagshilfe', 'Bei emotionaler Parentifizierung: Grenzen setzen — Kind ist NICHT der Partner/Therapeut'],
+      ueberweisung: 'Familienhilfe: SCAS, Service d\'Aide à la Famille. Bei psychisch krankem Elternteil: Hilfe für Eltern UND Kind. ONE bei Vernachlässigung. Young Carers Programme (wenn vorhanden).',
+      elternarbeit: 'Sensibles Thema — Eltern fühlen sich schnell schuldig. Nicht anklagen, sondern unterstützen: "Sie brauchen Hilfe — und Ihr Kind braucht seine Kindheit zurück. Beides ist möglich."',
+      materialien: { arbeitsblaetter: ['beziehungen-erkunden', 'selbstfuersorge'], therapiemodule: ['therapiemodul-familie'], fachmodule: ['parentifizierung'] },
+      referenzen: ['Boszormenyi-Nagy, I. & Spark, G. (1973): Invisible Loyalties — reciprocity in intergenerational family therapy.', 'Hooper, L.M. (2007): Expanding the discussion regarding parentification. Journal of Mental Health Counseling.', 'Earley, L. & Cushway, D. (2002): The parentified child. Clinical Child Psychology and Psychiatry.']
+    }]
+  },
+  {
+    id: 'geschwistergewalt', titel: 'Geschwisterrivalität / -gewalt', icon: '👊', farbe: '#B91C1C', kategorie: 'familie', icd: 'Z62.8',
+    beschreibung: 'Massive Konflikte, physische Gewalt unter Geschwistern',
+    variablen: [
+      { id: 'gs-form', frage: 'Wie zeigt sich der Geschwisterkonflikt?', typ: 'single', optionen: [
+        { id: 'rivalitaet', label: 'Rivalität (Eifersucht, Konkurrenz um Aufmerksamkeit)', tags: ['gs-rivalitaet'] },
+        { id: 'verbal', label: 'Verbale Aggression (Beschimpfungen, Drohungen)', tags: ['gs-verbal'] },
+        { id: 'physisch', label: 'Physische Gewalt (Schlagen, Treten, Beißen)', tags: ['gs-physisch'] },
+        { id: 'systematisch', label: 'Systematisches Mobbing eines Geschwisters', tags: ['gs-mobbing', 'risiko-hoch'] }
+      ]},
+      { id: 'gs-kontext', frage: 'Was befeuert den Konflikt?', typ: 'single', optionen: [
+        { id: 'ungleichbehandlung', label: 'Gefühlte Ungleichbehandlung durch Eltern', tags: ['gs-ungleich'] },
+        { id: 'enge', label: 'Räumliche Enge / geteiltes Zimmer', tags: ['gs-enge'] },
+        { id: 'veraenderung', label: 'Veränderung (neues Geschwister, Trennung)', tags: ['gs-veraenderung'] },
+        { id: 'modell', label: 'Gewalt als gelerntes Muster (Eltern als Modell)', tags: ['gs-modelllernen'] }
+      ]}
+    ],
+    empfehlungen: [{
+      id: 'gs-standard', tags_erforderlich: [], tags_ausschluss: [], tags_gewichtung: { 'gs-physisch': 3, 'gs-mobbing': 5, 'gs-modelllernen': 3, 'gs-ungleich': 2, 'risiko-hoch': 4 }, risiko: 'gelb',
+      einschaetzung: 'Geschwistergewalt — Oft bagatellisiert ("Die kloppen sich halt"). Aber: Systematische Gewalt zwischen Geschwistern ist die häufigste Form innerfamiliärer Gewalt und kann ebenso schädlich sein wie Peer-Mobbing. Grenze: Wenn ein Kind systematisch Angst hat, ist es KEINE normale Rivalität mehr.',
+      sofort: ['Unterscheiden: Normale Rivalität vs. Gewalt (Macht-Ungleichgewicht? Angst? Systematisch?)', 'Bei Gewalt: Klare Grenze — "Schlagen ist NICHT okay, auch nicht unter Geschwistern"', 'Opfer schützen: Rückzugsräume, nicht alleine lassen mit dem Aggressor', 'Gesprächseröffnung: "Wie ist das zu Hause mit deinem Bruder/deiner Schwester? Fühlst du dich sicher?"'],
+      mittelfristig: ['Familiensitzung: Regeln für den Umgang, Konsequenzen bei Gewalt', 'Individuelle Zeit mit jedem Kind: Aufmerksamkeitsdefizit reduzieren', 'Konfliktlösungsstrategien für beide Kinder', 'Bei massiver Gewalt: Trennung erwägen (getrennte Zimmer, ggf. Fremdunterbringung eines Kindes)'],
+      ueberweisung: 'Bei: Systematischer Gewalt, Verletzungen, sexualisierter Geschwistergewalt → KJP + Familienhilfe. Art. 7 prüfen bei schwerer Gewalt. SCAS für Familienintervention.',
+      elternarbeit: 'Eltern erkennen oft den Ernst nicht ("Die sind halt so"). Klare Botschaft: Geschwistergewalt ist nicht normal. Eltern müssen PARTEI ergreifen für das Opfer. Eigene Bevorzugung/Ungleichbehandlung reflektieren.',
+      materialien: { arbeitsblaetter: ['soziale-kompetenz'], therapiemodule: ['therapiemodul-familie'], fachmodule: ['geschwister'] },
+      referenzen: ['Meyers, A. (2014): A call to action — sibling abuse. Journal of Family Violence.', 'Wolke, D. & Skew, A.J. (2012): Sibling bullying and risk of depression. Pediatrics.', 'Tucker, C.J. et al. (2013): Association of sibling aggression with child and adolescent mental health. Pediatrics.']
+    }]
+  }
 ];

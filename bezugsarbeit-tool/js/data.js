@@ -24928,7 +24928,114 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'akute-krise', titel: 'Akute Krise / Zusammenbruch', icon: '⚡', farbe: '#DC2626', kategorie: 'krisen', icd: 'F43.0', beschreibung: 'Akute Belastungsreaktion, emotionaler Zusammenbruch, Erstarrung', variablen: [], empfehlungen: [] },
+  {
+    id: 'akute-krise', titel: 'Akute Krise / Zusammenbruch', icon: '⚡', farbe: '#DC2626', kategorie: 'krisen', icd: 'F43.0',
+    beschreibung: 'Akute Belastungsreaktion, emotionaler Zusammenbruch, Erstarrung',
+    variablen: [
+      {
+        id: 'krise-art', frage: 'Wie zeigt sich die aktuelle Krise?', typ: 'single',
+        optionen: [
+          { id: 'weinen', label: 'Unkontrolliertes Weinen / emotionaler Zusammenbruch', tags: ['krise-emotional'] },
+          { id: 'erstarrung', label: 'Erstarrung / Nicht-Reagieren / Shutdown', tags: ['krise-shutdown', 'pvt-dorsal'] },
+          { id: 'panik', label: 'Panikattacke / Hyperventilation / Herzrasen', tags: ['krise-panik', 'pvt-sympathikus'] },
+          { id: 'aggression', label: 'Aggressiver Ausbruch / Kontrollverlust', tags: ['krise-aggressiv', 'pvt-sympathikus'] },
+          { id: 'dissoziation', label: 'Dissoziation / "Abwesend" / nicht ansprechbar', tags: ['krise-dissoziation', 'pvt-dorsal'] },
+          { id: 'flucht', label: 'Flucht / Weglaufen', tags: ['krise-flucht', 'pvt-sympathikus'] }
+        ]
+      },
+      {
+        id: 'krise-ausloeser', frage: 'Was hat die Krise ausgelöst?', typ: 'single',
+        optionen: [
+          { id: 'nachricht', label: 'Schlechte Nachricht (Tod, Trennung, Diagnose)', tags: ['ausloeser-nachricht'] },
+          { id: 'trigger', label: 'Trigger / Flashback (Trauma-bezogen)', tags: ['ausloeser-trauma'] },
+          { id: 'konflikt', label: 'Akuter Konflikt (Eltern, Peers, Lehrer)', tags: ['ausloeser-konflikt'] },
+          { id: 'ueberforderung', label: 'Kumulative Überlastung ("Tropfen, der das Fass überlaufen lässt")', tags: ['ausloeser-kumulativ'] },
+          { id: 'unklar', label: 'Unklar / Jugendlicher kann es nicht benennen', tags: [] }
+        ]
+      },
+      {
+        id: 'krise-sicherheit', frage: 'Besteht akute Gefahr?', typ: 'single',
+        optionen: [
+          { id: 'keine', label: 'Keine Selbst-/Fremdgefährdung', tags: ['krise-sicher'] },
+          { id: 'selbst', label: 'Äußerungen von Suizidalität / SVV-Drang', tags: ['krise-suizidal', 'risiko-akut'] },
+          { id: 'fremd', label: 'Fremdgefährdung (droht, greift an)', tags: ['krise-fremdgefaehrdung', 'risiko-akut'] },
+          { id: 'fluchtgefahr', label: 'Fluchtgefahr (will weglaufen / ist weggelaufen)', tags: ['krise-flucht-akut'] }
+        ]
+      },
+      {
+        id: 'krise-vorgeschichte', frage: 'Gibt es relevante Vorgeschichte?', typ: 'multi',
+        optionen: [
+          { id: 'trauma', label: 'Bekanntes Trauma', tags: ['vorgeschichte-trauma'] },
+          { id: 'psych', label: 'Bekannte psychische Störung', tags: ['vorgeschichte-diagnose'] },
+          { id: 'krisen-frueher', label: 'Ähnliche Krisen in der Vergangenheit', tags: ['vorgeschichte-krisen'] },
+          { id: 'erste-krise', label: 'Erste Krise dieser Art', tags: ['krise-erstmalig'] },
+          { id: 'keine', label: 'Keine bekannte Vorgeschichte', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'krise-stabilisierung',
+        tags_erforderlich: ['krise-sicher'],
+        tags_ausschluss: ['risiko-akut'],
+        tags_gewichtung: { 'krise-emotional': 2, 'krise-panik': 2, 'pvt-sympathikus': 2, 'ausloeser-kumulativ': 1, 'ausloeser-nachricht': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Akute Belastungsreaktion (F43.0) ohne Selbst-/Fremdgefährdung. Das Nervensystem ist im Alarm-Modus (Sympathikus-Aktivierung) oder Shutdown (Dorsal-Vagal). Ziel: Erst regulieren, dann orientieren, dann besprechen. NICHT sofort nach dem "Warum" fragen — erst Sicherheit herstellen.',
+        sofort: [
+          'Präsenz zeigen: "Ich bin da. Du bist sicher." — Ruhige Stimme, offene Haltung',
+          'Co-Regulation: Langsames Atmen voratmen (4-7-8: 4 Sek ein, 7 halten, 8 aus), Augenkontakt anbieten',
+          'Bei Panik: Grounding — 5 Dinge sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken',
+          'Bei Shutdown: Sanfte sensorische Reize (kühles Wasser, Eiswürfel, starker Duft)',
+          'NICHT: Fragen stellen, Ratschläge geben, beruhigen wollen ("Ist doch nicht so schlimm")'
+        ],
+        mittelfristig: [
+          'Nachgespräch (frühestens nach 24h): Was ist passiert? Was hat geholfen? Was hättest du gebraucht?',
+          'Individuellen Krisenplan entwickeln: "Wenn ich merke, dass es mir schlecht geht, dann..."',
+          'Ursache klären: Einmaliges Ereignis oder Symptom einer tieferliegenden Problematik?',
+          'Weiterbetreuung sichern: Regelmäßige Termine in den Folgewochen'
+        ],
+        ueberweisung: 'Bei wiederholten Krisen oder Trauma-Hintergrund: KJP-Vorstellung. In Luxemburg: CePAS, CHNP. Kanner-Jugendtelefon 12345.',
+        elternarbeit: 'Eltern informieren (was ist passiert, wie wurde reagiert). Psychoedukation: Akute Belastungsreaktion ist NORMAL — der Körper schützt sich. Zu Hause: Ruhe, keine Vorwürfe, Präsenz.',
+        materialien: { arbeitsblaetter: ['notfallkoffer', 'atemtechniken', 'sicherheitsplan'], therapiemodule: ['therapiemodul-krisenintervention'], fachmodule: ['krisenintervention'] },
+        referenzen: [
+          'Dana, D. (2018): The Polyvagal Theory in Therapy — stabilization through co-regulation. Norton.',
+          'Roberts, A.R. (2005): Crisis Intervention Handbook (3rd ed.). Oxford University Press.',
+          'Hobfoll, S.E. et al. (2007): Five essential elements of immediate and mid-term mass trauma intervention. Psychiatry.',
+          'WHO (2011): Psychological First Aid — Guide for Field Workers.'
+        ]
+      },
+      {
+        id: 'krise-akut-gefahr',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'risiko-akut': 10, 'krise-suizidal': 10, 'krise-fremdgefaehrdung': 8, 'krise-flucht-akut': 5, 'krise-dissoziation': 3, 'vorgeschichte-trauma': 2 },
+        risiko: 'rot',
+        einschaetzung: 'Akute Krise MIT Selbst- oder Fremdgefährdung. Sofortiges Handeln erforderlich. Sicherheit geht vor Beziehungsarbeit, vor Diagnostik, vor allem anderen.',
+        sofort: [
+          '⚠️ SICHERHEIT ZUERST: Andere Personen aus der Gefahrenzone, gefährliche Gegenstände entfernen',
+          'Bei Suizidalität: 112 anrufen, NICHT alleine lassen, Mittel sichern',
+          'Bei Fremdgefährdung: Abstand halten, Hilfe holen (Kollegen, 113 Polizei), Opfer schützen',
+          'Bei Flucht: NICHT verfolgen wenn gefährlich — 113 informieren, Eltern anrufen',
+          'Bei Dissoziation: Sanft orientieren: "[Name], du bist hier in [Ort]. Es ist [Tag]. Du bist sicher."'
+        ],
+        mittelfristig: [
+          'Krisenprotokoll dokumentieren: Wann, was, wer hat was getan',
+          'Nachbesprechung im Team: Was lief gut? Was nächstes Mal anders?',
+          'KJP-Notfallvorstellung am gleichen Tag',
+          'Eltern sofort informieren (auch gegen Wunsch des Jugendlichen bei Lebensgefahr)'
+        ],
+        ueberweisung: '🚨 SOFORT: 112 (Notruf), 113 (Polizei bei Fremdgefährdung). KJP-Notfall: CHNP Ettelbruck, CHL Urgences pédiatriques. Art. 7 Meldepflicht prüfen.',
+        elternarbeit: 'Sofortige Benachrichtigung. Klare, sachliche Information: Was ist passiert, was wurde unternommen. Keine Schuldzuweisungen. Nächste Schritte gemeinsam besprechen.',
+        materialien: { arbeitsblaetter: ['sicherheitsplan'], therapiemodule: ['therapiemodul-krisenintervention'], fachmodule: ['krisenintervention'] },
+        referenzen: [
+          'NICE Guideline CG16 (2004/2022): Self-harm — short-term management and assessment.',
+          'Roberts, A.R. (2005): Seven-stage crisis intervention model. Oxford University Press.',
+          'Mitchell, J.T. & Everly, G.S. (2001): Critical Incident Stress Debriefing. Chevron Publishing.',
+          'Luxemburger Gesetz Art. 7 Jugendschutzgesetz: Meldepflicht bei Kindeswohlgefährdung.'
+        ]
+      }
+    ]
+  },
   { id: 'substanzkonsum', titel: 'Substanzkonsum / Suchtverhalten', icon: '🧪', farbe: '#BE185D', kategorie: 'krisen', icd: 'F10-F19', beschreibung: 'Alkohol, Cannabis, andere Substanzen, Mischkonsum', variablen: [], empfehlungen: [] },
 
   // D. Entwicklung / Trauma

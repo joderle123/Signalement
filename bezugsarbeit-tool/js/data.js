@@ -25761,7 +25761,83 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'kindeswohlgefaehrdung', titel: 'Elternkonflikt / häusliche Gewalt / Kindeswohlgefährdung', icon: '⚖️', farbe: '#7C3AED', kategorie: 'sozial', icd: 'T74 / Z61', beschreibung: 'Misshandlung, Vernachlässigung, häusliche Gewalt, Meldepflicht', variablen: [], empfehlungen: [] },
+  {
+    id: 'kindeswohlgefaehrdung', titel: 'Elternkonflikt / häusliche Gewalt / Kindeswohlgefährdung', icon: '⚖️', farbe: '#7C3AED', kategorie: 'sozial', icd: 'T74 / Z61',
+    beschreibung: 'Misshandlung, Vernachlässigung, häusliche Gewalt, Meldepflicht',
+    variablen: [
+      {
+        id: 'kw-art', frage: 'Welche Form der Gefährdung liegt vor (Verdacht)?', typ: 'multi',
+        optionen: [
+          { id: 'physisch', label: 'Physische Misshandlung (Schlagen, Verbrennen, Schütteln)', tags: ['kw-physisch', 'kw-meldepflichtig'] },
+          { id: 'emotional', label: 'Emotionale Misshandlung (Demütigung, Drohung, Isolation)', tags: ['kw-emotional'] },
+          { id: 'vernachlaessigung', label: 'Vernachlässigung (Nahrung, Hygiene, Aufsicht, Medizin)', tags: ['kw-vernachlaessigung'] },
+          { id: 'sexuell', label: 'Sexueller Missbrauch (Verdacht)', tags: ['kw-sexuell', 'kw-meldepflichtig', 'risiko-akut'] },
+          { id: 'haeusliche-gewalt', label: 'Häusliche Gewalt (Kind als Zeuge)', tags: ['kw-zeuge-gewalt'] },
+          { id: 'hochstrittig', label: 'Hochstrittige Trennung (Kind im Loyalitätskonflikt)', tags: ['kw-loyalitaetskonflikt'] }
+        ]
+      },
+      {
+        id: 'kw-quelle', frage: 'Wie wurde die Gefährdung bekannt?', typ: 'single',
+        optionen: [
+          { id: 'kind-berichtet', label: 'Kind berichtet spontan', tags: ['kw-kind-berichtet'] },
+          { id: 'beobachtung', label: 'Eigene Beobachtung (Verletzungen, Verhalten)', tags: ['kw-beobachtet'] },
+          { id: 'dritte', label: 'Hinweis von Dritten (Lehrer, Mitschüler)', tags: ['kw-fremdhinweis'] },
+          { id: 'verdacht', label: 'Verdacht ohne konkreten Beweis', tags: ['kw-verdacht'] }
+        ]
+      },
+      {
+        id: 'kw-akut', frage: 'Wie akut ist die Gefährdung?', typ: 'single',
+        optionen: [
+          { id: 'akut', label: 'Akut — Kind ist JETZT in Gefahr', tags: ['kw-akut', 'risiko-akut'] },
+          { id: 'wiederholt', label: 'Wiederholt — passiert regelmäßig, aber nicht gerade jetzt', tags: ['kw-wiederholt', 'risiko-hoch'] },
+          { id: 'vergangen', label: 'In der Vergangenheit — aktuell keine Gefahr', tags: ['kw-vergangen'] },
+          { id: 'unklar', label: 'Unklar — Situation nicht einschätzbar', tags: ['kw-unklar'] }
+        ]
+      },
+      {
+        id: 'kw-eltern', frage: 'Wie reagieren die Eltern?', typ: 'single',
+        optionen: [
+          { id: 'einsichtig', label: 'Einsichtig — erkennen Problem an', tags: ['eltern-einsichtig'] },
+          { id: 'bagatellisiert', label: 'Bagatellisieren ("Nicht so schlimm", "Das ist Erziehung")', tags: ['eltern-bagatellisieren'] },
+          { id: 'leugnen', label: 'Leugnen / Bestreiten', tags: ['eltern-leugnen'] },
+          { id: 'bedrohen', label: 'Bedrohen Fachkraft / Kind ("Wenn du was sagst...")', tags: ['eltern-bedrohen', 'risiko-hoch'] },
+          { id: 'nicht-erreichbar', label: 'Nicht erreichbar / verweigern Kontakt', tags: ['eltern-unerreichbar'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'kw-meldung',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'kw-meldepflichtig': 10, 'kw-akut': 10, 'risiko-akut': 10, 'kw-physisch': 5, 'kw-sexuell': 10, 'kw-wiederholt': 4, 'eltern-bedrohen': 5, 'kw-vernachlaessigung': 3, 'kw-zeuge-gewalt': 3 },
+        risiko: 'rot',
+        einschaetzung: 'Kindeswohlgefährdung — Art. 7 des luxemburgischen Jugendschutzgesetzes verpflichtet JEDEN Fachperson zur Meldung bei Verdacht auf Misshandlung, Missbrauch oder Vernachlässigung. Schweigepflicht (Art. 458) entfällt bei Kindeswohlgefährdung. Du bist NICHT zuständig für Ermittlung — nur für Meldung und Schutz.',
+        sofort: [
+          '⚠️ Bei akuter Gefahr: 113 (Polizei) — Kind aus der Gefahrensituation holen',
+          'Aussage des Kindes WÖRTLICH dokumentieren (keine Interpretation, keine Suggestivfragen)',
+          'NICHT: Eigene Ermittlung, Täter konfrontieren, Eltern vorab informieren (bei sexuellem Missbrauch!)',
+          'Verletzungen beobachten und dokumentieren (Ort, Größe, Form, Farbe) — NICHT fotografieren ohne Erlaubnis',
+          'Kind beruhigen: "Es ist nicht deine Schuld. Du hast richtig gehandelt, mir das zu erzählen."'
+        ],
+        mittelfristig: [
+          'Meldung an OPJ (Office de la Protection de la Jeunesse) / Staatsanwaltschaft',
+          'Kooperation mit ONE (Office National de l\'Enfance) — Schutzmaßnahmen einleiten',
+          'Dem Kind Kontinuität bieten — Beziehung aufrechterhalten trotz/während Intervention',
+          'Dokumentation lückenlos führen: Datum, Beobachtung, Maßnahme, Beteiligte'
+        ],
+        ueberweisung: '🚨 Meldepflicht Art. 7: OPJ Luxembourg (Tel: 247-82600), Parquet Tribunal de la Jeunesse. ONE für Schutzmaßnahmen. Bei akuter Gefahr: 113. Femmes en Détresse (häusl. Gewalt): 12 2000. ALUPSE (sex. Missbrauch).',
+        elternarbeit: 'CAVE: Bei Verdacht auf sex. Missbrauch durch Elternteil → NICHT den Elternteil informieren VOR Meldung! Bei häusl. Gewalt: Nicht-gewalttätigen Elternteil unterstützen. Bei Vernachlässigung: Oft Überforderung — Hilfsangebote statt Schuldzuweisung.',
+        materialien: { arbeitsblaetter: ['sicherheitsplan'], therapiemodule: ['therapiemodul-kinderschutz'], fachmodule: ['kindeswohlgefaehrdung'] },
+        referenzen: [
+          'Luxemburger Jugendschutzgesetz: Art. 7 Meldepflicht, Art. 458 CP Schweigepflicht.',
+          'WHO (2006): Preventing Child Maltreatment — a guide to taking action and generating evidence.',
+          'Kindler, H. et al. (2006): Handbuch Kindeswohlgefährdung nach § 1666 BGB und Allgemeiner Sozialer Dienst. DJI.',
+          'NICE Guideline CG89 (2009/2017): Child maltreatment — when to suspect and recognition.'
+        ]
+      }
+    ]
+  },
   { id: 'migration-flucht', titel: 'Migration / Flucht / kulturelle Anpassung', icon: '🌍', farbe: '#0D9488', kategorie: 'sozial', icd: 'Z60.3', beschreibung: 'Kulturschock, Sprachbarrieren, Diskriminierung, Heimweh', variablen: [], empfehlungen: [] },
   { id: 'mediensucht', titel: 'Mediensucht / Online-Abhängigkeit', icon: '📱', farbe: '#6366F1', kategorie: 'sozial', icd: 'F63.0', beschreibung: 'Exzessives Gaming, Social Media, Online-Konsum', variablen: [], empfehlungen: [] },
 

@@ -280,6 +280,70 @@ const ARBEITSBLÄTTER = {
 };
 
 // ============================================================
+// Eltern-Infoblätter – Zuordnung themaId → [{titel, datei}]
+// ============================================================
+const ELTERN_INFOBLAETTER = {
+  'angst':                [{ titel: 'Ihr Kind hat Angst — Was Sie wissen sollten', datei: 'angst-eltern.html' }],
+  'trennungsangst':       [{ titel: 'Ihr Kind hat Angst — Was Sie wissen sollten', datei: 'angst-eltern.html' }],
+  'soziale-angst':        [{ titel: 'Ihr Kind hat Angst — Was Sie wissen sollten', datei: 'angst-eltern.html' }],
+  'depression':           [{ titel: 'Depression bei Jugendlichen erkennen', datei: 'depression-eltern.html' }],
+  'selbstverletzung':     [{ titel: 'Selbstverletzung verstehen', datei: 'selbstverletzung-eltern.html' }],
+  'substanzkonsum':       [{ titel: 'Cannabis im Jugendalter', datei: 'cannabis-eltern.html' }],
+  'medienkonsum':         [{ titel: 'Bildschirmzeit & soziale Medien', datei: 'medienkonsum-eltern.html' }],
+  'digitales-wohlbefinden': [{ titel: 'Bildschirmzeit & soziale Medien', datei: 'medienkonsum-eltern.html' }],
+  'bildschirmzeit':       [{ titel: 'Bildschirmzeit & soziale Medien', datei: 'medienkonsum-eltern.html' }],
+  'mobbing':              [{ titel: 'Wenn Ihr Kind gemobbt wird', datei: 'mobbing-eltern.html' }],
+  'cybermobbing':         [{ titel: 'Wenn Ihr Kind gemobbt wird', datei: 'mobbing-eltern.html' }],
+  'schulverweigerung':    [{ titel: 'Schulabsentismus — Was Eltern tun können', datei: 'schulverweigerung-eltern.html' }],
+  'essstoerung':          [{ titel: 'Auffälliges Essverhalten erkennen', datei: 'essstoerung-eltern.html' }],
+  'koerper-selbstbild':   [{ titel: 'Auffälliges Essverhalten erkennen', datei: 'essstoerung-eltern.html' }],
+  'adhs':                 [{ titel: 'ADHS im Alltag — Tipps für Eltern', datei: 'adhs-eltern.html' }],
+  'trauma':               [{ titel: 'Traumatische Erfahrungen — Ihr Kind unterstützen', datei: 'trauma-eltern.html' }],
+  'aggressives-verhalten': [{ titel: 'Wutausbrüche & aggressives Verhalten', datei: 'wut-eltern.html' }],
+  'impulskontrolle':      [{ titel: 'Wutausbrüche & aggressives Verhalten', datei: 'wut-eltern.html' }],
+  'trauer':               [{ titel: 'Trauer bei Kindern & Jugendlichen', datei: 'trauer-eltern.html' }],
+  'trennung-scheidung':   [{ titel: 'Trennung & Scheidung — Das Kind im Blick', datei: 'scheidung-eltern.html' }],
+  'suizidalitaet':        [{ titel: 'Warnsignale erkennen — Suizidprävention', datei: 'suizidalitaet-eltern.html' }],
+  'identitaet':           [{ titel: 'Pubertät — Normalität vs. Warnsignale', datei: 'pubertaet-eltern.html' }],
+};
+
+// ============================================================
+// Eltern-Gesprächsleitfäden (Druckbar) – Für Fachkräfte zur Elterngesprächsvorbereitung
+// ============================================================
+const ELTERN_GESPRAECHSLEITFAEDEN = [
+  { id: 'loyalitaetskonflikt', titel: 'Loyalitätskonflikt mit Eltern besprechen', datei: 'leitfaden-loyalitaetskonflikt.html', beschreibung: 'Kind im Spannungsfeld zwischen Eltern und Institution' },
+  { id: 'unterbringung', titel: 'Unterbringung im Internat/Foyer erklären', datei: 'leitfaden-unterbringung.html', beschreibung: 'Placement als Unterstützung kommunizieren' },
+  { id: 'verdacht-misshandlung', titel: 'Verdacht auf Misshandlung ansprechen', datei: 'leitfaden-verdacht-misshandlung.html', beschreibung: 'Sensibles Thema mit Meldepflicht' },
+  { id: 'substanzkonsum', titel: 'Substanzkonsum des Kindes thematisieren', datei: 'leitfaden-substanzkonsum.html', beschreibung: 'Gesundheitsbezogen statt schuldzuweisend' },
+  { id: 'diagnose', titel: 'Psychische Diagnose mitteilen', datei: 'leitfaden-diagnose.html', beschreibung: 'Entstigmatisierung und Behandlungsoptionen' },
+  { id: 'schulprobleme', titel: 'Schulische Probleme besprechen', datei: 'leitfaden-schulprobleme.html', beschreibung: 'Lösungsorientiert mit konkretem Aktionsplan' },
+  { id: 'ueberweisung', titel: 'Überweisung an Fachstelle empfehlen', datei: 'leitfaden-ueberweisung.html', beschreibung: 'Professionelle Hilfe normalisieren' },
+  { id: 'krise', titel: 'Rückschritt oder Krise kommunizieren', datei: 'leitfaden-krise.html', beschreibung: 'Krisen als Teil des Prozesses einordnen' },
+  { id: 'entlassung', titel: 'Beendigung der Maßnahme besprechen', datei: 'leitfaden-entlassung.html', beschreibung: 'Übergang, Nachsorge und Abschied' },
+  { id: 'kooperation', titel: 'Elterliche Kooperation einfordern', datei: 'leitfaden-kooperation.html', beschreibung: 'Widerstand verstehen und auflösen' },
+];
+
+// ============================================================
+// Evaluationsbögen – Standardisierte Bewertungsinstrumente
+// ============================================================
+const EVALUATIONSBOEGEN = [
+  { id: 'sitzungsfeedback', titel: 'Sitzungs-Feedback', datei: 'sitzungsfeedback.html', beschreibung: 'Kurze Rückmeldung nach jeder Sitzung', frequenz: 'Pro Sitzung' },
+  { id: 'symptom-tracker', titel: 'Symptom-Tracker', datei: 'symptom-tracker.html', beschreibung: 'Wöchentlicher Befindlichkeitsbogen', frequenz: 'Wöchentlich' },
+  { id: 'zielerreichung', titel: 'Zielerreichungsskala (GAS)', datei: 'zielerreichung.html', beschreibung: 'Goal Attainment Scaling', frequenz: 'Monatlich' },
+  { id: 'beziehungsqualitaet', titel: 'Beziehungsqualität Check', datei: 'beziehungsqualitaet.html', beschreibung: 'Therapeutische Allianz messen', frequenz: 'Vierteljährlich' },
+  { id: 'abschlussevaluation', titel: 'Abschlussevaluation', datei: 'abschlussevaluation.html', beschreibung: 'Gesamtbewertung der Begleitung', frequenz: 'Bei Beendigung' },
+];
+
+// ============================================================
+// Überweisungsleitfaden – Luxemburger Hilfsangebote
+// ============================================================
+const UEBERWEISUNGSLEITFADEN = [
+  { id: 'leitfaden', titel: 'Überweisungsleitfaden Luxemburg', datei: 'ueberweisungsleitfaden.html' },
+  { id: 'formular', titel: 'Überweisungsformular (Blanko)', datei: 'ueberweisungsformular.html' },
+  { id: 'notfallkarte', titel: 'Notfallkarte Krisennummern', datei: 'notfallkarte.html' },
+];
+
+// ============================================================
 // Therapiemodul-Dateien (HTML) – Zuordnung themaId → Dateiname
 // ============================================================
 const THERAPIE_MODULE_DATEIEN = {

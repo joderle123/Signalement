@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pathways-v2';
+const CACHE_NAME = 'pathways-v3';
 
 const PRECACHE_ASSETS = [
   'index.html',
@@ -6,8 +6,12 @@ const PRECACHE_ASSETS = [
   'css/arbeitsblatt.css',
   'css/fachkraft-modul.css',
   'css/therapiemodul.css',
+  'css/eltern-infoblatt.css',
+  'css/evaluationsbogen.css',
   'fachkraft-modul.css',
   'therapiemodul.css',
+  'eltern-infoblatt.css',
+  'evaluationsbogen.css',
   'js/app.js',
   'js/data.js',
   'js/icons.js',

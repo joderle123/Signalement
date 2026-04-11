@@ -23918,7 +23918,46 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'soziale-angst', titel: 'Soziale Angst / Rückzug', icon: '😶', farbe: '#E07B39', kategorie: 'emotional', icd: 'F40.1', beschreibung: 'Vermeidung sozialer Situationen, Angst vor Bewertung', variablen: [], empfehlungen: [] },
+  { id: 'soziale-angst', titel: 'Soziale Angst / Rückzug', icon: '😶', farbe: '#E07B39', kategorie: 'emotional', icd: 'F40.1', beschreibung: 'Vermeidung sozialer Situationen, Angst vor Bewertung',
+    variablen: [
+      { id: 'sa-situationen', frage: 'Welche sozialen Situationen werden gemieden? (Mehrfachauswahl)', typ: 'multi', optionen: [
+        { id: 'klasse', label: 'Mündliche Beteiligung / Vorträge im Unterricht', tags: ['leistungs-situationen'] },
+        { id: 'gruppe', label: 'Gruppenarbeit / Teamaktivitäten', tags: ['gruppen-situationen'] },
+        { id: 'mensa', label: 'Mensa / Pausenhof / unstrukturierte Zeiten', tags: ['freizeit-situationen'] },
+        { id: 'telefon', label: 'Telefonieren / Behördenkontakte', tags: ['formelle-situationen'] },
+        { id: 'neue-kontakte', label: 'Neue Menschen kennenlernen', tags: ['neuheit-angst'] },
+        { id: 'alles', label: 'Fast alle sozialen Situationen', tags: ['generalisiert-sozial', 'dringend'] }
+      ]},
+      { id: 'sa-verhalten', frage: 'Wie reagiert der/die Jugendliche in sozialen Situationen?', typ: 'single', optionen: [
+        { id: 'still', label: 'Wird sehr still, spricht kaum, vermeidet Blickkontakt', tags: ['gehemmt'] },
+        { id: 'koerper', label: 'Körperliche Reaktionen (Erröten, Zittern, Schwitzen)', tags: ['koerperlich-sichtbar'] },
+        { id: 'flucht', label: 'Verlässt die Situation / läuft weg', tags: ['fluchtverhalten'] },
+        { id: 'aggression', label: 'Wird gereizt / aggressiv als Schutz', tags: ['defensiv-aggressiv'] }
+      ]},
+      { id: 'sa-online', frage: 'Wie ist das Sozialverhalten online?', typ: 'single', optionen: [
+        { id: 'aktiv', label: 'Online deutlich aktiver als offline', tags: ['online-kompensation'] },
+        { id: 'auch-schwierig', label: 'Auch online zurückgezogen', tags: ['durchgaengig-gehemmt'] },
+        { id: 'kein-internet', label: 'Kaum Internetnutzung', tags: [] }
+      ]},
+      { id: 'sa-beginn', frage: 'Wann hat die soziale Angst begonnen?', typ: 'single', optionen: [
+        { id: 'immer', label: 'War schon immer schüchtern/ängstlich', tags: ['temperament', 'frueh-beginn'] },
+        { id: 'pubertaet', label: 'Mit Beginn der Pubertät', tags: ['pubertaer'] },
+        { id: 'nach-ereignis', label: 'Nach einem bestimmten Ereignis (Mobbing, Blamage)', tags: ['trauma-ausgeloest'] },
+        { id: 'schleichend', label: 'Schleichend über Monate', tags: ['schleichend'] }
+      ]}
+    ],
+    empfehlungen: [
+      { id: 'sa-standard', tags_erforderlich: [], tags_gewichtung: { 'gehemmt': 2, 'gruppen-situationen': 2, 'adoleszent': 1, 'online-kompensation': 1 }, tags_ausschluss: ['suizidal-aktiv'], risiko: 'gelb',
+        einschaetzung: 'Soziale Angststörung (F40.1) — persistierende Angst vor sozialen Situationen, in denen Bewertung durch andere möglich ist. Beginn typischerweise in der Adoleszenz. Ohne Intervention hohes Chronifizierungsrisiko und sekundäre Depression (Beesdo et al., 2007). Differenzialdiagnose: Selektiver Mutismus, Autismus-Spektrum, Schüchternheit als Temperament.',
+        sofort: ['Soziale Angst validieren — NICHT als "schüchtern" bagatellisieren', 'Psychoedukation: Sicherheitsverhalten erklären (Vermeidung lindert kurzfristig, verstärkt langfristig)', 'Hierarchie angstbesetzter Situationen erstellen (Angstleiter 0-10)', 'Eine kleine machbare Exposition für diese Woche vereinbaren'],
+        mittelfristig: ['Kognitive Umstrukturierung: "Was denke ich, was andere über mich denken?" — Gedankenexperimente', 'Gestufte Exposition: Von leichten zu schweren sozialen Situationen (Angstleiter systematisch abarbeiten)', 'Videobasiertes Feedback: Eigenes Verhalten in sozialer Situation anschauen (korrigiert verzerrte Selbstwahrnehmung)', 'Soziale Kompetenz trainieren (Blickkontakt, Gespräch beginnen, Nein sagen)', 'SPIN oder Liebowitz-Skala alle 4 Wochen zur Verlaufskontrolle'],
+        ueberweisung: 'Bei generalisierter sozialer Angst (alle Situationen betroffen) oder Funktionseinschränkung >3 Monate: KVT-Spezialist. Clark & Wells Modell (1995) oder Stangier-Programm. Ggf. SSRI bei schwerer Ausprägung.',
+        elternarbeit: 'Eltern sollen das Kind NICHT entschuldigen oder vor sozialen Situationen schützen. Stattdessen: Ermutigen, loben bei kleinen Fortschritten, eigene soziale Ängstlichkeit reflektieren. Familiäre soziale Aktivitäten beibehalten.',
+        materialien: { arbeitsblaetter: ['soziale-faehigkeiten.html', 'stress-angst.html', 'selbstwertgefuehl.html'], therapiemodule: ['therapiemodul-soziale-kompetenz.html'], elterninfo: ['angst-eltern.html'] },
+        referenzen: ['Clark, D.M. & Wells, A. (1995). A cognitive model of social phobia. In R.G. Heimberg et al. (Eds.), Social phobia: Diagnosis, assessment, and treatment. Guilford.', 'Beesdo, K. et al. (2007). Incidence of social anxiety disorder. Psychological Medicine, 37(10), 1437-1448.', 'NICE (2013). Social anxiety disorder: Recognition, assessment and treatment. CG159.', 'Spence, S.H. et al. (2000). The treatment of childhood social phobia. Journal of Child Psychology and Psychiatry, 41(6), 713-726.']
+      }
+    ]
+  },
   { id: 'zwang', titel: 'Zwangssymptome / Zwangshandlungen', icon: '🔄', farbe: '#7C3AED', kategorie: 'emotional', icd: 'F42', beschreibung: 'Wiederkehrende Gedanken, Rituale, Kontrollzwang', variablen: [], empfehlungen: [] },
   { id: 'somatisierung', titel: 'Somatische Beschwerden ohne Befund', icon: '🤕', farbe: '#059669', kategorie: 'emotional', icd: 'F45', beschreibung: 'Kopf-/Bauchschmerzen, Übelkeit ohne medizinische Ursache', variablen: [], empfehlungen: [] },
   { id: 'trauer', titel: 'Trauer / Verlust', icon: '🕯️', farbe: '#475569', kategorie: 'emotional', icd: 'F43.2', beschreibung: 'Tod einer Bezugsperson, Trennung, Verlust von Heimat/Freunden', variablen: [], empfehlungen: [] },

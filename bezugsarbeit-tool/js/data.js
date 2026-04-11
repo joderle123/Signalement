@@ -24506,7 +24506,81 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'mobbing-taeter', titel: 'Mobbing (als Täter)', icon: '👊', farbe: '#991B1B', kategorie: 'externalisierend', icd: 'F91', beschreibung: 'Systematisches Schikanieren, Ausgrenzung, Cybermobbing', variablen: [], empfehlungen: [] },
+  {
+    id: 'mobbing-taeter', titel: 'Mobbing (als Täter)', icon: '👊', farbe: '#991B1B', kategorie: 'externalisierend', icd: 'F91',
+    beschreibung: 'Systematisches Schikanieren, Ausgrenzung, Cybermobbing',
+    variablen: [
+      {
+        id: 'mob-art', frage: 'Welche Form von Mobbing liegt vor?', typ: 'multi',
+        optionen: [
+          { id: 'physisch', label: 'Physisch (Schlagen, Schubsen, Wegnehmen)', tags: ['mob-physisch'] },
+          { id: 'verbal', label: 'Verbal (Beleidigen, Auslachen, Drohen)', tags: ['mob-verbal'] },
+          { id: 'relational', label: 'Relational (Ausschließen, Gerüchte, Manipulation)', tags: ['mob-relational'] },
+          { id: 'cyber', label: 'Cybermobbing (Chats, soziale Medien, Bilder)', tags: ['mob-cyber', 'digital'] },
+          { id: 'sexuell', label: 'Sexualisiertes Mobbing (Kommentare, Bilder)', tags: ['mob-sexualisiert', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'mob-rolle', frage: 'Welche Rolle nimmt der/die Jugendliche ein?', typ: 'single',
+        optionen: [
+          { id: 'haupttaeter', label: 'Haupttäter/in — initiiert das Mobbing', tags: ['mob-fuehrend'] },
+          { id: 'mitlaeufer', label: 'Mitläufer/in — macht mit, initiiert nicht', tags: ['mob-mitlaeufer'] },
+          { id: 'bully-victim', label: 'Bully-Victim — ist selbst auch Opfer', tags: ['mob-bully-victim', 'doppelrolle'] },
+          { id: 'anstifter', label: 'Anstifter/in — steuert andere, bleibt selbst unsichtbar', tags: ['mob-fuehrend', 'mob-relational'] }
+        ]
+      },
+      {
+        id: 'mob-motiv', frage: 'Was könnte das Motiv sein?', typ: 'single',
+        optionen: [
+          { id: 'status', label: 'Status / Macht in der Gruppe', tags: ['mob-status'] },
+          { id: 'unsicherheit', label: 'Eigene Unsicherheit verbergen', tags: ['mob-kompensation'] },
+          { id: 'modell', label: 'Gelerntes Verhalten (selbst Gewalt erlebt)', tags: ['mob-modelllernen'] },
+          { id: 'langeweile', label: 'Langeweile / Sensationslust', tags: ['mob-sensation'] },
+          { id: 'normen', label: 'Gruppennormen / "alle machen das"', tags: ['mob-normativ', 'peer-einfluss'] }
+        ]
+      },
+      {
+        id: 'mob-einsicht', frage: 'Wie reagiert der/die Jugendliche auf Konfrontation?', typ: 'single',
+        optionen: [
+          { id: 'leugnet', label: 'Leugnet alles / "War nur Spaß"', tags: ['einsicht-keine'] },
+          { id: 'bagatellisiert', label: 'Bagatellisiert — "Der/die ist selbst schuld"', tags: ['einsicht-gering'] },
+          { id: 'teilweise', label: 'Teilweise einsichtig — schämt sich', tags: ['einsicht-teilweise'] },
+          { id: 'reue', label: 'Echte Reue / möchte es wiedergutmachen', tags: ['einsicht-gut'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'mob-taeter-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'mob-fuehrend': 3, 'einsicht-keine': 3, 'mob-cyber': 2, 'mob-kompensation': 2, 'mob-modelllernen': 2, 'einsicht-gut': -1, 'mob-mitlaeufer': -1 },
+        risiko: 'gelb',
+        einschaetzung: 'Mobbing als Täter/in — Systematisches aggressives Verhalten gegenüber Schwächeren. Wichtig: Täter sind keine "bösen Kinder" — Mobbing hat Funktionen (Status, Kompensation, gelerntes Muster). Doppelstrategie nötig: Klare Konsequenzen UND Ursachenarbeit. Opferschutz hat Priorität.',
+        sofort: [
+          'Klare Positionierung: "Was passiert, ist Mobbing. Und Mobbing hört auf — heute."',
+          'Opferschutz sofort sicherstellen — räumliche Trennung wenn nötig',
+          'Konfrontatives Gespräch (nicht beschämend): Fakten benennen, Auswirkung auf Opfer verdeutlichen',
+          'Gesprächseröffnung: "Ich spreche mit dir, weil mir aufgefallen ist, dass [Name] von dir und anderen schlecht behandelt wird. Ich möchte verstehen, was da passiert — und ich möchte, dass es aufhört."'
+        ],
+        mittelfristig: [
+          'Empathie-Förderung: Perspektivwechsel, Opfer-Empathie-Übungen',
+          'Soziale Kompetenz stärken: Alternative Wege zu Status und Anerkennung',
+          'Systemische Intervention: No Blame Approach oder Farsta-Methode auf Klassenebene',
+          'Bei Cybermobbing: Digitale Medienkompetenz, rechtliche Konsequenzen erklären'
+        ],
+        ueberweisung: 'Bei: Schwerer Gewalt, sexualisiertem Mobbing, fehlender Einsicht, CU-Traits → KJP. In Luxemburg: BEE SECURE (Cybermobbing-Helpline 8002 1234), SCRIPT/MEN für schulische Interventionen.',
+        elternarbeit: 'Eltern informieren — nicht anklagen. Gemeinsam Verantwortung übernehmen. Klare Botschaft: "Wir brauchen Sie als Partner, damit Ihr Kind lernt, fair zu handeln." Mediennutzung zu Hause besprechen bei Cybermobbing.',
+        materialien: { arbeitsblaetter: ['soziale-kompetenz', 'perspektivwechsel'], therapiemodule: ['therapiemodul-mobbing'], fachmodule: ['mobbing'] },
+        referenzen: [
+          'Olweus, D. (2013): Olweus Bullying Prevention Program — school-wide intervention. Hazelden.',
+          'Salmivalli, C. (2010): Bullying and the peer group — modifying the system. Aggression and Violent Behavior.',
+          'Robinson, G. & Maines, B. (2008): No Blame Approach — Crying for Help. Lucky Duck Publishing.',
+          'NICE Guideline PH12 (2008): Social and emotional wellbeing — reducing bullying in schools.'
+        ]
+      }
+    ]
+  },
   { id: 'wutausbrueche', titel: 'Regulationsstörung / Wutausbrüche', icon: '🌋', farbe: '#EF4444', kategorie: 'externalisierend', icd: 'F91 / F63', beschreibung: 'Unkontrollierte emotionale Ausbrüche, Impulskontrollprobleme', variablen: [], empfehlungen: [] },
 
   // C. Krisen / Risiko

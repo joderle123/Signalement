@@ -25445,7 +25445,89 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'adhs-verdacht', titel: 'ADHS-Verdacht / Konzentrationsprobleme', icon: '⚡', farbe: '#F59E0B', kategorie: 'entwicklung', icd: 'F90', beschreibung: 'Unaufmerksamkeit, Hyperaktivität, Impulsivität', variablen: [], empfehlungen: [] },
+  {
+    id: 'adhs-verdacht', titel: 'ADHS-Verdacht / Konzentrationsprobleme', icon: '⚡', farbe: '#F59E0B', kategorie: 'entwicklung', icd: 'F90',
+    beschreibung: 'Unaufmerksamkeit, Hyperaktivität, Impulsivität',
+    variablen: [
+      {
+        id: 'adhs-praesentation', frage: 'Welche Symptome stehen im Vordergrund?', typ: 'single',
+        optionen: [
+          { id: 'unaufmerksam', label: 'Vorwiegend unaufmerksam (verträumt, vergesslich, langsam)', tags: ['adhs-unaufmerksam'] },
+          { id: 'hyperaktiv', label: 'Vorwiegend hyperaktiv-impulsiv (zappelig, kann nicht warten)', tags: ['adhs-hyperaktiv'] },
+          { id: 'kombiniert', label: 'Kombiniert (beides)', tags: ['adhs-kombiniert'] },
+          { id: 'unklar', label: 'Unklar — könnte auch andere Ursache haben', tags: ['adhs-differenzial'] }
+        ]
+      },
+      {
+        id: 'adhs-kontexte', frage: 'In welchen Kontexten zeigen sich die Symptome?', typ: 'multi',
+        optionen: [
+          { id: 'schule', label: 'In der Schule (Unterricht, Aufgaben)', tags: ['adhs-schule'] },
+          { id: 'zuhause', label: 'Zu Hause (Hausaufgaben, Alltag)', tags: ['adhs-zuhause'] },
+          { id: 'peers', label: 'In Peer-Situationen (Spiel, Sport)', tags: ['adhs-peers'] },
+          { id: 'ueberall', label: 'In allen Kontexten', tags: ['adhs-pervasiv'] }
+        ]
+      },
+      {
+        id: 'adhs-abklaerung', frage: 'Wie ist der Stand der Abklärung?', typ: 'single',
+        optionen: [
+          { id: 'keine', label: 'Noch keine Abklärung', tags: ['adhs-nicht-abgeklaert'] },
+          { id: 'verdacht', label: 'Verdacht geäußert, Abklärung läuft', tags: ['adhs-abklaerung-laeuft'] },
+          { id: 'diagnostiziert', label: 'ADHS diagnostiziert', tags: ['adhs-diagnostiziert'] },
+          { id: 'ausgeschlossen', label: 'ADHS wurde ausgeschlossen — andere Ursache', tags: ['adhs-ausgeschlossen'] }
+        ]
+      },
+      {
+        id: 'adhs-auswirkung', frage: 'Wie stark sind die Auswirkungen im Alltag?', typ: 'single',
+        optionen: [
+          { id: 'leicht', label: 'Leicht — kommt zurecht, braucht aber Unterstützung', tags: ['adhs-leicht'] },
+          { id: 'mittel', label: 'Mittel — deutliche Beeinträchtigung in Schule/Sozial', tags: ['adhs-mittel'] },
+          { id: 'schwer', label: 'Schwer — massive Probleme in mehreren Bereichen', tags: ['adhs-schwer'] }
+        ]
+      },
+      {
+        id: 'adhs-komorbid', frage: 'Gibt es begleitende Auffälligkeiten?', typ: 'multi',
+        optionen: [
+          { id: 'opposition', label: 'Oppositionelles Verhalten', tags: ['komorbid-odd'] },
+          { id: 'angst', label: 'Angst / Sorgen', tags: ['komorbid-angst'] },
+          { id: 'depression', label: 'Depressive Stimmung', tags: ['komorbid-depression'] },
+          { id: 'lernstoerung', label: 'Lese-/Rechtschreib-/Rechenschwäche', tags: ['komorbid-lernstoerung'] },
+          { id: 'tics', label: 'Tics', tags: ['komorbid-tics'] },
+          { id: 'keine', label: 'Keine erkennbar', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'adhs-paedagogisch',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'adhs-nicht-abgeklaert': 2, 'adhs-unaufmerksam': 1, 'adhs-hyperaktiv': 1, 'adhs-schule': 2, 'adhs-leicht': 1, 'adhs-mittel': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'ADHS-Verdacht / Konzentrationsprobleme — ADHS ist eine neurobiologische Entwicklungsstörung (NICHT Erziehungsfehler, NICHT Faulheit). Prävalenz: 5-7% aller Kinder/Jugendlichen. Wichtig: Nur ein KJP/Neuropädiater kann diagnostizieren. Als Bezugsarbeiter kannst du: beobachten, dokumentieren, pädagogisch unterstützen, Abklärung empfehlen.',
+        sofort: [
+          'Verhalten systematisch beobachten: In welchen Situationen, wie oft, wie stark? (SNAP-IV als Screening)',
+          'Umgebung anpassen: Reizarmer Arbeitsplatz, klare Strukturen, kurze Aufgabeneinheiten, Bewegungspausen',
+          'Positiv verstärken: Das Kind KANN nicht — es WILL nicht nicht. Stärken betonen.',
+          'Gesprächseröffnung: "Mir fällt auf, dass es dir manchmal schwerfällt, bei einer Sache zu bleiben. Das ist nichts, wofür du dich schämen musst — wir können herausfinden, warum das so ist und was dir hilft."'
+        ],
+        mittelfristig: [
+          'Abklärung empfehlen: KJP oder Neuropädiatrie für formale Diagnostik',
+          'Schulische Anpassungen: Nachteilsausgleich, Sitzplatz vorne, Timer-Methode, Aufgabensplitting',
+          'Selbstregulation fördern: Ampelsystem, Token-Economy, Bewegungsprogramm',
+          'Bei Diagnose: Multimodale Behandlung (Verhaltenstherapie + ggf. Medikation + pädagogische Anpassung)'
+        ],
+        ueberweisung: 'KJP-/Neuropädiatrische Abklärung empfohlen bei: Symptomen >6 Monate, Beeinträchtigung in 2+ Kontexten, Leidensdruck. In Luxemburg: CHNP, CHL (Neuropädiatrie), SCAP (Service de Consultation et d\'Aide pour troubles de l\'Attention).',
+        elternarbeit: 'Psychoedukation: ADHS erklären (neurobiologisch, nicht erzieherisch). Eltern entlasten — sie hören oft "Erziehen Sie Ihr Kind besser." Konsistente Strukturen zu Hause. Bei Diagnose: Entscheidungshilfe Medikation.',
+        materialien: { arbeitsblaetter: ['konzentration', 'tagesstruktur'], therapiemodule: ['therapiemodul-adhs'], fachmodule: ['adhs'] },
+        referenzen: [
+          'NICE Guideline NG87 (2018): ADHD — diagnosis and management in children and young people.',
+          'AWMF S3-Leitlinie ADHS (2018): Diagnostik und Therapie bei Kindern, Jugendlichen und Erwachsenen.',
+          'Barkley, R.A. (2015): Attention-Deficit Hyperactivity Disorder (4th ed.). Guilford Press.',
+          'Döpfner, M. et al. (2013): Therapieprogramm für Kinder mit hyperkinetischem und oppositionellem Problemverhalten (THOP). Beltz.'
+        ]
+      }
+    ]
+  },
   { id: 'essstoerung', titel: 'Essstörung-Verdacht', icon: '🪞', farbe: '#EC4899', kategorie: 'entwicklung', icd: 'F50', beschreibung: 'Restriktives Essen, Essanfälle, Erbrechen, Körperdysmorphie', variablen: [], empfehlungen: [] },
 
   // E. Soziale / Kontextuelle Probleme

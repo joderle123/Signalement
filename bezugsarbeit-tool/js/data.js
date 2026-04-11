@@ -23958,7 +23958,120 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'zwang', titel: 'Zwangssymptome / Zwangshandlungen', icon: '🔄', farbe: '#7C3AED', kategorie: 'emotional', icd: 'F42', beschreibung: 'Wiederkehrende Gedanken, Rituale, Kontrollzwang', variablen: [], empfehlungen: [] },
+  {
+    id: 'zwang', titel: 'Zwangssymptome / Zwangshandlungen', icon: '🔄', farbe: '#7C3AED', kategorie: 'emotional', icd: 'F42',
+    beschreibung: 'Wiederkehrende Gedanken, Rituale, Kontrollzwang',
+    variablen: [
+      {
+        id: 'zwang-art', frage: 'Welche Art von Zwängen zeigt der/die Jugendliche?', typ: 'multi',
+        optionen: [
+          { id: 'kontrollzwang', label: 'Kontrollzwänge (Tür, Herd, Schulranzen)', tags: ['zwang-kontrolle'] },
+          { id: 'waschzwang', label: 'Wasch-/Reinigungszwänge', tags: ['zwang-waschen'] },
+          { id: 'ordnungszwang', label: 'Ordnungs-/Symmetriezwänge', tags: ['zwang-ordnung'] },
+          { id: 'zaehlzwang', label: 'Zähl- oder Wiederholungszwänge', tags: ['zwang-zaehlen'] },
+          { id: 'gedankenzwang', label: 'Zwangsgedanken (aggressiv, sexuell, religiös)', tags: ['zwang-gedanken', 'primaer-kognitiv'] },
+          { id: 'sammelzwang', label: 'Horten / Sammelzwang', tags: ['zwang-horten'] }
+        ]
+      },
+      {
+        id: 'zwang-zeit', frage: 'Wie viel Zeit nehmen die Zwänge täglich ein?', typ: 'single',
+        optionen: [
+          { id: 'unter-1h', label: 'Unter 1 Stunde/Tag', tags: ['zwang-leicht'] },
+          { id: '1-3h', label: '1-3 Stunden/Tag', tags: ['zwang-mittel'] },
+          { id: 'ueber-3h', label: 'Über 3 Stunden/Tag', tags: ['zwang-schwer'] },
+          { id: 'staendig', label: 'Fast durchgängig / kann Alltag kaum bewältigen', tags: ['zwang-schwer', 'zwang-funktionseinschraenkung'] }
+        ]
+      },
+      {
+        id: 'zwang-einsicht', frage: 'Hat der/die Jugendliche Einsicht in die Irrationalität?', typ: 'single',
+        optionen: [
+          { id: 'gute-einsicht', label: 'Ja, findet es selbst übertrieben', tags: ['einsicht-gut'] },
+          { id: 'teilweise', label: 'Teilweise — manchmal unsicher', tags: ['einsicht-teilweise'] },
+          { id: 'keine-einsicht', label: 'Nein — ist überzeugt, dass Zwänge nötig sind', tags: ['einsicht-keine', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'zwang-familie', frage: 'Wie reagiert die Familie auf die Zwänge?', typ: 'single',
+        optionen: [
+          { id: 'akkomodation', label: 'Macht mit / passt sich an (Akkomodation)', tags: ['familie-akkomodation'] },
+          { id: 'bestrafung', label: 'Bestraft oder verbietet die Zwänge', tags: ['familie-bestrafung'] },
+          { id: 'hilflos', label: 'Hilflos / weiß nicht, wie reagieren', tags: ['familie-hilflos'] },
+          { id: 'unterstuetzend', label: 'Unterstützend — sucht aktiv Hilfe', tags: ['familie-kooperativ'] }
+        ]
+      },
+      {
+        id: 'zwang-komorbid', frage: 'Gibt es begleitende Symptome?', typ: 'multi',
+        optionen: [
+          { id: 'angst', label: 'Angst / Panikattacken', tags: ['komorbid-angst'] },
+          { id: 'depression', label: 'Depressive Stimmung', tags: ['komorbid-depression'] },
+          { id: 'tics', label: 'Tics (motorisch/vokal)', tags: ['komorbid-tics'] },
+          { id: 'adhs', label: 'ADHS / Konzentrationsprobleme', tags: ['komorbid-adhs'] },
+          { id: 'essstoerung', label: 'Essprobleme / Essstörung', tags: ['komorbid-essstoerung'] },
+          { id: 'keine', label: 'Keine begleitenden Symptome', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'zwang-erp-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'zwang-leicht': 1, 'zwang-mittel': 2, 'zwang-schwer': 3, 'einsicht-gut': 2, 'familie-kooperativ': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Zwangsstörung (F42) — Goldstandard der Behandlung ist Exposition mit Reaktionsverhinderung (ERP). Bei Kindern und Jugendlichen ist kognitive Verhaltenstherapie mit ERP die wirksamste Intervention. Familieneinbindung ist essenziell, da familiäre Akkomodation die Zwänge aufrechterhält.',
+        sofort: [
+          'Psychoedukation: Zwänge als "Fehlalarm im Gehirn" erklären — der Zwang ist nicht die Person',
+          'Zwangshierarchie erstellen: Situationen nach Angstlevel (0-10) ordnen',
+          'Externalisierung: Dem Zwang einen Namen geben ("Der Kontrolleur", "Der Zweifler")',
+          'Gesprächseröffnung: "Ich merke, dass dich bestimmte Gedanken/Rituale sehr beschäftigen. Das kennen mehr Jugendliche als du denkst. Wollen wir gemeinsam herausfinden, wie du dem Chef im Kopf weniger gehorchen musst?"'
+        ],
+        mittelfristig: [
+          'ERP beginnen: Mit leichtester Stufe der Hierarchie starten',
+          'Kognitive Umstrukturierung: Überschätzung von Gefahr und Verantwortung bearbeiten',
+          'Familiensitzung: Akkomodation identifizieren und schrittweise reduzieren',
+          'Bei >1h/Tag oder starker Funktionseinschränkung: Überweisung an KJP für medikamentöse Evaluation (SSRI — Fluvoxamin, Sertralin)'
+        ],
+        ueberweisung: 'KJP-Abklärung empfohlen bei: >3h/Tag Zwangszeit, fehlender Einsicht, Komorbidität mit Tics, massiver Funktionseinschränkung. In Luxemburg: CHNP Ettelbruck (KJP-Ambulanz), ZNS Letzebuerg.',
+        elternarbeit: 'Eltern-Infoblatt zu Zwangsstörungen. Kernbotschaft: Akkomodation (mitmachen, Rückversicherung geben) lindert kurzfristig, verstärkt aber langfristig. Eltern lernen, empathisch zu begrenzen: "Ich verstehe, dass es sich dringend anfühlt, aber wir üben, dem Zwang nicht nachzugeben."',
+        materialien: { arbeitsblaetter: ['zwangsgedanken-verstehen'], therapiemodule: ['therapiemodul-zwang'], fachmodule: ['zwang'] },
+        referenzen: [
+          'NICE Guideline CG31 (2005, updated 2023): Obsessive-compulsive disorder — ERP as first-line for mild-moderate OCD in children',
+          'AACAP Practice Parameter (2012): Assessment and Treatment of OCD in Children and Adolescents',
+          'Freeman, J. et al. (2014): POTS II — Augmenting CBT with medication for pediatric OCD. JAMA Psychiatry.',
+          'Lebowitz, E.R. (2019): SPACE — Supportive Parenting for Anxious Childhood Emotions. Yale University Press.'
+        ]
+      },
+      {
+        id: 'zwang-schwer-funktionsverlust',
+        tags_erforderlich: ['zwang-schwer'],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'zwang-funktionseinschraenkung': 5, 'einsicht-keine': 3, 'komorbid-tics': 2, 'komorbid-depression': 2 },
+        risiko: 'rot',
+        einschaetzung: 'Schwere Zwangsstörung mit erheblicher Funktionseinschränkung. Multimodale Behandlung erforderlich (KVT + Medikation). Bei fehlender Einsicht ist die Prognose für reine Psychotherapie eingeschränkt — medikamentöse Unterstützung frühzeitig erwägen.',
+        sofort: [
+          'Dringliche Überweisung an KJP arrangieren — nicht abwarten',
+          'Sicherheit klären: Schädigt sich der/die Jugendliche durch Zwangshandlungen (exzessives Waschen → Hautverletzung, etc.)?',
+          'Entlastung im Schulalltag: Nachteilsausgleich beantragen, Zeitdruck reduzieren',
+          'Gesprächseröffnung: "Ich sehe, wie viel Energie dich das kostet. Kein Mensch muss das alleine durchstehen. Gemeinsam mit einem Spezialisten finden wir einen Weg."'
+        ],
+        mittelfristig: [
+          'Kombinationsbehandlung: ERP + SSRI (Fluvoxamin/Sertralin — KJP-Verordnung)',
+          'Intensive KVT (2× wöchentlich) mit ERP-Fokus',
+          'Familien-basierte Intervention: SPACE-Programm bei starker Akkomodation',
+          'Schulische Anpassungen: Reduktion von Prüfungsdruck, flexible Pausenregelung'
+        ],
+        ueberweisung: 'Dringende KJP-Vorstellung: CHNP Ettelbruck, ZNS Letzebuerg. Bei stationärer Indikation (>6h/Tag, Selbstverletzung durch Zwänge, komplette Schulunfähigkeit): Kinder- und Jugendpsychiatrie.',
+        elternarbeit: 'Intensive Elternberatung — Familie ist oft erschöpft. SPACE-Programm nach Lebowitz als Alternative/Ergänzung wenn Jugendlicher therapieverweigend. Klare Psychoedukation: Zwang ist eine neurobiologische Störung, kein Erziehungsfehler.',
+        materialien: { arbeitsblaetter: ['zwangsgedanken-verstehen'], therapiemodule: ['therapiemodul-zwang'], fachmodule: ['zwang'] },
+        referenzen: [
+          'Pediatric OCD Treatment Study (POTS, 2004): Combination of CBT + sertraline superior to either alone. JAMA.',
+          'Lebowitz, E.R. et al. (2020): SPACE vs. CBT for childhood anxiety/OCD — randomized controlled trial. JAACAP.',
+          'AWMF S3-Leitlinie Zwangsstörungen (2013): Diagnostik und Therapie — Empfehlungen für Kinder und Jugendliche',
+          'Storch, E.A. et al. (2010): Intensive CBT for pediatric OCD — efficacy and predictors. Behavior Therapy.'
+        ]
+      }
+    ]
+  },
   { id: 'somatisierung', titel: 'Somatische Beschwerden ohne Befund', icon: '🤕', farbe: '#059669', kategorie: 'emotional', icd: 'F45', beschreibung: 'Kopf-/Bauchschmerzen, Übelkeit ohne medizinische Ursache', variablen: [], empfehlungen: [] },
   { id: 'trauer', titel: 'Trauer / Verlust', icon: '🕯️', farbe: '#475569', kategorie: 'emotional', icd: 'F43.2', beschreibung: 'Tod einer Bezugsperson, Trennung, Verlust von Heimat/Freunden', variablen: [], empfehlungen: [] },
 

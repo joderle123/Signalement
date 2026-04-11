@@ -332,6 +332,8 @@ const EVALUATIONSBOEGEN = [
   { id: 'zielerreichung', titel: 'Zielerreichungsskala (GAS)', datei: 'zielerreichung.html', beschreibung: 'Goal Attainment Scaling', frequenz: 'Monatlich' },
   { id: 'beziehungsqualitaet', titel: 'Beziehungsqualität Check', datei: 'beziehungsqualitaet.html', beschreibung: 'Therapeutische Allianz messen', frequenz: 'Vierteljährlich' },
   { id: 'abschlussevaluation', titel: 'Abschlussevaluation', datei: 'abschlussevaluation.html', beschreibung: 'Gesamtbewertung der Begleitung', frequenz: 'Bei Beendigung' },
+  { id: 'supervisionsvorbereitung', titel: 'Supervisionsvorbereitung', datei: 'supervisionsvorbereitung.html', beschreibung: 'Strukturierte Fallreflexion für Fachkräfte', frequenz: 'Vor jeder Supervision' },
+  { id: 'selbstfuersorge-check', titel: 'Selbstfürsorge-Check (ProQOL)', datei: 'selbstfuersorge-check.html', beschreibung: 'Compassion Satisfaction, Burnout & Sekundärtrauma messen', frequenz: 'Vierteljährlich' },
 ];
 
 // ============================================================

@@ -24184,7 +24184,124 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'trauer', titel: 'Trauer / Verlust', icon: '🕯️', farbe: '#475569', kategorie: 'emotional', icd: 'F43.2', beschreibung: 'Tod einer Bezugsperson, Trennung, Verlust von Heimat/Freunden', variablen: [], empfehlungen: [] },
+  {
+    id: 'trauer', titel: 'Trauer / Verlust', icon: '🕯️', farbe: '#475569', kategorie: 'emotional', icd: 'F43.2',
+    beschreibung: 'Tod einer Bezugsperson, Trennung, Verlust von Heimat/Freunden',
+    variablen: [
+      {
+        id: 'trauer-art', frage: 'Welche Art von Verlust liegt vor?', typ: 'single',
+        optionen: [
+          { id: 'tod-nah', label: 'Tod einer nahen Bezugsperson (Elternteil, Geschwister)', tags: ['verlust-tod', 'verlust-primaer'] },
+          { id: 'tod-erweitert', label: 'Tod im erweiterten Umfeld (Großeltern, Freund, Mitschüler)', tags: ['verlust-tod'] },
+          { id: 'trennung', label: 'Trennung/Scheidung der Eltern', tags: ['verlust-trennung'] },
+          { id: 'umzug', label: 'Verlust von Heimat/Freunden (Umzug, Migration)', tags: ['verlust-heimat'] },
+          { id: 'haustier', label: 'Tod eines Haustiers', tags: ['verlust-tier'] },
+          { id: 'ploetzlich', label: 'Plötzlicher/traumatischer Tod (Suizid, Unfall, Gewalt)', tags: ['verlust-tod', 'verlust-traumatisch', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'trauer-zeit', frage: 'Wie lange liegt der Verlust zurück?', typ: 'single',
+        optionen: [
+          { id: 'akut', label: 'Unter 2 Wochen', tags: ['trauer-akut'] },
+          { id: 'frisch', label: '2 Wochen – 6 Monate', tags: ['trauer-frisch'] },
+          { id: 'anhaltend', label: '6-12 Monate', tags: ['trauer-anhaltend'] },
+          { id: 'chronisch', label: 'Über 12 Monate', tags: ['trauer-chronisch', 'kompliziert-moeglich'] }
+        ]
+      },
+      {
+        id: 'trauer-reaktion', frage: 'Wie zeigt sich die Trauerreaktion?', typ: 'multi',
+        optionen: [
+          { id: 'weinen', label: 'Häufiges Weinen / Traurigkeit', tags: ['trauer-emotional'] },
+          { id: 'rueckzug', label: 'Sozialer Rückzug / Isolation', tags: ['trauer-rueckzug'] },
+          { id: 'wut', label: 'Wut / Aggression / Ungerechtigkeit', tags: ['trauer-wut'] },
+          { id: 'leugnen', label: 'Verleugnung / "Es ist nichts passiert"', tags: ['trauer-vermeidung'] },
+          { id: 'schuld', label: 'Schuldgefühle ("Hätte ich doch...")', tags: ['trauer-schuld'] },
+          { id: 'regression', label: 'Regression (jüngeres Verhalten, Einnässen)', tags: ['trauer-regression', 'kind'] },
+          { id: 'somatisch', label: 'Körperliche Beschwerden', tags: ['trauer-somatisch'] },
+          { id: 'keine-reaktion', label: 'Scheinbar keine Reaktion / "funktioniert einfach"', tags: ['trauer-vermeidung', 'trauer-abgespalten'] }
+        ]
+      },
+      {
+        id: 'trauer-umfeld', frage: 'Wie geht das Umfeld mit dem Verlust um?', typ: 'single',
+        optionen: [
+          { id: 'offen', label: 'Offen — es wird darüber gesprochen', tags: ['umfeld-offen'] },
+          { id: 'tabu', label: 'Tabu — niemand spricht darüber', tags: ['umfeld-tabu'] },
+          { id: 'ueberforderung', label: 'Überforderung — Eltern selbst in Trauer', tags: ['umfeld-ueberlastet'] },
+          { id: 'bagatellisierung', label: 'Bagatellisierung — "Sei stark" / "Das wird schon"', tags: ['umfeld-bagatellisiert'] }
+        ]
+      },
+      {
+        id: 'trauer-warnsignale', frage: 'Gibt es Warnsignale für komplizierte Trauer?', typ: 'multi',
+        optionen: [
+          { id: 'suizid', label: 'Todessehnsucht / "Ich will auch sterben"', tags: ['suizidal', 'risiko-hoch'] },
+          { id: 'funktionsverlust', label: 'Anhaltender Funktionsverlust (Schule, Alltag)', tags: ['funktionsverlust'] },
+          { id: 'halluzination', label: 'Stimme/Bild der verstorbenen Person (über Wochen)', tags: ['trauer-hallu'] },
+          { id: 'vermeidung-total', label: 'Totale Vermeidung aller Erinnerungen', tags: ['trauer-vermeidung-stark'] },
+          { id: 'keine', label: 'Keine besonderen Warnsignale', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'trauer-normal',
+        tags_erforderlich: [],
+        tags_ausschluss: ['suizidal', 'verlust-traumatisch'],
+        tags_gewichtung: { 'trauer-akut': 2, 'trauer-frisch': 2, 'umfeld-offen': 2, 'trauer-emotional': 1 },
+        risiko: 'gruen',
+        einschaetzung: 'Normale Trauerreaktion (Z63.4) — Trauer ist keine Störung, sondern eine gesunde Reaktion auf Verlust. Bei Kindern/Jugendlichen zeigt sich Trauer anders als bei Erwachsenen: wellenförmig, oft unterbrochen von normalem Spiel/Verhalten, manchmal verzögert. Aufgabe der Fachkraft: Einen sicheren Raum bieten und das Umfeld stärken.',
+        sofort: [
+          'Trauer normalisieren: "Es ist okay, traurig zu sein. Es gibt kein richtig oder falsch beim Trauern."',
+          'Gefühle benennen helfen — Trauer hat viele Gesichter (Wut, Angst, Schuld, Taubheit)',
+          'Rituale anbieten: Brief schreiben, Kerze anzünden, Erinnerungsbox',
+          'Gesprächseröffnung: "Wenn du über [Name] reden möchtest, bin ich da. Und wenn du nicht reden möchtest, ist das auch in Ordnung."'
+        ],
+        mittelfristig: [
+          'Erinnerungsarbeit: "Was war das Schönste mit [Name]?" — positive Erinnerungen aktivieren',
+          'Vier Traueraufgaben nach Worden begleiten: Realität akzeptieren, Schmerz erleben, sich anpassen, Verbindung bewahren',
+          'Peer-Unterstützung: Gibt es andere Schüler mit ähnlichen Erfahrungen?',
+          'Regelmäßige Check-ins (nicht nur in den ersten Wochen — Trauer kommt in Wellen)'
+        ],
+        ueberweisung: 'Bei normaler Trauer nicht zwingend nötig. Bei Bedarf: Omega 90 (Trauer- und Palliativbegleitung Luxembourg), Kanner-Jugendtelefon 12345.',
+        elternarbeit: 'Eltern informieren: Wie trauern Kinder/Jugendliche? Ehrlich sein, kindgerechte Sprache, keine Euphemismen ("eingeschlafen"). Eigene Trauer zeigen ist erlaubt und modellhaft.',
+        materialien: { arbeitsblaetter: ['trauer-erinnerungen', 'gefuehlstagebuch'], therapiemodule: ['therapiemodul-trauer'], fachmodule: ['trauer'] },
+        referenzen: [
+          'Worden, J.W. (2018): Grief Counseling and Grief Therapy (5th ed.). Springer.',
+          'Webb, N.B. (2010): Helping Bereaved Children (3rd ed.). Guilford Press.',
+          'Christ, G.H. (2000): Healing Children\'s Grief. Oxford University Press.',
+          'Dyregrov, A. (2008): Grief in Children: A Handbook for Adults (2nd ed.). Jessica Kingsley Publishers.'
+        ]
+      },
+      {
+        id: 'trauer-kompliziert',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'trauer-chronisch': 4, 'kompliziert-moeglich': 3, 'verlust-traumatisch': 5, 'suizidal': 10, 'funktionsverlust': 4, 'trauer-vermeidung-stark': 3, 'verlust-primaer': 2, 'umfeld-tabu': 2 },
+        risiko: 'rot',
+        einschaetzung: 'Verdacht auf komplizierte/prolongierte Trauer (F43.81 nach ICD-11: 6B42). Merkmale: Anhaltende intensive Sehnsucht, Funktionsverlust >6 Monate, Vermeidung oder Überflutung, möglicherweise traumatische Komponente. Bei Verlust durch Suizid: Erhöhtes Suizidrisiko beim Jugendlichen selbst.',
+        sofort: [
+          'Sicherheit klären: Aktive Todessehnsucht/Suizidalität? → Wenn ja: Krisenprotokoll aktivieren',
+          'Validierung: "Was du durchmachst, ist extrem schwer. Und es ist normal, dass es sich nach so langer Zeit noch so anfühlt."',
+          'Stabilisierung: Tagesstruktur sichern, Schlaf, Ernährung',
+          'Bei traumatischem Verlust: Erst Stabilisierung, NICHT sofort über Details sprechen'
+        ],
+        mittelfristig: [
+          'Überweisung an Traumatherapie bei traumatischem Verlust (EMDR/tf-KVT)',
+          'Narrative Trauerarbeit: Lebensgeschichte mit dem Verstorbenen rekonstruieren',
+          'Duale Prozessmodell (Stroebe & Schut): Zwischen Verlust-orientierung und Wiederherstellungs-orientierung pendeln',
+          'Bei Suizidverlust: Spezifische Psychoedukation — Schuldgefühle, Stigma, "Warum?"-Fragen bearbeiten'
+        ],
+        ueberweisung: 'Dringend empfohlen: KJP-Vorstellung bei prolongierter Trauer >6 Monate mit Funktionsverlust. In Luxemburg: Omega 90 (spezialisierte Trauerbegleitung), CHNP Ettelbruck (KJP). Bei Suizidverlust: Survivors of Suicide Support — Omega 90.',
+        elternarbeit: 'Familiensitzung empfohlen. Oft trauert die ganze Familie — wenn jeder allein trauert, fehlt der Halt. Gemeinsame Rituale stärken. Bei Elternteil-Verlust: Überlebenden Elternteil stärken, nicht überfordern.',
+        materialien: { arbeitsblaetter: ['trauer-erinnerungen', 'gefuehlstagebuch'], therapiemodule: ['therapiemodul-trauer'], fachmodule: ['trauer'] },
+        referenzen: [
+          'Shear, M.K. et al. (2011): Complicated Grief Treatment — a randomized controlled trial. JAMA.',
+          'Stroebe, M. & Schut, H. (1999): The Dual Process Model of coping with bereavement. Death Studies.',
+          'Melhem, N.M. et al. (2011): Grief in Children After the Death of a Parent. Archives of General Psychiatry.',
+          'Cerel, J. et al. (2008): Suicide-bereaved youth. JAACAP.'
+        ]
+      }
+    ]
+  },
 
   // B. Externalisierende Probleme
   { id: 'aggression', titel: 'Aggressives Verhalten / Gewaltbereitschaft', icon: '💥', farbe: '#DC2626', kategorie: 'externalisierend', icd: 'F91 / F92', beschreibung: 'Physische/verbale Aggression, Sachbeschädigung, Drohungen', variablen: [], empfehlungen: [] },

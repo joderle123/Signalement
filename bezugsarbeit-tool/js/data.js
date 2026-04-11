@@ -23720,3 +23720,67 @@ const CDSS_GEMEINSAME_VARIABLEN = [
     ]
   }
 ];
+
+// ============================================================
+// CDSS — 40 Probleme (Grundgerüst)
+// Variablen + Empfehlungen werden schrittweise ergänzt
+// ============================================================
+const CDSS_PROBLEME = [
+  // A. Emotionale / Internalisierende Probleme
+  { id: 'schulvermeidung', titel: 'Schulvermeidung / Schulabsentismus', icon: '🏫', farbe: '#EA580C', kategorie: 'emotional', icd: 'F93.0 / F40.1 / F91.3', beschreibung: 'Teilweises oder vollständiges Fernbleiben von der Schule', variablen: [], empfehlungen: [] },
+  { id: 'depression', titel: 'Depressive Stimmung / Antriebslosigkeit', icon: '🌧️', farbe: '#3B82F6', kategorie: 'emotional', icd: 'F32 / F33', beschreibung: 'Anhaltende Traurigkeit, Interessenverlust, Rückzug, Energielosigkeit', variablen: [], empfehlungen: [] },
+  { id: 'angst-panik', titel: 'Angst / Panikattacken', icon: '😰', farbe: '#F59E0B', kategorie: 'emotional', icd: 'F41.0 / F41.1', beschreibung: 'Übermäßige Sorgen, Panikattacken, körperliche Angstsymptome', variablen: [], empfehlungen: [] },
+  { id: 'soziale-angst', titel: 'Soziale Angst / Rückzug', icon: '😶', farbe: '#E07B39', kategorie: 'emotional', icd: 'F40.1', beschreibung: 'Vermeidung sozialer Situationen, Angst vor Bewertung', variablen: [], empfehlungen: [] },
+  { id: 'zwang', titel: 'Zwangssymptome / Zwangshandlungen', icon: '🔄', farbe: '#7C3AED', kategorie: 'emotional', icd: 'F42', beschreibung: 'Wiederkehrende Gedanken, Rituale, Kontrollzwang', variablen: [], empfehlungen: [] },
+  { id: 'somatisierung', titel: 'Somatische Beschwerden ohne Befund', icon: '🤕', farbe: '#059669', kategorie: 'emotional', icd: 'F45', beschreibung: 'Kopf-/Bauchschmerzen, Übelkeit ohne medizinische Ursache', variablen: [], empfehlungen: [] },
+  { id: 'trauer', titel: 'Trauer / Verlust', icon: '🕯️', farbe: '#475569', kategorie: 'emotional', icd: 'F43.2', beschreibung: 'Tod einer Bezugsperson, Trennung, Verlust von Heimat/Freunden', variablen: [], empfehlungen: [] },
+
+  // B. Externalisierende Probleme
+  { id: 'aggression', titel: 'Aggressives Verhalten / Gewaltbereitschaft', icon: '💥', farbe: '#DC2626', kategorie: 'externalisierend', icd: 'F91 / F92', beschreibung: 'Physische/verbale Aggression, Sachbeschädigung, Drohungen', variablen: [], empfehlungen: [] },
+  { id: 'opposition', titel: 'Oppositionelles Verhalten / Regelverweigerung', icon: '🚫', farbe: '#B91C1C', kategorie: 'externalisierend', icd: 'F91.3', beschreibung: 'Aktive Verweigerung, Provokation, Grenztestung', variablen: [], empfehlungen: [] },
+  { id: 'mobbing-taeter', titel: 'Mobbing (als Täter)', icon: '👊', farbe: '#991B1B', kategorie: 'externalisierend', icd: 'F91', beschreibung: 'Systematisches Schikanieren, Ausgrenzung, Cybermobbing', variablen: [], empfehlungen: [] },
+  { id: 'wutausbrueche', titel: 'Regulationsstörung / Wutausbrüche', icon: '🌋', farbe: '#EF4444', kategorie: 'externalisierend', icd: 'F91 / F63', beschreibung: 'Unkontrollierte emotionale Ausbrüche, Impulskontrollprobleme', variablen: [], empfehlungen: [] },
+
+  // C. Krisen / Risiko
+  { id: 'selbstverletzung', titel: 'Selbstverletzung (SVV)', icon: '🩹', farbe: '#BE185D', kategorie: 'krisen', icd: 'X78 / Z91.5', beschreibung: 'Ritzen, Schneiden, Verbrennen, Selbstschädigung', variablen: [], empfehlungen: [] },
+  { id: 'suizidalitaet', titel: 'Suizidgedanken / Suizidalität', icon: '🚨', farbe: '#7F1D1D', kategorie: 'krisen', icd: 'X71-X83 / Z91.5', beschreibung: 'Passive/aktive Todesgedanken, Suizidpläne, -versuche', variablen: [], empfehlungen: [] },
+  { id: 'akute-krise', titel: 'Akute Krise / Zusammenbruch', icon: '⚡', farbe: '#DC2626', kategorie: 'krisen', icd: 'F43.0', beschreibung: 'Akute Belastungsreaktion, emotionaler Zusammenbruch, Erstarrung', variablen: [], empfehlungen: [] },
+  { id: 'substanzkonsum', titel: 'Substanzkonsum / Suchtverhalten', icon: '🧪', farbe: '#BE185D', kategorie: 'krisen', icd: 'F10-F19', beschreibung: 'Alkohol, Cannabis, andere Substanzen, Mischkonsum', variablen: [], empfehlungen: [] },
+
+  // D. Entwicklung / Trauma
+  { id: 'trauma', titel: 'Trauma-Exposition / PTBS-Verdacht', icon: '🌪️', farbe: '#6366F1', kategorie: 'entwicklung', icd: 'F43.1', beschreibung: 'Flashbacks, Albträume, Vermeidung, Hypervigilanz', variablen: [], empfehlungen: [] },
+  { id: 'bindungsstoerung', titel: 'Bindungsstörung / Beziehungsabbrüche', icon: '🔗', farbe: '#8B5CF6', kategorie: 'entwicklung', icd: 'F94.1 / F94.2', beschreibung: 'Misstrauen, Klammern, Distanzlosigkeit, Beziehungsabbrüche', variablen: [], empfehlungen: [] },
+  { id: 'dissoziation', titel: 'Dissoziation / Abschalten', icon: '🌫️', farbe: '#64748B', kategorie: 'entwicklung', icd: 'F44', beschreibung: 'Abwesenheit, Depersonalisation, Amnesie, emotionale Taubheit', variablen: [], empfehlungen: [] },
+  { id: 'adhs-verdacht', titel: 'ADHS-Verdacht / Konzentrationsprobleme', icon: '⚡', farbe: '#F59E0B', kategorie: 'entwicklung', icd: 'F90', beschreibung: 'Unaufmerksamkeit, Hyperaktivität, Impulsivität', variablen: [], empfehlungen: [] },
+  { id: 'essstoerung', titel: 'Essstörung-Verdacht', icon: '🪞', farbe: '#EC4899', kategorie: 'entwicklung', icd: 'F50', beschreibung: 'Restriktives Essen, Essanfälle, Erbrechen, Körperdysmorphie', variablen: [], empfehlungen: [] },
+
+  // E. Soziale / Kontextuelle Probleme
+  { id: 'mobbing-opfer', titel: 'Mobbing (als Opfer)', icon: '😢', farbe: '#2563EB', kategorie: 'sozial', icd: 'Z60.4', beschreibung: 'Systematisches Schikaniert-werden, Ausgrenzung, Cybermobbing', variablen: [], empfehlungen: [] },
+  { id: 'identitaetskrise', titel: 'Identitätskrise / Coming Out / LGBTQ+', icon: '🏳️‍🌈', farbe: '#A855F7', kategorie: 'sozial', icd: 'Z60.0', beschreibung: 'Geschlechtsidentität, sexuelle Orientierung, Diskriminierung', variablen: [], empfehlungen: [] },
+  { id: 'kindeswohlgefaehrdung', titel: 'Elternkonflikt / häusliche Gewalt / Kindeswohlgefährdung', icon: '⚖️', farbe: '#7C3AED', kategorie: 'sozial', icd: 'T74 / Z61', beschreibung: 'Misshandlung, Vernachlässigung, häusliche Gewalt, Meldepflicht', variablen: [], empfehlungen: [] },
+  { id: 'migration-flucht', titel: 'Migration / Flucht / kulturelle Anpassung', icon: '🌍', farbe: '#0D9488', kategorie: 'sozial', icd: 'Z60.3', beschreibung: 'Kulturschock, Sprachbarrieren, Diskriminierung, Heimweh', variablen: [], empfehlungen: [] },
+  { id: 'mediensucht', titel: 'Mediensucht / Online-Abhängigkeit', icon: '📱', farbe: '#6366F1', kategorie: 'sozial', icd: 'F63.0', beschreibung: 'Exzessives Gaming, Social Media, Online-Konsum', variablen: [], empfehlungen: [] },
+
+  // F. Beziehungs- & Interaktionsprobleme
+  { id: 'machtkampf', titel: 'Machtkampf / Autoritätskonflikte', icon: '💪', farbe: '#F59E0B', kategorie: 'interaktion', icd: 'F91.3', beschreibung: 'Provokation, Grenztestung, Verweigerung in der Sitzung', variablen: [], empfehlungen: [] },
+  { id: 'luegen', titel: 'Lügen / Manipulieren', icon: '🎭', farbe: '#D97706', kategorie: 'interaktion', icd: 'F91', beschreibung: 'Chronisches Lügen, Verantwortung abschieben, Manipulation', variablen: [], empfehlungen: [] },
+  { id: 'stehlen', titel: 'Stehlen / Klauen', icon: '🤚', farbe: '#B45309', kategorie: 'interaktion', icd: 'F91.2', beschreibung: 'Diebstahl in Schule, zu Hause, im Geschäft', variablen: [], empfehlungen: [] },
+  { id: 'sexualisiertes-verhalten', titel: 'Sexualisierte Sprache / Verhalten', icon: '⚠️', farbe: '#E11D48', kategorie: 'interaktion', icd: 'F65 / F98.8', beschreibung: 'Unangemessenes sexuelles Verhalten, Grenzverletzung', variablen: [], empfehlungen: [] },
+  { id: 'selektiver-mutismus', titel: 'Selektiver Mutismus', icon: '🤐', farbe: '#475569', kategorie: 'interaktion', icd: 'F94.0', beschreibung: 'Spricht in bestimmten Kontexten nicht trotz Sprachfähigkeit', variablen: [], empfehlungen: [] },
+
+  // G. Schulische Alltagsprobleme
+  { id: 'null-bock', titel: 'Leistungsverweigerung / Null-Bock', icon: '😴', farbe: '#EA580C', kategorie: 'schule', icd: 'Z55', beschreibung: 'Keine Motivation, Arbeitsverweigerung, Desinteresse', variablen: [], empfehlungen: [] },
+  { id: 'tagtraeumen', titel: 'Konzentrationsprobleme / Tagträumen', icon: '☁️', farbe: '#0EA5E9', kategorie: 'schule', icd: 'R41.8', beschreibung: 'Abwesenheit ohne ADHS-Verdacht, Tagträumen, langsames Arbeitstempo', variablen: [], empfehlungen: [] },
+  { id: 'pruefungsangst', titel: 'Prüfungsangst / Leistungsdruck', icon: '📝', farbe: '#7C3AED', kategorie: 'schule', icd: 'F40.2 / F93.8', beschreibung: 'Perfektionismus, Blackout, Versagensangst', variablen: [], empfehlungen: [] },
+  { id: 'schulwechsel-krise', titel: 'Klassen-/Schulwechsel-Krise', icon: '🔀', farbe: '#2563EB', kategorie: 'schule', icd: 'F43.2', beschreibung: 'Anpassungsschwierigkeiten, Heimweh, Verlust von Freunden', variablen: [], empfehlungen: [] },
+
+  // H. Körper & Alltag
+  { id: 'enuresis', titel: 'Einnässen / Einkoten (Enuresis/Enkopresis)', icon: '💧', farbe: '#0891B2', kategorie: 'koerper', icd: 'F98.0 / F98.1', beschreibung: 'Primär oder sekundär, tags- oder nachts', variablen: [], empfehlungen: [] },
+  { id: 'schlafstoerung', titel: 'Schlafstörungen / Albträume', icon: '🌙', farbe: '#1E40AF', kategorie: 'koerper', icd: 'F51', beschreibung: 'Ein-/Durchschlafprobleme, Albträume, Schlafangst', variablen: [], empfehlungen: [] },
+  { id: 'tics', titel: 'Tics / Stereotypien', icon: '🔁', farbe: '#059669', kategorie: 'koerper', icd: 'F95', beschreibung: 'Motorische oder vokale Tics, repetitive Bewegungen', variablen: [], empfehlungen: [] },
+  { id: 'hygiene', titel: 'Hygieneverweigerung / Verwahrlosung', icon: '🚿', farbe: '#64748B', kategorie: 'koerper', icd: 'R46.0', beschreibung: 'Keine Körperpflege, verwahrlostes Erscheinungsbild', variablen: [], empfehlungen: [] },
+
+  // I. Familiäre Alltagssituationen
+  { id: 'parentifizierung', titel: 'Parentifizierung', icon: '👧‍👦', farbe: '#7C3AED', kategorie: 'familie', icd: 'Z62.1', beschreibung: 'Kind übernimmt Elternrolle, sorgt für Geschwister/Eltern', variablen: [], empfehlungen: [] },
+  { id: 'geschwistergewalt', titel: 'Geschwisterrivalität / -gewalt', icon: '👊', farbe: '#B91C1C', kategorie: 'familie', icd: 'Z62.8', beschreibung: 'Massive Konflikte, physische Gewalt unter Geschwistern', variablen: [], empfehlungen: [] }
+];

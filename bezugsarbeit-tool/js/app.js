@@ -46,7 +46,7 @@ function sanitize(html) {
                       'data-thema', 'data-schritt', 'data-kat', 'data-toggle',
                       'colspan', 'rowspan', 'min', 'max', 'step', 'rows', 'cols',
                       'readonly', 'multiple', 'selected', 'required', 'pattern',
-                      'clip-path', 'clip-rule', 'fill-rule', 'font-size', 'text-anchor',
+                      'clip-path', 'clip-rule', 'fill-rule', 'font-size', 'text-anchor', 'stroke-dasharray',
                       'dominant-baseline', 'data-action', 'data-nr', 'data-sitzung'],
       ADD_ATTR: ['onclick', 'onchange', 'oninput', 'onkeydown', 'onkeyup'],
     });
@@ -648,6 +648,166 @@ function countStatus(schueler, status) {
   return Object.values(schueler.topicStatus || {}).filter(v => v === status).length;
 }
 
+// ── Kaseload-Dashboard ──
+APP.homeView = 'klienten';
+
+function switchHomeView(view) {
+  APP.homeView = view;
+  const gridEl = document.getElementById('home-grid');
+  const kaseEl = document.getElementById('kaseload-view');
+  const btnK = document.getElementById('btn-view-klienten');
+  const btnL = document.getElementById('btn-view-kaseload');
+  if (view === 'kaseload') {
+    if (gridEl) gridEl.style.display = 'none';
+    if (kaseEl) kaseEl.style.display = '';
+    if (btnK) btnK.classList.remove('active');
+    if (btnL) btnL.classList.add('active');
+    renderKaseloadView();
+  } else {
+    if (gridEl) gridEl.style.display = '';
+    if (kaseEl) kaseEl.style.display = 'none';
+    if (btnK) btnK.classList.add('active');
+    if (btnL) btnL.classList.remove('active');
+  }
+}
+
+function renderKaseloadView() {
+  const container = document.getElementById('kaseload-view');
+  if (!container) return;
+  const schueler = DB.getSchueler();
+  if (schueler.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">Noch keine Klienten angelegt.</div>';
+    return;
+  }
+
+  const heute = new Date();
+  const heuteStr = heute.toISOString().split('T')[0];
+  const alleNotizen = DB.getNotizen();
+  const alleTermine = DB.getTermine();
+
+  // Aggregierte Daten pro Schüler
+  const rows = schueler.map(s => {
+    const notizen = alleNotizen.filter(n => n.schuelerId === s.id);
+    const sitzungen = notizen.filter(n => n.soap);
+    const termine = alleTermine.filter(t => t.schuelerId === s.id && t.datum <= heuteStr);
+
+    // ORS/SRS aktuell + Trend
+    const mitOrs = sitzungen.filter(n => n.soap.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+    const mitSrs = sitzungen.filter(n => n.soap.srs?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+    const orsAkt = mitOrs.length > 0 ? mitOrs[mitOrs.length - 1].soap.ors.total : null;
+    const srsAkt = mitSrs.length > 0 ? mitSrs[mitSrs.length - 1].soap.srs.total : null;
+    const orsTrend = mitOrs.length >= 2 ? orsAkt - mitOrs[mitOrs.length - 2].soap.ors.total : 0;
+    const srsTrend = mitSrs.length >= 2 ? srsAkt - mitSrs[mitSrs.length - 2].soap.srs.total : 0;
+
+    // Anwesenheit
+    const mitAw = termine.filter(t => t.anwesenheit);
+    const awAnwesend = mitAw.filter(t => t.anwesenheit === 'anwesend').length;
+    const awRate = mitAw.length > 0 ? Math.round((awAnwesend / mitAw.length) * 100) : null;
+
+    // Letzte Sitzung
+    const letzteSitzung = sitzungen.length > 0
+      ? sitzungen.sort((a, b) => b.datum.localeCompare(a.datum))[0].datum : null;
+    const tageSeit = letzteSitzung ? Math.floor((heute - new Date(letzteSitzung)) / 86400000) : null;
+
+    return { s, sitzungen: sitzungen.length, orsAkt, srsAkt, orsTrend, srsTrend, awRate, letzteSitzung, tageSeit };
+  });
+
+  // Aggregat-Statistiken
+  const aktiv = schueler.filter(s => (s.status || 'aktiv') === 'aktiv').length;
+  const hochrisiko = schueler.filter(s => s.risiko === 'hoch').length;
+  const orsWerte = rows.filter(r => r.orsAkt !== null).map(r => r.orsAkt);
+  const srsWerte = rows.filter(r => r.srsAkt !== null).map(r => r.srsAkt);
+  const avgOrs = orsWerte.length > 0 ? Math.round(orsWerte.reduce((a, b) => a + b, 0) / orsWerte.length) : null;
+  const avgSrs = srsWerte.length > 0 ? Math.round(srsWerte.reduce((a, b) => a + b, 0) / srsWerte.length) : null;
+  const avgSitzungen = schueler.length > 0 ? (rows.reduce((n, r) => n + r.sitzungen, 0) / schueler.length).toFixed(1) : 0;
+  const verbessernd = rows.filter(r => r.orsTrend > 2).length;
+  const verschlechternd = rows.filter(r => r.orsTrend < -2).length;
+  const stagnierend = rows.filter(r => r.orsAkt !== null).length - verbessernd - verschlechternd;
+
+  // Risiko-Verteilung
+  const risikoN = { niedrig: 0, mittel: 0, hoch: 0 };
+  schueler.forEach(s => { risikoN[s.risiko || 'niedrig']++; });
+  const risikoTotal = schueler.length || 1;
+
+  const trendIcon = v => v > 2 ? '↑' : v < -2 ? '↓' : '→';
+  const trendColor = v => v > 2 ? '#10B981' : v < -2 ? '#EF4444' : '#F59E0B';
+  const orsColor = v => v === null ? '#9CA3AF' : v >= 28 ? '#10B981' : v >= 20 ? '#F59E0B' : '#EF4444';
+  const srsColor = v => v === null ? '#9CA3AF' : v >= 30 ? '#10B981' : v >= 25 ? '#F59E0B' : '#EF4444';
+
+  let html = `
+    <!-- Aggregat-Stats -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:16px;">
+      <div class="stat-box"><div class="stat-box-zahl">${aktiv}</div><div class="stat-box-label">Aktive Fälle</div></div>
+      <div class="stat-box"><div class="stat-box-zahl ${hochrisiko > 0 ? 'red' : ''}">${hochrisiko}</div><div class="stat-box-label">Hochrisiko</div></div>
+      <div class="stat-box"><div class="stat-box-zahl">${avgSitzungen}</div><div class="stat-box-label">∅ Sitzungen</div></div>
+      ${avgOrs !== null ? `<div class="stat-box"><div class="stat-box-zahl" style="color:${orsColor(avgOrs)}">${avgOrs}</div><div class="stat-box-label">∅ ORS</div></div>` : ''}
+      ${avgSrs !== null ? `<div class="stat-box"><div class="stat-box-zahl" style="color:${srsColor(avgSrs)}">${avgSrs}</div><div class="stat-box-label">∅ SRS</div></div>` : ''}
+    </div>
+
+    <!-- Risiko-Verteilung -->
+    <div style="margin-bottom:16px;padding:12px;background:var(--card-bg,#fff);border:1px solid var(--border,#E5E7EB);border-radius:10px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Risiko-Verteilung</div>
+      <div style="display:flex;height:24px;border-radius:6px;overflow:hidden;">
+        <div style="width:${(risikoN.niedrig/risikoTotal*100).toFixed(0)}%;background:#10B981;" title="Niedrig: ${risikoN.niedrig}"></div>
+        <div style="width:${(risikoN.mittel/risikoTotal*100).toFixed(0)}%;background:#F59E0B;" title="Mittel: ${risikoN.mittel}"></div>
+        <div style="width:${(risikoN.hoch/risikoTotal*100).toFixed(0)}%;background:#EF4444;" title="Hoch: ${risikoN.hoch}"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px;">
+        <span style="color:#10B981;">● Niedrig: ${risikoN.niedrig}</span>
+        <span style="color:#F59E0B;">● Mittel: ${risikoN.mittel}</span>
+        <span style="color:#EF4444;">● Hoch: ${risikoN.hoch}</span>
+      </div>
+    </div>
+
+    <!-- Outcome-Trends -->
+    ${orsWerte.length > 0 ? `
+    <div style="margin-bottom:16px;padding:12px;background:var(--card-bg,#fff);border:1px solid var(--border,#E5E7EB);border-radius:10px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Outcome-Trends (ORS)</div>
+      <div style="display:flex;gap:16px;font-size:13px;">
+        <span style="color:#10B981;font-weight:600;">↑ ${verbessernd} verbessernd</span>
+        <span style="color:#F59E0B;font-weight:600;">→ ${stagnierend} stagnierend</span>
+        <span style="color:#EF4444;font-weight:600;">↓ ${verschlechternd} verschlechternd</span>
+      </div>
+    </div>` : ''}
+
+    <!-- Kaseload-Tabelle -->
+    <div style="overflow-x:auto;border:1px solid var(--border,#E5E7EB);border-radius:10px;background:var(--card-bg,#fff);">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="background:var(--bg-muted,#F9FAFB);text-align:left;">
+            <th style="padding:8px 10px;font-weight:600;">Klient</th>
+            <th style="padding:8px 6px;font-weight:600;">Risiko</th>
+            <th style="padding:8px 6px;font-weight:600;">ORS</th>
+            <th style="padding:8px 6px;font-weight:600;">SRS</th>
+            <th style="padding:8px 6px;font-weight:600;">Sitzungen</th>
+            <th style="padding:8px 6px;font-weight:600;">Anwesenh.</th>
+            <th style="padding:8px 6px;font-weight:600;">Letzte Sitzung</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.sort((a, b) => {
+            const rPrio = { hoch: 0, mittel: 1, niedrig: 2 };
+            return (rPrio[a.s.risiko || 'niedrig'] || 2) - (rPrio[b.s.risiko || 'niedrig'] || 2);
+          }).map(r => {
+            const riskBg = r.s.risiko === 'hoch' ? '#FEF2F2' : r.s.risiko === 'mittel' ? '#FFF7ED' : '';
+            return `<tr style="border-top:1px solid var(--border,#E5E7EB);cursor:pointer;${riskBg ? 'background:' + riskBg : ''}" onclick="showView('profil','${r.s.id}')">
+              <td style="padding:8px 10px;font-weight:500;">${r.s.vorname} ${r.s.nachname}</td>
+              <td style="padding:8px 6px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${r.s.risiko === 'hoch' ? '#EF4444' : r.s.risiko === 'mittel' ? '#F59E0B' : '#10B981'};"></span></td>
+              <td style="padding:8px 6px;color:${orsColor(r.orsAkt)};font-weight:600;">${r.orsAkt !== null ? r.orsAkt + ' <span style="color:' + trendColor(r.orsTrend) + '">' + trendIcon(r.orsTrend) + '</span>' : '—'}</td>
+              <td style="padding:8px 6px;color:${srsColor(r.srsAkt)};font-weight:600;">${r.srsAkt !== null ? r.srsAkt + ' <span style="color:' + trendColor(r.srsTrend) + '">' + trendIcon(r.srsTrend) + '</span>' : '—'}</td>
+              <td style="padding:8px 6px;">${r.sitzungen}</td>
+              <td style="padding:8px 6px;${r.awRate !== null && r.awRate < 60 ? 'color:#EF4444;font-weight:600;' : ''}">${r.awRate !== null ? r.awRate + '%' : '—'}</td>
+              <td style="padding:8px 6px;${r.tageSeit !== null && r.tageSeit > 14 ? 'color:#EF4444;font-weight:600;' : ''}">${r.letzteSitzung ? formatDatum(r.letzteSitzung) + (r.tageSeit > 14 ? ' ⚠️' : '') : '—'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  container.innerHTML = sanitize(html);
+}
+
 function renderAmpelsystem(schueler, afterEl) {
   const container = document.getElementById('ampelsystem');
   if (!container || schueler.length === 0) { if (container) container.innerHTML = ''; return; }
@@ -700,6 +860,43 @@ function renderAmpelsystem(schueler, afterEl) {
         alerts.push({ typ: 'orange', icon: '📉', schueler: s,
           text: `Wohlbefinden sinkt (${letzte3[0]}/10)`, detail: 'Abfallender Trend in den letzten Einträgen' });
       }
+    }
+
+    // 5. ORS/SRS Outcome-Verschlechterung (>5 Punkte Abfall)
+    const sitzungen = notizen.filter(n => n.soap && (n.soap.ors || n.soap.srs))
+      .sort((a, b) => a.datum.localeCompare(b.datum));
+    if (sitzungen.length >= 2) {
+      const letzte = sitzungen[sitzungen.length - 1];
+      const vorletzte = sitzungen[sitzungen.length - 2];
+      const orsAkt = letzte.soap.ors?.total;
+      const orsVor = vorletzte.soap.ors?.total;
+      if (orsAkt != null && orsVor != null && orsVor - orsAkt >= 5) {
+        alerts.push({ typ: 'rot', icon: '📉', schueler: s,
+          text: `ORS-Verschlechterung (${orsVor}→${orsAkt})`, detail: 'Abfall um ' + (orsVor - orsAkt) + ' Punkte' });
+      }
+      const srsAkt = letzte.soap.srs?.total;
+      const srsVor = vorletzte.soap.srs?.total;
+      if (srsAkt != null && srsVor != null && srsVor - srsAkt >= 5) {
+        alerts.push({ typ: 'orange', icon: '📊', schueler: s,
+          text: `SRS-Verschlechterung (${srsVor}→${srsAkt})`, detail: 'Sitzungsqualität gesunken' });
+      }
+    }
+
+    // 6. Anwesenheit: Konsekutive No-Shows
+    const sTermine = DB.getTermine(s.id)
+      .filter(t => t.schuelerId === s.id && t.datum <= heute.toISOString().split('T')[0])
+      .sort((a, b) => b.datum.localeCompare(a.datum));
+    let konsekNoShow = 0;
+    for (const t of sTermine) {
+      if (t.anwesenheit === 'abwesend-unentschuldigt') konsekNoShow++;
+      else if (t.anwesenheit) break;
+    }
+    if (konsekNoShow >= 3) {
+      alerts.push({ typ: 'rot', icon: '🚫', schueler: s,
+        text: `${konsekNoShow} Fehltermine in Folge`, detail: 'Dringende Kontaktaufnahme' });
+    } else if (konsekNoShow >= 2) {
+      alerts.push({ typ: 'orange', icon: '⚠️', schueler: s,
+        text: '2 Fehltermine in Folge', detail: 'Kontakt aufnehmen' });
     }
   });
 
@@ -2744,6 +2941,14 @@ function renderNotizKarte(notiz) {
   const soap = notiz.soap;
   const hasSoap = soap && (soap.subjektiv || soap.objektiv || soap.assessment || soap.plan);
   const srsTotal = soap && soap.srs ? soap.srs.total : null;
+  const orsTotal = soap && soap.ors ? soap.ors.total : null;
+
+  // ORS Badge
+  let orsBadge = '';
+  if (orsTotal !== null && orsTotal !== undefined) {
+    const orsClass = orsTotal >= 28 ? 'gut' : orsTotal >= 20 ? 'mittel' : 'schlecht';
+    orsBadge = `<span class="notiz-srs-badge ${orsClass}" style="border-color:#3B82F6;">ORS ${orsTotal}/40</span>`;
+  }
 
   // SRS Badge
   let srsBadge = '';
@@ -2817,6 +3022,7 @@ function renderNotizKarte(notiz) {
       <div class="notiz-karte-v2-header">
         <span class="notiz-badge" style="background:${kat.farbe}22;color:${kat.farbe};">${renderIcon(kat.icon)} ${kat.label}</span>
         ${themaLink}
+        ${orsBadge}
         ${srsBadge}
         ${safetyBadge}
         <span class="notiz-datum" style="margin-left:auto;">${formatDatum(notiz.datum)}</span>
@@ -2907,6 +3113,10 @@ function renderSoapVorschau() {
     (parseInt(document.getElementById('srs-goals')?.value || 0)) +
     (parseInt(document.getElementById('srs-approach')?.value || 0)) +
     (parseInt(document.getElementById('srs-overall')?.value || 0));
+  const orsTotal = (parseInt(document.getElementById('ors-individual')?.value || 0)) +
+    (parseInt(document.getElementById('ors-interpersonal')?.value || 0)) +
+    (parseInt(document.getElementById('ors-social')?.value || 0)) +
+    (parseInt(document.getElementById('ors-overall')?.value || 0));
 
   const stimmungMap = { 'sehr-schlecht': '😫 Sehr schlecht', 'schlecht': '😞 Schlecht', 'neutral': '😐 Neutral', 'gut': '🙂 Gut', 'sehr-gut': '😄 Sehr gut' };
   const pvtMap = { safe: '🟢 Sicher', activated: '🟡 Angespannt', frozen: '🟣 Eingefroren' };
@@ -2920,6 +3130,7 @@ function renderSoapVorschau() {
   }
 
   const srsColor = srsTotal >= 30 ? '#059669' : srsTotal >= 25 ? '#D97706' : '#DC2626';
+  const orsColor = orsTotal >= 28 ? '#059669' : orsTotal >= 20 ? '#D97706' : '#DC2626';
 
   container.innerHTML = `
     <div class="soap-vorschau">
@@ -2933,6 +3144,7 @@ function renderSoapVorschau() {
         ${stimmung ? `<div class="soap-vorschau-meta-item">${stimmungMap[stimmung] || stimmung}</div>` : ''}
         ${pvt ? `<div class="soap-vorschau-meta-item">${pvtMap[pvt] || pvt}</div>` : ''}
         ${themaLabel ? `<div class="soap-vorschau-meta-item">📌 ${themaLabel}</div>` : ''}
+        <div class="soap-vorschau-meta-item" style="color:${orsColor};font-weight:700;">📈 ORS: ${orsTotal}/40</div>
         <div class="soap-vorschau-meta-item" style="color:${srsColor};font-weight:700;">📊 SRS: ${srsTotal}/40</div>
       </div>
 
@@ -3058,6 +3270,11 @@ function addProtokoll() {
   const srsA = parseInt(document.getElementById('srs-approach')?.value || 0);
   const srsO = parseInt(document.getElementById('srs-overall')?.value || 0);
   const srsTotal = srsR + srsG + srsA + srsO;
+  const orsI = parseInt(document.getElementById('ors-individual')?.value || 0);
+  const orsIP = parseInt(document.getElementById('ors-interpersonal')?.value || 0);
+  const orsS = parseInt(document.getElementById('ors-social')?.value || 0);
+  const orsO = parseInt(document.getElementById('ors-overall')?.value || 0);
+  const orsTotal = orsI + orsIP + orsS + orsO;
 
   if (!datum) { showToast('Datum ist ein Pflichtfeld', 'error'); return; }
   if (!subjektiv && !objektiv && !assessment && !plan) {
@@ -3098,6 +3315,7 @@ function addProtokoll() {
     assessment ? `\n━━━ A (Assessment) ━━━\n${assessment}` : '',
     plan       ? `\n━━━ P (Plan) ━━━\n${plan}` : '',
     materialien ? `\n📎 Materialien: ${materialien}` : '',
+    `\n📈 ORS: ${orsTotal}/40 (Persönlich: ${orsI}, Beziehungen: ${orsIP}, Sozial: ${orsS}, Gesamt: ${orsO})`,
     `\n📊 SRS: ${srsTotal}/40 (Beziehung: ${srsR}, Ziele: ${srsG}, Ansatz: ${srsA}, Gesamt: ${srsO})`,
   ].filter(Boolean).join('');
 
@@ -3107,7 +3325,7 @@ function addProtokoll() {
     inhalt: text,
     kategorie: 'session',
     themaId: themaId || null,
-    soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel, pvt: pvtState, srs: { relationship: srsR, goals: srsG, approach: srsA, overall: srsO, total: srsTotal },
+    soap: { subjektiv, objektiv, assessment, plan, stimmung, setting, dauer, nr, materialien, themaId, themaLabel, pvt: pvtState, ors: { individual: orsI, interpersonal: orsIP, social: orsS, overall: orsO, total: orsTotal }, srs: { relationship: srsR, goals: srsG, approach: srsA, overall: srsO, total: srsTotal },
       cssrsSchweregrad: cssrsSchweregrad || null,
       sicherheitsplanDokumentiert: cssrsSchweregrad >= 3 ? !!document.getElementById('soap-sicherheitsplan-check')?.checked : null,
       supervisorInformiert: cssrsSchweregrad >= 3 ? !!document.getElementById('soap-supervisor-check')?.checked : null,
@@ -3287,6 +3505,21 @@ function updateSRS() {
   document.getElementById('srs-total-zahl').textContent = total;
   const alert = document.getElementById('srs-alert');
   if (alert) alert.style.display = total < 25 ? 'block' : 'none';
+}
+
+function updateORS() {
+  const ids = ['individual', 'interpersonal', 'social', 'overall'];
+  let total = 0;
+  ids.forEach(id => {
+    const val = parseInt(document.getElementById(`ors-${id}`).value);
+    const valEl = document.getElementById(`ors-val-${id}`);
+    if (valEl) valEl.textContent = val;
+    total += val;
+  });
+  const totalEl = document.getElementById('ors-total-zahl');
+  if (totalEl) totalEl.textContent = total;
+  const alert = document.getElementById('ors-alert');
+  if (alert) alert.style.display = total < 28 ? 'block' : 'none';
 }
 
 function populateProtThemen() {
@@ -5419,7 +5652,9 @@ function renderKalender() {
           ).join('')}
           ${termine.slice(0,3 - sessions.length).map(t => {
             const typ = TERMIN_TYPEN[t.typ] || TERMIN_TYPEN.termin;
-            return `<div class="tag-event" style="background:${typ.farbe};" title="${t.titel}">${t.uhrzeit ? t.uhrzeit + ' ' : ''}${t.titel}</div>`;
+            const aw = t.anwesenheit && ANWESENHEIT_STATUS[t.anwesenheit] ? ANWESENHEIT_STATUS[t.anwesenheit] : null;
+            const awDot = aw ? `<span style="font-size:8px;" title="${aw.label}">${aw.icon}</span> ` : '';
+            return `<div class="tag-event" style="background:${aw ? aw.farbe + '30' : typ.farbe};${aw ? 'border:1px solid ' + aw.farbe + ';color:' + aw.farbe : ''}" title="${t.titel}${aw ? ' — ' + aw.label : ''}">${awDot}${t.uhrzeit ? t.uhrzeit + ' ' : ''}${t.titel}</div>`;
           }).join('')}
           ${(termine.length + sessions.length) > 3 ? `<div style="font-size:10px;color:var(--text-muted);">+${termine.length + sessions.length - 3} mehr</div>` : ''}
         </div>
@@ -5431,18 +5666,51 @@ function renderKalender() {
 }
 
 function renderTerminSidebar() {
-  const alleTermine = DB.getTermine()
-    .filter(t => t.datum >= new Date().toISOString().split('T')[0])
+  const heuteStr = new Date().toISOString().split('T')[0];
+  const alleTermine = DB.getTermine();
+
+  // Kommende Termine
+  const kommende = alleTermine
+    .filter(t => t.datum >= heuteStr)
     .sort((a, b) => a.datum.localeCompare(b.datum))
     .slice(0, 10);
 
+  // Vergangene Termine ohne Anwesenheit (Quick-Mark)
+  const ohneAnwesenheit = alleTermine
+    .filter(t => t.datum < heuteStr && t.schuelerId && !t.anwesenheit)
+    .sort((a, b) => b.datum.localeCompare(a.datum))
+    .slice(0, 5);
+
   const container = document.getElementById('naechste-termine');
-  if (alleTermine.length === 0) {
+  let html = '';
+
+  // Quick-Mark Sektion für vergangene Termine
+  if (ohneAnwesenheit.length > 0) {
+    html += `<div style="padding:10px 12px;background:#FEF3C7;border-bottom:1px solid #FDE68A;">
+      <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:8px;">📋 Anwesenheit erfassen</div>`;
+    ohneAnwesenheit.forEach(t => {
+      const schueler = DB.getSchuelerById(t.schuelerId);
+      const name = schueler ? `${schueler.vorname} ${schueler.nachname}` : 'Unbekannt';
+      html += `<div style="padding:6px 0;border-bottom:1px solid #FDE68A50;display:flex;flex-direction:column;gap:4px;">
+        <div style="font-size:11px;color:#78350F;">${formatDatum(t.datum)} · ${name} · ${t.titel}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+          <button onclick="markAnwesenheit('${t.id}','anwesend')" style="font-size:10px;padding:2px 6px;border:1px solid #10B981;background:#ECFDF5;color:#065F46;border-radius:4px;cursor:pointer;">✅</button>
+          <button onclick="markAnwesenheit('${t.id}','abwesend-entschuldigt')" style="font-size:10px;padding:2px 6px;border:1px solid #F59E0B;background:#FEF3C7;color:#92400E;border-radius:4px;cursor:pointer;">📨</button>
+          <button onclick="markAnwesenheit('${t.id}','abwesend-unentschuldigt')" style="font-size:10px;padding:2px 6px;border:1px solid #EF4444;background:#FEF2F2;color:#991B1B;border-radius:4px;cursor:pointer;">❌</button>
+          <button onclick="markAnwesenheit('${t.id}','abgesagt')" style="font-size:10px;padding:2px 6px;border:1px solid #6B7280;background:#F3F4F6;color:#374151;border-radius:4px;cursor:pointer;">🚫</button>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  // Kommende Termine
+  if (kommende.length === 0 && ohneAnwesenheit.length === 0) {
     container.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:13px;">Keine bevorstehenden Termine</div>';
     return;
   }
 
-  container.innerHTML = alleTermine.map(t => {
+  html += kommende.map(t => {
     const typ = TERMIN_TYPEN[t.typ] || TERMIN_TYPEN.termin;
     const schueler = t.schuelerId ? DB.getSchuelerById(t.schuelerId) : null;
     return `
@@ -5458,6 +5726,15 @@ function renderTerminSidebar() {
       <button class="btn-icon btn-sm" style="font-size:11px;" onclick="deleteTermin('${t.id}')">🗑</button>
     </div>`;
   }).join('');
+
+  container.innerHTML = html;
+}
+
+function markAnwesenheit(terminId, status) {
+  DB.updateTermin(terminId, { anwesenheit: status });
+  const statusLabel = ANWESENHEIT_STATUS[status]?.label || status;
+  showToast(`${ANWESENHEIT_STATUS[status]?.icon || '✓'} ${statusLabel}`, 'success');
+  renderKalender();
 }
 
 function kalenderVor() {
@@ -6689,6 +6966,196 @@ function renderSafetyBanner(containerId) {
   container.innerHTML = html;
 }
 
+// ── ORS/SRS Outcome-Verlauf Widget ──
+function renderOutcomeVerlauf() {
+  const container = document.getElementById('outcome-verlauf-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) { container.innerHTML = ''; return; }
+
+  const notizen = DB.getNotizen(sid)
+    .filter(n => n.soap && (n.soap.ors || n.soap.srs))
+    .sort((a, b) => a.datum.localeCompare(b.datum));
+
+  if (notizen.length < 2) {
+    container.innerHTML = notizen.length === 0 ? '' : `
+      <div class="card" style="padding:16px;margin-bottom:12px;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:8px;">📈 Outcome-Verlauf</div>
+        <div style="font-size:12px;color:var(--text-muted);">Mindestens 2 Sitzungen mit ORS/SRS nötig für den Verlaufsgraph.</div>
+      </div>`;
+    return;
+  }
+
+  // Daten sammeln
+  const punkte = notizen.map((n, i) => ({
+    nr: i + 1,
+    datum: n.datum,
+    ors: n.soap.ors ? n.soap.ors.total : null,
+    srs: n.soap.srs ? n.soap.srs.total : null,
+  }));
+
+  // SVG-Chart generieren
+  const W = 400, H = 180, PAD = { top: 20, right: 20, bottom: 30, left: 35 };
+  const chartW = W - PAD.left - PAD.right;
+  const chartH = H - PAD.top - PAD.bottom;
+  const n = punkte.length;
+  const xStep = n > 1 ? chartW / (n - 1) : chartW;
+
+  function y(val) { return PAD.top + chartH - (val / 40) * chartH; }
+  function x(i) { return PAD.left + i * xStep; }
+
+  // ORS-Linie
+  let orsPath = '', orsDots = '';
+  let orsFirst = true;
+  punkte.forEach((p, i) => {
+    if (p.ors !== null) {
+      orsPath += (orsFirst ? 'M' : 'L') + `${x(i).toFixed(1)},${y(p.ors).toFixed(1)} `;
+      orsDots += `<circle cx="${x(i).toFixed(1)}" cy="${y(p.ors).toFixed(1)}" r="4" fill="#3B82F6" stroke="#fff" stroke-width="1.5"/>`;
+      orsFirst = false;
+    }
+  });
+
+  // SRS-Linie
+  let srsPath = '', srsDots = '';
+  let srsFirst = true;
+  punkte.forEach((p, i) => {
+    if (p.srs !== null) {
+      srsPath += (srsFirst ? 'M' : 'L') + `${x(i).toFixed(1)},${y(p.srs).toFixed(1)} `;
+      srsDots += `<circle cx="${x(i).toFixed(1)}" cy="${y(p.srs).toFixed(1)}" r="4" fill="#8B5CF6" stroke="#fff" stroke-width="1.5"/>`;
+      srsFirst = false;
+    }
+  });
+
+  // Cutoff-Linien
+  const orsCutoffY = y(28).toFixed(1);
+  const srsCutoffY = y(36).toFixed(1);
+
+  // Y-Achsen-Labels
+  let yLabels = '';
+  [0, 10, 20, 30, 40].forEach(v => {
+    yLabels += `<text x="${PAD.left - 5}" y="${y(v).toFixed(1)}" text-anchor="end" font-size="9" fill="#9CA3AF" dominant-baseline="middle">${v}</text>`;
+    yLabels += `<line x1="${PAD.left}" y1="${y(v).toFixed(1)}" x2="${W - PAD.right}" y2="${y(v).toFixed(1)}" stroke="#E5E7EB" stroke-width="0.5"/>`;
+  });
+
+  // X-Achsen-Labels
+  let xLabels = '';
+  const maxLabels = Math.min(n, 8);
+  const labelStep = n > maxLabels ? Math.ceil(n / maxLabels) : 1;
+  punkte.forEach((p, i) => {
+    if (i % labelStep === 0 || i === n - 1) {
+      const d = p.datum.substring(5).replace('-', '/');
+      xLabels += `<text x="${x(i).toFixed(1)}" y="${H - 5}" text-anchor="middle" font-size="9" fill="#9CA3AF">${d}</text>`;
+    }
+  });
+
+  // Trend-Berechnung
+  const orsWerte = punkte.filter(p => p.ors !== null).map(p => p.ors);
+  const srsWerte = punkte.filter(p => p.srs !== null).map(p => p.srs);
+  const orsTrend = orsWerte.length >= 2 ? orsWerte[orsWerte.length - 1] - orsWerte[0] : 0;
+  const srsTrend = srsWerte.length >= 2 ? srsWerte[srsWerte.length - 1] - srsWerte[0] : 0;
+  const trendIcon = v => v > 2 ? '↑' : v < -2 ? '↓' : '→';
+  const trendColor = v => v > 2 ? '#10B981' : v < -2 ? '#EF4444' : '#F59E0B';
+
+  const aktuellORS = orsWerte.length > 0 ? orsWerte[orsWerte.length - 1] : null;
+  const aktuellSRS = srsWerte.length > 0 ? srsWerte[srsWerte.length - 1] : null;
+
+  container.innerHTML = sanitize(`
+    <div class="card" style="padding:16px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="font-size:14px;font-weight:700;">📈 Outcome-Verlauf</div>
+        <div style="display:flex;gap:12px;font-size:12px;">
+          ${aktuellORS !== null ? `<span style="color:#3B82F6;font-weight:600;">ORS ${aktuellORS}/40 <span style="color:${trendColor(orsTrend)}">${trendIcon(orsTrend)}</span></span>` : ''}
+          ${aktuellSRS !== null ? `<span style="color:#8B5CF6;font-weight:600;">SRS ${aktuellSRS}/40 <span style="color:${trendColor(srsTrend)}">${trendIcon(srsTrend)}</span></span>` : ''}
+        </div>
+      </div>
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;max-height:200px;">
+        ${yLabels}
+        ${xLabels}
+        <line x1="${PAD.left}" y1="${orsCutoffY}" x2="${W - PAD.right}" y2="${orsCutoffY}" stroke="#3B82F6" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <text x="${W - PAD.right + 2}" y="${orsCutoffY}" font-size="8" fill="#3B82F6" dominant-baseline="middle">28</text>
+        <line x1="${PAD.left}" y1="${srsCutoffY}" x2="${W - PAD.right}" y2="${srsCutoffY}" stroke="#8B5CF6" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <text x="${W - PAD.right + 2}" y="${srsCutoffY}" font-size="8" fill="#8B5CF6" dominant-baseline="middle">36</text>
+        ${orsPath ? `<path d="${orsPath}" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+        ${srsPath ? `<path d="${srsPath}" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+        ${orsDots}
+        ${srsDots}
+      </svg>
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:8px;font-size:11px;color:var(--text-muted);">
+        <span><span style="display:inline-block;width:12px;height:3px;background:#3B82F6;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>ORS (Befindlichkeit)</span>
+        <span><span style="display:inline-block;width:12px;height:3px;background:#8B5CF6;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>SRS (Sitzungsqualität)</span>
+        <span style="opacity:0.6;">--- Klinischer Cutoff</span>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px;text-align:center;">${punkte.length} Sitzungen erfasst</div>
+    </div>
+  `);
+}
+
+// ── Anwesenheits-Widget (Profil-Dashboard) ──
+function renderAnwesenheitWidget() {
+  const container = document.getElementById('anwesenheit-widget');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) { container.innerHTML = ''; return; }
+
+  const heute = new Date().toISOString().split('T')[0];
+  const termine = DB.getTermine(sid)
+    .filter(t => t.schuelerId === sid && t.datum <= heute)
+    .sort((a, b) => b.datum.localeCompare(a.datum));
+
+  if (termine.length === 0) { container.innerHTML = ''; return; }
+
+  const mitStatus = termine.filter(t => t.anwesenheit);
+  const anwesend = mitStatus.filter(t => t.anwesenheit === 'anwesend').length;
+  const rate = mitStatus.length > 0 ? Math.round((anwesend / mitStatus.length) * 100) : null;
+
+  // Konsekutive No-Shows
+  let konsekutivNoShow = 0;
+  for (const t of termine) {
+    if (t.anwesenheit === 'abwesend-unentschuldigt') konsekutivNoShow++;
+    else if (t.anwesenheit) break;
+  }
+
+  // Letzte 10 Termine als Mini-Balken
+  const letzte10 = termine.slice(0, 10).reverse();
+  const farben = {
+    'anwesend': '#10B981',
+    'abwesend-unentschuldigt': '#EF4444',
+    'abwesend-entschuldigt': '#F59E0B',
+    'abgesagt': '#6B7280',
+    'verschoben': '#3B82F6',
+  };
+
+  const balken = letzte10.map(t => {
+    const f = t.anwesenheit ? (farben[t.anwesenheit] || '#D1D5DB') : '#D1D5DB';
+    const label = t.anwesenheit ? (ANWESENHEIT_STATUS[t.anwesenheit]?.label || '') : 'Nicht erfasst';
+    return `<div title="${t.datum}: ${label}" style="flex:1;height:20px;background:${f};border-radius:3px;min-width:8px;"></div>`;
+  }).join('');
+
+  const rateColor = rate === null ? '#9CA3AF' : rate >= 80 ? '#10B981' : rate >= 60 ? '#F59E0B' : '#EF4444';
+  const noShowAlert = konsekutivNoShow >= 2
+    ? `<div style="margin-top:8px;padding:6px 10px;background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;font-size:11px;color:#991B1B;">
+        ⚠️ <strong>${konsekutivNoShow} aufeinanderfolgende Fehltermine</strong> — Kontakt aufnehmen empfohlen
+       </div>`
+    : '';
+
+  container.innerHTML = sanitize(`
+    <div class="card" style="padding:16px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-size:14px;font-weight:700;">📅 Anwesenheit</div>
+        ${rate !== null ? `<span style="font-size:18px;font-weight:700;color:${rateColor};">${rate}%</span>` : '<span style="font-size:12px;color:#9CA3AF;">Noch nicht erfasst</span>'}
+      </div>
+      <div style="display:flex;gap:3px;margin-bottom:6px;">${balken}</div>
+      <div style="display:flex;gap:10px;font-size:10px;color:var(--text-muted);flex-wrap:wrap;">
+        <span><span style="display:inline-block;width:8px;height:8px;background:#10B981;border-radius:2px;vertical-align:middle;margin-right:3px;"></span>Anwesend</span>
+        <span><span style="display:inline-block;width:8px;height:8px;background:#EF4444;border-radius:2px;vertical-align:middle;margin-right:3px;"></span>Unentsch.</span>
+        <span><span style="display:inline-block;width:8px;height:8px;background:#F59E0B;border-radius:2px;vertical-align:middle;margin-right:3px;"></span>Entsch.</span>
+        <span><span style="display:inline-block;width:8px;height:8px;background:#D1D5DB;border-radius:2px;vertical-align:middle;margin-right:3px;"></span>Nicht erfasst</span>
+      </div>
+      ${noShowAlert}
+    </div>
+  `);
+}
+
 function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
@@ -6715,6 +7182,12 @@ function renderDashboard() {
   // Stufe 5b: Follow-Up Erinnerungen & Medikation
   renderFollowUpReminders();
   renderMedikationWidget();
+
+  // Stufe 5c: Outcome-Verlauf (ORS/SRS)
+  renderOutcomeVerlauf();
+
+  // Stufe 5d: Anwesenheits-Tracking
+  renderAnwesenheitWidget();
 
   // Stufe 6: Allgemeine Übersicht
   renderIntakeProgress();

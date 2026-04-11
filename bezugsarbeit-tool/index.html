@@ -111,8 +111,14 @@
     </div>
     <div class="content">
       <div class="home-stats" id="home-stats"></div>
+      <!-- Ansicht-Toggle: Klienten / Kaseload -->
+      <div style="display:flex;gap:6px;margin:8px 0 12px 0;" id="home-view-toggle">
+        <button class="btn btn-sm active" id="btn-view-klienten" onclick="switchHomeView('klienten')" style="font-size:12px;padding:4px 12px;">👥 Klienten</button>
+        <button class="btn btn-sm" id="btn-view-kaseload" onclick="switchHomeView('kaseload')" style="font-size:12px;padding:4px 12px;">📊 Kaseload</button>
+      </div>
       <div id="ampelsystem"></div>
       <div class="home-grid" id="home-grid"></div>
+      <div id="kaseload-view" style="display:none;"></div>
     </div>
   </div>
 
@@ -175,6 +181,12 @@
 
         <!-- Medikation Widget -->
         <div id="medikation-dashboard-widget"></div>
+
+        <!-- ORS/SRS Outcome-Verlauf -->
+        <div id="outcome-verlauf-widget"></div>
+
+        <!-- Anwesenheits-Widget -->
+        <div id="anwesenheit-widget"></div>
 
         <!-- Verlaufs-Trend -->
         <div id="verlauf-trend-widget"></div>
@@ -554,9 +566,52 @@
               </div>
             </div>
 
+            <!-- ORS Outcome Rating Scale -->
+            <div class="srs-section" style="border-left-color:#3B82F6;">
+              <div class="srs-header">📈 Befindlichkeit (ORS) <span class="srs-sub">Wie geht es dem Schüler? (1 Minute)</span> <button onclick="showToolLegitimation('ors')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist ORS?</button></div>
+              <div class="srs-sliders">
+                <div class="srs-row">
+                  <label>Persönlich <span>— Wie geht es mir innerlich?</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="5" id="ors-individual" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
+                    <span class="srs-val" id="ors-val-individual">5</span>
+                  </div>
+                </div>
+                <div class="srs-row">
+                  <label>Beziehungen <span>— Wie läuft es mit Familie & nahestehenden Menschen?</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="5" id="ors-interpersonal" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
+                    <span class="srs-val" id="ors-val-interpersonal">5</span>
+                  </div>
+                </div>
+                <div class="srs-row">
+                  <label>Sozial <span>— Wie läuft es in Schule, Arbeit, Freizeit?</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="5" id="ors-social" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
+                    <span class="srs-val" id="ors-val-social">5</span>
+                  </div>
+                </div>
+                <div class="srs-row">
+                  <label>Insgesamt <span>— Wie geht es mir insgesamt?</span></label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="5" id="ors-overall" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
+                    <span class="srs-val" id="ors-val-overall">5</span>
+                  </div>
+                </div>
+              </div>
+              <div class="srs-total" style="background:#EFF6FF;border-color:#BFDBFE;">
+                <span class="srs-total-zahl" id="ors-total-zahl" style="color:#2563EB;">20</span>
+                <span class="srs-total-text">von 40 Punkten</span>
+              </div>
+              <div id="ors-alert" class="srs-alert" style="display:none;background:#EFF6FF;border-color:#93C5FD;color:#1E40AF;">
+                ⚠️ <strong>ORS unter klinischem Cutoff (28).</strong><br>
+                Der Schüler zeigt relevante Belastungen — Zielorientierung und Interventionsbedarf prüfen.
+              </div>
+            </div>
+
             <!-- SRS Session Rating Scale -->
             <div class="srs-section">
-              <div class="srs-header">📊 Sitzungsbewertung <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span> <button onclick="showToolLegitimation('srs')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist SRS?</button></div>
+              <div class="srs-header">📊 Sitzungsbewertung (SRS) <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span> <button onclick="showToolLegitimation('srs')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist SRS?</button></div>
               <div class="srs-sliders">
                 <div class="srs-row">
                   <label>Beziehung <span>— Ich fühlte mich gehört und verstanden</span></label>

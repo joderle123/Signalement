@@ -1868,6 +1868,14 @@ const TERMIN_TYPEN = {
   'elterngespraech': { label: 'Elterngespräch', farbe: '#C0392B', icon: '👨‍👩‍👦' },
 };
 
+const ANWESENHEIT_STATUS = {
+  'anwesend':                { label: 'Anwesend',              icon: '✅', farbe: '#10B981' },
+  'abwesend-unentschuldigt': { label: 'Abwesend (unentsch.)',  icon: '❌', farbe: '#EF4444' },
+  'abwesend-entschuldigt':   { label: 'Abwesend (entsch.)',    icon: '📨', farbe: '#F59E0B' },
+  'abgesagt':                { label: 'Abgesagt',              icon: '🚫', farbe: '#6B7280' },
+  'verschoben':              { label: 'Verschoben',            icon: '🔄', farbe: '#3B82F6' },
+};
+
 // ============================================================
 // Screening – Domänen & Items (ICD-10 orientiert)
 // Skala: 0 = nie/gar nicht, 1 = selten/manchmal, 2 = oft, 3 = fast immer/sehr stark
@@ -5608,6 +5616,14 @@ const TOOL_LEGITIMATION = {
     warum: 'Ohne Feedback vom Schüler arbeitest du im Blindflug. Die SRS gibt dir nach jeder Sitzung eine ehrliche Rückmeldung — Probleme in der Beziehung werden sofort sichtbar.',
     evidenz: 'Therapieoutcome verbessert sich um 65% wenn systematisches Klientenfeedback eingesetzt wird (Lambert & Shimokawa, 2011). Die SRS ist das meistverwendete Feedback-Instrument weltweit.',
   },
+  ors: {
+    name: 'Outcome Rating Scale (ORS)',
+    quelle: 'Miller, S.D., Duncan, B.L., Brown, J., Sparks, J., & Claud, D. (2003). The Outcome Rating Scale. Journal of Brief Therapy, 2(2), 91–100.',
+    entwickler: 'Scott Miller, Barry Duncan, Jacqueline Sparks',
+    was: '4-Item-Skala zur Erfassung des Wohlbefindens: Persönlich (individuell), Beziehungen (interpersonell), Sozial (Schule/Arbeit/Freizeit) und Insgesamt (Gesamtbefindlichkeit). Jedes Item 0-10, Total 0-40.',
+    warum: 'Die ORS misst zu Sitzungsbeginn, wie es dem Schüler geht — unabhängig von der therapeutischen Beziehung. In Kombination mit der SRS (Sitzungsende) entsteht ein vollständiges Feedback-System: ORS = „Wie geht es dir?", SRS = „Wie war die Sitzung?".',
+    evidenz: 'Klinischer Cutoff Jugendliche: 28/40 (unter 28 = klinisch auffällig). Validiert mit .93 Korrelation zum OQ-45. Routine Outcome Monitoring (ROM) mit ORS/SRS verbessert Therapieergebnisse um 65% und halbiert Therapieabbrüche (Lambert & Shimokawa, 2011).',
+  },
   pvt: {
     name: 'Polyvagal-Theorie (PVT)',
     quelle: 'Porges, S.W. (2011). The Polyvagal Theory. W.W. Norton & Company.',
@@ -6180,11 +6196,20 @@ const DB = {
       titel: daten.titel || '',
       beschreibung: daten.beschreibung || '',
       typ: daten.typ || 'termin',
+      anwesenheit: daten.anwesenheit || null,
       erstellt: new Date().toISOString(),
     };
     alle.push(neu);
     this._save(this.KEYS.TERMINE, alle);
     return neu;
+  },
+  updateTermin(id, daten) {
+    const alle = this.getTermine();
+    const idx = alle.findIndex(t => t.id === id);
+    if (idx === -1) return null;
+    alle[idx] = { ...alle[idx], ...daten, geaendert: new Date().toISOString() };
+    this._save(this.KEYS.TERMINE, alle);
+    return alle[idx];
   },
   deleteTermin(id) {
     const alle = this.getTermine().filter(t => t.id !== id);

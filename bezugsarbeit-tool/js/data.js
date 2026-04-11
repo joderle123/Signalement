@@ -24304,7 +24304,121 @@ const CDSS_PROBLEME = [
   },
 
   // B. Externalisierende Probleme
-  { id: 'aggression', titel: 'Aggressives Verhalten / Gewaltbereitschaft', icon: '💥', farbe: '#DC2626', kategorie: 'externalisierend', icd: 'F91 / F92', beschreibung: 'Physische/verbale Aggression, Sachbeschädigung, Drohungen', variablen: [], empfehlungen: [] },
+  {
+    id: 'aggression', titel: 'Aggressives Verhalten / Gewaltbereitschaft', icon: '💥', farbe: '#DC2626', kategorie: 'externalisierend', icd: 'F91 / F92',
+    beschreibung: 'Physische/verbale Aggression, Sachbeschädigung, Drohungen',
+    variablen: [
+      {
+        id: 'agg-art', frage: 'Welche Art von Aggression zeigt sich?', typ: 'multi',
+        optionen: [
+          { id: 'physisch', label: 'Physisch (Schlagen, Treten, Werfen)', tags: ['agg-physisch'] },
+          { id: 'verbal', label: 'Verbal (Beschimpfen, Drohen, Einschüchtern)', tags: ['agg-verbal'] },
+          { id: 'sachbeschaedigung', label: 'Sachbeschädigung (Zerstören, Vandalismus)', tags: ['agg-sach'] },
+          { id: 'relational', label: 'Relational (Ausschließen, Gerüchte, Manipulation)', tags: ['agg-relational'] },
+          { id: 'auto', label: 'Autoaggression (gegen sich selbst)', tags: ['agg-auto', 'svv-moeglich'] }
+        ]
+      },
+      {
+        id: 'agg-trigger', frage: 'Was löst die Aggression typischerweise aus?', typ: 'single',
+        optionen: [
+          { id: 'frustration', label: 'Frustration / Überforderung', tags: ['agg-reaktiv', 'regulation-defizit'] },
+          { id: 'provokation', label: 'Wahrgenommene Provokation / Ungerechtigkeit', tags: ['agg-reaktiv', 'fehlattribution'] },
+          { id: 'kontrolle', label: 'Machtkampf / Kontrolle wollen', tags: ['agg-instrumentell'] },
+          { id: 'gruppe', label: 'Gruppendruck / Imponiergehabe', tags: ['agg-instrumentell', 'peer-einfluss'] },
+          { id: 'kein-trigger', label: 'Scheinbar ohne Anlass / impulsiv', tags: ['agg-impulsiv', 'regulation-defizit'] }
+        ]
+      },
+      {
+        id: 'agg-frequenz', frage: 'Wie häufig kommt es zu Aggressionen?', typ: 'single',
+        optionen: [
+          { id: 'einzelfall', label: 'Einmaliger/seltener Vorfall', tags: ['agg-leicht'] },
+          { id: 'woechentlich', label: 'Wöchentlich', tags: ['agg-mittel'] },
+          { id: 'taeglich', label: 'Täglich / fast täglich', tags: ['agg-schwer'] },
+          { id: 'eskalierend', label: 'Zunehmend — Frequenz/Schwere steigt', tags: ['agg-schwer', 'eskalation'] }
+        ]
+      },
+      {
+        id: 'agg-kontext', frage: 'In welchem Kontext tritt die Aggression auf?', typ: 'single',
+        optionen: [
+          { id: 'nur-schule', label: 'Nur in der Schule', tags: ['agg-kontextgebunden'] },
+          { id: 'nur-zuhause', label: 'Nur zu Hause', tags: ['agg-kontextgebunden', 'familiendynamik'] },
+          { id: 'ueberall', label: 'In allen Kontexten', tags: ['agg-generalisiert'] },
+          { id: 'peers', label: 'Nur gegenüber Gleichaltrigen', tags: ['agg-kontextgebunden', 'peer-probleme'] }
+        ]
+      },
+      {
+        id: 'agg-hintergrund', frage: 'Welcher Hintergrund wird vermutet?', typ: 'multi',
+        optionen: [
+          { id: 'trauma', label: 'Trauma / Gewalterfahrung in der Vorgeschichte', tags: ['agg-trauma-hintergrund'] },
+          { id: 'modell', label: 'Gewalt als gelerntes Modell (Familie, Umfeld)', tags: ['agg-modelllernen'] },
+          { id: 'adhs', label: 'ADHS / Impulskontrollstörung', tags: ['komorbid-adhs'] },
+          { id: 'callous', label: 'Callous-unemotional Traits (Empathiemangel)', tags: ['cu-traits', 'risiko-hoch'] },
+          { id: 'substanz', label: 'Substanzkonsum', tags: ['komorbid-substanz'] },
+          { id: 'unklar', label: 'Unklar', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'agg-reaktiv',
+        tags_erforderlich: ['agg-reaktiv'],
+        tags_ausschluss: ['cu-traits'],
+        tags_gewichtung: { 'regulation-defizit': 3, 'agg-trauma-hintergrund': 3, 'fehlattribution': 2, 'agg-impulsiv': 2, 'komorbid-adhs': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Reaktive Aggression — impulsiv, emotional getriggert, oft mit anschließendem Bedauern. Häufig bei Defiziten in der Emotionsregulation, ADHS oder nach Trauma. Prognose besser als bei instrumenteller Aggression. Kernintervention: Emotionsregulation stärken, Trigger erkennen, alternative Handlungsstrategien aufbauen.',
+        sofort: [
+          'De-Eskalation: Ruhig bleiben, nicht einschüchtern, Raum geben ("Du kannst dich kurz zurückziehen")',
+          'Nach Beruhigung: Situation gemeinsam rekonstruieren — Was ist passiert? Was hast du gefühlt? Was hättest du anders machen können?',
+          'Ampel-System einführen: Grün (alles ok) → Gelb (Warnung) → Rot (Explodiere gleich) — bei Gelb handeln',
+          'Gesprächseröffnung: "Ich sehe, dass dich etwas so wütend macht, dass du keine andere Möglichkeit siehst. Lass uns zusammen einen besseren Weg finden."'
+        ],
+        mittelfristig: [
+          'Emotionsregulations-Training: Wut-Thermometer, Atemtechniken, Stopp-Denk-Handle',
+          'Soziale Kompetenz: Perspektivübernahme, Konfliktkommunikation ("Ich-Botschaften")',
+          'Bei Trauma-Hintergrund: Trauma-sensitive Stabilisierung vor Verhaltensarbeit',
+          'Elterntraining: Positive Verstärkung, klare Grenzen ohne Eskalation'
+        ],
+        ueberweisung: 'KJP-Abklärung bei: täglicher Aggression, Eskalation, Verdacht auf ADHS, Substanzkonsum. In Luxemburg: SCAS (Service Central d\'Assistance Sociale), CHNP Ettelbruck.',
+        elternarbeit: 'Eltern als Teil der Lösung: Konsistente Konsequenzen, keine körperliche Bestrafung, Modelllernen. Triple P oder PCIT-Elemente.',
+        materialien: { arbeitsblaetter: ['wut-management', 'emotionsregulation'], therapiemodule: ['therapiemodul-aggression'], fachmodule: ['aggression'] },
+        referenzen: [
+          'Dodge, K.A. (2006): Translational science in action — hostile attributional style. Development and Psychopathology.',
+          'Lochman, J.E. et al. (2011): Coping Power Program — preventive intervention for aggressive children. JAACAP.',
+          'NICE Guideline CG158 (2013/2017): Antisocial behaviour and conduct disorders in children and young people.',
+          'Eyberg, S.M. et al. (2008): Evidence-based treatments for child and adolescent disruptive behavior. JCCAP.'
+        ]
+      },
+      {
+        id: 'agg-instrumentell-cu',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'agg-instrumentell': 4, 'cu-traits': 5, 'agg-schwer': 3, 'agg-generalisiert': 3, 'eskalation': 3, 'peer-einfluss': 2 },
+        risiko: 'rot',
+        einschaetzung: 'Instrumentelle/proaktive Aggression — geplant, zielgerichtet, ohne Reue. Bei Callous-Unemotional (CU) Traits: eingeschränkte Empathie, flache Affekte, Manipulation. Erfordert spezialisierte Intervention — klassisches Empathietraining oft wirkungslos. Belohnungsorientierte Ansätze effektiver als Bestrafung.',
+        sofort: [
+          'Klare, konsequente Grenzen OHNE Machtkampf — sachlich, nicht emotional',
+          'Schüler/Schülerinnen konfrontieren, nicht beschämen: "Was du getan hast, war nicht in Ordnung. Was war dein Ziel?"',
+          'Opferschutz sicherstellen — bei Gewalt gegen andere: sofortige Trennung',
+          'Sicherheitsplan: Wann wird die Schule/Polizei eingeschaltet?'
+        ],
+        mittelfristig: [
+          'Spezialisierte Programme: Multisystemische Therapie (MST) oder Funktionale Familientherapie (FFT)',
+          'Bei CU-Traits: Belohnungsorientierte Ansätze (Warm-Strict), nicht nur Strafen',
+          'Prosoziale Kompetenz über motivierende Gesprächsführung',
+          'Negative Peergroup identifizieren und alternative soziale Kontexte schaffen'
+        ],
+        ueberweisung: 'Dringende KJP/Forensische Abklärung bei: Waffengebrauch, schwerer Körperverletzung, Tierquälerei, fehlender Reue. In Luxemburg: SCAS, OPJ bei Kindeswohlgefährdung. Art. 7 Meldepflicht prüfen.',
+        elternarbeit: 'Intensive Familienarbeit nötig. Oft dysfunktionale Familiendynamik. MST/FFT einbeziehen. Eltern brauchen Unterstützung — nicht Schuldzuweisung.',
+        materialien: { arbeitsblaetter: ['wut-management'], therapiemodule: ['therapiemodul-aggression'], fachmodule: ['aggression'] },
+        referenzen: [
+          'Frick, P.J. et al. (2014): Callous-Unemotional Traits — DSM-5 specifier for conduct disorder. JAACAP.',
+          'Henggeler, S.W. (2011): Multisystemic Therapy — long-term effects. JAACAP.',
+          'Viding, E. & McCrory, E.J. (2012): Genetic and neurocognitive contributions to antisocial behaviour. British Journal of Psychiatry.',
+          'NICE Guideline CG158 (2013): Antisocial behaviour — recognition and management.'
+        ]
+      }
+    ]
+  },
   { id: 'opposition', titel: 'Oppositionelles Verhalten / Regelverweigerung', icon: '🚫', farbe: '#B91C1C', kategorie: 'externalisierend', icd: 'F91.3', beschreibung: 'Aktive Verweigerung, Provokation, Grenztestung', variablen: [], empfehlungen: [] },
   { id: 'mobbing-taeter', titel: 'Mobbing (als Täter)', icon: '👊', farbe: '#991B1B', kategorie: 'externalisierend', icd: 'F91', beschreibung: 'Systematisches Schikanieren, Ausgrenzung, Cybermobbing', variablen: [], empfehlungen: [] },
   { id: 'wutausbrueche', titel: 'Regulationsstörung / Wutausbrüche', icon: '🌋', farbe: '#EF4444', kategorie: 'externalisierend', icd: 'F91 / F63', beschreibung: 'Unkontrollierte emotionale Ausbrüche, Impulskontrollprobleme', variablen: [], empfehlungen: [] },

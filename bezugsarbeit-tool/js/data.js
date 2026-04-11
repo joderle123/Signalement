@@ -25528,7 +25528,82 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'essstoerung', titel: 'Essstörung-Verdacht', icon: '🪞', farbe: '#EC4899', kategorie: 'entwicklung', icd: 'F50', beschreibung: 'Restriktives Essen, Essanfälle, Erbrechen, Körperdysmorphie', variablen: [], empfehlungen: [] },
+  {
+    id: 'essstoerung', titel: 'Essstörung-Verdacht', icon: '🪞', farbe: '#EC4899', kategorie: 'entwicklung', icd: 'F50',
+    beschreibung: 'Restriktives Essen, Essanfälle, Erbrechen, Körperdysmorphie',
+    variablen: [
+      {
+        id: 'ess-typ', frage: 'Welches Essstörungsmuster zeigt sich?', typ: 'single',
+        optionen: [
+          { id: 'restriktiv', label: 'Restriktiv — isst wenig/nichts, Kalorien zählen, Mahlzeiten auslassen', tags: ['ess-restriktiv', 'anorexie-moeglich'] },
+          { id: 'binge', label: 'Essanfälle — große Mengen in kurzer Zeit, Kontrollverlust', tags: ['ess-binge'] },
+          { id: 'purging', label: 'Purging — Erbrechen, Abführmittel, exzessiver Sport nach dem Essen', tags: ['ess-purging', 'bulimie-moeglich'] },
+          { id: 'arfid', label: 'Selektiv — isst nur bestimmte Lebensmittel, Angst vor Essen', tags: ['ess-arfid'] },
+          { id: 'koerperbild', label: 'Körperbildstörung — sieht sich als "zu dick" trotz Normalgewicht', tags: ['ess-koerperbild'] }
+        ]
+      },
+      {
+        id: 'ess-koerper', frage: 'Gibt es körperliche Warnsignale?', typ: 'multi',
+        optionen: [
+          { id: 'gewichtsverlust', label: 'Deutlicher Gewichtsverlust', tags: ['ess-gewichtsverlust', 'risiko-hoch'] },
+          { id: 'amenorrhoe', label: 'Ausbleiben der Periode (Amenorrhoe)', tags: ['ess-amenorrhoe'] },
+          { id: 'muedigkeit', label: 'Extreme Müdigkeit / Kreislaufprobleme', tags: ['ess-somatisch'] },
+          { id: 'haarausfall', label: 'Haarausfall / Lanugo-Behaarung', tags: ['ess-somatisch'] },
+          { id: 'zaehne', label: 'Zahnprobleme / geschwollene Wangen (bei Erbrechen)', tags: ['ess-purging-zeichen'] },
+          { id: 'keine', label: 'Keine körperlichen Auffälligkeiten', tags: [] }
+        ]
+      },
+      {
+        id: 'ess-dauer', frage: 'Seit wann besteht das Problem?', typ: 'single',
+        optionen: [
+          { id: 'akut', label: 'Erst seit Kurzem (<1 Monat)', tags: ['ess-akut'] },
+          { id: 'wochen', label: '1-3 Monate', tags: ['ess-subakut'] },
+          { id: 'monate', label: '3-12 Monate', tags: ['ess-chronifizierend'] },
+          { id: 'jahre', label: 'Über 1 Jahr', tags: ['ess-chronisch', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'ess-einsicht', frage: 'Hat der/die Jugendliche Problembewusstsein?', typ: 'single',
+        optionen: [
+          { id: 'ja', label: 'Ja — leidet unter dem Verhalten', tags: ['ess-einsicht-gut'] },
+          { id: 'ambivalent', label: 'Ambivalent — weiß es ist nicht gut, will aber nicht ändern', tags: ['ess-einsicht-teilweise'] },
+          { id: 'nein', label: 'Nein — findet es normal / verteidigt das Verhalten', tags: ['ess-einsicht-keine'] },
+          { id: 'stolz', label: 'Ist stolz darauf ("Ich bin diszipliniert")', tags: ['ess-einsicht-keine', 'ess-pro-ana'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'ess-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'ess-restriktiv': 3, 'ess-purging': 3, 'ess-binge': 2, 'ess-gewichtsverlust': 4, 'ess-chronisch': 3, 'ess-einsicht-keine': 2, 'anorexie-moeglich': 3, 'bulimie-moeglich': 3, 'risiko-hoch': 3 },
+        risiko: 'rot',
+        einschaetzung: 'Essstörung (F50) — Essstörungen haben die HÖCHSTE Mortalitätsrate aller psychischen Störungen (insbes. Anorexia nervosa). Frühintervention ist entscheidend. Als Bezugsarbeiter: NICHT die Therapie übernehmen, sondern schnell an Spezialisten verweisen. Deine Rolle: Beziehung halten, Motivation stärken, Brücke zur Therapie.',
+        sofort: [
+          'Nicht auf Essen/Gewicht fokussieren — über Gefühle sprechen: "Wie geht es dir eigentlich?"',
+          'Medizinische Abklärung DRINGEND: Internistische Untersuchung (Elektrolyte, Herz, Nieren)',
+          'NICHT: Kommentare über Aussehen/Gewicht, auch nicht positiv ("Du siehst gut aus")',
+          'Gesprächseröffnung: "Ich mache mir Sorgen um dich — nicht weil du dünn bist oder zu viel isst, sondern weil ich merke, dass es dir nicht gut geht."'
+        ],
+        mittelfristig: [
+          'Dringende Überweisung an Spezialisten: KJP + Internist/Pädiater',
+          'Motivierende Gesprächsführung: Ambivalenz explorieren, NICHT konfrontieren',
+          'Beziehung aufrechterhalten als stabile Brücke — auch wenn Therapie läuft',
+          'Gemeinsame Mahlzeiten als pädagogisches Setting nutzen (nicht als Therapie)'
+        ],
+        ueberweisung: 'DRINGEND: KJP-Vorstellung + internistische Abklärung. In Luxemburg: CHNP Ettelbruck (Essstörungsambulanz), CHL Kannerklinik, ZNS Letzebuerg. Anlaufstelle: Anorexia Nervosa asbl Luxembourg.',
+        elternarbeit: 'Eltern sind oft hilflos oder verschlimmern ungewollt. Keine Essenskämpfe am Tisch. Keine Kommentare über Körper. Mahlzeiten als soziale Zeit gestalten, nicht als Kontrolle. Familien-basierte Therapie (Maudsley/FBT) als Goldstandard für Anorexie bei Jugendlichen.',
+        materialien: { arbeitsblaetter: ['koerperbild', 'essverhalten-reflexion'], therapiemodule: ['therapiemodul-essstoerung'], fachmodule: ['essstoerung'] },
+        referenzen: [
+          'Lock, J. & Le Grange, D. (2015): Treatment Manual for Anorexia Nervosa — Family-Based Treatment (FBT). Guilford Press.',
+          'NICE Guideline NG69 (2017): Eating disorders — recognition and treatment.',
+          'AWMF S3-Leitlinie Essstörungen (2018): Diagnostik und Therapie.',
+          'Treasure, J. et al. (2010): Working with families of people with eating disorders — the New Maudsley approach. Routledge.'
+        ]
+      }
+    ]
+  },
 
   // E. Soziale / Kontextuelle Probleme
   { id: 'mobbing-opfer', titel: 'Mobbing (als Opfer)', icon: '😢', farbe: '#2563EB', kategorie: 'sozial', icd: 'Z60.4', beschreibung: 'Systematisches Schikaniert-werden, Ausgrenzung, Cybermobbing', variablen: [], empfehlungen: [] },

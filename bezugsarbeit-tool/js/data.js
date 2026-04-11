@@ -23866,7 +23866,58 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'angst-panik', titel: 'Angst / Panikattacken', icon: '😰', farbe: '#F59E0B', kategorie: 'emotional', icd: 'F41.0 / F41.1', beschreibung: 'Übermäßige Sorgen, Panikattacken, körperliche Angstsymptome', variablen: [], empfehlungen: [] },
+  { id: 'angst-panik', titel: 'Angst / Panikattacken', icon: '😰', farbe: '#F59E0B', kategorie: 'emotional', icd: 'F41.0 / F41.1', beschreibung: 'Übermäßige Sorgen, Panikattacken, körperliche Angstsymptome',
+    variablen: [
+      { id: 'ang-typ', frage: 'Welcher Angst-Typ liegt am ehesten vor?', typ: 'single', optionen: [
+        { id: 'generalisiert', label: 'Generalisierte Angst — ständige Sorgen um alles', tags: ['generalisiert', 'gad'] },
+        { id: 'panik', label: 'Panikattacken — plötzliche intensive Angstanfälle', tags: ['panikattacken', 'panik'] },
+        { id: 'trennung', label: 'Trennungsangst — Angst vor Trennung von Bezugspersonen', tags: ['trennungsangst'] },
+        { id: 'spezifisch', label: 'Spezifische Phobie — Angst vor konkretem Objekt/Situation', tags: ['spezifische-phobie'] },
+        { id: 'unklar', label: 'Unklar / gemischt', tags: ['angst-gemischt'] }
+      ]},
+      { id: 'ang-koerper', frage: 'Welche körperlichen Symptome zeigt der/die Jugendliche? (Mehrfachauswahl)', typ: 'multi', optionen: [
+        { id: 'herzklopfen', label: 'Herzklopfen / Herzrasen', tags: ['herzklopfen'] },
+        { id: 'atemnot', label: 'Atemnot / Hyperventilation', tags: ['atemnot'] },
+        { id: 'schwitzen', label: 'Schwitzen / Zittern', tags: ['vegetativ'] },
+        { id: 'bauch', label: 'Bauchschmerzen / Übelkeit', tags: ['bauch-symptome', 'somatisch'] },
+        { id: 'schwindel', label: 'Schwindel / Ohnmachtsgefühl', tags: ['schwindel'] },
+        { id: 'muskeln', label: 'Muskelverspannung / Kopfschmerzen', tags: ['muskulaer'] },
+        { id: 'keine', label: 'Kaum körperliche Symptome', tags: [] }
+      ]},
+      { id: 'ang-vermeidung', frage: 'Wie stark ist das Vermeidungsverhalten?', typ: 'single', optionen: [
+        { id: 'gering', label: 'Gering — stellt sich den Situationen (mit Unbehagen)', tags: ['vermeidung-gering'] },
+        { id: 'mittel', label: 'Mittel — vermeidet bestimmte Situationen regelmäßig', tags: ['vermeidung-mittel'] },
+        { id: 'stark', label: 'Stark — massives Vermeidungsverhalten, Alltag eingeschränkt', tags: ['vermeidung-stark', 'dringend'] }
+      ]},
+      { id: 'ang-sicherheitsverhalten', frage: 'Zeigt der/die Jugendliche Sicherheitsverhalten?', typ: 'multi', optionen: [
+        { id: 'begleitperson', label: 'Braucht immer eine Begleitperson', tags: ['sicherheits-begleitung'] },
+        { id: 'rueckversicherung', label: 'Ständige Rückversicherung ("Wird alles gut?")', tags: ['rueckversicherung'] },
+        { id: 'handy', label: 'Handy muss immer dabei/an sein', tags: ['sicherheits-handy'] },
+        { id: 'rituale', label: 'Bestimmte Rituale vor angstbesetzten Situationen', tags: ['angst-rituale', 'zwang-moeglich'] },
+        { id: 'keine', label: 'Keine auffälligen Sicherheitsverhaltensweisen', tags: [] }
+      ]}
+    ],
+    empfehlungen: [
+      { id: 'ang-generalisiert', tags_erforderlich: ['generalisiert'], tags_gewichtung: { 'chronisch': 2, 'vermeidung-mittel': 2, 'komorbid-depression': 3 }, tags_ausschluss: ['suizidal-aktiv'], risiko: 'gelb',
+        einschaetzung: 'Generalisierte Angststörung (F41.1) — anhaltende, übermäßige und unkontrollierbare Sorgen in verschiedenen Lebensbereichen. Häufig mit Muskelverspannungen, Schlafstörungen und Reizbarkeit. GAD-7 Score bestätigt klinisch relevante Angstsymptomatik. Bei Jugendlichen Erstlinienbehandlung: KVT (Kendall, 1994).',
+        sofort: ['Angst validieren: "Deine Sorgen sind real und ernst zu nehmen"', 'Psychoedukation: Angst-Kreislauf erklären (Gedanke → Körper → Verhalten → Verstärkung)', 'Erste Atemübung vermitteln: 4-7-8 Technik (4 ein, 7 halten, 8 aus)', 'Sorgenstunde einführen: 15 Minuten am Tag für Sorgen, Rest des Tages sorgenfrei'],
+        mittelfristig: ['KVT-basiert: Kognitive Umstrukturierung der Sorgengedanken', 'Exposition: Schrittweise Konfrontation mit vermiedenen Situationen (Angstleiter)', 'Progressive Muskelentspannung (Jacobson) als Körper-Intervention', 'Achtsamkeitsübungen zur Entkopplung von Sorgengedanken', 'GAD-7 alle 2 Wochen zur Verlaufskontrolle'],
+        ueberweisung: 'Wenn nach 8-12 Wochen keine Besserung: Überweisung an Kinder-/Jugendpsychotherapeut für strukturierte KVT (Coping Cat Programm, Kendall). Bei schwerer GAD mit Funktionseinschränkung: psychiatrische Abklärung für ggf. SSRI.',
+        elternarbeit: 'Eltern-Psychoedukation: Rückversicherungsverhalten nicht verstärken (kurze, klare Antworten statt endloser Beruhigung). Eltern als Co-Therapeuten für Exposition einbinden. Eigene Ängstlichkeit reflektieren (Modelllernen).',
+        materialien: { arbeitsblaetter: ['stress-angst.html', 'achtsamkeit-grounding.html', 'wiederkehrende-gedanken.html'], therapiemodule: ['therapiemodul-angstbewaeltigung.html'], elterninfo: ['angst-eltern.html'] },
+        referenzen: ['Kendall, P.C. (1994). Treating anxiety disorders in children: Results of a randomized clinical trial. Journal of Consulting and Clinical Psychology, 62(1), 100-110.', 'Spitzer, R.L. et al. (2006). A brief measure for assessing generalized anxiety disorder: The GAD-7. Archives of Internal Medicine, 166(10), 1092-1097.', 'NICE (2013). Social anxiety disorder. CG159.', 'James, A.C. et al. (2020). Cognitive behavioural therapy for anxiety disorders in children and adolescents. Cochrane Database of Systematic Reviews.']
+      },
+      { id: 'ang-panikattacken', tags_erforderlich: ['panikattacken'], tags_gewichtung: { 'atemnot': 3, 'herzklopfen': 2, 'vermeidung-stark': 3 }, tags_ausschluss: [], risiko: 'gelb',
+        einschaetzung: 'Panikstörung (F41.0) — wiederkehrende unerwartete Panikattacken mit intensiver Angst und vegetativen Symptomen (Herzrasen, Atemnot, Schwindel). Häufig Angst vor der nächsten Attacke (Erwartungsangst). Wichtig: Medizinische Ursachen ausschließen (Schilddrüse, Herzrhythmusstörungen).',
+        sofort: ['Bei akuter Panikattacke: Grounding-Techniken (5-4-3-2-1 Methode), Atemregulation', 'Psychoedukation: "Eine Panikattacke ist unangenehm, aber nicht gefährlich. Sie geht vorbei."', 'Panikprotokoll einführen: Wann, wo, wie lange, Auslöser, Intensität (0-10)', 'Medizinische Abklärung empfehlen wenn noch nicht erfolgt'],
+        mittelfristig: ['Interozeptive Exposition: Körpersensationen gezielt auslösen (Hyperventilation, Drehen) um Angst vor Symptomen zu reduzieren', 'Kognitive Umstrukturierung: Katastrophengedanken ("Ich sterbe") hinterfragen', 'In-vivo-Exposition bei Agoraphobie (vermiedene Orte stufenweise aufsuchen)', 'Entspannungsverfahren als Bewältigungsstrategie (NICHT als Sicherheitsverhalten)'],
+        ueberweisung: 'Psychiatrische Abklärung empfohlen (Differenzialdiagnostik). Bei häufigen Panikattacken (>4/Monat) oder Agoraphobie: KVT-Spezialist. Medikamentös ggf. SSRI (Sertralin/Fluoxetin).',
+        elternarbeit: 'Eltern sollen bei Panikattacken ruhig bleiben, nicht in die Panik einsteigen. Kind NICHT aus angstbesetzten Situationen "retten" (verstärkt Vermeidung). Gemeinsam Notfallkarte erstellen.',
+        materialien: { arbeitsblaetter: ['angstanfaelle.html', 'achtsamkeit-grounding.html', 'stress-angst.html'], therapiemodule: ['therapiemodul-angstbewaeltigung.html'], elterninfo: ['angst-eltern.html'] },
+        referenzen: ['Clark, D.M. (1986). A cognitive approach to panic. Behaviour Research and Therapy, 24(4), 461-470.', 'Craske, M.G. et al. (2014). Optimizing inhibitory learning during exposure therapy. Behaviour Research and Therapy, 58, 10-23.', 'APA (2009). Practice guideline for the treatment of patients with panic disorder. 2nd ed.']
+      }
+    ]
+  },
   { id: 'soziale-angst', titel: 'Soziale Angst / Rückzug', icon: '😶', farbe: '#E07B39', kategorie: 'emotional', icd: 'F40.1', beschreibung: 'Vermeidung sozialer Situationen, Angst vor Bewertung', variablen: [], empfehlungen: [] },
   { id: 'zwang', titel: 'Zwangssymptome / Zwangshandlungen', icon: '🔄', farbe: '#7C3AED', kategorie: 'emotional', icd: 'F42', beschreibung: 'Wiederkehrende Gedanken, Rituale, Kontrollzwang', variablen: [], empfehlungen: [] },
   { id: 'somatisierung', titel: 'Somatische Beschwerden ohne Befund', icon: '🤕', farbe: '#059669', kategorie: 'emotional', icd: 'F45', beschreibung: 'Kopf-/Bauchschmerzen, Übelkeit ohne medizinische Ursache', variablen: [], empfehlungen: [] },

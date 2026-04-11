@@ -26311,10 +26311,218 @@ const CDSS_PROBLEME = [
   },
 
   // G. Schulische Alltagsprobleme
-  { id: 'null-bock', titel: 'Leistungsverweigerung / Null-Bock', icon: '😴', farbe: '#EA580C', kategorie: 'schule', icd: 'Z55', beschreibung: 'Keine Motivation, Arbeitsverweigerung, Desinteresse', variablen: [], empfehlungen: [] },
-  { id: 'tagtraeumen', titel: 'Konzentrationsprobleme / Tagträumen', icon: '☁️', farbe: '#0EA5E9', kategorie: 'schule', icd: 'R41.8', beschreibung: 'Abwesenheit ohne ADHS-Verdacht, Tagträumen, langsames Arbeitstempo', variablen: [], empfehlungen: [] },
-  { id: 'pruefungsangst', titel: 'Prüfungsangst / Leistungsdruck', icon: '📝', farbe: '#7C3AED', kategorie: 'schule', icd: 'F40.2 / F93.8', beschreibung: 'Perfektionismus, Blackout, Versagensangst', variablen: [], empfehlungen: [] },
-  { id: 'schulwechsel-krise', titel: 'Klassen-/Schulwechsel-Krise', icon: '🔀', farbe: '#2563EB', kategorie: 'schule', icd: 'F43.2', beschreibung: 'Anpassungsschwierigkeiten, Heimweh, Verlust von Freunden', variablen: [], empfehlungen: [] },
+  {
+    id: 'null-bock', titel: 'Leistungsverweigerung / Null-Bock', icon: '😴', farbe: '#EA580C', kategorie: 'schule', icd: 'Z55',
+    beschreibung: 'Keine Motivation, Arbeitsverweigerung, Desinteresse',
+    variablen: [
+      {
+        id: 'nb-form', frage: 'Wie zeigt sich die Verweigerung?', typ: 'multi',
+        optionen: [
+          { id: 'passiv', label: 'Passiv (macht nichts, starrt ins Leere)', tags: ['nb-passiv'] },
+          { id: 'aktiv', label: 'Aktiv ("Ist mir egal", "Wozu?")', tags: ['nb-aktiv'] },
+          { id: 'selektiv', label: 'Selektiv (nur bestimmte Fächer/Lehrer)', tags: ['nb-selektiv'] },
+          { id: 'total', label: 'Total (gar nichts mehr, auch keine Hausaufgaben)', tags: ['nb-total', 'nb-schwer'] }
+        ]
+      },
+      {
+        id: 'nb-ursache', frage: 'Was könnte dahinterstecken?', typ: 'single',
+        optionen: [
+          { id: 'ueberforderung', label: 'Überforderung (kann nicht, traut sich nicht)', tags: ['nb-ueberforderung'] },
+          { id: 'unterforderung', label: 'Unterforderung (Langeweile, "zu leicht")', tags: ['nb-unterforderung'] },
+          { id: 'sinnlosigkeit', label: 'Sinnerleben fehlt ("Wozu brauche ich das?")', tags: ['nb-sinn'] },
+          { id: 'psychisch', label: 'Psychische Belastung (Depression, Trauma, Angst)', tags: ['nb-psychisch'] },
+          { id: 'beziehung', label: 'Beziehungsproblem (Lehrer, Klasse)', tags: ['nb-beziehung'] }
+        ]
+      },
+      {
+        id: 'nb-dauer', frage: 'Seit wann besteht die Verweigerung?', typ: 'single',
+        optionen: [
+          { id: 'wochen', label: 'Seit wenigen Wochen', tags: ['nb-akut'] },
+          { id: 'monate', label: 'Seit Monaten', tags: ['nb-chronisch'] },
+          { id: 'immer', label: '"Schon immer so"', tags: ['nb-chronisch', 'nb-schwer'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'nb-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'nb-total': 3, 'nb-ueberforderung': 2, 'nb-psychisch': 3, 'nb-sinn': 2, 'nb-chronisch': 2, 'nb-schwer': 3 },
+        risiko: 'gelb',
+        einschaetzung: '"Null Bock" ist IMMER ein Symptom, nie die Ursache. Dahinter liegt entweder: Angst zu versagen (Selbstwertschutz durch Nicht-Versuchen), Überforderung, Depression, oder ein Umfeld das keine Motivation fördert. Wer "nicht will", kann oft nicht — oder hat aufgegeben.',
+        sofort: [
+          'NICHT moralisieren: "Du musst!" / "Streng dich an!" → funktioniert nie',
+          'Neugier statt Druck: "Was müsste passieren, damit du Lust hättest?"',
+          'Kleine Erfolge ermöglichen: Aufgaben so anpassen, dass Erfolg wahrscheinlich wird',
+          'Gesprächseröffnung: "Ich merke, Schule fühlt sich gerade ziemlich sinnlos an für dich. Erzähl mir — was begeistert dich eigentlich?"'
+        ],
+        mittelfristig: [
+          'Ursache behandeln: Bei Depression → Stimmung zuerst. Bei Überforderung → Nachhilfe/Anpassung.',
+          'Selbstwirksamkeit aufbauen: Erfolge sichtbar machen, Stärken einsetzen',
+          'Sinnerleben schaffen: Verbindung zum echten Leben, Zukunftsperspektive',
+          'Schule als Partner: Nachteilsausgleich, individuelle Förderung, Differenzierung'
+        ],
+        ueberweisung: 'Bei: Totalverweigerung >4 Wochen, Verdacht auf Depression, Schulabbruchgefahr → KJP/CePAS. Lernstörung-Abklärung bei selektiver Verweigerung.',
+        elternarbeit: 'Eltern aus dem Hausaufgaben-Kampf holen. Nicht bestrafen ("Kein Handy bis du lernst") — sondern Bedingungen schaffen. Gemeinsame Zukunftsgespräche statt Leistungsdruck.',
+        materialien: { arbeitsblaetter: ['motivation', 'zukunftsplanung'], therapiemodule: ['therapiemodul-schulmotivation'], fachmodule: ['schulmotivation'] },
+        referenzen: ['Deci, E.L. & Ryan, R.M. (2000): Self-Determination Theory — intrinsic motivation.', 'Dweck, C.S. (2006): Mindset — The New Psychology of Success.', 'Hattie, J. (2009): Visible Learning — teacher-student relationship as key factor.']
+      }
+    ]
+  },
+  {
+    id: 'tagtraeumen', titel: 'Konzentrationsprobleme / Tagträumen', icon: '☁️', farbe: '#0EA5E9', kategorie: 'schule', icd: 'R41.8',
+    beschreibung: 'Abwesenheit ohne ADHS-Verdacht, Tagträumen, langsames Arbeitstempo',
+    variablen: [
+      {
+        id: 'tag-muster', frage: 'Wie zeigt sich die Unkonzentriertheit?', typ: 'multi',
+        optionen: [
+          { id: 'abwesend', label: 'Geistig abwesend / "in einer anderen Welt"', tags: ['tag-abwesend'] },
+          { id: 'langsam', label: 'Extrem langsames Arbeitstempo', tags: ['tag-langsam'] },
+          { id: 'vergesslich', label: 'Vergesslich (Material, Aufgaben, Termine)', tags: ['tag-vergesslich'] },
+          { id: 'wechselnd', label: 'Wechselt ständig die Aktivität, beginnt vieles', tags: ['tag-wechselnd'] }
+        ]
+      },
+      {
+        id: 'tag-ursache', frage: 'Mögliche Ursache?', typ: 'single',
+        optionen: [
+          { id: 'schlaf', label: 'Schlafmangel / Müdigkeit', tags: ['tag-schlaf'] },
+          { id: 'sorgen', label: 'Grübeln / Sorgen / belastende Gedanken', tags: ['tag-sorgen'] },
+          { id: 'reizarm', label: 'Unterstimulierung (Langeweile, zu leichter Stoff)', tags: ['tag-unterstimuliert'] },
+          { id: 'dissoziation', label: 'Milde Dissoziation (nach Belastung)', tags: ['tag-dissoziation'] },
+          { id: 'medikation', label: 'Medikamenten-Nebenwirkung', tags: ['tag-medikation'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'tag-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'tag-abwesend': 2, 'tag-schlaf': 2, 'tag-sorgen': 3, 'tag-dissoziation': 4, 'tag-langsam': 1 },
+        risiko: 'gruen',
+        einschaetzung: 'Konzentrationsprobleme ohne ADHS — Wenn ADHS ausgeschlossen ist, liegen meist andere Ursachen vor: Schlafmangel (Hauptursache bei Jugendlichen!), emotionale Belastung (Grübeln bindet Aufmerksamkeit), Unterstimulierung, oder milde dissoziative Phänomene.',
+        sofort: [
+          'Schlaf-Screening: Wann ins Bett? Handy im Zimmer? Aufwachzeit? (Jugendliche brauchen 8-10h!)',
+          'Bewegungspausen einbauen: Alle 20 Min kurz bewegen — Aufmerksamkeit steigt danach',
+          'Sanftes Zurückholen: Nicht beschämen ("Bist du noch da?"), sondern einbeziehen',
+          'Gesprächseröffnung: "Mir fällt auf, dass deine Gedanken manchmal woanders sind. Magst du mir erzählen, wo sie hingehen?"'
+        ],
+        mittelfristig: [
+          'Schlafhygiene verbessern (wenn Ursache): Feste Zeiten, kein Screen 1h vor Bett',
+          'Bei Sorgen/Grübeln: Sorgenzeit einrichten, Gedanken externalisieren (Aufschreiben)',
+          'Aufmerksamkeitstraining: Achtsamkeitsübungen, Timer-Methode (5 Min fokussiert → Pause)',
+          'Schulische Anpassung: Sitzplatz vorne, kürzere Aufgabeneinheiten, visuelle Hilfen'
+        ],
+        ueberweisung: 'Bei Persistenz: ADHS-Abklärung doch erwägen, Neuropädiatrie (Absence-Epilepsie ausschließen!), KJP bei Dissoziation.',
+        elternarbeit: 'Schlafrhythmus gemeinsam verbessern. Screen-Zeit am Abend begrenzen. Nicht bestrafen für Vergesslichkeit — Systeme einführen (Checklisten, Timer, Rituale).',
+        materialien: { arbeitsblaetter: ['konzentration', 'achtsamkeit'], therapiemodule: ['therapiemodul-konzentration'], fachmodule: ['konzentration'] },
+        referenzen: ['Owens, J.A. (2014): Insufficient sleep in adolescents and young adults. Pediatrics.', 'Diamond, A. (2013): Executive functions. Annual Review of Psychology.', 'Klingberg, T. (2010): Training and plasticity of working memory. Trends in Cognitive Sciences.']
+      }
+    ]
+  },
+  {
+    id: 'pruefungsangst', titel: 'Prüfungsangst / Leistungsdruck', icon: '📝', farbe: '#7C3AED', kategorie: 'schule', icd: 'F40.2 / F93.8',
+    beschreibung: 'Perfektionismus, Blackout, Versagensangst',
+    variablen: [
+      {
+        id: 'pa-form', frage: 'Wie zeigt sich die Prüfungsangst?', typ: 'multi',
+        optionen: [
+          { id: 'blackout', label: 'Blackout (weiß plötzlich nichts mehr)', tags: ['pa-blackout'] },
+          { id: 'koerperlich', label: 'Körperlich (Übelkeit, Zittern, Herzrasen, Schwindel)', tags: ['pa-somatisch'] },
+          { id: 'vermeidung', label: 'Vermeidung (krank an Prüfungstagen)', tags: ['pa-vermeidung'] },
+          { id: 'perfektionismus', label: 'Perfektionismus (nichts ist gut genug, immer Angst)', tags: ['pa-perfektionismus'] },
+          { id: 'prokrastination', label: 'Prokrastination (kann nicht anfangen zu lernen)', tags: ['pa-prokrastination'] }
+        ]
+      },
+      {
+        id: 'pa-quelle', frage: 'Woher kommt der Leistungsdruck?', typ: 'single',
+        optionen: [
+          { id: 'eltern', label: 'Eltern (hohe Erwartungen)', tags: ['pa-eltern-druck'] },
+          { id: 'selbst', label: 'Eigene hohe Ansprüche / Perfektionismus', tags: ['pa-intern'] },
+          { id: 'vergleich', label: 'Sozialer Vergleich (Mitschüler, Geschwister)', tags: ['pa-vergleich'] },
+          { id: 'zukunft', label: 'Zukunftsangst ("Wenn ich das nicht schaffe, ist alles vorbei")', tags: ['pa-zukunft'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'pa-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'pa-blackout': 2, 'pa-vermeidung': 3, 'pa-perfektionismus': 3, 'pa-somatisch': 2, 'pa-eltern-druck': 2, 'pa-zukunft': 2 },
+        risiko: 'gruen',
+        einschaetzung: 'Prüfungsangst — Eine der häufigsten Ängste bei Jugendlichen (ca. 15-25% betroffen). Oft Kombination aus: Katastrophisieren ("Wenn ich durchfalle, ist mein Leben vorbei"), mangelnden Lernstrategien, und körperlicher Angstreaktion. Gut behandelbar mit KVT-Elementen.',
+        sofort: [
+          'Normalisieren: "Prüfungsangst haben viele — und man kann lernen, damit umzugehen"',
+          'Atemtechnik für den Moment: 4-7-8 Atmung, progressive Muskelentspannung',
+          'Katastrophisieren hinterfragen: "Was wäre das Schlimmste? Und dann? Und dann?"',
+          'Gesprächseröffnung: "Wenn du an die nächste Prüfung denkst — was genau macht dir Angst? Das Nicht-Wissen, oder das Gefühl, nicht gut genug zu sein?"'
+        ],
+        mittelfristig: [
+          'Kognitive Umstrukturierung: "Ich MUSS perfekt sein" → "Ich gebe mein Bestes, und das ist genug"',
+          'Lernstrategien verbessern: Prüfungsvorbereitung reduziert Angst am effektivsten',
+          'Exposition: Prüfungssimulationen unter entspannten Bedingungen üben',
+          'Bei Perfektionismus: "Good enough" als Konzept einführen, Fehlertoleranz üben'
+        ],
+        ueberweisung: 'Bei: Schulvermeidung, Generalisierung (alle Leistungssituationen), Panikattacken, somatoformer Störung → KJP. CePAS für schulische Unterstützung.',
+        elternarbeit: 'Leistungsdruck reflektieren: Was vermitteln WIR? "Ich bin stolz auf dich" nicht nur bei guten Noten. Vergleiche mit Geschwistern/anderen VERMEIDEN. Fehler als Lernchance framen.',
+        materialien: { arbeitsblaetter: ['pruefungsangst', 'atemtechniken', 'kognitive-umstrukturierung'], therapiemodule: ['therapiemodul-angst'], fachmodule: ['angst'] },
+        referenzen: ['Ergene, T. (2003): Meta-analysis of test anxiety reduction programs. School Psychology International.', 'Putwain, D.W. (2007): Test anxiety in UK schoolchildren. British Journal of Educational Psychology.', 'Zeidner, M. (1998): Test Anxiety — The State of the Art. Plenum Press.']
+      }
+    ]
+  },
+  {
+    id: 'schulwechsel-krise', titel: 'Klassen-/Schulwechsel-Krise', icon: '🔀', farbe: '#2563EB', kategorie: 'schule', icd: 'F43.2',
+    beschreibung: 'Anpassungsschwierigkeiten, Heimweh, Verlust von Freunden',
+    variablen: [
+      {
+        id: 'sw-art', frage: 'Um welchen Übergang handelt es sich?', typ: 'single',
+        optionen: [
+          { id: 'grundschule-sek', label: 'Grundschule → Sekundarstufe', tags: ['sw-uebergang'] },
+          { id: 'schulwechsel', label: 'Schulwechsel (neue Schule, gleiche Stufe)', tags: ['sw-wechsel'] },
+          { id: 'klassenwechsel', label: 'Klassenwechsel / neue Klasse', tags: ['sw-klasse'] },
+          { id: 'foerder', label: 'Wechsel in Förderschule / CDSE', tags: ['sw-foerder'] }
+        ]
+      },
+      {
+        id: 'sw-reaktion', frage: 'Wie reagiert der/die Jugendliche?', typ: 'multi',
+        optionen: [
+          { id: 'rueckzug', label: 'Sozialer Rückzug / findet keinen Anschluss', tags: ['sw-rueckzug'] },
+          { id: 'heimweh', label: 'Heimweh nach alter Schule/Klasse', tags: ['sw-heimweh'] },
+          { id: 'leistung', label: 'Leistungseinbruch', tags: ['sw-leistung'] },
+          { id: 'somatisch', label: 'Körperliche Beschwerden (Bauchschmerzen)', tags: ['sw-somatisch'] },
+          { id: 'regression', label: 'Regression (klammern, weinen)', tags: ['sw-regression'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'sw-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'sw-rueckzug': 3, 'sw-heimweh': 2, 'sw-leistung': 2, 'sw-regression': 2, 'sw-somatisch': 2 },
+        risiko: 'gruen',
+        einschaetzung: 'Anpassungsstörung nach Schulwechsel (F43.2) — Übergänge sind für die meisten Jugendlichen stressig, aber die Mehrheit passt sich innerhalb von 4-8 Wochen an. Problematisch wird es, wenn: Rückzug >4 Wochen, Schulvermeidung beginnt, oder keine sozialen Kontakte entstehen.',
+        sofort: [
+          'Normalisieren: "Es ist normal, dass sich alles fremd anfühlt. Das wird besser."',
+          'Strukturierte Peer-Kontakte: Buddy-System, gemeinsame Projekte, AG beitreten',
+          'Regelmäßiger Check-in: Wie geht es in der neuen Klasse? Was ist schwierig? Was geht?',
+          'Gesprächseröffnung: "Ein Schulwechsel ist wie ein Umzug — man vermisst das Alte und muss das Neue erst kennenlernen. Wie kann ich dir dabei helfen?"'
+        ],
+        mittelfristig: [
+          'Soziale Integration aktiv fördern: Kooperative Aufgaben, Kennenlernspiele, Patensystem',
+          'Alte Kontakte pflegen erlauben: Nicht "vergiss die alten Freunde" — BEIDES ist okay',
+          'Bei Leistungseinbruch: Vorübergehend niedrigere Erwartungen, Schonraum geben',
+          'Wenn nach 8 Wochen keine Besserung: Intensivere Diagnostik (soziale Angst? Mobbing?)'
+        ],
+        ueberweisung: 'Bei: Schulvermeidung, Verschlechterung nach 8 Wochen, völliger Isolation → CePAS, bei V.a. soz. Angst: KJP.',
+        elternarbeit: 'Eltern als Brücke: Kontakt zu neuen Eltern suchen, Playdates/Treffen ermöglichen. Nicht bagatellisieren ("Stell dich nicht so an") — aber auch nicht katastrophisieren. Geduld vermitteln.',
+        materialien: { arbeitsblaetter: ['soziale-kompetenz', 'uebergaenge'], therapiemodule: ['therapiemodul-uebergaenge'], fachmodule: ['uebergaenge'] },
+        referenzen: ['Zeedyk, M.S. et al. (2003): Negotiating the transition from primary to secondary school. School Psychology International.', 'Hanewald, R. (2013): Transition between primary and secondary school. Australian Journal of Teacher Education.']
+      }
+    ]
+  },
 
   // H. Körper & Alltag
   { id: 'enuresis', titel: 'Einnässen / Einkoten (Enuresis/Enkopresis)', icon: '💧', farbe: '#0891B2', kategorie: 'koerper', icd: 'F98.0 / F98.1', beschreibung: 'Primär oder sekundär, tags- oder nachts', variablen: [], empfehlungen: [] },

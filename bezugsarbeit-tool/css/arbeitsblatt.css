@@ -5,8 +5,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --farbe: #7B5EA7;        /* wird per Inline-Style pro Blatt überschrieben */
-  --farbe-hell: #F5F0FA;
+  --farbe: #2563EB;        /* wird per Inline-Style pro Blatt überschrieben */
+  --farbe-hell: #EFF6FF;
   --farbe-mid: color-mix(in srgb, var(--farbe) 15%, white);
   --text: #1E293B;
   --grau: #64748B;

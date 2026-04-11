@@ -836,9 +836,10 @@ function renderWeiterbildung() {
 
   const tabs = [
     { id: 'uebersicht', label: 'Übersicht', icon: '🏠' },
+    { id: 'schnellhilfe', label: 'Schnellhilfe', icon: '🆘' },
     { id: 'lernpfade', label: 'Praxis-Lernpfade', icon: '🎓' },
     { id: 'nachschlagewerke', label: 'Nachschlagewerke', icon: '📖' },
-    { id: 'glossar', label: 'Glossar', icon: '📝' }
+    { id: 'selbstfuersorge', label: 'Selbstfürsorge', icon: '💚' }
   ];
 
   container.innerHTML = `
@@ -855,11 +856,12 @@ function renderWeiterbildung() {
 
   const content = document.getElementById('wb-tab-content');
   switch (WB_ACTIVE_TAB) {
-    case 'uebersicht':    renderWBUebersicht(content); break;
-    case 'lernpfade':     renderWBLernpfade(content); break;
+    case 'uebersicht':       renderWBUebersicht(content); break;
+    case 'schnellhilfe':     renderCDSSProblemauswahl(content); break;
+    case 'lernpfade':        renderWBLernpfade(content); break;
     case 'nachschlagewerke': renderWBNachschlagewerke(content); break;
-    case 'glossar':       renderWBGlossar(content); break;
-    default:              renderWBUebersicht(content);
+    case 'selbstfuersorge':  renderWBSelbstfuersorge(content); break;
+    default:                 renderWBUebersicht(content);
   }
 }
 
@@ -898,79 +900,81 @@ function renderWBUebersicht(container) {
           <div style="width:56px;height:56px;background:rgba(255,255,255,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;">🎓</div>
           <div style="flex:1;">
             <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">Weiterbildung</h2>
-            <p style="font-size:13px;opacity:0.85;line-height:1.5;">Praxisnahe Lernpfade für die Bezugsarbeit mit Jugendlichen. Jedes Modul enthält Theorie, Fallbeispiele, Gesprächsskripte und einen Wissenstest.</p>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-size:32px;font-weight:800;">${gelesenCount}/${totalModule}</div>
-            <div style="font-size:11px;opacity:0.75;">Module absolviert</div>
+            <p style="font-size:13px;opacity:0.85;line-height:1.5;">Schnellhilfe bei akuten Situationen, praxisnahe Lernpfade, Nachschlagewerke und Selbstfürsorge — alles für deine professionelle Entwicklung.</p>
           </div>
         </div>
-        ${gelesenCount > 0 ? `
-          <div style="margin-top:14px;background:rgba(255,255,255,0.15);border-radius:8px;height:6px;overflow:hidden;">
-            <div style="height:100%;width:${Math.round(gelesenCount/totalModule*100)}%;background:rgba(255,255,255,0.7);border-radius:8px;transition:width 0.3s;"></div>
-          </div>
-        ` : ''}
       </div>
     </div>
 
-    <!-- Kategorien -->
+    <!-- Schnellhilfe prominent -->
+    <div class="card" style="cursor:pointer;border:2px solid #DC2626;margin-bottom:20px;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='schnellhilfe';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(220,38,38,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+      <div class="card-body" style="padding:20px;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="width:52px;height:52px;background:#FEF2F2;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;">🆘</div>
+          <div style="flex:1;">
+            <div style="font-size:16px;font-weight:800;color:#DC2626;margin-bottom:4px;">Schnellhilfe — "Was mache ich jetzt?"</div>
+            <p style="font-size:12px;color:#6B7280;line-height:1.5;">Problem auswählen, Situation beschreiben, fundierte Handlungsempfehlung erhalten. 40 Probleme, hunderte Variablen, evidenzbasierte Empfehlungen mit Referenzen. In 2 Minuten.</p>
+          </div>
+          <div style="font-size:24px;color:#DC2626;">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Bereiche -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px;">
-      ${Object.entries(WB_KATEGORIEN).map(([key, kat]) => {
-        const stats = katStats[key];
-        const pfade = WB_LERNPFADE.filter(p => p.kategorie === key);
-        return `
-          <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='lernpfade';WB_FILTER_KAT='${key}';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
-            <div class="card-body" style="padding:20px;">
-              <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-                <div style="width:44px;height:44px;background:${kat.farbe}15;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">${kat.icon}</div>
-                <div style="flex:1;">
-                  <div style="font-size:14px;font-weight:700;color:#1F2937;">${kat.label}</div>
-                  <div style="font-size:11px;color:#6B7280;">${stats.done}/${stats.total} Module</div>
-                </div>
-              </div>
-              <p style="font-size:12px;color:#6B7280;line-height:1.5;margin-bottom:12px;">${kat.beschreibung}</p>
-              <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                ${pfade.map(p => `
-                  <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:${gelesen.includes(p.id) ? '#F0FDF4' : '#F3F4F6'};color:${gelesen.includes(p.id) ? '#16A34A' : '#6B7280'};font-weight:500;">${gelesen.includes(p.id) ? '✓ ' : ''}${p.icon} ${p.titel.split(' ')[0]}</span>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('')}
-    </div>
 
-    <!-- Schnellzugriff -->
-    <div class="card" style="margin-bottom:20px;">
-      <div class="card-header">
-        <span>📖</span>
-        <div class="card-title">Nachschlagewerke</div>
-      </div>
-      <div class="card-body">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
-          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB;" onclick="WB_ACTIVE_TAB='glossar';renderWeiterbildung();">
-            <span style="font-size:20px;">📝</span>
+      <!-- Praxis-Lernpfade -->
+      <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='lernpfade';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+        <div class="card-body" style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="width:44px;height:44px;background:#FEF3C7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🎓</div>
             <div>
-              <div style="font-size:13px;font-weight:600;">Glossar</div>
-              <div style="font-size:11px;color:#6B7280;">Fachbegriffe nachschlagen</div>
+              <div style="font-size:14px;font-weight:700;color:#1F2937;">Praxis-Lernpfade</div>
+              <div style="font-size:11px;color:#6B7280;">${gelesenCount}/${totalModule} absolviert</div>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB;" onclick="WB_ACTIVE_TAB='nachschlagewerke';renderWeiterbildung();">
-            <span style="font-size:20px;">🌳</span>
-            <div>
-              <div style="font-size:13px;font-weight:600;">Entscheidungsbäume</div>
-              <div style="font-size:11px;color:#6B7280;">Interaktive Triage-Hilfen</div>
-            </div>
+          <p style="font-size:12px;color:#6B7280;line-height:1.5;margin-bottom:10px;">"Ich will mich vorbereiten" — 20 Kurse mit Theorie, Fallbeispielen, Gesprächsskripten und Wissenstests.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            ${Object.entries(WB_KATEGORIEN).map(([key, kat]) => `
+              <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:${kat.farbe}15;color:${kat.farbe};font-weight:600;">${kat.icon} ${kat.label.split(' ')[0]}</span>
+            `).join('')}
           </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB;" onclick="WB_ACTIVE_TAB='nachschlagewerke';renderWeiterbildung();">
-            <span style="font-size:20px;">📚</span>
-            <div>
-              <div style="font-size:13px;font-weight:600;">Fachkraft-Module</div>
-              <div style="font-size:11px;color:#6B7280;">${Object.keys(FACHKRAFT_MODULE_DATEIEN).length}+ klinische Nachschlagewerke</div>
+          ${gelesenCount > 0 ? `
+            <div style="margin-top:10px;background:#E5E7EB;border-radius:4px;height:4px;overflow:hidden;">
+              <div style="height:100%;width:${Math.round(gelesenCount/totalModule*100)}%;background:#D97706;border-radius:4px;"></div>
             </div>
-          </div>
+          ` : ''}
         </div>
       </div>
+
+      <!-- Nachschlagewerke -->
+      <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='nachschlagewerke';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+        <div class="card-body" style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="width:44px;height:44px;background:#EFF6FF;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📖</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#1F2937;">Nachschlagewerke</div>
+              <div style="font-size:11px;color:#6B7280;">Glossar, Fachmodule, Wiki</div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#6B7280;line-height:1.5;">"Ich will etwas nachschlagen" — ${Object.keys(FACHKRAFT_MODULE_DATEIEN).length}+ Fachkraft-Module, Wiki-Artikel, Entscheidungsbäume und Glossar.</p>
+        </div>
+      </div>
+
+      <!-- Selbstfürsorge -->
+      <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='selbstfuersorge';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+        <div class="card-body" style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="width:44px;height:44px;background:#F0FDF4;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">💚</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#1F2937;">Selbstfürsorge</div>
+              <div style="font-size:11px;color:#6B7280;">ProQOL, Supervision</div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#6B7280;line-height:1.5;">"Wie geht es mir?" — Selbstfürsorge-Check, Supervisionsvorbereitung und Burnout-Prävention.</p>
+        </div>
+      </div>
+
     </div>
 
     ${quizCount > 0 ? `
@@ -1116,15 +1120,374 @@ function renderWBNachschlagewerke(container) {
   `;
 }
 
-function renderWBGlossar(container) {
-  container.innerHTML = `
-    <div class="card">
-      <div class="card-header">
-        <span>📝</span>
-        <div class="card-title">Glossar — Fachbegriffe</div>
+// ============================================================
+// CDSS — Schnellhilfe (Klinisches Entscheidungsunterstützungssystem)
+// ============================================================
+let CDSS_STATE = { problem: null, schritt: 0, antworten: {}, tags: [] };
+
+function renderCDSSProblemauswahl(container) {
+  CDSS_STATE = { problem: null, schritt: 0, antworten: {}, tags: [] };
+
+  if (typeof CDSS_PROBLEME === 'undefined' || !CDSS_PROBLEME.length) {
+    container.innerHTML = `
+      <div class="card" style="border:2px solid #DC2626;margin-bottom:16px;">
+        <div class="card-body" style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+            <div style="font-size:28px;">🆘</div>
+            <div>
+              <div style="font-size:16px;font-weight:800;color:#DC2626;">Schnellhilfe</div>
+              <p style="font-size:12px;color:#6B7280;">Problem auswählen → Situation beschreiben → Handlungsempfehlung erhalten</p>
+            </div>
+          </div>
+          <p style="color:#6B7280;font-size:13px;">Die Schnellhilfe wird gerade aufgebaut — 40 Probleme mit evidenzbasierten Empfehlungen werden Schritt für Schritt hinzugefügt.</p>
+        </div>
       </div>
+    `;
+    return;
+  }
+
+  const kategorien = {
+    emotional: { label: 'Emotionale / Internalisierende Probleme', icon: '🌧️', farbe: '#3B82F6' },
+    externalisierend: { label: 'Externalisierende Probleme', icon: '🔥', farbe: '#EF4444' },
+    krisen: { label: 'Krisen / Risiko', icon: '🚨', farbe: '#DC2626' },
+    entwicklung: { label: 'Entwicklung / Trauma', icon: '🧠', farbe: '#8B5CF6' },
+    sozial: { label: 'Soziale / Kontextuelle Probleme', icon: '🌍', farbe: '#0EA5E9' },
+    interaktion: { label: 'Beziehungs- & Interaktionsprobleme', icon: '⚡', farbe: '#F59E0B' },
+    schule: { label: 'Schulische Alltagsprobleme', icon: '🏫', farbe: '#EA580C' },
+    koerper: { label: 'Körper & Alltag', icon: '🏥', farbe: '#059669' },
+    familie: { label: 'Familiäre Alltagssituationen', icon: '👨‍👩‍👧', farbe: '#7C3AED' }
+  };
+
+  container.innerHTML = `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:16px;font-weight:800;color:#1F2937;margin-bottom:4px;">🆘 Schnellhilfe — Welches Problem siehst du?</div>
+      <p style="font-size:12px;color:#6B7280;">Wähle das Hauptproblem. Du beschreibst danach die Situation genauer und erhältst eine fundierte Handlungsempfehlung.</p>
+    </div>
+    <input type="text" id="cdss-suche" placeholder="Problem suchen..." oninput="filterCDSSProbleme(this.value)" style="width:100%;padding:10px 14px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;margin-bottom:16px;font-family:inherit;">
+    <div id="cdss-problem-grid">
+      ${Object.entries(kategorien).map(([katId, kat]) => {
+        const probs = CDSS_PROBLEME.filter(p => p.kategorie === katId);
+        if (!probs.length) return '';
+        return `
+          <div class="cdss-kat-section" data-kat="${katId}" style="margin-bottom:20px;">
+            <div style="font-size:13px;font-weight:700;color:${kat.farbe};margin-bottom:8px;display:flex;align-items:center;gap:6px;">${kat.icon} ${kat.label}</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;">
+              ${probs.map(p => `
+                <div class="cdss-problem-karte" data-id="${p.id}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:white;border:1.5px solid #E5E7EB;border-radius:10px;cursor:pointer;transition:all 0.15s;" onclick="startCDSS('${p.id}')" onmouseenter="this.style.borderColor='${p.farbe}';this.style.background='${p.farbe}08'" onmouseleave="this.style.borderColor='#E5E7EB';this.style.background='white'">
+                  <span style="font-size:20px;">${p.icon}</span>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-size:12px;font-weight:600;color:#1F2937;">${p.titel}</div>
+                    <div style="font-size:10px;color:#9CA3AF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.beschreibung}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function filterCDSSProbleme(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.cdss-problem-karte').forEach(el => {
+    const id = el.dataset.id;
+    const prob = CDSS_PROBLEME.find(p => p.id === id);
+    const match = !q || prob.titel.toLowerCase().includes(q) || prob.beschreibung.toLowerCase().includes(q);
+    el.style.display = match ? '' : 'none';
+  });
+  document.querySelectorAll('.cdss-kat-section').forEach(el => {
+    const visibleCards = el.querySelectorAll('.cdss-problem-karte[style*="display: none"]');
+    const totalCards = el.querySelectorAll('.cdss-problem-karte');
+    el.style.display = visibleCards.length === totalCards.length ? 'none' : '';
+  });
+}
+
+function startCDSS(problemId) {
+  const problem = CDSS_PROBLEME.find(p => p.id === problemId);
+  if (!problem) return;
+  CDSS_STATE = { problem: problem, schritt: 0, antworten: {}, tags: [] };
+  renderCDSSWizard();
+}
+
+function renderCDSSWizard() {
+  const container = document.getElementById('wb-tab-content');
+  if (!container) return;
+  const { problem, schritt, antworten } = CDSS_STATE;
+
+  const alleVariablen = [...(typeof CDSS_GEMEINSAME_VARIABLEN !== 'undefined' ? CDSS_GEMEINSAME_VARIABLEN : []), ...(problem.variablen || [])];
+  const total = alleVariablen.length;
+
+  if (schritt >= total) {
+    renderCDSSErgebnis(container);
+    return;
+  }
+
+  const v = alleVariablen[schritt];
+  const bisherig = antworten[v.id];
+
+  container.innerHTML = `
+    <div style="margin-bottom:16px;">
+      <button class="btn btn-sm btn-secondary" onclick="CDSS_STATE.schritt=0;CDSS_STATE.antworten={};CDSS_STATE.tags=[];renderCDSSProblemauswahl(document.getElementById('wb-tab-content'));" style="margin-bottom:12px;">← Problemauswahl</button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:22px;">${problem.icon}</span>
+        <span style="font-size:15px;font-weight:700;color:#1F2937;">${problem.titel}</span>
+      </div>
+      <!-- Fortschritt -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        <span style="font-size:11px;color:#6B7280;">Schritt ${schritt + 1} von ${total}</span>
+        <div style="flex:1;background:#E5E7EB;border-radius:4px;height:4px;overflow:hidden;">
+          <div style="height:100%;width:${Math.round((schritt/total)*100)}%;background:#D97706;border-radius:4px;transition:width 0.3s;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-body" style="padding:24px;">
+        <div style="font-size:14px;font-weight:700;color:#1F2937;margin-bottom:16px;">${v.frage}</div>
+        ${v.typ === 'multi' ? `
+          <div style="display:flex;flex-direction:column;gap:8px;" id="cdss-optionen">
+            ${v.optionen.map(opt => {
+              const checked = Array.isArray(bisherig) && bisherig.includes(opt.id);
+              return `
+                <label style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:${checked ? '#FEF3C7' : 'white'};border:1.5px solid ${checked ? '#D97706' : '#E5E7EB'};border-radius:10px;cursor:pointer;transition:all 0.15s;" onmouseenter="if(!this.querySelector('input').checked)this.style.background='#F8FAFC'" onmouseleave="if(!this.querySelector('input').checked)this.style.background='white'">
+                  <input type="checkbox" value="${opt.id}" ${checked ? 'checked' : ''} onchange="cdssMultiSelect('${v.id}','${opt.id}',this.checked)" style="width:16px;height:16px;accent-color:#D97706;">
+                  <span style="font-size:13px;color:#1F2937;">${opt.label}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            ${schritt > 0 ? '<button class="btn btn-sm btn-secondary" onclick="CDSS_STATE.schritt--;renderCDSSWizard();">← Zurück</button>' : ''}
+            <button class="btn btn-sm btn-primary" onclick="cdssWeiter()">Weiter →</button>
+          </div>
+        ` : `
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            ${v.optionen.map(opt => `
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:${bisherig === opt.id ? '#FEF3C7' : 'white'};border:1.5px solid ${bisherig === opt.id ? '#D97706' : '#E5E7EB'};border-radius:10px;cursor:pointer;transition:all 0.15s;" onclick="cdssSingleSelect('${v.id}','${opt.id}')" onmouseenter="this.style.background='${bisherig === opt.id ? '#FEF3C7' : '#F8FAFC'}';this.style.borderColor='${bisherig === opt.id ? '#D97706' : '#CBD5E1'}'" onmouseleave="this.style.background='${bisherig === opt.id ? '#FEF3C7' : 'white'}';this.style.borderColor='${bisherig === opt.id ? '#D97706' : '#E5E7EB'}'">
+                <span style="font-size:13px;color:#1F2937;">${opt.label}</span>
+              </div>
+            `).join('')}
+          </div>
+          ${schritt > 0 ? '<div style="margin-top:12px;"><button class="btn btn-sm btn-secondary" onclick="CDSS_STATE.schritt--;renderCDSSWizard();">← Zurück</button></div>' : ''}
+        `}
+      </div>
+    </div>
+  `;
+}
+
+function cdssSingleSelect(varId, optId) {
+  const problem = CDSS_STATE.problem;
+  const alleVariablen = [...(typeof CDSS_GEMEINSAME_VARIABLEN !== 'undefined' ? CDSS_GEMEINSAME_VARIABLEN : []), ...(problem.variablen || [])];
+  const v = alleVariablen.find(x => x.id === varId);
+  const opt = v.optionen.find(o => o.id === optId);
+
+  // Remove old tags for this variable
+  const oldOpt = v.optionen.find(o => o.id === CDSS_STATE.antworten[varId]);
+  if (oldOpt && oldOpt.tags) {
+    CDSS_STATE.tags = CDSS_STATE.tags.filter(t => !oldOpt.tags.includes(t));
+  }
+
+  CDSS_STATE.antworten[varId] = optId;
+  if (opt.tags) CDSS_STATE.tags.push(...opt.tags);
+  CDSS_STATE.schritt++;
+  renderCDSSWizard();
+}
+
+function cdssMultiSelect(varId, optId, checked) {
+  if (!CDSS_STATE.antworten[varId]) CDSS_STATE.antworten[varId] = [];
+  const problem = CDSS_STATE.problem;
+  const alleVariablen = [...(typeof CDSS_GEMEINSAME_VARIABLEN !== 'undefined' ? CDSS_GEMEINSAME_VARIABLEN : []), ...(problem.variablen || [])];
+  const v = alleVariablen.find(x => x.id === varId);
+  const opt = v.optionen.find(o => o.id === optId);
+
+  if (checked) {
+    if (!CDSS_STATE.antworten[varId].includes(optId)) CDSS_STATE.antworten[varId].push(optId);
+    if (opt.tags) CDSS_STATE.tags.push(...opt.tags);
+  } else {
+    CDSS_STATE.antworten[varId] = CDSS_STATE.antworten[varId].filter(id => id !== optId);
+    if (opt.tags) CDSS_STATE.tags = CDSS_STATE.tags.filter(t => !opt.tags.includes(t));
+  }
+}
+
+function cdssWeiter() {
+  CDSS_STATE.schritt++;
+  renderCDSSWizard();
+}
+
+function renderCDSSErgebnis(container) {
+  const { problem, tags, antworten } = CDSS_STATE;
+
+  // Tag-matching engine
+  let besteEmpfehlung = null;
+  let bestScore = -1;
+
+  (problem.empfehlungen || []).forEach(emp => {
+    // Check required tags
+    const erfuellt = (emp.tags_erforderlich || []).every(t => tags.includes(t));
+    if (!erfuellt) return;
+    // Check exclusion tags
+    const ausgeschlossen = (emp.tags_ausschluss || []).some(t => tags.includes(t));
+    if (ausgeschlossen) return;
+    // Score by weighted tags
+    let score = 0;
+    const gewichtung = emp.tags_gewichtung || {};
+    tags.forEach(t => { score += (gewichtung[t] || 1); });
+    if (score > bestScore) { bestScore = score; besteEmpfehlung = emp; }
+  });
+
+  // Fallback
+  if (!besteEmpfehlung && problem.empfehlungen && problem.empfehlungen.length) {
+    besteEmpfehlung = problem.empfehlungen[problem.empfehlungen.length - 1];
+  }
+
+  if (!besteEmpfehlung) {
+    container.innerHTML = `
+      <div class="card"><div class="card-body" style="padding:24px;">
+        <button class="btn btn-sm btn-secondary" onclick="WB_ACTIVE_TAB='schnellhilfe';renderWeiterbildung();" style="margin-bottom:16px;">← Neue Problemauswahl</button>
+        <p style="font-size:14px;font-weight:700;color:#1F2937;margin-bottom:8px;">${problem.icon} ${problem.titel}</p>
+        <p style="color:#6B7280;">Für dieses Problem werden die Empfehlungen gerade aufgebaut. Bitte schaue in den Fachkraft-Modulen oder der Bibliothek nach.</p>
+      </div></div>
+    `;
+    return;
+  }
+
+  const e = besteEmpfehlung;
+  const risikoFarben = { gruen: '#16A34A', gelb: '#D97706', rot: '#DC2626' };
+  const risikoLabels = { gruen: 'GERINGES RISIKO — Beobachten & begleiten', gelb: 'MITTLERES RISIKO — Zeitnahe Intervention empfohlen', rot: 'HOHES RISIKO — Sofortiges Handeln erforderlich' };
+  const risikoIcons = { gruen: '🟢', gelb: '🟡', rot: '🔴' };
+
+  container.innerHTML = `
+    <div style="margin-bottom:16px;">
+      <button class="btn btn-sm btn-secondary" onclick="WB_ACTIVE_TAB='schnellhilfe';renderWeiterbildung();" style="margin-right:8px;">← Neue Problemauswahl</button>
+      <button class="btn btn-sm btn-secondary" onclick="window.print();">🖨 Drucken</button>
+    </div>
+
+    <!-- Risiko-Banner -->
+    <div style="background:${risikoFarben[e.risiko] || '#6B7280'};color:white;padding:14px 20px;border-radius:12px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:22px;">${risikoIcons[e.risiko] || '⚪'}</span>
+      <span style="font-size:14px;font-weight:700;">${risikoLabels[e.risiko] || 'Einschätzung'}</span>
+    </div>
+
+    <!-- Fachliche Einschätzung -->
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header"><span>📋</span><div class="card-title">Fachliche Einschätzung</div></div>
+      <div class="card-body"><p style="font-size:12px;line-height:1.7;">${e.einschaetzung || ''}</p></div>
+    </div>
+
+    <!-- Sofortmaßnahmen -->
+    ${e.sofort && e.sofort.length ? `
+    <div class="card" style="margin-bottom:12px;border-left:3px solid ${risikoFarben[e.risiko] || '#6B7280'};">
+      <div class="card-header"><span>⚡</span><div class="card-title">Sofortmaßnahmen</div></div>
       <div class="card-body">
-        <p style="color:#6B7280;font-size:13px;">Das Glossar wird in einem kommenden Update hinzugefügt (~100 durchsuchbare Fachbegriffe).</p>
+        <ol style="padding-left:18px;font-size:12px;line-height:1.7;">
+          ${e.sofort.map(s => '<li style="margin-bottom:6px;">' + s + '</li>').join('')}
+        </ol>
+      </div>
+    </div>
+    ` : ''}
+
+    <!-- Mittelfristige Interventionen -->
+    ${e.mittelfristig && e.mittelfristig.length ? `
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header"><span>📅</span><div class="card-title">Mittelfristige Interventionen (2-6 Wochen)</div></div>
+      <div class="card-body">
+        <ul style="padding-left:18px;font-size:12px;line-height:1.7;">
+          ${e.mittelfristig.map(m => '<li style="margin-bottom:4px;">' + m + '</li>').join('')}
+        </ul>
+      </div>
+    </div>
+    ` : ''}
+
+    <!-- Überweisung -->
+    ${e.ueberweisung ? `
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header"><span>🏥</span><div class="card-title">Überweisung / Vernetzung</div></div>
+      <div class="card-body"><p style="font-size:12px;line-height:1.7;">${e.ueberweisung}</p></div>
+    </div>
+    ` : ''}
+
+    <!-- Elternarbeit -->
+    ${e.elternarbeit ? `
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header"><span>👨‍👩‍👧</span><div class="card-title">Elternarbeit</div></div>
+      <div class="card-body"><p style="font-size:12px;line-height:1.7;">${e.elternarbeit}</p></div>
+    </div>
+    ` : ''}
+
+    <!-- Materialien -->
+    ${e.materialien ? `
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header"><span>📚</span><div class="card-title">Empfohlene Materialien</div></div>
+      <div class="card-body">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${(e.materialien.arbeitsblaetter || []).map(a => `<span style="font-size:11px;padding:4px 10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:6px;cursor:pointer;color:#16A34A;" onclick="window.open('arbeitsblaetter/${a}','_blank')">📄 ${a.replace('.html','').replace(/-/g,' ')}</span>`).join('')}
+          ${(e.materialien.therapiemodule || []).map(t => `<span style="font-size:11px;padding:4px 10px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;cursor:pointer;color:#2563EB;" onclick="window.open('therapiemodule/${t}','_blank')">📘 ${t.replace('.html','').replace(/-/g,' ')}</span>`).join('')}
+          ${(e.materialien.elterninfo || []).map(ei => `<span style="font-size:11px;padding:4px 10px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;cursor:pointer;color:#D97706;" onclick="window.open('eltern-infoblaetter/${ei}','_blank')">👨‍👩‍👧 ${ei.replace('.html','').replace(/-/g,' ')}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+    ` : ''}
+
+    <!-- Referenzen -->
+    ${e.referenzen && e.referenzen.length ? `
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-header"><span>📖</span><div class="card-title">Referenzen</div></div>
+      <div class="card-body">
+        <ol style="padding-left:18px;font-size:11px;color:#6B7280;line-height:1.7;">
+          ${e.referenzen.map(r => '<li style="margin-bottom:4px;">' + r + '</li>').join('')}
+        </ol>
+      </div>
+    </div>
+    ` : ''}
+
+    <!-- Gewählte Variablen (klappbar) -->
+    <details style="margin-top:12px;">
+      <summary style="font-size:12px;color:#6B7280;cursor:pointer;font-weight:600;">Gewählte Variablen anzeigen</summary>
+      <div style="margin-top:8px;padding:12px;background:#F8FAFC;border-radius:8px;font-size:11px;line-height:1.8;">
+        ${Object.entries(antworten).map(([k, v]) => {
+          return `<div><strong>${k}:</strong> ${Array.isArray(v) ? v.join(', ') : v}</div>`;
+        }).join('')}
+        <div style="margin-top:6px;color:#9CA3AF;"><strong>Tags:</strong> ${tags.join(', ')}</div>
+      </div>
+    </details>
+  `;
+}
+
+// ============================================================
+// SELBSTFÜRSORGE
+// ============================================================
+function renderWBSelbstfuersorge(container) {
+  container.innerHTML = `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:16px;font-weight:800;color:#1F2937;margin-bottom:4px;">💚 Selbstfürsorge & Supervision</div>
+      <p style="font-size:12px;color:#6B7280;">Werkzeuge für deine eigene professionelle Gesundheit.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+      <div class="card" style="cursor:pointer;" onclick="window.open('evaluationsboegen/selbstfuersorge-check.html','_blank')">
+        <div class="card-body" style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="width:44px;height:44px;background:#F0FDF4;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">💚</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;">Selbstfürsorge-Check (ProQOL)</div>
+              <div style="font-size:11px;color:#6B7280;">Vierteljährlich empfohlen</div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#6B7280;line-height:1.5;">Compassion Satisfaction, Burnout & sekundäre Traumatisierung messen. 30 Items, 10 Minuten.</p>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="window.open('evaluationsboegen/supervisionsvorbereitung.html','_blank')">
+        <div class="card-body" style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="width:44px;height:44px;background:#EDE9FE;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📋</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;">Supervisionsvorbereitung</div>
+              <div style="font-size:11px;color:#6B7280;">Vor jeder Supervision</div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#6B7280;line-height:1.5;">Strukturierte Fallreflexion mit Leitfragen für produktive Supervisionen.</p>
+        </div>
       </div>
     </div>
   `;

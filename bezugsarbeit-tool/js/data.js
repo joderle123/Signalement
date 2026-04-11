@@ -24581,7 +24581,112 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'wutausbrueche', titel: 'Regulationsstörung / Wutausbrüche', icon: '🌋', farbe: '#EF4444', kategorie: 'externalisierend', icd: 'F91 / F63', beschreibung: 'Unkontrollierte emotionale Ausbrüche, Impulskontrollprobleme', variablen: [], empfehlungen: [] },
+  {
+    id: 'wutausbrueche', titel: 'Regulationsstörung / Wutausbrüche', icon: '🌋', farbe: '#EF4444', kategorie: 'externalisierend', icd: 'F91 / F63',
+    beschreibung: 'Unkontrollierte emotionale Ausbrüche, Impulskontrollprobleme',
+    variablen: [
+      {
+        id: 'wut-intensitaet', frage: 'Wie intensiv sind die Ausbrüche?', typ: 'single',
+        optionen: [
+          { id: 'leicht', label: 'Schreien, Weinen, Türen schlagen', tags: ['wut-leicht'] },
+          { id: 'mittel', label: 'Dinge werfen, Sachen zerstören, Schlagen gegen Wände', tags: ['wut-mittel'] },
+          { id: 'schwer', label: 'Selbst- oder Fremdgefährdung (Angriff, Flucht, Panik)', tags: ['wut-schwer', 'risiko-hoch'] },
+          { id: 'shutdown', label: 'Kompletter Shutdown / Erstarrung nach Ausbruch', tags: ['wut-shutdown', 'pvt-dorsal'] }
+        ]
+      },
+      {
+        id: 'wut-trigger', frage: 'Was löst die Ausbrüche typischerweise aus?', typ: 'multi',
+        optionen: [
+          { id: 'uebergaenge', label: 'Übergänge / Veränderungen im Ablauf', tags: ['trigger-uebergaenge'] },
+          { id: 'ueberforderung', label: 'Überforderung / zu viele Reize', tags: ['trigger-ueberforderung'] },
+          { id: 'ungerechtigkeit', label: 'Wahrgenommene Ungerechtigkeit', tags: ['trigger-ungerechtigkeit'] },
+          { id: 'grenzsetzung', label: 'Grenzsetzung / "Nein" hören', tags: ['trigger-grenzen'] },
+          { id: 'hunger-muede', label: 'Hunger, Müdigkeit, körperliches Unwohlsein', tags: ['trigger-physiologisch'] },
+          { id: 'unvorhersehbar', label: 'Scheinbar ohne erkennbaren Auslöser', tags: ['trigger-unklar'] }
+        ]
+      },
+      {
+        id: 'wut-nach', frage: 'Was passiert nach dem Ausbruch?', typ: 'single',
+        optionen: [
+          { id: 'reue', label: 'Reue / Scham / Weinen ("Es tut mir leid")', tags: ['wut-reue', 'einsicht-gut'] },
+          { id: 'erschoepfung', label: 'Totale Erschöpfung / Rückzug', tags: ['wut-erschoepfung'] },
+          { id: 'bagatellisierung', label: 'Bagatellisierung ("War nicht so schlimm")', tags: ['wut-bagatellisierung'] },
+          { id: 'kein-erinnern', label: 'Kann sich kaum erinnern (dissoziativ)', tags: ['wut-dissoziativ', 'dissoziation-moeglich'] }
+        ]
+      },
+      {
+        id: 'wut-komorbid', frage: 'Gibt es begleitende Diagnosen/Verdachte?', typ: 'multi',
+        optionen: [
+          { id: 'adhs', label: 'ADHS / Impulskontrollstörung', tags: ['komorbid-adhs'] },
+          { id: 'autismus', label: 'Autismus-Spektrum (Verdacht)', tags: ['komorbid-autismus'] },
+          { id: 'trauma', label: 'Trauma / belastende Vorgeschichte', tags: ['komorbid-trauma'] },
+          { id: 'angst', label: 'Angst / Überforderung', tags: ['komorbid-angst'] },
+          { id: 'depression', label: 'Depressive Stimmung / Reizbarkeit', tags: ['komorbid-depression'] },
+          { id: 'keine', label: 'Keine bekannt', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'wut-regulation',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'wut-leicht': 1, 'wut-mittel': 2, 'wut-reue': 2, 'trigger-ueberforderung': 2, 'trigger-physiologisch': 1, 'komorbid-adhs': 2, 'regulation-defizit': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Emotionale Dysregulation mit Wutausbrüchen — Häufig bei Kindern/Jugendlichen mit ADHS, Trauma oder Reizüberflutung. Der Ausbruch ist das Symptom, nicht das Problem. Dahinter liegt oft: zu wenig Regulationsstrategien, chronische Überforderung oder ein Nervensystem im Daueralarm (PVT: Sympathikus-Dominanz).',
+        sofort: [
+          'Während des Ausbruchs: Sicherheit gewährleisten, NICHT rationalisieren oder moralisieren',
+          'Co-Regulation anbieten: Ruhige Stimme, Präsenz, Raum geben — "Ich bin da, wenn du mich brauchst"',
+          'Nachbesprechung erst wenn Fenster der Toleranz wieder erreicht: "Was hat sich verändert, bevor es losging?"',
+          'Gesprächseröffnung: "Ich sehe, dass dich manchmal Gefühle überrollen, die so groß sind, dass du nicht weißt wohin damit. Das ist nicht deine Schuld — und wir können üben, damit besser umzugehen."'
+        ],
+        mittelfristig: [
+          'Emotionsregulations-Training: Zones of Regulation, Wut-Thermometer, Ampelsystem',
+          'Fenster der Toleranz erweitern: Durch körperliche Übungen, Atemarbeit, sensorische Strategien',
+          'Trigger-Prävention: Vorhersehbare Strukturen, Übergänge vorbereiten, Reizreduktion',
+          'Bei ADHS: Medikamentöse Einstellung kann Regulationsfähigkeit deutlich verbessern'
+        ],
+        ueberweisung: 'KJP-Abklärung bei: Täglichen Ausbrüchen, Fremdgefährdung, Verdacht auf ADHS/Autismus, dissoziativen Anteilen. In Luxemburg: CHNP, CHL Kannerklinik, SRE (Service Rééducatif).',
+        elternarbeit: 'Eltern entlasten: Wutausbrüche sind anstrengend — Schuldgefühle und Erschöpfung adressieren. Co-Regulation vorleben: "Erst beruhigen, dann reden." Gemeinsam Notfallplan erstellen.',
+        materialien: { arbeitsblaetter: ['wut-management', 'emotionsregulation'], therapiemodule: ['therapiemodul-emotionsregulation'], fachmodule: ['impulskontrolle'] },
+        referenzen: [
+          'Siegel, D.J. & Bryson, T.P. (2012): The Whole-Brain Child — neurobiological approach to emotional storms.',
+          'Kuypers, L. (2011): Zones of Regulation — A curriculum for emotional and sensory self-regulation.',
+          'Sukhodolsky, D.G. et al. (2016): CBT for anger and aggression in children. Guilford Press.',
+          'Dana, D. (2018): The Polyvagal Theory in Therapy — engaging the rhythm of regulation. Norton.'
+        ]
+      },
+      {
+        id: 'wut-schwer-gefaehrdung',
+        tags_erforderlich: ['wut-schwer'],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'risiko-hoch': 5, 'wut-dissoziativ': 4, 'komorbid-trauma': 3, 'komorbid-autismus': 2, 'trigger-unklar': 2 },
+        risiko: 'rot',
+        einschaetzung: 'Schwere Regulationsstörung mit Selbst-/Fremdgefährdung. Möglicherweise traumatisch bedingte Reaktionen, dissoziativer Anteil oder neurologische Komponente. Dringender Abklärungsbedarf. Im Ausbruch selbst: Nur Sicherheit — keine Intervention.',
+        sofort: [
+          'Sicherheitsplan: Wer macht was, wenn es eskaliert? (Raum verlassen, Hilfe holen, 112)',
+          'Umgebung sichern: Gefährliche Gegenstände entfernen, sichere Rückzugsräume identifizieren',
+          'NICHT festhalten (außer bei akuter Gefahr) — Festhalten kann retraumatisieren',
+          'Nach dem Ausbruch: Nicht bestrafen, nicht ignorieren — versorgen und stabilisieren'
+        ],
+        mittelfristig: [
+          'Dringende KJP-Vorstellung: Differenzialdiagnostik (ADHS, Autismus, Trauma, Epilepsie)',
+          'Trauma-Screening: Dissoziation? Flashbacks? Trigger-Kette?',
+          'Individueller Krisenplan für Schule: Wer interveniert wie? Wann wird Fachkraft gerufen?',
+          'Sensorische Strategien: Gewichtsdecke, Kaukette, Stressball — für den Alltag'
+        ],
+        ueberweisung: 'Dringende KJP-Vorstellung empfohlen. In Luxemburg: CHNP Ettelbruck (Notfallambulanz), CHL Kannerklinik. Bei Verdacht auf Autismus: Ligue HMC / Centre de Diagnostic Précoce.',
+        elternarbeit: 'Krisenplan gemeinsam erstellen. Eltern brauchen konkrete Handlungsanweisungen: Was tun im Ausbruch? Wann 112 rufen? Psychoedukation: Ausbrüche sind keine Erziehungsfehler.',
+        materialien: { arbeitsblaetter: ['wut-management', 'sicherheitsplan'], therapiemodule: ['therapiemodul-emotionsregulation'], fachmodule: ['impulskontrolle'] },
+        referenzen: [
+          'Porges, S.W. (2011): The Polyvagal Theory — neurophysiological foundations of safety.',
+          'Greene, R.W. (2014): The Explosive Child — understanding inflexible-explosive children.',
+          'van der Kolk, B. (2014): The Body Keeps the Score — trauma and emotional dysregulation.',
+          'Lecavalier, L. (2006): Behavioral and emotional problems in young people with ASD. JADD.'
+        ]
+      }
+    ]
+  },
 
   // C. Krisen / Risiko
   { id: 'selbstverletzung', titel: 'Selbstverletzung (SVV)', icon: '🩹', farbe: '#BE185D', kategorie: 'krisen', icd: 'X78 / Z91.5', beschreibung: 'Ritzen, Schneiden, Verbrennen, Selbstschädigung', variablen: [], empfehlungen: [] },

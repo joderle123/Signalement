@@ -863,20 +863,271 @@ function renderWeiterbildung() {
   }
 }
 
-function renderWBUebersicht(container) {
-  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Weiterbildungsbereich wird geladen...</p></div></div>';
+function getWBProgress() {
+  try {
+    return JSON.parse(localStorage.getItem('pathways_wb_progress') || '{}');
+  } catch(e) { return {}; }
 }
 
+function saveWBProgress(progress) {
+  localStorage.setItem('pathways_wb_progress', JSON.stringify(progress));
+}
+
+function renderWBUebersicht(container) {
+  const progress = getWBProgress();
+  const gelesen = (progress.geleseneModule || []);
+  const quizScores = progress.quizScores || {};
+
+  const totalModule = WB_LERNPFADE.length;
+  const gelesenCount = gelesen.length;
+  const quizCount = Object.keys(quizScores).length;
+
+  // Kategorie-Stats
+  const katStats = {};
+  Object.keys(WB_KATEGORIEN).forEach(k => {
+    const pfade = WB_LERNPFADE.filter(p => p.kategorie === k);
+    const done = pfade.filter(p => gelesen.includes(p.id)).length;
+    katStats[k] = { total: pfade.length, done: done };
+  });
+
+  container.innerHTML = `
+    <!-- Hero -->
+    <div class="card" style="background:linear-gradient(135deg,#D97706 0%,#B45309 100%);color:white;border:none;margin-bottom:20px;">
+      <div class="card-body" style="padding:28px 24px;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="width:56px;height:56px;background:rgba(255,255,255,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;">🎓</div>
+          <div style="flex:1;">
+            <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">Weiterbildung</h2>
+            <p style="font-size:13px;opacity:0.85;line-height:1.5;">Praxisnahe Lernpfade für die Bezugsarbeit mit Jugendlichen. Jedes Modul enthält Theorie, Fallbeispiele, Gesprächsskripte und einen Wissenstest.</p>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:32px;font-weight:800;">${gelesenCount}/${totalModule}</div>
+            <div style="font-size:11px;opacity:0.75;">Module absolviert</div>
+          </div>
+        </div>
+        ${gelesenCount > 0 ? `
+          <div style="margin-top:14px;background:rgba(255,255,255,0.15);border-radius:8px;height:6px;overflow:hidden;">
+            <div style="height:100%;width:${Math.round(gelesenCount/totalModule*100)}%;background:rgba(255,255,255,0.7);border-radius:8px;transition:width 0.3s;"></div>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+
+    <!-- Kategorien -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px;">
+      ${Object.entries(WB_KATEGORIEN).map(([key, kat]) => {
+        const stats = katStats[key];
+        const pfade = WB_LERNPFADE.filter(p => p.kategorie === key);
+        return `
+          <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='lernpfade';WB_FILTER_KAT='${key}';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+            <div class="card-body" style="padding:20px;">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <div style="width:44px;height:44px;background:${kat.farbe}15;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">${kat.icon}</div>
+                <div style="flex:1;">
+                  <div style="font-size:14px;font-weight:700;color:#1F2937;">${kat.label}</div>
+                  <div style="font-size:11px;color:#6B7280;">${stats.done}/${stats.total} Module</div>
+                </div>
+              </div>
+              <p style="font-size:12px;color:#6B7280;line-height:1.5;margin-bottom:12px;">${kat.beschreibung}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                ${pfade.map(p => `
+                  <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:${gelesen.includes(p.id) ? '#F0FDF4' : '#F3F4F6'};color:${gelesen.includes(p.id) ? '#16A34A' : '#6B7280'};font-weight:500;">${gelesen.includes(p.id) ? '✓ ' : ''}${p.icon} ${p.titel.split(' ')[0]}</span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+
+    <!-- Schnellzugriff -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <span>📖</span>
+        <div class="card-title">Nachschlagewerke</div>
+      </div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB;" onclick="WB_ACTIVE_TAB='glossar';renderWeiterbildung();">
+            <span style="font-size:20px;">📝</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;">Glossar</div>
+              <div style="font-size:11px;color:#6B7280;">Fachbegriffe nachschlagen</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB;" onclick="WB_ACTIVE_TAB='nachschlagewerke';renderWeiterbildung();">
+            <span style="font-size:20px;">🌳</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;">Entscheidungsbäume</div>
+              <div style="font-size:11px;color:#6B7280;">Interaktive Triage-Hilfen</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB;" onclick="WB_ACTIVE_TAB='nachschlagewerke';renderWeiterbildung();">
+            <span style="font-size:20px;">📚</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;">Fachkraft-Module</div>
+              <div style="font-size:11px;color:#6B7280;">${Object.keys(FACHKRAFT_MODULE_DATEIEN).length}+ klinische Nachschlagewerke</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ${quizCount > 0 ? `
+    <!-- Quiz-Ergebnisse -->
+    <div class="card">
+      <div class="card-header">
+        <span>📊</span>
+        <div class="card-title">Meine Wissenstests</div>
+      </div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+          ${Object.entries(quizScores).map(([id, qs]) => {
+            const lp = WB_LERNPFADE.find(p => p.id === id);
+            if (!lp) return '';
+            const pct = Math.round(qs.score / qs.total * 100);
+            return `
+              <div style="padding:10px 14px;background:#F8FAFC;border-radius:10px;border:1px solid #E5E7EB;">
+                <div style="font-size:12px;font-weight:600;margin-bottom:4px;">${lp.icon} ${lp.titel}</div>
+                <div style="font-size:18px;font-weight:800;color:${pct >= 80 ? '#16A34A' : pct >= 50 ? '#D97706' : '#DC2626'};">${qs.score}/${qs.total}</div>
+                <div style="font-size:10px;color:#6B7280;">${qs.datum || ''}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+    ` : ''}
+  `;
+}
+
+let WB_FILTER_KAT = '';
+
 function renderWBLernpfade(container) {
-  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Lernpfade werden geladen...</p></div></div>';
+  const progress = getWBProgress();
+  const gelesen = progress.geleseneModule || [];
+
+  // Filter
+  const kategorien = Object.entries(WB_KATEGORIEN);
+  const filtered = WB_FILTER_KAT ? WB_LERNPFADE.filter(p => p.kategorie === WB_FILTER_KAT) : WB_LERNPFADE;
+
+  container.innerHTML = `
+    <!-- Filter -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      <button class="btn btn-sm ${!WB_FILTER_KAT ? 'btn-primary' : 'btn-secondary'}" onclick="WB_FILTER_KAT='';renderWeiterbildung();">Alle (${WB_LERNPFADE.length})</button>
+      ${kategorien.map(([key, kat]) => `
+        <button class="btn btn-sm ${WB_FILTER_KAT === key ? 'btn-primary' : 'btn-secondary'}" onclick="WB_FILTER_KAT='${key}';renderWeiterbildung();">
+          ${kat.icon} ${kat.label} (${WB_LERNPFADE.filter(p => p.kategorie === key).length})
+        </button>
+      `).join('')}
+    </div>
+
+    <!-- Grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+      ${filtered.map((lp, idx) => {
+        const done = gelesen.includes(lp.id);
+        const quizScore = (progress.quizScores || {})[lp.id];
+        return `
+          <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative;overflow:hidden;${done ? 'border-left:3px solid #16A34A;' : ''}" onclick="window.open('${lp.datei}','_blank')" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+            <div class="card-body" style="padding:18px;">
+              <div style="display:flex;align-items:flex-start;gap:12px;">
+                <div style="width:44px;height:44px;background:${lp.farbe}15;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${lp.icon}</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <span style="font-size:14px;font-weight:700;color:#1F2937;line-height:1.3;">${lp.titel}</span>
+                    ${done ? '<span style="font-size:10px;padding:2px 6px;background:#F0FDF4;color:#16A34A;border-radius:4px;font-weight:600;">Absolviert</span>' : ''}
+                  </div>
+                  <p style="font-size:12px;color:#6B7280;line-height:1.5;margin-bottom:8px;">${lp.beschreibung}</p>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <span style="font-size:11px;color:#9CA3AF;display:flex;align-items:center;gap:4px;">⏱ ${lp.dauer}</span>
+                    <span style="font-size:10px;padding:2px 8px;background:${lp.farbe}15;color:${lp.farbe};border-radius:4px;font-weight:600;">${WB_KATEGORIEN[lp.kategorie]?.label || ''}</span>
+                    ${quizScore ? `<span style="font-size:11px;color:${Math.round(quizScore.score/quizScore.total*100)>=80?'#16A34A':'#D97706'};font-weight:600;">Quiz: ${quizScore.score}/${quizScore.total}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
 }
 
 function renderWBNachschlagewerke(container) {
-  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Nachschlagewerke werden geladen...</p></div></div>';
+  const fmCount = Object.keys(FACHKRAFT_MODULE_DATEIEN).length;
+  const wikiCount = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.length : 0;
+
+  container.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+
+      <!-- Fachkraft-Module -->
+      <div class="card">
+        <div class="card-header">
+          <span>📚</span>
+          <div class="card-title">Fachkraft-Module</div>
+        </div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#6B7280;margin-bottom:12px;">${fmCount}+ klinische Nachschlagewerke mit ICD-Codes, Diagnostik und Interventionen.</p>
+          <p style="font-size:11px;color:#9CA3AF;">Zugriff über die Bibliothek (Wissen-Tab) bei einem ausgewählten Schüler.</p>
+        </div>
+      </div>
+
+      <!-- Wiki-Artikel -->
+      <div class="card">
+        <div class="card-header">
+          <span>📖</span>
+          <div class="card-title">Wiki-Artikel</div>
+        </div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#6B7280;margin-bottom:12px;">${wikiCount} Fachartikel zu Themen der Jugendarbeit in Luxemburg.</p>
+          <p style="font-size:11px;color:#9CA3AF;">Zugriff über die Bibliothek (Wissen-Tab) bei einem ausgewählten Schüler.</p>
+        </div>
+      </div>
+
+      <!-- Entscheidungsbäume -->
+      <div class="card" style="cursor:pointer;" onclick="window.open('entscheidungsbaeume/triage-baum.html','_blank')">
+        <div class="card-header">
+          <span>🌳</span>
+          <div class="card-title">Entscheidungsbäume</div>
+        </div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#6B7280;margin-bottom:12px;">Interaktive Triage- und Überweisungshilfen für schwierige Entscheidungssituationen.</p>
+          <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();window.open('entscheidungsbaeume/triage-baum.html','_blank')">Triage-Baum öffnen</button>
+        </div>
+      </div>
+
+      <!-- Evaluationsbögen -->
+      <div class="card">
+        <div class="card-header">
+          <span>📊</span>
+          <div class="card-title">Evaluationsbögen</div>
+        </div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#6B7280;margin-bottom:12px;">${EVALUATIONSBOEGEN.length} standardisierte Bewertungsinstrumente für Sitzungs-Feedback, Symptom-Tracking und Selbstfürsorge.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+            ${EVALUATIONSBOEGEN.map(e => `
+              <span style="font-size:10px;padding:3px 8px;background:#F3F4F6;border-radius:6px;color:#6B7280;cursor:pointer;" onclick="event.stopPropagation();window.open('evaluationsboegen/${e.datei}','_blank')">${e.titel}</span>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  `;
 }
 
 function renderWBGlossar(container) {
-  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Glossar wird geladen...</p></div></div>';
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <span>📝</span>
+        <div class="card-title">Glossar — Fachbegriffe</div>
+      </div>
+      <div class="card-body">
+        <p style="color:#6B7280;font-size:13px;">Das Glossar wird in einem kommenden Update hinzugefügt (~100 durchsuchbare Fachbegriffe).</p>
+      </div>
+    </div>
+  `;
 }
 
 // ============================================================

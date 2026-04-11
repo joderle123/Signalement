@@ -24814,7 +24814,120 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'suizidalitaet', titel: 'Suizidgedanken / Suizidalität', icon: '🚨', farbe: '#7F1D1D', kategorie: 'krisen', icd: 'X71-X83 / Z91.5', beschreibung: 'Passive/aktive Todesgedanken, Suizidpläne, -versuche', variablen: [], empfehlungen: [] },
+  {
+    id: 'suizidalitaet', titel: 'Suizidgedanken / Suizidalität', icon: '🚨', farbe: '#7F1D1D', kategorie: 'krisen', icd: 'X71-X83 / Z91.5',
+    beschreibung: 'Passive/aktive Todesgedanken, Suizidpläne, -versuche',
+    variablen: [
+      {
+        id: 'sui-stufe', frage: 'Auf welcher Stufe befindet sich die Suizidalität?', typ: 'single',
+        optionen: [
+          { id: 'passiv', label: 'Passive Todesgedanken ("Wäre besser, wenn ich nicht mehr da wäre")', tags: ['sui-passiv'] },
+          { id: 'aktiv-ohne-plan', label: 'Aktive Gedanken OHNE konkreten Plan', tags: ['sui-aktiv', 'risiko-hoch'] },
+          { id: 'aktiv-mit-plan', label: 'Aktive Gedanken MIT konkretem Plan (Methode, Zeitpunkt)', tags: ['sui-aktiv', 'sui-plan', 'risiko-akut'] },
+          { id: 'vorbereitung', label: 'Vorbereitungshandlungen (Abschiedsbrief, Mittel besorgt)', tags: ['sui-aktiv', 'sui-plan', 'sui-vorbereitung', 'risiko-akut'] },
+          { id: 'versuch', label: 'Aktueller oder kürzlicher Suizidversuch', tags: ['sui-versuch', 'risiko-akut'] }
+        ]
+      },
+      {
+        id: 'sui-risikofaktoren', frage: 'Welche Risikofaktoren liegen vor?', typ: 'multi',
+        optionen: [
+          { id: 'vorversuch', label: 'Früherer Suizidversuch', tags: ['sui-vorversuch', 'risiko-hoch'] },
+          { id: 'svv', label: 'Aktuelle Selbstverletzung', tags: ['komorbid-svv'] },
+          { id: 'suizid-familie', label: 'Suizid in Familie/Umfeld', tags: ['sui-modell'] },
+          { id: 'isolation', label: 'Soziale Isolation / kein Unterstützungsnetz', tags: ['sui-isolation'] },
+          { id: 'hoffnungslosigkeit', label: 'Ausgeprägte Hoffnungslosigkeit', tags: ['sui-hoffnungslos'] },
+          { id: 'substanz', label: 'Substanzkonsum (enthemmt)', tags: ['komorbid-substanz', 'risiko-hoch'] },
+          { id: 'impulsivitaet', label: 'Hohe Impulsivität', tags: ['sui-impulsiv'] },
+          { id: 'lgbtq', label: 'LGBTQ+ (erhöhtes Risiko durch Minority Stress)', tags: ['sui-lgbtq'] }
+        ]
+      },
+      {
+        id: 'sui-schutzfaktoren', frage: 'Welche Schutzfaktoren sind vorhanden?', typ: 'multi',
+        optionen: [
+          { id: 'bezugsperson', label: 'Mindestens eine stabile Bezugsperson', tags: ['schutz-bezugsperson'] },
+          { id: 'behandlung', label: 'Laufende therapeutische Behandlung', tags: ['schutz-behandlung'] },
+          { id: 'zukunft', label: 'Kann Zukunftspläne benennen', tags: ['schutz-zukunft'] },
+          { id: 'ambivalenz', label: 'Ambivalent — will eigentlich nicht sterben', tags: ['schutz-ambivalenz'] },
+          { id: 'hilfe-sucht', label: 'Sucht aktiv Hilfe', tags: ['schutz-hilfesuche'] },
+          { id: 'keine', label: 'Kaum Schutzfaktoren erkennbar', tags: ['schutz-keine', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'sui-ausloeser', frage: 'Was hat die aktuelle Krise ausgelöst?', typ: 'single',
+        optionen: [
+          { id: 'beziehung', label: 'Beziehungsabbruch / Zurückweisung', tags: ['ausloeser-beziehung'] },
+          { id: 'mobbing', label: 'Mobbing / Demütigung', tags: ['ausloeser-mobbing'] },
+          { id: 'familie', label: 'Familienkonflikt / häusliche Gewalt', tags: ['ausloeser-familie'] },
+          { id: 'leistung', label: 'Schulversagen / Leistungsdruck', tags: ['ausloeser-leistung'] },
+          { id: 'outing', label: 'Unfreiwilliges Outing / Identitätskrise', tags: ['ausloeser-identitaet'] },
+          { id: 'chronisch', label: 'Kein einzelner Auslöser — chronische Belastung', tags: ['ausloeser-chronisch'] },
+          { id: 'unklar', label: 'Unklar', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'sui-passiv-mittel',
+        tags_erforderlich: ['sui-passiv'],
+        tags_ausschluss: ['sui-aktiv', 'sui-plan', 'risiko-akut'],
+        tags_gewichtung: { 'sui-passiv': 2, 'schutz-ambivalenz': 2, 'schutz-bezugsperson': 1, 'komorbid-svv': 2, 'sui-hoffnungslos': 3 },
+        risiko: 'gelb',
+        einschaetzung: 'Passive Suizidalität — Todessehnsucht ohne aktive Handlungsabsicht. Ernst nehmen, aber nicht gleichsetzen mit akuter Gefahr. Häufig Ausdruck von Hoffnungslosigkeit und Erschöpfung ("Ich will nicht sterben, ich will nur, dass der Schmerz aufhört"). Monitoring und Beziehungsarbeit sind zentral.',
+        sofort: [
+          'Direkt ansprechen: "Du hast gesagt, du wärst lieber nicht mehr da. Kannst du mir mehr darüber erzählen?"',
+          'Abgrenzung klären: Unterschied zwischen "nicht mehr leben wollen" und "sterben wollen"',
+          'Suizidrisiko weiter abklären: Hat er/sie einen Plan? Zugang zu Mitteln?',
+          'Gesprächseröffnung: "Danke, dass du mir das erzählst. Das braucht Mut. Ich nehme das ernst, und ich bin froh, dass du noch hier bist."'
+        ],
+        mittelfristig: [
+          'Sicherheitsplan erstellen (Stanley & Brown): Warnsignale → Bewältigungsstrategien → Kontaktpersonen → Notfallnummern',
+          'Grundstörung behandeln: Depression? Trauma? Mobbing? — Ursache adressieren',
+          'Hoffnung aufbauen: Kleine erreichbare Ziele, positive Zukunftsbilder',
+          'Regelmäßiges Monitoring: Wöchentlicher Check-in zur Suizidalität'
+        ],
+        ueberweisung: 'KJP-Vorstellung empfohlen innerhalb 1-2 Wochen. In Luxemburg: CHNP Ettelbruck, CHL. Kanner-Jugendtelefon 12345, SOS Détresse 454545.',
+        elternarbeit: 'Eltern informieren — behutsam, aber klar. Keine Schuldgefühle schüren. Konkrete Anweisungen: Zugang zu Medikamenten/Mitteln sichern, nicht alleine lassen bei Verschlechterung, Notfallnummern griffbereit.',
+        materialien: { arbeitsblaetter: ['sicherheitsplan', 'notfallkoffer', 'hoffnung-und-gruende'], therapiemodule: ['therapiemodul-suizidalitaet'], fachmodule: ['suizidalitaet'] },
+        referenzen: [
+          'Stanley, B. & Brown, G.K. (2012): Safety Planning Intervention. Cognitive and Behavioral Practice.',
+          'Jobes, D.A. (2016): Managing Suicidal Risk — CAMS approach (2nd ed.). Guilford Press.',
+          'DGKJP S2k-Leitlinie (2016): Suizidalität im Kindes- und Jugendalter.',
+          'Bridge, J.A. et al. (2006): Adolescent suicide and suicidal behavior. Journal of Child Psychology and Psychiatry.'
+        ]
+      },
+      {
+        id: 'sui-akut',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'sui-aktiv': 8, 'sui-plan': 10, 'sui-vorbereitung': 15, 'sui-versuch': 15, 'risiko-akut': 10, 'sui-vorversuch': 5, 'schutz-keine': 5, 'sui-isolation': 3, 'sui-hoffnungslos': 3, 'komorbid-substanz': 3, 'sui-impulsiv': 3 },
+        risiko: 'rot',
+        einschaetzung: 'AKUTE SUIZIDALITÄT — Aktive Suizidgedanken mit Plan, Vorbereitung oder Versuch. Höchste Risikostufe. Lebensrettung hat Priorität vor allen anderen Überlegungen. Schweigepflicht (Art. 458) entfällt bei akuter Lebensgefahr.',
+        sofort: [
+          '⚠️ NICHT ALLEINE LASSEN — Kontinuierliche 1:1-Begleitung',
+          'Bei akuter Gefahr: 112 (Notruf) anrufen — Jugendlicher MUSS professionelle Hilfe bekommen',
+          'Zugang zu Mitteln SOFORT entfernen: Medikamente, scharfe Gegenstände, Höhen sichern',
+          'Ruhig, direkt, empathisch: "Ich sehe, dass es dir so schlecht geht, dass du nicht mehr weitermachen willst. Ich lasse dich jetzt nicht alleine. Wir holen gemeinsam Hilfe."',
+          'NICHT: Versprechen einfordern, moralisieren, bagatellisieren, alleine entscheiden'
+        ],
+        mittelfristig: [
+          'Sofortige KJP-Notfallvorstellung — gleicher Tag, NICHT auf Termin warten',
+          'Eltern/Erziehungsberechtigte SOFORT informieren',
+          'Stationäre Aufnahme erwägen bei: Konkretem Plan + Zugang zu Mitteln + fehlenden Schutzfaktoren',
+          'Nach Stabilisierung: Sicherheitsplan erstellen, engmaschige ambulante Begleitung',
+          'Art. 7 Meldung an OPJ wenn Eltern nicht kooperieren'
+        ],
+        ueberweisung: '🚨 SOFORT: 112 (Notruf) bei akuter Gefahr. KJP-Notfallambulanz: CHNP Ettelbruck, CHL Urgences. Kanner-Jugendtelefon: 12345 (24/7). SOS Détresse: 454545.',
+        elternarbeit: 'Sofortige Benachrichtigung — Schweigepflicht entfällt. Eltern brauchen: Krisenplan, 24/7-Begleitung organisieren, Mittel sichern, Notfallnummern. Eigene Unterstützung für Eltern vermitteln.',
+        materialien: { arbeitsblaetter: ['sicherheitsplan', 'notfallkoffer'], therapiemodule: ['therapiemodul-suizidalitaet'], fachmodule: ['suizidalitaet'] },
+        referenzen: [
+          'WHO (2014): Preventing Suicide — A Global Imperative.',
+          'AACAP Practice Parameter (2001/2021): Assessment and Treatment of Suicidal Behavior in Children and Adolescents.',
+          'Brent, D.A. et al. (2013): Protecting adolescents from self-harm — means restriction. JAMA Psychiatry.',
+          'DGKJP S2k-Leitlinie (2016): Suizidalität im Kindes- und Jugendalter — Notfallprotokoll.'
+        ]
+      }
+    ]
+  },
   { id: 'akute-krise', titel: 'Akute Krise / Zusammenbruch', icon: '⚡', farbe: '#DC2626', kategorie: 'krisen', icd: 'F43.0', beschreibung: 'Akute Belastungsreaktion, emotionaler Zusammenbruch, Erstarrung', variablen: [], empfehlungen: [] },
   { id: 'substanzkonsum', titel: 'Substanzkonsum / Suchtverhalten', icon: '🧪', farbe: '#BE185D', kategorie: 'krisen', icd: 'F10-F19', beschreibung: 'Alkohol, Cannabis, andere Substanzen, Mischkonsum', variablen: [], empfehlungen: [] },
 

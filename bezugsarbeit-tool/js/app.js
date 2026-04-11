@@ -1014,22 +1014,83 @@ function renderBibliothek() {
     });
   }
 
+  // 6. Eltern-Infoblätter (👨‍👩‍👧 teal)
+  if (typeof ELTERN_INFOBLAETTER !== 'undefined') {
+    const eiFiles = new Map();
+    for (const [themaId, blaetter] of Object.entries(ELTERN_INFOBLAETTER)) {
+      for (const ei of blaetter) {
+        if (!eiFiles.has(ei.datei)) {
+          eiFiles.set(ei.datei, { id: 'ei-' + ei.datei, label: ei.titel, datei: ei.datei, typ: 'elterninfo' });
+        }
+      }
+    }
+    eiFiles.forEach(item => allItems.push(item));
+  }
+
+  // 7. Gesprächsleitfäden (🗣️ violett)
+  if (typeof ELTERN_GESPRAECHSLEITFAEDEN !== 'undefined') {
+    ELTERN_GESPRAECHSLEITFAEDEN.forEach(gl => {
+      allItems.push({
+        id: 'gl-' + gl.id,
+        label: gl.titel,
+        datei: gl.datei,
+        typ: 'leitfaden_eltern',
+        beschreibung: gl.beschreibung,
+      });
+    });
+  }
+
+  // 8. Evaluationsbögen (📊 violett)
+  if (typeof EVALUATIONSBOEGEN !== 'undefined') {
+    EVALUATIONSBOEGEN.forEach(ev => {
+      allItems.push({
+        id: 'ev-' + ev.id,
+        label: ev.titel,
+        datei: ev.datei,
+        typ: 'evaluation',
+        beschreibung: ev.beschreibung,
+        frequenz: ev.frequenz,
+      });
+    });
+  }
+
+  // 9. Überweisungsleitfaden (🏥 blau)
+  if (typeof UEBERWEISUNGSLEITFADEN !== 'undefined') {
+    UEBERWEISUNGSLEITFADEN.forEach(ue => {
+      allItems.push({
+        id: 'ue-' + ue.id,
+        label: ue.titel,
+        datei: ue.datei,
+        typ: 'ueberweisung',
+      });
+    });
+  }
+
   // ── Ebenen-Zuordnung + Evidenz-Level ──
   allItems.forEach(item => {
     if (item.typ === 'arbeitsblatt' || item.typ === 'intervention') {
       item.ebene = 'praxis';
     } else if (item.typ === 'therapie') {
       item.ebene = 'leitfaden';
+    } else if (item.typ === 'elterninfo' || item.typ === 'leitfaden_eltern') {
+      item.ebene = 'elternarbeit';
+    } else if (item.typ === 'evaluation') {
+      item.ebene = 'evaluation';
+    } else if (item.typ === 'ueberweisung') {
+      item.ebene = 'vernetzung';
     } else {
       item.ebene = 'fachwissen'; // fachkraft + wiki
     }
 
     // Evidenz-Level zuweisen (1-3 Sterne)
-    // 3 = evidenzbasiert/manualisiert, 2 = praxisbewährt, 1 = ergänzend
     if (item.typ === 'therapie') item.evidenz = 3;
     else if (item.typ === 'fachkraft') item.evidenz = 3;
     else if (item.typ === 'wiki') item.evidenz = 2;
     else if (item.typ === 'intervention') item.evidenz = 2;
+    else if (item.typ === 'leitfaden_eltern') item.evidenz = 3;
+    else if (item.typ === 'elterninfo') item.evidenz = 2;
+    else if (item.typ === 'evaluation') item.evidenz = 3;
+    else if (item.typ === 'ueberweisung') item.evidenz = 2;
     else item.evidenz = 1;
   });
 
@@ -1062,18 +1123,25 @@ function renderBibliothek() {
 
   // ── Typ-Konfiguration ──
   const typConfig = {
-    fachkraft:     { icon: '📚', label: 'Fachwissen',      farbe: '#2563EB', bg: '#EFF6FF' },
-    therapie:      { icon: '🎓', label: 'Sitzungsleitfaden', farbe: '#10B981', bg: '#ECFDF5' },
-    intervention:  { icon: '🎯', label: 'Aktivitäten',      farbe: '#F59E0B', bg: '#FFFBEB' },
-    arbeitsblatt:  { icon: '📝', label: 'Arbeitsblatt',    farbe: '#6366F1', bg: '#EEF2FF' },
-    wiki:          { icon: '📖', label: 'Wissen',            farbe: '#0D9488', bg: '#F0FDFA' },
+    fachkraft:       { icon: '📚', label: 'Fachwissen',         farbe: '#6C5CE7', bg: '#F3F1FE' },
+    therapie:        { icon: '🎓', label: 'Sitzungsleitfaden',  farbe: '#00B894', bg: '#EEFBF7' },
+    intervention:    { icon: '🎯', label: 'Aktivitäten',        farbe: '#FDCB6E', bg: '#FFF9EB' },
+    arbeitsblatt:    { icon: '📝', label: 'Arbeitsblatt',       farbe: '#6366F1', bg: '#EEF2FF' },
+    wiki:            { icon: '📖', label: 'Wissen',             farbe: '#0D9488', bg: '#F0FDFA' },
+    elterninfo:      { icon: '👨‍👩‍👧', label: 'Eltern-Infoblatt',  farbe: '#0F766E', bg: '#F0FDFA' },
+    leitfaden_eltern:{ icon: '🗣️', label: 'Gesprächsleitfaden', farbe: '#6D28D9', bg: '#F5F3FF' },
+    evaluation:      { icon: '📊', label: 'Evaluationsbogen',   farbe: '#7C3AED', bg: '#F5F3FF' },
+    ueberweisung:    { icon: '🏥', label: 'Überweisung',        farbe: '#1D4ED8', bg: '#EFF6FF' },
   };
 
-  // ── 3-Ebenen-Konfiguration ──
+  // ── Ebenen-Konfiguration ──
   const ebenenConfig = {
-    praxis:     { icon: '🛠️', label: 'Praxis',     farbe: '#6366F1', desc: 'Arbeitsblätter & Aktivitäten für die Sitzung' },
-    leitfaden:  { icon: '📋', label: 'Leitfaden',  farbe: '#10B981', desc: 'Sitzungsanleitungen für Therapeuten' },
-    fachwissen: { icon: '🎓', label: 'Fachwissen', farbe: '#2563EB', desc: 'Hintergrundwissen, ICD-Codes, Fachpersonal-Material' },
+    praxis:       { icon: '🛠️', label: 'Praxis',       farbe: '#6366F1', desc: 'Arbeitsblätter & Aktivitäten für die Sitzung' },
+    leitfaden:    { icon: '📋', label: 'Leitfaden',     farbe: '#00B894', desc: 'Sitzungsanleitungen für Therapeuten' },
+    fachwissen:   { icon: '🎓', label: 'Fachwissen',    farbe: '#6C5CE7', desc: 'Hintergrundwissen, ICD-Codes, Fachpersonal-Material' },
+    elternarbeit: { icon: '👨‍👩‍👧', label: 'Elternarbeit', farbe: '#0F766E', desc: 'Infoblätter, Leitfäden & Gesprächsvorbereitung für Eltern' },
+    evaluation:   { icon: '📊', label: 'Evaluation',    farbe: '#7C3AED', desc: 'Standardisierte Bewertungsinstrumente' },
+    vernetzung:   { icon: '🏥', label: 'Vernetzung',    farbe: '#1D4ED8', desc: 'Überweisungsleitfaden & Luxemburger Hilfsangebote' },
   };
 
   // ── Zähler pro Ebene ──
@@ -1162,10 +1230,24 @@ function renderBibliothekKarte(item, cfg) {
       actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="openWikiArtikel('${item.wikiId}')">Lesen</button>`;
       metaHtml = item.kategorie ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.kategorie}</div>` : '';
       break;
+    case 'elterninfo':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('eltern-infoblaetter/${item.datei}', '_blank')">Öffnen</button>`;
+      break;
+    case 'leitfaden_eltern':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('eltern-infoblaetter/${item.datei}', '_blank')">Öffnen</button>`;
+      metaHtml = item.beschreibung ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.beschreibung}</div>` : '';
+      break;
+    case 'evaluation':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('evaluationsboegen/${item.datei}', '_blank')">Öffnen</button>`;
+      metaHtml = item.frequenz ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.frequenz}</div>` : '';
+      break;
+    case 'ueberweisung':
+      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('ueberweisungen/${item.datei}', '_blank')">Öffnen</button>`;
+      break;
   }
 
   const ebene = item.ebene || 'praxis';
-  const ebCfg = { praxis: { label: 'Praxis', icon: '🛠️' }, leitfaden: { label: 'Leitfaden', icon: '📋' }, fachwissen: { label: 'Fachwissen', icon: '🎓' } }[ebene];
+  const ebCfg = { praxis: { label: 'Praxis', icon: '🛠️' }, leitfaden: { label: 'Leitfaden', icon: '📋' }, fachwissen: { label: 'Fachwissen', icon: '🎓' }, elternarbeit: { label: 'Elternarbeit', icon: '👨‍👩‍👧' }, evaluation: { label: 'Evaluation', icon: '📊' }, vernetzung: { label: 'Vernetzung', icon: '🏥' } }[ebene];
   const fachpersonalBadge = item.typ === 'fachkraft' ? '<span style="font-size:9px;padding:2px 6px;border-radius:8px;background:#FEF3C7;color:#92400E;font-weight:600;margin-left:auto;">Fachpersonal</span>' : '';
 
   // Evidenz-Sterne (1-3)
@@ -1377,11 +1459,13 @@ function renderArbeitsblaetter(themaId) {
   const modul = typeof THEMA_MODULE !== 'undefined' ? (THEMA_MODULE[themaId] || null) : null;
   const tmDatei = typeof THERAPIE_MODULE_DATEIEN !== 'undefined' ? (THERAPIE_MODULE_DATEIEN[themaId] || null) : null;
   const fkDatei = typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' ? (FACHKRAFT_MODULE_DATEIEN[themaId] || null) : null;
+  const elternInfos = typeof ELTERN_INFOBLAETTER !== 'undefined' ? (ELTERN_INFOBLAETTER[themaId] || []) : [];
 
-  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul && !tmDatei && !fkDatei) return '';
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul && !tmDatei && !fkDatei && elternInfos.length === 0) return '';
 
   const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0 || tmDatei;
   const hasFachkraft = !!fkDatei;
+  const hasEltern = elternInfos.length > 0;
 
   return `
     <div style="margin-bottom:20px;">
@@ -1397,6 +1481,10 @@ function renderArbeitsblaetter(themaId) {
         ${hasFachkraft ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','fk')">
           🎓 Fachwissen
           <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Für Fachpersonal</span>
+        </button>` : ''}
+        ${hasEltern ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','el')">
+          👨‍👩‍👧 Eltern
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Eltern-Infoblätter</span>
         </button>` : ''}
       </div>
 
@@ -1460,6 +1548,23 @@ function renderArbeitsblaetter(themaId) {
         <div style="font-size:11px;color:var(--text-muted);padding:8px 0;">
           <strong>Inhalte:</strong> Störungsbild &amp; Entstehung · Diagnostische Kriterien (ICD-10/11) · Evidenzbasierte Interventionen · Gesprächsführung · Luxemburger Fachstellen &amp; Anlaufstellen
         </div>
+      </div>` : ''}
+
+      ${hasEltern ? `
+      <div id="pt-el-${themaId}" class="panel-tab-content" style="display:none;">
+        <div style="background:#F0FDFA;border:1.5px solid #99F6E4;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:#0F766E;line-height:1.5;">
+          <strong>Eltern-Infoblätter</strong> · Zum Ausdrucken und Mitgeben<br>
+          <span style="opacity:0.75;">Professionelle Handouts für Elterngespräche zu diesem Thema.</span>
+        </div>
+        ${elternInfos.map(ei => `
+          <a href="eltern-infoblaetter/${ei.datei}" target="_blank"
+             style="display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:8px;
+                    background:#F0FDFA;border:1.5px solid #99F6E4;border-radius:8px;
+                    text-decoration:none;color:#0F766E;font-size:13px;font-weight:600;">
+            <span style="font-size:20px;">👨‍👩‍👧</span>
+            <span style="flex:1;">${ei.titel}</span>
+            <span style="font-size:12px;opacity:0.7;">Öffnen →</span>
+          </a>`).join('')}
       </div>` : ''}
     </div>`;
 }

@@ -23647,6 +23647,176 @@ const WB_KATEGORIEN = {
 };
 
 // ============================================================
+// MIKRO-INTERVENTIONEN pro Screening-Domäne (Idee 2)
+// Kurze, evidenzbasierte Übungen (2-5 Min) für den Sitzungsstart
+// ============================================================
+const MIKRO_INTERVENTIONEN = {
+  depression: [
+    { id: 'mi-dep-1', titel: 'Verhaltensaktivierung Mini', dauer: '3 Min', beschreibung: 'Frage: „Was hast du diese Woche gemacht, das dir auch nur ein kleines bisschen gut getan hat?" → Liste von 3 Aktivitäten, 1 davon für nächste Woche einplanen.', evidenz: 'Martell et al. (2010): Behavioral Activation for Depression' },
+    { id: 'mi-dep-2', titel: 'Gedanken-Check', dauer: '4 Min', beschreibung: '„Wenn dein Kopf gerade redet — was sagt er?" → Gedanken aufschreiben → „Ist das ein Fakt oder eine Meinung?" → Alternativen finden.', evidenz: 'Beck (1979): Kognitive Therapie der Depression' },
+    { id: 'mi-dep-3', titel: 'Stimmungs-Thermometer', dauer: '2 Min', beschreibung: 'Skala 0-10: „Wo stehst du gerade?" + „Was wäre ein halber Punkt besser?" → Fokus auf Mikro-Verbesserung.', evidenz: 'De Shazer (1985): Solution-Focused Brief Therapy' },
+    { id: 'mi-dep-4', titel: 'Dankbarkeits-Moment', dauer: '2 Min', beschreibung: '„Nenne mir eine Sache, die heute OK war — auch wenn sie klein ist." → Positive Aufmerksamkeitslenkung.', evidenz: 'Seligman et al. (2005): Positive Psychology Interventions' },
+  ],
+  'angst-generalisiert': [
+    { id: 'mi-ang-1', titel: 'Box-Breathing', dauer: '2 Min', beschreibung: '4 Sekunden einatmen → 4 halten → 4 ausatmen → 4 halten. 4 Zyklen. Aktiviert den Parasympathikus.', evidenz: 'Ma et al. (2017): Slow breathing & autonomic regulation' },
+    { id: 'mi-ang-2', titel: 'Sorgen-Sortier-Box', dauer: '3 Min', beschreibung: '„Welche Sorge ist gerade am lautesten?" → Aufschreiben → „Kannst du daran etwas ändern? Ja → Plan. Nein → Loslassen."', evidenz: 'Leahy (2005): Worry Cure — CBT für Sorgen' },
+    { id: 'mi-ang-3', titel: 'Grounding 5-4-3-2-1', dauer: '3 Min', beschreibung: '5 Dinge sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken. Bringt ins Hier und Jetzt.', evidenz: 'Najavits (2002): Seeking Safety — Grounding-Technik' },
+  ],
+  'angst-sozial': [
+    { id: 'mi-soz-1', titel: 'Blickfokus-Übung', dauer: '2 Min', beschreibung: '„Worauf achtest du in sozialen Situationen? Auf dich oder auf andere?" → Aufmerksamkeit nach außen lenken. Beobachtungsaufgabe für den Tag geben.', evidenz: 'Clark & Wells (1995): Social Phobia Model' },
+    { id: 'mi-soz-2', titel: 'Sicherheitsverhalten checken', dauer: '3 Min', beschreibung: '„Was tust du, damit es weniger schlimm wird?" → Sicherheitsverhalten identifizieren → 1 davon experimentell weglassen.', evidenz: 'Clark & Wells (1995): Kognitive Therapie sozialer Phobie' },
+  ],
+  trauma: [
+    { id: 'mi-trm-1', titel: 'Safe-Place Imagination', dauer: '4 Min', beschreibung: '„Stell dir einen Ort vor, an dem du dich 100% sicher fühlst." → Alle Sinne durchgehen → Ankerwort festlegen.', evidenz: 'Reddemann (2001): Psychodynamisch Imaginative Traumatherapie' },
+    { id: 'mi-trm-2', titel: 'Tresor-Übung', dauer: '3 Min', beschreibung: '„Stell dir einen Tresor vor. Lege alles, was dich gerade belastet, hinein. Schließe ihn ab. Du kannst ihn jederzeit wieder öffnen."', evidenz: 'Reddemann (2001): PITT — Stabilisierungstechniken' },
+    { id: 'mi-trm-3', titel: 'Orientierungs-Check', dauer: '2 Min', beschreibung: '„Wo bist du gerade? Welcher Tag ist heute? Wer bin ich?" → Bei Dissoziation: Eis in die Hand, laute Musik, kaltes Wasser.', evidenz: 'Van der Hart et al. (2006): Strukturelle Dissoziation' },
+  ],
+  adhs: [
+    { id: 'mi-adhs-1', titel: 'Body-Scan Express', dauer: '2 Min', beschreibung: '„Schließ die Augen. Wo im Körper spürst du gerade Energie?" → Bewegung kanalisieren: 30 Sek Hampelmänner, dann hinsetzen.', evidenz: 'Barkley (2015): ADHS und Selbstregulation' },
+    { id: 'mi-adhs-2', titel: 'Aufgaben-Zerleger', dauer: '3 Min', beschreibung: '„Was musst du heute erledigen?" → In 3 Mini-Schritte zerlegen → Ersten Schritt JETZT definieren.', evidenz: 'Dawson & Guare (2018): Executive Skills in Children' },
+  ],
+  selbstverletzung: [
+    { id: 'mi-svv-1', titel: 'Eiswürfel-Technik', dauer: '2 Min', beschreibung: 'Eiswürfel in die Hand drücken → Intensive Körperempfindung ohne Verletzung. Alternativ: Gummiband am Handgelenk.', evidenz: 'Chapman (2006): Experiential Avoidance Model of NSSI' },
+    { id: 'mi-svv-2', titel: 'Emotionswelle surfen', dauer: '3 Min', beschreibung: '„Der Drang ist wie eine Welle — sie kommt, steigt, und geht wieder." → Timer auf 10 Min → Drang beobachten statt handeln.', evidenz: 'Linehan (1993): DBT — Distress Tolerance Skills' },
+  ],
+  suizidalitaet: [
+    { id: 'mi-sui-1', titel: 'Sicherheitsplan-Check', dauer: '3 Min', beschreibung: 'Bestehenden Sicherheitsplan durchgehen: „Welche Warnsignale erkennst du? Wen kannst du anrufen? Was hilft dir?"', evidenz: 'Stanley & Brown (2012): Safety Planning Intervention' },
+  ],
+  substanz: [
+    { id: 'mi-sub-1', titel: 'Motivationswaage', dauer: '4 Min', beschreibung: '2 Spalten: „Was gibt mir der Konsum?" / „Was nimmt er mir?" → Ohne Wertung auflisten → „Was überwiegt?"', evidenz: 'Miller & Rollnick (2013): Motivational Interviewing' },
+    { id: 'mi-sub-2', titel: 'Trigger-Map', dauer: '3 Min', beschreibung: '„Wann ist der Drang am stärksten? Welche Situation? Welches Gefühl?" → 1 Alternative pro Trigger planen.', evidenz: 'Marlatt & Donovan (2005): Relapse Prevention' },
+  ],
+  essstoerung: [
+    { id: 'mi-ess-1', titel: 'Mahlzeiten-Protokoll', dauer: '3 Min', beschreibung: 'Kurz-Check: „Was hast du gestern gegessen?" → Ohne Bewertung → Struktur vorschlagen: 3 Hauptmahlzeiten + 2 Snacks.', evidenz: 'Fairburn (2008): CBT-E for Eating Disorders' },
+  ],
+  soziale_isolation: [
+    { id: 'mi-iso-1', titel: 'Kontakt-Experiment', dauer: '3 Min', beschreibung: '„Mit wem könntest du diese Woche 5 Minuten reden?" → 1 konkreter Micro-Kontakt geplant.', evidenz: 'Cacioppo & Patrick (2008): Loneliness — Social Reconnection' },
+  ],
+  conduct: [
+    { id: 'mi-con-1', titel: 'Wut-Thermometer', dauer: '3 Min', beschreibung: '„Auf einer Skala 0-10: Wo steht deine Wut gerade? Bei welcher Zahl verlierst du die Kontrolle?" → Frühwarnsignale identifizieren.', evidenz: 'Lochman et al. (2008): Coping Power — Anger Management' },
+    { id: 'mi-con-2', titel: 'Perspektivwechsel', dauer: '4 Min', beschreibung: '„Stell dir vor, du bist [betroffene Person]. Wie fühlt sich das an?" → Empathie-Training ohne Moralisieren.', evidenz: 'Kazdin (2003): Problem-Solving Skills Training' },
+  ],
+  bindung: [
+    { id: 'mi-bin-1', titel: 'Beziehungs-Landkarte', dauer: '4 Min', beschreibung: '„Zeichne einen Kreis. Du bist in der Mitte. Wer steht dir nah? Wer weiter weg?" → Beziehungsmuster sichtbar machen.', evidenz: 'Bowlby (1988): Attachment Theory — Working Models' },
+  ],
+  mobbing: [
+    { id: 'mi-mob-1', titel: 'Sicherheitsnetz-Check', dauer: '3 Min', beschreibung: '„Wer weiß davon? Wer hilft dir? Wen würdest du anrufen?" → Unterstützungsnetzwerk aktivieren.', evidenz: 'Olweus (1993): Bullying Prevention Program' },
+  ],
+  schlaf: [
+    { id: 'mi-sch-1', titel: 'Schlafhygiene-Quick-Check', dauer: '3 Min', beschreibung: '5 Fragen: Handy im Bett? Koffein nach 14 Uhr? Feste Schlafenszeit? Sport am Abend? Dunkles Zimmer? → 1 Änderung vereinbaren.', evidenz: 'Harvey (2002): Cognitive Model of Insomnia' },
+  ],
+};
+
+// ============================================================
+// ADAPTIVE SITZUNGSSTEUERUNG (Idee 1)
+// Sitzungsvorschläge basierend auf Screening-Profil + ORS/SRS
+// ============================================================
+const SITZUNGS_TEMPLATES = {
+  krise: {
+    titel: 'Krisen-Sitzung',
+    icon: '🚨',
+    farbe: '#DC2626',
+    phasen: [
+      { dauer: '5 Min', label: 'Sicherheits-Check', beschreibung: 'Suizidalität/SVV abklären, akute Gefährdung prüfen' },
+      { dauer: '10 Min', label: 'Stabilisierung', beschreibung: 'Grounding, Safe-Place, Atemtechnik — regulieren vor reden' },
+      { dauer: '15 Min', label: 'Situationsklärung', beschreibung: 'Was ist passiert? Was brauchst du jetzt? Wer kann helfen?' },
+      { dauer: '10 Min', label: 'Sicherheitsplan', beschreibung: 'Sicherheitsplan erstellen/aktualisieren, Notfallnummern besprechen' },
+      { dauer: '5 Min', label: 'Abschluss', beschreibung: 'Nächster Termin fixieren, SRS ausfüllen, Kontaktperson informieren' },
+    ],
+  },
+  erstgespraech: {
+    titel: 'Erstgespräch',
+    icon: '🤝',
+    farbe: '#2563EB',
+    phasen: [
+      { dauer: '5 Min', label: 'Ankommen', beschreibung: 'Vorstellen, Rahmen erklären, Schweigepflicht, Erwartungen' },
+      { dauer: '5 Min', label: 'ORS ausfüllen', beschreibung: 'Befindlichkeit erfassen — Baseline für Outcome-Messung' },
+      { dauer: '15 Min', label: 'Problem erkunden', beschreibung: 'Offene Fragen: Was führt dich her? Was belastet am meisten?' },
+      { dauer: '10 Min', label: 'Ressourcen & Stärken', beschreibung: 'Was funktioniert gut? Wer unterstützt dich? Was macht dir Freude?' },
+      { dauer: '5 Min', label: 'Vereinbarung', beschreibung: 'Screening ankündigen, nächsten Termin, Arbeitsweise besprechen' },
+      { dauer: '5 Min', label: 'SRS ausfüllen', beschreibung: 'Wie war dieses erste Gespräch? Feedback einholen' },
+    ],
+  },
+  ors_niedrig: {
+    titel: 'Belastungssitzung (ORS < 28)',
+    icon: '📉',
+    farbe: '#D97706',
+    phasen: [
+      { dauer: '3 Min', label: 'ORS besprechen', beschreibung: 'ORS-Wert reflektieren: „Was hat sich seit letztem Mal verändert?"' },
+      { dauer: '10 Min', label: 'Belastung explorieren', beschreibung: 'Welcher ORS-Bereich ist am niedrigsten? Dort ansetzen.' },
+      { dauer: '5 Min', label: 'Mikro-Intervention', beschreibung: 'Passende Kurzübung aus der Mikro-Interventionsbibliothek durchführen' },
+      { dauer: '15 Min', label: 'Themenarbeit', beschreibung: 'Am priorisierten Thema aus dem Förderplan arbeiten' },
+      { dauer: '5 Min', label: 'Zusammenfassung', beschreibung: 'Was nehme ich mit? Was probiere ich diese Woche?' },
+      { dauer: '5 Min', label: 'SRS + Abschluss', beschreibung: 'Sitzungsbewertung, nächster Termin' },
+    ],
+  },
+  ors_hoch: {
+    titel: 'Stabilisierungssitzung (ORS ≥ 28)',
+    icon: '📈',
+    farbe: '#059669',
+    phasen: [
+      { dauer: '3 Min', label: 'ORS besprechen', beschreibung: 'Erfolg anerkennen: „Deine Werte sind gut — was machst du richtig?"' },
+      { dauer: '10 Min', label: 'Fortschritt sichern', beschreibung: 'Was hat zu der Verbesserung beigetragen? Strategie identifizieren.' },
+      { dauer: '15 Min', label: 'Vertiefung/Neues Thema', beschreibung: 'Nächstes Thema im Förderplan ansteuern oder Prävention' },
+      { dauer: '5 Min', label: 'Rückfallprävention', beschreibung: 'Was könnnte die Verbesserung gefährden? Notfallplan besprechen.' },
+      { dauer: '5 Min', label: 'SRS + Abschluss', beschreibung: 'Evtl. Sitzungsfrequenz reduzieren wenn stabil?' },
+    ],
+  },
+  srs_niedrig: {
+    titel: 'Beziehungsreparatur (SRS < 25)',
+    icon: '🔧',
+    farbe: '#7C3AED',
+    phasen: [
+      { dauer: '5 Min', label: 'SRS ansprechen', beschreibung: '„Letztes Mal war die Bewertung niedrig. Das ist mutig — lass uns darüber reden."' },
+      { dauer: '10 Min', label: 'Was war anders?', beschreibung: 'Welcher Bereich? Beziehung? Thema? Methode? Direkt nachfragen.' },
+      { dauer: '10 Min', label: 'Anpassung besprechen', beschreibung: 'Gemeinsam überlegen: Was soll sich ändern? Was wünschst du dir?' },
+      { dauer: '10 Min', label: 'Neue Arbeitsweise testen', beschreibung: 'Angepasste Sitzung durchführen basierend auf Feedback' },
+      { dauer: '5 Min', label: 'Erneute SRS', beschreibung: 'Hat sich etwas verbessert? Offenheit signalisieren.' },
+    ],
+  },
+  regulaer: {
+    titel: 'Reguläre Sitzung',
+    icon: '💬',
+    farbe: '#6366F1',
+    phasen: [
+      { dauer: '3 Min', label: 'Check-In + ORS', beschreibung: 'Befindlichkeit erfassen, aktuelle Lage kurz besprechen' },
+      { dauer: '5 Min', label: 'Rückblick', beschreibung: 'Was hat sich seit letztem Mal getan? Hausaufgabe besprochen?' },
+      { dauer: '20 Min', label: 'Themenarbeit', beschreibung: 'Priorisiertes Thema aus dem Förderplan bearbeiten' },
+      { dauer: '5 Min', label: 'Zusammenfassung', beschreibung: 'Wichtigstes Ergebnis, Hausaufgabe, nächster Schritt' },
+      { dauer: '5 Min', label: 'SRS + Abschluss', beschreibung: 'Sitzungsbewertung, nächster Termin' },
+    ],
+  },
+};
+
+// ============================================================
+// PROGNOSTIK-FAKTOREN (Idee 4)
+// Risiko- und Schutzfaktoren für Verlaufsprognose
+// ============================================================
+const PROGNOSTIK_FAKTOREN = {
+  risiko: [
+    { id: 'komorbid', label: 'Komorbidität', gewicht: 2, check: (scr) => (scr.comorbidityPattern || []).length >= 2, beschreibung: 'Mehrere Komorbiditätsmuster erhöhen Therapiedauer und -komplexität' },
+    { id: 'chronisch', label: 'Chronizität', gewicht: 2, check: (scr, s) => { const screenings = DB.getScreenings(s.id).filter(x => x.abgeschlossen); return screenings.length >= 2 && screenings.every(x => (x.flaggedAreas || []).length > 2); }, beschreibung: 'Wiederholte Screenings zeigen persistierende Belastung' },
+    { id: 'trauma_hoch', label: 'Schwere Traumatisierung', gewicht: 3, check: (scr) => (scr.scores?.trauma || 0) >= 10, beschreibung: 'Hohe Trauma-Scores verlängern die Stabilisierungsphase erheblich' },
+    { id: 'suizid_risiko', label: 'Suizidalitäts-Risiko', gewicht: 3, check: (scr) => (scr.scores?.suizidalitaet || 0) >= 4, beschreibung: 'Akutes Suizidrisiko erfordert sofortige Krisenintervention' },
+    { id: 'kein_netzwerk', label: 'Fehlendes Unterstützungsnetzwerk', gewicht: 1, check: (scr) => (scr.scores?.soziale_isolation || 0) >= 6, beschreibung: 'Soziale Isolation verlangsamt Therapiefortschritte' },
+    { id: 'eltern_problem', label: 'Familiäre Belastung', gewicht: 1, check: (scr) => (scr.scores?.familie || 0) >= 6, beschreibung: 'Familiäre Probleme erschweren ambulante Fortschritte' },
+    { id: 'svv_aktiv', label: 'Aktive Selbstverletzung', gewicht: 2, check: (scr) => (scr.scores?.selbstverletzung || 0) >= 4, beschreibung: 'SVV erfordert parallele DBT-Skills-Arbeit' },
+  ],
+  schutz: [
+    { id: 'motivation', label: 'Eigenmotivation vorhanden', gewicht: -1, check: (scr, s) => { const n = DB.getNotizen(s.id).filter(x => x.soap); return n.length >= 3; }, beschreibung: 'Regelmäßige Sitzungsteilnahme zeigt Behandlungsmotivation' },
+    { id: 'frueh_erkannt', label: 'Früherkennung', gewicht: -1, check: (scr) => (scr.flaggedAreas || []).length <= 3 && !(scr.flaggedAreas || []).some(f => ['suizidalitaet', 'selbstverletzung', 'psychose'].includes(f)), beschreibung: 'Wenige, nicht-krisenhafte Belastungsbereiche — gute Prognose' },
+    { id: 'staerken', label: 'Identifizierte Stärken', gewicht: -1, check: (scr) => { const schutzDomains = ['resilienz', 'selbstwirksamkeit', 'prosozial']; return schutzDomains.some(d => (scr.scores?.[d] || 0) >= 6); }, beschreibung: 'Vorhandene Schutzfaktoren unterstützen Resilienz' },
+    { id: 'outcome_positiv', label: 'Positiver Outcome-Trend', gewicht: -2, check: (scr, s) => { const n = DB.getNotizen(s.id).filter(x => x.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum)); if (n.length < 3) return false; return n[n.length-1].soap.ors.total > n[0].soap.ors.total + 3; }, beschreibung: 'ORS zeigt messbaren Fortschritt' },
+  ],
+  dauer_schaetzung: {
+    basis_wochen: 16,
+    pro_risiko_punkt: 4,
+    min_wochen: 8,
+    max_wochen: 52,
+  },
+};
+
+// ============================================================
 // CDSS — Gemeinsame Variablen (bei jedem Problem abgefragt)
 // ============================================================
 const CDSS_GEMEINSAME_VARIABLEN = [

@@ -946,9 +946,12 @@
       <div id="screening-ergebnis-container" style="display:none;">
 
         <!-- Ergebnis-Tabs -->
-        <div class="profil-tabs" id="screening-ergebnis-tabs" style="margin-bottom:0;">
+        <div class="profil-tabs" id="screening-ergebnis-tabs" style="margin-bottom:0;flex-wrap:wrap;">
           <div class="profil-tab active" data-scrtab="risikoprofil" onclick="showScrTab('risikoprofil')">📊 Risikoprofil</div>
           <div class="profil-tab" data-scrtab="empfehlungen" onclick="showScrTab('empfehlungen')">📋 Empfehlungen</div>
+          <div class="profil-tab" data-scrtab="sitzungsplan" onclick="showScrTab('sitzungsplan')">🎯 Sitzungsplan</div>
+          <div class="profil-tab" data-scrtab="interventionen" onclick="showScrTab('interventionen')">⚡ Interventionen</div>
+          <div class="profil-tab" data-scrtab="prognostik" onclick="showScrTab('prognostik')">🔮 Prognostik</div>
           <div class="profil-tab" data-scrtab="verlauf" onclick="showScrTab('verlauf')">📈 Verlauf</div>
         </div>
 
@@ -1007,6 +1010,21 @@
             Die folgenden Empfehlungen basieren auf den Screening-Ergebnissen und sind als Arbeitshilfe gedacht.
           </div>
           <div id="scr-empfehlungen-liste"></div>
+        </div>
+
+        <!-- TAB: Sitzungsplan (Adaptive Sitzungssteuerung) -->
+        <div class="screening-ergebnis-tab" data-scrtab="sitzungsplan">
+          <div id="scr-sitzungsplan"></div>
+        </div>
+
+        <!-- TAB: Mikro-Interventionen -->
+        <div class="screening-ergebnis-tab" data-scrtab="interventionen">
+          <div id="scr-mikro-interventionen"></div>
+        </div>
+
+        <!-- TAB: Prognostik -->
+        <div class="screening-ergebnis-tab" data-scrtab="prognostik">
+          <div id="scr-prognostik"></div>
         </div>
 
         <!-- TAB: Verlauf -->

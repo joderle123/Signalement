@@ -12443,6 +12443,277 @@ function renderScrNaechsteSchritte(scr) {
   `;
 }
 
+// ── Adaptive Sitzungssteuerung (Idee 1) ──
+function renderScrSitzungsplan(scr) {
+  const el = document.getElementById('scr-sitzungsplan');
+  if (!el) return;
+  const s = DB.getSchuelerById(scr.schuelerId);
+  if (!s) return;
+
+  // Bestimme passenden Sitzungstyp basierend auf Screening + ORS/SRS
+  const flagged = scr.flaggedAreas || [];
+  const krisenDomains = flagged.filter(f => ['selbstverletzung', 'suizidalitaet', 'psychose'].includes(f));
+  const notizen = DB.getNotizen(s.id).filter(n => n.soap).sort((a, b) => b.datum.localeCompare(a.datum));
+  const letzteORS = notizen.find(n => n.soap.ors?.total != null);
+  const letzteSRS = notizen.find(n => n.soap.srs?.total != null);
+  const orsWert = letzteORS?.soap.ors.total ?? null;
+  const srsWert = letzteSRS?.soap.srs.total ?? null;
+
+  // Template-Auswahl
+  let empfohleneTemplates = [];
+  if (krisenDomains.length > 0) empfohleneTemplates.push('krise');
+  if (notizen.length === 0) empfohleneTemplates.push('erstgespraech');
+  if (srsWert !== null && srsWert < 25) empfohleneTemplates.push('srs_niedrig');
+  if (orsWert !== null && orsWert < 28) empfohleneTemplates.push('ors_niedrig');
+  else if (orsWert !== null && orsWert >= 28) empfohleneTemplates.push('ors_hoch');
+  if (empfohleneTemplates.length === 0) empfohleneTemplates.push('regulaer');
+
+  let html = `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">🎯 Adaptive Sitzungssteuerung</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">
+        Basierend auf Screening-Profil${orsWert !== null ? `, ORS ${orsWert}/40` : ''}${srsWert !== null ? `, SRS ${srsWert}/40` : ''} und ${notizen.length} bisherigen Sitzungen.
+      </div>
+    </div>`;
+
+  empfohleneTemplates.forEach((key, idx) => {
+    const t = SITZUNGS_TEMPLATES[key];
+    if (!t) return;
+    const isFirst = idx === 0;
+    html += `
+      <div class="card" style="margin-bottom:12px;${isFirst ? 'border:2px solid ' + t.farbe + ';' : ''}">
+        <div class="card-header" style="background:${t.farbe}10;">
+          <span>${t.icon}</span>
+          <div class="card-title">${t.titel}${isFirst ? ' <span style="font-size:11px;background:' + t.farbe + ';color:white;padding:1px 8px;border-radius:8px;margin-left:6px;">Empfohlen</span>' : ''}</div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          ${t.phasen.map((p, i) => `
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 16px;${i > 0 ? 'border-top:1px solid var(--border,#E5E7EB);' : ''}">
+              <div style="min-width:50px;font-size:11px;font-weight:600;color:${t.farbe};padding-top:1px;">${p.dauer}</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:600;">${p.label}</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${p.beschreibung}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  });
+
+  // Alle Templates als Auswahl anzeigen
+  html += `
+    <details style="margin-top:12px;">
+      <summary style="font-size:12px;cursor:pointer;color:#2563EB;font-weight:500;">Alle Sitzungstypen anzeigen</summary>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px;">
+        ${Object.entries(SITZUNGS_TEMPLATES).map(([key, t]) => `
+          <div style="padding:10px;background:var(--card-bg,#fff);border:1px solid var(--border,#E5E7EB);border-radius:8px;border-left:3px solid ${t.farbe};">
+            <div style="font-size:13px;font-weight:600;">${t.icon} ${t.titel}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${t.phasen.length} Phasen · ${t.phasen.reduce((s, p) => s + parseInt(p.dauer), 0)} Min</div>
+          </div>
+        `).join('')}
+      </div>
+    </details>`;
+
+  el.innerHTML = sanitize(html);
+}
+
+// ── Mikro-Interventionsbibliothek (Idee 2) ──
+function renderScrMikroInterventionen(scr) {
+  const el = document.getElementById('scr-mikro-interventionen');
+  if (!el) return;
+
+  const flagged = scr.flaggedAreas || [];
+  if (flagged.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">Keine auffälligen Bereiche — keine spezifischen Mikro-Interventionen empfohlen.</div>';
+    return;
+  }
+
+  let html = `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">⚡ Mikro-Interventionsbibliothek</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">
+        Kurze, evidenzbasierte Übungen (2-5 Min) passend zu den auffälligen Bereichen. Ideal als Sitzungseinstieg oder Abschluss.
+      </div>
+    </div>`;
+
+  flagged.forEach(domainId => {
+    const domain = SCREENING_DOMAINS.find(d => d.id === domainId);
+    if (!domain) return;
+    const interventionen = MIKRO_INTERVENTIONEN[domainId] || [];
+    if (interventionen.length === 0) return;
+
+    html += `
+      <div class="card" style="margin-bottom:12px;border-left:4px solid ${domain.farbe};">
+        <div class="card-header" style="background:${domain.farbe}10;">
+          <span>${domain.icon}</span>
+          <div class="card-title">${domain.label}</div>
+          <span style="font-size:11px;color:var(--text-muted);">${interventionen.length} Übung${interventionen.length !== 1 ? 'en' : ''}</span>
+        </div>
+        <div class="card-body" style="padding:0;">
+          ${interventionen.map((mi, i) => `
+            <div style="padding:12px 16px;${i > 0 ? 'border-top:1px solid var(--border,#E5E7EB);' : ''}">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <div style="font-size:13px;font-weight:600;">${mi.titel}</div>
+                <span style="font-size:10px;padding:2px 8px;background:#F3F4F6;border-radius:8px;color:#6B7280;">⏱ ${mi.dauer}</span>
+              </div>
+              <div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:4px;">${mi.beschreibung}</div>
+              <div style="font-size:10px;color:#9CA3AF;font-style:italic;">📚 ${mi.evidenz}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  });
+
+  if (html.indexOf('card-header') === -1 + html.indexOf('Mikro-Interventionsbibliothek')) {
+    html += '<div style="padding:16px;color:var(--text-muted);font-size:12px;">Für die auffälligen Bereiche sind noch keine Mikro-Interventionen hinterlegt.</div>';
+  }
+
+  el.innerHTML = sanitize(html);
+}
+
+// ── Prognostik-Modul (Idee 4) ──
+function renderScrPrognostik(scr) {
+  const el = document.getElementById('scr-prognostik');
+  if (!el) return;
+  const s = DB.getSchuelerById(scr.schuelerId);
+  if (!s) return;
+
+  const flagged = scr.flaggedAreas || [];
+  const risikoFaktoren = [];
+  const schutzFaktoren = [];
+  let risikoScore = 0;
+
+  // Risiko-Faktoren prüfen
+  PROGNOSTIK_FAKTOREN.risiko.forEach(f => {
+    try {
+      if (f.check(scr, s)) {
+        risikoFaktoren.push(f);
+        risikoScore += f.gewicht;
+      }
+    } catch(e) { /* silent */ }
+  });
+
+  // Schutz-Faktoren prüfen
+  PROGNOSTIK_FAKTOREN.schutz.forEach(f => {
+    try {
+      if (f.check(scr, s)) {
+        schutzFaktoren.push(f);
+        risikoScore += f.gewicht; // gewicht ist negativ
+      }
+    } catch(e) { /* silent */ }
+  });
+
+  // Dauer-Schätzung
+  const cfg = PROGNOSTIK_FAKTOREN.dauer_schaetzung;
+  const rohWochen = cfg.basis_wochen + (risikoScore * cfg.pro_risiko_punkt);
+  const geschaetzteWochen = Math.max(cfg.min_wochen, Math.min(cfg.max_wochen, rohWochen));
+  const geschaetzteMonate = Math.round(geschaetzteWochen / 4.3);
+
+  // Prognose-Stufe
+  let prognoseStufe, prognoseLabel, prognoseFarbe, prognoseIcon;
+  if (risikoScore <= 0) {
+    prognoseStufe = 'guenstig';
+    prognoseLabel = 'Günstige Prognose';
+    prognoseFarbe = '#10B981';
+    prognoseIcon = '🟢';
+  } else if (risikoScore <= 3) {
+    prognoseStufe = 'mittel';
+    prognoseLabel = 'Moderate Prognose';
+    prognoseFarbe = '#F59E0B';
+    prognoseIcon = '🟡';
+  } else {
+    prognoseStufe = 'komplex';
+    prognoseLabel = 'Komplexe Prognose';
+    prognoseFarbe = '#EF4444';
+    prognoseIcon = '🔴';
+  }
+
+  // Empfohlene Sitzungsfrequenz
+  let frequenz;
+  if (risikoScore >= 5) frequenz = '2x pro Woche';
+  else if (risikoScore >= 2) frequenz = '1x pro Woche';
+  else if (risikoScore >= 0) frequenz = '1x pro Woche bis 14-tägig';
+  else frequenz = '14-tägig bis monatlich';
+
+  let html = `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">🔮 Prognostische Einschätzung</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">
+        Basierend auf ${flagged.length} auffälligen Bereichen, ${risikoFaktoren.length} Risiko- und ${schutzFaktoren.length} Schutzfaktoren.
+        <br><em>Hinweis: Dies ist eine algorithmusbasierte Orientierung, keine klinische Diagnose.</em>
+      </div>
+    </div>
+
+    <!-- Prognose-Banner -->
+    <div style="padding:16px;background:${prognoseFarbe}10;border:2px solid ${prognoseFarbe};border-radius:12px;margin-bottom:16px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;">${prognoseIcon}</div>
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:700;color:${prognoseFarbe};">${prognoseLabel}</div>
+        <div style="font-size:13px;color:var(--text);margin-top:4px;">
+          Geschätzte Begleitdauer: <strong>${geschaetzteMonate} Monate</strong> (${geschaetzteWochen} Wochen)
+          · Empfohlene Frequenz: <strong>${frequenz}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risiko/Schutz-Faktoren -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div class="card">
+        <div class="card-header" style="background:#FEF2F2;"><span>⚠️</span><div class="card-title" style="color:#DC2626;">Risikofaktoren (${risikoFaktoren.length})</div></div>
+        <div class="card-body" style="padding:0;">
+          ${risikoFaktoren.length === 0 ? '<div style="padding:12px;color:#10B981;font-size:12px;">Keine identifizierten Risikofaktoren</div>' :
+            risikoFaktoren.map(f => `
+              <div style="padding:8px 12px;border-bottom:1px solid #FEE2E2;">
+                <div style="font-size:12px;font-weight:600;color:#991B1B;">${f.label}</div>
+                <div style="font-size:11px;color:#6B7280;margin-top:2px;">${f.beschreibung}</div>
+              </div>
+            `).join('')}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="background:#ECFDF5;"><span>🛡️</span><div class="card-title" style="color:#065F46;">Schutzfaktoren (${schutzFaktoren.length})</div></div>
+        <div class="card-body" style="padding:0;">
+          ${schutzFaktoren.length === 0 ? '<div style="padding:12px;color:#F59E0B;font-size:12px;">Noch keine Schutzfaktoren identifiziert — Stärken-Screening durchführen</div>' :
+            schutzFaktoren.map(f => `
+              <div style="padding:8px 12px;border-bottom:1px solid #A7F3D0;">
+                <div style="font-size:12px;font-weight:600;color:#065F46;">${f.label}</div>
+                <div style="font-size:11px;color:#6B7280;margin-top:2px;">${f.beschreibung}</div>
+              </div>
+            `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Verlaufsprognose-Hinweise -->
+    <div class="card">
+      <div class="card-header"><span>📊</span><div class="card-title">Verlaufserwartung</div></div>
+      <div class="card-body">
+        <div style="font-size:12px;line-height:1.8;">
+          ${prognoseStufe === 'guenstig' ? `
+            <p>✅ <strong>Erwarteter Verlauf:</strong> Bei regelmäßigen Sitzungen und stabiler Unterstützung ist eine deutliche Besserung innerhalb von ${geschaetzteMonate} Monaten wahrscheinlich.</p>
+            <p>📋 <strong>Empfehlung:</strong> Fokussierte Themenarbeit, Stärken-Orientierung, frühzeitige Übergangsplanung.</p>
+            <p>📈 <strong>Re-Screening:</strong> In 8 Wochen zur Verlaufskontrolle.</p>
+          ` : prognoseStufe === 'mittel' ? `
+            <p>🟡 <strong>Erwarteter Verlauf:</strong> Fortschritte sind möglich, aber erfordern strukturierte Arbeit. Rückschläge sind einzuplanen.</p>
+            <p>📋 <strong>Empfehlung:</strong> Klare Zielvereinbarungen, engmaschiges ORS/SRS-Monitoring, Elternarbeit intensivieren.</p>
+            <p>📈 <strong>Re-Screening:</strong> In 6 Wochen zur Verlaufskontrolle. Bei ORS-Verschlechterung: Behandlungsplan anpassen.</p>
+            <p>🔗 <strong>Vernetzung:</strong> Therapeutische Anbindung prüfen, Schule einbeziehen.</p>
+          ` : `
+            <p>🔴 <strong>Erwarteter Verlauf:</strong> Komplexes Belastungsprofil — langfristige, multimodale Begleitung erforderlich.</p>
+            <p>📋 <strong>Empfehlung:</strong> Stabilisierung vor Themenarbeit, Krisenplan aktiv halten, Netzwerkarbeit ist essentiell.</p>
+            <p>📈 <strong>Re-Screening:</strong> Alle 4 Wochen. ORS/SRS bei jeder Sitzung. Bei Stagnation nach 8 Wochen: Fallkonferenz.</p>
+            <p>🔗 <strong>Vernetzung:</strong> Therapeut, Kinder- und Jugendpsychiater, ggf. ONE/OPJ, Schulpsychologie.</p>
+            <p>⚠️ <strong>Achtung:</strong> Therapieabbruch-Risiko erhöht — Beziehungsarbeit priorisieren, niederschwellige Kontaktformen anbieten.</p>
+          `}
+        </div>
+      </div>
+    </div>
+  `;
+
+  el.innerHTML = sanitize(html);
+}
+
 function renderScrProfilChart(scr) {
   const ctx = document.getElementById('scr-chart-profil');
   if (!ctx) return;
@@ -12661,6 +12932,14 @@ function showScrTab(tab) {
   });
   if (tab === 'verlauf') {
     renderScrVerlauf(APP.currentSchuelerId);
+  }
+  if (tab === 'sitzungsplan' || tab === 'interventionen' || tab === 'prognostik') {
+    const scr = DB.getScreenings().find(s => s.id === APP.currentScreeningId);
+    if (scr) {
+      if (tab === 'sitzungsplan') renderScrSitzungsplan(scr);
+      if (tab === 'interventionen') renderScrMikroInterventionen(scr);
+      if (tab === 'prognostik') renderScrPrognostik(scr);
+    }
   }
 }
 

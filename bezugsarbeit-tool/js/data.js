@@ -25838,7 +25838,75 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'migration-flucht', titel: 'Migration / Flucht / kulturelle Anpassung', icon: '🌍', farbe: '#0D9488', kategorie: 'sozial', icd: 'Z60.3', beschreibung: 'Kulturschock, Sprachbarrieren, Diskriminierung, Heimweh', variablen: [], empfehlungen: [] },
+  {
+    id: 'migration-flucht', titel: 'Migration / Flucht / kulturelle Anpassung', icon: '🌍', farbe: '#0D9488', kategorie: 'sozial', icd: 'Z60.3',
+    beschreibung: 'Kulturschock, Sprachbarrieren, Diskriminierung, Heimweh',
+    variablen: [
+      {
+        id: 'mig-kontext', frage: 'In welchem Migrationskontext befindet sich der/die Jugendliche?', typ: 'single',
+        optionen: [
+          { id: 'umf', label: 'Unbegleiteter minderjähriger Flüchtling (UMF)', tags: ['mig-umf', 'risiko-hoch'] },
+          { id: 'flucht-familie', label: 'Flucht mit Familie', tags: ['mig-flucht-familie'] },
+          { id: 'migration', label: 'Arbeitsmigration der Eltern (EU/Drittland)', tags: ['mig-arbeit'] },
+          { id: 'nachzug', label: 'Familiennachzug (war lange getrennt)', tags: ['mig-nachzug'] },
+          { id: 'zweite-gen', label: '2. Generation — hier geboren, kulturelle Identitätsfrage', tags: ['mig-zweite-gen'] }
+        ]
+      },
+      {
+        id: 'mig-belastung', frage: 'Welche Hauptbelastung liegt vor?', typ: 'multi',
+        optionen: [
+          { id: 'sprache', label: 'Sprachbarriere / kann sich nicht ausdrücken', tags: ['mig-sprache'] },
+          { id: 'trauma', label: 'Flucht-/Kriegstrauma', tags: ['mig-trauma', 'komorbid-trauma'] },
+          { id: 'diskriminierung', label: 'Rassismus / Diskriminierung', tags: ['mig-diskriminierung'] },
+          { id: 'heimweh', label: 'Heimweh / Trauer um Verlorenes (Heimat, Freunde, Familie)', tags: ['mig-heimweh'] },
+          { id: 'unsicherheit', label: 'Aufenthaltsunsicherheit / Angst vor Abschiebung', tags: ['mig-aufenthalt-unsicher', 'risiko-hoch'] },
+          { id: 'kulturkonflikt', label: 'Kulturkonflikt (Familie vs. neue Umgebung)', tags: ['mig-kulturkonflikt'] },
+          { id: 'isolation', label: 'Soziale Isolation / kein Anschluss', tags: ['mig-isolation'] }
+        ]
+      },
+      {
+        id: 'mig-ressourcen', frage: 'Welche Ressourcen sind vorhanden?', typ: 'multi',
+        optionen: [
+          { id: 'familie', label: 'Familie vor Ort als Unterstützung', tags: ['mig-familie-da'] },
+          { id: 'community', label: 'Community / kulturelle Gemeinschaft', tags: ['mig-community'] },
+          { id: 'sprache-ok', label: 'Spricht eine Landessprache (LU/FR/DE)', tags: ['mig-sprache-ok'] },
+          { id: 'schule-ok', label: 'Schulische Integration gelingt', tags: ['mig-schule-ok'] },
+          { id: 'wenig', label: 'Kaum Ressourcen / sehr isoliert', tags: ['mig-wenig-ressourcen'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'mig-integration',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'mig-sprache': 3, 'mig-heimweh': 2, 'mig-kulturkonflikt': 2, 'mig-isolation': 3, 'mig-diskriminierung': 2, 'mig-umf': 4, 'mig-trauma': 3, 'mig-aufenthalt-unsicher': 4, 'mig-wenig-ressourcen': 3 },
+        risiko: 'gelb',
+        einschaetzung: 'Migrations-/Fluchtbezogene Belastung — Akkulturationsstress ist NORMAL und KEIN Zeichen von Schwäche. Aber: Multiple Stressoren (Sprache, Trauma, Aufenthalt, Diskriminierung) kumulieren sich. Bei UMF: Besonders verletzlich durch fehlende Bezugspersonen. Kultursensible Arbeit bedeutet: Die eigene kulturelle Brille kennen und ablegen.',
+        sofort: [
+          'Beziehungsaufbau OHNE Sprachbarriere: Körpersprache, Bilder, Dolmetscher (NICHT Familienmitglieder!)',
+          'Grundbedürfnisse sichern: Aufenthaltsstatus? Wohnsituation? Gesundheitsversorgung?',
+          'Kulturelle Kompetenz: Nicht alle Probleme durch "Kultur" erklären — Jugendliche sind Individuen',
+          'Gesprächseröffnung: "Du hast einen weiten Weg hinter dir. Ich möchte verstehen, wie es dir hier geht — und was du brauchst."'
+        ],
+        mittelfristig: [
+          'Sprachförderung als Priorität: Zugang zu Sprachkursen, schulische Förderung',
+          'Soziale Integration: Sport, Jugendtreff, Patenprogramm — niederschwellig',
+          'Bei Trauma: Erst Stabilisierung, NICHT sofort Trauma konfrontieren (kulturell oft anders verstanden)',
+          'Aufenthaltsrecht klären: Kooperation mit Anwalt, ASTI, Luxemburger Flüchtlingsrat'
+        ],
+        ueberweisung: 'In Luxemburg: ASTI (Association de Soutien aux Travailleurs Immigrés), Caritas Accueil et Solidarité, Croix-Rouge (Flüchtlingsbetreuung), LFR (Lëtzebuerger Flüchtlingsrot). UMF: ONE (Office National de l\'Enfance). Kultursensible Therapie: Médecins du Monde.',
+        elternarbeit: 'Eltern selbst oft stark belastet (eigene Trauma, Existenzsorgen). Kulturmittler/Dolmetscher einsetzen. Respekt vor kulturellen Werten — UND klare Haltung bei Kinderschutz. Eltern als Experten ihrer Kultur anerkennen.',
+        materialien: { arbeitsblaetter: ['identitaet-erkunden', 'mein-lebensweg'], therapiemodule: ['therapiemodul-migration'], fachmodule: ['migration'] },
+        referenzen: [
+          'Fazel, M. et al. (2012): Mental health of displaced and refugee children. The Lancet.',
+          'Berry, J.W. (2005): Acculturation — living successfully in two cultures. International Journal of Intercultural Relations.',
+          'UNHCR (2017): Guidelines on Assessing and Determining the Best Interests of the Child.',
+          'Ruf, M. et al. (2010): Narrative Exposure Therapy for children — KIDNET. BMC Psychiatry.'
+        ]
+      }
+    ]
+  },
   { id: 'mediensucht', titel: 'Mediensucht / Online-Abhängigkeit', icon: '📱', farbe: '#6366F1', kategorie: 'sozial', icd: 'F63.0', beschreibung: 'Exzessives Gaming, Social Media, Online-Konsum', variablen: [], empfehlungen: [] },
 
   // F. Beziehungs- & Interaktionsprobleme

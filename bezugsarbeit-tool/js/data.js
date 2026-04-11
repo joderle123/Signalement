@@ -24072,7 +24072,118 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'somatisierung', titel: 'Somatische Beschwerden ohne Befund', icon: '🤕', farbe: '#059669', kategorie: 'emotional', icd: 'F45', beschreibung: 'Kopf-/Bauchschmerzen, Übelkeit ohne medizinische Ursache', variablen: [], empfehlungen: [] },
+  {
+    id: 'somatisierung', titel: 'Somatische Beschwerden ohne Befund', icon: '🤕', farbe: '#059669', kategorie: 'emotional', icd: 'F45',
+    beschreibung: 'Kopf-/Bauchschmerzen, Übelkeit ohne medizinische Ursache',
+    variablen: [
+      {
+        id: 'som-art', frage: 'Welche körperlichen Beschwerden stehen im Vordergrund?', typ: 'multi',
+        optionen: [
+          { id: 'kopf', label: 'Kopfschmerzen / Migräne', tags: ['som-kopf'] },
+          { id: 'bauch', label: 'Bauchschmerzen / Übelkeit', tags: ['som-bauch'] },
+          { id: 'schwindel', label: 'Schwindel / Ohnmachtsgefühle', tags: ['som-schwindel'] },
+          { id: 'schmerz-diffus', label: 'Diffuse Schmerzen (Rücken, Glieder)', tags: ['som-diffus'] },
+          { id: 'herz', label: 'Herzrasen / Brustenge', tags: ['som-herz', 'panik-moeglich'] },
+          { id: 'muedigkeit', label: 'Extreme Müdigkeit / Erschöpfung', tags: ['som-fatigue'] }
+        ]
+      },
+      {
+        id: 'som-muster', frage: 'Wann treten die Beschwerden auf?', typ: 'single',
+        optionen: [
+          { id: 'schultage', label: 'Vor allem an Schultagen / vor Prüfungen', tags: ['som-schulbezogen', 'vermeidung-moeglich'] },
+          { id: 'konflikte', label: 'Nach Konflikten / emotionalen Belastungen', tags: ['som-stressreaktion'] },
+          { id: 'unvorhersehbar', label: 'Unvorhersehbar / kein klares Muster', tags: ['som-chronisch'] },
+          { id: 'staendig', label: 'Fast dauerhaft vorhanden', tags: ['som-chronisch', 'som-schwer'] }
+        ]
+      },
+      {
+        id: 'som-medizin', frage: 'Wie weit ist die medizinische Abklärung?', typ: 'single',
+        optionen: [
+          { id: 'keine', label: 'Noch keine ärztliche Abklärung', tags: ['abklaerung-noetig'] },
+          { id: 'teilweise', label: 'Teilweise — Hausarzt ohne Befund', tags: ['abklaerung-laeuft'] },
+          { id: 'abgeschlossen', label: 'Umfassend abgeklärt — kein organischer Befund', tags: ['abklaerung-fertig'] },
+          { id: 'chronisch', label: 'Bekannte chronische Erkrankung als Grundlage', tags: ['organisch-moeglich', 'abklaerung-fertig'] }
+        ]
+      },
+      {
+        id: 'som-funktion', frage: 'Welche Funktion könnten die Beschwerden haben?', typ: 'single',
+        optionen: [
+          { id: 'vermeidung', label: 'Vermeidung (Schule, soziale Situationen)', tags: ['som-vermeidung'] },
+          { id: 'aufmerksamkeit', label: 'Zuwendung / Aufmerksamkeit bekommen', tags: ['som-zuwendung'] },
+          { id: 'ausdruck', label: 'Emotionsausdruck ("Bauch tut weh" = Angst)', tags: ['som-alexithymie'] },
+          { id: 'unklar', label: 'Unklar / nicht einzuordnen', tags: [] }
+        ]
+      },
+      {
+        id: 'som-komorbid', frage: 'Gibt es begleitende psychische Symptome?', typ: 'multi',
+        optionen: [
+          { id: 'angst', label: 'Angst / Sorgen', tags: ['komorbid-angst'] },
+          { id: 'depression', label: 'Traurigkeit / Antriebslosigkeit', tags: ['komorbid-depression'] },
+          { id: 'trauma', label: 'Trauma-Hinweise', tags: ['komorbid-trauma'] },
+          { id: 'schulvermeidung', label: 'Schulvermeidung', tags: ['komorbid-schulvermeidung'] },
+          { id: 'keine', label: 'Keine erkennbaren psychischen Symptome', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'som-psychoedukation',
+        tags_erforderlich: ['abklaerung-fertig'],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'som-schulbezogen': 2, 'som-alexithymie': 3, 'som-vermeidung': 2, 'komorbid-angst': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Somatoforme Störung (F45) — Körperliche Beschwerden ohne ausreichenden organischen Befund. Häufig bei Kindern/Jugendlichen als Ausdruck psychischer Belastung ("Der Körper spricht, was der Mund nicht sagen kann"). Zentral ist die Validierung der Beschwerden bei gleichzeitiger Erweiterung des Erklärungsmodells.',
+        sofort: [
+          'Beschwerden ernst nehmen und validieren — NICHT: "Du hast nichts" / "Das ist nur psychisch"',
+          'Biopsychosoziales Modell erklären: Stress → Muskelspannung → Schmerz / Stress → Magen → Übelkeit',
+          'Körperwahrnehmung schulen: "Wo genau spürst du das? Wann wird es stärker/schwächer?"',
+          'Gesprächseröffnung: "Dein Körper versucht dir etwas zu sagen. Lass uns gemeinsam herausfinden, was das sein könnte."'
+        ],
+        mittelfristig: [
+          'Emotionserkennung fördern: Gefühlsrad, Körper-Landkarte ("Wo sitzt welches Gefühl?")',
+          'Entspannungsverfahren: Progressive Muskelrelaxation, Atemübungen, Body-Scan',
+          'Stressbewältigung: Trigger identifizieren, Belastungs-Tagebuch führen',
+          'Aktivitätsaufbau: Trotz Beschwerden schrittweise wieder aktiv werden (Graded Activity)'
+        ],
+        ueberweisung: 'Bei anhaltender Schulunfähigkeit (>2 Wochen) oder massiver Einschränkung: KJP-Vorstellung. In Luxemburg: CHNP Ettelbruck, ZNS Letzebuerg. Koordination mit Kinderarzt wichtig.',
+        elternarbeit: 'Eltern neigen zu zwei Extremen: Überbesorgnis (viele Arztbesuche) oder Bagatellisierung. Mittlerer Weg: Beschwerden anerkennen, aber keine sekundären Krankheitsgewinne verstärken. Schulbesuch als Normalzustand beibehalten.',
+        materialien: { arbeitsblaetter: ['koerperwahrnehmung', 'emotionserkennung'], therapiemodule: ['therapiemodul-somatisierung'], fachmodule: ['somatisierung'] },
+        referenzen: [
+          'Campo, J.V. & Fritz, G.K. (2001): Somatization in children and adolescents. JAACAP.',
+          'Garralda, M.E. (2010): Unexplained physical complaints. Child and Adolescent Psychiatric Clinics.',
+          'AWMF S3-Leitlinie Funktionelle Körperbeschwerden (2018): Diagnostik und Therapie',
+          'Kozlowska, K. (2013): Stress, distress, and bodytalk. Harvard Review of Psychiatry.'
+        ]
+      },
+      {
+        id: 'som-abklaerung-erst',
+        tags_erforderlich: ['abklaerung-noetig'],
+        tags_ausschluss: ['abklaerung-fertig'],
+        tags_gewichtung: { 'som-schwer': 3, 'som-chronisch': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Körperliche Beschwerden ohne bisherige medizinische Abklärung. Vor psychologischer Intervention muss eine organische Ursache ausgeschlossen werden. Gleichzeitig: Frühzeitig biopsychosoziale Perspektive einführen, um "Doctor Shopping" zu vermeiden.',
+        sofort: [
+          'Medizinische Abklärung empfehlen: Kinderarzt als Erstanlaufstelle',
+          'Beschwerden dokumentieren: Wann, wie oft, wie stark (Schmerztagebuch)',
+          'Beschwerden validieren: "Das ist real — und wir schauen gemeinsam, woher es kommt"',
+          'Parallel bereits Stress-Zusammenhänge explorieren (ohne zu pathologisieren)'
+        ],
+        mittelfristig: [
+          'Nach medizinischer Abklärung: Biopsychosoziales Erklärungsmodell aufbauen',
+          'Koordination mit Kinderarzt: Gemeinsame Strategie — keine weiteren unnötigen Untersuchungen',
+          'Psychoedukation Eltern: Körper und Psyche hängen zusammen, das ist normal'
+        ],
+        ueberweisung: 'Kinderarzt/Hausarzt zur somatischen Abklärung. Bei Verdacht auf neurologische Ursache: Neuropädiatrie. In Luxemburg: CHL (Kannerklinik), CHEM Esch.',
+        elternarbeit: 'Eltern bei medizinischer Abklärung begleiten. Frühzeitig vermitteln, dass psychosomatisch ≠ eingebildet. Ziel: Eine Anlaufstelle (Kinderarzt), nicht viele parallele Facharztbesuche.',
+        materialien: { arbeitsblaetter: ['koerperwahrnehmung'], therapiemodule: ['therapiemodul-somatisierung'], fachmodule: ['somatisierung'] },
+        referenzen: [
+          'Eminson, D.M. (2007): Medically unexplained symptoms in children and adolescents. Clinical Psychology Review.',
+          'Garralda, M.E. (2010): Unexplained physical complaints. Child and Adolescent Psychiatric Clinics.',
+          'NICE Guideline CG168 (2014): Unexplained symptoms — assessment and management in children'
+        ]
+      }
+    ]
+  },
   { id: 'trauer', titel: 'Trauer / Verlust', icon: '🕯️', farbe: '#475569', kategorie: 'emotional', icd: 'F43.2', beschreibung: 'Tod einer Bezugsperson, Trennung, Verlust von Heimat/Freunden', variablen: [], empfehlungen: [] },
 
   // B. Externalisierende Probleme

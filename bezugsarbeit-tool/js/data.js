@@ -25986,7 +25986,72 @@ const CDSS_PROBLEME = [
   },
 
   // F. Beziehungs- & Interaktionsprobleme
-  { id: 'machtkampf', titel: 'Machtkampf / Autoritätskonflikte', icon: '💪', farbe: '#F59E0B', kategorie: 'interaktion', icd: 'F91.3', beschreibung: 'Provokation, Grenztestung, Verweigerung in der Sitzung', variablen: [], empfehlungen: [] },
+  {
+    id: 'machtkampf', titel: 'Machtkampf / Autoritätskonflikte', icon: '💪', farbe: '#F59E0B', kategorie: 'interaktion', icd: 'F91.3',
+    beschreibung: 'Provokation, Grenztestung, Verweigerung in der Sitzung',
+    variablen: [
+      {
+        id: 'mk-form', frage: 'Wie zeigt sich der Machtkampf?', typ: 'multi',
+        optionen: [
+          { id: 'passiv', label: 'Passive Verweigerung (ignoriert, schweigt, "keine Lust")', tags: ['mk-passiv'] },
+          { id: 'aktiv', label: 'Aktive Provokation (widerspricht, beleidigt, testet Grenzen)', tags: ['mk-aktiv'] },
+          { id: 'verhandlung', label: 'Endlose Verhandlungen / "Warum muss ich das?"', tags: ['mk-verhandlung'] },
+          { id: 'sabotage', label: 'Sabotage (zerstört Arbeitsmaterial, stört andere)', tags: ['mk-sabotage'] },
+          { id: 'splitting', label: 'Splitting (spielt Erwachsene gegeneinander aus)', tags: ['mk-splitting'] }
+        ]
+      },
+      {
+        id: 'mk-kontext', frage: 'In welchem Kontext entsteht der Machtkampf?', typ: 'single',
+        optionen: [
+          { id: 'anforderung', label: 'Bei Anforderungen / Aufgaben', tags: ['mk-bei-anforderung'] },
+          { id: 'grenzen', label: 'Bei Grenzsetzung / Regeln', tags: ['mk-bei-grenzen'] },
+          { id: 'beziehung', label: 'In der therapeutischen Beziehung (testet die Fachkraft)', tags: ['mk-beziehung'] },
+          { id: 'generell', label: 'Generell / in allen Interaktionen', tags: ['mk-generell'] }
+        ]
+      },
+      {
+        id: 'mk-dahinter', frage: 'Was könnte hinter dem Machtkampf stecken?', typ: 'single',
+        optionen: [
+          { id: 'autonomie', label: 'Autonomiebedürfnis (entwicklungsbedingt, Pubertät)', tags: ['mk-autonomie'] },
+          { id: 'angst', label: 'Angst vor Kontrollverlust / Hilflosigkeit', tags: ['mk-angst'] },
+          { id: 'bindung', label: 'Bindungstestung ("Bleibst du auch wenn ich schwierig bin?")', tags: ['mk-bindung-test'] },
+          { id: 'traumareaktion', label: 'Trauma-Reaktion (Kontrolle nie wieder abgeben)', tags: ['mk-trauma'] },
+          { id: 'unklar', label: 'Unklar', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'mk-deeskalation',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'mk-aktiv': 2, 'mk-passiv': 1, 'mk-bei-grenzen': 2, 'mk-beziehung': 3, 'mk-bindung-test': 3, 'mk-autonomie': 1, 'mk-angst': 2 },
+        risiko: 'gruen',
+        einschaetzung: 'Machtkampf als Interaktionsmuster — Der Machtkampf ist die OBERFLÄCHE. Darunter liegt immer ein unerfülltes Bedürfnis (Autonomie, Sicherheit, Kontrolle, Zugehörigkeit). Die Fachkraft "gewinnt" einen Machtkampf NIE wirklich — auch wenn sie sich durchsetzt, verliert sie die Beziehung. Die Kunst: Aus dem Kampf aussteigen, OHNE klein beizugeben.',
+        sofort: [
+          'AUS DEM KAMPF AUSSTEIGEN: "Ich merke, wir stecken in einem Machtkampf. Den möchte ich nicht gewinnen — und du brauchst ihn auch nicht zu gewinnen."',
+          'Wahlmöglichkeiten anbieten statt Befehle: "Du kannst X oder Y machen — was passt dir besser?"',
+          'Bedürfnis dahinter ansprechen: "Was brauchst du gerade eigentlich?" / "Was ist dir wichtig?"',
+          'NICHT: Lauter werden, drohen, ultimatum stellen, öffentlich beschämen, auf Gehorsam bestehen'
+        ],
+        mittelfristig: [
+          'Beziehung vor Inhalt: Erst Beziehung reparieren, dann Anforderungen stellen',
+          'Autonomie aktiv gewähren: Mitbestimmung bei Themen, Methoden, Timing der Sitzung',
+          'Kontrollbedürfnis normalisieren: "Es ist logisch, dass du Kontrolle brauchst — nach dem, was du erlebt hast."',
+          'Eigene Muster reflektieren: Wo brauche ICH als Fachkraft die Kontrolle? Was triggert MICH?'
+        ],
+        ueberweisung: 'Bei: Generalisiertem Muster in allen Kontexten, schwerer Opposition, Verdacht auf Bindungsstörung → KJP. Supervision für die Fachkraft empfohlen (Gegenübertragung bearbeiten).',
+        elternarbeit: 'Eltern oft im gleichen Machtkampf gefangen. Psychoedukation: "Wer eskaliert, hat verloren." Dreier-Gespräch: Kind + Eltern + Fachkraft — gemeinsam Regeln aushandeln statt diktieren.',
+        materialien: { arbeitsblaetter: ['soziale-kompetenz', 'beziehungen-erkunden'], therapiemodule: ['therapiemodul-opposition'], fachmodule: ['opposition'] },
+        referenzen: [
+          'Greene, R.W. (2014): The Explosive Child — Collaborative & Proactive Solutions.',
+          'Omer, H. (2004): Non-Violent Resistance — a new approach to violent and self-destructive children. Cambridge University Press.',
+          'Hughes, D.A. (2009): Attachment-Focused Parenting — PACE model.',
+          'Dreikurs, R. & Soltz, V. (1964/2004): Children: The Challenge — understanding misbehavior goals. Plume.'
+        ]
+      }
+    ]
+  },
   { id: 'luegen', titel: 'Lügen / Manipulieren', icon: '🎭', farbe: '#D97706', kategorie: 'interaktion', icd: 'F91', beschreibung: 'Chronisches Lügen, Verantwortung abschieben, Manipulation', variablen: [], empfehlungen: [] },
   { id: 'stehlen', titel: 'Stehlen / Klauen', icon: '🤚', farbe: '#B45309', kategorie: 'interaktion', icd: 'F91.2', beschreibung: 'Diebstahl in Schule, zu Hause, im Geschäft', variablen: [], empfehlungen: [] },
   { id: 'sexualisiertes-verhalten', titel: 'Sexualisierte Sprache / Verhalten', icon: '⚠️', farbe: '#E11D48', kategorie: 'interaktion', icd: 'F65 / F98.8', beschreibung: 'Unangemessenes sexuelles Verhalten, Grenzverletzung', variablen: [], empfehlungen: [] },

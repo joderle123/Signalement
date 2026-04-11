@@ -25155,7 +25155,115 @@ const CDSS_PROBLEME = [
   },
 
   // D. Entwicklung / Trauma
-  { id: 'trauma', titel: 'Trauma-Exposition / PTBS-Verdacht', icon: '🌪️', farbe: '#6366F1', kategorie: 'entwicklung', icd: 'F43.1', beschreibung: 'Flashbacks, Albträume, Vermeidung, Hypervigilanz', variablen: [], empfehlungen: [] },
+  {
+    id: 'trauma', titel: 'Trauma-Exposition / PTBS-Verdacht', icon: '🌪️', farbe: '#6366F1', kategorie: 'entwicklung', icd: 'F43.1',
+    beschreibung: 'Flashbacks, Albträume, Vermeidung, Hypervigilanz',
+    variablen: [
+      {
+        id: 'trauma-art', frage: 'Welche Art von Trauma liegt vor (soweit bekannt)?', typ: 'multi',
+        optionen: [
+          { id: 'misshandlung', label: 'Physische Misshandlung', tags: ['trauma-misshandlung', 'trauma-interpersonell'] },
+          { id: 'missbrauch', label: 'Sexueller Missbrauch', tags: ['trauma-sexuell', 'trauma-interpersonell', 'risiko-hoch'] },
+          { id: 'emot-misshandlung', label: 'Emotionale Misshandlung / Vernachlässigung', tags: ['trauma-emotional', 'trauma-interpersonell'] },
+          { id: 'haeusliche-gewalt', label: 'Häusliche Gewalt (als Zeuge)', tags: ['trauma-zeuge', 'trauma-interpersonell'] },
+          { id: 'unfall', label: 'Unfall / Naturkatastrophe / medizinisch', tags: ['trauma-typ-i'] },
+          { id: 'flucht', label: 'Flucht / Krieg / Verfolgung', tags: ['trauma-flucht', 'trauma-komplex'] },
+          { id: 'verlust', label: 'Traumatischer Verlust (Suizid, Gewalt)', tags: ['trauma-verlust'] },
+          { id: 'unklar', label: 'Unklar / Verdacht ohne Bestätigung', tags: ['trauma-verdacht'] }
+        ]
+      },
+      {
+        id: 'trauma-typ', frage: 'Handelt es sich um ein einmaliges oder chronisches Trauma?', typ: 'single',
+        optionen: [
+          { id: 'typ-i', label: 'Einmaliges Ereignis (Typ I — Unfall, Überfall)', tags: ['trauma-typ-i'] },
+          { id: 'typ-ii', label: 'Chronisch / wiederholt (Typ II — Missbrauch, häusl. Gewalt)', tags: ['trauma-typ-ii', 'trauma-komplex'] },
+          { id: 'komplex', label: 'Komplexes Entwicklungstrauma (früh, langanhaltend, Bezugsperson)', tags: ['trauma-komplex', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'trauma-symptome', frage: 'Welche Symptome zeigt der/die Jugendliche?', typ: 'multi',
+        optionen: [
+          { id: 'flashbacks', label: 'Flashbacks / Intrusionen / Albträume', tags: ['ptbs-wiedererleben'] },
+          { id: 'vermeidung', label: 'Vermeidung (Orte, Personen, Gespräche)', tags: ['ptbs-vermeidung'] },
+          { id: 'hypervigilanz', label: 'Hypervigilanz / Schreckhaftigkeit / Schlafprobleme', tags: ['ptbs-arousal'] },
+          { id: 'dissoziation', label: 'Dissoziation / Abschalten / Depersonalisation', tags: ['ptbs-dissoziation'] },
+          { id: 'regression', label: 'Regression / jüngeres Verhalten', tags: ['ptbs-regression'] },
+          { id: 'aggression', label: 'Aggression / Reizbarkeit', tags: ['ptbs-aggression'] },
+          { id: 'somatisch', label: 'Somatische Beschwerden', tags: ['ptbs-somatisch'] }
+        ]
+      },
+      {
+        id: 'trauma-sicherheit', frage: 'Ist der/die Jugendliche aktuell sicher?', typ: 'single',
+        optionen: [
+          { id: 'sicher', label: 'Ja — kein Kontakt mehr mit Täter/Gefährdung', tags: ['trauma-sicher'] },
+          { id: 'teilweise', label: 'Teilweise — Kontakt besteht noch (z.B. Umgangsrecht)', tags: ['trauma-teilweise-sicher'] },
+          { id: 'unsicher', label: 'Nein — lebt noch in der Gefahrensituation', tags: ['trauma-unsicher', 'risiko-akut'] },
+          { id: 'unklar', label: 'Unklar / Situation nicht vollständig einschätzbar', tags: ['trauma-unklar'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'trauma-stabilisierung',
+        tags_erforderlich: ['trauma-sicher'],
+        tags_ausschluss: ['trauma-unsicher', 'risiko-akut'],
+        tags_gewichtung: { 'trauma-typ-i': 2, 'ptbs-wiedererleben': 2, 'ptbs-arousal': 2, 'ptbs-vermeidung': 1, 'trauma-sicher': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'PTBS-Symptomatik nach Trauma-Exposition — Jugendlicher ist aktuell sicher. Dreiphasiges Vorgehen: 1) Stabilisierung, 2) Traumaverarbeitung (nur durch spezialisierte Fachkraft!), 3) Integration. Als Bezugsarbeiter: Phase 1 ist deine Domäne. Phase 2 gehört in Therapie.',
+        sofort: [
+          'Sicherheit bestätigen: "Was dir passiert ist, ist vorbei. Du bist jetzt sicher."',
+          'Psychoedukation: Trauma-Symptome sind NORMALE Reaktionen auf ABNORMALE Erfahrungen',
+          'Stabilisierung: Sicherer Ort (Imagination), Atemübungen, Grounding bei Flashbacks',
+          'Gesprächseröffnung: "Manchmal passieren Dinge, die so schlimm sind, dass unser Kopf sie nicht richtig verarbeiten kann. Dann kommen sie als Bilder, Gefühle oder Körperreaktionen zurück. Das ist nicht verrückt — das ist dein Gehirn, das versucht zu heilen."'
+        ],
+        mittelfristig: [
+          'Überweisung an Traumatherapie: tf-KVT oder EMDR bei qualifiziertem KJP',
+          'Fenster der Toleranz stabilisieren: Polyvagale Übungen, Co-Regulation',
+          'Trigger-Management: Trigger identifizieren, Umgang üben, Umfeld informieren',
+          'Schulische Anpassungen: Rückzugsmöglichkeit, Prüfungserleichterung, informierte Lehrer'
+        ],
+        ueberweisung: 'Traumatherapie-Spezialist: CHNP Ettelbruck (Traumaambulanz), ZNS Letzebuerg. Bei sexuellem Missbrauch: Service Psychologique ALUPSE. Bei häusl. Gewalt: Femmes en Détresse.',
+        elternarbeit: 'Eltern als Co-Regulatoren stärken (wenn nicht selbst Verursacher). Psychoedukation: Warum reagiert mein Kind so? Was hilft? Was verschlimmert? Keine Details des Traumas erfragen — das gehört in die Therapie.',
+        materialien: { arbeitsblaetter: ['trauma-psychoedukation', 'sicherer-ort', 'grounding'], therapiemodule: ['therapiemodul-trauma'], fachmodule: ['trauma'] },
+        referenzen: [
+          'Cohen, J.A. et al. (2017): Trauma-Focused CBT for Children and Adolescents (2nd ed.). Guilford Press.',
+          'van der Kolk, B. (2014): The Body Keeps the Score. Viking.',
+          'NICE Guideline NG116 (2018): PTSD — recognition and management in children.',
+          'ISTSS (2019): Treatment Guidelines for Complex PTSD in Children and Adolescents.'
+        ]
+      },
+      {
+        id: 'trauma-unsicher-meldung',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'trauma-unsicher': 10, 'risiko-akut': 10, 'trauma-sexuell': 5, 'trauma-misshandlung': 4, 'trauma-komplex': 3, 'trauma-teilweise-sicher': 3, 'trauma-verdacht': 2 },
+        risiko: 'rot',
+        einschaetzung: 'Aktive Traumatisierung / Kindeswohlgefährdung — Jugendlicher lebt noch in der Gefahrensituation oder hat weiterhin Kontakt mit dem Täter. SICHERHEIT HAT ABSOLUTE PRIORITÄT. Vor jeder therapeutischen Arbeit muss die Sicherheit hergestellt werden. Art. 7 Meldepflicht greift.',
+        sofort: [
+          '⚠️ Art. 7 Meldepflicht prüfen: Bei Verdacht auf Misshandlung/Missbrauch → Meldung an OPJ/Staatsanwaltschaft',
+          'Jugendlichen NICHT unter Druck setzen zu erzählen — aber ernst nehmen wenn er/sie spricht',
+          'KEINE eigene Ermittlung — das ist Aufgabe der Justiz (OPJ)',
+          'Dokumentation: Wörtliche Aussagen notieren, eigene Beobachtungen getrennt',
+          'Gesprächseröffnung: "Ich glaube dir. Was du mir erzählst, ist wichtig. Und ich werde dafür sorgen, dass du Hilfe bekommst."'
+        ],
+        mittelfristig: [
+          'Sofortige Meldung an OPJ (Office de la Protection de la Jeunesse) / ONE',
+          'Sicherheitsplan: Wo kann der Jugendliche hin, wenn es eskaliert?',
+          'Kooperation mit Justiz und Kinderschutz',
+          'Stabilisierung parallel: Sicherer Ort, Vertrauensperson, Tagesstruktur'
+        ],
+        ueberweisung: '🚨 Meldepflicht Art. 7: OPJ Luxembourg, Parquet (Staatsanwaltschaft). ONE (Office National de l\'Enfance) für Schutzmaßnahmen. Bei akuter Gefahr: 113 (Polizei). ALUPSE bei sexuellem Missbrauch. Kannerklinik CHL für forensische Untersuchung.',
+        elternarbeit: 'CAVE: Wenn Eltern Täter sind → KEINE Information an Eltern vor Meldung. Kooperation mit Kinderschutz-Institutionen. Nicht-misshandelnder Elternteil: Schutzfähigkeit einschätzen, stärken.',
+        materialien: { arbeitsblaetter: ['sicherheitsplan'], therapiemodule: ['therapiemodul-trauma'], fachmodule: ['trauma', 'kindeswohlgefaehrdung'] },
+        referenzen: [
+          'Luxemburger Jugendschutzgesetz: Art. 7 — Meldepflicht bei Kindeswohlgefährdung.',
+          'WHO (2006): Preventing Child Maltreatment — a guide to taking action.',
+          'Kindler, H. (2006): Handbuch Kindeswohlgefährdung nach § 1666 BGB. DJI München.',
+          'NICE Guideline CG89 (2009/2017): Child maltreatment — recognition and response.'
+        ]
+      }
+    ]
+  },
   { id: 'bindungsstoerung', titel: 'Bindungsstörung / Beziehungsabbrüche', icon: '🔗', farbe: '#8B5CF6', kategorie: 'entwicklung', icd: 'F94.1 / F94.2', beschreibung: 'Misstrauen, Klammern, Distanzlosigkeit, Beziehungsabbrüche', variablen: [], empfehlungen: [] },
   { id: 'dissoziation', titel: 'Dissoziation / Abschalten', icon: '🌫️', farbe: '#64748B', kategorie: 'entwicklung', icd: 'F44', beschreibung: 'Abwesenheit, Depersonalisation, Amnesie, emotionale Taubheit', variablen: [], empfehlungen: [] },
   { id: 'adhs-verdacht', titel: 'ADHS-Verdacht / Konzentrationsprobleme', icon: '⚡', farbe: '#F59E0B', kategorie: 'entwicklung', icd: 'F90', beschreibung: 'Unaufmerksamkeit, Hyperaktivität, Impulsivität', variablen: [], empfehlungen: [] },

@@ -25036,7 +25036,123 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'substanzkonsum', titel: 'Substanzkonsum / Suchtverhalten', icon: '🧪', farbe: '#BE185D', kategorie: 'krisen', icd: 'F10-F19', beschreibung: 'Alkohol, Cannabis, andere Substanzen, Mischkonsum', variablen: [], empfehlungen: [] },
+  {
+    id: 'substanzkonsum', titel: 'Substanzkonsum / Suchtverhalten', icon: '🧪', farbe: '#BE185D', kategorie: 'krisen', icd: 'F10-F19',
+    beschreibung: 'Alkohol, Cannabis, andere Substanzen, Mischkonsum',
+    variablen: [
+      {
+        id: 'sub-substanz', frage: 'Welche Substanz(en) werden konsumiert?', typ: 'multi',
+        optionen: [
+          { id: 'cannabis', label: 'Cannabis', tags: ['sub-cannabis'] },
+          { id: 'alkohol', label: 'Alkohol', tags: ['sub-alkohol'] },
+          { id: 'nikotin', label: 'Nikotin / Vaping', tags: ['sub-nikotin'] },
+          { id: 'stimulanzien', label: 'Stimulanzien (Amphetamine, Kokain, MDMA)', tags: ['sub-stimulanzien', 'risiko-hoch'] },
+          { id: 'opioide', label: 'Opioide / Medikamentenmissbrauch', tags: ['sub-opioide', 'risiko-hoch'] },
+          { id: 'andere', label: 'Andere (Lösungsmittel, Research Chemicals, Pilze)', tags: ['sub-andere'] },
+          { id: 'misch', label: 'Mischkonsum (mehrere Substanzen gleichzeitig)', tags: ['sub-mischkonsum', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'sub-muster', frage: 'Wie sieht das Konsummuster aus?', typ: 'single',
+        optionen: [
+          { id: 'experimentell', label: 'Experimentell / Probierkonsum (1-2 Mal)', tags: ['sub-experimentell'] },
+          { id: 'gelegentlich', label: 'Gelegentlich (Wochenende, Partys)', tags: ['sub-gelegentlich'] },
+          { id: 'regelmaessig', label: 'Regelmäßig (mehrmals/Woche)', tags: ['sub-regelmaessig', 'sub-mittel'] },
+          { id: 'taeglich', label: 'Täglich / Abhängigkeit', tags: ['sub-taeglich', 'sub-schwer', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'sub-funktion', frage: 'Welche Funktion hat der Konsum?', typ: 'single',
+        optionen: [
+          { id: 'dazugehoeren', label: 'Dazugehören / Peergroup-Norm', tags: ['sub-sozial'] },
+          { id: 'selbstmedikation', label: 'Selbstmedikation (Angst, Depression, Schlaf, Trauma)', tags: ['sub-selbstmedikation'] },
+          { id: 'flucht', label: 'Flucht / Realitätsvermeidung', tags: ['sub-flucht'] },
+          { id: 'sensation', label: 'Sensation Seeking / Kick', tags: ['sub-sensation'] },
+          { id: 'unklar', label: 'Unklar / mehrere Gründe', tags: [] }
+        ]
+      },
+      {
+        id: 'sub-konsequenzen', frage: 'Welche Folgen zeigen sich bereits?', typ: 'multi',
+        optionen: [
+          { id: 'schule', label: 'Schulprobleme (Fehlzeiten, Leistungsabfall)', tags: ['sub-schulfolgen'] },
+          { id: 'sozial', label: 'Soziale Probleme (Freundeswechsel, Isolation)', tags: ['sub-sozialfolgen'] },
+          { id: 'familie', label: 'Familienkonflikte', tags: ['sub-familienfolgen'] },
+          { id: 'gesundheit', label: 'Gesundheitliche Probleme', tags: ['sub-gesundheitsfolgen'] },
+          { id: 'legal', label: 'Legale Probleme (Polizei, Anzeige)', tags: ['sub-legalfolgen'] },
+          { id: 'keine', label: 'Noch keine sichtbaren Folgen', tags: [] }
+        ]
+      },
+      {
+        id: 'sub-motivation', frage: 'Wie ist die Veränderungsbereitschaft?', typ: 'single',
+        optionen: [
+          { id: 'kein-problem', label: '"Ist kein Problem" — kein Problembewusstsein', tags: ['sub-precontemplation'] },
+          { id: 'ambivalent', label: 'Ambivalent — sieht Probleme, will aber nicht aufhören', tags: ['sub-contemplation'] },
+          { id: 'bereit', label: 'Möchte reduzieren / aufhören', tags: ['sub-preparation'] },
+          { id: 'hilfe-gesucht', label: 'Sucht aktiv Hilfe', tags: ['sub-action'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'sub-frueher-konsum',
+        tags_erforderlich: [],
+        tags_ausschluss: ['sub-schwer', 'sub-taeglich'],
+        tags_gewichtung: { 'sub-experimentell': 2, 'sub-gelegentlich': 2, 'sub-sozial': 2, 'sub-cannabis': 1, 'sub-alkohol': 1, 'sub-precontemplation': 1 },
+        risiko: 'gelb',
+        einschaetzung: 'Früher / gelegentlicher Substanzkonsum — Noch keine Abhängigkeit, aber Risikoverhalten. In der Adoleszenz ist Experimentieren häufig (ca. 30% der 15-Jährigen in LU haben Cannabis probiert). Ziel: Nicht moralisieren, sondern Risikokompetenz stärken. Motivierende Gesprächsführung effektiver als Verbote.',
+        sofort: [
+          'Offenes, nicht-verurteilendes Gespräch: "Ich weiß, dass viele in deinem Alter Erfahrungen mit ... machen. Mich interessiert, wie das bei dir ist."',
+          'Risikokompetenz fördern: Was weißt du über die Substanz? Was könnte passieren?',
+          'Funktion klären: Warum konsumierst du? Was bekommst du dadurch?',
+          'NICHT: Moralische Appelle, Drohungen, Eltern-Sofortinfo bei Probierkonsum'
+        ],
+        mittelfristig: [
+          'Motivierende Gesprächsführung (MI): Ambivalenz explorieren, Diskrepanz aufbauen',
+          'Peer-Einfluss bearbeiten: Wie sagst du "Nein"? Gibt es Alternativen?',
+          'Alternative Bedürfnisbefriedigung: Was könnte dir dasselbe geben ohne Risiko?',
+          'Monitoring: Konsummuster im Auge behalten — verändert sich die Frequenz?'
+        ],
+        ueberweisung: 'Bei regelmäßigem Konsum oder Verdacht auf Selbstmedikation: Suchtberatung. In Luxemburg: Impuls (Centre National de Prévention des Addictions), CNS Ettelbruck.',
+        elternarbeit: 'Eltern informieren — CAVE: Bei Probierkonsum nicht sofort dramatisieren. Eltern brauchen: Psychoedukation (Probieren ≠ Sucht), Kommunikationsstrategien (Zuhören statt Predigen), klare Haltung ohne Eskalation.',
+        materialien: { arbeitsblaetter: ['substanzkonsum-reflexion'], therapiemodule: ['therapiemodul-substanz'], fachmodule: ['substanzkonsum'] },
+        referenzen: [
+          'Miller, W.R. & Rollnick, S. (2013): Motivational Interviewing (3rd ed.). Guilford Press.',
+          'EMCDDA (2022): European Drug Report — prevalence data for Luxembourg.',
+          'NICE Guideline CG51 (2007/2022): Drug misuse in children and young people.',
+          'Thomasius, R. et al. (2009): Cannabis und Cannabinoide bei Jugendlichen. Deutsches Ärzteblatt.'
+        ]
+      },
+      {
+        id: 'sub-regelmaessig-abhaengig',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'sub-regelmaessig': 3, 'sub-taeglich': 5, 'sub-schwer': 5, 'sub-selbstmedikation': 3, 'sub-mischkonsum': 4, 'sub-stimulanzien': 3, 'sub-opioide': 5, 'sub-schulfolgen': 2, 'sub-legalfolgen': 2, 'sub-gesundheitsfolgen': 3 },
+        risiko: 'rot',
+        einschaetzung: 'Regelmäßiger Substanzkonsum / Verdacht auf Abhängigkeit. Bei Jugendlichen entwickelt sich Abhängigkeit schneller als bei Erwachsenen (unreifes Belohnungssystem). Selbstmedikation ist häufig — hinter dem Konsum liegt oft eine unbehandelte psychische Störung. Doppeldiagnose-Ansatz: Sucht UND Grundstörung behandeln.',
+        sofort: [
+          'Ernst nehmen ohne zu dramatisieren: "Ich mache mir Sorgen, weil sich dein Konsummuster verändert hat"',
+          'Sicherheit klären: Konsumiert unter gefährlichen Bedingungen? Mischkonsum? Überdosierungsrisiko?',
+          'Bei akuter Intoxikation: Medizinische Erstversorgung (112 bei Bewusstlosigkeit)',
+          'Bei Selbstmedikation: "Du nimmst [Substanz], damit du dich besser fühlst — lass uns schauen, was dahintersteckt"'
+        ],
+        mittelfristig: [
+          'Suchtberatung einbeziehen: Impuls Luxembourg, CNS Ettelbruck',
+          'Komorbide Störungen behandeln: Depression, Angst, ADHS, Trauma — oft Ursache des Konsums',
+          'Motivierende Gesprächsführung (MI) + Kontingenzmanagement',
+          'Bei Abhängigkeit: Strukturierte Entwöhnung, ggf. stationär'
+        ],
+        ueberweisung: 'Dringend: Impuls (Centre National de Prévention des Addictions) — Beratung und Therapie. CHNP/CNS bei stationärem Bedarf. JDH (Jugend- an Drogenhëllef) — Streetwork und Beratung. Bei Minderjährigen: Jugendgericht/OPJ kann Therapieauflage aussprechen.',
+        elternarbeit: 'Eltern sind oft verzweifelt oder in Verleugnung. Klare Botschaft: Abhängigkeit ist eine Erkrankung, kein Willensdefizit. Eltern als Verbündete gewinnen, nicht als Feinde. Al-Anon Luxembourg für betroffene Angehörige.',
+        materialien: { arbeitsblaetter: ['substanzkonsum-reflexion'], therapiemodule: ['therapiemodul-substanz'], fachmodule: ['substanzkonsum'] },
+        referenzen: [
+          'Winters, K.C. et al. (2011): Adolescent substance abuse treatment — JAACAP Practice Parameter.',
+          'NICE Guideline CG51 (2007/2022): Drug misuse — psychosocial interventions.',
+          'Dennis, M.L. et al. (2004): The Cannabis Youth Treatment Study — JAACAP.',
+          'Hoch, E. et al. (2019): Cannabis use and mental health — Lancet Psychiatry.'
+        ]
+      }
+    ]
+  },
 
   // D. Entwicklung / Trauma
   { id: 'trauma', titel: 'Trauma-Exposition / PTBS-Verdacht', icon: '🌪️', farbe: '#6366F1', kategorie: 'entwicklung', icd: 'F43.1', beschreibung: 'Flashbacks, Albträume, Vermeidung, Hypervigilanz', variablen: [], empfehlungen: [] },

@@ -25264,7 +25264,112 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'bindungsstoerung', titel: 'Bindungsstörung / Beziehungsabbrüche', icon: '🔗', farbe: '#8B5CF6', kategorie: 'entwicklung', icd: 'F94.1 / F94.2', beschreibung: 'Misstrauen, Klammern, Distanzlosigkeit, Beziehungsabbrüche', variablen: [], empfehlungen: [] },
+  {
+    id: 'bindungsstoerung', titel: 'Bindungsstörung / Beziehungsabbrüche', icon: '🔗', farbe: '#8B5CF6', kategorie: 'entwicklung', icd: 'F94.1 / F94.2',
+    beschreibung: 'Misstrauen, Klammern, Distanzlosigkeit, Beziehungsabbrüche',
+    variablen: [
+      {
+        id: 'bind-muster', frage: 'Welches Bindungsmuster zeigt sich?', typ: 'single',
+        optionen: [
+          { id: 'unsicher-vermeidend', label: 'Vermeidend — hält alle auf Distanz, "braucht niemanden"', tags: ['bind-vermeidend'] },
+          { id: 'unsicher-ambivalent', label: 'Ambivalent — klammert, dann stößt weg, extrem anhänglich', tags: ['bind-ambivalent'] },
+          { id: 'desorganisiert', label: 'Desorganisiert — widersprüchliches Verhalten, Angst VOR der Bezugsperson', tags: ['bind-desorganisiert', 'risiko-hoch'] },
+          { id: 'distanzlos', label: 'Distanzlos — geht auf Fremde zu, keine Fremdangst', tags: ['bind-distanzlos'] },
+          { id: 'unklar', label: 'Unklar / wechselnd', tags: [] }
+        ]
+      },
+      {
+        id: 'bind-verhalten', frage: 'Wie zeigt sich das im Alltag?', typ: 'multi',
+        optionen: [
+          { id: 'beziehungsabbruch', label: 'Beziehungen abrupt beenden / "Bevor du mich verlässt, gehe ich"', tags: ['bind-abbruch'] },
+          { id: 'misstrauen', label: 'Tiefes Misstrauen gegenüber Erwachsenen', tags: ['bind-misstrauen'] },
+          { id: 'klammern', label: 'Exzessives Klammern / Trennungsangst', tags: ['bind-klammern'] },
+          { id: 'kontrolle', label: 'Kontrollierendes Verhalten in Beziehungen', tags: ['bind-kontrolle'] },
+          { id: 'parentifizierung', label: 'Rollenumkehr — kümmert sich um Erwachsene', tags: ['bind-parentifiziert'] },
+          { id: 'aggression-naehe', label: 'Aggression bei zu viel Nähe', tags: ['bind-naehe-angst'] }
+        ]
+      },
+      {
+        id: 'bind-vorgeschichte', frage: 'Welche Bindungserfahrungen gibt es in der Vorgeschichte?', typ: 'multi',
+        optionen: [
+          { id: 'fruehe-trennung', label: 'Frühe Trennung von Bezugsperson', tags: ['bind-frueh-getrennt'] },
+          { id: 'heim', label: 'Fremdunterbringung / Heim / Pflegefamilie', tags: ['bind-fremduntergebracht'] },
+          { id: 'wechsel', label: 'Häufige Bezugsperson-Wechsel', tags: ['bind-instabil'] },
+          { id: 'vernachlaessigung', label: 'Emotionale Vernachlässigung', tags: ['bind-vernachlaessigt'] },
+          { id: 'gewalt', label: 'Gewalt durch Bezugsperson', tags: ['bind-traumatisiert', 'trauma-interpersonell'] },
+          { id: 'unklar', label: 'Vorgeschichte unklar/unbekannt', tags: ['bind-vorgeschichte-unklar'] }
+        ]
+      },
+      {
+        id: 'bind-aktuell', frage: 'Gibt es aktuell mindestens eine stabile Bezugsperson?', typ: 'single',
+        optionen: [
+          { id: 'ja', label: 'Ja — mindestens eine verlässliche Person', tags: ['bind-ressource-vorhanden'] },
+          { id: 'teilweise', label: 'Teilweise — Beziehung ist belastet aber vorhanden', tags: ['bind-ressource-teilweise'] },
+          { id: 'nein', label: 'Nein — keine stabile Bezugsperson', tags: ['bind-keine-ressource', 'risiko-hoch'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'bind-beziehungsaufbau',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'bind-vermeidend': 2, 'bind-ambivalent': 2, 'bind-misstrauen': 2, 'bind-abbruch': 3, 'bind-ressource-vorhanden': 1, 'bind-naehe-angst': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Unsichere Bindung mit Auswirkungen auf Beziehungsverhalten — Bindungsmuster sind erlernt und veränderbar, aber brauchen Zeit und Beständigkeit. Als Bezugsarbeiter BIST du die korrigierende Bindungserfahrung. Dein wichtigstes Werkzeug: Verlässlichkeit, Vorhersehbarkeit, emotionale Verfügbarkeit.',
+        sofort: [
+          'Verlässlichkeit zeigen: Termine einhalten, Ankündigungen umsetzen, Versprechen halten — IMMER',
+          'Tempo des Jugendlichen respektieren: Nähe nicht erzwingen, Distanz nicht bestrafen',
+          'Bei Abbruchversuchen: "Du kannst mich wegschicken, aber ich komme wieder. Das ist mein Job und meine Entscheidung."',
+          'Gesprächseröffnung: "Ich merke, dass es dir schwerfällt, jemandem zu vertrauen. Das ergibt total Sinn, wenn man bedenkt, was du erlebt hast. Vertrauen braucht Zeit — und die haben wir."'
+        ],
+        mittelfristig: [
+          'Korrigierende Beziehungserfahrung systematisch aufbauen: PACE (Playfulness, Acceptance, Curiosity, Empathy) nach Hughes',
+          'Bindungsverhalten beobachten und dokumentieren: Wie nah lässt er/sie zu? Wann kommt der Abbruchimpuls?',
+          'Übergangsrituale gestalten: Bei jedem Abschied klar sagen, wann man wiederkommt',
+          'Beziehungsqualität regelmäßig reflektieren (nicht nur Symptome)'
+        ],
+        ueberweisung: 'Bei schwerer Bindungsstörung (F94.1/F94.2): KJP-Abklärung. Bindungsbasierte Therapie: CHNP, Fondation Kannerschlass (Heimbetreuung mit therapeutischem Ansatz).',
+        elternarbeit: 'Eltern sind oft selbst unsicher gebunden. Videogestützte Bindungsförderung (VIPP-SD) oder Circle of Security Parenting. Ziel: Eltern als sichere Basis stärken, nicht Schuld zuweisen.',
+        materialien: { arbeitsblaetter: ['beziehungen-erkunden', 'vertrauensnetz'], therapiemodule: ['therapiemodul-bindung'], fachmodule: ['bindung'] },
+        referenzen: [
+          'Hughes, D.A. (2009): Attachment-Focused Parenting — PACE model. Norton.',
+          'Bowlby, J. (1988): A Secure Base — parent-child attachment. Basic Books.',
+          'Brisch, K.H. (2009): Bindungsstörungen — von der Bindungstheorie zur Therapie (10. Aufl.). Klett-Cotta.',
+          'NICE Guideline NG26 (2015): Children\'s attachment — assessment and intervention.'
+        ]
+      },
+      {
+        id: 'bind-schwer-desorganisiert',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'bind-desorganisiert': 5, 'bind-distanzlos': 4, 'bind-keine-ressource': 5, 'bind-fremduntergebracht': 2, 'bind-traumatisiert': 4, 'bind-instabil': 3, 'risiko-hoch': 3 },
+        risiko: 'rot',
+        einschaetzung: 'Schwere Bindungsstörung (F94.1 reaktiv / F94.2 enthemmt) — Häufig bei Kindern mit multiplen Beziehungsabbrüchen, Heimkarrieren oder früher Traumatisierung. Bindungsdesorganisation ist der stärkste Prädiktor für spätere psychische Störungen. Spezialisierte Hilfe nötig — aber DU als Bezugsarbeiter bist der Anfang der Lösung.',
+        sofort: [
+          'Klare Struktur und Vorhersehbarkeit: Tagesablauf, Regeln, Rituale — Sicherheit durch Struktur',
+          'Bei distanzlosem Verhalten: Sanft Grenzen setzen OHNE Zurückweisung ("Ich mag dich, UND wir kennen uns noch nicht so gut")',
+          'Emotionale Verfügbarkeit signalisieren: Nicht warten bis der Jugendliche kommt — aktiv Kontakt suchen',
+          'Team informieren: Alle sollen konsistent reagieren — kein Splitting zwischen Bezugspersonen zulassen'
+        ],
+        mittelfristig: [
+          'Dringende KJP-Vorstellung: Differenzialdiagnostik (Bindungsstörung vs. ADHS vs. Trauma)',
+          'Stabile Betreuungskontinuität sichern: Bezugsperson-Wechsel VERMEIDEN',
+          'Heilpädagogische/therapeutische Maßnahmen: Spieltherapie, Theraplay, DDP (Dyadic Developmental Psychotherapy)',
+          'Bei Fremdunterbringung: Bindungsorientierte Pflege, Übergänge sorgfältig begleiten'
+        ],
+        ueberweisung: 'Spezialisierte KJP-Abklärung: CHNP Ettelbruck, CHL. Bei Fremdunterbringung: ONE (Office National de l\'Enfance), Fondation Kannerschlass. Heilpädagogische Dienste: SRE.',
+        elternarbeit: 'Intensiv — oft sind Eltern Teil der Ursache. Circle of Security (COS) als evidenzbasiertes Elternprogramm. Bei Pflegeeltern: Spezifische Beratung zu Bindungsstörung — "Das Kind testet nicht SIE, es testet ob Beziehung sicher ist."',
+        materialien: { arbeitsblaetter: ['beziehungen-erkunden', 'vertrauensnetz'], therapiemodule: ['therapiemodul-bindung'], fachmodule: ['bindung'] },
+        referenzen: [
+          'Zeanah, C.H. & Gleason, M.M. (2015): RAD and DSED — Annual Review of Clinical Psychology.',
+          'Brisch, K.H. (2009): Bindungsstörungen (10. Aufl.). Klett-Cotta.',
+          'NICE Guideline NG26 (2015): Children\'s attachment — looked-after children and young people.',
+          'Powell, B. et al. (2013): The Circle of Security Intervention. Guilford Press.'
+        ]
+      }
+    ]
+  },
   { id: 'dissoziation', titel: 'Dissoziation / Abschalten', icon: '🌫️', farbe: '#64748B', kategorie: 'entwicklung', icd: 'F44', beschreibung: 'Abwesenheit, Depersonalisation, Amnesie, emotionale Taubheit', variablen: [], empfehlungen: [] },
   { id: 'adhs-verdacht', titel: 'ADHS-Verdacht / Konzentrationsprobleme', icon: '⚡', farbe: '#F59E0B', kategorie: 'entwicklung', icd: 'F90', beschreibung: 'Unaufmerksamkeit, Hyperaktivität, Impulsivität', variablen: [], empfehlungen: [] },
   { id: 'essstoerung', titel: 'Essstörung-Verdacht', icon: '🪞', farbe: '#EC4899', kategorie: 'entwicklung', icd: 'F50', beschreibung: 'Restriktives Essen, Essanfälle, Erbrechen, Körperdysmorphie', variablen: [], empfehlungen: [] },

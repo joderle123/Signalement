@@ -26052,10 +26052,263 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'luegen', titel: 'Lügen / Manipulieren', icon: '🎭', farbe: '#D97706', kategorie: 'interaktion', icd: 'F91', beschreibung: 'Chronisches Lügen, Verantwortung abschieben, Manipulation', variablen: [], empfehlungen: [] },
-  { id: 'stehlen', titel: 'Stehlen / Klauen', icon: '🤚', farbe: '#B45309', kategorie: 'interaktion', icd: 'F91.2', beschreibung: 'Diebstahl in Schule, zu Hause, im Geschäft', variablen: [], empfehlungen: [] },
-  { id: 'sexualisiertes-verhalten', titel: 'Sexualisierte Sprache / Verhalten', icon: '⚠️', farbe: '#E11D48', kategorie: 'interaktion', icd: 'F65 / F98.8', beschreibung: 'Unangemessenes sexuelles Verhalten, Grenzverletzung', variablen: [], empfehlungen: [] },
-  { id: 'selektiver-mutismus', titel: 'Selektiver Mutismus', icon: '🤐', farbe: '#475569', kategorie: 'interaktion', icd: 'F94.0', beschreibung: 'Spricht in bestimmten Kontexten nicht trotz Sprachfähigkeit', variablen: [], empfehlungen: [] },
+  {
+    id: 'luegen', titel: 'Lügen / Manipulieren', icon: '🎭', farbe: '#D97706', kategorie: 'interaktion', icd: 'F91',
+    beschreibung: 'Chronisches Lügen, Verantwortung abschieben, Manipulation',
+    variablen: [
+      {
+        id: 'lueg-art', frage: 'Welche Art des Lügens zeigt sich?', typ: 'single',
+        optionen: [
+          { id: 'notluegen', label: 'Notlügen (Strafe vermeiden, Ärger aus dem Weg gehen)', tags: ['lueg-defensiv'] },
+          { id: 'uebertreibung', label: 'Übertreibung / Prahlerei (besser dastehen)', tags: ['lueg-kompensation'] },
+          { id: 'manipulation', label: 'Gezielte Manipulation (andere gegeneinander ausspielen)', tags: ['lueg-instrumentell', 'risiko-hoch'] },
+          { id: 'pathologisch', label: 'Pathologisch — lügt auch ohne erkennbaren Grund', tags: ['lueg-pathologisch'] }
+        ]
+      },
+      {
+        id: 'lueg-funktion', frage: 'Was erreicht der/die Jugendliche durch das Lügen?', typ: 'single',
+        optionen: [
+          { id: 'schutz', label: 'Schutz vor Strafe / Konsequenzen', tags: ['lueg-schutz'] },
+          { id: 'zugehoerigkeit', label: 'Zugehörigkeit / Anerkennung', tags: ['lueg-zugehoerigkeit'] },
+          { id: 'kontrolle', label: 'Kontrolle über Situation / andere', tags: ['lueg-kontrolle'] },
+          { id: 'vermeidung', label: 'Vermeidung von Scham / Versagen', tags: ['lueg-scham'] }
+        ]
+      },
+      {
+        id: 'lueg-kontext', frage: 'Gegenüber wem wird gelogen?', typ: 'multi',
+        optionen: [
+          { id: 'eltern', label: 'Eltern', tags: ['lueg-eltern'] },
+          { id: 'lehrer', label: 'Lehrer / Fachkräfte', tags: ['lueg-fachkraft'] },
+          { id: 'peers', label: 'Gleichaltrige', tags: ['lueg-peers'] },
+          { id: 'alle', label: 'Alle / wahllos', tags: ['lueg-generalisiert'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'lueg-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'lueg-defensiv': 1, 'lueg-kompensation': 2, 'lueg-instrumentell': 3, 'lueg-pathologisch': 4, 'lueg-schutz': 1, 'lueg-kontrolle': 3 },
+        risiko: 'gruen',
+        einschaetzung: 'Chronisches Lügen — Lügen ist bei Kindern/Jugendlichen häufig und entwicklungsbedingt normal (3-7 Jahre: Fantasielügen, Pubertät: Autonomie-Lügen). Problematisch wird es, wenn es: chronisch ist, Beziehungen zerstört, oder zur Manipulation anderer dient. Frage ist immer: WARUM lügt das Kind — was würde passieren, wenn es die Wahrheit sagt?',
+        sofort: [
+          'Nicht in die Falle tappen: KEINE Fragen stellen, auf die du die Antwort schon kennst ("Hast du das genommen?")',
+          'Ehrlichkeit BELOHNEN, nicht bestrafen: "Danke, dass du mir die Wahrheit sagst — das war mutig."',
+          'Lüge benennen, Kind nicht als "Lügner" abstempeln: "Das stimmt nicht — und ich möchte wissen warum."',
+          'Gesprächseröffnung: "Mir fällt auf, dass du mir manchmal Dinge erzählst, die nicht stimmen. Ich frage mich, ob du Angst hast, mir die Wahrheit zu sagen. Was würde passieren, wenn du ehrlich bist?"'
+        ],
+        mittelfristig: [
+          'Kontext der Ehrlichkeit schaffen: Konsequenzen für Lügen > Konsequenzen für die Wahrheit',
+          'Selbstwert stärken: Wenn das Kind nicht lügen MUSS um anerkannt zu werden',
+          'Bei Manipulation/Splitting: Alle Bezugspersonen müssen konsistent reagieren und kommunizieren',
+          'Kognitive Entwicklung fördern: Perspektivübernahme, Vertrauen als Wert'
+        ],
+        ueberweisung: 'Bei: Pathologischem Lügen ohne erkennbare Funktion, Verdacht auf Conduct Disorder, Callous-Unemotional Traits → KJP.',
+        elternarbeit: 'Eltern reflektieren: Wie reagiere ich auf Wahrheit? Wird Ehrlichkeit bestraft? Lüge ich selbst als Vorbild? Konsistenz: Gleiche Reaktion aller Erwachsenen. Nicht "erwischen wollen" — sondern Ehrlichkeit möglich machen.',
+        materialien: { arbeitsblaetter: ['soziale-kompetenz', 'vertrauensnetz'], therapiemodule: ['therapiemodul-opposition'], fachmodule: ['opposition'] },
+        referenzen: [
+          'Talwar, V. & Lee, K. (2008): Social and cognitive correlates of children\'s lying behavior. Child Development.',
+          'Stouthamer-Loeber, M. (1986): Lying as a problem behavior in children. Clinical Psychology Review.',
+          'Greene, R.W. (2014): Collaborative & Proactive Solutions — addressing lying as a lagging skill.',
+          'Ekman, P. (2009): Why Kids Lie — how parents can encourage truthfulness. Penguin.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'stehlen', titel: 'Stehlen / Klauen', icon: '🤚', farbe: '#B45309', kategorie: 'interaktion', icd: 'F91.2',
+    beschreibung: 'Diebstahl in Schule, zu Hause, im Geschäft',
+    variablen: [
+      {
+        id: 'steh-kontext', frage: 'Wo/bei wem wird gestohlen?', typ: 'multi',
+        optionen: [
+          { id: 'schule', label: 'In der Schule (Mitschüler, Lehrer)', tags: ['steh-schule'] },
+          { id: 'zuhause', label: 'Zu Hause (Eltern, Geschwister)', tags: ['steh-zuhause'] },
+          { id: 'geschaeft', label: 'Im Geschäft (Ladendiebstahl)', tags: ['steh-laden'] },
+          { id: 'online', label: 'Online (Kreditkarte, In-App-Käufe)', tags: ['steh-online'] }
+        ]
+      },
+      {
+        id: 'steh-motiv', frage: 'Was könnte das Motiv sein?', typ: 'single',
+        optionen: [
+          { id: 'mangel', label: 'Realer Mangel (hat kein Geld, Hunger)', tags: ['steh-mangel'] },
+          { id: 'kick', label: 'Kick / Nervenkitzel', tags: ['steh-sensation'] },
+          { id: 'peers', label: 'Gruppendruck / Mutprobe', tags: ['steh-peer'] },
+          { id: 'aufmerksamkeit', label: 'Aufmerksamkeit / Hilferuf', tags: ['steh-hilferuf'] },
+          { id: 'impuls', label: 'Impulskontrollproblem (kann nicht widerstehen)', tags: ['steh-impuls'] }
+        ]
+      },
+      {
+        id: 'steh-frequenz', frage: 'Wie oft kommt es vor?', typ: 'single',
+        optionen: [
+          { id: 'einmalig', label: 'Einmaliger Vorfall', tags: ['steh-einmalig'] },
+          { id: 'gelegentlich', label: 'Gelegentlich (monatlich)', tags: ['steh-gelegentlich'] },
+          { id: 'regelmaessig', label: 'Regelmäßig', tags: ['steh-regelmaessig', 'risiko-hoch'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'steh-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'steh-einmalig': 1, 'steh-regelmaessig': 3, 'steh-sensation': 2, 'steh-impuls': 3, 'steh-mangel': 2, 'steh-hilferuf': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Stehlen bei Kindern/Jugendlichen — Häufiger als gedacht, oft einmalig und entwicklungsbedingt (Grenztestung). Wird problematisch bei: Chronizität, fehlender Reue, Eskalation. Immer Funktion klären: Mangel? Kick? Zugehörigkeit? Hilferuf?',
+        sofort: [
+          'Sachlich konfrontieren: "Ich weiß, dass du [Gegenstand] genommen hast. Lass uns darüber reden."',
+          'NICHT beschämen oder vor anderen bloßstellen',
+          'Wiedergutmachung ermöglichen: Zurückgeben, entschuldigen, Schaden ersetzen',
+          'Gesprächseröffnung: "Jeder macht mal etwas, das nicht okay war. Mich interessiert nicht, dich zu bestrafen — mich interessiert, warum."'
+        ],
+        mittelfristig: [
+          'Funktion klären und alternatives Verhalten erarbeiten',
+          'Bei Mangel: Soziale Unterstützung (Schulmaterial, Essen, Taschengeld)',
+          'Bei Sensation/Impuls: Emotionsregulation, Impulskontrolle stärken',
+          'Konsequenzen erleben lassen (natürliche Konsequenzen, nicht Bestrafung)'
+        ],
+        ueberweisung: 'Bei: Chronischem Stehlen, fehlender Reue, Eskalation, Verdacht auf Conduct Disorder → KJP.',
+        elternarbeit: 'Eltern nicht dramatisieren ("Mein Kind wird kriminell") — aber auch nicht bagatellisieren. Klare Haltung: Stehlen ist nicht okay. Konsequente, nicht-gewaltsame Reaktion vereinbaren.',
+        materialien: { arbeitsblaetter: ['soziale-kompetenz'], therapiemodule: ['therapiemodul-opposition'], fachmodule: ['impulskontrolle'] },
+        referenzen: [
+          'Winnicott, D.W. (1956): The antisocial tendency — stealing as hope. In: Through Paediatrics to Psychoanalysis.',
+          'Kazdin, A.E. (2005): Parent Management Training — treatment for oppositional and conduct disorders. Oxford University Press.',
+          'NICE Guideline CG158 (2013): Antisocial behaviour and conduct disorders in children.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'sexualisiertes-verhalten', titel: 'Sexualisierte Sprache / Verhalten', icon: '⚠️', farbe: '#E11D48', kategorie: 'interaktion', icd: 'F65 / F98.8',
+    beschreibung: 'Unangemessenes sexuelles Verhalten, Grenzverletzung',
+    variablen: [
+      {
+        id: 'sex-art', frage: 'Welches Verhalten zeigt sich?', typ: 'multi',
+        optionen: [
+          { id: 'sprache', label: 'Sexualisierte Sprache (Obszönitäten, Witze, Kommentare)', tags: ['sex-sprache'] },
+          { id: 'zeichnungen', label: 'Sexualisierte Zeichnungen / Medienkonsum', tags: ['sex-medien'] },
+          { id: 'beruehrung-selbst', label: 'Öffentliche Selbststimulation / Masturbation', tags: ['sex-selbst', 'sex-oeffentlich'] },
+          { id: 'beruehrung-andere', label: 'Unerwünschte Berührung anderer', tags: ['sex-grenzueberschreitend', 'risiko-hoch'] },
+          { id: 'nachspiel', label: 'Sexuelle Handlungen nachspielen (mit anderen Kindern)', tags: ['sex-nachspiel', 'risiko-hoch'] },
+          { id: 'exposition', label: 'Sich entblößen / andere zum Entblößen auffordern', tags: ['sex-exposition', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'sex-alter', frage: 'Ist das Verhalten altersangemessen?', typ: 'single',
+        optionen: [
+          { id: 'normal', label: 'Altersgemäße Neugier (Doktorspiele bei Jüngeren, Interesse bei Älteren)', tags: ['sex-altersgerecht'] },
+          { id: 'grenzwertig', label: 'Grenzwertig — häufiger/intensiver als üblich', tags: ['sex-grenzwertig'] },
+          { id: 'auffaellig', label: 'Deutlich auffällig — nicht altersgemäß, grenzverletzend', tags: ['sex-auffaellig'] },
+          { id: 'missbrauchsindikator', label: 'Möglicher Indikator für sexuellen Missbrauch', tags: ['sex-missbrauch-moeglich', 'risiko-akut'] }
+        ]
+      },
+      {
+        id: 'sex-opfer', frage: 'Gibt es Opfer / Betroffene?', typ: 'single',
+        optionen: [
+          { id: 'keine', label: 'Nein — nur eigenes Verhalten', tags: ['sex-kein-opfer'] },
+          { id: 'gleichaltrig', label: 'Gleichaltrige — mit Einverständnis', tags: ['sex-peers'] },
+          { id: 'grenzverletzung', label: 'Grenzverletzung gegenüber anderen (ohne Einverständnis)', tags: ['sex-opfer-vorhanden', 'risiko-hoch'] },
+          { id: 'juengere', label: 'Gegenüber jüngeren Kindern', tags: ['sex-juengere', 'risiko-akut'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'sex-intervention',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'sex-grenzueberschreitend': 5, 'sex-nachspiel': 5, 'sex-missbrauch-moeglich': 10, 'sex-opfer-vorhanden': 8, 'sex-juengere': 10, 'sex-auffaellig': 3, 'sex-oeffentlich': 2, 'risiko-akut': 10 },
+        risiko: 'rot',
+        einschaetzung: 'Sexualisiertes Verhalten bei Kindern/Jugendlichen — Kann entwicklungsbedingt normal sein (Neugier), kann aber auch Hinweis auf sexuellen Missbrauch oder frühe Exposition gegenüber pornografischem Material sein. Grenzverletzend gegenüber anderen = immer ernst nehmen. Bei Verhalten gegenüber Jüngeren: Meldepflicht prüfen.',
+        sofort: [
+          'Sofortige Grenzsetzung OHNE Beschämung: "Was du gerade tust, ist hier nicht okay. Lass uns darüber reden."',
+          'Opferschutz: Wenn andere betroffen sind → sofortige Trennung und Betreuung des Opfers',
+          'NICHT: Überreagieren, "perversen" Stempel aufdrücken — aber auch NICHT ignorieren',
+          '⚠️ Bei Verdacht auf eig. Missbrauchserfahrung: Dokumentieren, OPJ-Meldung prüfen'
+        ],
+        mittelfristig: [
+          'Sexualpädagogische Abklärung: Was ist altersgemäß? Was nicht?',
+          'Bei eigener Missbrauchserfahrung: Traumatherapie (NICHT Sexualpädagogik allein)',
+          'Grenzen-Curriculum: Gute/schlechte Berührung, Körperautonomie, Consent',
+          'Bei Grenzverletzung gegenüber anderen: Spezialisiertes Setting (forensisch/KJP)'
+        ],
+        ueberweisung: 'Bei grenzverletztem Verhalten gegen Jüngere/ohne Einverständnis: Art. 7 Meldepflicht prüfen. KJP-Vorstellung: CHNP. Spezialisiert: ALUPSE (sexueller Missbrauch). Planning Familial Luxembourg (Sexualpädagogik).',
+        elternarbeit: 'Eltern sachlich informieren (oft extreme Scham/Angst). Klare Botschaft: Sexuelles Verhalten bei Kindern ist NICHT "pervers" — es hat einen Grund (oft Exposition/Missbrauch). Gemeinsam Grenzen setzen UND Ursache klären.',
+        materialien: { arbeitsblaetter: ['koerper-grenzen', 'sicherheitsplan'], therapiemodule: ['therapiemodul-sexualitaet'], fachmodule: ['sexualisiertes-verhalten'] },
+        referenzen: [
+          'Friedrich, W.N. (2007): Children with Sexual Behavior Problems. Norton.',
+          'Chaffin, M. et al. (2008): Report of the ATSA Task Force on Children with Sexual Behavior Problems.',
+          'NICE Guideline CG89 (2009): Child maltreatment — sexual abuse indicators.',
+          'Silovsky, J.F. & Niec, L. (2002): Characteristics of young children with sexual behavior problems. Child Maltreatment.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'selektiver-mutismus', titel: 'Selektiver Mutismus', icon: '🤐', farbe: '#475569', kategorie: 'interaktion', icd: 'F94.0',
+    beschreibung: 'Spricht in bestimmten Kontexten nicht trotz Sprachfähigkeit',
+    variablen: [
+      {
+        id: 'mut-kontext', frage: 'In welchen Kontexten spricht der/die Jugendliche NICHT?', typ: 'multi',
+        optionen: [
+          { id: 'schule', label: 'In der Schule (Lehrer, Klasse)', tags: ['mut-schule'] },
+          { id: 'fremde', label: 'Mit Fremden / neuen Personen', tags: ['mut-fremde'] },
+          { id: 'erwachsene', label: 'Mit Erwachsenen generell', tags: ['mut-erwachsene'] },
+          { id: 'ueberall', label: 'Fast überall außer zu Hause', tags: ['mut-generalisiert'] }
+        ]
+      },
+      {
+        id: 'mut-spricht', frage: 'Wo/mit wem spricht er/sie?', typ: 'multi',
+        optionen: [
+          { id: 'zuhause', label: 'Zu Hause mit Familie', tags: ['mut-spricht-familie'] },
+          { id: 'freund', label: 'Mit einem/wenigen ausgewählten Freund(en)', tags: ['mut-spricht-freund'] },
+          { id: 'fluester', label: 'Flüstert manchmal', tags: ['mut-fluestert'] },
+          { id: 'nonverbal', label: 'Kommuniziert nur nonverbal (Nicken, Zeigen, Schreiben)', tags: ['mut-nur-nonverbal'] }
+        ]
+      },
+      {
+        id: 'mut-dauer', frage: 'Seit wann besteht das Schweigen?', typ: 'single',
+        optionen: [
+          { id: 'immer', label: 'Seit Beginn (Kindergarten/Schuleintritt)', tags: ['mut-frueh'] },
+          { id: 'uebergang', label: 'Nach einem Übergang (Schulwechsel, Umzug)', tags: ['mut-uebergang'] },
+          { id: 'ereignis', label: 'Nach einem belastenden Ereignis', tags: ['mut-nach-ereignis', 'trauma-moeglich'] },
+          { id: 'neu', label: 'Erst seit Kurzem (<3 Monate)', tags: ['mut-neu'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'mut-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'mut-generalisiert': 3, 'mut-schule': 2, 'mut-nur-nonverbal': 2, 'mut-frueh': 2, 'mut-nach-ereignis': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Selektiver Mutismus (F94.0) — KEINE Verweigerung ("will nicht sprechen"), sondern eine Angststörung ("kann nicht sprechen"). Das Kind/der Jugendliche ist in bestimmten Situationen durch Angst am Sprechen gehindert. CAVE: Nicht mit Schüchternheit verwechseln — SM persistiert über Monate und beeinträchtigt massiv.',
+        sofort: [
+          'Keinen Druck ausüben: NICHT "Sag doch was" / "Du KANNST doch sprechen"',
+          'Nonverbale Kommunikation akzeptieren: Nicken, Zeigen, Schreiben ist ein Anfang',
+          'Angst reduzieren: Kleine Gruppen, vorhersehbare Situationen, keine Überraschungen',
+          'Gesprächseröffnung (NICHT verbal fordern): Aktivität anbieten, nebeneinander arbeiten, indirekt kommunizieren — der Druck raus'
+        ],
+        mittelfristig: [
+          'Stufenweise Exposition (Sliding-In-Technique / Defocused Communication)',
+          'Stimulus Fading: Person, mit der das Kind spricht, bringt neue Person langsam dazu',
+          'Shaping: Jede Form der Kommunikation verstärken (Nicken → Flüstern → Sprechen)',
+          'KJP-Überweisung für Verhaltenstherapie mit SM-Expertise'
+        ],
+        ueberweisung: 'SM erfordert spezialisierte Behandlung: KJP mit SM-Erfahrung. In Luxemburg: CHNP, CHL Neuropädiatrie (Abgrenzung: Sprachstörung?). Logopädie als Ergänzung. Dauer: Oft 6-18 Monate.',
+        elternarbeit: 'Eltern beruhigen: SM ist keine absichtliche Verweigerung. Nicht zwingen, nicht bestrafen, nicht bloßstellen. Eltern können Brücke sein: Kind spricht mit Elternteil → Fachkraft hört zu → Kind gewöhnt sich → irgendwann direkt.',
+        materialien: { arbeitsblaetter: ['soziale-kompetenz'], therapiemodule: ['therapiemodul-mutismus'], fachmodule: ['mutismus'] },
+        referenzen: [
+          'Johnson, M. & Wintgens, A. (2016): The Selective Mutism Resource Manual (2nd ed.). Speechmark.',
+          'Bergman, R.L. et al. (2013): Integrated Behavior Therapy for Selective Mutism. Behavior Research and Therapy.',
+          'Cohan, S.L. et al. (2006): Selective mutism — a review. Clinical Psychology Review.',
+          'NICE: No specific guideline — treated under Anxiety Disorders (CG159) framework.'
+        ]
+      }
+    ]
+  },
 
   // G. Schulische Alltagsprobleme
   { id: 'null-bock', titel: 'Leistungsverweigerung / Null-Bock', icon: '😴', farbe: '#EA580C', kategorie: 'schule', icd: 'Z55', beschreibung: 'Keine Motivation, Arbeitsverweigerung, Desinteresse', variablen: [], empfehlungen: [] },

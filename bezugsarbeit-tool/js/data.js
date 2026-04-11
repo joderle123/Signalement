@@ -25606,7 +25606,84 @@ const CDSS_PROBLEME = [
   },
 
   // E. Soziale / Kontextuelle Probleme
-  { id: 'mobbing-opfer', titel: 'Mobbing (als Opfer)', icon: '😢', farbe: '#2563EB', kategorie: 'sozial', icd: 'Z60.4', beschreibung: 'Systematisches Schikaniert-werden, Ausgrenzung, Cybermobbing', variablen: [], empfehlungen: [] },
+  {
+    id: 'mobbing-opfer', titel: 'Mobbing (als Opfer)', icon: '😢', farbe: '#2563EB', kategorie: 'sozial', icd: 'Z60.4',
+    beschreibung: 'Systematisches Schikaniert-werden, Ausgrenzung, Cybermobbing',
+    variablen: [
+      {
+        id: 'mop-art', frage: 'Welche Form von Mobbing erlebt der/die Jugendliche?', typ: 'multi',
+        optionen: [
+          { id: 'physisch', label: 'Physisch (geschlagen, geschubst, Sachen weggenommen)', tags: ['mop-physisch'] },
+          { id: 'verbal', label: 'Verbal (beleidigt, ausgelacht, bedroht)', tags: ['mop-verbal'] },
+          { id: 'relational', label: 'Relational (ausgeschlossen, ignoriert, Gerüchte)', tags: ['mop-relational'] },
+          { id: 'cyber', label: 'Cybermobbing (Chats, soziale Medien, Bilder/Videos)', tags: ['mop-cyber'] },
+          { id: 'sexualisiert', label: 'Sexualisiert (Kommentare, unerwünschte Berührung, Bilder)', tags: ['mop-sexualisiert', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'mop-dauer', frage: 'Wie lange geht das Mobbing schon?', typ: 'single',
+        optionen: [
+          { id: 'akut', label: 'Erst seit Kurzem (<1 Monat)', tags: ['mop-akut'] },
+          { id: 'wochen', label: '1-3 Monate', tags: ['mop-subakut'] },
+          { id: 'monate', label: '3-12 Monate', tags: ['mop-chronisch'] },
+          { id: 'jahre', label: 'Über 1 Jahr / "schon immer"', tags: ['mop-chronisch', 'mop-schwer'] }
+        ]
+      },
+      {
+        id: 'mop-reaktion', frage: 'Wie reagiert der/die Jugendliche auf das Mobbing?', typ: 'single',
+        optionen: [
+          { id: 'rueckzug', label: 'Rückzug / Vermeidung (geht nicht mehr hin)', tags: ['mop-rueckzug', 'vermeidung'] },
+          { id: 'erdulden', label: 'Erduldet es still ("Ist nicht so schlimm")', tags: ['mop-erdulden'] },
+          { id: 'gegenwehr', label: 'Wehrt sich (verbal oder physisch)', tags: ['mop-gegenwehr'] },
+          { id: 'internalisierung', label: 'Glaubt den Tätern ("Ich bin wirklich hässlich/dumm")', tags: ['mop-internalisiert', 'risiko-hoch'] },
+          { id: 'hilfe-sucht', label: 'Sucht aktiv Hilfe', tags: ['mop-hilfe'] }
+        ]
+      },
+      {
+        id: 'mop-auswirkung', frage: 'Welche Auswirkungen zeigen sich?', typ: 'multi',
+        optionen: [
+          { id: 'schulvermeidung', label: 'Schulvermeidung / Fehlzeiten', tags: ['mop-schulvermeidung'] },
+          { id: 'angst', label: 'Angst / Panikattacken', tags: ['komorbid-angst'] },
+          { id: 'depression', label: 'Depressive Stimmung / Hoffnungslosigkeit', tags: ['komorbid-depression'] },
+          { id: 'svv', label: 'Selbstverletzung', tags: ['komorbid-svv', 'risiko-hoch'] },
+          { id: 'suizidal', label: 'Suizidgedanken', tags: ['suizidal', 'risiko-akut'] },
+          { id: 'somatisch', label: 'Körperliche Beschwerden (Bauchschmerzen, Kopfweh)', tags: ['mop-somatisch'] },
+          { id: 'keine', label: 'Noch keine deutlichen Auswirkungen', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'mop-standard',
+        tags_erforderlich: [],
+        tags_ausschluss: ['suizidal', 'risiko-akut'],
+        tags_gewichtung: { 'mop-verbal': 1, 'mop-relational': 2, 'mop-chronisch': 3, 'mop-internalisiert': 3, 'mop-schulvermeidung': 2, 'komorbid-angst': 2, 'komorbid-depression': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Mobbing-Opfer — Systematische, wiederholte Aggression mit Machtungleichgewicht. Mobbing ist KEIN normaler Konflikt und NICHT die Schuld des Opfers. Langfristige Folgen: Depression, Angststörungen, PTBS-ähnliche Symptome, Schulabbruch. Dreifach-Strategie: 1) Opfer stärken, 2) System ändern, 3) Folgen behandeln.',
+        sofort: [
+          'Validieren: "Was dir passiert, ist nicht okay. Und es ist NICHT deine Schuld."',
+          'Sicherheit herstellen: Gibt es akute Gefahr? Schutzmaßnahmen in der Schule?',
+          'Dokumentation: Was genau passiert, wann, durch wen? (für Schulleitung/ggf. Polizei)',
+          'Gesprächseröffnung: "Ich glaube dir. Kein Mensch hat verdient, so behandelt zu werden. Gemeinsam finden wir einen Weg, dass das aufhört."'
+        ],
+        mittelfristig: [
+          'Schulische Intervention: Schulleitung/Klassenlehrerin informieren — systemische Maßnahmen einfordern',
+          'Selbstwert stärken: Gegengift zur Täter-Botschaft ("Du bist nichts wert")',
+          'Soziale Kompetenz: Neue Peer-Kontakte aufbauen (Sport, Verein, AG)',
+          'Bei Cybermobbing: Beweise sichern (Screenshots), BEE SECURE einschalten, ggf. Polizei'
+        ],
+        ueberweisung: 'Bei: Schulvermeidung >2 Wochen, Depression, SVV, Suizidalität → KJP. In Luxemburg: BEE SECURE (Helpline 8002 1234), SCRIPT/MEN (schulische Intervention), CePAS.',
+        elternarbeit: 'Eltern als Verbündete: Gemeinsam Schulleitung kontaktieren. Eltern dürfen wütend sein — aber nicht selbst intervenieren (verschlimmert oft). Kind braucht das Gefühl: "Meine Eltern stehen hinter mir UND die Erwachsenen handeln."',
+        materialien: { arbeitsblaetter: ['selbstwert', 'soziale-kompetenz'], therapiemodule: ['therapiemodul-mobbing'], fachmodule: ['mobbing'] },
+        referenzen: [
+          'Olweus, D. (2013): Bullying at School — what we know and what we can do. Blackwell.',
+          'Arseneault, L. (2018): Annual Research Review — The persistent and pervasive impact of being bullied. JCPP.',
+          'Ttofi, M.M. & Farrington, D.P. (2011): Effectiveness of school-based anti-bullying programs. Journal of Aggression.',
+          'Schäfer, M. & Korn, S. (2004): Bullying as a group process. British Journal of Developmental Psychology.'
+        ]
+      }
+    ]
+  },
   { id: 'identitaetskrise', titel: 'Identitätskrise / Coming Out / LGBTQ+', icon: '🏳️‍🌈', farbe: '#A855F7', kategorie: 'sozial', icd: 'Z60.0', beschreibung: 'Geschlechtsidentität, sexuelle Orientierung, Diskriminierung', variablen: [], empfehlungen: [] },
   { id: 'kindeswohlgefaehrdung', titel: 'Elternkonflikt / häusliche Gewalt / Kindeswohlgefährdung', icon: '⚖️', farbe: '#7C3AED', kategorie: 'sozial', icd: 'T74 / Z61', beschreibung: 'Misshandlung, Vernachlässigung, häusliche Gewalt, Meldepflicht', variablen: [], empfehlungen: [] },
   { id: 'migration-flucht', titel: 'Migration / Flucht / kulturelle Anpassung', icon: '🌍', farbe: '#0D9488', kategorie: 'sozial', icd: 'Z60.3', beschreibung: 'Kulturschock, Sprachbarrieren, Diskriminierung, Heimweh', variablen: [], empfehlungen: [] },

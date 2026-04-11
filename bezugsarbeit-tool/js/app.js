@@ -482,6 +482,10 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-kalender').classList.add('active');
     document.getElementById('nav-kalender').classList.add('active');
     renderKalender();
+  } else if (view === 'weiterbildung') {
+    document.getElementById('view-weiterbildung').classList.add('active');
+    document.getElementById('nav-weiterbildung').classList.add('active');
+    renderWeiterbildung();
   } else if (view === 'screening' && schuelerId) {
     APP.currentSchuelerId = schuelerId;
     document.getElementById('view-screening').classList.add('active');
@@ -819,6 +823,60 @@ function renderProfilCompleteness(s) {
       </div>
     </div>
   `;
+}
+
+// ============================================================
+// WEITERBILDUNG — Praxis-Lernpfade & Nachschlagewerke
+// ============================================================
+let WB_ACTIVE_TAB = 'uebersicht';
+
+function renderWeiterbildung() {
+  const container = document.getElementById('weiterbildung-content');
+  if (!container) return;
+
+  const tabs = [
+    { id: 'uebersicht', label: 'Übersicht', icon: '🏠' },
+    { id: 'lernpfade', label: 'Praxis-Lernpfade', icon: '🎓' },
+    { id: 'nachschlagewerke', label: 'Nachschlagewerke', icon: '📖' },
+    { id: 'glossar', label: 'Glossar', icon: '📝' }
+  ];
+
+  container.innerHTML = `
+    <div class="phase-tabs" style="margin-bottom:20px;">
+      ${tabs.map(t => `
+        <button class="phase-tab ${WB_ACTIVE_TAB === t.id ? 'active' : ''}"
+                onclick="WB_ACTIVE_TAB='${t.id}'; renderWeiterbildung();">
+          ${t.icon} ${t.label}
+        </button>
+      `).join('')}
+    </div>
+    <div id="wb-tab-content"></div>
+  `;
+
+  const content = document.getElementById('wb-tab-content');
+  switch (WB_ACTIVE_TAB) {
+    case 'uebersicht':    renderWBUebersicht(content); break;
+    case 'lernpfade':     renderWBLernpfade(content); break;
+    case 'nachschlagewerke': renderWBNachschlagewerke(content); break;
+    case 'glossar':       renderWBGlossar(content); break;
+    default:              renderWBUebersicht(content);
+  }
+}
+
+function renderWBUebersicht(container) {
+  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Weiterbildungsbereich wird geladen...</p></div></div>';
+}
+
+function renderWBLernpfade(container) {
+  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Lernpfade werden geladen...</p></div></div>';
+}
+
+function renderWBNachschlagewerke(container) {
+  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Nachschlagewerke werden geladen...</p></div></div>';
+}
+
+function renderWBGlossar(container) {
+  container.innerHTML = '<div class="card"><div class="card-body"><p style="color:#6B7280;">Glossar wird geladen...</p></div></div>';
 }
 
 // ============================================================

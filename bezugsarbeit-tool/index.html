@@ -40,6 +40,9 @@
     <div class="nav-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0">
       <span class="nav-item-icon" aria-hidden="true">📅</span> Kalender
     </div>
+    <div class="nav-item" id="nav-weiterbildung" onclick="showView('weiterbildung')" role="button" tabindex="0">
+      <span class="nav-item-icon" aria-hidden="true">🎓</span> Weiterbildung
+    </div>
   </nav>
 
   <!-- Phasen-Navigation (nur sichtbar wenn Profil offen) -->
@@ -788,6 +791,18 @@
           <div id="naechste-termine"></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ---- WEITERBILDUNG VIEW ---- -->
+  <div class="view" id="view-weiterbildung">
+    <div class="topbar">
+      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
+      <div class="topbar-title">Weiterbildung</div>
+      <div class="topbar-actions"></div>
+    </div>
+    <div class="content" id="weiterbildung-content">
+      <!-- Wird von renderWeiterbildung() gefüllt -->
     </div>
   </div>
 

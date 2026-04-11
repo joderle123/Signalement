@@ -571,6 +571,11 @@ const FACHKRAFT_MODULE_DATEIEN = {
   'parentifizierung':        'familie.html',
   'young-carers':            'familie.html',
   'institutionserfahrung':   'familie.html',
+  // Kulturelle Kompetenz Module
+  'kulturelle-identitaet':   'kulturelle-kompetenz.html',
+  'geschlechtsidentitaet':   'lgbtq-jugendliche.html',
+  'diskriminierung':         'kulturelle-kompetenz.html',
+  'zugehoerigkeit':          'kulturelle-kompetenz.html',
 };
 
 // ============================================================

@@ -23727,7 +23727,86 @@ const CDSS_GEMEINSAME_VARIABLEN = [
 // ============================================================
 const CDSS_PROBLEME = [
   // A. Emotionale / Internalisierende Probleme
-  { id: 'schulvermeidung', titel: 'Schulvermeidung / Schulabsentismus', icon: '🏫', farbe: '#EA580C', kategorie: 'emotional', icd: 'F93.0 / F40.1 / F91.3', beschreibung: 'Teilweises oder vollständiges Fernbleiben von der Schule', variablen: [], empfehlungen: [] },
+  { id: 'schulvermeidung', titel: 'Schulvermeidung / Schulabsentismus', icon: '🏫', farbe: '#EA580C', kategorie: 'emotional', icd: 'F93.0 / F40.1 / F91.3', beschreibung: 'Teilweises oder vollständiges Fernbleiben von der Schule',
+    variablen: [
+      { id: 'sv-hauptgrund', frage: 'Was ist der vermutete Hauptgrund für die Schulvermeidung?', typ: 'single', optionen: [
+        { id: 'angst', label: 'Angstbedingt (Trennungs-, Sozial- oder Schulangst)', tags: ['angst-bedingt', 'internalisierend'] },
+        { id: 'opposition', label: 'Oppositionell (Verweigerung, keine Motivation)', tags: ['oppositionell', 'externalisierend'] },
+        { id: 'mobbing', label: 'Mobbing / Ausgrenzung durch Peers', tags: ['mobbing', 'peer-problem'] },
+        { id: 'ueberforderung', label: 'Schulische Überforderung / Lernschwäche', tags: ['ueberforderung', 'kognitiv'] },
+        { id: 'familiaer', label: 'Familiäre Belastung (parentifiziert, häusl. Gewalt)', tags: ['familiaer', 'parentifiziert'] },
+        { id: 'somatisch', label: 'Somatische Beschwerden (Kopf-/Bauchschmerzen)', tags: ['somatisch'] },
+        { id: 'unklar', label: 'Unklar / mehrere Faktoren', tags: ['multifaktoriell'] }
+      ]},
+      { id: 'sv-muster', frage: 'Welches Muster zeigt die Schulvermeidung?', typ: 'single', optionen: [
+        { id: 'bestimmte-tage', label: 'Bestimmte Tage oder Fächer werden gemieden', tags: ['selektiv'] },
+        { id: 'morgens', label: 'Morgens vor der Schule (Übelkeit, Weinen, Verweigerung)', tags: ['morgen-krise', 'trennungsangst-moeglich'] },
+        { id: 'ganztags', label: 'Ganztägiges Fernbleiben', tags: ['vollstaendig'] },
+        { id: 'nach-ferien', label: 'Nur nach Ferien / Wochenende', tags: ['uebergangs-problem'] }
+      ]},
+      { id: 'sv-fehlzeiten', frage: 'Wie viele Fehltage pro Monat?', typ: 'single', optionen: [
+        { id: 'unter-5', label: 'Weniger als 5 Tage', tags: ['fehlzeiten-gering'] },
+        { id: '5-10', label: '5–10 Tage', tags: ['fehlzeiten-mittel'] },
+        { id: 'ueber-10', label: 'Mehr als 10 Tage', tags: ['fehlzeiten-hoch', 'dringend'] },
+        { id: 'kein-besuch', label: 'Gar kein Schulbesuch', tags: ['fehlzeiten-total', 'dringend', 'akut'] }
+      ]},
+      { id: 'sv-komorbid', frage: 'Welche Begleiterscheinungen beobachtest du? (Mehrfachauswahl)', typ: 'multi', optionen: [
+        { id: 'depression', label: 'Depressive Stimmung', tags: ['komorbid-depression'] },
+        { id: 'angst', label: 'Angst / Panik', tags: ['komorbid-angst'] },
+        { id: 'zwang', label: 'Zwanghaftes Verhalten', tags: ['komorbid-zwang'] },
+        { id: 'somatik', label: 'Somatische Beschwerden', tags: ['komorbid-somatik'] },
+        { id: 'adhs', label: 'ADHS / Konzentrationsprobleme', tags: ['komorbid-adhs'] },
+        { id: 'svv', label: 'Selbstverletzung', tags: ['komorbid-svv', 'risiko'] },
+        { id: 'substanz', label: 'Substanzkonsum', tags: ['komorbid-substanz'] },
+        { id: 'schlaf', label: 'Schlafstörungen', tags: ['komorbid-schlaf'] },
+        { id: 'keine', label: 'Keine erkennbaren', tags: [] }
+      ]},
+      { id: 'sv-elternverhalten', frage: 'Wie verhalten sich die Eltern bezüglich Schulbesuch?', typ: 'single', optionen: [
+        { id: 'unterstuetzen', label: 'Unterstützen aktiv den Schulbesuch', tags: ['eltern-pro-schule'] },
+        { id: 'tolerieren', label: 'Tolerieren das Fehlen / sind gleichgültig', tags: ['eltern-passiv'] },
+        { id: 'klammern', label: 'Klammern selbst / wollen Kind zu Hause behalten', tags: ['eltern-klammern', 'trennungsangst-eltern'] },
+        { id: 'unwissend', label: 'Wissen nicht davon (Kind täuscht Schulbesuch vor)', tags: ['eltern-unwissend', 'verdeckt'] }
+      ]}
+    ],
+    empfehlungen: [
+      { id: 'sv-angst-kind', tags_erforderlich: ['angst-bedingt'], tags_gewichtung: { 'kind': 2, 'trennungsangst-moeglich': 3, 'eltern-klammern': 3 }, tags_ausschluss: ['risiko'], risiko: 'gelb',
+        einschaetzung: 'Angstbedingte Schulvermeidung — häufig im Zusammenhang mit Trennungsangst (F93.0) oder sozialer Phobie (F40.1). Das Kind vermeidet die Schule nicht aus Unlust, sondern aus echter Angst. Frühintervention ist entscheidend, da Chronifizierung das Risiko für Langzeitfolgen (Schulabbruch, soziale Isolation, Depression) erhöht.',
+        sofort: ['Beziehung aufbauen: "Ich sehe, dass dir der Schulbesuch gerade sehr schwer fällt. Das ist okay."', 'NICHT mit Zwang arbeiten — Druck verstärkt die Angst (Kearney, 2008)', 'Angstauslöser identifizieren: Welche Situation genau löst die Angst aus? (Trennungsmoment? Bestimmtes Fach? Mensa?)', 'Mit Schule abstimmen: Vertrauensperson als Anlaufstelle benennen', 'Elterngespräch: Gemeinsam stufenweisen Wiedereinstieg planen'],
+        mittelfristig: ['Gestufte Exposition: Schrittweise Annäherung an die Schule (erst Schulhof, dann 1 Stunde, dann halber Tag)', 'Angstbewältigungsstrategien vermitteln (Atemtechniken, Gedankenstopp, Sicherheitsanker)', 'Kognitive Umstrukturierung: "Was ist das Schlimmste was passieren kann?"', 'Bei Trennungsangst: Eltern-Kind-Interaktion bearbeiten (Abschiedsrituale, Autonomie fördern)', 'Wöchentliches Monitoring der Fehlzeiten'],
+        ueberweisung: 'Bei >4 Wochen Schulabwesenheit oder komorbider Depression/Angststörung: Überweisung an Kinder- und Jugendpsychiater (CHL Kannerklinik, ZNS-Letzebuerg). Bei Trennungsangst <10 Jahre: EMDR oder spieltherapeutischer Ansatz.',
+        elternarbeit: 'Eltern müssen verstehen: Schulvermeidung ist keine Faulheit. Morgenroutine vereinfachen, Abschied kurz und positiv halten, NICHT nachgeben wenn Kind zu Hause bleiben will (verstärkt Vermeidungsverhalten). Bei klammernden Eltern: eigene Trennungsangst thematisieren.',
+        materialien: { arbeitsblaetter: ['stress-angst.html', 'emotionsregulation.html'], therapiemodule: ['therapiemodul-angstbewaeltigung.html'], elterninfo: ['angst-eltern.html'] },
+        referenzen: ['Kearney, C.A. (2008). School absenteeism and school refusal behavior in youth: A contemporary review. Clinical Psychology Review, 28(3), 451-471.', 'Heyne, D. et al. (2019). Differentiation between school attendance problems. European Child & Adolescent Psychiatry, 28, 563-583.', 'NICE (2013). Social anxiety disorder: recognition, assessment and treatment. CG159.', 'Wimmer, M. (2008). School refusal: Information for educators. NASP.']
+      },
+      { id: 'sv-opposition', tags_erforderlich: ['oppositionell'], tags_gewichtung: { 'externalisierend': 2, 'negative-peers': 3, 'eltern-passiv': 2 }, tags_ausschluss: [], risiko: 'gelb',
+        einschaetzung: 'Oppositionelle Schulvermeidung — der Jugendliche bleibt aus Unlust, Provokation oder aufgrund attraktiverer Alternativen (Peers, Medien) der Schule fern. Oft im Kontext von ODD (F91.3) oder Störung des Sozialverhaltens. Wichtig: Abgrenzung zur angstbedingten Vermeidung (hier fehlt der Leidensdruck).',
+        sofort: ['NICHT moralisieren — Machtkampf vermeiden', 'Motivational Interviewing: "Was würdest du gerne tun nach der Schule?" — Anreize identifizieren', 'Klare, durchsetzbare Konsequenzen vereinbaren (mit Eltern + Schule gemeinsam)', 'Fragen: Was genau macht Schule unattraktiv? (Langeweile, Überforderung, Peer-Konflikte?)'],
+        mittelfristig: ['Verhaltensvertrag mit klaren Zielen und Belohnungen aufsetzen', 'Positive Aktivitäten an Schulbesuch koppeln (Privileg-System)', 'Alternativbeschäftigungen einschränken (Gaming, Social Media — mit Eltern abstimmen)', 'Sozialkompetenztraining bei Peer-Problemen', 'Schulische Stärken identifizieren und fördern'],
+        ueberweisung: 'Bei >8 Wochen Schulabwesenheit: Abstimmung mit ONE (Office National de l\'Enfance) und Service de la Scolarisation. Bei komorbider Störung des Sozialverhaltens: Kinder-/Jugendpsychiatrische Abklärung.',
+        elternarbeit: 'Eltern müssen konsistente Grenzen setzen: Kein Schulbesuch = keine Freizeit-Privilegien. Morgenroutine klar strukturieren. Bei passiven Eltern: Elterntraining (Triple P, STEP) empfehlen. Nicht den Jugendlichen entschuldigen.',
+        materialien: { arbeitsblaetter: ['wut-aerger.html', 'selbstwertgefuehl.html'], therapiemodule: ['therapiemodul-soziale-kompetenz.html'], elterninfo: [] },
+        referenzen: ['Kearney, C.A. & Silverman, W.K. (1996). The evolution and reconciliation of taxonomic strategies for school refusal behavior. Clinical Psychology: Science and Practice, 3(4), 339-354.', 'Egger, H.L., Costello, E.J. & Angold, A. (2003). School refusal and psychiatric disorders: A community study. Journal of the American Academy of Child & Adolescent Psychiatry, 42(7), 797-807.', 'AWMF (2018). S3-Leitlinie Störungen des Sozialverhaltens. DGKJP.']
+      },
+      { id: 'sv-mobbing', tags_erforderlich: ['mobbing'], tags_gewichtung: { 'isoliert': 3, 'komorbid-depression': 2, 'komorbid-svv': 5 }, tags_ausschluss: [], risiko: 'gelb',
+        einschaetzung: 'Schulvermeidung aufgrund von Mobbing — der Jugendliche bleibt der Schule fern, weil er/sie dort systematisch schikaniert wird. Dies ist eine rationale Schutzreaktion, kein pathologisches Vermeidungsverhalten. Priorität: Sicherheit herstellen, dann Reintegration.',
+        sofort: ['Mobbing-Situation ernst nehmen und dokumentieren', 'Sicherheitsgefühl herstellen: "Du bist hier sicher. Was dir passiert ist nicht okay."', 'Sofortige Abstimmung mit Klassenlehrer/Schulleitung — Mobbing muss auf Schulebene gestoppt werden', 'NICHT das Opfer zum Problemträger machen (kein "Du musst dich wehren")'],
+        mittelfristig: ['Anti-Mobbing-Intervention auf Klassenebene (No Blame Approach, Farsta-Methode)', 'Selbstwert stärken (Ressourcenaktivierung, Stärken-Profil)', 'Soziale Kontakte außerhalb der Klasse aufbauen (AG, Sport, Verein)', 'Bei Cybermobbing: BEE SECURE Luxemburg einschalten', 'Stufenweise Reintegration erst wenn Sicherheit gewährleistet'],
+        ueberweisung: 'Bei anhaltender Depression oder SVV nach Mobbing: psychotherapeutische Anbindung. Bei Cybermobbing: BEE SECURE (www.bee-secure.lu) und ggf. Polizei (Art. 442-2 Code pénal).',
+        elternarbeit: 'Eltern informieren und als Verbündete gewinnen. Eltern des Täters nur über Schule kontaktieren lassen (nicht direkt). Dokumentation aller Vorfälle empfehlen.',
+        materialien: { arbeitsblaetter: ['selbstwertgefuehl.html', 'soziale-faehigkeiten.html'], therapiemodule: ['therapiemodul-soziale-kompetenz.html'], elterninfo: [] },
+        referenzen: ['Olweus, D. (1993). Bullying at School: What We Know and What We Can Do. Blackwell.', 'Ttofi, M.M. & Farrington, D.P. (2011). Effectiveness of school-based programs to reduce bullying: A systematic and meta-analytic review. Journal of Experimental Criminology, 7, 27-56.', 'BEE SECURE Luxembourg (2023). Cybermobbing: Was tun? Leitfaden.']
+      },
+      { id: 'sv-fallback', tags_erforderlich: [], tags_gewichtung: { 'dringend': 3, 'chronisch': 2, 'fehlzeiten-total': 5 }, tags_ausschluss: [], risiko: 'gelb',
+        einschaetzung: 'Schulvermeidung mit unklarer oder multifaktorieller Ursache. Eine umfassende diagnostische Abklärung ist notwendig, um die zugrundeliegenden Faktoren zu identifizieren. Kearneys funktionales Modell (2008) unterscheidet 4 Funktionen: (1) Vermeidung negativer Affekte, (2) Flucht vor sozialer Bewertung, (3) Aufmerksamkeit von Bezugspersonen, (4) Tangible reinforcement (attraktivere Alternativen).',
+        sofort: ['Funktionale Analyse: Welche Funktion hat die Schulvermeidung? (SRAS-R Fragebogen)', 'Screening auf komorbide Störungen durchführen (PHQ-A, GAD-7, SNAP-IV)', 'Abstimmung mit Schule: aktuelle Fehlzeiten, Verhalten in der Schule, schulische Leistungen', 'Kontakt zu den Eltern aufnehmen'],
+        mittelfristig: ['Je nach Funktion gezielt intervenieren (angstbasiert → Exposition; oppositionell → Kontingenzmanagement)', 'Engmaschiges Monitoring der Fehlzeiten (wöchentlich)', 'Bei Chronifizierung (>3 Monate): multisystemische Intervention (Schule + Familie + therapeutisch)', 'Schulisches Re-Integrationsprogramm mit stufenweisem Aufbau'],
+        ueberweisung: 'Bei >4 Wochen vollständiger Schulabwesenheit: Service de la Scolarisation / Mediation scolaire. Bei psychischen Komorbiditäten: CHL Kannerklinik oder ZNS-Letzebuerg.',
+        elternarbeit: 'Eltern als Partner einbinden. Gemeinsam Morgenroutine und Konsequenzen vereinbaren. Ggf. Familienberatung (CePAS).',
+        materialien: { arbeitsblaetter: ['stress-angst.html', 'emotionsregulation.html', 'selbstwertgefuehl.html'], therapiemodule: [], elterninfo: ['angst-eltern.html'] },
+        referenzen: ['Kearney, C.A. (2008). School absenteeism and school refusal behavior in youth. Clinical Psychology Review, 28(3), 451-471.', 'Heyne, D. et al. (2019). Differentiation between school attendance problems. European Child & Adolescent Psychiatry, 28, 563-583.', 'Kearney, C.A. & Albano, A.M. (2004). The functional profiles of school refusal behavior. Behavior Modification, 28(1), 147-170.', 'Service de la Scolarisation Luxembourg (2023). Procédure en cas d\'absentéisme scolaire.']
+      }
+    ]
+  },
   { id: 'depression', titel: 'Depressive Stimmung / Antriebslosigkeit', icon: '🌧️', farbe: '#3B82F6', kategorie: 'emotional', icd: 'F32 / F33', beschreibung: 'Anhaltende Traurigkeit, Interessenverlust, Rückzug, Energielosigkeit', variablen: [], empfehlungen: [] },
   { id: 'angst-panik', titel: 'Angst / Panikattacken', icon: '😰', farbe: '#F59E0B', kategorie: 'emotional', icd: 'F41.0 / F41.1', beschreibung: 'Übermäßige Sorgen, Panikattacken, körperliche Angstsymptome', variablen: [], empfehlungen: [] },
   { id: 'soziale-angst', titel: 'Soziale Angst / Rückzug', icon: '😶', farbe: '#E07B39', kategorie: 'emotional', icd: 'F40.1', beschreibung: 'Vermeidung sozialer Situationen, Angst vor Bewertung', variablen: [], empfehlungen: [] },

@@ -25684,7 +25684,83 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'identitaetskrise', titel: 'Identitätskrise / Coming Out / LGBTQ+', icon: '🏳️‍🌈', farbe: '#A855F7', kategorie: 'sozial', icd: 'Z60.0', beschreibung: 'Geschlechtsidentität, sexuelle Orientierung, Diskriminierung', variablen: [], empfehlungen: [] },
+  {
+    id: 'identitaetskrise', titel: 'Identitätskrise / Coming Out / LGBTQ+', icon: '🏳️‍🌈', farbe: '#A855F7', kategorie: 'sozial', icd: 'Z60.0',
+    beschreibung: 'Geschlechtsidentität, sexuelle Orientierung, Diskriminierung',
+    variablen: [
+      {
+        id: 'id-thema', frage: 'Um welches Thema geht es primär?', typ: 'single',
+        optionen: [
+          { id: 'orientierung', label: 'Sexuelle Orientierung (schwul, lesbisch, bi, pan, asexuell)', tags: ['id-orientierung'] },
+          { id: 'geschlecht', label: 'Geschlechtsidentität (trans, non-binär, genderfluid)', tags: ['id-trans'] },
+          { id: 'coming-out', label: 'Coming-Out-Prozess (unabhängig vom Thema)', tags: ['id-coming-out'] },
+          { id: 'unsicherheit', label: 'Unsicherheit / Exploration ("Wer bin ich?")', tags: ['id-exploration'] }
+        ]
+      },
+      {
+        id: 'id-umfeld', frage: 'Wie reagiert das Umfeld?', typ: 'single',
+        optionen: [
+          { id: 'unterstuetzend', label: 'Unterstützend / akzeptierend', tags: ['id-umfeld-ok'] },
+          { id: 'ablehnend-familie', label: 'Familie ablehnend / feindlich', tags: ['id-familie-ablehnend', 'risiko-hoch'] },
+          { id: 'ablehnend-peers', label: 'Peers ablehnend / Mobbing', tags: ['id-peers-ablehnend'] },
+          { id: 'noch-nicht-offen', label: 'Noch nicht offen — Angst vor Reaktionen', tags: ['id-verborgen'] },
+          { id: 'gemischt', label: 'Gemischt — manche akzeptieren, manche nicht', tags: ['id-gemischt'] }
+        ]
+      },
+      {
+        id: 'id-belastung', frage: 'Welche psychische Belastung zeigt sich?', typ: 'multi',
+        optionen: [
+          { id: 'angst', label: 'Angst / Panik (vor Outing, Ablehnung)', tags: ['komorbid-angst'] },
+          { id: 'depression', label: 'Depression / Hoffnungslosigkeit', tags: ['komorbid-depression'] },
+          { id: 'svv', label: 'Selbstverletzung', tags: ['komorbid-svv', 'risiko-hoch'] },
+          { id: 'suizidal', label: 'Suizidgedanken', tags: ['suizidal', 'risiko-akut'] },
+          { id: 'isolation', label: 'Soziale Isolation', tags: ['id-isolation'] },
+          { id: 'dysphorie', label: 'Geschlechtsdysphorie / Körperleid', tags: ['id-dysphorie'] },
+          { id: 'keine', label: 'Gering — braucht primär Raum zum Reden', tags: [] }
+        ]
+      },
+      {
+        id: 'id-kulturell', frage: 'Gibt es kulturelle/religiöse Faktoren?', typ: 'single',
+        optionen: [
+          { id: 'keine', label: 'Keine besonderen kulturellen Konflikte', tags: [] },
+          { id: 'religioes', label: 'Religiöser Hintergrund — Homosexualität/Trans als Sünde', tags: ['id-religioes-konflikt'] },
+          { id: 'kulturell', label: 'Kultureller Hintergrund — LGBTQ+ als Tabu/Schande', tags: ['id-kulturell-konflikt', 'risiko-hoch'] },
+          { id: 'ehre', label: 'Ehre-basierte Familienstruktur — Gefahr bei Outing', tags: ['id-ehrbasiert', 'risiko-hoch'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'id-unterstuetzung',
+        tags_erforderlich: [],
+        tags_ausschluss: ['risiko-akut'],
+        tags_gewichtung: { 'id-exploration': 2, 'id-coming-out': 2, 'id-umfeld-ok': 1, 'id-verborgen': 2, 'id-orientierung': 1, 'id-trans': 2 },
+        risiko: 'gruen',
+        einschaetzung: 'LGBTQ+ Identität ist KEINE Störung und erfordert KEINE Therapie der Identität selbst. Minority Stress (Diskriminierung, Ablehnung, Verstecken) führt aber zu erhöhten Raten von Depression (2-3×), Suizidalität (4-6×) und SVV. Deine Rolle: Sicherer Raum, Affirmation, Ressourcen vermitteln.',
+        sofort: [
+          'Affirmativer Ansatz: "Danke, dass du mir das erzählst. Wie du dich fühlst und wen du liebst, ist okay."',
+          'NICHT: "Das ist nur eine Phase", "Bist du sicher?", "Hast du es schon mit dem anderen Geschlecht probiert?"',
+          'Fragen, wie die Person angesprochen werden möchte (Pronomen, Name)',
+          'Gesprächseröffnung: "Du bist hier sicher. Was auch immer du mir erzählen möchtest — ich höre zu, ohne zu urteilen."'
+        ],
+        mittelfristig: [
+          'Ressourcen vermitteln: Peer-Gruppen, LGBTQ+ Jugendgruppen, Online-Communities',
+          'Coming-Out begleiten: Wem zuerst? Wie? Sicherheitsplan wenn Reaktion negativ',
+          'Minority Stress bearbeiten: Internalisierte Homofeindlichkeit / Transfeindlichkeit erkennen',
+          'Bei Geschlechtsdysphorie: Informieren über Optionen (Beratung, ggf. Endokrinologie) — NICHT drängen'
+        ],
+        ueberweisung: 'In Luxemburg: Cigale (Centre d\'Information GAy et LEsbien), Rosa Lëtzebuerg, Intersex & Transgender Luxembourg (ITGL). Bei Dysphorie: Endokrinologie CHL (Pubertätsblocker-Beratung). Bei Suizidalität: 12345 (Kanner-Jugendtelefon).',
+        elternarbeit: 'Eltern brauchen Zeit — Trauerreaktion über "verlorene Erwartungen" ist normal. PFLAG-Ansatz: Informieren, Fragen beantworten, Kontakt zu anderen Eltern. Bei ablehnendem religiösem/kulturellem Hintergrund: Sicherheit des Jugendlichen hat Priorität.',
+        materialien: { arbeitsblaetter: ['identitaet-erkunden', 'selbstwert'], therapiemodule: ['therapiemodul-identitaet'], fachmodule: ['identitaet'] },
+        referenzen: [
+          'Meyer, I.H. (2003): Prejudice, social stress, and mental health in LGB populations. Psychological Bulletin.',
+          'APA (2021): Guidelines for Psychological Practice with Sexual Minority Persons.',
+          'WPATH Standards of Care v8 (2022): Health of Transsexual, Transgender, and Gender Nonconforming People.',
+          'Toomey, R.B. et al. (2018): Transgender adolescent suicide ideation — school-based protective factors. JAACAP.'
+        ]
+      }
+    ]
+  },
   { id: 'kindeswohlgefaehrdung', titel: 'Elternkonflikt / häusliche Gewalt / Kindeswohlgefährdung', icon: '⚖️', farbe: '#7C3AED', kategorie: 'sozial', icd: 'T74 / Z61', beschreibung: 'Misshandlung, Vernachlässigung, häusliche Gewalt, Meldepflicht', variablen: [], empfehlungen: [] },
   { id: 'migration-flucht', titel: 'Migration / Flucht / kulturelle Anpassung', icon: '🌍', farbe: '#0D9488', kategorie: 'sozial', icd: 'Z60.3', beschreibung: 'Kulturschock, Sprachbarrieren, Diskriminierung, Heimweh', variablen: [], empfehlungen: [] },
   { id: 'mediensucht', titel: 'Mediensucht / Online-Abhängigkeit', icon: '📱', farbe: '#6366F1', kategorie: 'sozial', icd: 'F63.0', beschreibung: 'Exzessives Gaming, Social Media, Online-Konsum', variablen: [], empfehlungen: [] },

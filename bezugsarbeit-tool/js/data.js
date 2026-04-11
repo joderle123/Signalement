@@ -25370,7 +25370,81 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'dissoziation', titel: 'Dissoziation / Abschalten', icon: '🌫️', farbe: '#64748B', kategorie: 'entwicklung', icd: 'F44', beschreibung: 'Abwesenheit, Depersonalisation, Amnesie, emotionale Taubheit', variablen: [], empfehlungen: [] },
+  {
+    id: 'dissoziation', titel: 'Dissoziation / Abschalten', icon: '🌫️', farbe: '#64748B', kategorie: 'entwicklung', icd: 'F44',
+    beschreibung: 'Abwesenheit, Depersonalisation, Amnesie, emotionale Taubheit',
+    variablen: [
+      {
+        id: 'diss-art', frage: 'Welche dissoziativen Phänomene zeigen sich?', typ: 'multi',
+        optionen: [
+          { id: 'abwesenheit', label: 'Abwesenheit / "Wegdriften" / starrer Blick', tags: ['diss-absorption'] },
+          { id: 'depersonalisation', label: 'Depersonalisation ("Fühle mich nicht real / wie neben mir")', tags: ['diss-depersonalisation'] },
+          { id: 'derealisation', label: 'Derealisation ("Die Welt fühlt sich unwirklich an")', tags: ['diss-derealisation'] },
+          { id: 'amnesie', label: 'Amnesie (Erinnerungslücken für Alltagssituationen)', tags: ['diss-amnesie', 'diss-schwer'] },
+          { id: 'taubheit', label: 'Emotionale Taubheit ("Fühle gar nichts")', tags: ['diss-numbing'] },
+          { id: 'sensorisch', label: 'Sensorische Dissoziation (Taubheit in Körperteilen, kein Schmerz)', tags: ['diss-sensorisch'] }
+        ]
+      },
+      {
+        id: 'diss-trigger', frage: 'Wann tritt die Dissoziation auf?', typ: 'single',
+        optionen: [
+          { id: 'stress', label: 'Bei Stress / emotionaler Überforderung', tags: ['diss-stressbedingt'] },
+          { id: 'trigger', label: 'Bei spezifischen Triggern (Orte, Personen, Sinnesreize)', tags: ['diss-triggerbedingt', 'trauma-moeglich'] },
+          { id: 'spontan', label: 'Scheinbar spontan / ohne erkennbaren Auslöser', tags: ['diss-spontan'] },
+          { id: 'chronisch', label: 'Fast durchgehend / Dauerzustand', tags: ['diss-chronisch', 'diss-schwer'] }
+        ]
+      },
+      {
+        id: 'diss-dauer', frage: 'Wie lange dauern die Episoden typischerweise?', typ: 'single',
+        optionen: [
+          { id: 'sekunden', label: 'Sekunden bis Minuten', tags: ['diss-kurz'] },
+          { id: 'minuten-stunden', label: 'Minuten bis Stunden', tags: ['diss-mittel'] },
+          { id: 'stunden-tage', label: 'Stunden bis Tage', tags: ['diss-lang', 'diss-schwer'] },
+          { id: 'anhaltend', label: 'Anhaltend / kaum Unterbrechung', tags: ['diss-chronisch', 'diss-schwer'] }
+        ]
+      },
+      {
+        id: 'diss-vorgeschichte', frage: 'Gibt es eine Trauma-Vorgeschichte?', typ: 'single',
+        optionen: [
+          { id: 'trauma-bekannt', label: 'Ja — Trauma bekannt', tags: ['diss-traumabedingt'] },
+          { id: 'trauma-vermutet', label: 'Vermutet, aber nicht bestätigt', tags: ['diss-trauma-vermutet'] },
+          { id: 'kein-trauma', label: 'Nein / keine Hinweise auf Trauma', tags: ['diss-nicht-traumatisch'] },
+          { id: 'unklar', label: 'Unklar', tags: [] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'diss-stabilisierung',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'diss-absorption': 1, 'diss-stressbedingt': 2, 'diss-kurz': 1, 'diss-numbing': 2, 'diss-traumabedingt': 2, 'diss-triggerbedingt': 2 },
+        risiko: 'gelb',
+        einschaetzung: 'Dissoziative Symptome — Häufig bei Kindern/Jugendlichen mit Trauma-Vorgeschichte als Schutzreaktion des Nervensystems (PVT: Dorsal-vagaler Shutdown). Auch bei hoher Stressbelastung ohne Trauma möglich. Dissoziation ist KEIN "Aufmerksamkeitsdefizit" und KEIN absichtliches Abschalten. Es ist ein automatischer Schutzmechanismus.',
+        sofort: [
+          'Grounding-Techniken bei akuter Dissoziation: Kaltes Wasser auf Hände, starke Sinnesreize (Pfefferminzöl, Eiswürfel)',
+          'Orientierende Ansprache: "[Name], du bist hier in [Raum], es ist [Wochentag]. Du bist sicher."',
+          'NICHT: Berühren ohne Erlaubnis, Schütteln, laut ansprechen, erschrecken',
+          'Gesprächseröffnung (NACH Episode): "Manchmal schaltet unser Gehirn ab, wenn es zu viel wird — wie ein Sicherungskasten. Das ist ein Schutz, kein Fehler."'
+        ],
+        mittelfristig: [
+          'Trigger identifizieren: Tagebuch — wann, wo, was passierte vorher?',
+          'Fenster der Toleranz erweitern: Sensorische Strategien, Atemübungen, Körperwahrnehmung',
+          'Sicherer Ort (Imagination): Innerer Rückzugsort als Alternative zur Dissoziation',
+          'Bei Trauma-Hintergrund: Überweisung an Traumatherapie (Stabilisierung vor Konfrontation!)'
+        ],
+        ueberweisung: 'KJP-Abklärung bei: Häufiger/schwerer Dissoziation, Amnesie, Identitätswechsel. In Luxemburg: CHNP Ettelbruck (Traumaambulanz), CHL.',
+        elternarbeit: 'Psychoedukation: Dissoziation erklären — "Ihr Kind schaltet nicht ab, um zu nerven, sondern weil der Körper sich schützt." Trigger im Alltag identifizieren helfen. Keine Bestrafung für dissoziative Episoden.',
+        materialien: { arbeitsblaetter: ['grounding', 'sicherer-ort', 'koerperwahrnehmung'], therapiemodule: ['therapiemodul-dissoziation'], fachmodule: ['dissoziation'] },
+        referenzen: [
+          'Putnam, F.W. (1997): Dissociation in Children and Adolescents. Guilford Press.',
+          'Silberg, J.L. (2013): The Child Survivor — healing developmental trauma. Routledge.',
+          'Dana, D. (2018): Polyvagal Theory in Therapy — understanding shutdown responses. Norton.',
+          'ISSTD (2011): Guidelines for treating dissociative identity disorder in children and adolescents.'
+        ]
+      }
+    ]
+  },
   { id: 'adhs-verdacht', titel: 'ADHS-Verdacht / Konzentrationsprobleme', icon: '⚡', farbe: '#F59E0B', kategorie: 'entwicklung', icd: 'F90', beschreibung: 'Unaufmerksamkeit, Hyperaktivität, Impulsivität', variablen: [], empfehlungen: [] },
   { id: 'essstoerung', titel: 'Essstörung-Verdacht', icon: '🪞', farbe: '#EC4899', kategorie: 'entwicklung', icd: 'F50', beschreibung: 'Restriktives Essen, Essanfälle, Erbrechen, Körperdysmorphie', variablen: [], empfehlungen: [] },
 

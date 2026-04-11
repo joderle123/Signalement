@@ -25907,7 +25907,83 @@ const CDSS_PROBLEME = [
       }
     ]
   },
-  { id: 'mediensucht', titel: 'Mediensucht / Online-Abhängigkeit', icon: '📱', farbe: '#6366F1', kategorie: 'sozial', icd: 'F63.0', beschreibung: 'Exzessives Gaming, Social Media, Online-Konsum', variablen: [], empfehlungen: [] },
+  {
+    id: 'mediensucht', titel: 'Mediensucht / Online-Abhängigkeit', icon: '📱', farbe: '#6366F1', kategorie: 'sozial', icd: 'F63.0',
+    beschreibung: 'Exzessives Gaming, Social Media, Online-Konsum',
+    variablen: [
+      {
+        id: 'med-art', frage: 'Welche Mediennutzung ist problematisch?', typ: 'multi',
+        optionen: [
+          { id: 'gaming', label: 'Gaming (PC, Konsole, Mobile)', tags: ['med-gaming'] },
+          { id: 'social', label: 'Social Media (TikTok, Instagram, Snapchat)', tags: ['med-social'] },
+          { id: 'streaming', label: 'Streaming/Videos (YouTube, Netflix) — stundenlang', tags: ['med-streaming'] },
+          { id: 'pornografie', label: 'Pornografie', tags: ['med-pornografie'] },
+          { id: 'gambling', label: 'Online-Gambling / Lootboxen', tags: ['med-gambling', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'med-dauer', frage: 'Wie viele Stunden pro Tag (außerhalb von Schule)?', typ: 'single',
+        optionen: [
+          { id: '2-4h', label: '2-4 Stunden', tags: ['med-erhoet'] },
+          { id: '4-6h', label: '4-6 Stunden', tags: ['med-hoch'] },
+          { id: '6-8h', label: '6-8 Stunden', tags: ['med-exzessiv'] },
+          { id: 'ueber-8h', label: 'Über 8 Stunden / "die ganze Nacht"', tags: ['med-exzessiv', 'med-schwer', 'risiko-hoch'] }
+        ]
+      },
+      {
+        id: 'med-kriterien', frage: 'Welche Sucht-Kriterien sind erfüllt?', typ: 'multi',
+        optionen: [
+          { id: 'kontrollverlust', label: 'Kontrollverlust (kann nicht aufhören, obwohl er/sie will)', tags: ['med-kontrollverlust'] },
+          { id: 'entzug', label: 'Entzugssymptome (Gereiztheit, Unruhe, Aggression ohne Gerät)', tags: ['med-entzug'] },
+          { id: 'toleranz', label: 'Toleranzentwicklung (braucht immer mehr/intensiver)', tags: ['med-toleranz'] },
+          { id: 'vernachlaessigung', label: 'Vernachlässigung anderer Aktivitäten (Schule, Sport, Freunde)', tags: ['med-vernachlaessigung'] },
+          { id: 'trotz-folgen', label: 'Weiternutzung trotz negativer Folgen', tags: ['med-trotz-folgen'] },
+          { id: 'luegen', label: 'Lügen über Nutzungsdauer', tags: ['med-verheimlichen'] }
+        ]
+      },
+      {
+        id: 'med-funktion', frage: 'Welche Funktion hat die Mediennutzung?', typ: 'single',
+        optionen: [
+          { id: 'flucht', label: 'Flucht aus der Realität (Probleme vergessen)', tags: ['med-flucht'] },
+          { id: 'sozial', label: 'Soziale Kontakte NUR online', tags: ['med-sozial-online'] },
+          { id: 'langeweile', label: 'Langeweile / nichts anderes zu tun', tags: ['med-langeweile'] },
+          { id: 'selbstwert', label: 'Selbstwert durch Likes/Erfolge/Ranking', tags: ['med-selbstwert'] },
+          { id: 'regulation', label: 'Emotionsregulation (beruhigt sich dadurch)', tags: ['med-regulation'] }
+        ]
+      }
+    ],
+    empfehlungen: [
+      {
+        id: 'med-intervention',
+        tags_erforderlich: [],
+        tags_ausschluss: [],
+        tags_gewichtung: { 'med-kontrollverlust': 3, 'med-entzug': 3, 'med-exzessiv': 3, 'med-vernachlaessigung': 2, 'med-schwer': 4, 'med-flucht': 2, 'med-sozial-online': 2, 'med-gaming': 1, 'med-social': 1 },
+        risiko: 'gelb',
+        einschaetzung: 'Problematische Mediennutzung / Internet Gaming Disorder (ICD-11: 6C51) — Seit 2019 offizielle WHO-Diagnose. Wichtig: Nicht JEDE intensive Nutzung ist Sucht. Kriterien: Kontrollverlust + Vernachlässigung + Weitermachen trotz Folgen, >12 Monate. Häufig Symptom einer dahinterliegenden Problematik (Depression, Angst, Isolation).',
+        sofort: [
+          'Nicht konfrontativ: "Mir fällt auf, dass Gaming/Social Media einen großen Teil deines Lebens einnimmt. Wie siehst du das selbst?"',
+          'Funktion verstehen: WAS bekommt der Jugendliche online, das er/sie offline NICHT bekommt?',
+          'NICHT: Geräte wegnehmen als erste Maßnahme (Eskalation, zerstört Beziehung)',
+          'Gesprächseröffnung: "Ich will dir dein Handy/deinen PC nicht wegnehmen. Ich will verstehen, was dir das gibt — und ob es noch andere Wege gibt, das zu bekommen."'
+        ],
+        mittelfristig: [
+          'Motivierende Gesprächsführung: Kosten-Nutzen-Analyse gemeinsam erstellen',
+          'Alternative Aktivitäten aufbauen: Sport, Verein, Offline-Freunde — BEVOR Reduktion',
+          'Medienvertrag: Gemeinsam Regeln aushandeln (NICHT diktieren)',
+          'Dahinterliegende Problematik behandeln: Depression? Angst? Soziale Isolation?'
+        ],
+        ueberweisung: 'Bei: >8h/Tag, Kontrollverlust, Schulversagen, vollständiger sozialer Rückzug → Suchtberatung. In Luxemburg: Impuls (Centre National de Prévention des Addictions), BEE SECURE (Medienkompetenz). Bei schwerer Gaming Disorder: CHNP.',
+        elternarbeit: 'Eltern oft hilflos ("Ich hab alles probiert"). Medienvertrag GEMEINSAM (Eltern + Kind + Fachkraft). Eigenes Medienverhalten reflektieren. Klare Zeiten statt totales Verbot. WLAN-Router-Timer als technische Hilfe.',
+        materialien: { arbeitsblaetter: ['mediennutzung-reflexion', 'medienvertrag'], therapiemodule: ['therapiemodul-mediensucht'], fachmodule: ['mediensucht'] },
+        referenzen: [
+          'WHO ICD-11 (2019): Gaming Disorder (6C51) — diagnostic criteria.',
+          'Petry, N.M. et al. (2014): Internet Gaming Disorder — DSM-5 criteria. Addiction.',
+          'NICE (2022): Problematic internet and social media use — rapid review.',
+          'Müller, K.W. et al. (2015): Internet addiction in young people — prevalence and clinical presentation. Deutsches Ärzteblatt.'
+        ]
+      }
+    ]
+  },
 
   // F. Beziehungs- & Interaktionsprobleme
   { id: 'machtkampf', titel: 'Machtkampf / Autoritätskonflikte', icon: '💪', farbe: '#F59E0B', kategorie: 'interaktion', icd: 'F91.3', beschreibung: 'Provokation, Grenztestung, Verweigerung in der Sitzung', variablen: [], empfehlungen: [] },

@@ -4951,6 +4951,204 @@ function analyzeTreatmentResponse(schuelerId) {
   return { themen: themenAnalyse, gesamtTrend, bestesThema, ansatzAnalyse, besterAnsatz, suddenChange };
 }
 
+// ============================================================
+// THERAPEUTISCHER ZWILLING — Analyse-Engine
+// ============================================================
+
+// ORS/SRS Trend-Analyse für einen Klienten
+function analyseORS_SRS_Trend(schuelerId) {
+  const notizen = DB.getNotizen(schuelerId)
+    .filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null)
+    .sort((a, b) => a.datum.localeCompare(b.datum));
+  if (notizen.length === 0) return null;
+
+  const orsWerte = notizen.map(n => n.soap.ors.total);
+  const srsWerte = notizen.filter(n => n.soap?.srs?.total != null).map(n => n.soap.srs.total);
+  const letzte3ORS = orsWerte.slice(-3);
+  const letzte3SRS = srsWerte.slice(-3);
+
+  const orsDurchschnitt = Math.round(orsWerte.reduce((a, b) => a + b, 0) / orsWerte.length * 10) / 10;
+  const srsDurchschnitt = srsWerte.length > 0 ? Math.round(srsWerte.reduce((a, b) => a + b, 0) / srsWerte.length * 10) / 10 : null;
+
+  // Trend: letzte 3 vs. vorherige
+  let orsTrend = 'stabil';
+  if (orsWerte.length >= 3) {
+    const letzte = orsWerte.slice(-3).reduce((a, b) => a + b, 0) / 3;
+    const vorherige = orsWerte.slice(0, -3);
+    if (vorherige.length > 0) {
+      const vorDurchschnitt = vorherige.reduce((a, b) => a + b, 0) / vorherige.length;
+      const delta = letzte - vorDurchschnitt;
+      if (delta > 3) orsTrend = 'steigend';
+      else if (delta < -3) orsTrend = 'fallend';
+    }
+  }
+
+  let srsTrend = 'stabil';
+  if (srsWerte.length >= 3) {
+    const letzte = srsWerte.slice(-3).reduce((a, b) => a + b, 0) / 3;
+    const vorherige = srsWerte.slice(0, -3);
+    if (vorherige.length > 0) {
+      const vorDurchschnitt = vorherige.reduce((a, b) => a + b, 0) / vorherige.length;
+      const delta = letzte - vorDurchschnitt;
+      if (delta > 3) srsTrend = 'steigend';
+      else if (delta < -3) srsTrend = 'fallend';
+    }
+  }
+
+  // ORS RCI
+  const orsRci = berechneRCI(orsWerte);
+
+  return {
+    ors: { trend: orsTrend, letzte3: letzte3ORS, durchschnitt: orsDurchschnitt, anzahl: orsWerte.length, rci: orsRci },
+    srs: { trend: srsTrend, letzte3: letzte3SRS, durchschnitt: srsDurchschnitt, anzahl: srsWerte.length },
+    letzteNotiz: notizen[notizen.length - 1],
+  };
+}
+
+// Anwesenheitsmuster-Analyse
+function analyseAnwesenheitsMuster(schuelerId) {
+  const termine = DB.getTermine(schuelerId).sort((a, b) => a.datum.localeCompare(b.datum));
+  if (termine.length === 0) return null;
+
+  const total = termine.length;
+  const anwesend = termine.filter(t => t.status === 'anwesend').length;
+  const noShows = termine.filter(t => t.status === 'no-show').length;
+  const abgesagt = termine.filter(t => t.status === 'abgesagt').length;
+  const rate = Math.round(anwesend / total * 100);
+
+  // Konsekutive No-Shows (am Ende)
+  let konsekutiveNoShows = 0;
+  for (let i = termine.length - 1; i >= 0; i--) {
+    if (termine[i].status === 'no-show') konsekutiveNoShows++;
+    else break;
+  }
+
+  // Letzter Termin
+  const letzterTermin = termine[termine.length - 1];
+  const tageSeitLetztem = letzterTermin ? Math.floor((Date.now() - new Date(letzterTermin.datum).getTime()) / 86400000) : null;
+
+  return { rate, total, anwesend, noShows, abgesagt, konsekutiveNoShows, letzterTermin, tageSeitLetztem };
+}
+
+// Stimmungsmuster-Analyse
+function analyseStimmungsMuster(schuelerId) {
+  const notizen = DB.getNotizen(schuelerId)
+    .filter(n => n.kategorie === 'session' && n.soap?.stimmung)
+    .sort((a, b) => a.datum.localeCompare(b.datum));
+  if (notizen.length === 0) return null;
+
+  const moodScore = { 'sehr-schlecht': 1, 'schlecht': 2, 'neutral': 3, 'gut': 4, 'sehr-gut': 5 };
+
+  // Nach Wochentag
+  const nachWochentag = {};
+  const tage = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+  for (const n of notizen) {
+    const tag = tage[new Date(n.datum).getDay()];
+    if (!nachWochentag[tag]) nachWochentag[tag] = [];
+    nachWochentag[tag].push(moodScore[n.soap.stimmung] || 3);
+  }
+  for (const tag of Object.keys(nachWochentag)) {
+    const arr = nachWochentag[tag];
+    nachWochentag[tag] = Math.round(arr.reduce((a, b) => a + b, 0) / arr.length * 10) / 10;
+  }
+
+  // Nach Setting
+  const nachSetting = {};
+  for (const n of notizen) {
+    const s = n.soap.setting || 'unbekannt';
+    if (!nachSetting[s]) nachSetting[s] = [];
+    nachSetting[s].push(moodScore[n.soap.stimmung] || 3);
+  }
+  for (const s of Object.keys(nachSetting)) {
+    const arr = nachSetting[s];
+    nachSetting[s] = { avg: Math.round(arr.reduce((a, b) => a + b, 0) / arr.length * 10) / 10, n: arr.length };
+  }
+
+  // Trend (letzte 5 vs. vorherige)
+  const scores = notizen.map(n => moodScore[n.soap.stimmung] || 3);
+  let trend = 'stabil';
+  if (scores.length >= 5) {
+    const letzte = scores.slice(-3).reduce((a, b) => a + b, 0) / 3;
+    const vorherige = scores.slice(0, -3).reduce((a, b) => a + b, 0) / (scores.length - 3);
+    if (letzte - vorherige > 0.5) trend = 'steigend';
+    else if (vorherige - letzte > 0.5) trend = 'fallend';
+  }
+
+  return { nachWochentag, nachSetting, trend, anzahl: notizen.length };
+}
+
+// Setting-Wirkung: Welches Setting erzielt die besten SRS-Werte?
+function analyseSettingWirkung(schuelerId) {
+  const notizen = DB.getNotizen(schuelerId)
+    .filter(n => n.kategorie === 'session' && n.soap?.setting && n.soap?.srs?.total != null);
+  if (notizen.length === 0) return null;
+
+  const settingMap = {};
+  for (const n of notizen) {
+    const s = n.soap.setting;
+    if (!settingMap[s]) settingMap[s] = [];
+    settingMap[s].push(n.soap.srs.total);
+  }
+
+  const settingScores = {};
+  let bestSetting = null;
+  let bestAvg = 0;
+  for (const [setting, werte] of Object.entries(settingMap)) {
+    const avg = Math.round(werte.reduce((a, b) => a + b, 0) / werte.length * 10) / 10;
+    settingScores[setting] = { avg, n: werte.length };
+    if (avg > bestAvg && werte.length >= 2) {
+      bestAvg = avg;
+      bestSetting = setting;
+    }
+  }
+
+  return { settingScores, bestSetting, bestAvg };
+}
+
+// Vernachlässigte Themen: Screening-Flaggen die nie als Sitzungsthema adressiert wurden
+function findeVernachlaessigteThemen(schuelerId) {
+  const screenings = DB.getScreenings(schuelerId);
+  if (!screenings || screenings.length === 0) return [];
+
+  // Letztes Screening
+  const letztes = screenings.sort((a, b) => (b.datum || '').localeCompare(a.datum || ''))[0];
+  if (!letztes || !letztes.ergebnisse) return [];
+
+  // Flaggen: Domänen über Cutoff
+  const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+  const flaggen = [];
+  for (const domain of domains) {
+    const score = letztes.ergebnisse[domain.id];
+    if (score != null && score >= domain.cutoff && !domain.invertiert) {
+      flaggen.push({ id: domain.id, label: domain.label, icon: domain.icon, score, cutoff: domain.cutoff });
+    }
+  }
+
+  // Welche Domänen wurden als Sitzungsthema adressiert?
+  const notizen = DB.getNotizen(schuelerId).filter(n => n.kategorie === 'session');
+  const adressierteDomains = new Set();
+
+  // Check 1: Über SOAP Freitext-Keyword-Matching
+  for (const n of notizen) {
+    const text = [n.soap?.subjektiv, n.soap?.objektiv, n.soap?.assessment, n.soap?.plan].filter(Boolean).join(' ').toLowerCase();
+    if (typeof THEMEN_KEYWORDS !== 'undefined') {
+      for (const [domain, keywords] of Object.entries(THEMEN_KEYWORDS)) {
+        if (keywords.some(kw => text.includes(kw))) {
+          adressierteDomains.add(domain);
+        }
+      }
+    }
+  }
+
+  // Check 2: Thema-Verknüpfung (wenn Thema einer Domäne zugeordnet)
+  for (const n of notizen) {
+    if (n.themaId) adressierteDomains.add(n.themaId);
+  }
+
+  // Flaggen die nie adressiert wurden
+  return flaggen.filter(f => !adressierteDomains.has(f.id));
+}
+
 function renderTreatmentResponse(schuelerId) {
   const el = document.getElementById('treatment-response-container');
   if (!el) return;

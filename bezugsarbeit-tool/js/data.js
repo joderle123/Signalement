@@ -23647,6 +23647,35 @@ const WB_KATEGORIEN = {
 };
 
 // ============================================================
+// THEMEN_KEYWORDS — Schlüsselwörter pro Screening-Domäne
+// Für Text-Analyse in SOAP-Notizen (Therapeutischer Zwilling)
+// ============================================================
+const THEMEN_KEYWORDS = {
+  depression: ['traurig', 'hoffnungslos', 'müde', 'antriebslos', 'weinen', 'leer', 'sinnlos', 'wertlos', 'keine lust', 'rückzug', 'isolation', 'schlaflos', 'appetitlos', 'niedergeschlagen', 'dunkel', 'schwer', 'belastend', 'energie', 'motivation', 'freudlos', 'suizid', 'tod', 'sterben', 'aufgeben'],
+  'angst-generalisiert': ['angst', 'sorgen', 'nervös', 'unruhig', 'panik', 'herzklopfen', 'zittern', 'schwitzen', 'atemnot', 'katastrophe', 'schlimm', 'kontrolle', 'überfordert', 'grübeln', 'anspannung', 'entspannung', 'beruhigen', 'atemübung', 'gedankenkreisen'],
+  'angst-sozial': ['schüchtern', 'peinlich', 'bewertung', 'blamieren', 'erröten', 'vermeiden', 'gruppe', 'klasse', 'präsentation', 'referat', 'auslachen', 'meinung', 'auffallen', 'blicke', 'unsicher', 'stumm', 'schweigen'],
+  trauma: ['flashback', 'alptraum', 'erinnerung', 'vermeidung', 'trigger', 'schreckhaft', 'hypervigilant', 'erstarrt', 'missbrauch', 'gewalt', 'unfall', 'verlust', 'tod', 'übergriff', 'ohnmacht', 'schutzlos', 'sicher', 'unsicher', 'stabilisierung', 'grounding', 'dissoziation'],
+  adhs: ['konzentration', 'ablenkung', 'vergessen', 'unruhig', 'impulsiv', 'chaotisch', 'unorganisiert', 'zappelig', 'ungeduldig', 'abschweifend', 'hausaufgaben', 'struktur', 'plan', 'timer', 'fokus', 'aufmerksamkeit'],
+  conduct: ['aggression', 'wut', 'schlagen', 'regeln', 'strafe', 'provokation', 'zerstören', 'lügen', 'stehlen', 'grenze', 'respekt', 'autorität', 'konsequenz', 'eskalation', 'gewalt', 'drohung', 'polizei'],
+  selbstverletzung: ['ritzen', 'schneiden', 'kratzen', 'verbrennen', 'selbstverletzung', 'narben', 'suizid', 'sterben', 'nicht mehr leben', 'aufhören', 'plan', 'methode', 'gedanken', 'wunsch', 'sicherheitsplan', 'notfall', 'krise'],
+  essstoerung: ['essen', 'gewicht', 'dick', 'dünn', 'kalorien', 'erbrechen', 'diät', 'körper', 'spiegel', 'fasten', 'essanfall', 'kontrolle', 'mahlzeit', 'bmi', 'figur', 'sport', 'purging', 'body'],
+  substanz: ['kiffen', 'cannabis', 'alkohol', 'trinken', 'drogen', 'joint', 'betrunken', 'rausch', 'konsum', 'abhängig', 'sucht', 'party', 'dealer', 'entzug', 'rauchen', 'nikotin', 'vape', 'pillen'],
+  schlaf: ['schlaf', 'einschlafen', 'aufwachen', 'müde', 'nacht', 'handy', 'bildschirm', 'alptraum', 'schlaflos', 'bett', 'rhythmus', 'mitternacht', 'morgens', 'erschöpft', 'schlafen', 'wach'],
+  psychose: ['stimmen', 'hören', 'sehen', 'verfolgt', 'überwacht', 'mission', 'besonders', 'unwirklich', 'realität', 'wahrnehmung', 'halluzination', 'wahn', 'paranoid', 'verschwörung'],
+  autismus: ['routine', 'veränderung', 'laut', 'reizüberflutung', 'sensorisch', 'spezialinteresse', 'sozial', 'mimik', 'ironie', 'wörtlich', 'meltdown', 'shutdown', 'struktur', 'regeln', 'anders'],
+  trennungsangst: ['trennung', 'alleinsein', 'mama', 'papa', 'vermissen', 'heimweh', 'bauchschmerzen', 'kopfschmerzen', 'schule verweigern', 'klammern', 'angst', 'verlassen', 'abholen'],
+  mobbing: ['mobbing', 'hänseln', 'ausgrenzen', 'schikanieren', 'cybermobbing', 'instagram', 'tiktok', 'snapchat', 'gerücht', 'beleidigung', 'bedrohung', 'allein', 'opfer', 'täter', 'gruppe'],
+  familie: ['eltern', 'vater', 'mutter', 'stiefvater', 'stiefmutter', 'streit', 'trennung', 'scheidung', 'gewalt', 'alkohol', 'vernachlässigung', 'geschwister', 'wohnsituation', 'umzug', 'pflege', 'heim', 'jugendamt', 'sorgerecht', 'besuchsrecht'],
+  diskriminierung: ['rassismus', 'diskriminierung', 'ausländer', 'herkunft', 'religion', 'kopftuch', 'hautfarbe', 'sprache', 'kultur', 'zugehörigkeit', 'anders', 'fremd', 'ausgrenzung', 'identität', 'lgbtq', 'trans', 'queer', 'outing'],
+  'soziale-isolation': ['einsam', 'allein', 'keine freunde', 'zurückgezogen', 'kontakt', 'sozial', 'meiden', 'vermeiden', 'rückzug', 'einsamkeit', 'unverstanden', 'außenseiter', 'abgelehnt'],
+  zwang: ['zwang', 'ritual', 'wiederholen', 'waschen', 'zählen', 'kontrollieren', 'ordnung', 'gedanken', 'aufdringlich', 'müssen', 'angst', 'nicht aufhören', 'sauber', 'symmetrie'],
+  stimmungsextreme: ['hochphase', 'euphorisch', 'überdreht', 'wenig schlaf', 'viele ideen', 'impulsiv', 'geldausgeben', 'stimmungswechsel', 'himmelhoch', 'todtraurig', 'instabil', 'extrem', 'schwankungen'],
+  psychosomatik: ['bauchschmerzen', 'kopfschmerzen', 'übelkeit', 'schwindel', 'herzrasen', 'atemnot', 'körper', 'schmerzen', 'arzt', 'befund', 'stress', 'somatisch', 'beschwerden', 'krank'],
+  dissoziation: ['abwesend', 'nebel', 'unwirklich', 'glas', 'fremd', 'zeitlücke', 'erinnern', 'außen', 'beobachten', 'taub', 'gefühllos', 'nicht da', 'neben sich', 'autopilot'],
+  resilienz: ['stärke', 'ressource', 'hobby', 'freund', 'vertrauen', 'sport', 'musik', 'tier', 'natur', 'humor', 'kreativ', 'helfen', 'zuversicht', 'durchhalten', 'bewältigen', 'familie', 'glaube', 'ziel']
+};
+
+// ============================================================
 // MIKRO-INTERVENTIONEN pro Screening-Domäne (Idee 2)
 // Kurze, evidenzbasierte Übungen (2-5 Min) für den Sitzungsstart
 // ============================================================

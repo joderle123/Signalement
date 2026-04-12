@@ -175,55 +175,58 @@
 
       <!-- DASHBOARD -->
       <div class="profil-tab-content active" data-tab="dashboard">
-        <!-- Safety-Kaskade Banner (höchste Priorität) -->
+        <!-- === CRITICAL: Safety (immer sichtbar) === -->
         <div id="safety-banner-dashboard"></div>
-
-        <!-- Therapeutischer Zwilling: Sitzungs-Briefing -->
-        <div id="sitzungs-briefing-widget"></div>
-
-        <!-- Therapeutischer Zwilling: Muster-Radar -->
-        <div id="muster-radar-widget"></div>
-
-        <!-- Praxis-Akademie: Just-in-Time Wissen -->
-        <div id="just-in-time-widget"></div>
-
-        <!-- Risiko-Ampel (prominent, ganz oben!) -->
         <div id="risiko-ampel-widget"></div>
 
-        <!-- Sitzungsvorschlag: Was mache ich heute? -->
-        <div id="sitzungsvorschlag-widget"></div>
+        <!-- === Klinische Intelligenz === -->
+        <div class="widget-group" id="wg-intelligence">
+          <div class="widget-group-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <span class="widget-group-label">Sitzungsvorbereitung</span>
+            <span class="widget-group-line"></span>
+            <span class="widget-group-toggle">▼</span>
+          </div>
+          <div class="widget-group-content">
+            <div id="sitzungs-briefing-widget"></div>
+            <div id="muster-radar-widget"></div>
+            <div id="just-in-time-widget"></div>
+          </div>
+        </div>
 
-        <!-- Nächste Schritte & Fortschritt -->
-        <div id="naechste-schritte-widget"></div>
+        <!-- === Planung & Aktion === -->
+        <div class="widget-group" id="wg-planning">
+          <div class="widget-group-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <span class="widget-group-label">Planung & Nachverfolgung</span>
+            <span class="widget-group-line"></span>
+            <span class="widget-group-toggle">▼</span>
+          </div>
+          <div class="widget-group-content">
+            <div id="sitzungsvorschlag-widget"></div>
+            <div id="naechste-schritte-widget"></div>
+            <div id="kontakt-nachfass-widget"></div>
+            <div id="followup-reminders-widget"></div>
+            <div id="medikation-dashboard-widget"></div>
+          </div>
+        </div>
 
-        <!-- Kontakt-Nachfass-Erinnerungen -->
-        <div id="kontakt-nachfass-widget"></div>
+        <!-- === Outcomes & Tracking === -->
+        <div class="widget-group" id="wg-outcomes">
+          <div class="widget-group-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            <span class="widget-group-label">Outcomes & Verlauf</span>
+            <span class="widget-group-line"></span>
+            <span class="widget-group-toggle">▼</span>
+          </div>
+          <div class="widget-group-content">
+            <div id="outcome-verlauf-widget"></div>
+            <div id="wirkungsnachweis-widget"></div>
+            <div id="anwesenheit-widget"></div>
+            <div id="verlauf-trend-widget"></div>
+          </div>
+        </div>
 
-        <!-- Follow-Up Erinnerungen -->
-        <div id="followup-reminders-widget"></div>
-
-        <!-- Medikation Widget -->
-        <div id="medikation-dashboard-widget"></div>
-
-        <!-- ORS/SRS Outcome-Verlauf -->
-        <div id="outcome-verlauf-widget"></div>
-
-        <!-- Wirkungsmaschine: Wirkungsnachweis -->
-        <div id="wirkungsnachweis-widget"></div>
-
-        <!-- Anwesenheits-Widget -->
-        <div id="anwesenheit-widget"></div>
-
-        <!-- Verlaufs-Trend -->
-        <div id="verlauf-trend-widget"></div>
-
-        <!-- Quick-Entry: Akutes Thema -->
+        <!-- === Schnellzugriff === -->
         <div id="quick-entry-dashboard"></div>
-
-        <!-- Intake-Fortschritt -->
         <div id="intake-progress-widget"></div>
-
-        <!-- Kompakte Zusammenfassung -->
         <div id="dashboard-summary-widget"></div>
 
         <div class="dashboard-grid">

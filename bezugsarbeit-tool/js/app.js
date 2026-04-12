@@ -7353,13 +7353,17 @@ function escapeHtml(text) {
 // ============================================================
 // TOAST
 // ============================================================
-function showToast(msg, typ = '') {
+function showToast(msg, typ = '', duration = 3000) {
   const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
   toast.className = `toast ${typ}`;
-  toast.innerHTML = `${typ === 'success' ? '✓' : typ === 'error' ? '✕' : 'ℹ'} ${msg}`;
+  const icon = typ === 'success' ? '✓' : typ === 'error' ? '✕' : typ === 'warning' ? '!' : 'ℹ';
+  toast.innerHTML = `<span style="font-weight:700;opacity:0.7;font-size:11px">${icon}</span> ${sanitize(msg)}`;
   container.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(() => {
+    toast.classList.add('removing');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
 }
 
 // ============================================================
@@ -8639,51 +8643,40 @@ function renderDashboard() {
   const s = DB.getSchuelerById(APP.currentSchuelerId);
   if (!s) return;
 
-  // === PRIORITÄTSBASIERTE WIDGET-REIHENFOLGE ===
-  // Stufe 1: Safety (nicht wegklickbar)
+  // === 1. CRITICAL: Safety + Risiko (immer sichtbar, oben) ===
   renderSafetyBanner('safety-banner-dashboard');
+  renderRisikoWidget();
 
-  // Stufe 1b: Therapeutischer Zwilling — Sitzungs-Briefing + Muster-Radar
+  // === 2. Klinische Intelligenz (Therapeutischer Zwilling) ===
   renderSitzungsBriefing(APP.currentSchuelerId);
   renderMusterRadar(APP.currentSchuelerId);
   renderJustInTimeWissen(APP.currentSchuelerId);
 
-  // Stufe 2: Risiko-Monitoring
-  renderRisikoWidget();
-
-  // Stufe 3: Engagement-Warnung bei kritischem Status (Risiko-Schüler ohne Kontakt)
-  renderKontaktNachfassWidget();
-
-  // Stufe 4: Verlauf-Warnungen (Sudden-Change, Verschlechterung)
-  renderVerlaufWidget();
-
-  // Stufe 5: Klinische Planung
+  // === 3. Planung & Nachverfolgung ===
   renderSitzungsvorschlag();
   renderNaechsteSchritte();
-  renderPhaseTransitionPrompt();
-  renderRueckschrittAlert();
-
-  // Stufe 5b: Follow-Up Erinnerungen & Medikation
+  renderKontaktNachfassWidget();
   renderFollowUpReminders();
   renderMedikationWidget();
 
-  // Stufe 5c: Outcome-Verlauf (ORS/SRS)
+  // === 4. Outcomes & Verlauf ===
   renderOutcomeVerlauf();
-
-  // Stufe 5c2: Wirkungsnachweis
   renderWirkungsnachweis(APP.currentSchuelerId);
-
-  // Stufe 5d: Anwesenheits-Tracking
   renderAnwesenheitWidget();
+  renderVerlaufWidget();
 
-  // Stufe 6: Allgemeine Übersicht
+  // === 5. Weitere Alerts (inline) ===
+  renderPhaseTransitionPrompt();
+  renderRueckschrittAlert();
+
+  // === 6. Schnellzugriff & Übersicht ===
+  renderQuickEntry('quick-entry-dashboard');
   renderIntakeProgress();
+  renderDashboardSummary();
   renderWohlbefinden();
   renderDashKalender();
   renderDashTodo();
   renderNotizbuch();
-  renderDashboardSummary();
-  renderQuickEntry('quick-entry-dashboard');
 }
 
 // ---- HYPOTHESEN → 5P ÜBERTRAGUNG ----

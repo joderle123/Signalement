@@ -18116,3 +18116,145 @@ function deleteHelferEintrag(id) {
   showToast('Fachperson entfernt', '');
   renderHelfersystem();
 }
+
+// ============================================================
+// HILFEPLANKONFERENZEN
+// ============================================================
+let _konferenzAufgaben = [];
+
+function renderKonferenzen() {
+  const container = document.getElementById('konferenzen-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  const konferenzen = DB.getKonferenzen(sid).sort((a, b) => (b.datum || '').localeCompare(a.datum || ''));
+  const heute = new Date().toISOString().split('T')[0];
+  _konferenzAufgaben = [];
+
+  let html = '<div class="section-header" style="margin-bottom:18px;">';
+  html += '<h3 style="margin:0;font-size:18px;">📋 Hilfeplankonferenzen</h3>';
+  html += '<p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">Protokolle, Beschlüsse und Aufgaben aus Hilfeplangesprächen</p>';
+  html += '</div>';
+
+  // Formular
+  html += '<div class="card" style="margin-bottom:20px;">';
+  html += '<div class="card-header"><span>➕</span><div class="card-title">Neue Konferenz</div></div>';
+  html += '<div class="card-body">';
+  html += '<div class="form-grid">';
+  html += `<div class="form-group"><label>Datum *</label><input type="date" id="konf-datum" value="${heute}"></div>`;
+  html += '<div class="form-group"><label>Titel *</label><input type="text" id="konf-titel" placeholder="z.B. Hilfeplan-Fortschreibung"></div>';
+  html += '<div class="form-group full"><label>Teilnehmer</label><input type="text" id="konf-teilnehmer" placeholder="Kommagetrennt: Frau Müller, Herr Schmidt, ..."></div>';
+  html += '<div class="form-group full"><label>Anlass</label><input type="text" id="konf-anlass" placeholder="z.B. Regeltermin, Krisenintervention"></div>';
+  html += '<div class="form-group full"><label>Themen / Inhalte</label><textarea id="konf-themen" rows="3" placeholder="Besprochene Themen..."></textarea></div>';
+  html += '<div class="form-group full"><label>Beschlüsse</label><textarea id="konf-beschluesse" rows="2" placeholder="Getroffene Entscheidungen..."></textarea></div>';
+  html += '</div>';
+
+  // Aufgaben
+  html += '<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">';
+  html += '<div style="font-size:13px;font-weight:600;margin-bottom:8px;">Aufgaben</div>';
+  html += '<div id="konf-aufgaben-list"></div>';
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  html += '<input type="text" id="konf-aufgabe-wer" placeholder="Wer" style="flex:1;min-width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;">';
+  html += '<input type="text" id="konf-aufgabe-was" placeholder="Was" style="flex:2;min-width:120px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;">';
+  html += '<input type="date" id="konf-aufgabe-bis" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;">';
+  html += '<button class="btn btn-sm btn-secondary" onclick="addKonferenzAufgabeTemp()">+ Aufgabe</button>';
+  html += '</div></div>';
+
+  html += '<div class="form-grid" style="margin-top:12px;">';
+  html += '<div class="form-group"><label>Nächster Termin</label><input type="date" id="konf-naechster"></div>';
+  html += '</div>';
+  html += '<button class="btn btn-primary btn-sm" onclick="addKonferenzEintrag()" style="margin-top:8px;">📋 Konferenz speichern</button>';
+  html += '</div></div>';
+
+  // Bestehende Konferenzen
+  if (konferenzen.length > 0) {
+    konferenzen.forEach(k => {
+      const teilnehmerArr = (k.teilnehmer || []);
+      const aufgaben = k.aufgaben || [];
+      html += `<div class="card" style="margin-bottom:12px;">`;
+      html += `<div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.konf-detail').classList.toggle('collapsed')">`;
+      html += `<span>📋</span>`;
+      html += `<div class="card-title">${escapeHtml(k.titel || 'Konferenz')}</div>`;
+      html += `<span style="font-size:11px;color:var(--text-muted);">${formatDatum(k.datum)} · ${teilnehmerArr.length} Teilnehmer · ${aufgaben.length} Aufgaben</span>`;
+      html += `<button class="btn-icon btn-sm" style="font-size:11px;margin-left:auto;" onclick="event.stopPropagation();deleteKonferenzEintrag('${k.id}')">🗑</button>`;
+      html += '</div>';
+      html += '<div class="konf-detail">';
+      html += '<div class="card-body" style="padding:14px;">';
+
+      if (k.anlass) html += `<div style="font-size:12px;margin-bottom:8px;"><strong>Anlass:</strong> ${escapeHtml(k.anlass)}</div>`;
+      if (teilnehmerArr.length) html += `<div style="font-size:12px;margin-bottom:8px;"><strong>Teilnehmer:</strong> ${teilnehmerArr.map(t => escapeHtml(t)).join(', ')}</div>`;
+      if (k.themen) html += `<div style="font-size:12px;margin-bottom:8px;"><strong>Themen:</strong><br>${escapeHtml(k.themen).replace(/\n/g, '<br>')}</div>`;
+      if (k.beschluesse) html += `<div style="font-size:12px;margin-bottom:8px;padding:8px;background:var(--bg-subtle);border-radius:6px;border-left:3px solid #3B82F6;"><strong>Beschlüsse:</strong><br>${escapeHtml(k.beschluesse).replace(/\n/g, '<br>')}</div>`;
+
+      if (aufgaben.length > 0) {
+        html += '<div style="margin-top:8px;"><strong style="font-size:12px;">Aufgaben:</strong>';
+        aufgaben.forEach(a => {
+          const ueberfaellig = a.bis && a.bis < heute;
+          html += `<div style="display:flex;gap:8px;align-items:center;padding:4px 0;font-size:12px;">`;
+          html += `<span style="font-weight:600;color:var(--primary);">${escapeHtml(a.wer)}</span>`;
+          html += `<span style="flex:1;color:var(--text);">${escapeHtml(a.was)}</span>`;
+          if (a.bis) html += `<span style="font-size:10px;padding:2px 6px;border-radius:4px;${ueberfaellig ? 'background:#FEF2F2;color:#DC2626;font-weight:600;' : 'background:var(--bg-subtle);color:var(--text-muted);'}">bis ${formatDatum(a.bis)}</span>`;
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+
+      if (k.naechsterTermin) html += `<div style="font-size:12px;margin-top:8px;color:#059669;font-weight:600;">📅 Nächster Termin: ${formatDatum(k.naechsterTermin)}</div>`;
+      html += '</div></div></div>';
+    });
+  } else {
+    html += renderEmptyState('📋', 'Noch keine Konferenzen', 'Dokumentiere Hilfeplangespräche mit Teilnehmern, Beschlüssen und Aufgaben.');
+  }
+
+  container.innerHTML = html;
+}
+
+function addKonferenzAufgabeTemp() {
+  const wer = document.getElementById('konf-aufgabe-wer')?.value?.trim();
+  const was = document.getElementById('konf-aufgabe-was')?.value?.trim();
+  const bis = document.getElementById('konf-aufgabe-bis')?.value || '';
+  if (!wer || !was) { showToast('Bitte Wer und Was angeben', 'error'); return; }
+  _konferenzAufgaben.push({ wer, was, bis });
+
+  const list = document.getElementById('konf-aufgaben-list');
+  if (list) {
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;gap:8px;align-items:center;padding:4px 0;font-size:12px;';
+    div.innerHTML = `<span style="font-weight:600;">${escapeHtml(wer)}</span><span style="flex:1;">${escapeHtml(was)}</span>${bis ? `<span style="font-size:10px;color:var(--text-muted);">bis ${bis}</span>` : ''}<button class="btn-icon btn-sm" style="font-size:10px;" onclick="this.parentElement.remove();_konferenzAufgaben.pop();">✕</button>`;
+    list.appendChild(div);
+  }
+  document.getElementById('konf-aufgabe-wer').value = '';
+  document.getElementById('konf-aufgabe-was').value = '';
+  document.getElementById('konf-aufgabe-bis').value = '';
+}
+
+function addKonferenzEintrag() {
+  const titel = document.getElementById('konf-titel')?.value?.trim();
+  const datum = document.getElementById('konf-datum')?.value;
+  if (!titel || !datum) { showToast('Bitte Datum und Titel eingeben', 'error'); return; }
+
+  const teilnehmerStr = document.getElementById('konf-teilnehmer')?.value?.trim() || '';
+  const teilnehmer = teilnehmerStr ? teilnehmerStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+  DB.addKonferenz({
+    schuelerId: APP.currentSchuelerId,
+    datum: datum,
+    titel: titel,
+    teilnehmer: teilnehmer,
+    anlass: document.getElementById('konf-anlass')?.value?.trim() || '',
+    themen: document.getElementById('konf-themen')?.value?.trim() || '',
+    beschluesse: document.getElementById('konf-beschluesse')?.value?.trim() || '',
+    aufgaben: [..._konferenzAufgaben],
+    naechsterTermin: document.getElementById('konf-naechster')?.value || ''
+  });
+  showToast('Konferenz gespeichert', 'success');
+  renderKonferenzen();
+}
+
+function deleteKonferenzEintrag(id) {
+  if (!confirm('Konferenz löschen?')) return;
+  DB.deleteKonferenz(id);
+  showToast('Konferenz gelöscht', '');
+  renderKonferenzen();
+}

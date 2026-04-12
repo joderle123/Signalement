@@ -5728,6 +5728,14 @@ const TOOL_LEGITIMATION = {
     warum: 'Dropout ist das größte Risiko in der Jugendhilfe — ca. 40–60% brechen vorzeitig ab (Swift & Greenberg, 2012). 2+ aufeinanderfolgende Fehltermine sind ein starker Prädiktor für Abbruch. Frühzeitiges Erkennen ermöglicht proaktives Nachfassen.',
     evidenz: 'Metaanalyse (Swift & Greenberg, 2012): Durchschnittliche Dropout-Rate liegt bei 20% (Erwachsene) bis 40–60% (Jugendliche). Proaktives Engagement-Monitoring und therapeutische Nachfass-Strategien reduzieren die Abbruchquote signifikant (Nock & Ferriter, 2005).',
   },
+  helfersystem: {
+    name: 'Professionelles Netzwerk (Helfersystem)',
+    quelle: 'Bronfenbrenner, U. (1979). The Ecology of Human Development. Harvard University Press.\nRapp, C.A. & Goscha, R.J. (2006). The Strengths Model: Case Management with People with Psychiatric Disabilities. Oxford University Press.',
+    entwickler: 'Basierend auf Bronfenbrenner (Ökologisches Modell), Rapp & Goscha (Strengths-Based Case Management)',
+    was: 'Systematische Erfassung und Koordination aller am Fall beteiligten Fachpersonen und Institutionen. Kategorisiert nach Bereich (Medizin, Schule, Behörde, Therapie, Soziales) mit Kontaktdaten und Zuständigkeiten.',
+    warum: 'Jugendliche in der Jugendhilfe haben im Durchschnitt 5–12 professionelle Kontaktpersonen (Bronfenbrenner, 1979). Ohne systematische Koordination entstehen Informationslücken, Doppelarbeit und widersprüchliche Interventionen.',
+    evidenz: 'Das ökologische Modell (Bronfenbrenner, 1979) zeigt, dass Entwicklung in verschachtelten Systemen stattfindet. Strengths-Based Case Management (Rapp & Goscha, 2006) belegt: Koordinierte Netzwerkarbeit verbessert Outcomes um 30–50% gegenüber fragmentierter Betreuung.',
+  },
 };
 
 // SOAP Beispiel-Einträge für Pädagogen

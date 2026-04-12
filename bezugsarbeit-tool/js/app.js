@@ -18001,3 +18001,118 @@ function renderEmptyState(icon, title, text) {
     + '<div class="empty-state-text">' + escapeHtml(text) + '</div>'
     + '</div>';
 }
+
+// ============================================================
+// HELFERSYSTEM — Professionelles Netzwerk
+// ============================================================
+const HELFER_KATEGORIEN = {
+  medizin: { icon: '🏥', label: 'Medizin', farbe: '#3B82F6' },
+  schule: { icon: '🏫', label: 'Schule', farbe: '#10B981' },
+  behoerde: { icon: '🏛️', label: 'Behörde', farbe: '#F59E0B' },
+  therapie: { icon: '🧠', label: 'Therapie', farbe: '#8B5CF6' },
+  soziales: { icon: '🤝', label: 'Soziales', farbe: '#0EA5E9' }
+};
+
+function renderHelfersystem() {
+  const container = document.getElementById('helfersystem-container');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  const helfer = DB.getHelfer(sid).sort((a, b) => (a.kategorie || '').localeCompare(b.kategorie || ''));
+  const heute = new Date().toISOString().split('T')[0];
+
+  let html = '<div class="section-header" style="margin-bottom:18px;">';
+  html += '<div style="display:flex;align-items:center;gap:8px;">';
+  html += '<h3 style="margin:0;font-size:18px;">🤝 Professionelles Netzwerk</h3>';
+  html += '<button class="btn-ref-inline" onclick="showToolLegitimation(\'helfersystem\')">📚</button>';
+  html += '</div>';
+  html += '<p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">Alle am Fall beteiligten Fachpersonen und Institutionen</p>';
+  html += '</div>';
+
+  // Formular
+  html += '<div class="card" style="margin-bottom:20px;">';
+  html += '<div class="card-header"><span>➕</span><div class="card-title">Fachperson hinzufügen</div></div>';
+  html += '<div class="card-body">';
+  html += '<div class="form-grid">';
+  html += '<div class="form-group"><label>Name *</label><input type="text" id="helfer-name" placeholder="Vor- und Nachname"></div>';
+  html += '<div class="form-group"><label>Rolle / Funktion</label><input type="text" id="helfer-rolle" placeholder="z.B. Kinderarzt, Lehrerin"></div>';
+  html += '<div class="form-group"><label>Institution</label><input type="text" id="helfer-institution" placeholder="z.B. Praxis Dr. Müller"></div>';
+  html += `<div class="form-group"><label>Kategorie</label>
+    <select id="helfer-kategorie">
+      ${Object.entries(HELFER_KATEGORIEN).map(([k, v]) => `<option value="${k}">${v.icon} ${v.label}</option>`).join('')}
+    </select>
+  </div>`;
+  html += '<div class="form-group"><label>Telefon</label><input type="tel" id="helfer-telefon" placeholder="+352 ..."></div>';
+  html += '<div class="form-group"><label>E-Mail</label><input type="email" id="helfer-email" placeholder="email@example.com"></div>';
+  html += '<div class="form-group full"><label>Notiz</label><input type="text" id="helfer-notiz" placeholder="Zusätzliche Informationen"></div>';
+  html += '</div>';
+  html += '<button class="btn btn-primary btn-sm" onclick="addHelferEintrag()" style="margin-top:8px;">🤝 Fachperson speichern</button>';
+  html += '</div></div>';
+
+  // Gruppierte Liste
+  if (helfer.length > 0) {
+    const grouped = {};
+    helfer.forEach(h => {
+      const kat = h.kategorie || 'soziales';
+      if (!grouped[kat]) grouped[kat] = [];
+      grouped[kat].push(h);
+    });
+
+    Object.entries(HELFER_KATEGORIEN).forEach(([katId, kat]) => {
+      const items = grouped[katId];
+      if (!items || items.length === 0) return;
+      html += `<div style="margin-bottom:16px;">`;
+      html += `<div style="font-size:13px;font-weight:700;color:${kat.farbe};margin-bottom:8px;display:flex;align-items:center;gap:6px;">${kat.icon} ${kat.label} (${items.length})</div>`;
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;">';
+      items.forEach(h => {
+        html += `<div class="card" style="border-left:3px solid ${kat.farbe};">`;
+        html += '<div class="card-body" style="padding:12px;">';
+        html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;">`;
+        html += `<div><div style="font-weight:700;font-size:13px;color:var(--text);">${escapeHtml(h.name)}</div>`;
+        if (h.rolle) html += `<div style="font-size:11px;color:var(--text-muted);">${escapeHtml(h.rolle)}</div>`;
+        if (h.institution) html += `<div style="font-size:11px;color:var(--text-muted);">${escapeHtml(h.institution)}</div>`;
+        html += '</div>';
+        html += `<button class="btn-icon btn-sm" style="font-size:11px;" onclick="deleteHelferEintrag('${h.id}')">🗑</button>`;
+        html += '</div>';
+        const actions = [];
+        if (h.telefon) actions.push(`<a href="tel:${escapeHtml(h.telefon)}" style="font-size:11px;color:${kat.farbe};text-decoration:none;">📞 ${escapeHtml(h.telefon)}</a>`);
+        if (h.email) actions.push(`<a href="mailto:${escapeHtml(h.email)}" style="font-size:11px;color:${kat.farbe};text-decoration:none;">📧 ${escapeHtml(h.email)}</a>`);
+        if (actions.length) html += `<div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;">${actions.join('')}</div>`;
+        if (h.notiz) html += `<div style="font-size:11px;color:var(--text-muted);margin-top:6px;font-style:italic;">${escapeHtml(h.notiz)}</div>`;
+        html += '</div></div>';
+      });
+      html += '</div></div>';
+    });
+  } else {
+    html += renderEmptyState('🤝', 'Noch keine Fachpersonen', 'Füge Ärzte, Lehrkräfte, Therapeuten und andere Beteiligte hinzu.');
+  }
+
+  container.innerHTML = html;
+}
+
+function addHelferEintrag() {
+  const name = document.getElementById('helfer-name')?.value?.trim();
+  if (!name) { showToast('Bitte Name eingeben', 'error'); return; }
+
+  DB.addHelfer({
+    schuelerId: APP.currentSchuelerId,
+    name: name,
+    rolle: document.getElementById('helfer-rolle')?.value?.trim() || '',
+    institution: document.getElementById('helfer-institution')?.value?.trim() || '',
+    kategorie: document.getElementById('helfer-kategorie')?.value || 'soziales',
+    telefon: document.getElementById('helfer-telefon')?.value?.trim() || '',
+    email: document.getElementById('helfer-email')?.value?.trim() || '',
+    notiz: document.getElementById('helfer-notiz')?.value?.trim() || '',
+    aktiv: true
+  });
+  showToast('Fachperson gespeichert', 'success');
+  renderHelfersystem();
+}
+
+function deleteHelferEintrag(id) {
+  if (!confirm('Fachperson entfernen?')) return;
+  DB.deleteHelfer(id);
+  showToast('Fachperson entfernt', '');
+  renderHelfersystem();
+}

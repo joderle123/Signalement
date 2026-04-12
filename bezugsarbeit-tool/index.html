@@ -15,85 +15,135 @@
 <body>
 
 <!-- ============================================================
-     SIDEBAR
+     SIDEBAR — Icon Rail + Floating Panel
      ============================================================ -->
-<aside id="sidebar" role="navigation" aria-label="Hauptnavigation">
-  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" onclick="toggleSidebarCollapse()" title="Sidebar ein-/ausklappen">‹</button>
-  <div class="sidebar-header">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 3C7.5 3 4 6.5 4 10.5C4 14 6 16.5 8 18L9 21H15L16 18C18 16.5 20 14 20 10.5C20 6.5 16.5 3 12 3Z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <path d="M12 3V8M8 6L10.5 9M16 6L13.5 9" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-          <path d="M9 21H15M9.5 19.5H14.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="12" cy="12" r="2.5" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/>
-        </svg>
+<div id="sidebar-wrapper">
+  <!-- ── ICON RAIL (48px, immer sichtbar) ── -->
+  <aside id="sidebar" class="sidebar-rail" role="navigation" aria-label="Hauptnavigation">
+    <div class="rail-logo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3C7.5 3 4 6.5 4 10.5C4 14 6 16.5 8 18L9 21H15L16 18C18 16.5 20 14 20 10.5C20 6.5 16.5 3 12 3Z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="12" cy="12" r="2.5" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/>
+      </svg>
+    </div>
+
+    <nav class="rail-nav" aria-label="Hauptmenü">
+      <div class="rail-item active" id="nav-home" onclick="showView('home')" role="button" tabindex="0" data-tooltip="Dashboard">
+        <span class="rail-icon" aria-hidden="true">🏠</span>
+        <span class="rail-dot"></span>
       </div>
-      <div class="sidebar-title">Pathways</div>
+      <div class="rail-separator"></div>
+      <div class="rail-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0" data-tooltip="Kalender">
+        <span class="rail-icon" aria-hidden="true">📅</span>
+        <span class="rail-dot"></span>
+      </div>
+      <div class="rail-item" id="nav-zeiterfassung" onclick="showView('zeiterfassung')" role="button" tabindex="0" data-tooltip="Zeiterfassung">
+        <span class="rail-icon" aria-hidden="true">⏱️</span>
+        <span class="rail-dot"></span>
+      </div>
+      <div class="rail-item" id="nav-aufgaben" onclick="showView('aufgaben')" role="button" tabindex="0" data-tooltip="Aufgaben">
+        <span class="rail-icon" aria-hidden="true">✅</span>
+        <span class="rail-dot"></span>
+      </div>
+      <div class="rail-item" id="nav-notizen" onclick="showView('notizen')" role="button" tabindex="0" data-tooltip="Notizen">
+        <span class="rail-icon" aria-hidden="true">📝</span>
+        <span class="rail-dot"></span>
+      </div>
+      <div class="rail-separator"></div>
+      <div class="rail-item" id="nav-bibliothek" onclick="showView('bibliothek')" role="button" tabindex="0" data-tooltip="Bibliothek">
+        <span class="rail-icon" aria-hidden="true">📚</span>
+        <span class="rail-dot"></span>
+      </div>
+      <div class="rail-item" id="nav-weiterbildung" onclick="showView('weiterbildung')" role="button" tabindex="0" data-tooltip="Weiterbildung">
+        <span class="rail-icon" aria-hidden="true">🎓</span>
+        <span class="rail-dot"></span>
+      </div>
+    </nav>
+
+    <div class="rail-clients" id="rail-clients">
+      <!-- JS: renderRailClients() füllt max. 4 Klienten-Avatare -->
     </div>
-    <div class="sidebar-subtitle">Therapeutic Case Management</div>
+
+    <div class="rail-footer">
+      <div class="rail-item" id="dark-mode-btn" onclick="toggleDarkMode()" data-tooltip="Dark Mode" role="button" tabindex="0">
+        <span class="rail-icon">🌙</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── FLOATING PANEL (280px, erscheint bei Hover) ── -->
+  <div class="sidebar-floating-panel" id="sidebar-floating-panel">
+    <div class="fp-header">
+      <div class="fp-logo">
+        <div class="sidebar-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3C7.5 3 4 6.5 4 10.5C4 14 6 16.5 8 18L9 21H15L16 18C18 16.5 20 14 20 10.5C20 6.5 16.5 3 12 3Z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M12 3V8M8 6L10.5 9M16 6L13.5 9" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+            <path d="M9 21H15M9.5 19.5H14.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="2.5" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.15)"/>
+          </svg>
+        </div>
+        <div>
+          <div class="fp-title">Pathways</div>
+          <div class="fp-subtitle">Therapeutic Case Management</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="fp-nav">
+      <div class="fp-section-label">Arbeitsbereich</div>
+      <div class="fp-nav-item active" onclick="showView('home')">
+        <span class="fp-nav-icon">🏠</span> Dashboard
+      </div>
+
+      <div class="fp-section-label">Meine Orga</div>
+      <div class="fp-nav-item" onclick="showView('kalender')">
+        <span class="fp-nav-icon">📅</span> Kalender
+      </div>
+      <div class="fp-nav-item" onclick="showView('zeiterfassung')">
+        <span class="fp-nav-icon">⏱️</span> Zeiterfassung
+      </div>
+      <div class="fp-nav-item" onclick="showView('aufgaben')">
+        <span class="fp-nav-icon">✅</span> Aufgaben
+      </div>
+      <div class="fp-nav-item" onclick="showView('notizen')">
+        <span class="fp-nav-icon">📝</span> Notizen
+      </div>
+
+      <div class="fp-section-label">Wissen</div>
+      <div class="fp-nav-item" onclick="showView('bibliothek')">
+        <span class="fp-nav-icon">📚</span> Bibliothek
+      </div>
+      <div class="fp-nav-item" onclick="showView('weiterbildung')">
+        <span class="fp-nav-icon">🎓</span> Weiterbildung
+      </div>
+    </nav>
+
+    <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
+
+    <div class="fp-schueler-section">
+      <div class="fp-schueler-header">
+        Klienten
+        <button class="btn-add-schueler" onclick="openSchuelerModal()">+ Neu</button>
+      </div>
+      <div class="schueler-liste" id="schueler-sidebar-liste"></div>
+    </div>
+
+    <div class="fp-footer">
+      <div class="fp-footer-actions">
+        <button onclick="openPinSetup()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;color:rgba(255,255,255,0.5);" title="PIN-Schutz" aria-label="PIN-Schutz einrichten">🔒</button>
+        <button onclick="exportDaten()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;color:rgba(255,255,255,0.5);" title="Backup exportieren" aria-label="Backup exportieren">💾</button>
+        <button onclick="exportCSV()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;color:rgba(255,255,255,0.5);" title="CSV Export" aria-label="CSV exportieren">📊</button>
+        <button onclick="document.getElementById('import-input').click()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;color:rgba(255,255,255,0.5);" title="Backup importieren" aria-label="Backup importieren">📥</button>
+      </div>
+      <div class="fp-footer-info">
+        <span id="save-indicator" style="font-size:10px;color:#10B981;">✓ Gespeichert</span>
+        <span style="opacity:0.3;">·</span>
+        <span style="font-size:10px;opacity:0.4;">v2.1</span>
+      </div>
+    </div>
   </div>
-
-  <nav class="sidebar-nav" aria-label="Hauptmenü">
-    <div class="sidebar-section-label">Arbeitsbereich</div>
-    <div class="nav-item active" id="nav-home" onclick="showView('home')" role="button" tabindex="0" aria-current="page" data-tooltip="Dashboard">
-      <span class="nav-item-icon" aria-hidden="true">🏠</span> Dashboard
-    </div>
-  </nav>
-
-  <!-- Meine Orga -->
-  <div class="sidebar-orga-nav">
-    <div class="sidebar-section-label">Meine Orga</div>
-    <div class="nav-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0" data-tooltip="Kalender">
-      <span class="nav-item-icon" aria-hidden="true">📅</span> Kalender
-    </div>
-    <div class="nav-item" id="nav-zeiterfassung" onclick="showView('zeiterfassung')" role="button" tabindex="0" data-tooltip="Zeiterfassung">
-      <span class="nav-item-icon" aria-hidden="true">⏱️</span> Zeiterfassung
-    </div>
-    <div class="nav-item" id="nav-aufgaben" onclick="showView('aufgaben')" role="button" tabindex="0" data-tooltip="Aufgaben">
-      <span class="nav-item-icon" aria-hidden="true">✅</span> Aufgaben
-    </div>
-    <div class="nav-item" id="nav-notizen" onclick="showView('notizen')" role="button" tabindex="0" data-tooltip="Notizen">
-      <span class="nav-item-icon" aria-hidden="true">📝</span> Notizen
-    </div>
-  </div>
-
-  <!-- Wissen -->
-  <div class="sidebar-ressourcen-nav">
-    <div class="sidebar-section-label">Wissen</div>
-    <div class="nav-item" id="nav-bibliothek" onclick="showView('bibliothek')" role="button" tabindex="0" data-tooltip="Bibliothek">
-      <span class="nav-item-icon" aria-hidden="true">📚</span> Bibliothek
-    </div>
-    <div class="nav-item" id="nav-weiterbildung" onclick="showView('weiterbildung')" role="button" tabindex="0" data-tooltip="Weiterbildung">
-      <span class="nav-item-icon" aria-hidden="true">🎓</span> Weiterbildung
-    </div>
-  </div>
-
-  <input type="file" id="import-input" accept=".json" style="display:none" onchange="importDaten(event)">
-
-  <div class="sidebar-schueler-section">
-    <div class="sidebar-schueler-header">
-      Klienten
-      <button class="btn-add-schueler" onclick="openSchuelerModal()">+ Neu</button>
-    </div>
-    <div class="schueler-liste" id="schueler-sidebar-liste"></div>
-  </div>
-
-  <div class="sidebar-footer" style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-    <div style="display:flex;align-items:center;gap:6px;">
-      <button id="dark-mode-btn" onclick="toggleDarkMode()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;" title="Dark Mode umschalten" aria-label="Dark Mode umschalten">🌙</button>
-      <button onclick="openPinSetup()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;" title="PIN-Schutz" aria-label="PIN-Schutz einrichten">🔒</button>
-      <button onclick="exportDaten()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;" title="Backup exportieren" aria-label="Backup exportieren">💾</button>
-      <button onclick="exportCSV()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;" title="CSV Export" aria-label="CSV exportieren">📊</button>
-      <button onclick="document.getElementById('import-input').click()" style="background:none;border:none;cursor:pointer;font-size:14px;padding:2px;" title="Backup importieren" aria-label="Backup importieren">📥</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px;">
-      <span id="save-indicator" style="font-size:10px;color:#10B981;">✓ Gespeichert</span>
-      <span style="opacity:0.4;">·</span>
-      <span style="font-size:10px;opacity:0.5;">Pathways v2.1</span>
-    </div>
-  </div>
-</aside>
+</div>
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
 
 <!-- ============================================================
@@ -105,7 +155,7 @@
   <div class="view active" id="view-home">
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
-      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-breadcrumbs" id="bc-home"></div>
       <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>Suche oder springe zu...</span>
@@ -117,6 +167,7 @@
       </div>
     </div>
     <div class="content">
+      <div id="hero-card"></div>
       <div class="home-stats" id="home-stats"></div>
       <!-- Ansicht-Toggle: Klienten / Kaseload -->
       <div style="display:flex;gap:6px;margin:8px 0 12px 0;" id="home-view-toggle">
@@ -135,6 +186,14 @@
 
   <!-- ---- PROFIL VIEW ---- -->
   <div class="view" id="view-profil">
+    <!-- Breadcrumb bar -->
+    <div class="profil-breadcrumb-bar">
+      <div class="topbar-breadcrumbs" id="bc-profil"></div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche…</span>
+      </div>
+    </div>
     <!-- Header -->
     <div class="profil-header">
       <div class="profil-avatar" id="profil-avatar" onclick="uploadFoto(APP.currentSchuelerId)">
@@ -963,7 +1022,13 @@
   <!-- ---- KALENDER VIEW ---- -->
   <div class="view" id="view-kalender">
     <div class="topbar">
-      <div class="topbar-title">Kalender</div>
+      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
+      <div class="topbar-breadcrumbs" id="bc-kalender"></div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche oder springe zu...</span>
+        <kbd>⌘K</kbd>
+      </div>
       <div class="topbar-actions">
         <button class="btn btn-primary" onclick="openTerminModal()">+ Neuer Termin</button>
       </div>
@@ -1008,7 +1073,11 @@
   <div class="view" id="view-weiterbildung">
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
-      <div class="topbar-title">Weiterbildung</div>
+      <div class="topbar-breadcrumbs" id="bc-weiterbildung"></div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche oder springe zu...</span><kbd>⌘K</kbd>
+      </div>
       <div class="topbar-actions"></div>
     </div>
     <div class="content" id="weiterbildung-content">
@@ -1020,7 +1089,11 @@
   <div class="view" id="view-zeiterfassung">
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
-      <div class="topbar-title">Zeiterfassung</div>
+      <div class="topbar-breadcrumbs" id="bc-zeiterfassung"></div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche oder springe zu...</span><kbd>⌘K</kbd>
+      </div>
       <div class="topbar-actions"></div>
     </div>
     <div class="content" id="zeiterfassung-content">
@@ -1032,7 +1105,11 @@
   <div class="view" id="view-aufgaben">
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
-      <div class="topbar-title">Aufgaben</div>
+      <div class="topbar-breadcrumbs" id="bc-aufgaben"></div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche oder springe zu...</span><kbd>⌘K</kbd>
+      </div>
       <div class="topbar-actions"></div>
     </div>
     <div class="content" id="aufgaben-content">
@@ -1044,7 +1121,11 @@
   <div class="view" id="view-notizen">
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
-      <div class="topbar-title">Meine Notizen</div>
+      <div class="topbar-breadcrumbs" id="bc-notizen"></div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche oder springe zu...</span><kbd>⌘K</kbd>
+      </div>
       <div class="topbar-actions">
         <button class="btn btn-primary" onclick="addPersNotiz()">+ Neue Notiz</button>
       </div>
@@ -1058,7 +1139,11 @@
   <div class="view" id="view-bibliothek">
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
-      <div class="topbar-title">Bibliothek</div>
+      <div class="topbar-breadcrumbs" id="bc-bibliothek"></div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche oder springe zu...</span><kbd>⌘K</kbd>
+      </div>
       <div class="topbar-actions"></div>
     </div>
     <div class="content" style="flex:1;overflow-y:auto;">
@@ -1069,7 +1154,7 @@
   <!-- ---- SCREENING VIEW ---- -->
   <div class="view" id="view-screening">
     <div class="topbar">
-      <div class="topbar-title" id="screening-topbar-titel">Screening</div>
+      <div class="topbar-breadcrumbs" id="bc-screening"></div>
       <div class="topbar-actions">
         <button class="btn btn-secondary btn-sm" onclick="showView('profil', APP.currentSchuelerId)">← Zurück zum Profil</button>
       </div>

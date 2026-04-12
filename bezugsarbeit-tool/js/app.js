@@ -377,28 +377,15 @@ function toggleDarkMode() {
 
 // ---- Mobile Sidebar Toggle ----
 function toggleMobileSidebar() {
-  const sidebar = document.getElementById('sidebar');
+  const wrapper = document.getElementById('sidebar-wrapper');
   const backdrop = document.getElementById('sidebar-backdrop');
-  sidebar.classList.toggle('mobile-open');
-  backdrop.classList.toggle('visible');
+  if (wrapper) wrapper.classList.toggle('mobile-open');
+  if (backdrop) backdrop.classList.toggle('visible');
 }
 
-function toggleSidebarCollapse() {
-  const sidebar = document.getElementById('sidebar');
-  const btn = document.getElementById('sidebar-collapse-btn');
-  const collapsed = sidebar.classList.toggle('sidebar-collapsed');
-  btn.textContent = collapsed ? '›' : '‹';
-  localStorage.setItem('pathways_sidebar_collapsed', collapsed ? '1' : '0');
-}
-
-function restoreSidebarState() {
-  if (localStorage.getItem('pathways_sidebar_collapsed') === '1') {
-    const sidebar = document.getElementById('sidebar');
-    const btn = document.getElementById('sidebar-collapse-btn');
-    if (sidebar) sidebar.classList.add('sidebar-collapsed');
-    if (btn) btn.textContent = '›';
-  }
-}
+// Legacy no-ops (rail replaces collapsible sidebar)
+function toggleSidebarCollapse() {}
+function restoreSidebarState() {}
 
 // ---- Loading Overlay ----
 function showLoading(text) {
@@ -481,11 +468,22 @@ function migrateRoadmapsTo7Phasen() {
 // ============================================================
 // VIEWS
 // ============================================================
+// Section color map
+const SECTION_COLORS = {
+  home: '#6366F1', kalender: '#10B981', zeiterfassung: '#F59E0B',
+  aufgaben: '#8B5CF6', notizen: '#EC4899', bibliothek: '#0EA5E9',
+  weiterbildung: '#14B8A6', screening: '#EF4444', profil: '#6366F1'
+};
+
 function showView(view, schuelerId = null) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.rail-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.fp-nav-item').forEach(n => n.classList.remove('active'));
 
   APP.currentView = view;
+
+  // Set section color
+  document.documentElement.style.setProperty('--section-color', SECTION_COLORS[view] || '#6366F1');
 
   // Reset client state when leaving profile
   if (view !== 'profil' && view !== 'screening') {
@@ -532,6 +530,104 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-notizen').classList.add('active');
     document.getElementById('nav-notizen').classList.add('active');
     renderPersNotizen();
+  }
+
+  // Update floating panel nav active state
+  updateFpNavActive(view);
+
+  // Update breadcrumbs
+  updateBreadcrumbs(view, schuelerId);
+}
+
+function updateFpNavActive(view) {
+  const VIEW_LABELS = {
+    home: 'Dashboard', kalender: 'Kalender', zeiterfassung: 'Zeiterfassung',
+    aufgaben: 'Aufgaben', notizen: 'Notizen', bibliothek: 'Bibliothek',
+    weiterbildung: 'Weiterbildung'
+  };
+  const label = VIEW_LABELS[view];
+  document.querySelectorAll('.fp-nav-item').forEach(el => {
+    el.classList.toggle('active', el.textContent.trim().includes(label));
+  });
+}
+
+// ============================================================
+// BREADCRUMBS
+// ============================================================
+const VIEW_META = {
+  home:           { icon: '🏠', label: 'Dashboard' },
+  kalender:       { icon: '📅', label: 'Kalender' },
+  zeiterfassung:  { icon: '⏱️', label: 'Zeiterfassung' },
+  aufgaben:       { icon: '✅', label: 'Aufgaben' },
+  notizen:        { icon: '📝', label: 'Notizen' },
+  bibliothek:     { icon: '📚', label: 'Bibliothek' },
+  weiterbildung:  { icon: '🎓', label: 'Weiterbildung' },
+  screening:      { icon: '🔍', label: 'Screening' },
+  profil:         { icon: '👤', label: 'Profil' }
+};
+
+const PHASE_META = {
+  fallakte:    { icon: '📋', label: 'Fallakte' },
+  diagnostik:  { icon: '🔍', label: 'Diagnostik' },
+  begleitung:  { icon: '🧭', label: 'Begleitung' },
+  auswertung:  { icon: '📊', label: 'Auswertung' }
+};
+
+function updateBreadcrumbs(view, schuelerId, phase, subTab) {
+  // Build breadcrumb segments: each is { label, onclick?, active? }
+  const segs = [];
+
+  // Home is always first (clickable unless we're already on home)
+  if (view !== 'home') {
+    segs.push({ label: '🏠', onclick: "showView('home')" });
+  }
+
+  const meta = VIEW_META[view] || { icon: '', label: view };
+
+  if (view === 'profil' || view === 'screening') {
+    // Client-specific views: show client name
+    const s = schuelerId ? DB.getSchueler().find(sc => sc.id === schuelerId) : null;
+    const name = s ? `${s.vorname} ${s.nachname}` : 'Klient';
+
+    if (view === 'screening') {
+      segs.push({ label: name, onclick: `showView('profil','${schuelerId}')` });
+      segs.push({ label: 'Screening', active: true });
+    } else {
+      // Profil — no further nesting at view level
+      segs.push({ label: name, active: !phase });
+
+      if (phase) {
+        const pm = PHASE_META[phase] || { label: phase };
+        segs.push({ label: pm.label, onclick: `showPhase('${phase}')`, active: !subTab });
+
+        if (subTab) {
+          // Find the sub-tab label
+          const tabs = PHASE_TABS[phase] || [];
+          const tabObj = tabs.find(t => t.id === subTab);
+          const tabLabel = tabObj ? tabObj.label : subTab;
+          segs.push({ label: tabLabel, active: true });
+        }
+      }
+    }
+  } else {
+    // Regular views
+    segs.push({ label: `${meta.icon} ${meta.label}`, active: true });
+  }
+
+  // Render into the breadcrumb container
+  const bcEl = document.getElementById(`bc-${view}`);
+
+  if (bcEl) {
+    bcEl.innerHTML = segs.map((seg, i) => {
+      const sep = i > 0 ? '<span class="bc-separator">/</span>' : '';
+      if (seg.active) {
+        return `${sep}<span class="bc-item bc-active">${seg.label}</span>`;
+      } else if (seg.onclick) {
+        return `${sep}<span class="bc-item bc-clickable" onclick="${seg.onclick}">${seg.label}</span>`;
+      } else {
+        return `${sep}<span class="bc-item">${seg.label}</span>`;
+      }
+    }).join('');
   }
 }
 
@@ -582,11 +678,49 @@ function renderSidebar() {
       </div>
     </div>`;
   }).join('');
+
+  renderRailClients();
+}
+
+function renderRailClients() {
+  const el = document.getElementById('rail-clients');
+  if (!el) return;
+  const schueler = DB.getSchueler().filter(s => (s.status || 'aktiv') === 'aktiv');
+  const show = schueler.slice(0, 4);
+  const rest = schueler.length - show.length;
+  el.innerHTML = show.map(s =>
+    `<div class="rail-client-avatar" onclick="showView('profil','${s.id}')" title="${escapeHtml(s.vorname)} ${escapeHtml(s.nachname)}">
+      ${s.foto ? `<img src="${s.foto}" alt="">` : getInitials(s.vorname, s.nachname)}
+    </div>`
+  ).join('') + (rest > 0 ? `<div class="rail-client-more" onclick="showView('home')" title="${rest} weitere Klienten">+${rest}</div>` : '');
 }
 
 // ============================================================
 // HOME VIEW
 // ============================================================
+function renderHeroCard() {
+  const el = document.getElementById('hero-card');
+  if (!el) return;
+  const schueler = DB.getSchueler();
+  const aktive = schueler.filter(s => (s.status || 'aktiv') === 'aktiv');
+  if (aktive.length === 0) { el.innerHTML = ''; return; }
+
+  const heute = new Date().toISOString().slice(0, 10);
+  const termine = DB.getTermine().filter(t => t.datum === heute);
+  const hour = new Date().getHours();
+  const gruss = hour < 12 ? 'Guten Morgen' : hour < 17 ? 'Guten Nachmittag' : 'Guten Abend';
+  const dateStr = new Date().toLocaleDateString('de-CH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  el.innerHTML = `
+    <div class="hero-dashboard-card">
+      <div class="hero-card-content">
+        <div class="hero-card-greeting">${gruss}.</div>
+        <div class="hero-card-summary">Du hast <strong>${aktive.length} aktive Klient${aktive.length === 1 ? '' : 'en'}</strong>${termine.length > 0 ? ` und <strong>${termine.length} Termin${termine.length === 1 ? '' : 'e'}</strong> heute` : ''}.</div>
+      </div>
+      <div class="hero-card-date">${dateStr}</div>
+    </div>`;
+}
+
 function renderHome() {
   const schueler = DB.getSchueler();
   const grid = document.getElementById('home-grid');
@@ -596,6 +730,9 @@ function renderHome() {
   const gefiltert = schueler.filter(s =>
     `${s.vorname} ${s.nachname} ${s.klasse}`.toLowerCase().includes(filter)
   );
+
+  // Hero Card
+  renderHeroCard();
 
   // Stats-Leiste
   if (schueler.length > 0 && statsEl) {
@@ -2103,6 +2240,9 @@ function showPhase(phase, subTabId) {
     ).join('');
     showProfilTab(activeSubId);
   }
+
+  // Update breadcrumbs for profil view — rendered into home breadcrumb area as fallback
+  updateBreadcrumbs('profil', APP.currentSchuelerId, phase, subTabId || tabs[0].id);
 }
 
 function showSubTab(tabId) {

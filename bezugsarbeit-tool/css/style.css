@@ -8123,6 +8123,58 @@ textarea:required:invalid:not(:placeholder-shown) {
   font-size: 11px; color: var(--danger, #EF4444); margin-top: 2px;
 }
 
+/* ============================================================
+   SCHNELLNOTIZ — Floating Action Button + Modal
+   ============================================================ */
+.schnellnotiz-fab {
+  position: fixed; bottom: 24px; left: 24px; width: 52px; height: 52px;
+  border-radius: 50%; border: none; cursor: pointer; font-size: 20px;
+  background: var(--warning, #F59E0B); color: white;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+  z-index: 999; transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.schnellnotiz-fab:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5); }
+.schnellnotiz-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  z-index: 1000; display: none; backdrop-filter: blur(2px);
+}
+.schnellnotiz-overlay.open { display: block; }
+.schnellnotiz-modal {
+  position: fixed; bottom: 88px; left: 24px; width: 320px;
+  background: var(--bg-card, #fff); border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18); z-index: 1001;
+  display: none; overflow: hidden;
+  animation: modalIn 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.schnellnotiz-modal.open { display: block; }
+.schnellnotiz-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+}
+.schnellnotiz-header h3 { margin: 0; font-size: 15px; font-weight: 700; }
+.schnellnotiz-close {
+  background: none; border: none; font-size: 20px; cursor: pointer;
+  color: var(--text-muted); padding: 0; line-height: 1;
+}
+.schnellnotiz-body { padding: 16px; }
+.schnellnotiz-body select {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 12px; margin-bottom: 10px;
+  background: var(--bg-card); color: var(--text); font-family: inherit;
+}
+.schnellnotiz-body textarea {
+  width: 100%; padding: 10px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 13px; margin-bottom: 10px;
+  resize: vertical; font-family: inherit;
+  background: var(--bg-card); color: var(--text);
+}
+.schnellnotiz-body .btn { width: 100%; }
+
+/* Konferenz-Details kollabierbar */
+.konf-detail { overflow: hidden; }
+.konf-detail.collapsed { display: none; }
+
 /* High contrast mode support */
 @media (forced-colors: active) {
   .btn-primary {

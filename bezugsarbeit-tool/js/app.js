@@ -620,13 +620,23 @@ function renderHome() {
   renderKlinischerFingerabdruck(schueler);
 
   if (gefiltert.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state" style="grid-column:1/-1">
-        <div class="empty-state-icon">👥</div>
-        <div class="empty-state-title">${filter ? 'Kein Treffer' : 'Noch keine Schüler'}</div>
-        <div class="empty-state-text">${filter ? `Keine Schüler gefunden für „${filter}".` : 'Erstelle das erste Schülerprofil um zu beginnen.'}</div>
-        ${!filter ? '<button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuen Schüler anlegen</button>' : ''}
+    if (filter) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔍</div><div class="empty-state-title">Kein Treffer</div><div class="empty-state-text">Keine Klienten gefunden für "${escapeHtml(filter)}".</div></div>`;
+    } else {
+      grid.innerHTML = `<div style="grid-column:1/-1;max-width:600px;margin:40px auto;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">🧭</div>
+        <h2 style="font-size:22px;font-weight:800;color:var(--text);margin:0 0 8px;">Willkommen bei Pathways</h2>
+        <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:24px;">Dein professionelles Werkzeug für therapeutische Bezugsarbeit. Beginne damit, deinen ersten Klienten anzulegen — danach stehen dir Screening, Fallformulierung, Sitzungsprotokolle und vieles mehr zur Verfügung.</p>
+        <button class="btn btn-primary" onclick="openSchuelerModal()" style="font-size:14px;padding:12px 24px;">+ Ersten Klienten anlegen</button>
+        <div style="display:flex;gap:16px;justify-content:center;margin-top:32px;flex-wrap:wrap;">
+          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">📅</div><div style="font-size:11px;color:var(--text-muted);">Kalender</div></div>
+          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">✅</div><div style="font-size:11px;color:var(--text-muted);">Aufgaben</div></div>
+          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">⏱</div><div style="font-size:11px;color:var(--text-muted);">Zeiterfassung</div></div>
+          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">🎓</div><div style="font-size:11px;color:var(--text-muted);">Weiterbildung</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:16px;">Tipp: Du kannst auch ohne Klienten den Kalender, Aufgaben und die Weiterbildung nutzen.</p>
       </div>`;
+    }
     return;
   }
 

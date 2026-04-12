@@ -392,12 +392,12 @@ body {
 }
 
 .sidebar-section-label {
-  padding: 10px 20px 5px;
+  padding: 12px 20px 5px;
   font-size: 9px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.22);
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.35);
 }
 
 .sidebar-phase-item {
@@ -437,10 +437,16 @@ body {
   opacity: 1;
 }
 
+/* Orga-Sektion */
+.sidebar-orga-nav {
+  padding: 4px 10px 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
 /* Ressourcen-Sektion */
 .sidebar-ressourcen-nav {
   padding: 4px 10px 8px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 .sidebar-ressourcen-nav .nav-item {

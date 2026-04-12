@@ -18403,3 +18403,41 @@ function deleteZeitEintrag(id) {
   showToast('Zeiteintrag gelöscht', '');
   renderZeiterfassung();
 }
+
+// ============================================================
+// SCHNELLNOTIZ — Floating Action Button
+// ============================================================
+function toggleSchnellnotiz() {
+  const fab = document.getElementById('schnellnotiz-fab');
+  const overlay = document.getElementById('schnellnotiz-overlay');
+  const modal = document.getElementById('schnellnotiz-modal');
+  if (!fab || !overlay || !modal) return;
+
+  const isOpen = modal.classList.contains('open');
+  if (isOpen) {
+    modal.classList.remove('open');
+    overlay.classList.remove('open');
+  } else {
+    modal.classList.add('open');
+    overlay.classList.add('open');
+    const ta = document.getElementById('schnellnotiz-text');
+    if (ta) { ta.value = ''; ta.focus(); }
+  }
+}
+
+function saveSchnellnotiz() {
+  const text = document.getElementById('schnellnotiz-text')?.value?.trim();
+  const kategorie = document.getElementById('schnellnotiz-kategorie')?.value || 'beobachtung';
+  if (!text) { showToast('Bitte Notiz eingeben', 'error'); return; }
+  if (!APP.currentSchuelerId) { showToast('Bitte zuerst einen Klienten auswählen', 'error'); return; }
+
+  DB.createNotiz({
+    schuelerId: APP.currentSchuelerId,
+    datum: new Date().toISOString().split('T')[0],
+    inhalt: text,
+    kategorie: kategorie,
+  });
+
+  toggleSchnellnotiz();
+  showToast('Schnellnotiz gespeichert', 'success');
+}

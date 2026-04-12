@@ -4212,6 +4212,61 @@ select {
 .phase-res-info-blue { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
 .phase-res-info-yellow { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
 .phase-res-info-green { background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; }
+
+/* ── Fachliche Referenz-Kästchen ── */
+.ref-inline {
+  font-size: 10px;
+  color: var(--text-muted, #9CA3AF);
+  padding: 6px 10px;
+  margin-top: 6px;
+  background: var(--bg-subtle, #F9FAFB);
+  border-radius: 6px;
+  border-left: 2px solid var(--primary, #6366F1);
+  line-height: 1.5;
+  font-style: italic;
+}
+.btn-ref-inline {
+  background: none;
+  border: 1px solid var(--border, #E4E4E7);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--text-muted, #6B7280);
+  white-space: nowrap;
+  transition: all var(--speed, 0.18s);
+}
+.btn-ref-inline:hover {
+  background: var(--bg-subtle, #F3F4F6);
+  color: var(--primary, #6366F1);
+  border-color: var(--primary, #6366F1);
+}
+.btn-ref-sidebar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0 2px;
+  opacity: 0.5;
+  transition: opacity var(--speed, 0.18s);
+  vertical-align: middle;
+}
+.btn-ref-sidebar:hover {
+  opacity: 1;
+}
+.widget-group-desc {
+  font-size: 10px;
+  color: var(--text-muted, #9CA3AF);
+  padding: 0 4px 8px;
+  line-height: 1.4;
+  font-style: italic;
+  border-bottom: 1px solid var(--border, #E4E4E7);
+  margin-bottom: 8px;
+}
+.widget-group.collapsed .widget-group-desc {
+  display: none;
+}
+
 /* Empfehlungs-Karten */
 .phase-res-cards {
   display: flex;
@@ -6514,6 +6569,12 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 
 /* ── Dark Mode: Empty states ── */
 [data-theme="dark"] .empty-state { color: var(--text-muted); }
+
+/* ── Dark Mode: Referenz-Kästchen ── */
+[data-theme="dark"] .ref-inline { background: var(--bg-card); border-left-color: var(--primary); color: var(--text-muted); }
+[data-theme="dark"] .btn-ref-inline { border-color: var(--border); color: var(--text-muted); }
+[data-theme="dark"] .btn-ref-inline:hover { background: var(--bg-card); color: var(--primary); border-color: var(--primary); }
+[data-theme="dark"] .widget-group-desc { color: var(--text-muted); border-bottom-color: var(--border); }
 
 /* ── Dark Mode: Roadmap ── */
 [data-theme="dark"] .roadmap-stepper { background: var(--bg-subtle); border-color: var(--border); }

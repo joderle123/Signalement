@@ -3679,28 +3679,35 @@ function showToolLegitimation(toolKey) {
   overlay.id = 'tool-legit-overlay';
   overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
   overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const bg = isDark ? '#1C1C1E' : '#fff';
+  const textMain = isDark ? '#E5E5EA' : '#374151';
+  const textTitle = isDark ? '#F5F5F7' : '#1F2937';
+  const textMuted = isDark ? '#8E8E93' : '#6B7280';
+  const textMuted2 = isDark ? '#636366' : '#9CA3AF';
+  const boxBg = (light, dark) => isDark ? dark : light;
   overlay.innerHTML = `
-    <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.2);max-height:85vh;overflow-y:auto;">
+    <div style="background:${bg};border-radius:14px;max-width:520px;width:100%;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.3);max-height:85vh;overflow-y:auto;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div style="font-size:18px;font-weight:700;color:#1F2937;">📚 ${data.name}</div>
-        <button onclick="document.getElementById('tool-legit-overlay').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#9CA3AF;">✕</button>
+        <div style="font-size:18px;font-weight:700;color:${textTitle};">📚 ${data.name}</div>
+        <button onclick="document.getElementById('tool-legit-overlay').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:${textMuted};">✕</button>
       </div>
-      <div style="background:#EFF6FF;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #2563EB;">
-        <div style="font-weight:600;color:#1D4ED8;font-size:13px;margin-bottom:6px;">Was ist das?</div>
-        <div style="font-size:13px;color:#374151;line-height:1.6;">${data.was}</div>
+      <div style="background:${boxBg('#EFF6FF','#1A2332')};border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #2563EB;">
+        <div style="font-weight:600;color:#3B82F6;font-size:13px;margin-bottom:6px;">Was ist das?</div>
+        <div style="font-size:13px;color:${textMain};line-height:1.6;">${data.was}</div>
       </div>
-      <div style="background:#ECFDF5;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #10B981;">
-        <div style="font-weight:600;color:#065F46;font-size:13px;margin-bottom:6px;">Warum dieses Tool?</div>
-        <div style="font-size:13px;color:#374151;line-height:1.6;">${data.warum}</div>
+      <div style="background:${boxBg('#ECFDF5','#132A1E')};border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #10B981;">
+        <div style="font-weight:600;color:#10B981;font-size:13px;margin-bottom:6px;">Warum dieses Tool?</div>
+        <div style="font-size:13px;color:${textMain};line-height:1.6;">${data.warum}</div>
       </div>
-      <div style="background:#FFF7ED;border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #F97316;">
-        <div style="font-weight:600;color:#9A3412;font-size:13px;margin-bottom:6px;">Evidenz</div>
-        <div style="font-size:13px;color:#374151;line-height:1.6;">${data.evidenz}</div>
+      <div style="background:${boxBg('#FFF7ED','#2A1F0F')};border-radius:10px;padding:14px;margin-bottom:12px;border-left:4px solid #F97316;">
+        <div style="font-weight:600;color:#F97316;font-size:13px;margin-bottom:6px;">Evidenz</div>
+        <div style="font-size:13px;color:${textMain};line-height:1.6;">${data.evidenz}</div>
       </div>
-      <div style="background:#EEF2FF;border-radius:10px;padding:14px;border-left:4px solid #6366F1;">
-        <div style="font-weight:600;color:#4338CA;font-size:13px;margin-bottom:6px;">Quelle</div>
-        <div style="font-size:12px;color:#6B7280;line-height:1.5;font-style:italic;">${data.quelle}</div>
-        <div style="font-size:12px;color:#9CA3AF;margin-top:4px;">Entwickelt von: ${data.entwickler}</div>
+      <div style="background:${boxBg('#EEF2FF','#1E1A2E')};border-radius:10px;padding:14px;border-left:4px solid #6366F1;">
+        <div style="font-weight:600;color:#818CF8;font-size:13px;margin-bottom:6px;">Quelle</div>
+        <div style="font-size:12px;color:${textMuted};line-height:1.5;font-style:italic;">${data.quelle}</div>
+        <div style="font-size:12px;color:${textMuted2};margin-top:4px;">Entwickelt von: ${data.entwickler}</div>
       </div>
     </div>
   `;
@@ -6096,6 +6103,7 @@ function renderWirkungsnachweis(schuelerId) {
       <div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.card-body').style.display=this.parentElement.querySelector('.card-body').style.display==='none'?'block':'none';">
         <span>📊</span>
         <div class="card-title">Wirkungsnachweis</div>
+        <button onclick="event.stopPropagation();showToolLegitimation('wirkungsnachweis')" class="btn-ref-inline" style="margin-left:8px;">📚 Evidenz</button>
         <span style="font-size:12px;color:${klassifikation.farbe};font-weight:600;margin-left:auto;">${klassifikation.icon} ${klassifikation.label}</span>
       </div>
       <div class="card-body" style="padding:10px 14px;">
@@ -6391,6 +6399,7 @@ function renderTreatmentResponse(schuelerId) {
       <div class="card-header">
         <span>💊</span>
         <div class="card-title">Treatment-Response-Analyse</div>
+        <button onclick="showToolLegitimation('rom')" class="btn-ref-inline" style="margin-left:8px;">📚 ROM</button>
         <span style="font-size:12px;color:var(--text-muted);margin-left:auto;">${analyse.themen.reduce((a, t) => a + t.anzahl, 0)} Sitzungen</span>
       </div>
       <div class="card-body">
@@ -8545,7 +8554,7 @@ function renderOutcomeVerlauf() {
   container.innerHTML = sanitize(`
     <div class="card" style="padding:16px;margin-bottom:12px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div style="font-size:14px;font-weight:700;">📈 Outcome-Verlauf</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:14px;font-weight:700;">📈 Outcome-Verlauf</span><button onclick="showToolLegitimation('rom')" class="btn-ref-inline">📚 ROM</button></div>
         <div style="display:flex;gap:12px;font-size:12px;">
           ${aktuellORS !== null ? `<span style="color:#3B82F6;font-weight:600;">ORS ${aktuellORS}/40 <span style="color:${trendColor(orsTrend)}">${trendIcon(orsTrend)}</span></span>` : ''}
           ${aktuellSRS !== null ? `<span style="color:#8B5CF6;font-weight:600;">SRS ${aktuellSRS}/40 <span style="color:${trendColor(srsTrend)}">${trendIcon(srsTrend)}</span></span>` : ''}
@@ -8624,7 +8633,7 @@ function renderAnwesenheitWidget() {
   container.innerHTML = sanitize(`
     <div class="card" style="padding:16px;margin-bottom:12px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div style="font-size:14px;font-weight:700;">📅 Anwesenheit</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:14px;font-weight:700;">📅 Anwesenheit</span><button onclick="showToolLegitimation('anwesenheit')" class="btn-ref-inline">📚</button></div>
         ${rate !== null ? `<span style="font-size:18px;font-weight:700;color:${rateColor};">${rate}%</span>` : '<span style="font-size:12px;color:#9CA3AF;">Noch nicht erfasst</span>'}
       </div>
       <div style="display:flex;gap:3px;margin-bottom:6px;">${balken}</div>
@@ -16447,6 +16456,7 @@ function renderRisikoWidget() {
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <span style="font-size:20px;">${stufeInfo.icon}</span>
           <strong style="color:${stufeInfo.farbe};">Risiko-Status: ${stufeInfo.label}</strong>
+          <button onclick="showToolLegitimation('risiko')" class="btn-ref-inline" style="margin-left:8px;">📚</button>
           <span style="font-size:10px;color:#6B7280;margin-left:auto;">${new Date(letzter.datum).toLocaleDateString('de-DE')}</span>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">

@@ -45,7 +45,7 @@
 
   <!-- Klient-Navigation (nur sichtbar wenn Profil offen) -->
   <div class="sidebar-phase-nav" id="sidebar-phase-nav" style="display:none;">
-    <div class="sidebar-section-label" id="sidebar-klient-label">Klient</div>
+    <div class="sidebar-section-label" id="sidebar-klient-label">Klient <button onclick="event.stopPropagation();showToolLegitimation('phasenmodell')" class="btn-ref-sidebar" title="7-Phasen-Begleitmodell">📚</button></div>
     <div class="sidebar-phase-item" data-phase="fallakte" onclick="showPhase('fallakte')">
       <span class="nav-item-icon">📋</span> Fallakte
     </div>
@@ -186,6 +186,7 @@
             <span class="widget-group-line"></span>
             <span class="widget-group-toggle">▼</span>
           </div>
+          <div class="widget-group-desc">Evidenzbasierte Sitzungsplanung auf Basis von ORS/SRS-Trends, Muster-Analyse und klinischen Algorithmen (Lambert & Shimokawa, 2011)</div>
           <div class="widget-group-content">
             <div id="sitzungs-briefing-widget"></div>
             <div id="muster-radar-widget"></div>
@@ -200,6 +201,7 @@
             <span class="widget-group-line"></span>
             <span class="widget-group-toggle">▼</span>
           </div>
+          <div class="widget-group-desc">Strukturierte Interventionsplanung und proaktives Engagement-Monitoring (Swift & Greenberg, 2012; Nock & Ferriter, 2005)</div>
           <div class="widget-group-content">
             <div id="sitzungsvorschlag-widget"></div>
             <div id="naechste-schritte-widget"></div>
@@ -216,6 +218,7 @@
             <span class="widget-group-line"></span>
             <span class="widget-group-toggle">▼</span>
           </div>
+          <div class="widget-group-desc">Wirksamkeitsnachweis mit standardisierten Effektstärken — Cohen's d, RCI, klinische Klassifikation (Jacobson & Truax, 1991; Cohen, 1988)</div>
           <div class="widget-group-content">
             <div id="outcome-verlauf-widget"></div>
             <div id="wirkungsnachweis-widget"></div>
@@ -323,6 +326,9 @@
 
       <!-- FÖRDERPLAN / ROADMAP (inkl. Ziele) -->
       <div class="profil-tab-content" data-tab="roadmap">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button onclick="showToolLegitimation('roadmap')" class="btn-ref-inline">📚 Förderplan & Zielplanung</button>
+        </div>
         <div id="roadmap-container"></div>
         <div id="roadmap-ziele-section" style="margin-top:16px;">
           <details class="collapsible-panel" open>
@@ -695,6 +701,7 @@
                 ⚠️ <strong>ORS unter klinischem Cutoff (28).</strong><br>
                 Der Schüler zeigt relevante Belastungen — Zielorientierung und Interventionsbedarf prüfen.
               </div>
+              <div class="ref-inline">Klinischer Cutoff Jugendliche: 28/40 (Miller et al., 2003). Unter 28 = klinisch auffällige Belastung. Validiert mit r = .93 zum OQ-45.</div>
             </div>
 
             <!-- SRS Session Rating Scale -->
@@ -738,6 +745,7 @@
                 ⚠️ <strong>Score unter 25 — Reflexion empfohlen.</strong><br>
                 Mögliche Fragen: Was könnte die Beziehung belastet haben? War das Thema zu früh? War der Schüler reguliert genug?
               </div>
+              <div class="ref-inline">Allianz-Cutoff: 36/40 (Duncan et al., 2003). Unter 36 = therapeutische Beziehung prüfen. SRS ist das weltweit meistverwendete Feedback-Instrument.</div>
             </div>
 
             <!-- PVT-Check am Ende der Sitzung -->
@@ -789,6 +797,9 @@
 
       <!-- STÄRKEN-PROFIL -->
       <div class="profil-tab-content" data-tab="staerken">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button onclick="showToolLegitimation('staerken')" class="btn-ref-inline">📚 Stärkenbasierte Arbeit</button>
+        </div>
         <div id="staerken-container"></div>
       </div>
 
@@ -811,6 +822,9 @@
 
       <!-- ANALYSE: Hypothesen -->
       <div class="profil-tab-content" data-tab="hypothesen-tab">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button onclick="showToolLegitimation('hypothesen')" class="btn-ref-inline">📚 Klinische Hypothesenbildung</button>
+        </div>
         <div id="hypothesen-container"></div>
         <div id="hypothesen-zeitstrahl-container" style="margin-top:16px;"></div>
       </div>
@@ -830,6 +844,9 @@
 
       <!-- KONTAKTLOG -->
       <div class="profil-tab-content" data-tab="kontaktlog">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button onclick="showToolLegitimation('kontaktlog')" class="btn-ref-inline">📚 Dokumentationsstandards</button>
+        </div>
         <div id="kontaktlog-container"></div>
       </div>
 
@@ -839,6 +856,7 @@
           <div class="card-header">
             <span>👨‍👩‍👧</span>
             <div class="card-title">Familien-Genogramm</div>
+            <button onclick="showToolLegitimation('genogramm')" class="btn-ref-inline" style="margin-left:auto;">📚 Grundlage</button>
           </div>
           <div class="card-body">
             <div style="font-size:12px;color:#6B7280;margin-bottom:12px;line-height:1.5;">

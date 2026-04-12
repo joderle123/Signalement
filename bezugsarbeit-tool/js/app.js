@@ -601,6 +601,9 @@ function renderHome() {
   // Ampelsystem — Aufmerksamkeit erforderlich
   renderAmpelsystem(schueler, statsEl);
 
+  // Spiegel — Berater-Selbstreflexion
+  renderSpiegelHinweise(schueler);
+
   if (gefiltert.length === 0) {
     grid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
@@ -5480,6 +5483,133 @@ function renderMusterRadar(schuelerId) {
       </div>
       <div class="card-body" style="padding:8px 12px;">
         <div class="radar-cards">${cards.join('')}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// THERAPEUTISCHER ZWILLING — Spiegel (Berater-Selbstreflexion)
+// ============================================================
+function renderSpiegelHinweise(schueler) {
+  const el = document.getElementById('spiegel-widget');
+  if (!el) return;
+  if (!schueler || schueler.length < 2) { el.innerHTML = ''; return; }
+
+  const aktive = schueler.filter(s => (s.status || 'aktiv') === 'aktiv');
+  if (aktive.length < 2) { el.innerHTML = ''; return; }
+
+  const hinweise = [];
+
+  // 1. Dokumentationslücken: Aktive Klienten ohne Notiz seit X Tagen
+  const heute = Date.now();
+  for (const s of aktive) {
+    const notizen = DB.getNotizen(s.id).filter(n => n.kategorie === 'session').sort((a, b) => b.datum.localeCompare(a.datum));
+    if (notizen.length === 0) continue;
+    const letzteNotiz = new Date(notizen[0].datum);
+    const tage = Math.floor((heute - letzteNotiz.getTime()) / 86400000);
+    if (tage >= 21) {
+      hinweise.push({
+        typ: 'luecke',
+        icon: '📝',
+        titel: `${s.vorname} ${s.nachname}: ${tage} Tage seit letzter Notiz`,
+        detail: `Letzte Sitzungsdokumentation: ${letzteNotiz.toLocaleDateString('de-DE')}`,
+        prio: tage
+      });
+    }
+  }
+
+  // 2. Frequenz-Muster: Dokumentierst du manche Klienten deutlich öfter?
+  const notizCounts = aktive.map(s => ({
+    name: `${s.vorname} ${s.nachname}`,
+    count: DB.getNotizen(s.id).filter(n => n.kategorie === 'session').length
+  })).filter(x => x.count > 0);
+  if (notizCounts.length >= 3) {
+    const avg = notizCounts.reduce((a, b) => a + b.count, 0) / notizCounts.length;
+    const unterversorgt = notizCounts.filter(x => x.count < avg * 0.5);
+    const ueberversorgt = notizCounts.filter(x => x.count > avg * 2);
+    if (unterversorgt.length > 0 || ueberversorgt.length > 0) {
+      let detail = '';
+      if (unterversorgt.length > 0) detail += `Wenig dokumentiert: ${unterversorgt.map(x => `${x.name} (${x.count})`).join(', ')}. `;
+      if (ueberversorgt.length > 0) detail += `Sehr häufig: ${ueberversorgt.map(x => `${x.name} (${x.count})`).join(', ')}. `;
+      detail += `Durchschnitt: ${Math.round(avg)} Sitzungen.`;
+      hinweise.push({
+        typ: 'frequenz',
+        icon: '⚖️',
+        titel: 'Ungleiche Dokumentationsfrequenz',
+        detail,
+        prio: 50
+      });
+    }
+  }
+
+  // 3. Notiz-Länge: Werden Notizen kürzer über Zeit?
+  const alleSoapNotizen = aktive.flatMap(s =>
+    DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap)
+  ).sort((a, b) => a.datum.localeCompare(b.datum));
+  if (alleSoapNotizen.length >= 10) {
+    const laengen = alleSoapNotizen.map(n => {
+      const text = [n.soap.subjektiv, n.soap.objektiv, n.soap.assessment, n.soap.plan].filter(Boolean).join(' ');
+      return text.split(/\s+/).length;
+    });
+    const ersteHaelfte = laengen.slice(0, Math.floor(laengen.length / 2));
+    const zweiteHaelfte = laengen.slice(Math.floor(laengen.length / 2));
+    const avgErste = ersteHaelfte.reduce((a, b) => a + b, 0) / ersteHaelfte.length;
+    const avgZweite = zweiteHaelfte.reduce((a, b) => a + b, 0) / zweiteHaelfte.length;
+    if (avgErste > 0 && (avgErste - avgZweite) / avgErste > 0.3) {
+      hinweise.push({
+        typ: 'laenge',
+        icon: '📉',
+        titel: 'Notiz-Länge nimmt ab',
+        detail: `Deine Notizen werden kürzer (∅ ${Math.round(avgErste)} → ${Math.round(avgZweite)} Wörter). Zeitmangel? Routine? Bewusst überprüfen.`,
+        prio: 40
+      });
+    }
+  }
+
+  // 4. Setting-Monotonie: Nutzt der Berater immer das gleiche Setting?
+  const settingCounts = {};
+  for (const s of aktive) {
+    const notizen = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.setting);
+    for (const n of notizen) {
+      settingCounts[n.soap.setting] = (settingCounts[n.soap.setting] || 0) + 1;
+    }
+  }
+  const totalSettings = Object.values(settingCounts).reduce((a, b) => a + b, 0);
+  if (totalSettings >= 10) {
+    const dominantSetting = Object.entries(settingCounts).sort((a, b) => b[1] - a[1])[0];
+    if (dominantSetting && dominantSetting[1] / totalSettings > 0.85) {
+      hinweise.push({
+        typ: 'monotonie',
+        icon: '🔄',
+        titel: `${Math.round(dominantSetting[1] / totalSettings * 100)}% deiner Sitzungen: ${dominantSetting[0]}`,
+        detail: 'Die Forschung zeigt: Setting-Variation kann die Wirksamkeit erhöhen. Outdoor, Gruppenaktivitäten oder kreative Settings als Alternative?',
+        prio: 30
+      });
+    }
+  }
+
+  if (hinweise.length === 0) { el.innerHTML = ''; return; }
+  hinweise.sort((a, b) => b.prio - a.prio);
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;border-left:4px solid #F59E0B;">
+      <div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.card-body').style.display=this.parentElement.querySelector('.card-body').style.display==='none'?'block':'none';">
+        <span>🪞</span>
+        <div class="card-title">Spiegel — Selbstreflexion</div>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">${hinweise.length} Hinweis${hinweise.length > 1 ? 'e' : ''}</span>
+      </div>
+      <div class="card-body" style="padding:8px 12px;">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Diese Hinweise sind keine Kritik — sie machen Muster sichtbar, die im Alltag untergehen.</div>
+        ${hinweise.map(h => `
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg-card, #FFFBEB);margin-bottom:6px;">
+            <span style="font-size:18px;flex-shrink:0;">${h.icon}</span>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;color:var(--text-primary, #1F2937);">${h.titel}</div>
+              <div style="font-size:11px;color:var(--text-muted, #6B7280);margin-top:2px;">${h.detail}</div>
+            </div>
+          </div>
+        `).join('')}
       </div>
     </div>
   `;

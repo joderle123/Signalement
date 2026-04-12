@@ -5736,6 +5736,14 @@ const TOOL_LEGITIMATION = {
     warum: 'Jugendliche in der Jugendhilfe haben im Durchschnitt 5–12 professionelle Kontaktpersonen (Bronfenbrenner, 1979). Ohne systematische Koordination entstehen Informationslücken, Doppelarbeit und widersprüchliche Interventionen.',
     evidenz: 'Das ökologische Modell (Bronfenbrenner, 1979) zeigt, dass Entwicklung in verschachtelten Systemen stattfindet. Strengths-Based Case Management (Rapp & Goscha, 2006) belegt: Koordinierte Netzwerkarbeit verbessert Outcomes um 30–50% gegenüber fragmentierter Betreuung.',
   },
+  konferenzen: {
+    name: 'Hilfeplankonferenzen',
+    quelle: 'SGB VIII § 36 (Hilfeplanung). Merchel, J. (2015). Hilfeplanung bei den Hilfen zur Erziehung. Ernst Reinhardt Verlag.',
+    entwickler: 'Gesetzlich verankert in SGB VIII, methodisch elaboriert durch Merchel und die Bundesarbeitsgemeinschaft der Landesjugendämter',
+    was: 'Strukturierte multiprofessionelle Besprechungen zur Hilfeplanung. Dokumentation von Teilnehmern, Themen, Beschlüssen und Aufgaben mit Verantwortlichkeiten und Fristen.',
+    warum: 'Hilfeplankonferenzen sind der zentrale Steuerungsmechanismus in der Jugendhilfe. Ohne systematische Protokollierung gehen Beschlüsse verloren, Verantwortlichkeiten werden unklar.',
+    evidenz: '§ 36 SGB VIII schreibt die Hilfeplanung als partizipativen Prozess vor. Studien zeigen: Strukturierte Hilfeplanverfahren verbessern die Beteiligung der Adressaten und erhöhen die Verbindlichkeit von Massnahmen (Merchel, 2015).',
+  },
 };
 
 // SOAP Beispiel-Einträge für Pädagogen
@@ -6148,6 +6156,7 @@ const DB = {
     ZEIT: 'cdse_zeit',
     KONFERENZEN: 'cdse_konferenzen',
     AUFGABEN: 'cdse_aufgaben',
+    PERSNOTIZEN: 'cdse_persnotizen',
   },
 
   // Safe localStorage wrapper with quota protection
@@ -6629,6 +6638,24 @@ const DB = {
   deleteAufgabe(id) {
     const alle = this.getAufgaben().filter(a => a.id !== id);
     this._save(this.KEYS.AUFGABEN, alle);
+  },
+
+  // Persönliche Notizen (OneNote-style)
+  getPersNotizen() {
+    return JSON.parse(localStorage.getItem(this.KEYS.PERSNOTIZEN) || '[]');
+  },
+  addPersNotiz(daten) {
+    const alle = this.getPersNotizen();
+    alle.push({ id: this.generateId(), ...daten, erstellt: new Date().toISOString(), geaendert: new Date().toISOString() });
+    this._save(this.KEYS.PERSNOTIZEN, alle);
+  },
+  updatePersNotiz(id, daten) {
+    const alle = this.getPersNotizen().map(n => n.id === id ? { ...n, ...daten, geaendert: new Date().toISOString() } : n);
+    this._save(this.KEYS.PERSNOTIZEN, alle);
+  },
+  deletePersNotiz(id) {
+    const alle = this.getPersNotizen().filter(n => n.id !== id);
+    this._save(this.KEYS.PERSNOTIZEN, alle);
   },
 };
 

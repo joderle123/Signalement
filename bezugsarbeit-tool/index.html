@@ -52,6 +52,9 @@
     <div class="nav-item" id="nav-aufgaben" onclick="showView('aufgaben')" role="button" tabindex="0">
       <span class="nav-item-icon" aria-hidden="true">✅</span> Aufgaben
     </div>
+    <div class="nav-item" id="nav-notizen" onclick="showView('notizen')" role="button" tabindex="0">
+      <span class="nav-item-icon" aria-hidden="true">📝</span> Notizen
+    </div>
   </div>
 
   <!-- Wissen -->
@@ -1033,6 +1036,20 @@
     </div>
     <div class="content" id="aufgaben-content">
       <!-- Wird von renderAufgaben() gefüllt -->
+    </div>
+  </div>
+
+  <!-- ---- NOTIZEN VIEW (OneNote-Style) ---- -->
+  <div class="view" id="view-notizen">
+    <div class="topbar">
+      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
+      <div class="topbar-title">Meine Notizen</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary" onclick="addPersNotiz()">+ Neue Notiz</button>
+      </div>
+    </div>
+    <div class="content" id="notizen-view-content">
+      <!-- Wird von renderPersNotizen() gefüllt -->
     </div>
   </div>
 

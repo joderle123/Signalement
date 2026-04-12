@@ -212,6 +212,9 @@ async function initApp() {
   // Backup-Recovery prüfen (verzögert, damit showConfirm verfügbar)
   setTimeout(checkAutoBackupRecovery, 1000);
 
+  // Onboarding für neue User
+  checkOnboarding();
+
   // Register Service Worker for PWA
   if ('serviceWorker' in navigator) {
     try {
@@ -507,6 +510,10 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-aufgaben').classList.add('active');
     document.getElementById('nav-aufgaben').classList.add('active');
     renderAufgaben();
+  } else if (view === 'notizen') {
+    document.getElementById('view-notizen').classList.add('active');
+    document.getElementById('nav-notizen').classList.add('active');
+    renderPersNotizen();
   }
 }
 
@@ -7920,6 +7927,7 @@ function exportDaten() {
     zeit: DB.getZeit(),
     konferenzen: DB.getKonferenzen(),
     aufgaben: DB.getAufgaben(),
+    persNotizen: DB.getPersNotizen(),
   };
   const json = JSON.stringify(daten, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -8049,6 +8057,13 @@ function doImportMerge(daten) {
         const lokalAIds = new Set(DB.getAufgaben().map(a => a.id));
         const alleA = [...DB.getAufgaben(), ...daten.aufgaben.filter(a => !lokalAIds.has(a.id))];
         localStorage.setItem(DB.KEYS.AUFGABEN, JSON.stringify(alleA));
+      }
+
+      // Persönliche Notizen zusammenführen
+      if (daten.persNotizen) {
+        const lokalPNIds = new Set(DB.getPersNotizen().map(n => n.id));
+        const allePN = [...DB.getPersNotizen(), ...daten.persNotizen.filter(n => !lokalPNIds.has(n.id))];
+        localStorage.setItem(DB.KEYS.PERSNOTIZEN, JSON.stringify(allePN));
       }
 
       renderSidebar();
@@ -18160,9 +18175,10 @@ function renderKonferenzen() {
   const heute = new Date().toISOString().split('T')[0];
   _konferenzAufgaben = [];
 
-  let html = '<div class="section-header" style="margin-bottom:18px;">';
-  html += '<h3 style="margin:0;font-size:18px;">📋 Hilfeplankonferenzen</h3>';
-  html += '<p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">Protokolle, Beschlüsse und Aufgaben aus Hilfeplangesprächen</p>';
+  let html = '<div class="section-header" style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start;">';
+  html += '<div><h3 style="margin:0;font-size:18px;">📋 Hilfeplankonferenzen</h3>';
+  html += '<p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">Protokolle, Beschlüsse und Aufgaben aus Hilfeplangesprächen</p></div>';
+  html += '<button onclick="showToolLegitimation(\'konferenzen\')" class="btn-ref-inline">📚 Grundlage</button>';
   html += '</div>';
 
   // Formular
@@ -18497,32 +18513,42 @@ function renderQuickActionsBar() {
   const srsTotal = letzte?.soap?.srs?.total;
   const orsDatum = letzte ? formatDatum(letzte.datum) : null;
 
+  // Count protocols
+  const protokolle = DB.getNotizen(sid).filter(n => n.soap);
+  const anzahlProt = protokolle.length;
+
   container.innerHTML = `
-    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:stretch;">
-      <div class="card" style="flex:1;min-width:200px;cursor:pointer;transition:transform 0.15s;" onclick="showPhase('begleitung','notizen');setTimeout(()=>document.querySelector('[data-mode=\\'protokoll\\']')?.click(),100)" onmouseenter="this.style.transform='translateY(-1px)'" onmouseleave="this.style.transform=''">
-        <div class="card-body" style="padding:12px 14px;display:flex;align-items:center;gap:12px;">
-          <div style="width:40px;height:40px;background:#3B82F620;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📋</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text);">Neues Sitzungsprotokoll</div>
-            <div style="font-size:11px;color:var(--text-muted);">SOAP + ORS/SRS erfassen</div>
+    <div style="margin-bottom:20px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Schnellzugriff</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+        <div class="card qa-card qa-card-soap" style="cursor:pointer;" onclick="showPhase('begleitung','notizen');setTimeout(()=>{document.getElementById('btn-protokoll')?.click();},200)">
+          <div class="card-body" style="padding:14px 16px;display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,#3B82F6,#6366F1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;box-shadow:0 4px 12px rgba(59,130,246,0.3);">📋</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Neues SOAP-Protokoll</div>
+              <div style="font-size:11px;color:var(--text-muted);">Sitzung dokumentieren (inkl. ORS/SRS)</div>
+              <div style="font-size:10px;color:var(--primary);margin-top:2px;font-weight:600;">${anzahlProt} Protokoll${anzahlProt !== 1 ? 'e' : ''} vorhanden</div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="card" style="flex:1;min-width:200px;cursor:pointer;transition:transform 0.15s;" onclick="openQuickORS()" onmouseenter="this.style.transform='translateY(-1px)'" onmouseleave="this.style.transform=''">
-        <div class="card-body" style="padding:12px 14px;display:flex;align-items:center;gap:12px;">
-          <div style="width:40px;height:40px;background:${orsTotal != null && orsTotal < 28 ? '#EF444420' : '#10B98120'};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📈</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text);">ORS Befindlichkeit</div>
-            <div style="font-size:11px;color:var(--text-muted);">${orsTotal != null ? 'Letzter Wert: ' + orsTotal + '/40 (' + orsDatum + ')' : 'Noch keine Messung'}</div>
+        <div class="card qa-card" style="cursor:pointer;" onclick="openQuickORS()">
+          <div class="card-body" style="padding:14px 16px;display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;background:${orsTotal != null && orsTotal < 28 ? 'linear-gradient(135deg,#EF4444,#DC2626)' : 'linear-gradient(135deg,#10B981,#059669)'};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;box-shadow:0 4px 12px ${orsTotal != null && orsTotal < 28 ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'};">📈</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">ORS Befindlichkeit</div>
+              <div style="font-size:11px;color:var(--text-muted);">${orsTotal != null ? 'Letzter Wert: <strong>' + orsTotal + '/40</strong> (' + orsDatum + ')' : 'Noch keine Messung'}</div>
+              ${orsTotal != null && orsTotal < 28 ? '<div style="font-size:10px;color:#EF4444;font-weight:600;margin-top:2px;">Unter klinischem Cutoff (28)</div>' : ''}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="card" style="flex:1;min-width:200px;cursor:pointer;transition:transform 0.15s;" onclick="openQuickSRS()" onmouseenter="this.style.transform='translateY(-1px)'" onmouseleave="this.style.transform=''">
-        <div class="card-body" style="padding:12px 14px;display:flex;align-items:center;gap:12px;">
-          <div style="width:40px;height:40px;background:${srsTotal != null && srsTotal < 36 ? '#F59E0B20' : '#10B98120'};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📊</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text);">SRS Sitzungsbewertung</div>
-            <div style="font-size:11px;color:var(--text-muted);">${srsTotal != null ? 'Letzter Wert: ' + srsTotal + '/40 (' + orsDatum + ')' : 'Noch keine Messung'}</div>
+        <div class="card qa-card" style="cursor:pointer;" onclick="openQuickSRS()">
+          <div class="card-body" style="padding:14px 16px;display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;background:${srsTotal != null && srsTotal < 36 ? 'linear-gradient(135deg,#F59E0B,#D97706)' : 'linear-gradient(135deg,#10B981,#059669)'};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;box-shadow:0 4px 12px ${srsTotal != null && srsTotal < 36 ? 'rgba(245,158,11,0.3)' : 'rgba(16,185,129,0.3)'};">📊</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">SRS Sitzungsbewertung</div>
+              <div style="font-size:11px;color:var(--text-muted);">${srsTotal != null ? 'Letzter Wert: <strong>' + srsTotal + '/40</strong> (' + orsDatum + ')' : 'Noch keine Messung'}</div>
+              ${srsTotal != null && srsTotal < 36 ? '<div style="font-size:10px;color:#F59E0B;font-weight:600;margin-top:2px;">Unter Allianz-Cutoff (36)</div>' : ''}
+            </div>
           </div>
         </div>
       </div>
@@ -18815,4 +18841,231 @@ function deleteAufgabeEintrag(id) {
   DB.deleteAufgabe(id);
   showToast('Aufgabe gelöscht', '');
   renderAufgaben();
+}
+
+// ============================================================
+// PERSÖNLICHE NOTIZEN (OneNote-Style)
+// ============================================================
+let NOTIZEN_EDIT_ID = null;
+let NOTIZEN_KATEGORIE = 'alle';
+
+const NOTIZ_FARBEN = [
+  { id: 'gelb', label: 'Gelb', bg: '#FEF9C3', border: '#FDE047', dark_bg: '#423D12', dark_border: '#A16207' },
+  { id: 'blau', label: 'Blau', bg: '#DBEAFE', border: '#93C5FD', dark_bg: '#1E293B', dark_border: '#3B82F6' },
+  { id: 'gruen', label: 'Grün', bg: '#DCFCE7', border: '#86EFAC', dark_bg: '#14332A', dark_border: '#22C55E' },
+  { id: 'rosa', label: 'Rosa', bg: '#FCE7F3', border: '#F9A8D4', dark_bg: '#3B1532', dark_border: '#EC4899' },
+  { id: 'lila', label: 'Lila', bg: '#EDE9FE', border: '#C4B5FD', dark_bg: '#2E1F56', dark_border: '#8B5CF6' },
+  { id: 'weiss', label: 'Weiss', bg: '#FFFFFF', border: '#E5E7EB', dark_bg: '#1F2937', dark_border: '#4B5563' },
+];
+
+const NOTIZ_KATEGORIEN = [
+  { id: 'allgemein', label: 'Allgemein', icon: '📝' },
+  { id: 'ideen', label: 'Ideen', icon: '💡' },
+  { id: 'meeting', label: 'Meeting', icon: '👥' },
+  { id: 'reflexion', label: 'Reflexion', icon: '🪞' },
+  { id: 'planung', label: 'Planung', icon: '📋' },
+  { id: 'wichtig', label: 'Wichtig', icon: '⭐' },
+];
+
+function renderPersNotizen() {
+  const container = document.getElementById('notizen-view-content');
+  if (!container) return;
+  const alle = DB.getPersNotizen().sort((a, b) => {
+    if (a.angepinnt && !b.angepinnt) return -1;
+    if (!a.angepinnt && b.angepinnt) return 1;
+    return new Date(b.geaendert) - new Date(a.geaendert);
+  });
+  const gefiltert = NOTIZEN_KATEGORIE === 'alle' ? alle : alle.filter(n => n.kategorie === NOTIZEN_KATEGORIE);
+
+  let html = '';
+
+  // Category filter tabs
+  html += '<div class="pn-filter-bar">';
+  html += '<button class="pn-filter-btn ' + (NOTIZEN_KATEGORIE === 'alle' ? 'active' : '') + '" onclick="NOTIZEN_KATEGORIE=\'alle\';renderPersNotizen();">Alle (' + alle.length + ')</button>';
+  for (const kat of NOTIZ_KATEGORIEN) {
+    const cnt = alle.filter(n => n.kategorie === kat.id).length;
+    html += '<button class="pn-filter-btn ' + (NOTIZEN_KATEGORIE === kat.id ? 'active' : '') + '" onclick="NOTIZEN_KATEGORIE=\'' + kat.id + '\';renderPersNotizen();">' + kat.icon + ' ' + kat.label + (cnt > 0 ? ' (' + cnt + ')' : '') + '</button>';
+  }
+  html += '</div>';
+
+  // Search
+  html += '<div class="pn-search-row">';
+  html += '<input type="text" id="pn-search" placeholder="Notizen durchsuchen..." oninput="filterPersNotizen()" class="pn-search-input">';
+  html += '</div>';
+
+  if (gefiltert.length === 0) {
+    html += renderEmptyState('📝', 'Keine Notizen', 'Erstelle deine erste Notiz mit dem Button oben.');
+  } else {
+    html += '<div class="pn-grid" id="pn-grid">';
+    for (const notiz of gefiltert) {
+      const farbe = NOTIZ_FARBEN.find(f => f.id === notiz.farbe) || NOTIZ_FARBEN[0];
+      const kat = NOTIZ_KATEGORIEN.find(k => k.id === notiz.kategorie) || NOTIZ_KATEGORIEN[0];
+      const preview = escapeHtml((notiz.text || '').substring(0, 200));
+      const datum = notiz.geaendert ? new Date(notiz.geaendert).toLocaleDateString('de-LU', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+      html += '<div class="pn-card" style="background:' + farbe.bg + ';border-color:' + farbe.border + ';" onclick="editPersNotiz(\'' + notiz.id + '\')">';
+      html += '<div class="pn-card-header">';
+      html += '<span class="pn-card-kat">' + kat.icon + ' ' + kat.label + '</span>';
+      html += '<div class="pn-card-actions">';
+      if (notiz.angepinnt) html += '<span class="pn-pin active" title="Angepinnt">📌</span>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="pn-card-title">' + escapeHtml(notiz.titel || 'Unbenannt') + '</div>';
+      html += '<div class="pn-card-preview">' + preview + '</div>';
+      html += '<div class="pn-card-footer">' + datum + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  container.innerHTML = sanitize(html);
+}
+
+function addPersNotiz() {
+  NOTIZEN_EDIT_ID = null;
+  openNotizEditor({ titel: '', text: '', kategorie: 'allgemein', farbe: 'gelb', angepinnt: false });
+}
+
+function editPersNotiz(id) {
+  const notiz = DB.getPersNotizen().find(n => n.id === id);
+  if (!notiz) return;
+  NOTIZEN_EDIT_ID = id;
+  openNotizEditor(notiz);
+}
+
+function openNotizEditor(notiz) {
+  // Build modal
+  let farbOptionen = NOTIZ_FARBEN.map(f =>
+    '<button type="button" class="pn-farb-btn ' + (notiz.farbe === f.id ? 'active' : '') + '" data-farbe="' + f.id + '" style="background:' + f.bg + ';border-color:' + f.border + ';" onclick="selectNotizFarbe(this)" title="' + f.label + '"></button>'
+  ).join('');
+
+  let katOptionen = NOTIZ_KATEGORIEN.map(k =>
+    '<option value="' + k.id + '" ' + (notiz.kategorie === k.id ? 'selected' : '') + '>' + k.icon + ' ' + k.label + '</option>'
+  ).join('');
+
+  const html = '<div class="modal-overlay" id="notiz-editor-overlay" onclick="closeNotizEditor()">' +
+    '<div class="modal-content pn-editor-modal" onclick="event.stopPropagation()">' +
+    '<div class="pn-editor-header">' +
+    '<h3>' + (NOTIZEN_EDIT_ID ? 'Notiz bearbeiten' : 'Neue Notiz') + '</h3>' +
+    '<div style="display:flex;gap:8px;align-items:center;">' +
+    (NOTIZEN_EDIT_ID ? '<button class="btn btn-danger btn-sm" onclick="deletePersNotiz(\'' + NOTIZEN_EDIT_ID + '\')">Löschen</button>' : '') +
+    '<button class="btn btn-secondary btn-sm" onclick="closeNotizEditor()">Schliessen</button>' +
+    '</div></div>' +
+    '<div class="pn-editor-body">' +
+    '<input type="text" id="pn-edit-titel" class="pn-title-input" placeholder="Titel..." value="' + escapeHtml(notiz.titel || '') + '">' +
+    '<div class="pn-editor-meta">' +
+    '<select id="pn-edit-kat" class="pn-kat-select">' + katOptionen + '</select>' +
+    '<div class="pn-farb-picker">' + farbOptionen + '</div>' +
+    '<label class="pn-pin-label"><input type="checkbox" id="pn-edit-pin" ' + (notiz.angepinnt ? 'checked' : '') + '> 📌 Anpinnen</label>' +
+    '</div>' +
+    '<textarea id="pn-edit-text" class="pn-text-editor" placeholder="Schreibe hier deine Notiz..." rows="12">' + escapeHtml(notiz.text || '') + '</textarea>' +
+    '<div class="pn-editor-footer">' +
+    '<button class="btn btn-primary" onclick="savePersNotiz()">Speichern</button>' +
+    '</div>' +
+    '</div></div></div>';
+
+  // Remove existing editor if any
+  const existing = document.getElementById('notiz-editor-overlay');
+  if (existing) existing.remove();
+
+  document.body.insertAdjacentHTML('beforeend', sanitize(html));
+  setTimeout(() => document.getElementById('pn-edit-titel')?.focus(), 100);
+}
+
+function selectNotizFarbe(btn) {
+  document.querySelectorAll('.pn-farb-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function closeNotizEditor() {
+  const overlay = document.getElementById('notiz-editor-overlay');
+  if (overlay) overlay.remove();
+  NOTIZEN_EDIT_ID = null;
+}
+
+function savePersNotiz() {
+  const titel = document.getElementById('pn-edit-titel')?.value?.trim() || 'Unbenannt';
+  const text = document.getElementById('pn-edit-text')?.value || '';
+  const kategorie = document.getElementById('pn-edit-kat')?.value || 'allgemein';
+  const angepinnt = document.getElementById('pn-edit-pin')?.checked || false;
+  const aktiveFarbe = document.querySelector('.pn-farb-btn.active');
+  const farbe = aktiveFarbe ? aktiveFarbe.dataset.farbe : 'gelb';
+
+  if (NOTIZEN_EDIT_ID) {
+    DB.updatePersNotiz(NOTIZEN_EDIT_ID, { titel, text, kategorie, farbe, angepinnt });
+    showToast('Notiz aktualisiert', 'success');
+  } else {
+    DB.addPersNotiz({ titel, text, kategorie, farbe, angepinnt });
+    showToast('Notiz erstellt', 'success');
+  }
+  closeNotizEditor();
+  renderPersNotizen();
+}
+
+function deletePersNotiz(id) {
+  if (!confirm('Notiz unwiderruflich löschen?')) return;
+  DB.deletePersNotiz(id);
+  showToast('Notiz gelöscht', '');
+  closeNotizEditor();
+  renderPersNotizen();
+}
+
+function filterPersNotizen() {
+  const query = (document.getElementById('pn-search')?.value || '').toLowerCase();
+  document.querySelectorAll('.pn-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(query) ? '' : 'none';
+  });
+}
+
+// ============================================================
+// ONBOARDING — Geführter Einstieg für neue User
+// ============================================================
+function checkOnboarding() {
+  const done = localStorage.getItem('pathways_onboarding_done');
+  if (done) return;
+  const schueler = DB.getSchueler();
+  // Show onboarding only for new users (no clients yet)
+  if (schueler.length === 0) {
+    setTimeout(showOnboarding, 600);
+  }
+}
+
+function showOnboarding() {
+  const existing = document.getElementById('onboarding-wrap');
+  if (existing) existing.remove();
+
+  const html = '<div class="onboarding-overlay" id="onboarding-wrap">' +
+    '<div class="onboarding-card">' +
+    '<div style="font-size:48px;margin-bottom:16px;">🧭</div>' +
+    '<h2>Willkommen bei Pathways</h2>' +
+    '<div class="onb-subtitle">Dein evidenzbasiertes Werkzeug für therapeutische Bezugsarbeit mit Jugendlichen. Hier ist dein Schnellstart:</div>' +
+    '<div class="onboarding-steps">' +
+    '<div class="onb-step">' +
+    '<div class="onb-step-icon">1</div>' +
+    '<div class="onb-step-text"><div class="onb-step-title">Klient anlegen</div><div class="onb-step-desc">Erstelle dein erstes Profil — darauf baut alles auf: Screening, Diagnostik, Begleitung.</div></div>' +
+    '</div>' +
+    '<div class="onb-step">' +
+    '<div class="onb-step-icon">2</div>' +
+    '<div class="onb-step-text"><div class="onb-step-title">Screening durchführen</div><div class="onb-step-desc">18 Bereiche in 5 Minuten — du bekommst ein Risikoprofil mit konkreten Empfehlungen.</div></div>' +
+    '</div>' +
+    '<div class="onb-step">' +
+    '<div class="onb-step-icon">3</div>' +
+    '<div class="onb-step-text"><div class="onb-step-title">Sitzungen dokumentieren</div><div class="onb-step-desc">SOAP-Protokolle mit ORS/SRS — evidenzbasierte Wirksamkeitsmessung in jeder Sitzung.</div></div>' +
+    '</div>' +
+    '<div class="onb-step">' +
+    '<div class="onb-step-icon">4</div>' +
+    '<div class="onb-step-text"><div class="onb-step-title">Orga nutzen</div><div class="onb-step-desc">Kalender, Aufgaben, Zeiterfassung und persönliche Notizen — auch ohne Klient nutzbar.</div></div>' +
+    '</div>' +
+    '</div>' +
+    '<button class="onb-cta" onclick="closeOnboarding();openSchuelerModal();">Ersten Klienten anlegen</button>' +
+    '<button class="onb-skip" onclick="closeOnboarding();">Später — erstmal umschauen</button>' +
+    '</div></div>';
+
+  document.body.insertAdjacentHTML('beforeend', sanitize(html));
+}
+
+function closeOnboarding() {
+  const overlay = document.getElementById('onboarding-wrap');
+  if (overlay) overlay.remove();
+  localStorage.setItem('pathways_onboarding_done', '1');
 }

@@ -8771,6 +8771,9 @@ function renderDashboard() {
   renderSafetyBanner('safety-banner-dashboard');
   renderRisikoWidget();
 
+  // === 1b. Quick Actions: ORS/SRS + Neues Protokoll ===
+  renderQuickActionsBar();
+
   // === 2. Klinische Intelligenz (Therapeutischer Zwilling) ===
   renderSitzungsBriefing(APP.currentSchuelerId);
   renderMusterRadar(APP.currentSchuelerId);
@@ -18447,4 +18450,225 @@ function saveSchnellnotiz() {
 
   toggleSchnellnotiz();
   showToast('Schnellnotiz gespeichert', 'success');
+}
+
+// ============================================================
+// QUICK ACTIONS BAR — ORS/SRS + Neues Protokoll
+// ============================================================
+function renderQuickActionsBar() {
+  const container = document.getElementById('quick-actions-bar');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  // Letzte ORS/SRS Werte
+  const notizen = DB.getNotizen(sid).filter(n => n.soap && (n.soap.ors || n.soap.srs)).sort((a, b) => (b.datum || '').localeCompare(a.datum || ''));
+  const letzte = notizen[0];
+  const orsTotal = letzte?.soap?.ors?.total;
+  const srsTotal = letzte?.soap?.srs?.total;
+  const orsDatum = letzte ? formatDatum(letzte.datum) : null;
+
+  container.innerHTML = `
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:stretch;">
+      <div class="card" style="flex:1;min-width:200px;cursor:pointer;transition:transform 0.15s;" onclick="showPhase('begleitung','notizen');setTimeout(()=>document.querySelector('[data-mode=\\'protokoll\\']')?.click(),100)" onmouseenter="this.style.transform='translateY(-1px)'" onmouseleave="this.style.transform=''">
+        <div class="card-body" style="padding:12px 14px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;background:#3B82F620;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📋</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);">Neues Sitzungsprotokoll</div>
+            <div style="font-size:11px;color:var(--text-muted);">SOAP + ORS/SRS erfassen</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;min-width:200px;cursor:pointer;transition:transform 0.15s;" onclick="openQuickORS()" onmouseenter="this.style.transform='translateY(-1px)'" onmouseleave="this.style.transform=''">
+        <div class="card-body" style="padding:12px 14px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;background:${orsTotal != null && orsTotal < 28 ? '#EF444420' : '#10B98120'};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📈</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);">ORS Befindlichkeit</div>
+            <div style="font-size:11px;color:var(--text-muted);">${orsTotal != null ? 'Letzter Wert: ' + orsTotal + '/40 (' + orsDatum + ')' : 'Noch keine Messung'}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;min-width:200px;cursor:pointer;transition:transform 0.15s;" onclick="openQuickSRS()" onmouseenter="this.style.transform='translateY(-1px)'" onmouseleave="this.style.transform=''">
+        <div class="card-body" style="padding:12px 14px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;background:${srsTotal != null && srsTotal < 36 ? '#F59E0B20' : '#10B98120'};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📊</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);">SRS Sitzungsbewertung</div>
+            <div style="font-size:11px;color:var(--text-muted);">${srsTotal != null ? 'Letzter Wert: ' + srsTotal + '/40 (' + orsDatum + ')' : 'Noch keine Messung'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function openQuickORS() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const bg = isDark ? '#1E293B' : '#FFFFFF';
+  const text = isDark ? '#E2E8F0' : '#1F2937';
+  const border = isDark ? '#334155' : '#E5E7EB';
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `
+    <div style="background:${bg};border-radius:16px;width:95%;max-width:480px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);animation:modalIn 0.35s cubic-bezier(0.16,1,0.3,1);">
+      <div style="padding:20px;border-bottom:1px solid ${border};">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h2 style="margin:0;font-size:16px;font-weight:700;color:${text};">📈 ORS — Befindlichkeit erfassen</h2>
+          <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:${text};">✕</button>
+        </div>
+        <p style="margin:6px 0 0;font-size:11px;color:var(--text-muted);">Outcome Rating Scale (Miller et al., 2003) · Cutoff: 28/40</p>
+      </div>
+      <div style="padding:20px;">
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Individuell (Persönliches Wohlbefinden)</label>
+          <input type="range" min="0" max="10" value="5" id="qors-individual" oninput="updateQuickORSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>schlecht</span><span id="qors-v-individual">5</span><span>gut</span></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Interpersonell (Beziehungen)</label>
+          <input type="range" min="0" max="10" value="5" id="qors-interpersonal" oninput="updateQuickORSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>schlecht</span><span id="qors-v-interpersonal">5</span><span>gut</span></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Sozial (Schule, Arbeit, Freizeit)</label>
+          <input type="range" min="0" max="10" value="5" id="qors-social" oninput="updateQuickORSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>schlecht</span><span id="qors-v-social">5</span><span>gut</span></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Gesamt (Allgemein)</label>
+          <input type="range" min="0" max="10" value="5" id="qors-overall" oninput="updateQuickORSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>schlecht</span><span id="qors-v-overall">5</span><span>gut</span></div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--bg-subtle);border-radius:10px;margin-bottom:14px;">
+          <div style="font-size:24px;font-weight:800;color:var(--primary);" id="qors-total">20</div>
+          <div style="font-size:11px;color:var(--text-muted);">/ 40 (Cutoff: 28)</div>
+        </div>
+        <button onclick="saveQuickORS()" class="btn btn-primary" style="width:100%;">📈 ORS speichern</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function updateQuickORSTotal() {
+  const i = parseInt(document.getElementById('qors-individual')?.value || 0);
+  const ip = parseInt(document.getElementById('qors-interpersonal')?.value || 0);
+  const s = parseInt(document.getElementById('qors-social')?.value || 0);
+  const o = parseInt(document.getElementById('qors-overall')?.value || 0);
+  ['individual','interpersonal','social','overall'].forEach(k => {
+    const el = document.getElementById('qors-v-' + k);
+    if (el) el.textContent = document.getElementById('qors-' + k)?.value || 0;
+  });
+  const total = i + ip + s + o;
+  const el = document.getElementById('qors-total');
+  if (el) { el.textContent = total; el.style.color = total < 28 ? '#EF4444' : '#10B981'; }
+}
+
+function saveQuickORS() {
+  const i = parseInt(document.getElementById('qors-individual')?.value || 0);
+  const ip = parseInt(document.getElementById('qors-interpersonal')?.value || 0);
+  const s = parseInt(document.getElementById('qors-social')?.value || 0);
+  const o = parseInt(document.getElementById('qors-overall')?.value || 0);
+  const total = i + ip + s + o;
+
+  DB.createNotiz({
+    schuelerId: APP.currentSchuelerId,
+    datum: new Date().toISOString().split('T')[0],
+    inhalt: 'ORS Quick-Messung: ' + total + '/40',
+    kategorie: 'beobachtung',
+    soap: { ors: { individual: i, interpersonal: ip, social: s, overall: o, total: total } }
+  });
+
+  document.querySelector('div[style*="position:fixed"][style*="z-index:9999"]')?.remove();
+  showToast('ORS gespeichert: ' + total + '/40', 'success');
+  renderDashboard();
+}
+
+function openQuickSRS() {
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const bg = isDark ? '#1E293B' : '#FFFFFF';
+  const text = isDark ? '#E2E8F0' : '#1F2937';
+  const border = isDark ? '#334155' : '#E5E7EB';
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `
+    <div style="background:${bg};border-radius:16px;width:95%;max-width:480px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);animation:modalIn 0.35s cubic-bezier(0.16,1,0.3,1);">
+      <div style="padding:20px;border-bottom:1px solid ${border};">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h2 style="margin:0;font-size:16px;font-weight:700;color:${text};">📊 SRS — Sitzungsbewertung</h2>
+          <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:${text};">✕</button>
+        </div>
+        <p style="margin:6px 0 0;font-size:11px;color:var(--text-muted);">Session Rating Scale (Duncan et al., 2003) · Cutoff: 36/40</p>
+      </div>
+      <div style="padding:20px;">
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Beziehung (Fühlte mich gehört/verstanden)</label>
+          <input type="range" min="0" max="10" value="7" id="qsrs-relationship" oninput="updateQuickSRSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>gar nicht</span><span id="qsrs-v-relationship">7</span><span>sehr</span></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Ziele & Themen (Wir arbeiteten an dem was mir wichtig ist)</label>
+          <input type="range" min="0" max="10" value="7" id="qsrs-goals" oninput="updateQuickSRSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>gar nicht</span><span id="qsrs-v-goals">7</span><span>sehr</span></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Vorgehen (Der Ansatz passte für mich)</label>
+          <input type="range" min="0" max="10" value="7" id="qsrs-approach" oninput="updateQuickSRSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>gar nicht</span><span id="qsrs-v-approach">7</span><span>sehr</span></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px;font-weight:600;color:${text};display:block;margin-bottom:4px;">Gesamt (Die Sitzung war insgesamt gut)</label>
+          <input type="range" min="0" max="10" value="7" id="qsrs-overall" oninput="updateQuickSRSTotal()" style="width:100%;">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);"><span>gar nicht</span><span id="qsrs-v-overall">7</span><span>sehr</span></div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--bg-subtle);border-radius:10px;margin-bottom:14px;">
+          <div style="font-size:24px;font-weight:800;color:var(--primary);" id="qsrs-total">28</div>
+          <div style="font-size:11px;color:var(--text-muted);">/ 40 (Cutoff: 36)</div>
+        </div>
+        <button onclick="saveQuickSRS()" class="btn btn-primary" style="width:100%;">📊 SRS speichern</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function updateQuickSRSTotal() {
+  const r = parseInt(document.getElementById('qsrs-relationship')?.value || 0);
+  const g = parseInt(document.getElementById('qsrs-goals')?.value || 0);
+  const a = parseInt(document.getElementById('qsrs-approach')?.value || 0);
+  const o = parseInt(document.getElementById('qsrs-overall')?.value || 0);
+  ['relationship','goals','approach','overall'].forEach(k => {
+    const el = document.getElementById('qsrs-v-' + k);
+    if (el) el.textContent = document.getElementById('qsrs-' + k)?.value || 0;
+  });
+  const total = r + g + a + o;
+  const el = document.getElementById('qsrs-total');
+  if (el) { el.textContent = total; el.style.color = total < 36 ? '#F59E0B' : '#10B981'; }
+}
+
+function saveQuickSRS() {
+  const r = parseInt(document.getElementById('qsrs-relationship')?.value || 0);
+  const g = parseInt(document.getElementById('qsrs-goals')?.value || 0);
+  const a = parseInt(document.getElementById('qsrs-approach')?.value || 0);
+  const o = parseInt(document.getElementById('qsrs-overall')?.value || 0);
+  const total = r + g + a + o;
+
+  DB.createNotiz({
+    schuelerId: APP.currentSchuelerId,
+    datum: new Date().toISOString().split('T')[0],
+    inhalt: 'SRS Quick-Messung: ' + total + '/40',
+    kategorie: 'beobachtung',
+    soap: { srs: { relationship: r, goals: g, approach: a, overall: o, total: total } }
+  });
+
+  document.querySelector('div[style*="position:fixed"][style*="z-index:9999"]')?.remove();
+  showToast('SRS gespeichert: ' + total + '/40', 'success');
+  renderDashboard();
 }

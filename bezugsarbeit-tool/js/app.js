@@ -604,6 +604,9 @@ function renderHome() {
   // Spiegel — Berater-Selbstreflexion
   renderSpiegelHinweise(schueler);
 
+  // Klinischer Fingerabdruck — Aggregierte Wirksamkeit
+  renderKlinischerFingerabdruck(schueler);
+
   if (gefiltert.length === 0) {
     grid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
@@ -5677,6 +5680,112 @@ function renderSpiegelHinweise(schueler) {
             </div>
           </div>
         `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// WIRKUNGSMASCHINE — Klinischer Fingerabdruck (aggregiert)
+// ============================================================
+function renderKlinischerFingerabdruck(schueler) {
+  const el = document.getElementById('klinischer-fingerabdruck-widget');
+  if (!el) return;
+
+  // Nur Klienten mit genug ORS-Daten (mindestens 4 Sitzungen)
+  const auswertbar = schueler.filter(s => {
+    const notizen = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null);
+    return notizen.length >= 4;
+  });
+
+  if (auswertbar.length < 2) { el.innerHTML = ''; return; }
+
+  // Für jeden Klient: RCI, Cohen's d, Klassifikation
+  const ergebnisse = auswertbar.map(s => {
+    const notizen = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+    const orsWerte = notizen.map(n => n.soap.ors.total);
+    const rci = berechneRCI(orsWerte);
+    const mitte = Math.floor(orsWerte.length / 2);
+    const cohenD = berechneCohenD(orsWerte.slice(0, mitte), orsWerte.slice(mitte));
+    const preORS = (orsWerte[0] + orsWerte[1]) / 2;
+    const postORS = (orsWerte[orsWerte.length - 2] + orsWerte[orsWerte.length - 1]) / 2;
+    const klassifikation = berechneKlinischeKlassifikation(preORS, postORS, rci);
+    return { s, rci, cohenD, klassifikation, preORS, postORS, sitzungen: orsWerte.length };
+  });
+
+  // Aggregation
+  const recovered = ergebnisse.filter(e => e.klassifikation.klasse === 'recovered').length;
+  const improved = ergebnisse.filter(e => e.klassifikation.klasse === 'improved').length;
+  const unchanged = ergebnisse.filter(e => e.klassifikation.klasse === 'unchanged').length;
+  const deteriorated = ergebnisse.filter(e => e.klassifikation.klasse === 'deteriorated').length;
+  const verbesserungsRate = Math.round((recovered + improved) / ergebnisse.length * 100);
+
+  // Durchschnittliche Effektstärke
+  const dWerte = ergebnisse.filter(e => e.cohenD).map(e => e.cohenD.d);
+  const avgD = dWerte.length > 0 ? Math.round(dWerte.reduce((a, b) => a + b, 0) / dWerte.length * 100) / 100 : null;
+
+  // Durchschnittliche Sitzungszahl
+  const avgSitzungen = Math.round(ergebnisse.reduce((a, e) => a + e.sitzungen, 0) / ergebnisse.length);
+
+  // Setting-Wirkung aggregiert
+  const settingMap = {};
+  for (const s of schueler) {
+    const notizen = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.setting && n.soap?.srs?.total != null);
+    for (const n of notizen) {
+      if (!settingMap[n.soap.setting]) settingMap[n.soap.setting] = [];
+      settingMap[n.soap.setting].push(n.soap.srs.total);
+    }
+  }
+  const settingRanking = Object.entries(settingMap)
+    .filter(([, v]) => v.length >= 3)
+    .map(([setting, werte]) => ({ setting, avg: Math.round(werte.reduce((a, b) => a + b, 0) / werte.length * 10) / 10, n: werte.length }))
+    .sort((a, b) => b.avg - a.avg);
+
+  // Dropout-Rate (Klienten mit Status 'pausiert' oder 'dropout')
+  const alleKlienten = schueler.length;
+  const dropouts = schueler.filter(s => s.abschlussgrund === 'dropout' || (s.status === 'pausiert')).length;
+  const dropoutRate = alleKlienten > 0 ? Math.round(dropouts / alleKlienten * 100) : 0;
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;border-left:4px solid #059669;">
+      <div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.card-body').style.display=this.parentElement.querySelector('.card-body').style.display==='none'?'block':'none';">
+        <span>🏆</span>
+        <div class="card-title">Klinischer Fingerabdruck</div>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">${auswertbar.length} Klienten auswertbar</span>
+      </div>
+      <div class="card-body" style="padding:10px 14px;">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+          <div style="flex:1;min-width:100px;padding:10px;border-radius:8px;background:var(--bg-card, #F9FAFB);text-align:center;">
+            <div style="font-size:24px;font-weight:700;color:#059669;">${verbesserungsRate}%</div>
+            <div style="font-size:10px;color:var(--text-muted);">Verbesserungsrate</div>
+          </div>
+          ${avgD !== null ? `
+          <div style="flex:1;min-width:100px;padding:10px;border-radius:8px;background:var(--bg-card, #F9FAFB);text-align:center;">
+            <div style="font-size:24px;font-weight:700;color:#4F46E5;">${avgD}</div>
+            <div style="font-size:10px;color:var(--text-muted);">∅ Effektstärke (d)</div>
+          </div>` : ''}
+          <div style="flex:1;min-width:100px;padding:10px;border-radius:8px;background:var(--bg-card, #F9FAFB);text-align:center;">
+            <div style="font-size:24px;font-weight:700;color:#6B7280;">${avgSitzungen}</div>
+            <div style="font-size:10px;color:var(--text-muted);">∅ Sitzungen</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+          <span style="padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#ECFDF5;color:#059669;">🏆 Genesen: ${recovered}</span>
+          <span style="padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#EFF6FF;color:#3B82F6;">📈 Verbessert: ${improved}</span>
+          <span style="padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#F3F4F6;color:#6B7280;">➡️ Unverändert: ${unchanged}</span>
+          <span style="padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#FEE2E2;color:#DC2626;">📉 Verschlechtert: ${deteriorated}</span>
+        </div>
+
+        ${settingRanking.length > 0 ? `
+        <div style="font-size:12px;margin-top:8px;">
+          <strong>Setting-Ranking (SRS):</strong>
+          ${settingRanking.slice(0, 4).map((s, i) => `<span style="margin-left:6px;${i === 0 ? 'color:#059669;font-weight:600;' : ''}">${s.setting}: ∅${s.avg} (${s.n}x)</span>`).join(' |')}
+        </div>` : ''}
+
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">
+          Dropout-Rate: ${dropoutRate}% | Benchmark Jugendhilfe: ~30%
+        </div>
       </div>
     </div>
   `;

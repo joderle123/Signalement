@@ -982,9 +982,109 @@ function renderProfil(schuelerId) {
 
 function updateSchuelerStatus(status) {
   if (!APP.currentSchuelerId) return;
+  if (status === 'abgeschlossen') {
+    showAbschlussModal();
+    return;
+  }
   DB.updateSchueler(APP.currentSchuelerId, { status });
   renderSidebar();
-  showToast(`Status auf „${status === 'aktiv' ? 'Aktiv' : status === 'pausiert' ? 'Pausiert' : 'Abgeschlossen'}" gesetzt`, 'success');
+  showToast(`Status auf „${status === 'aktiv' ? 'Aktiv' : 'Pausiert'}" gesetzt`, 'success');
+}
+
+// ============================================================
+// WIRKUNGSMASCHINE — Abschluss-Protokoll
+// ============================================================
+function showAbschlussModal() {
+  const sid = APP.currentSchuelerId;
+  const s = DB.getSchuelerById(sid);
+  if (!s) return;
+  const name = `${s.vorname} ${s.nachname}`;
+
+  // Wirkungsdaten sammeln
+  const notizen = DB.getNotizen(sid).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+  let wirkungHtml = '<p style="color:var(--text-muted);font-size:12px;">Nicht genug ORS-Daten für Wirkungsnachweis.</p>';
+  if (notizen.length >= 4) {
+    const orsW = notizen.map(n => n.soap.ors.total);
+    const rci = berechneRCI(orsW);
+    const m = Math.floor(orsW.length / 2);
+    const cd = berechneCohenD(orsW.slice(0, m), orsW.slice(m));
+    const preO = Math.round((orsW[0] + orsW[1]) / 2 * 10) / 10;
+    const postO = Math.round((orsW[orsW.length - 2] + orsW[orsW.length - 1]) / 2 * 10) / 10;
+    const kl = berechneKlinischeKlassifikation(preO, postO, rci);
+    wirkungHtml = `
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0;">
+        <div style="flex:1;min-width:80px;text-align:center;padding:8px;border-radius:8px;background:var(--bg-card, #F3F4F6);">
+          <div style="font-size:18px;font-weight:700;color:${kl.farbe};">${kl.icon}</div>
+          <div style="font-size:11px;">${kl.label}</div>
+        </div>
+        <div style="flex:1;min-width:80px;text-align:center;padding:8px;border-radius:8px;background:var(--bg-card, #F3F4F6);">
+          <div style="font-size:18px;font-weight:700;">${preO}→${postO}</div>
+          <div style="font-size:11px;">ORS (Δ${(postO - preO) >= 0 ? '+' : ''}${Math.round((postO - preO) * 10) / 10})</div>
+        </div>
+        ${rci ? `<div style="flex:1;min-width:80px;text-align:center;padding:8px;border-radius:8px;background:var(--bg-card, #F3F4F6);">
+          <div style="font-size:18px;font-weight:700;">${rci.rci}</div>
+          <div style="font-size:11px;">RCI ${rci.reliable ? '✅' : '—'}</div>
+        </div>` : ''}
+        ${cd ? `<div style="flex:1;min-width:80px;text-align:center;padding:8px;border-radius:8px;background:var(--bg-card, #F3F4F6);">
+          <div style="font-size:18px;font-weight:700;">${cd.d}</div>
+          <div style="font-size:11px;">Cohen's d (${cd.interpretation})</div>
+        </div>` : ''}
+      </div>
+    `;
+  }
+
+  const anw = analyseAnwesenheitsMuster(sid);
+
+  // Modal erstellen
+  const overlay = document.createElement('div');
+  overlay.id = 'abschluss-modal-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML = `
+    <div style="background:var(--bg-primary, #fff);border-radius:12px;padding:24px;max-width:520px;width:90%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="font-size:18px;font-weight:700;margin-bottom:16px;">🏁 Fall abschließen: ${name}</div>
+
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Abschlussgrund</label>
+        <select id="abschluss-grund" style="width:100%;padding:8px;border-radius:8px;border:1px solid #D1D5DB;font-size:13px;">
+          <option value="">— Bitte wählen —</option>
+          <option value="ziele-erreicht">Ziele erreicht</option>
+          <option value="teilweise-erreicht">Ziele teilweise erreicht</option>
+          <option value="dropout">Abbruch / Dropout</option>
+          <option value="umzug">Umzug / Schulwechsel</option>
+          <option value="uebergang">Übergang (Transition)</option>
+          <option value="sonstiges">Sonstiges</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Wirkungszusammenfassung</label>
+        ${wirkungHtml}
+        ${anw ? `<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Anwesenheit: ${anw.rate}% (${anw.anwesend}/${anw.total} Sitzungen)</div>` : ''}
+      </div>
+
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
+        <button onclick="document.getElementById('abschluss-modal-overlay').remove();" style="padding:8px 16px;border-radius:8px;border:1px solid #D1D5DB;background:var(--bg-primary, #fff);cursor:pointer;font-size:13px;">Abbrechen</button>
+        <button onclick="confirmAbschluss()" style="padding:8px 16px;border-radius:8px;border:none;background:#059669;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Fall abschließen</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function confirmAbschluss() {
+  const grund = document.getElementById('abschluss-grund')?.value;
+  if (!grund) {
+    showToast('Bitte Abschlussgrund wählen', 'warning');
+    return;
+  }
+  DB.updateSchueler(APP.currentSchuelerId, {
+    status: 'abgeschlossen',
+    abschlussgrund: grund,
+    abschlussdatum: new Date().toISOString().split('T')[0]
+  });
+  document.getElementById('abschluss-modal-overlay')?.remove();
+  renderSidebar();
+  showToast(`Fall abgeschlossen (${grund})`, 'success');
 }
 
 function renderProfilCompleteness(s) {
@@ -11734,6 +11834,23 @@ function generateSCASBericht(s, name, notizen, scr, roadmap, ff, wb, heute) {
       })()}
 
       ${(() => {
+        const sN = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+        if (sN.length < 4) return '';
+        const orsW = sN.map(n => n.soap.ors.total);
+        const rci = berechneRCI(orsW);
+        const m = Math.floor(orsW.length / 2);
+        const cd = berechneCohenD(orsW.slice(0, m), orsW.slice(m));
+        const preO = Math.round((orsW[0] + orsW[1]) / 2 * 10) / 10;
+        const postO = Math.round((orsW[orsW.length - 2] + orsW[orsW.length - 1]) / 2 * 10) / 10;
+        const kl = berechneKlinischeKlassifikation(preO, postO, rci);
+        return `<h4>6b. Wirkungsnachweis</h4>
+          <p><strong>ORS-Veränderung:</strong> ${preO} → ${postO} (Δ ${postO - preO >= 0 ? '+' : ''}${Math.round((postO - preO) * 10) / 10})</p>
+          ${rci ? `<p><strong>RCI:</strong> ${rci.rci} — ${rci.reliable ? 'Statistisch signifikante Veränderung' : 'Keine signifikante Veränderung'}</p>` : ''}
+          ${cd ? `<p><strong>Effektstärke (Cohen's d):</strong> ${cd.d} (${cd.interpretation}er Effekt)</p>` : ''}
+          <p><strong>Klinische Klassifikation:</strong> ${kl.icon} ${kl.label}</p>`;
+      })()}
+
+      ${(() => {
         const risiko = DB.getRisiko(s.id).sort((a, b) => new Date(b.datum) - new Date(a.datum));
         if (risiko.length === 0) return '';
         const letzter = risiko[0];
@@ -11820,6 +11937,18 @@ function generateElternbrief(s, name, notizen, roadmap, wb, heute) {
       ${fortschritt ? `<p><strong>Entwicklung:</strong> ${fortschritt}</p>` : ''}
       ${themen}
 
+      ${(() => {
+        const sN = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+        if (sN.length < 4) return '';
+        const orsW = sN.map(n => n.soap.ors.total);
+        const preO = Math.round((orsW[0] + orsW[1]) / 2 * 10) / 10;
+        const postO = Math.round((orsW[orsW.length - 2] + orsW[orsW.length - 1]) / 2 * 10) / 10;
+        const delta = postO - preO;
+        if (delta > 3) return `<p><strong>Messbare Verbesserung:</strong> Die regelmäßig erfasste Befindlichkeit von ${s.vorname} zeigt eine deutliche Verbesserung. Der Wert stieg von ${preO} auf ${postO} Punkte (Skala 0-40).</p>`;
+        if (delta < -3) return `<p><strong>Unterstützungsbedarf:</strong> Die erfasste Befindlichkeit zeigt, dass ${s.vorname} weiterhin Unterstützung braucht. Wir passen unsere Herangehensweise entsprechend an.</p>`;
+        return `<p><strong>Stabile Betreuung:</strong> Die Befindlichkeit von ${s.vorname} ist stabil. Wir arbeiten weiterhin an den vereinbarten Zielen.</p>`;
+      })()}
+
       <p>Wir arbeiten weiterhin daran, ${s.vorname} bestmöglich zu unterstützen.
       Bei Fragen stehen wir Ihnen jederzeit zur Verfügung.</p>
 
@@ -11886,6 +12015,22 @@ function generateUebergabe(s, name, notizen, scr, roadmap, ff, wb, heute) {
           return `<p>Status: <strong>${maxStufe}</strong> (${formatDatum(letzter.datum)})</p>`;
         }
         return '<p style="color:#DC2626;">⚠️ Kein Sicherheits-Check dokumentiert.</p>';
+      })()}
+
+      ${(() => {
+        const sN = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+        if (sN.length < 4) return '';
+        const orsW = sN.map(n => n.soap.ors.total);
+        const rci = berechneRCI(orsW);
+        const m = Math.floor(orsW.length / 2);
+        const cd = berechneCohenD(orsW.slice(0, m), orsW.slice(m));
+        const preO = Math.round((orsW[0] + orsW[1]) / 2 * 10) / 10;
+        const postO = Math.round((orsW[orsW.length - 2] + orsW[orsW.length - 1]) / 2 * 10) / 10;
+        const kl = berechneKlinischeKlassifikation(preO, postO, rci);
+        const sw = analyseSettingWirkung(s.id);
+        return `<h4>Wirkungsprofil</h4>
+          <p>${kl.icon} <strong>${kl.label}</strong> — ORS: ${preO} → ${postO}${rci ? ` | RCI: ${rci.rci}` : ''}${cd ? ` | Cohen's d: ${cd.d} (${cd.interpretation})` : ''}</p>
+          ${sw && sw.bestSetting ? `<p><strong>Setting-Empfehlung:</strong> "${sw.bestSetting}" erzielte die besten Ergebnisse (SRS ∅ ${sw.bestAvg}/40).</p>` : ''}`;
       })()}
 
       <h4>Wichtige Hinweise für die Übernahme</h4>

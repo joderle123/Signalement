@@ -5149,6 +5149,148 @@ function findeVernachlaessigteThemen(schuelerId) {
   return flaggen.filter(f => !adressierteDomains.has(f.id));
 }
 
+// ============================================================
+// THERAPEUTISCHER ZWILLING — Sitzungs-Briefing Widget
+// ============================================================
+function renderSitzungsBriefing(schuelerId) {
+  const el = document.getElementById('sitzungs-briefing-widget');
+  if (!el) return;
+
+  const notizen = DB.getNotizen(schuelerId).filter(n => n.kategorie === 'session').sort((a, b) => a.datum.localeCompare(b.datum));
+  if (notizen.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+
+  const orsSrsTrend = analyseORS_SRS_Trend(schuelerId);
+  const anwesenheit = analyseAnwesenheitsMuster(schuelerId);
+  const stimmung = analyseStimmungsMuster(schuelerId);
+  const settingWirkung = analyseSettingWirkung(schuelerId);
+  const vernachlaessigt = findeVernachlaessigteThemen(schuelerId);
+
+  // Letzte Notiz: Plan-Sektion (Vereinbarung)
+  const letzteNotiz = notizen[notizen.length - 1];
+  const letzterPlan = letzteNotiz?.soap?.plan || '';
+  const letzteDatum = letzteNotiz?.datum ? new Date(letzteNotiz.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+
+  // Build briefing cards
+  const cards = [];
+
+  // 1. ORS/SRS Trend
+  if (orsSrsTrend) {
+    const trendIcon = { steigend: '📈', fallend: '📉', stabil: '➡️' };
+    const trendColor = { steigend: '#059669', fallend: '#DC2626', stabil: '#6B7280' };
+    const ors = orsSrsTrend.ors;
+    const srs = orsSrsTrend.srs;
+    cards.push(`
+      <div class="briefing-card">
+        <div class="briefing-card-icon" style="color:${trendColor[ors.trend]};">${trendIcon[ors.trend]}</div>
+        <div class="briefing-card-content">
+          <div class="briefing-card-title">ORS-Trend: ${ors.trend}</div>
+          <div class="briefing-card-detail">Letzte 3: ${ors.letzte3.join(', ')} | ∅ ${ors.durchschnitt}/40${ors.rci ? ` | RCI: ${ors.rci.rci}` : ''}</div>
+          ${srs.anzahl > 0 ? `<div class="briefing-card-detail">SRS ∅ ${srs.durchschnitt}/40 (${srs.trend})</div>` : ''}
+        </div>
+      </div>
+    `);
+  }
+
+  // 2. Letzte Vereinbarung
+  if (letzterPlan) {
+    const planKurz = letzterPlan.length > 150 ? letzterPlan.substring(0, 150) + '...' : letzterPlan;
+    cards.push(`
+      <div class="briefing-card">
+        <div class="briefing-card-icon">📋</div>
+        <div class="briefing-card-content">
+          <div class="briefing-card-title">Letzte Vereinbarung (${letzteDatum})</div>
+          <div class="briefing-card-detail" style="white-space:pre-line;">${sanitize(planKurz)}</div>
+        </div>
+      </div>
+    `);
+  }
+
+  // 3. Anwesenheit
+  if (anwesenheit) {
+    let anwWarn = '';
+    if (anwesenheit.konsekutiveNoShows >= 2) anwWarn = `<span style="color:#DC2626;font-weight:600;">${anwesenheit.konsekutiveNoShows}x nicht erschienen in Folge!</span>`;
+    else if (anwesenheit.tageSeitLetztem > 21) anwWarn = `<span style="color:#D97706;">Letzter Kontakt vor ${anwesenheit.tageSeitLetztem} Tagen</span>`;
+    cards.push(`
+      <div class="briefing-card">
+        <div class="briefing-card-icon">${anwesenheit.rate >= 75 ? '✅' : anwesenheit.rate >= 50 ? '⚠️' : '🚨'}</div>
+        <div class="briefing-card-content">
+          <div class="briefing-card-title">Anwesenheit: ${anwesenheit.rate}% (${anwesenheit.anwesend}/${anwesenheit.total})</div>
+          <div class="briefing-card-detail">${anwesenheit.noShows} No-Shows, ${anwesenheit.abgesagt} abgesagt${anwWarn ? ' | ' + anwWarn : ''}</div>
+        </div>
+      </div>
+    `);
+  }
+
+  // 4. Stimmungsmuster
+  if (stimmung && stimmung.anzahl >= 3) {
+    const trendText = { steigend: 'verbessert sich', fallend: 'verschlechtert sich', stabil: 'stabil' };
+    // Bester/schlechtester Wochentag
+    const tage = Object.entries(stimmung.nachWochentag).sort((a, b) => b[1] - a[1]);
+    const besterTag = tage.length > 0 ? tage[0] : null;
+    const schlechtesterTag = tage.length > 1 ? tage[tage.length - 1] : null;
+    let tagInfo = '';
+    if (besterTag && schlechtesterTag && besterTag[1] !== schlechtesterTag[1]) {
+      tagInfo = ` | Bester Tag: ${besterTag[0]} (${besterTag[1]}), Schwierigster: ${schlechtesterTag[0]} (${schlechtesterTag[1]})`;
+    }
+    cards.push(`
+      <div class="briefing-card">
+        <div class="briefing-card-icon">${stimmung.trend === 'steigend' ? '🌤️' : stimmung.trend === 'fallend' ? '🌧️' : '☁️'}</div>
+        <div class="briefing-card-content">
+          <div class="briefing-card-title">Stimmung: ${trendText[stimmung.trend]}</div>
+          <div class="briefing-card-detail">${stimmung.anzahl} Sitzungen erfasst${tagInfo}</div>
+        </div>
+      </div>
+    `);
+  }
+
+  // 5. Setting-Empfehlung
+  if (settingWirkung && settingWirkung.bestSetting && Object.keys(settingWirkung.settingScores).length >= 2) {
+    const settings = Object.entries(settingWirkung.settingScores).sort((a, b) => b[1].avg - a[1].avg);
+    if (settings.length >= 2 && settings[0][1].avg - settings[settings.length - 1][1].avg > 3) {
+      cards.push(`
+        <div class="briefing-card">
+          <div class="briefing-card-icon">💡</div>
+          <div class="briefing-card-content">
+            <div class="briefing-card-title">Setting-Empfehlung: ${settingWirkung.bestSetting}</div>
+            <div class="briefing-card-detail">SRS ∅ ${settingWirkung.bestAvg}/40 — deutlich besser als andere Settings (${settings.map(([s, d]) => `${s}: ${d.avg}`).join(', ')})</div>
+          </div>
+        </div>
+      `);
+    }
+  }
+
+  // 6. Vernachlässigte Themen
+  if (vernachlaessigt.length > 0) {
+    cards.push(`
+      <div class="briefing-card" style="border-left-color:#D97706;">
+        <div class="briefing-card-icon">🔍</div>
+        <div class="briefing-card-content">
+          <div class="briefing-card-title">Noch nicht adressierte Screening-Flaggen</div>
+          <div class="briefing-card-detail">${vernachlaessigt.map(f => `${f.icon} ${f.label} (Score: ${f.score}/${f.cutoff})`).join(' | ')}</div>
+        </div>
+      </div>
+    `);
+  }
+
+  if (cards.length === 0) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;border-left:4px solid #8B5CF6;">
+      <div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.card-body').style.display=this.parentElement.querySelector('.card-body').style.display==='none'?'block':'none';">
+        <span>🧠</span>
+        <div class="card-title">Sitzungs-Briefing</div>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">Therapeutischer Zwilling</span>
+      </div>
+      <div class="card-body" style="padding:8px 12px;">
+        <div class="briefing-cards">${cards.join('')}</div>
+      </div>
+    </div>
+  `;
+}
+
 function renderTreatmentResponse(schuelerId) {
   const el = document.getElementById('treatment-response-container');
   if (!el) return;
@@ -7429,6 +7571,9 @@ function renderDashboard() {
   // === PRIORITÄTSBASIERTE WIDGET-REIHENFOLGE ===
   // Stufe 1: Safety (nicht wegklickbar)
   renderSafetyBanner('safety-banner-dashboard');
+
+  // Stufe 1b: Therapeutischer Zwilling — Sitzungs-Briefing
+  renderSitzungsBriefing(APP.currentSchuelerId);
 
   // Stufe 2: Risiko-Monitoring
   renderRisikoWidget();

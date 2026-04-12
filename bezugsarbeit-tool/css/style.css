@@ -455,6 +455,38 @@ body {
 }
 
 /* ============================================================
+   THERAPEUTISCHER ZWILLING — Briefing & Radar
+   ============================================================ */
+.briefing-cards { display:flex; flex-direction:column; gap:8px; }
+.briefing-card {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:10px 12px; border-radius:8px;
+  background:var(--bg-card, #F9FAFB); border-left:3px solid #8B5CF6;
+}
+.briefing-card-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+.briefing-card-content { flex:1; min-width:0; }
+.briefing-card-title { font-size:13px; font-weight:600; color:var(--text-primary, #1F2937); }
+.briefing-card-detail { font-size:11px; color:var(--text-muted, #6B7280); margin-top:2px; line-height:1.5; }
+
+.radar-cards { display:flex; flex-direction:column; gap:8px; }
+.radar-card {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:10px 12px; border-radius:8px;
+  background:var(--bg-card, #F9FAFB); border-left:3px solid #3B82F6;
+}
+.radar-card-icon { font-size:18px; flex-shrink:0; }
+.radar-card-content { flex:1; min-width:0; }
+.radar-card-title { font-size:13px; font-weight:600; color:var(--text-primary, #1F2937); }
+.radar-card-detail { font-size:11px; color:var(--text-muted, #6B7280); margin-top:2px; line-height:1.5; }
+.radar-card-badge {
+  display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600;
+  margin-top:4px;
+}
+
+[data-theme="dark"] .briefing-card { background:var(--bg-card, #1F2937); }
+[data-theme="dark"] .radar-card { background:var(--bg-card, #1F2937); }
+
+/* ============================================================
    MAIN CONTENT
    ============================================================ */
 #main {

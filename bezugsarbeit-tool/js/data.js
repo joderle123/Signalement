@@ -6136,6 +6136,9 @@ const DB = {
     VERLAUF: 'cdse_verlauf',
     KONTAKTE: 'cdse_kontakte',
     RISIKO: 'cdse_risiko',
+    HELFER: 'cdse_helfer',
+    ZEIT: 'cdse_zeit',
+    KONFERENZEN: 'cdse_konferenzen',
   },
 
   // Safe localStorage wrapper with quota protection
@@ -6510,6 +6513,95 @@ const DB = {
     alle.push(eintrag);
     this._save(this.KEYS.RISIKO, alle);
     return eintrag;
+  },
+
+  // Helfersystem (Professionelles Netzwerk)
+  getHelfer(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.HELFER) || '[]');
+    return schuelerId ? alle.filter(h => h.schuelerId === schuelerId) : alle;
+  },
+  addHelfer(daten) {
+    const alle = this.getHelfer();
+    const neu = {
+      id: this.generateId(),
+      schuelerId: daten.schuelerId,
+      name: daten.name || '',
+      rolle: daten.rolle || '', // psychiater, schulberater, sozialarbeiter, therapeut, arzt, behoerde, andere
+      institution: daten.institution || '',
+      telefon: daten.telefon || '',
+      email: daten.email || '',
+      kategorie: daten.kategorie || 'therapie', // medizin, schule, behoerde, therapie, soziales
+      notiz: daten.notiz || '',
+      letzterKontakt: daten.letzterKontakt || '',
+      aktiv: daten.aktiv !== false,
+      erstellt: new Date().toISOString(),
+    };
+    alle.push(neu);
+    this._save(this.KEYS.HELFER, alle);
+    return neu;
+  },
+  updateHelfer(id, daten) {
+    const alle = this.getHelfer();
+    const idx = alle.findIndex(h => h.id === id);
+    if (idx >= 0) { Object.assign(alle[idx], daten); this._save(this.KEYS.HELFER, alle); }
+  },
+  deleteHelfer(id) {
+    const alle = this.getHelfer().filter(h => h.id !== id);
+    this._save(this.KEYS.HELFER, alle);
+  },
+
+  // Zeiterfassung
+  getZeit(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.ZEIT) || '[]');
+    return schuelerId ? alle.filter(z => z.schuelerId === schuelerId) : alle;
+  },
+  addZeit(daten) {
+    const alle = this.getZeit();
+    const neu = {
+      id: this.generateId(),
+      schuelerId: daten.schuelerId || null, // null = klientenübergreifend
+      datum: daten.datum || new Date().toISOString().split('T')[0],
+      dauer: daten.dauer || 0, // Minuten
+      kategorie: daten.kategorie || 'sitzung', // sitzung, elternarbeit, dokumentation, netzwerk, supervision, weiterbildung, admin
+      beschreibung: daten.beschreibung || '',
+      erstellt: new Date().toISOString(),
+    };
+    alle.push(neu);
+    this._save(this.KEYS.ZEIT, alle);
+    return neu;
+  },
+  deleteZeit(id) {
+    const alle = this.getZeit().filter(z => z.id !== id);
+    this._save(this.KEYS.ZEIT, alle);
+  },
+
+  // Hilfeplankonferenzen
+  getKonferenzen(schuelerId = null) {
+    const alle = JSON.parse(localStorage.getItem(this.KEYS.KONFERENZEN) || '[]');
+    return schuelerId ? alle.filter(k => k.schuelerId === schuelerId) : alle;
+  },
+  addKonferenz(daten) {
+    const alle = this.getKonferenzen();
+    const neu = {
+      id: this.generateId(),
+      schuelerId: daten.schuelerId,
+      datum: daten.datum || new Date().toISOString().split('T')[0],
+      titel: daten.titel || 'Hilfeplankonferenz',
+      teilnehmer: daten.teilnehmer || [], // [{ name, rolle, institution }]
+      anlass: daten.anlass || '',
+      themen: daten.themen || '',
+      beschluesse: daten.beschluesse || '', // Entscheidungen
+      aufgaben: daten.aufgaben || [], // [{ wer, was, bis }]
+      naechsterTermin: daten.naechsterTermin || '',
+      erstellt: new Date().toISOString(),
+    };
+    alle.push(neu);
+    this._save(this.KEYS.KONFERENZEN, alle);
+    return neu;
+  },
+  deleteKonferenz(id) {
+    const alle = this.getKonferenzen().filter(k => k.id !== id);
+    this._save(this.KEYS.KONFERENZEN, alle);
   },
 };
 

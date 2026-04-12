@@ -496,6 +496,10 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-screening').classList.add('active');
     updateSidebarActive(schuelerId);
     renderScreening(schuelerId);
+  } else if (view === 'zeiterfassung') {
+    document.getElementById('view-zeiterfassung').classList.add('active');
+    document.getElementById('nav-zeiterfassung').classList.add('active');
+    renderZeiterfassung();
   }
 }
 
@@ -1348,7 +1352,7 @@ function renderWBLernpfade(container) {
         const done = gelesen.includes(lp.id);
         const quizScore = (progress.quizScores || {})[lp.id];
         return `
-          <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative;overflow:hidden;${done ? 'border-left:3px solid #16A34A;' : ''}" onclick="window.open('${lp.datei}','_blank')" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative;overflow:hidden;${done ? 'border-left:3px solid #16A34A;' : ''}" onclick="showLernpfadDetail('${lp.id}')" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
             <div class="card-body" style="padding:18px;">
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <div style="width:44px;height:44px;background:${lp.farbe}15;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${lp.icon}</div>
@@ -1371,6 +1375,82 @@ function renderWBLernpfade(container) {
       }).join('')}
     </div>
   `;
+}
+
+function showLernpfadDetail(id) {
+  const lp = WB_LERNPFADE.find(p => p.id === id);
+  if (!lp) return;
+  const progress = getWBProgress();
+  const gelesen = progress.geleseneModule || [];
+  const istGelesen = gelesen.includes(id);
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const bg = isDark ? '#1E293B' : '#FFFFFF';
+  const text = isDark ? '#E2E8F0' : '#1F2937';
+  const muted = isDark ? '#94A3B8' : '#6B7280';
+  const border = isDark ? '#334155' : '#E5E7EB';
+  const katInfo = WB_KATEGORIEN[lp.kategorie] || {};
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:overlayFadeIn 0.2s ease;';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `
+    <div style="background:${bg};border-radius:16px;width:95%;max-width:640px;max-height:85vh;overflow-y:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);animation:modalIn 0.35s cubic-bezier(0.16,1,0.3,1);">
+      <div style="padding:24px;border-bottom:1px solid ${border};">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div style="display:flex;gap:14px;align-items:center;">
+            <div style="width:52px;height:52px;background:${lp.farbe}20;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;">${lp.icon}</div>
+            <div>
+              <h2 style="font-size:18px;font-weight:800;color:${text};margin:0 0 4px;">${escapeHtml(lp.titel)}</h2>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <span style="font-size:11px;padding:3px 8px;background:${lp.farbe}15;color:${lp.farbe};border-radius:5px;font-weight:600;">${katInfo.label || ''}</span>
+                <span style="font-size:11px;color:${muted};">⏱ ${lp.dauer}</span>
+                ${istGelesen ? '<span style="font-size:11px;padding:3px 8px;background:#F0FDF4;color:#16A34A;border-radius:5px;font-weight:600;">✓ Absolviert</span>' : ''}
+              </div>
+            </div>
+          </div>
+          <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="background:${isDark ? '#334155' : '#F3F4F6'};border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;color:${muted};">✕</button>
+        </div>
+      </div>
+      <div style="padding:24px;">
+        <p style="font-size:14px;color:${text};line-height:1.7;margin-bottom:20px;">${escapeHtml(lp.beschreibung)}</p>
+        <div style="background:${isDark ? '#0F172A' : '#F8FAFC'};border:1px solid ${border};border-radius:12px;padding:16px;margin-bottom:20px;">
+          <div style="font-size:12px;font-weight:700;color:${lp.farbe};margin-bottom:10px;">📋 Lernziele</div>
+          <ul style="margin:0;padding-left:18px;font-size:13px;color:${text};line-height:1.8;">
+            <li>Erkennung und Einordnung im pädagogischen Alltag</li>
+            <li>Evidenzbasierte Interventionsstrategien</li>
+            <li>Grenzen der eigenen Rolle und Überweisungskriterien</li>
+            <li>Praktische Handlungsempfehlungen für den Bezugsalltag</li>
+          </ul>
+        </div>
+        <div style="background:${isDark ? '#1E3A2F' : '#F0FDF4'};border:1px solid ${isDark ? '#166534' : '#BBF7D0'};border-radius:12px;padding:16px;margin-bottom:20px;">
+          <div style="font-size:12px;font-weight:700;color:#16A34A;margin-bottom:6px;">💡 Tipp</div>
+          <p style="font-size:12px;color:${isDark ? '#86EFAC' : '#166534'};margin:0;line-height:1.6;">Nutze die <strong>Schnellhilfe</strong> für konkrete Fallsituationen — dort findest du interaktive Entscheidungsbäume mit massgeschneiderten Handlungsempfehlungen.</p>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          ${!istGelesen ? `<button onclick="markLernpfadGelesen('${id}');this.closest('div[style*=\\'position:fixed\\']').remove();" style="padding:10px 20px;background:${lp.farbe};color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">✓ Als gelesen markieren</button>` : `<button onclick="unmarkLernpfadGelesen('${id}');this.closest('div[style*=\\'position:fixed\\']').remove();" style="padding:10px 20px;background:${isDark ? '#334155' : '#F3F4F6'};color:${text};border:1px solid ${border};border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Markierung entfernen</button>`}
+          <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="padding:10px 20px;background:${isDark ? '#334155' : '#F3F4F6'};color:${text};border:1px solid ${border};border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Schliessen</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function markLernpfadGelesen(id) {
+  const progress = getWBProgress();
+  if (!progress.geleseneModule) progress.geleseneModule = [];
+  if (!progress.geleseneModule.includes(id)) progress.geleseneModule.push(id);
+  saveWBProgress(progress);
+  renderWeiterbildung();
+  showToast('Modul als gelesen markiert', 'success');
+}
+
+function unmarkLernpfadGelesen(id) {
+  const progress = getWBProgress();
+  progress.geleseneModule = (progress.geleseneModule || []).filter(m => m !== id);
+  saveWBProgress(progress);
+  renderWeiterbildung();
+  showToast('Markierung entfernt', '');
 }
 
 function renderWBNachschlagewerke(container) {
@@ -1924,6 +2004,7 @@ const PHASE_TABS = {
   fallakte: [
     { id: 'info', label: 'Aufnahme' },
     { id: 'genogramm', label: 'Genogramm' },
+    { id: 'helfersystem', label: 'Netzwerk' },
     { id: 'kontaktlog', label: 'Kontakte' }
   ],
   diagnostik: [
@@ -1936,7 +2017,8 @@ const PHASE_TABS = {
     { id: 'fallformulierung', label: '5P-Analyse' },
     { id: 'roadmap', label: 'Förderplan & Ziele' },
     { id: 'themen', label: 'Themen & Sitzungen' },
-    { id: 'notizen', label: 'Notizen' }
+    { id: 'notizen', label: 'Notizen' },
+    { id: 'konferenzen', label: 'Konferenzen' }
   ],
   auswertung: [
     { id: 'hypothesen-tab', label: 'Hypothesen' },
@@ -2020,6 +2102,8 @@ function showProfilTab(tab) {
   if (tab === 'treatment-tab') renderTreatmentTab();
   if (tab === 'verlauf-tracker') { renderVerlaufTracker(); renderRisikoTimeline(); }
   if (tab === 'kontaktlog') renderKontaktlog();
+  if (tab === 'helfersystem') renderHelfersystem();
+  if (tab === 'konferenzen') renderKonferenzen();
 }
 
 // ============================================================
@@ -7815,6 +7899,9 @@ function exportDaten() {
     verlauf: DB.getVerlauf(),
     kontakte: DB.getKontakte(),
     risiko: DB.getRisiko(),
+    helfer: DB.getHelfer(),
+    zeit: DB.getZeit(),
+    konferenzen: DB.getKonferenzen(),
   };
   const json = JSON.stringify(daten, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -7916,6 +8003,27 @@ function doImportMerge(daten) {
         const lokalRisikoIds = new Set(DB.getRisiko().map(r => r.id));
         const alleRisiko = [...DB.getRisiko(), ...daten.risiko.filter(r => !lokalRisikoIds.has(r.id))];
         localStorage.setItem(DB.KEYS.RISIKO, JSON.stringify(alleRisiko));
+      }
+
+      // Helfer zusammenführen
+      if (daten.helfer) {
+        const lokalHIds = new Set(DB.getHelfer().map(h => h.id));
+        const alleH = [...DB.getHelfer(), ...daten.helfer.filter(h => !lokalHIds.has(h.id))];
+        localStorage.setItem(DB.KEYS.HELFER, JSON.stringify(alleH));
+      }
+
+      // Zeiterfassung zusammenführen
+      if (daten.zeit) {
+        const lokalZIds = new Set(DB.getZeit().map(z => z.id));
+        const alleZ = [...DB.getZeit(), ...daten.zeit.filter(z => !lokalZIds.has(z.id))];
+        localStorage.setItem(DB.KEYS.ZEIT, JSON.stringify(alleZ));
+      }
+
+      // Konferenzen zusammenführen
+      if (daten.konferenzen) {
+        const lokalKonfIds = new Set(DB.getKonferenzen().map(k => k.id));
+        const alleKonf = [...DB.getKonferenzen(), ...daten.konferenzen.filter(k => !lokalKonfIds.has(k.id))];
+        localStorage.setItem(DB.KEYS.KONFERENZEN, JSON.stringify(alleKonf));
       }
 
       renderSidebar();

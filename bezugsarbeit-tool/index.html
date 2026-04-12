@@ -41,6 +41,9 @@
     <div class="nav-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0">
       <span class="nav-item-icon" aria-hidden="true">📅</span> Kalender
     </div>
+    <div class="nav-item" id="nav-zeiterfassung" onclick="showView('zeiterfassung')" role="button" tabindex="0">
+      <span class="nav-item-icon" aria-hidden="true">⏱️</span> Zeiterfassung
+    </div>
   </nav>
 
   <!-- Klient-Navigation (nur sichtbar wenn Profil offen) -->
@@ -850,6 +853,16 @@
         <div id="kontaktlog-container"></div>
       </div>
 
+      <!-- HELFERSYSTEM / PROFESSIONELLES NETZWERK -->
+      <div class="profil-tab-content" data-tab="helfersystem">
+        <div id="helfersystem-container"></div>
+      </div>
+
+      <!-- HILFEPLANKONFERENZEN -->
+      <div class="profil-tab-content" data-tab="konferenzen">
+        <div id="konferenzen-container"></div>
+      </div>
+
       <!-- GENOGRAMM -->
       <div class="profil-tab-content" data-tab="genogramm">
         <div class="card">
@@ -986,6 +999,18 @@
     </div>
     <div class="content" id="weiterbildung-content">
       <!-- Wird von renderWeiterbildung() gefüllt -->
+    </div>
+  </div>
+
+  <!-- ---- ZEITERFASSUNG VIEW ---- -->
+  <div class="view" id="view-zeiterfassung">
+    <div class="topbar">
+      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
+      <div class="topbar-title">Zeiterfassung</div>
+      <div class="topbar-actions"></div>
+    </div>
+    <div class="content" id="zeiterfassung-content">
+      <!-- Wird von renderZeiterfassung() gefüllt -->
     </div>
   </div>
 
@@ -1214,6 +1239,28 @@
   <div class="help-panel-body" id="help-container"></div>
 </div>
 <div class="help-overlay" id="help-overlay" onclick="toggleHelpPanel()"></div>
+
+<!-- Schnellnotiz FAB + Modal -->
+<button class="schnellnotiz-fab" id="schnellnotiz-fab" onclick="toggleSchnellnotiz()" title="Schnellnotiz">✏️</button>
+<div class="schnellnotiz-overlay" id="schnellnotiz-overlay" onclick="toggleSchnellnotiz()"></div>
+<div class="schnellnotiz-modal" id="schnellnotiz-modal">
+  <div class="schnellnotiz-header">
+    <h3>✏️ Schnellnotiz</h3>
+    <button class="schnellnotiz-close" onclick="toggleSchnellnotiz()">&times;</button>
+  </div>
+  <div class="schnellnotiz-body">
+    <div class="schnellnotiz-klient" id="schnellnotiz-klient-info"></div>
+    <select id="schnellnotiz-kategorie" class="form-select">
+      <option value="wichtig">⚠️ Wichtig</option>
+      <option value="beobachtung">👁 Beobachtung</option>
+      <option value="fortschritt">📈 Fortschritt</option>
+      <option value="elternkontakt">📞 Elternkontakt</option>
+      <option value="session">💬 Sitzung</option>
+    </select>
+    <textarea id="schnellnotiz-text" class="form-textarea" placeholder="Kurze Notiz erfassen..." rows="4"></textarea>
+    <button class="btn btn-primary" style="width:100%" onclick="saveSchnellnotiz()">Speichern</button>
+  </div>
+</div>
 
 <!-- Toast Container -->
 <div id="toast-container" role="status" aria-live="polite"></div>

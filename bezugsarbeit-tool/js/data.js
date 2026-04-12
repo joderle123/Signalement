@@ -6147,6 +6147,7 @@ const DB = {
     HELFER: 'cdse_helfer',
     ZEIT: 'cdse_zeit',
     KONFERENZEN: 'cdse_konferenzen',
+    AUFGABEN: 'cdse_aufgaben',
   },
 
   // Safe localStorage wrapper with quota protection
@@ -6610,6 +6611,24 @@ const DB = {
   deleteKonferenz(id) {
     const alle = this.getKonferenzen().filter(k => k.id !== id);
     this._save(this.KEYS.KONFERENZEN, alle);
+  },
+
+  // Aufgaben (persönliche Todo-Liste)
+  getAufgaben() {
+    return JSON.parse(localStorage.getItem(this.KEYS.AUFGABEN) || '[]');
+  },
+  addAufgabe(daten) {
+    const alle = this.getAufgaben();
+    alle.push({ id: this.generateId(), ...daten, erstellt: new Date().toISOString() });
+    this._save(this.KEYS.AUFGABEN, alle);
+  },
+  updateAufgabe(id, daten) {
+    const alle = this.getAufgaben().map(a => a.id === id ? { ...a, ...daten } : a);
+    this._save(this.KEYS.AUFGABEN, alle);
+  },
+  deleteAufgabe(id) {
+    const alle = this.getAufgaben().filter(a => a.id !== id);
+    this._save(this.KEYS.AUFGABEN, alle);
   },
 };
 

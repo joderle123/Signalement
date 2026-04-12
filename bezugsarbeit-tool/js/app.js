@@ -7909,6 +7909,7 @@ function exportDaten() {
     helfer: DB.getHelfer(),
     zeit: DB.getZeit(),
     konferenzen: DB.getKonferenzen(),
+    aufgaben: DB.getAufgaben(),
   };
   const json = JSON.stringify(daten, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -8031,6 +8032,13 @@ function doImportMerge(daten) {
         const lokalKonfIds = new Set(DB.getKonferenzen().map(k => k.id));
         const alleKonf = [...DB.getKonferenzen(), ...daten.konferenzen.filter(k => !lokalKonfIds.has(k.id))];
         localStorage.setItem(DB.KEYS.KONFERENZEN, JSON.stringify(alleKonf));
+      }
+
+      // Aufgaben zusammenführen
+      if (daten.aufgaben) {
+        const lokalAIds = new Set(DB.getAufgaben().map(a => a.id));
+        const alleA = [...DB.getAufgaben(), ...daten.aufgaben.filter(a => !lokalAIds.has(a.id))];
+        localStorage.setItem(DB.KEYS.AUFGABEN, JSON.stringify(alleA));
       }
 
       renderSidebar();
@@ -18671,4 +18679,119 @@ function saveQuickSRS() {
   document.querySelector('div[style*="position:fixed"][style*="z-index:9999"]')?.remove();
   showToast('SRS gespeichert: ' + total + '/40', 'success');
   renderDashboard();
+}
+
+// ============================================================
+// AUFGABEN — Persönliche Todo-Liste
+// ============================================================
+const AUFGABE_PRIORITAETEN = {
+  dringend: { icon: '🔴', label: 'Dringend', farbe: '#EF4444' },
+  normal: { icon: '🟡', label: 'Normal', farbe: '#F59E0B' },
+  warten: { icon: '🔵', label: 'Warten', farbe: '#3B82F6' }
+};
+
+let AUFGABEN_FILTER = 'offen';
+
+function renderAufgaben() {
+  const container = document.getElementById('aufgaben-content');
+  if (!container) return;
+
+  const alle = DB.getAufgaben();
+  const schueler = DB.getSchueler();
+  const heute = new Date().toISOString().split('T')[0];
+
+  const offen = alle.filter(a => !a.erledigt);
+  const erledigt = alle.filter(a => a.erledigt);
+  const filtered = AUFGABEN_FILTER === 'offen' ? offen : AUFGABEN_FILTER === 'erledigt' ? erledigt : alle;
+  const sorted = filtered.sort((a, b) => {
+    if (!a.erledigt && b.erledigt) return -1;
+    if (a.erledigt && !b.erledigt) return 1;
+    const priOrd = { dringend: 0, normal: 1, warten: 2 };
+    return (priOrd[a.prioritaet] || 1) - (priOrd[b.prioritaet] || 1);
+  });
+
+  let html = '';
+
+  // Stats
+  const ueberfaellig = offen.filter(a => a.faellig && a.faellig < heute).length;
+  html += `<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+    <div class="card" style="flex:1;min-width:100px;"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--primary);">${offen.length}</div><div style="font-size:11px;color:var(--text-muted);">Offen</div></div></div>
+    <div class="card" style="flex:1;min-width:100px;"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#EF4444;">${ueberfaellig}</div><div style="font-size:11px;color:var(--text-muted);">Überfällig</div></div></div>
+    <div class="card" style="flex:1;min-width:100px;"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#10B981;">${erledigt.length}</div><div style="font-size:11px;color:var(--text-muted);">Erledigt</div></div></div>
+  </div>`;
+
+  // Filter
+  html += `<div style="display:flex;gap:6px;margin-bottom:14px;">
+    <button class="btn btn-sm ${AUFGABEN_FILTER === 'offen' ? 'btn-primary' : 'btn-secondary'}" onclick="AUFGABEN_FILTER='offen';renderAufgaben();">Offen (${offen.length})</button>
+    <button class="btn btn-sm ${AUFGABEN_FILTER === 'erledigt' ? 'btn-primary' : 'btn-secondary'}" onclick="AUFGABEN_FILTER='erledigt';renderAufgaben();">Erledigt (${erledigt.length})</button>
+    <button class="btn btn-sm ${AUFGABEN_FILTER === 'alle' ? 'btn-primary' : 'btn-secondary'}" onclick="AUFGABEN_FILTER='alle';renderAufgaben();">Alle</button>
+  </div>`;
+
+  // Formular
+  html += '<div class="card" style="margin-bottom:16px;">';
+  html += '<div class="card-header"><span>➕</span><div class="card-title">Neue Aufgabe</div></div>';
+  html += '<div class="card-body">';
+  html += '<div class="form-grid">';
+  html += '<div class="form-group" style="flex:2;"><label>Aufgabe *</label><input type="text" id="aufgabe-text" placeholder="Was muss erledigt werden?"></div>';
+  html += `<div class="form-group"><label>Priorität</label><select id="aufgabe-prio">${Object.entries(AUFGABE_PRIORITAETEN).map(([k, v]) => `<option value="${k}">${v.icon} ${v.label}</option>`).join('')}</select></div>`;
+  html += '<div class="form-group"><label>Fällig bis</label><input type="date" id="aufgabe-faellig"></div>';
+  html += `<div class="form-group"><label>Klient (optional)</label><select id="aufgabe-schueler"><option value="">— Keiner —</option>${schueler.map(s => `<option value="${s.id}">${escapeHtml(s.vorname)} ${escapeHtml(s.nachname)}</option>`).join('')}</select></div>`;
+  html += '</div>';
+  html += '<button class="btn btn-primary btn-sm" onclick="addAufgabeEintrag()" style="margin-top:8px;">✅ Aufgabe speichern</button>';
+  html += '</div></div>';
+
+  // Liste
+  if (sorted.length > 0) {
+    html += '<div class="card"><div class="card-body" style="padding:8px;">';
+    sorted.forEach(a => {
+      const prio = AUFGABE_PRIORITAETEN[a.prioritaet] || AUFGABE_PRIORITAETEN.normal;
+      const ueberfaelligItem = !a.erledigt && a.faellig && a.faellig < heute;
+      const schuelerName = a.schuelerId ? schueler.find(s => s.id === a.schuelerId) : null;
+      html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 8px;border-bottom:1px solid var(--border);${a.erledigt ? 'opacity:0.5;' : ''}">
+        <input type="checkbox" ${a.erledigt ? 'checked' : ''} onchange="toggleAufgabe('${a.id}')" style="width:18px;height:18px;cursor:pointer;accent-color:${prio.farbe};">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;color:var(--text);${a.erledigt ? 'text-decoration:line-through;' : ''}">${escapeHtml(a.text)}</div>
+          <div style="font-size:10px;color:var(--text-muted);display:flex;gap:8px;margin-top:2px;">
+            <span>${prio.icon} ${prio.label}</span>
+            ${a.faellig ? `<span style="${ueberfaelligItem ? 'color:#EF4444;font-weight:600;' : ''}">📅 ${formatDatum(a.faellig)}</span>` : ''}
+            ${schuelerName ? `<span>👤 ${escapeHtml(schuelerName.vorname)}</span>` : ''}
+          </div>
+        </div>
+        <button class="btn-icon btn-sm" style="font-size:11px;" onclick="deleteAufgabeEintrag('${a.id}')">🗑</button>
+      </div>`;
+    });
+    html += '</div></div>';
+  } else {
+    html += renderEmptyState('✅', 'Keine Aufgaben', AUFGABEN_FILTER === 'offen' ? 'Alles erledigt! Erstelle neue Aufgaben oben.' : 'Keine Aufgaben in dieser Kategorie.');
+  }
+
+  container.innerHTML = html;
+}
+
+function addAufgabeEintrag() {
+  const text = document.getElementById('aufgabe-text')?.value?.trim();
+  if (!text) { showToast('Bitte Aufgabe eingeben', 'error'); return; }
+  DB.addAufgabe({
+    text: text,
+    prioritaet: document.getElementById('aufgabe-prio')?.value || 'normal',
+    faellig: document.getElementById('aufgabe-faellig')?.value || '',
+    schuelerId: document.getElementById('aufgabe-schueler')?.value || null,
+    erledigt: false
+  });
+  showToast('Aufgabe erstellt', 'success');
+  renderAufgaben();
+}
+
+function toggleAufgabe(id) {
+  const aufgabe = DB.getAufgaben().find(a => a.id === id);
+  if (!aufgabe) return;
+  DB.updateAufgabe(id, { erledigt: !aufgabe.erledigt });
+  renderAufgaben();
+}
+
+function deleteAufgabeEintrag(id) {
+  if (!confirm('Aufgabe löschen?')) return;
+  DB.deleteAufgabe(id);
+  showToast('Aufgabe gelöscht', '');
+  renderAufgaben();
 }

@@ -1215,6 +1215,9 @@ function renderWBUebersicht(container) {
       </div>
     </div>
 
+    <!-- Personalisierte Empfehlungen (Praxis-Akademie) -->
+    <div id="wb-empfehlungen-container"></div>
+
     <!-- Schnellhilfe prominent -->
     <div class="card" style="cursor:pointer;border:2px solid #DC2626;margin-bottom:20px;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='schnellhilfe';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(220,38,38,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
       <div class="card-body" style="padding:20px;">
@@ -1427,6 +1430,38 @@ function renderWBNachschlagewerke(container) {
 
     </div>
   `;
+
+  // Personalisierte Empfehlungen rendern (Praxis-Akademie)
+  setTimeout(() => {
+    const empfEl = document.getElementById('wb-empfehlungen-container');
+    if (!empfEl) return;
+    try {
+      const profil = berechneLernprofil();
+      if (profil.empfehlungen.length === 0) { empfEl.innerHTML = ''; return; }
+      empfEl.innerHTML = `
+        <div class="card" style="border-left:4px solid #8B5CF6;margin-bottom:20px;">
+          <div class="card-header">
+            <span>🎯</span>
+            <div class="card-title">Für dich empfohlen</div>
+            <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">Basierend auf deinem Kaseload</span>
+          </div>
+          <div class="card-body" style="padding:10px 14px;">
+            ${profil.empfehlungen.map(e => `
+              <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:8px;background:var(--bg-card, #F9FAFB);margin-bottom:8px;cursor:pointer;transition:background 0.15s;" onclick="openLernpfad('${e.pfad.id}')" onmouseenter="this.style.background='var(--bg-hover, #EEF2FF)'" onmouseleave="this.style.background='var(--bg-card, #F9FAFB)'">
+                <div style="font-size:22px;flex-shrink:0;">${e.pfad.icon}</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:600;color:var(--text-primary, #1F2937);">${e.pfad.titel}</div>
+                  <div style="font-size:11px;color:#8B5CF6;margin-top:2px;">${e.grund}</div>
+                  <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">${e.pfad.dauer} | ${e.pfad.beschreibung}</div>
+                </div>
+                <div style="font-size:16px;color:#8B5CF6;flex-shrink:0;">→</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    } catch(e) { empfEl.innerHTML = ''; }
+  }, 0);
 }
 
 // ============================================================
@@ -5997,6 +6032,128 @@ function renderWirkungsnachweis(schuelerId) {
       </div>
     </div>
   `;
+}
+
+// ============================================================
+// PRAXIS-AKADEMIE — Lernprofil-Engine
+// ============================================================
+
+// Mapping: Screening-Domäne → relevante Lernpfad-IDs
+const DOMAIN_LERNPFAD_MAP = {
+  depression: ['01-internalisierende'],
+  'angst-generalisiert': ['01-internalisierende'],
+  'angst-sozial': ['01-internalisierende', '15-schweigender-jugendlicher'],
+  trauma: ['03-trauma', '07-dissoziation'],
+  adhs: ['06-adhs-praxis'],
+  conduct: ['02-externalisierende'],
+  selbstverletzung: ['05-selbstverletzung-suizidalitaet'],
+  essstoerung: ['08-essstoerungen'],
+  substanz: ['19-substanzkonsum'],
+  schlaf: ['01-internalisierende'],
+  psychose: ['07-dissoziation'],
+  autismus: ['06-adhs-praxis'],
+  trennungsangst: ['01-internalisierende', '04-bindungsstoerung'],
+  mobbing: ['02-externalisierende', '15-schweigender-jugendlicher'],
+  familie: ['12-psychisch-belastete-eltern', '13-hochstrittige-trennung', '11-verweigernde-eltern'],
+  diskriminierung: ['16-migration-flucht', '17-lgbtq-jugendliche', '14-kulturelle-erziehung'],
+  'soziale-isolation': ['15-schweigender-jugendlicher', '04-bindungsstoerung'],
+  zwang: ['01-internalisierende'],
+  stimmungsextreme: ['01-internalisierende'],
+  psychosomatik: ['01-internalisierende'],
+  dissoziation: ['07-dissoziation', '03-trauma'],
+};
+
+function berechneLernprofil() {
+  const schueler = DB.getSchueler().filter(s => (s.status || 'aktiv') === 'aktiv');
+  const progress = getWBProgress();
+  const gelesen = progress.geleseneModule || [];
+
+  // 1. Kaseload-Analyse: Häufigste Screening-Domänen
+  const domainCounts = {};
+  for (const s of schueler) {
+    const screenings = DB.getScreenings(s.id).filter(sc => sc.abgeschlossen).sort((a, b) => (b.datum || '').localeCompare(a.datum || ''));
+    if (screenings.length === 0) continue;
+    const latest = screenings[0];
+    const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+    for (const d of domains) {
+      const score = latest.ergebnisse?.[d.id];
+      if (score != null && score >= d.cutoff && !d.invertiert) {
+        domainCounts[d.id] = (domainCounts[d.id] || 0) + 1;
+      }
+    }
+  }
+
+  // 2. Welche Lernpfade sind relevant aber noch nicht gelesen?
+  const empfehlungen = [];
+  const lernpfade = typeof WB_LERNPFADE !== 'undefined' ? WB_LERNPFADE : [];
+
+  for (const [domain, count] of Object.entries(domainCounts).sort((a, b) => b[1] - a[1])) {
+    const relevantPfade = (DOMAIN_LERNPFAD_MAP[domain] || [])
+      .filter(id => !gelesen.includes(id))
+      .map(id => lernpfade.find(p => p.id === id))
+      .filter(Boolean);
+    for (const pfad of relevantPfade) {
+      if (!empfehlungen.find(e => e.pfad.id === pfad.id)) {
+        const domainLabel = (typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : []).find(d => d.id === domain)?.label || domain;
+        empfehlungen.push({
+          pfad,
+          grund: `${count} ${count === 1 ? 'Klient hat' : 'Klienten haben'} ${domainLabel}-Scores über Cutoff`,
+          domain,
+          prio: count
+        });
+      }
+    }
+  }
+
+  // 3. Effektstärken-Analyse: Wo sind die Outcomes am schwächsten?
+  const domainEffects = {};
+  for (const s of schueler) {
+    const notizen = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+    if (notizen.length < 4) continue;
+    const orsW = notizen.map(n => n.soap.ors.total);
+    const m = Math.floor(orsW.length / 2);
+    const cd = berechneCohenD(orsW.slice(0, m), orsW.slice(m));
+    if (!cd) continue;
+
+    // Welche Domänen hat dieser Klient?
+    const screenings = DB.getScreenings(s.id).filter(sc => sc.abgeschlossen);
+    if (screenings.length === 0) continue;
+    const latest = screenings[0];
+    const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+    for (const d of domains) {
+      if (latest.ergebnisse?.[d.id] >= d.cutoff && !d.invertiert) {
+        if (!domainEffects[d.id]) domainEffects[d.id] = [];
+        domainEffects[d.id].push(cd.d);
+      }
+    }
+  }
+
+  // Domänen mit niedrigsten Effektstärken = Verbesserungspotential
+  for (const [domain, effects] of Object.entries(domainEffects)) {
+    const avg = effects.reduce((a, b) => a + b, 0) / effects.length;
+    if (avg < 0.3 && effects.length >= 2) {
+      const relevantPfade = (DOMAIN_LERNPFAD_MAP[domain] || [])
+        .filter(id => !gelesen.includes(id))
+        .map(id => lernpfade.find(p => p.id === id))
+        .filter(Boolean);
+      for (const pfad of relevantPfade) {
+        const existing = empfehlungen.find(e => e.pfad.id === pfad.id);
+        if (existing) {
+          existing.grund += ` | Niedrige Effektstärke (d=${Math.round(avg * 100) / 100})`;
+          existing.prio += 2;
+        } else {
+          const domainLabel = (typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : []).find(d => d.id === domain)?.label || domain;
+          empfehlungen.push({
+            pfad, domain, prio: 2,
+            grund: `Niedrige Effektstärke bei ${domainLabel} (d=${Math.round(avg * 100) / 100})`
+          });
+        }
+      }
+    }
+  }
+
+  empfehlungen.sort((a, b) => b.prio - a.prio);
+  return { empfehlungen: empfehlungen.slice(0, 5), domainCounts, domainEffects, gelesen };
 }
 
 function renderTreatmentResponse(schuelerId) {

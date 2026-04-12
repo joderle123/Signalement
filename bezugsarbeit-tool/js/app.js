@@ -5291,6 +5291,200 @@ function renderSitzungsBriefing(schuelerId) {
   `;
 }
 
+// ============================================================
+// THERAPEUTISCHER ZWILLING — Muster-Radar Widget
+// ============================================================
+function renderMusterRadar(schuelerId) {
+  const el = document.getElementById('muster-radar-widget');
+  if (!el) return;
+
+  const notizen = DB.getNotizen(schuelerId).filter(n => n.kategorie === 'session').sort((a, b) => a.datum.localeCompare(b.datum));
+  if (notizen.length < 3) { el.innerHTML = ''; return; }
+
+  const cards = [];
+
+  // 1. Zeitliche Muster (Stimmung × Wochentag)
+  const stimmung = analyseStimmungsMuster(schuelerId);
+  if (stimmung && Object.keys(stimmung.nachWochentag).length >= 2) {
+    const tage = Object.entries(stimmung.nachWochentag).sort((a, b) => b[1] - a[1]);
+    const spread = tage[0][1] - tage[tage.length - 1][1];
+    if (spread >= 0.8) {
+      cards.push(`
+        <div class="radar-card">
+          <div class="radar-card-icon">📅</div>
+          <div class="radar-card-content">
+            <div class="radar-card-title">Zeitliches Muster erkannt</div>
+            <div class="radar-card-detail">Stimmung variiert nach Wochentag: ${tage.map(([t, v]) => `${t}: ${v}`).join(', ')}</div>
+            <span class="radar-card-badge" style="background:#EEF2FF;color:#4F46E5;">Wochentag-Effekt</span>
+          </div>
+        </div>
+      `);
+    }
+  }
+
+  // 2. Setting-Wirkung (Setting × SRS-Durchschnitt)
+  const settingWirkung = analyseSettingWirkung(schuelerId);
+  if (settingWirkung && Object.keys(settingWirkung.settingScores).length >= 2) {
+    const settings = Object.entries(settingWirkung.settingScores)
+      .filter(([, d]) => d.n >= 2)
+      .sort((a, b) => b[1].avg - a[1].avg);
+    if (settings.length >= 2) {
+      const best = settings[0];
+      const worst = settings[settings.length - 1];
+      const diff = best[1].avg - worst[1].avg;
+      if (diff >= 3) {
+        cards.push(`
+          <div class="radar-card">
+            <div class="radar-card-icon">📍</div>
+            <div class="radar-card-content">
+              <div class="radar-card-title">Setting-Wirkung</div>
+              <div class="radar-card-detail">${best[0]}: SRS ∅ ${best[1].avg} (${best[1].n}x) vs. ${worst[0]}: SRS ∅ ${worst[1].avg} (${worst[1].n}x) — Differenz: ${Math.round(diff * 10) / 10} Punkte</div>
+              <span class="radar-card-badge" style="background:#ECFDF5;color:#059669;">+${Math.round(diff)} SRS bei ${best[0]}</span>
+            </div>
+          </div>
+        `);
+      }
+    }
+  }
+
+  // 3. Thema-Allianz (Thema × SRS)
+  const themaMap = {};
+  for (const n of notizen) {
+    if (n.themaId && n.soap?.srs?.total != null) {
+      if (!themaMap[n.themaId]) themaMap[n.themaId] = { srs: [], label: '' };
+      themaMap[n.themaId].srs.push(n.soap.srs.total);
+    }
+  }
+  const allThemen = typeof THEMEN_KATEGORIEN !== 'undefined' ? THEMEN_KATEGORIEN.flatMap(k => k.themen || []) : [];
+  const themaAnalyse = Object.entries(themaMap)
+    .filter(([, d]) => d.srs.length >= 2)
+    .map(([id, d]) => {
+      const info = allThemen.find(t => t.id === id);
+      const avg = Math.round(d.srs.reduce((a, b) => a + b, 0) / d.srs.length * 10) / 10;
+      return { id, label: info?.titel || id, avg, n: d.srs.length };
+    })
+    .sort((a, b) => b.avg - a.avg);
+  if (themaAnalyse.length >= 2) {
+    const best = themaAnalyse[0];
+    const worst = themaAnalyse[themaAnalyse.length - 1];
+    if (best.avg - worst.avg >= 3) {
+      cards.push(`
+        <div class="radar-card">
+          <div class="radar-card-icon">🎯</div>
+          <div class="radar-card-content">
+            <div class="radar-card-title">Thema-Allianz-Muster</div>
+            <div class="radar-card-detail">Stärkste Allianz bei "${best.label}" (SRS ∅ ${best.avg}, ${best.n}x) — Schwächste: "${worst.label}" (SRS ∅ ${worst.avg}, ${worst.n}x)</div>
+            <span class="radar-card-badge" style="background:#FEF3C7;color:#D97706;">Allianz variiert nach Thema</span>
+          </div>
+        </div>
+      `);
+    }
+  }
+
+  // 4. ORS Frühwarnung
+  const orsTrend = analyseORS_SRS_Trend(schuelerId);
+  if (orsTrend && orsTrend.ors.trend === 'fallend') {
+    cards.push(`
+      <div class="radar-card" style="border-left-color:#DC2626;">
+        <div class="radar-card-icon">⚠️</div>
+        <div class="radar-card-content">
+          <div class="radar-card-title">Frühwarnung: ORS fallend</div>
+          <div class="radar-card-detail">Die Befindlichkeit verschlechtert sich. Letzte 3 ORS: ${orsTrend.ors.letzte3.join(', ')}. Interventionsanpassung prüfen.</div>
+          <span class="radar-card-badge" style="background:#FEE2E2;color:#DC2626;">Handlungsbedarf</span>
+        </div>
+      </div>
+    `);
+  }
+
+  // 5. Externe Ereignisse Korrelation
+  const mitEreignissen = notizen.filter(n => n.soap?.externeEreignisse?.length > 0 && n.soap.externeEreignisse[0] !== 'keine');
+  if (mitEreignissen.length >= 2) {
+    const ohneEreignisse = notizen.filter(n => !n.soap?.externeEreignisse?.length || n.soap.externeEreignisse[0] === 'keine' || n.soap.externeEreignisse.length === 0);
+    if (ohneEreignisse.length >= 2) {
+      const mitORS = mitEreignissen.filter(n => n.soap?.ors?.total != null).map(n => n.soap.ors.total);
+      const ohneORS = ohneEreignisse.filter(n => n.soap?.ors?.total != null).map(n => n.soap.ors.total);
+      if (mitORS.length >= 2 && ohneORS.length >= 2) {
+        const avgMit = Math.round(mitORS.reduce((a, b) => a + b, 0) / mitORS.length * 10) / 10;
+        const avgOhne = Math.round(ohneORS.reduce((a, b) => a + b, 0) / ohneORS.length * 10) / 10;
+        const diff = avgOhne - avgMit;
+        if (Math.abs(diff) >= 3) {
+          cards.push(`
+            <div class="radar-card">
+              <div class="radar-card-icon">📌</div>
+              <div class="radar-card-content">
+                <div class="radar-card-title">Externe Ereignisse beeinflussen ORS</div>
+                <div class="radar-card-detail">Mit externen Belastungen: ORS ∅ ${avgMit} — Ohne: ORS ∅ ${avgOhne} (Differenz: ${Math.round(diff * 10) / 10})</div>
+                <span class="radar-card-badge" style="background:#F3F4F6;color:#4B5563;">Umfeld-Sensitivität</span>
+              </div>
+            </div>
+          `);
+        }
+      }
+    }
+  }
+
+  // 6. PVT-Regulation (Delta PVT-Start → PVT-Ende)
+  const pvtNotizen = notizen.filter(n => n.soap?.pvt && n.soap?.pvtEnde);
+  if (pvtNotizen.length >= 2) {
+    const states = { safe: 0, activated: 1, frozen: 2 };
+    let regulated = 0, worse = 0, same = 0;
+    for (const n of pvtNotizen) {
+      const delta = states[n.soap.pvt] - states[n.soap.pvtEnde];
+      if (delta > 0) regulated++;
+      else if (delta < 0) worse++;
+      else same++;
+    }
+    const regulationRate = Math.round(regulated / pvtNotizen.length * 100);
+    cards.push(`
+      <div class="radar-card">
+        <div class="radar-card-icon">🧠</div>
+        <div class="radar-card-content">
+          <div class="radar-card-title">PVT-Regulation: ${regulationRate}% der Sitzungen regulierend</div>
+          <div class="radar-card-detail">${regulated}x reguliert, ${same}x stabil, ${worse}x dysreguliert (${pvtNotizen.length} Sitzungen mit PVT-Start + Ende)</div>
+          <span class="radar-card-badge" style="background:${regulationRate >= 60 ? '#ECFDF5' : '#FEF3C7'};color:${regulationRate >= 60 ? '#059669' : '#D97706'};">${regulationRate >= 60 ? 'Gute Regulation' : 'Regulation prüfen'}</span>
+        </div>
+      </div>
+    `);
+  }
+
+  // 7. Engagement-Trend (wenn genug Daten)
+  const engNotizen = notizen.filter(n => n.soap?.engagement != null);
+  if (engNotizen.length >= 3) {
+    const engWerte = engNotizen.map(n => n.soap.engagement);
+    const avg = Math.round(engWerte.reduce((a, b) => a + b, 0) / engWerte.length * 10) / 10;
+    const letzte3 = engWerte.slice(-3);
+    const letzte3avg = Math.round(letzte3.reduce((a, b) => a + b, 0) / letzte3.length * 10) / 10;
+    if (Math.abs(letzte3avg - avg) >= 1.5) {
+      const trend = letzte3avg > avg ? 'steigend' : 'fallend';
+      cards.push(`
+        <div class="radar-card">
+          <div class="radar-card-icon">${trend === 'steigend' ? '📈' : '📉'}</div>
+          <div class="radar-card-content">
+            <div class="radar-card-title">Engagement ${trend}</div>
+            <div class="radar-card-detail">∅ Gesamt: ${avg}/10, Letzte 3: ${letzte3avg}/10 (${letzte3.join(', ')})</div>
+            <span class="radar-card-badge" style="background:${trend === 'steigend' ? '#ECFDF5' : '#FEE2E2'};color:${trend === 'steigend' ? '#059669' : '#DC2626'};">${trend === 'steigend' ? 'Engagement wächst' : 'Engagement sinkt'}</span>
+          </div>
+        </div>
+      `);
+    }
+  }
+
+  if (cards.length === 0) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;border-left:4px solid #3B82F6;">
+      <div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.card-body').style.display=this.parentElement.querySelector('.card-body').style.display==='none'?'block':'none';">
+        <span>🔬</span>
+        <div class="card-title">Muster-Radar</div>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">${cards.length} Muster erkannt</span>
+      </div>
+      <div class="card-body" style="padding:8px 12px;">
+        <div class="radar-cards">${cards.join('')}</div>
+      </div>
+    </div>
+  `;
+}
+
 function renderTreatmentResponse(schuelerId) {
   const el = document.getElementById('treatment-response-container');
   if (!el) return;
@@ -7572,8 +7766,9 @@ function renderDashboard() {
   // Stufe 1: Safety (nicht wegklickbar)
   renderSafetyBanner('safety-banner-dashboard');
 
-  // Stufe 1b: Therapeutischer Zwilling — Sitzungs-Briefing
+  // Stufe 1b: Therapeutischer Zwilling — Sitzungs-Briefing + Muster-Radar
   renderSitzungsBriefing(APP.currentSchuelerId);
+  renderMusterRadar(APP.currentSchuelerId);
 
   // Stufe 2: Risiko-Monitoring
   renderRisikoWidget();

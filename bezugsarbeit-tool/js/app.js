@@ -4830,6 +4830,73 @@ function berechneRCI(werte) {
   };
 }
 
+// ============================================================
+// WIRKUNGSMASCHINE — Statistische Funktionen
+// ============================================================
+
+// Cohen's d: Effektstärke (Mean_post - Mean_pre) / SD_pooled
+function berechneCohenD(preScores, postScores) {
+  if (preScores.length < 2 || postScores.length < 2) return null;
+  const meanPre = preScores.reduce((a, b) => a + b, 0) / preScores.length;
+  const meanPost = postScores.reduce((a, b) => a + b, 0) / postScores.length;
+  const varPre = preScores.reduce((s, v) => s + Math.pow(v - meanPre, 2), 0) / (preScores.length - 1);
+  const varPost = postScores.reduce((s, v) => s + Math.pow(v - meanPost, 2), 0) / (postScores.length - 1);
+  const sdPooled = Math.sqrt((varPre + varPost) / 2);
+  if (sdPooled === 0) return null;
+  const d = (meanPost - meanPre) / sdPooled;
+  let interpretation;
+  const absD = Math.abs(d);
+  if (absD < 0.2) interpretation = 'vernachlässigbar';
+  else if (absD < 0.5) interpretation = 'klein';
+  else if (absD < 0.8) interpretation = 'mittel';
+  else interpretation = 'groß';
+  return { d: Math.round(d * 100) / 100, interpretation, richtung: d > 0 ? 'verbessert' : d < 0 ? 'verschlechtert' : 'stabil' };
+}
+
+// Klinische Klassifikation: Recovered / Improved / Unchanged / Deteriorated
+// Basierend auf RCI + klinischem Cutoff (ORS: 28)
+function berechneKlinischeKlassifikation(preORS, postORS, rci) {
+  const cutoff = 28; // ORS klinischer Cutoff
+  const reliable = rci && Math.abs(rci.rci) > 1.96;
+  const verbessert = rci && rci.rci > 0;
+  const verschlechtert = rci && rci.rci < 0;
+
+  if (reliable && verbessert && postORS >= cutoff && preORS < cutoff) return { klasse: 'recovered', label: 'Klinisch genesen', farbe: '#059669', icon: '🏆' };
+  if (reliable && verbessert) return { klasse: 'improved', label: 'Zuverlässig verbessert', farbe: '#3B82F6', icon: '📈' };
+  if (reliable && verschlechtert) return { klasse: 'deteriorated', label: 'Verschlechtert', farbe: '#DC2626', icon: '📉' };
+  return { klasse: 'unchanged', label: 'Unverändert', farbe: '#6B7280', icon: '➡️' };
+}
+
+// Screening-Delta: Vergleich T1 vs. T2 pro Domäne
+function berechneScreeningDelta(screening1, screening2) {
+  if (!screening1?.ergebnisse || !screening2?.ergebnisse) return null;
+  const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+  const deltas = {};
+  for (const domain of domains) {
+    const pre = screening1.ergebnisse[domain.id];
+    const post = screening2.ergebnisse[domain.id];
+    if (pre != null && post != null) {
+      const delta = post - pre;
+      const prozent = pre > 0 ? Math.round(delta / pre * 100) : 0;
+      const invertiert = domain.invertiert || false;
+      // Für invertierte Skalen (Resilienz): höherer Score = besser
+      const verbessert = invertiert ? delta > 0 : delta < 0;
+      deltas[domain.id] = {
+        label: domain.label,
+        icon: domain.icon,
+        pre, post, delta,
+        prozent,
+        verbessert,
+        signifikant: Math.abs(delta) >= 2, // vereinfachte Schwelle
+        cutoff: domain.cutoff,
+        preUeberCutoff: !invertiert && pre >= domain.cutoff,
+        postUeberCutoff: !invertiert && post >= domain.cutoff,
+      };
+    }
+  }
+  return deltas;
+}
+
 function analyzeTreatmentResponse(schuelerId) {
   const notizen = DB.getNotizen(schuelerId).filter(n => n.kategorie === 'session' && n.themaId && n.soap?.srs?.total != null);
   if (notizen.length === 0) return { themen: [], gesamtTrend: null, bestesThema: null };

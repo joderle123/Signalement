@@ -8124,6 +8124,29 @@ textarea:required:invalid:not(:placeholder-shown) {
 }
 
 /* ============================================================
+   PROFIL PHASE-NAV — Horizontale Phasen-Leiste im Profil
+   ============================================================ */
+.profil-phase-nav {
+  display: flex; gap: 0; background: var(--bg-card);
+  border-bottom: 2px solid var(--border);
+  padding: 0 16px; overflow-x: auto;
+}
+.profil-phase-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 16px; font-size: 13px; font-weight: 500;
+  color: var(--text-muted); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px; white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.profil-phase-item:hover { color: var(--text); }
+.profil-phase-item.active {
+  color: var(--primary); font-weight: 700;
+  border-bottom-color: var(--primary);
+}
+.profil-phase-item span { font-size: 14px; }
+
+/* ============================================================
    SCHNELLNOTIZ — Floating Action Button + Modal
    ============================================================ */
 .schnellnotiz-fab {

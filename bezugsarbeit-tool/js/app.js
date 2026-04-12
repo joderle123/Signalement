@@ -466,9 +466,12 @@ function showView(view, schuelerId = null) {
 
   APP.currentView = view;
 
-  // Show/hide sidebar phase nav based on view
-  const sidebarPhaseNav = document.getElementById('sidebar-phase-nav');
-  if (sidebarPhaseNav) sidebarPhaseNav.style.display = (view === 'profil' || view === 'screening') ? '' : 'none';
+  // Reset client state when leaving profile
+  if (view !== 'profil' && view !== 'screening') {
+    APP.currentSchuelerId = null;
+    APP.currentPhase = null;
+    updateSidebarActive(null);
+  }
 
   if (view === 'home') {
     document.getElementById('view-home').classList.add('active');
@@ -500,6 +503,10 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-zeiterfassung').classList.add('active');
     document.getElementById('nav-zeiterfassung').classList.add('active');
     renderZeiterfassung();
+  } else if (view === 'aufgaben') {
+    document.getElementById('view-aufgaben').classList.add('active');
+    document.getElementById('nav-aufgaben').classList.add('active');
+    renderAufgaben();
   }
 }
 
@@ -2041,8 +2048,8 @@ function getPhaseForTab(tabId) {
 function showPhase(phase, subTabId) {
   APP.currentPhase = phase;
 
-  // Highlight sidebar phase item
-  document.querySelectorAll('.sidebar-phase-item').forEach(t =>
+  // Highlight phase item (now inside profil view, not sidebar)
+  document.querySelectorAll('.profil-phase-item').forEach(t =>
     t.classList.toggle('active', t.dataset.phase === phase)
   );
 

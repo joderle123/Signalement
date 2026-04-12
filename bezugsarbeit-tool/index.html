@@ -38,34 +38,25 @@
     <div class="nav-item active" id="nav-home" onclick="showView('home')" role="button" tabindex="0" aria-current="page">
       <span class="nav-item-icon" aria-hidden="true">🏠</span> Dashboard
     </div>
+  </nav>
+
+  <!-- Meine Orga -->
+  <div class="sidebar-orga-nav">
+    <div class="sidebar-section-label">Meine Orga</div>
     <div class="nav-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0">
       <span class="nav-item-icon" aria-hidden="true">📅</span> Kalender
     </div>
     <div class="nav-item" id="nav-zeiterfassung" onclick="showView('zeiterfassung')" role="button" tabindex="0">
       <span class="nav-item-icon" aria-hidden="true">⏱️</span> Zeiterfassung
     </div>
-  </nav>
-
-  <!-- Klient-Navigation (nur sichtbar wenn Profil offen) -->
-  <div class="sidebar-phase-nav" id="sidebar-phase-nav" style="display:none;">
-    <div class="sidebar-section-label" id="sidebar-klient-label">Klient <button onclick="event.stopPropagation();showToolLegitimation('phasenmodell')" class="btn-ref-sidebar" title="7-Phasen-Begleitmodell">📚</button></div>
-    <div class="sidebar-phase-item" data-phase="fallakte" onclick="showPhase('fallakte')">
-      <span class="nav-item-icon">📋</span> Fallakte
-    </div>
-    <div class="sidebar-phase-item" data-phase="diagnostik" onclick="showPhase('diagnostik')">
-      <span class="nav-item-icon">🔍</span> Diagnostik
-    </div>
-    <div class="sidebar-phase-item active" data-phase="begleitung" onclick="showPhase('begleitung')">
-      <span class="nav-item-icon">🧭</span> Begleitung
-    </div>
-    <div class="sidebar-phase-item" data-phase="auswertung" onclick="showPhase('auswertung')">
-      <span class="nav-item-icon">📊</span> Auswertung
+    <div class="nav-item" id="nav-aufgaben" onclick="showView('aufgaben')" role="button" tabindex="0">
+      <span class="nav-item-icon" aria-hidden="true">✅</span> Aufgaben
     </div>
   </div>
 
-  <!-- Ressourcen -->
+  <!-- Wissen -->
   <div class="sidebar-ressourcen-nav">
-    <div class="sidebar-section-label">Ressourcen</div>
+    <div class="sidebar-section-label">Wissen</div>
     <div class="nav-item" id="nav-bibliothek" onclick="showView('bibliothek')" role="button" tabindex="0">
       <span class="nav-item-icon" aria-hidden="true">📚</span> Bibliothek
     </div>
@@ -170,7 +161,23 @@
       </div>
     </div>
 
-    <!-- Sub-Tabs (Phase-Tabs sind jetzt in der Sidebar) -->
+    <!-- Phase-Navigation (innerhalb Profil, nicht in Sidebar) -->
+    <div class="profil-phase-nav" id="profil-phase-nav">
+      <div class="profil-phase-item active" data-phase="fallakte" onclick="showPhase('fallakte')">
+        <span>📋</span> Fallakte
+      </div>
+      <div class="profil-phase-item" data-phase="diagnostik" onclick="showPhase('diagnostik')">
+        <span>🔍</span> Diagnostik
+      </div>
+      <div class="profil-phase-item" data-phase="begleitung" onclick="showPhase('begleitung')">
+        <span>🧭</span> Begleitung
+      </div>
+      <div class="profil-phase-item" data-phase="auswertung" onclick="showPhase('auswertung')">
+        <span>📊</span> Auswertung
+      </div>
+    </div>
+
+    <!-- Sub-Tabs -->
     <div class="profil-tabs-sub" id="profil-tabs-sub"></div>
 
     <!-- Tab-Inhalte -->
@@ -1011,6 +1018,18 @@
     </div>
     <div class="content" id="zeiterfassung-content">
       <!-- Wird von renderZeiterfassung() gefüllt -->
+    </div>
+  </div>
+
+  <!-- ---- AUFGABEN VIEW ---- -->
+  <div class="view" id="view-aufgaben">
+    <div class="topbar">
+      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
+      <div class="topbar-title">Aufgaben</div>
+      <div class="topbar-actions"></div>
+    </div>
+    <div class="content" id="aufgaben-content">
+      <!-- Wird von renderAufgaben() gefüllt -->
     </div>
   </div>
 

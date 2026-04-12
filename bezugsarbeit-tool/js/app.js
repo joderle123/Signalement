@@ -5682,6 +5682,114 @@ function renderSpiegelHinweise(schueler) {
   `;
 }
 
+// ============================================================
+// WIRKUNGSMASCHINE — Wirkungsnachweis-Widget pro Klient
+// ============================================================
+function renderWirkungsnachweis(schuelerId) {
+  const el = document.getElementById('wirkungsnachweis-widget');
+  if (!el) return;
+
+  const notizen = DB.getNotizen(schuelerId).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+  if (notizen.length < 3) { el.innerHTML = ''; return; }
+
+  const orsWerte = notizen.map(n => n.soap.ors.total);
+  const preORS = Math.round((orsWerte[0] + orsWerte[1]) / 2 * 10) / 10;
+  const postORS = Math.round((orsWerte[orsWerte.length - 2] + orsWerte[orsWerte.length - 1]) / 2 * 10) / 10;
+  const orsDelta = Math.round((postORS - preORS) * 10) / 10;
+
+  // RCI
+  const rci = berechneRCI(orsWerte);
+
+  // Cohen's d (erste Hälfte vs. zweite Hälfte)
+  const mitte = Math.floor(orsWerte.length / 2);
+  const cohenD = berechneCohenD(orsWerte.slice(0, mitte), orsWerte.slice(mitte));
+
+  // Klinische Klassifikation
+  const klassifikation = berechneKlinischeKlassifikation(preORS, postORS, rci);
+
+  // Screening-Delta (wenn 2+ Screenings vorhanden)
+  const screenings = DB.getScreenings(schuelerId).sort((a, b) => (a.datum || '').localeCompare(b.datum || ''));
+  let screeningDeltaHtml = '';
+  if (screenings.length >= 2) {
+    const deltas = berechneScreeningDelta(screenings[0], screenings[screenings.length - 1]);
+    if (deltas) {
+      const relevantDeltas = Object.values(deltas).filter(d => d.signifikant);
+      if (relevantDeltas.length > 0) {
+        screeningDeltaHtml = `
+          <div style="margin-top:10px;">
+            <div style="font-size:12px;font-weight:600;margin-bottom:6px;">Screening-Veränderungen (T1 → T2)</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;">
+              ${relevantDeltas.map(d => `
+                <span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:6px;font-size:11px;background:${d.verbessert ? '#ECFDF5' : '#FEE2E2'};color:${d.verbessert ? '#059669' : '#DC2626'};">
+                  ${d.icon} ${d.label}: ${d.pre}→${d.post} (${d.delta > 0 ? '+' : ''}${d.delta})
+                  ${d.preUeberCutoff && !d.postUeberCutoff ? '✅' : ''}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+    }
+  }
+
+  // Ziel-Erreichung
+  const themen = typeof THEMEN_KATEGORIEN !== 'undefined' ? THEMEN_KATEGORIEN.flatMap(k => k.themen || []) : [];
+  const s = DB.getSchuelerById(schuelerId);
+  let zieleHtml = '';
+  if (s) {
+    const alleThemen = themen.filter(t => {
+      const st = s['thema_' + t.id];
+      return st && st !== 'nicht-begonnen';
+    });
+    const erreicht = alleThemen.filter(t => s['thema_' + t.id] === 'abgeschlossen');
+    if (alleThemen.length > 0) {
+      zieleHtml = `
+        <div style="margin-top:8px;font-size:12px;">
+          <strong>Ziele:</strong> ${erreicht.length} von ${alleThemen.length} erreicht (${Math.round(erreicht.length / alleThemen.length * 100)}%)
+        </div>
+      `;
+    }
+  }
+
+  // Anwesenheitsrate
+  const anwesenheit = analyseAnwesenheitsMuster(schuelerId);
+  const anwesenheitHtml = anwesenheit ? `<div style="font-size:12px;margin-top:4px;"><strong>Anwesenheit:</strong> ${anwesenheit.rate}% (${anwesenheit.anwesend}/${anwesenheit.total})</div>` : '';
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;border-left:4px solid ${klassifikation.farbe};">
+      <div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.card-body').style.display=this.parentElement.querySelector('.card-body').style.display==='none'?'block':'none';">
+        <span>📊</span>
+        <div class="card-title">Wirkungsnachweis</div>
+        <span style="font-size:12px;color:${klassifikation.farbe};font-weight:600;margin-left:auto;">${klassifikation.icon} ${klassifikation.label}</span>
+      </div>
+      <div class="card-body" style="padding:10px 14px;">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
+          <div style="flex:1;min-width:120px;padding:10px;border-radius:8px;background:var(--bg-card, #F9FAFB);text-align:center;">
+            <div style="font-size:22px;font-weight:700;color:${orsDelta >= 0 ? '#059669' : '#DC2626'};">${orsDelta >= 0 ? '+' : ''}${orsDelta}</div>
+            <div style="font-size:11px;color:var(--text-muted);">ORS-Veränderung</div>
+            <div style="font-size:10px;color:var(--text-muted);">${preORS} → ${postORS}</div>
+          </div>
+          ${rci ? `
+          <div style="flex:1;min-width:120px;padding:10px;border-radius:8px;background:var(--bg-card, #F9FAFB);text-align:center;">
+            <div style="font-size:22px;font-weight:700;color:${rci.reliable ? '#059669' : '#6B7280'};">${rci.rci}</div>
+            <div style="font-size:11px;color:var(--text-muted);">RCI</div>
+            <div style="font-size:10px;color:${rci.reliable ? '#059669' : '#6B7280'};">${rci.reliable ? '✅ Signifikant' : '— Nicht signifikant'}</div>
+          </div>` : ''}
+          ${cohenD ? `
+          <div style="flex:1;min-width:120px;padding:10px;border-radius:8px;background:var(--bg-card, #F9FAFB);text-align:center;">
+            <div style="font-size:22px;font-weight:700;color:#4F46E5;">${cohenD.d}</div>
+            <div style="font-size:11px;color:var(--text-muted);">Cohen's d</div>
+            <div style="font-size:10px;color:#4F46E5;">${cohenD.interpretation}er Effekt</div>
+          </div>` : ''}
+        </div>
+        ${zieleHtml}
+        ${anwesenheitHtml}
+        ${screeningDeltaHtml}
+      </div>
+    </div>
+  `;
+}
+
 function renderTreatmentResponse(schuelerId) {
   const el = document.getElementById('treatment-response-container');
   if (!el) return;
@@ -7988,6 +8096,9 @@ function renderDashboard() {
 
   // Stufe 5c: Outcome-Verlauf (ORS/SRS)
   renderOutcomeVerlauf();
+
+  // Stufe 5c2: Wirkungsnachweis
+  renderWirkungsnachweis(APP.currentSchuelerId);
 
   // Stufe 5d: Anwesenheits-Tracking
   renderAnwesenheitWidget();

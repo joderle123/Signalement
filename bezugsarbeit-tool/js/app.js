@@ -1218,6 +1218,9 @@ function renderWBUebersicht(container) {
     <!-- Personalisierte Empfehlungen (Praxis-Akademie) -->
     <div id="wb-empfehlungen-container"></div>
 
+    <!-- Wirkungs-Feedback (Praxis-Akademie) -->
+    <div id="wb-wirkungs-feedback-container"></div>
+
     <!-- Schnellhilfe prominent -->
     <div class="card" style="cursor:pointer;border:2px solid #DC2626;margin-bottom:20px;transition:transform 0.15s,box-shadow 0.15s;" onclick="WB_ACTIVE_TAB='schnellhilfe';renderWeiterbildung();" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(220,38,38,0.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
       <div class="card-body" style="padding:20px;">
@@ -1461,6 +1464,82 @@ function renderWBNachschlagewerke(container) {
         </div>
       `;
     } catch(e) { empfEl.innerHTML = ''; }
+
+    // Wirkungs-Feedback rendern
+    const fbEl = document.getElementById('wb-wirkungs-feedback-container');
+    if (fbEl) {
+      try {
+        const progress2 = getWBProgress();
+        const gelesen2 = progress2.geleseneModule || [];
+        if (gelesen2.length >= 2) {
+          const schueler = DB.getSchueler().filter(s => (s.status || 'aktiv') === 'aktiv');
+          const domainOutcomes = {};
+
+          for (const s of schueler) {
+            const notizen = DB.getNotizen(s.id).filter(n => n.kategorie === 'session' && n.soap?.ors?.total != null).sort((a, b) => a.datum.localeCompare(b.datum));
+            if (notizen.length < 4) continue;
+            const orsW = notizen.map(n => n.soap.ors.total);
+            const preO = (orsW[0] + orsW[1]) / 2;
+            const postO = (orsW[orsW.length - 2] + orsW[orsW.length - 1]) / 2;
+            const delta = postO - preO;
+
+            const screenings = DB.getScreenings(s.id).filter(sc => sc.abgeschlossen);
+            if (screenings.length === 0) continue;
+            const latest = screenings[0];
+            const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+            for (const d of domains) {
+              if (latest.ergebnisse?.[d.id] >= d.cutoff && !d.invertiert) {
+                if (!domainOutcomes[d.id]) domainOutcomes[d.id] = { label: d.label, deltas: [], hasPfad: false };
+                domainOutcomes[d.id].deltas.push(delta);
+              }
+            }
+          }
+
+          // Welche Domänen haben gelesene Lernpfade?
+          const lernpfade = typeof WB_LERNPFADE !== 'undefined' ? WB_LERNPFADE : [];
+          for (const [domain, mapping] of Object.entries(DOMAIN_LERNPFAD_MAP)) {
+            if (domainOutcomes[domain] && mapping.some(id => gelesen2.includes(id))) {
+              domainOutcomes[domain].hasPfad = true;
+              domainOutcomes[domain].pfadNames = mapping.filter(id => gelesen2.includes(id)).map(id => lernpfade.find(p => p.id === id)?.titel || id);
+            }
+          }
+
+          const mitPfad = Object.entries(domainOutcomes).filter(([, d]) => d.hasPfad && d.deltas.length >= 1);
+          if (mitPfad.length > 0) {
+            fbEl.innerHTML = `
+              <div class="card" style="border-left:4px solid #059669;margin-bottom:20px;">
+                <div class="card-header">
+                  <span>📊</span>
+                  <div class="card-title">Dein Lernfortschritt & Wirkung</div>
+                </div>
+                <div class="card-body" style="padding:10px 14px;">
+                  <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Zusammenhang zwischen gelesenen Modulen und Klienten-Outcomes (Korrelation, nicht Kausalität).</div>
+                  ${mitPfad.map(([domain, d]) => {
+                    const avgDelta = Math.round(d.deltas.reduce((a, b) => a + b, 0) / d.deltas.length * 10) / 10;
+                    const isPositive = avgDelta > 0;
+                    return `
+                      <div style="display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg-card, #F9FAFB);margin-bottom:6px;">
+                        <span style="font-size:18px;">${isPositive ? '📈' : '📉'}</span>
+                        <div style="flex:1;">
+                          <div style="font-size:12px;font-weight:600;">${d.pfadNames.join(', ')}</div>
+                          <div style="font-size:11px;color:${isPositive ? '#059669' : '#D97706'};">
+                            ${d.label}-Klienten: ORS ∅ ${avgDelta >= 0 ? '+' : ''}${avgDelta} (${d.deltas.length} ${d.deltas.length === 1 ? 'Klient' : 'Klienten'})
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          } else {
+            fbEl.innerHTML = '';
+          }
+        } else {
+          fbEl.innerHTML = '';
+        }
+      } catch(e) { fbEl.innerHTML = ''; }
+    }
   }, 0);
 }
 
@@ -6127,6 +6206,25 @@ function renderJustInTimeWissen(schuelerId) {
       </div>
     </div>
   `;
+}
+
+// ============================================================
+// PRAXIS-AKADEMIE — Material-Nutzungs-Tracking
+// ============================================================
+function getMaterialNutzung() {
+  try { return JSON.parse(localStorage.getItem('pathways_material_nutzung') || '[]'); }
+  catch(e) { return []; }
+}
+
+function trackMaterialNutzung(materialId, schuelerId, typ) {
+  const nutzung = getMaterialNutzung();
+  nutzung.push({
+    materialId,
+    schuelerId: schuelerId || null,
+    typ: typ || 'modul', // 'modul', 'arbeitsblatt', 'mikro'
+    datum: new Date().toISOString()
+  });
+  localStorage.setItem('pathways_material_nutzung', JSON.stringify(nutzung));
 }
 
 // ============================================================

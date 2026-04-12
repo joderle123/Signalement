@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function initApp() {
   migrateRoadmapsTo7Phasen();
+  restoreSidebarState();
   renderSidebar();
   showView('home');
 
@@ -380,6 +381,23 @@ function toggleMobileSidebar() {
   const backdrop = document.getElementById('sidebar-backdrop');
   sidebar.classList.toggle('mobile-open');
   backdrop.classList.toggle('visible');
+}
+
+function toggleSidebarCollapse() {
+  const sidebar = document.getElementById('sidebar');
+  const btn = document.getElementById('sidebar-collapse-btn');
+  const collapsed = sidebar.classList.toggle('sidebar-collapsed');
+  btn.textContent = collapsed ? '›' : '‹';
+  localStorage.setItem('pathways_sidebar_collapsed', collapsed ? '1' : '0');
+}
+
+function restoreSidebarState() {
+  if (localStorage.getItem('pathways_sidebar_collapsed') === '1') {
+    const sidebar = document.getElementById('sidebar');
+    const btn = document.getElementById('sidebar-collapse-btn');
+    if (sidebar) sidebar.classList.add('sidebar-collapsed');
+    if (btn) btn.textContent = '›';
+  }
 }
 
 // ---- Loading Overlay ----
@@ -7047,59 +7065,116 @@ function toggleHypothesenSort() {
 // ============================================================
 function openSchuelerModal(schuelerId = null) {
   const s = schuelerId ? DB.getSchuelerById(schuelerId) : null;
-  const titel = s ? 'Schüler bearbeiten' : 'Neuen Schüler anlegen';
+  const titel = s ? 'Klient bearbeiten' : 'Neuen Klienten anlegen';
+  const subtitle = s ? `${s.vorname} ${s.nachname}` : 'Erfasse die Grunddaten — alles Weitere folgt im Profil';
+  const risiko = s?.risiko || 'niedrig';
+  const initialen = s ? (s.vorname[0] || '') + (s.nachname[0] || '') : '';
 
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.id = 'schueler-modal';
-  overlay.innerHTML = `
-    <div class="modal">
-      <div class="modal-header">
-        <span>👤</span>
-        <div class="modal-title">${titel}</div>
-        <button class="modal-close" onclick="closeModal('schueler-modal')">✕</button>
+  // Remove existing
+  const existing = document.getElementById('schueler-panel-backdrop');
+  if (existing) existing.remove();
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'schueler-panel-backdrop';
+  backdrop.id = 'schueler-panel-backdrop';
+
+  backdrop.innerHTML = `
+    <div class="schueler-panel" id="schueler-panel" onclick="event.stopPropagation()">
+      <div class="sp-accent"></div>
+      <div class="sp-header">
+        <div>
+          <div class="sp-title">${escapeHtml(titel)}</div>
+          <div class="sp-subtitle">${escapeHtml(subtitle)}</div>
+        </div>
+        <button class="sp-close" onclick="closeSchuelerPanel()">&times;</button>
       </div>
-      <div class="modal-body">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Vorname *</label>
-            <input type="text" id="m-vorname" value="${s?.vorname || ''}" placeholder="Vorname">
+
+      <div class="sp-body">
+        <!-- Avatar -->
+        <div class="sp-avatar-area">
+          <div class="sp-avatar" id="sp-avatar">
+            ${s?.foto ? '<img src="' + s.foto + '" alt="">' : '<span>' + escapeHtml(initialen || '?') + '</span>'}
           </div>
-          <div class="form-group">
-            <label>Nachname *</label>
-            <input type="text" id="m-nachname" value="${s?.nachname || ''}" placeholder="Nachname">
+          <div class="sp-avatar-hint">${s ? 'Klicke auf das Profil um das Foto zu ändern' : 'Foto kann später im Profil hinzugefügt werden'}</div>
+        </div>
+
+        <!-- Form Fields -->
+        <div class="sp-fields">
+          <div class="sp-field-row">
+            <div class="sp-field">
+              <label class="sp-label">Vorname *</label>
+              <input type="text" id="m-vorname" class="sp-input" value="${escapeHtml(s?.vorname || '')}" placeholder="Max">
+            </div>
+            <div class="sp-field">
+              <label class="sp-label">Nachname *</label>
+              <input type="text" id="m-nachname" class="sp-input" value="${escapeHtml(s?.nachname || '')}" placeholder="Muster">
+            </div>
           </div>
-          <div class="form-group">
-            <label>Geburtsdatum</label>
-            <input type="date" id="m-geburtsdatum" value="${s?.geburtsdatum || ''}">
+          <div class="sp-field-row">
+            <div class="sp-field">
+              <label class="sp-label">Geburtsdatum</label>
+              <input type="date" id="m-geburtsdatum" class="sp-input" value="${s?.geburtsdatum || ''}">
+            </div>
+            <div class="sp-field">
+              <label class="sp-label">Klasse / Gruppe</label>
+              <input type="text" id="m-klasse" class="sp-input" value="${escapeHtml(s?.klasse || '')}" placeholder="z.B. Gruppe A">
+            </div>
           </div>
-          <div class="form-group">
-            <label>Klasse / Gruppe</label>
-            <input type="text" id="m-klasse" value="${s?.klasse || ''}" placeholder="z.B. Gruppe A">
+          <div class="sp-field">
+            <label class="sp-label">Eintrittsdatum</label>
+            <input type="date" id="m-eintrittsdatum" class="sp-input" value="${s?.eintrittsdatum || new Date().toISOString().split('T')[0]}">
           </div>
-          <div class="form-group">
-            <label>Eintrittsdatum</label>
-            <input type="date" id="m-eintrittsdatum" value="${s?.eintrittsdatum || ''}">
-          </div>
-          <div class="form-group">
-            <label>Risikoeinschätzung</label>
-            <select id="m-risiko">
-              <option value="niedrig" ${s?.risiko === 'niedrig' ? 'selected' : ''}>🟢 Niedrig</option>
-              <option value="mittel" ${s?.risiko === 'mittel' ? 'selected' : ''}>🟡 Mittel</option>
-              <option value="hoch" ${s?.risiko === 'hoch' ? 'selected' : ''}>🔴 Hoch</option>
-            </select>
+
+          <!-- Risk Pills -->
+          <div class="sp-field">
+            <label class="sp-label">Risikoeinschätzung</label>
+            <input type="hidden" id="m-risiko" value="${risiko}">
+            <div class="sp-risk-pills">
+              <button type="button" class="sp-risk-pill sp-risk-low ${risiko === 'niedrig' ? 'active' : ''}" onclick="selectRiskPill(this, 'niedrig')">
+                <span class="sp-risk-dot" style="background:#10B981;"></span> Niedrig
+              </button>
+              <button type="button" class="sp-risk-pill sp-risk-mid ${risiko === 'mittel' ? 'active' : ''}" onclick="selectRiskPill(this, 'mittel')">
+                <span class="sp-risk-dot" style="background:#F59E0B;"></span> Mittel
+              </button>
+              <button type="button" class="sp-risk-pill sp-risk-high ${risiko === 'hoch' ? 'active' : ''}" onclick="selectRiskPill(this, 'hoch')">
+                <span class="sp-risk-dot" style="background:#EF4444;"></span> Hoch
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('schueler-modal')">Abbrechen</button>
-        <button class="btn btn-primary" onclick="saveSchueler('${schuelerId || ''}')">Speichern</button>
-      </div>
-    </div>`;
 
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal('schueler-modal'); });
-  document.getElementById('m-vorname').focus();
+      <div class="sp-footer">
+        <button class="btn btn-secondary" onclick="closeSchuelerPanel()">Abbrechen</button>
+        <button class="btn btn-primary" onclick="saveSchueler('${schuelerId || ''}')" style="min-width:140px;">
+          ${s ? '💾 Aktualisieren' : '✨ Klient anlegen'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(backdrop);
+  backdrop.addEventListener('click', e => { if (e.target === backdrop) closeSchuelerPanel(); });
+  requestAnimationFrame(() => {
+    backdrop.classList.add('open');
+    document.getElementById('m-vorname')?.focus();
+  });
+}
+
+function closeSchuelerPanel() {
+  const backdrop = document.getElementById('schueler-panel-backdrop');
+  if (!backdrop) return;
+  const panel = document.getElementById('schueler-panel');
+  if (panel) panel.style.animation = 'spSlideOut 0.25s ease forwards';
+  backdrop.style.opacity = '0';
+  setTimeout(() => backdrop.remove(), 250);
+}
+
+function selectRiskPill(btn, value) {
+  document.querySelectorAll('.sp-risk-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const input = document.getElementById('m-risiko');
+  if (input) input.value = value;
 }
 
 function saveSchueler(schuelerId) {
@@ -7131,7 +7206,7 @@ function saveSchueler(schuelerId) {
     setTimeout(() => showOnboardingWizard(neu.id), 300);
   }
 
-  closeModal('schueler-modal');
+  closeSchuelerPanel();
   renderSidebar();
   if (APP.currentView === 'home') renderHome();
 }

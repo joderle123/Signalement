@@ -18,6 +18,7 @@
      SIDEBAR
      ============================================================ -->
 <aside id="sidebar" role="navigation" aria-label="Hauptnavigation">
+  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" onclick="toggleSidebarCollapse()" title="Sidebar ein-/ausklappen">‹</button>
   <div class="sidebar-header">
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">
@@ -35,7 +36,7 @@
 
   <nav class="sidebar-nav" aria-label="Hauptmenü">
     <div class="sidebar-section-label">Arbeitsbereich</div>
-    <div class="nav-item active" id="nav-home" onclick="showView('home')" role="button" tabindex="0" aria-current="page">
+    <div class="nav-item active" id="nav-home" onclick="showView('home')" role="button" tabindex="0" aria-current="page" data-tooltip="Dashboard">
       <span class="nav-item-icon" aria-hidden="true">🏠</span> Dashboard
     </div>
   </nav>
@@ -43,16 +44,16 @@
   <!-- Meine Orga -->
   <div class="sidebar-orga-nav">
     <div class="sidebar-section-label">Meine Orga</div>
-    <div class="nav-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0">
+    <div class="nav-item" id="nav-kalender" onclick="showView('kalender')" role="button" tabindex="0" data-tooltip="Kalender">
       <span class="nav-item-icon" aria-hidden="true">📅</span> Kalender
     </div>
-    <div class="nav-item" id="nav-zeiterfassung" onclick="showView('zeiterfassung')" role="button" tabindex="0">
+    <div class="nav-item" id="nav-zeiterfassung" onclick="showView('zeiterfassung')" role="button" tabindex="0" data-tooltip="Zeiterfassung">
       <span class="nav-item-icon" aria-hidden="true">⏱️</span> Zeiterfassung
     </div>
-    <div class="nav-item" id="nav-aufgaben" onclick="showView('aufgaben')" role="button" tabindex="0">
+    <div class="nav-item" id="nav-aufgaben" onclick="showView('aufgaben')" role="button" tabindex="0" data-tooltip="Aufgaben">
       <span class="nav-item-icon" aria-hidden="true">✅</span> Aufgaben
     </div>
-    <div class="nav-item" id="nav-notizen" onclick="showView('notizen')" role="button" tabindex="0">
+    <div class="nav-item" id="nav-notizen" onclick="showView('notizen')" role="button" tabindex="0" data-tooltip="Notizen">
       <span class="nav-item-icon" aria-hidden="true">📝</span> Notizen
     </div>
   </div>
@@ -60,10 +61,10 @@
   <!-- Wissen -->
   <div class="sidebar-ressourcen-nav">
     <div class="sidebar-section-label">Wissen</div>
-    <div class="nav-item" id="nav-bibliothek" onclick="showView('bibliothek')" role="button" tabindex="0">
+    <div class="nav-item" id="nav-bibliothek" onclick="showView('bibliothek')" role="button" tabindex="0" data-tooltip="Bibliothek">
       <span class="nav-item-icon" aria-hidden="true">📚</span> Bibliothek
     </div>
-    <div class="nav-item" id="nav-weiterbildung" onclick="showView('weiterbildung')" role="button" tabindex="0">
+    <div class="nav-item" id="nav-weiterbildung" onclick="showView('weiterbildung')" role="button" tabindex="0" data-tooltip="Weiterbildung">
       <span class="nav-item-icon" aria-hidden="true">🎓</span> Weiterbildung
     </div>
   </div>
@@ -105,13 +106,13 @@
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
       <div class="topbar-title">Dashboard</div>
+      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Suche oder springe zu...</span>
+        <kbd>⌘K</kbd>
+      </div>
       <div class="topbar-actions">
-        <div class="search-input">
-          <span style="color:var(--text-muted);font-size:14px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </span>
-          <input type="text" id="home-suche" placeholder="Suchen..." oninput="renderHome()" aria-label="Klienten durchsuchen">
-        </div>
+        <input type="text" id="home-suche" placeholder="Filter..." oninput="renderHome()" aria-label="Klienten filtern" class="topbar-filter-input">
         <button class="btn btn-primary" onclick="openSchuelerModal()">+ Neuer Klient</button>
       </div>
     </div>

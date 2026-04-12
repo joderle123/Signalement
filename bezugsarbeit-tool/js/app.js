@@ -7166,9 +7166,9 @@ function renderKalender() {
 
   schueler.forEach(s => {
     // Krisen-Daten: SOAP-Einträge mit Krise oder Risiko-rot-Wechsel
-    const protokolle = DB.getProtokolle(s.id);
+    const protokolle = DB.getNotizen(s.id).filter(n => n.soap);
     protokolle.forEach(p => {
-      if (p.krise || p.cssrsSchweregrad >= 3) {
+      if (p.krise || (p.soap && p.soap.cssrsSchweregrad >= 3)) {
         krisenDaten.add(p.datum);
       }
     });
@@ -7194,7 +7194,7 @@ function renderKalender() {
     const risiko = DB.getRisiko(s.id);
     const hatRot = risiko.some(r => r.wert === 'rot');
     if (!hatRot) return;
-    const protokolle = DB.getProtokolle(s.id).sort((a, b) => new Date(b.datum) - new Date(a.datum));
+    const protokolle = DB.getNotizen(s.id).filter(n => n.soap).sort((a, b) => new Date(b.datum) - new Date(a.datum));
     const letzteSitzung = protokolle.length > 0 ? new Date(protokolle[0].datum) : null;
     const tage = letzteSitzung ? Math.floor((heute - letzteSitzung) / (1000 * 60 * 60 * 24)) : 999;
     if (tage > 14) {
@@ -16796,7 +16796,7 @@ function calculateEngagementScore(schuelerId) {
   const sid = schuelerId || APP.currentSchuelerId;
   const kontakte = DB.getKontakte(sid).sort((a, b) => new Date(b.datum) - new Date(a.datum));
   const termine = DB.getTermine().filter(t => t.schuelerId === sid);
-  const protokolle = DB.getProtokolle(sid);
+  const protokolle = DB.getNotizen(sid).filter(n => n.soap);
 
   const heute = new Date();
   const result = { score: 0, stufe: 'gruen', label: 'Regelmässig', details: [] };

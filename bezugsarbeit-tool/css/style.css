@@ -3610,7 +3610,7 @@ select {
 }
 
 /* ========== Polyvagal Check-in (PVT) ========== */
-.pvt-grid {
+.pvt-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;

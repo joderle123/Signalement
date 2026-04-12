@@ -76,6 +76,7 @@ const APP = {
   wohlbefindenScore: null,
   protStimmung: null,
   protPVT: null,
+  _selectedPVTEnde: null,
 };
 
 // ---- Dirty-Tracking & Auto-Backup ----
@@ -3621,17 +3622,29 @@ function addProtokoll() {
   if (intTyp) intTyp.value = '';
   document.querySelectorAll('.ext-ereignis-cb').forEach(cb => cb.checked = false);
 
-  // Reset SRS
+  // Reset SRS (HTML defaults: value=7, total=28)
   ['relationship', 'goals', 'approach', 'overall'].forEach(id => {
     const slider = document.getElementById(`srs-${id}`);
-    if (slider) { slider.value = 5; }
+    if (slider) { slider.value = 7; }
     const valEl = document.getElementById(`srs-val-${id}`);
-    if (valEl) valEl.textContent = '5';
+    if (valEl) valEl.textContent = '7';
   });
   const srsTotal2 = document.getElementById('srs-total-zahl');
-  if (srsTotal2) srsTotal2.textContent = '20';
+  if (srsTotal2) srsTotal2.textContent = '28';
   const srsAlert2 = document.getElementById('srs-alert');
   if (srsAlert2) srsAlert2.style.display = 'none';
+
+  // Reset ORS (HTML defaults: value=5, total=20)
+  ['individual', 'interpersonal', 'social', 'overall'].forEach(id => {
+    const slider = document.getElementById(`ors-${id}`);
+    if (slider) { slider.value = 5; }
+    const valEl = document.getElementById(`ors-val-${id}`);
+    if (valEl) valEl.textContent = '5';
+  });
+  const orsTotal2 = document.getElementById('ors-total-zahl');
+  if (orsTotal2) orsTotal2.textContent = '20';
+  const orsAlert2 = document.getElementById('ors-alert');
+  if (orsAlert2) orsAlert2.style.display = 'none';
 
   renderNotizen();
   showToast('Protokoll gespeichert (SOAP)', 'success');

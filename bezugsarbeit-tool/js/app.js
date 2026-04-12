@@ -18447,17 +18447,28 @@ function saveSchnellnotiz() {
   const text = document.getElementById('schnellnotiz-text')?.value?.trim();
   const kategorie = document.getElementById('schnellnotiz-kategorie')?.value || 'beobachtung';
   if (!text) { showToast('Bitte Notiz eingeben', 'error'); return; }
-  if (!APP.currentSchuelerId) { showToast('Bitte zuerst einen Klienten auswählen', 'error'); return; }
 
-  DB.createNotiz({
-    schuelerId: APP.currentSchuelerId,
-    datum: new Date().toISOString().split('T')[0],
-    inhalt: text,
-    kategorie: kategorie,
-  });
+  if (APP.currentSchuelerId) {
+    // Mit Klient → als Notiz speichern
+    DB.createNotiz({
+      schuelerId: APP.currentSchuelerId,
+      datum: new Date().toISOString().split('T')[0],
+      inhalt: text,
+      kategorie: kategorie,
+    });
+  } else {
+    // Ohne Klient → als persönliche Aufgabe speichern
+    DB.addAufgabe({
+      text: text,
+      prioritaet: kategorie === 'wichtig' ? 'dringend' : 'normal',
+      faellig: '',
+      schuelerId: null,
+      erledigt: false
+    });
+  }
 
   toggleSchnellnotiz();
-  showToast('Schnellnotiz gespeichert', 'success');
+  showToast(APP.currentSchuelerId ? 'Notiz gespeichert' : 'Persönliche Aufgabe erstellt', 'success');
 }
 
 // ============================================================

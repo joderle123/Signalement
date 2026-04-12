@@ -18258,3 +18258,148 @@ function deleteKonferenzEintrag(id) {
   showToast('Konferenz gelöscht', '');
   renderKonferenzen();
 }
+
+// ============================================================
+// ZEITERFASSUNG
+// ============================================================
+const ZEIT_KATEGORIEN = {
+  sitzung: { icon: '💬', label: 'Sitzung', farbe: '#3B82F6' },
+  elternarbeit: { icon: '👨‍👩‍👧', label: 'Elternarbeit', farbe: '#8B5CF6' },
+  dokumentation: { icon: '📝', label: 'Dokumentation', farbe: '#6B7280' },
+  netzwerk: { icon: '🤝', label: 'Netzwerk', farbe: '#0EA5E9' },
+  supervision: { icon: '🎯', label: 'Supervision', farbe: '#F59E0B' },
+  weiterbildung: { icon: '📚', label: 'Weiterbildung', farbe: '#10B981' },
+  admin: { icon: '📋', label: 'Admin', farbe: '#9CA3AF' }
+};
+
+let ZEIT_FILTER_KAT = '';
+let ZEIT_MONAT = new Date().toISOString().slice(0, 7);
+
+function renderZeiterfassung() {
+  const container = document.getElementById('zeiterfassung-content');
+  if (!container) return;
+
+  const alleEintraege = DB.getZeit();
+  const monatEintraege = alleEintraege.filter(e => (e.datum || '').startsWith(ZEIT_MONAT));
+  const filtered = ZEIT_FILTER_KAT ? monatEintraege.filter(e => e.kategorie === ZEIT_FILTER_KAT) : monatEintraege;
+  const sorted = filtered.sort((a, b) => (b.datum || '').localeCompare(a.datum || ''));
+
+  const schueler = DB.getSchueler();
+  const heute = new Date().toISOString().split('T')[0];
+
+  // Statistiken
+  const gesamtMin = monatEintraege.reduce((s, e) => s + (parseInt(e.dauer) || 0), 0);
+  const gesamtH = Math.floor(gesamtMin / 60);
+  const gesamtM = gesamtMin % 60;
+  const katStats = {};
+  monatEintraege.forEach(e => {
+    const k = e.kategorie || 'admin';
+    katStats[k] = (katStats[k] || 0) + (parseInt(e.dauer) || 0);
+  });
+
+  // Monat-Label
+  const [mJ, mM] = ZEIT_MONAT.split('-');
+  const monatLabel = new Date(parseInt(mJ), parseInt(mM) - 1).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+
+  let html = '';
+
+  // Monats-Navigation
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">';
+  html += `<button class="btn btn-sm btn-secondary" onclick="navigateZeitMonat(-1)">← Vormonat</button>`;
+  html += `<span style="font-size:16px;font-weight:700;">${monatLabel}</span>`;
+  html += `<button class="btn btn-sm btn-secondary" onclick="navigateZeitMonat(1)">Nächster →</button>`;
+  html += '</div>';
+
+  // Statistik-Karten
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px;">';
+  html += `<div class="card"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--primary);">${gesamtH}h ${gesamtM}m</div><div style="font-size:11px;color:var(--text-muted);">Gesamt</div></div></div>`;
+  html += `<div class="card"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--text);">${monatEintraege.length}</div><div style="font-size:11px;color:var(--text-muted);">Einträge</div></div></div>`;
+
+  // Top-Kategorien
+  const topKats = Object.entries(katStats).sort((a, b) => b[1] - a[1]).slice(0, 2);
+  topKats.forEach(([k, min]) => {
+    const kat = ZEIT_KATEGORIEN[k] || ZEIT_KATEGORIEN.admin;
+    html += `<div class="card"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:20px;font-weight:800;color:${kat.farbe};">${Math.floor(min / 60)}h ${min % 60}m</div><div style="font-size:11px;color:var(--text-muted);">${kat.icon} ${kat.label}</div></div></div>`;
+  });
+  html += '</div>';
+
+  // Filter
+  html += '<div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">';
+  html += `<button class="btn btn-sm ${!ZEIT_FILTER_KAT ? 'btn-primary' : 'btn-secondary'}" onclick="ZEIT_FILTER_KAT='';renderZeiterfassung();">Alle</button>`;
+  Object.entries(ZEIT_KATEGORIEN).forEach(([k, v]) => {
+    const count = katStats[k] || 0;
+    if (count > 0 || k === ZEIT_FILTER_KAT) {
+      html += `<button class="btn btn-sm ${ZEIT_FILTER_KAT === k ? 'btn-primary' : 'btn-secondary'}" onclick="ZEIT_FILTER_KAT='${k}';renderZeiterfassung();">${v.icon} ${v.label}</button>`;
+    }
+  });
+  html += '</div>';
+
+  // Formular
+  html += '<div class="card" style="margin-bottom:16px;">';
+  html += '<div class="card-header"><span>➕</span><div class="card-title">Zeit erfassen</div></div>';
+  html += '<div class="card-body">';
+  html += '<div class="form-grid">';
+  html += `<div class="form-group"><label>Datum</label><input type="date" id="zeit-datum" value="${heute}"></div>`;
+  html += '<div class="form-group"><label>Dauer (Min.)</label><input type="number" id="zeit-dauer" min="1" max="480" placeholder="z.B. 45"></div>';
+  html += `<div class="form-group"><label>Kategorie</label><select id="zeit-kategorie">${Object.entries(ZEIT_KATEGORIEN).map(([k, v]) => `<option value="${k}">${v.icon} ${v.label}</option>`).join('')}</select></div>`;
+  html += `<div class="form-group"><label>Klient (optional)</label><select id="zeit-schueler"><option value="">— Kein Klient —</option>${schueler.map(s => `<option value="${s.id}">${escapeHtml(s.vorname)} ${escapeHtml(s.nachname)}</option>`).join('')}</select></div>`;
+  html += '<div class="form-group full"><label>Beschreibung</label><input type="text" id="zeit-beschreibung" placeholder="Was wurde gemacht?"></div>';
+  html += '</div>';
+  html += '<button class="btn btn-primary btn-sm" onclick="addZeitEintrag()" style="margin-top:8px;">⏱ Zeit speichern</button>';
+  html += '</div></div>';
+
+  // Liste
+  if (sorted.length > 0) {
+    html += '<div class="card">';
+    html += '<div class="card-header"><span>📋</span><div class="card-title">Einträge</div></div>';
+    html += '<div class="card-body">';
+    sorted.forEach(e => {
+      const kat = ZEIT_KATEGORIEN[e.kategorie] || ZEIT_KATEGORIEN.admin;
+      const schuelerName = e.schuelerId ? schueler.find(s => s.id === e.schuelerId) : null;
+      html += `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">`;
+      html += `<span style="font-size:10px;padding:2px 8px;background:${kat.farbe}15;color:${kat.farbe};border-radius:4px;font-weight:600;white-space:nowrap;">${kat.icon} ${kat.label}</span>`;
+      html += `<div style="flex:1;min-width:0;">`;
+      html += `<div style="font-size:12px;color:var(--text);">${escapeHtml(e.beschreibung || '-')}</div>`;
+      html += `<div style="font-size:10px;color:var(--text-muted);">${formatDatum(e.datum)}${schuelerName ? ' · ' + escapeHtml(schuelerName.vorname + ' ' + schuelerName.nachname) : ''}</div>`;
+      html += '</div>';
+      html += `<span style="font-weight:700;font-size:13px;color:var(--text);white-space:nowrap;">${e.dauer} Min.</span>`;
+      html += `<button class="btn-icon btn-sm" style="font-size:11px;" onclick="deleteZeitEintrag('${e.id}')">🗑</button>`;
+      html += '</div>';
+    });
+    html += '</div></div>';
+  } else {
+    html += renderEmptyState('⏱', 'Keine Einträge', 'Erfasse deine Arbeitszeit nach Kategorien.');
+  }
+
+  container.innerHTML = html;
+}
+
+function navigateZeitMonat(delta) {
+  const [y, m] = ZEIT_MONAT.split('-').map(Number);
+  const d = new Date(y, m - 1 + delta, 1);
+  ZEIT_MONAT = d.toISOString().slice(0, 7);
+  renderZeiterfassung();
+}
+
+function addZeitEintrag() {
+  const dauer = parseInt(document.getElementById('zeit-dauer')?.value);
+  const datum = document.getElementById('zeit-datum')?.value;
+  if (!dauer || dauer < 1 || !datum) { showToast('Bitte Datum und Dauer eingeben', 'error'); return; }
+
+  DB.addZeit({
+    schuelerId: document.getElementById('zeit-schueler')?.value || null,
+    datum: datum,
+    dauer: dauer,
+    kategorie: document.getElementById('zeit-kategorie')?.value || 'admin',
+    beschreibung: document.getElementById('zeit-beschreibung')?.value?.trim() || ''
+  });
+  showToast('Zeit gespeichert', 'success');
+  renderZeiterfassung();
+}
+
+function deleteZeitEintrag(id) {
+  if (!confirm('Zeiteintrag löschen?')) return;
+  DB.deleteZeit(id);
+  showToast('Zeiteintrag gelöscht', '');
+  renderZeiterfassung();
+}

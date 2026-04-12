@@ -6035,6 +6035,101 @@ function renderWirkungsnachweis(schuelerId) {
 }
 
 // ============================================================
+// PRAXIS-AKADEMIE — Just-in-Time Wissen im Klient-Dashboard
+// ============================================================
+function renderJustInTimeWissen(schuelerId) {
+  const el = document.getElementById('just-in-time-widget');
+  if (!el) return;
+
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) { el.innerHTML = ''; return; }
+
+  // Screening-Flaggen des Klienten
+  const screenings = DB.getScreenings(schuelerId).filter(sc => sc.abgeschlossen).sort((a, b) => (b.datum || '').localeCompare(a.datum || ''));
+  if (screenings.length === 0) { el.innerHTML = ''; return; }
+  const latest = screenings[0];
+  const domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+  const flagged = domains.filter(d => latest.ergebnisse?.[d.id] >= d.cutoff && !d.invertiert);
+  if (flagged.length === 0) { el.innerHTML = ''; return; }
+
+  const progress = getWBProgress();
+  const gelesen = progress.geleseneModule || [];
+
+  const empfehlungen = [];
+
+  for (const domain of flagged.slice(0, 3)) { // Max 3 Domänen
+    // 1. Mikro-Intervention
+    const mikros = typeof MIKRO_INTERVENTIONEN !== 'undefined' ? (MIKRO_INTERVENTIONEN[domain.id] || []) : [];
+    if (mikros.length > 0) {
+      const random = mikros[Math.floor(new Date().getDate() % mikros.length)]; // Deterministisch pro Tag
+      empfehlungen.push({
+        typ: 'mikro',
+        icon: '⚡',
+        titel: random.titel,
+        detail: `${random.dauer} | ${random.beschreibung.substring(0, 100)}...`,
+        domain: domain.label,
+        aktion: null
+      });
+    }
+
+    // 2. Arbeitsblatt
+    if (domain.worksheets && domain.worksheets.length > 0) {
+      const ws = domain.worksheets[0];
+      empfehlungen.push({
+        typ: 'arbeitsblatt',
+        icon: '📄',
+        titel: ws.replace('.html', '').replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()),
+        detail: `Arbeitsblatt für ${domain.label}`,
+        domain: domain.label,
+        aktion: `window.open('arbeitsblaetter/${ws}','_blank')`
+      });
+    }
+
+    // 3. Fachmodul (wenn nicht gelesen)
+    const relevantPfade = (DOMAIN_LERNPFAD_MAP[domain.id] || [])
+      .filter(id => !gelesen.includes(id))
+      .map(id => (typeof WB_LERNPFADE !== 'undefined' ? WB_LERNPFADE : []).find(p => p.id === id))
+      .filter(Boolean);
+    if (relevantPfade.length > 0) {
+      empfehlungen.push({
+        typ: 'modul',
+        icon: '🎓',
+        titel: relevantPfade[0].titel,
+        detail: `${relevantPfade[0].dauer} — Noch nicht gelesen`,
+        domain: domain.label,
+        aktion: `openLernpfad('${relevantPfade[0].id}')`
+      });
+    }
+  }
+
+  if (empfehlungen.length === 0) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:12px;border-left:4px solid #D97706;">
+      <div class="card-header" style="cursor:pointer;" onclick="this.parentElement.querySelector('.card-body').style.display=this.parentElement.querySelector('.card-body').style.display==='none'?'block':'none';">
+        <span>📚</span>
+        <div class="card-title">Für die nächste Sitzung mit ${s.vorname}</div>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">Praxis-Akademie</span>
+      </div>
+      <div class="card-body" style="padding:8px 12px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          ${empfehlungen.slice(0, 5).map(e => `
+            <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;background:var(--bg-card, #FFFBEB);${e.aktion ? 'cursor:pointer;' : ''}" ${e.aktion ? `onclick="${e.aktion}"` : ''}>
+              <span style="font-size:16px;flex-shrink:0;">${e.icon}</span>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:600;color:var(--text-primary, #1F2937);">${e.titel}</div>
+                <div style="font-size:10px;color:var(--text-muted, #6B7280);margin-top:1px;">${e.detail}</div>
+              </div>
+              <span style="font-size:9px;padding:2px 6px;border-radius:6px;background:#FDE68A;color:#92400E;white-space:nowrap;">${e.domain}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
 // PRAXIS-AKADEMIE — Lernprofil-Engine
 // ============================================================
 
@@ -8440,6 +8535,7 @@ function renderDashboard() {
   // Stufe 1b: Therapeutischer Zwilling — Sitzungs-Briefing + Muster-Radar
   renderSitzungsBriefing(APP.currentSchuelerId);
   renderMusterRadar(APP.currentSchuelerId);
+  renderJustInTimeWissen(APP.currentSchuelerId);
 
   // Stufe 2: Risiko-Monitoring
   renderRisikoWidget();

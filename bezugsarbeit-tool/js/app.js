@@ -2322,16 +2322,12 @@ const PHASE_TABS = {
   ],
   begleitung: [
     { id: 'dashboard', label: 'Heute' },
-    { id: 'fallformulierung', label: '5P-Analyse' },
-    { id: 'roadmap', label: 'Förderplan & Ziele' },
-    { id: 'themen', label: 'Themen & Sitzungen' },
-    { id: 'notizen', label: 'Notizen' },
-    { id: 'konferenzen', label: 'Konferenzen' }
+    { id: 'fallformulierung', label: 'Fallbild' },
+    { id: 'roadmap', label: 'Förderplan' },
+    { id: 'notizen', label: 'Sitzungen' }
   ],
   auswertung: [
-    { id: 'hypothesen-tab', label: 'Hypothesen' },
     { id: 'treatment-tab', label: 'Verlauf' },
-    { id: 'verlauf-tracker', label: 'Verlaufs-Tracker' },
     { id: 'berichte', label: 'Berichte' }
   ]
 };
@@ -2397,11 +2393,11 @@ function showProfilTab(tab) {
   }
 
   if (tab === 'dashboard') renderDashboard();
-  if (tab === 'roadmap') { renderRoadmap(); renderZiele(); renderScreeningZielVorschlaege(); }
-  if (tab === 'themen') { renderThemen(); renderSitzungenImThemenTab(); }
-  if (tab === 'notizen') renderNotizen();
+  if (tab === 'roadmap') { renderRoadmap(); renderZiele(); renderScreeningZielVorschlaege(); renderThemenImFoerderplan(); }
+  if (tab === 'themen') { renderThemen(); renderSitzungenImThemenTab(); } // legacy
+  if (tab === 'notizen') { renderNotizen(); renderKonferenzenInSitzungen(); }
   if (tab === 'staerken') renderStaerken();
-  if (tab === 'fallformulierung') renderFallformulierung();
+  if (tab === 'fallformulierung') { renderFallformulierung(); renderHypothesenImFallbild(); }
   if (tab === 'screening') renderScreeningEmbedded();
   if (tab === 'verhalten') renderVerhalten();
   if (tab === 'berichte') renderBerichte();
@@ -2411,7 +2407,7 @@ function showProfilTab(tab) {
   if (tab === 'bibliothek') renderBibliothek();
   if (tab === 'hypothesen-tab') renderHypothesenTab();
   if (tab === 'treatment-tab') renderTreatmentTab();
-  if (tab === 'verlauf-tracker') { renderVerlaufTracker(); renderRisikoTimeline(); }
+  if (tab === 'verlauf-tracker') { renderVerlaufTracker(); renderRisikoTimeline(); } // legacy fallback
   if (tab === 'kontaktlog') renderKontaktlog();
   if (tab === 'helfersystem') renderHelfersystem();
   if (tab === 'konferenzen') renderKonferenzen();
@@ -2797,6 +2793,105 @@ function renderHypothesenTab() {
   if (zeitContainer) {
     try { renderHypothesenZeitstrahl(APP.currentSchuelerId); } catch(e) { console.warn('Pathways:', e); }
   }
+}
+
+// Hypothesen direkt im Fallbild (unter 5P) rendern
+function renderHypothesenImFallbild() {
+  const container = document.getElementById('hypothesen-im-fallbild');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  // Hypothesen-Container dynamisch erzeugen
+  container.innerHTML = '<div style="border-top:2px solid #E5E7EB;padding-top:20px;">'
+    + '<h3 style="font-size:16px;margin:0 0 12px;color:#1F2937;">🔬 Klinische Hypothesen</h3>'
+    + '<div id="hypothesen-container"></div>'
+    + '<div id="hypothesen-zeitstrahl-container" style="margin-top:16px;"></div>'
+    + '</div>';
+
+  renderHypothesen(sid);
+  try { renderHypothesenZeitstrahl(sid); } catch(e) { console.warn('Pathways:', e); }
+}
+
+// Themen-Übersicht im Förderplan rendern
+function renderThemenImFoerderplan() {
+  const container = document.getElementById('themen-im-foerderplan');
+  if (!container) return;
+  const s = DB.getSchuelerById(APP.currentSchuelerId);
+  if (!s) return;
+  const topicStatus = s.topicStatus || {};
+
+  let html = '<div style="border-top:2px solid #E5E7EB;padding-top:20px;">'
+    + '<h3 style="font-size:16px;margin:0 0 12px;color:#1F2937;">📋 Themen & Arbeitsfelder</h3>';
+
+  html += THEMEN_KATEGORIEN.map(function(kat) {
+    const total = kat.themen.length;
+    const done = kat.themen.filter(function(t) { return topicStatus[t.id] === 'abgeschlossen'; }).length;
+    const active = kat.themen.filter(function(t) { return topicStatus[t.id] === 'in-bearbeitung'; }).length;
+    if (done === 0 && active === 0) return ''; // Nur relevante Kategorien zeigen
+
+    return '<div style="margin-bottom:12px;">'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+      + '<span style="width:28px;height:28px;border-radius:8px;background:' + kat.farbe + ';display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">' + renderIcon(kat.icon) + '</span>'
+      + '<strong style="font-size:14px;">' + kat.titel + '</strong>'
+      + '<span style="font-size:11px;color:#6B7280;">' + done + '/' + total + '</span>'
+      + '</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:6px;">'
+      + kat.themen.map(function(thema) {
+          var status = topicStatus[thema.id] || 'nicht-begonnen';
+          var bg = status === 'abgeschlossen' ? '#D1FAE5' : status === 'in-bearbeitung' ? '#DBEAFE' : '#F3F4F6';
+          var color = status === 'abgeschlossen' ? '#065F46' : status === 'in-bearbeitung' ? '#1E40AF' : '#9CA3AF';
+          var icon = status === 'abgeschlossen' ? '✓ ' : status === 'in-bearbeitung' ? '● ' : '';
+          return '<span onclick="openThemaPanel(\'' + kat.id + '\',\'' + thema.id + '\')" style="padding:4px 10px;background:' + bg + ';color:' + color + ';border-radius:16px;font-size:12px;cursor:pointer;transition:all 0.2s;">' + icon + thema.titel + '</span>';
+        }).join('')
+      + '</div></div>';
+  }).join('');
+
+  // Alle Themen anzeigen Button
+  html += '<div style="margin-top:8px;">'
+    + '<button class="btn btn-outline btn-sm" onclick="showProfilTab(\'themen\')" style="font-size:12px;">Alle Themen & Details anzeigen →</button>'
+    + '</div></div>';
+
+  container.innerHTML = html;
+}
+
+// Konferenzen im Sitzungen-Tab rendern
+function renderKonferenzenInSitzungen() {
+  const container = document.getElementById('konferenzen-in-sitzungen');
+  if (!container) return;
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+
+  const konferenzen = DB.getKonferenzen(sid).sort(function(a, b) { return (b.datum || '').localeCompare(a.datum || ''); });
+
+  if (konferenzen.length === 0) {
+    container.innerHTML = '<div style="border-top:2px solid #E5E7EB;padding-top:16px;">'
+      + '<details><summary style="font-size:14px;font-weight:600;color:#1F2937;cursor:pointer;">📎 Konferenzen & Hilfeplan</summary>'
+      + '<div style="padding:16px;text-align:center;color:#9CA3AF;font-size:13px;">Noch keine Konferenzen erfasst.'
+      + '<br><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="addKonferenz()">+ Konferenz erfassen</button></div>'
+      + '</details></div>';
+    return;
+  }
+
+  let html = '<div style="border-top:2px solid #E5E7EB;padding-top:16px;">'
+    + '<details><summary style="font-size:14px;font-weight:600;color:#1F2937;cursor:pointer;">📎 Konferenzen & Hilfeplan <span style="font-size:12px;font-weight:400;color:#6B7280;">(' + konferenzen.length + ')</span></summary>'
+    + '<div style="padding-top:12px;">'
+    + '<button class="btn btn-primary btn-sm" onclick="addKonferenz()" style="margin-bottom:12px;">+ Neue Konferenz</button>';
+
+  konferenzen.slice(0, 5).forEach(function(k) {
+    html += '<div style="padding:10px 12px;background:var(--bg-card,#fff);border:1px solid var(--border,#E5E7EB);border-radius:8px;margin-bottom:8px;">'
+      + '<div style="font-weight:600;font-size:13px;">' + (k.typ || 'Konferenz') + ' — ' + (k.datum || '') + '</div>'
+      + (k.teilnehmer ? '<div style="font-size:11px;color:#6B7280;margin-top:2px;">Teilnehmer: ' + k.teilnehmer + '</div>' : '')
+      + (k.notizen ? '<div style="font-size:12px;margin-top:4px;">' + k.notizen.substring(0, 100) + (k.notizen.length > 100 ? '...' : '') + '</div>' : '')
+      + '</div>';
+  });
+
+  if (konferenzen.length > 5) {
+    html += '<button class="btn btn-outline btn-sm" onclick="showPhase(\'begleitung\');setTimeout(function(){showSubTab(\'konferenzen\')},100);">Alle ' + konferenzen.length + ' Konferenzen →</button>';
+  }
+
+  html += '</div></details></div>';
+  container.innerHTML = html;
 }
 
 // ============================================================
@@ -3630,7 +3725,7 @@ function renderNotizKarte(notiz) {
   const inhaltText = (notiz.inhalt || '') + (soap ? [soap.subjektiv, soap.objektiv, soap.assessment, soap.plan].filter(Boolean).join(' ') : '');
   const hatSafetyFlag = safetyKeywords.test(inhaltText);
   const safetyBadge = hatSafetyFlag ? '<span style="font-size:11px;padding:1px 6px;border-radius:8px;background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;font-weight:600;">🚨 Safety</span>' : '';
-  const safetyBanner = hatSafetyFlag ? '<div style="padding:4px 8px;background:#FEF2F2;border:1px solid #FECACA;border-radius:4px;font-size:11px;color:#991B1B;margin-top:4px;">⚠️ Safety-relevanter Inhalt erkannt — <a href="#" onclick="showPhase(\'analyse\');setTimeout(()=>showSubTab(\'verlauf-tracker\'),100);return false;" style="color:#DC2626;font-weight:600;">Risiko-Check empfohlen</a></div>' : '';
+  const safetyBanner = hatSafetyFlag ? '<div style="padding:4px 8px;background:#FEF2F2;border:1px solid #FECACA;border-radius:4px;font-size:11px;color:#991B1B;margin-top:4px;">⚠️ Safety-relevanter Inhalt erkannt — <a href="#" onclick="showPhase(\'auswertung\');setTimeout(()=>showSubTab(\'treatment-tab\'),100);return false;" style="color:#DC2626;font-weight:600;">Verlauf prüfen</a></div>' : '';
 
   return `
     <div class="notiz-karte-v2" style="border-left-color:${hatSafetyFlag ? '#DC2626' : kat.farbe};">
@@ -3806,45 +3901,45 @@ function renderSoapVorschau() {
 // ---- SOAP-Vorlagen ----
 const SOAP_VORLAGEN = {
   erstgespraech: {
-    subjektiv: '• Anlass der Vorstellung:\n• Aktuelle Situation aus Sicht des Jugendlichen:\n• Erwartungen an die Zusammenarbeit:\n• Bisherige Erfahrungen mit Beratung/Therapie:',
-    objektiv: '• Erster Eindruck (Erscheinung, Kontaktverhalten):\n• Emotionale Grundstimmung:\n• Kooperationsbereitschaft:\n• Sprache und Kommunikation:',
-    assessment: '• Vorläufige Einschätzung der Problemlage:\n• Risikobewertung (Selbst-/Fremdgefährdung):\n• Ressourcen und Schutzfaktoren:\n• Dringlichkeit:',
-    plan: '• Vereinbarte Frequenz der Sitzungen:\n• Screening durchführen: ☐\n• Anamnese vervollständigen: ☐\n• Nächster Termin:\n• Ggf. Überweisung an:',
+    subjektiv: 'Anlass, Situation, Erwartungen:',
+    objektiv: 'Erster Eindruck, Stimmung, Kooperation:',
+    assessment: 'Einschätzung, Risiko, Ressourcen:',
+    plan: 'Frequenz, Screening ☐, nächster Termin:',
     setting: 'Einzelgespräch',
   },
   regulaer: {
-    subjektiv: '• Wie geht es dir seit letztem Mal?\n• Was ist seit der letzten Sitzung passiert?\n• Gibt es aktuelle Belastungen?\n• Was möchtest du heute besprechen?',
-    objektiv: '• Stimmung heute im Vergleich zur letzten Sitzung:\n• Beobachtetes Verhalten:\n• Reaktion auf Interventionen:\n• Nonverbale Signale:',
-    assessment: '• Fortschritt in Bezug auf Ziele:\n• Wirksamkeit der eingesetzten Methoden:\n• Veränderungen im Gesamtbild:\n• Anpassungsbedarf:',
-    plan: '• Vereinbarung für die Woche:\n• Hausaufgabe/Übung:\n• Thema nächste Sitzung:\n• Nächster Termin:',
+    subjektiv: 'Befinden seit letztem Mal, aktuelle Themen:',
+    objektiv: 'Stimmung, Verhalten, Reaktion auf Interventionen:',
+    assessment: 'Fortschritt, Wirksamkeit, Anpassungsbedarf:',
+    plan: 'Vereinbarung, nächstes Thema, Termin:',
     setting: 'Einzelgespräch',
   },
   krise: {
-    subjektiv: '• Auslöser der Krise:\n• Aktuelle Gefühlslage:\n• Suizidalität abgeklärt: ☐ Ja ☐ Nein\n• Selbstverletzung: ☐ Ja ☐ Nein\n• Sicherheitsgefühl (0-10):',
-    objektiv: '• Affektlage (aufgelöst/dissoziiert/aggressiv/...):\n• Vitalzeichen (Zittern, Hyperventilation, ...):\n• Realitätsprüfung:\n• Ansprechbarkeit/Kooperation:',
-    assessment: '• Risikobewertung: ☐ Niedrig ☐ Mittel ☐ Hoch ☐ Akut\n• Stabilisierung erreicht: ☐ Ja ☐ Teilweise ☐ Nein\n• Auslösende Faktoren:\n• Schutzfaktoren vorhanden:',
-    plan: '• Sicherheitsplan erstellt/aktualisiert: ☐\n• Eltern/Erziehungsberechtigte informiert: ☐\n• Fachstelle kontaktiert: ☐\n• Engmaschiger Folgetermin:\n• Notfallnummern besprochen: ☐',
+    subjektiv: 'Auslöser, Gefühlslage, Suizidalität ☐:',
+    objektiv: 'Affekt, Ansprechbarkeit, Kooperation:',
+    assessment: 'Risiko: ☐ Niedrig ☐ Mittel ☐ Hoch, Stabilisierung:',
+    plan: 'Sicherheitsplan ☐, Eltern informiert ☐, Folgetermin:',
     setting: 'Krisenintervention',
   },
   eltern: {
-    subjektiv: '• Anliegen der Eltern:\n• Beobachtungen zu Hause:\n• Sorgen und Wünsche:\n• Veränderungen seit letztem Gespräch:',
-    objektiv: '• Eltern-Kind-Dynamik:\n• Kooperationsbereitschaft der Eltern:\n• Übereinstimmung mit Sicht des Jugendlichen:\n• Familienressourcen:',
-    assessment: '• Einschätzung der familiären Situation:\n• Erziehungskompetenzen:\n• Unterstützungsbedarf:\n• Risiko- und Schutzfaktoren im Umfeld:',
-    plan: '• Vereinbarungen mit den Eltern:\n• Empfehlungen für zu Hause:\n• Nächstes Elterngespräch:\n• Ggf. Familienberatung empfohlen: ☐',
+    subjektiv: 'Anliegen, Beobachtungen zu Hause:',
+    objektiv: 'Eltern-Kind-Dynamik, Kooperation:',
+    assessment: 'Familiäre Situation, Unterstützungsbedarf:',
+    plan: 'Vereinbarungen, nächstes Gespräch:',
     setting: 'Elterngespräch',
   },
   abschluss: {
-    subjektiv: '• Rückblick des Jugendlichen auf die Zusammenarbeit:\n• Was hat geholfen?\n• Was hätte besser sein können?\n• Wie fühlt sich der Abschluss an?',
-    objektiv: '• Veränderungen seit Beginn der Begleitung:\n• Erreichung der vereinbarten Ziele:\n• Aktuelle Stabilität:\n• Verbleibende Risikofaktoren:',
-    assessment: '• Gesamteinschätzung des Verlaufs:\n• Prognose:\n• Verbleibender Unterstützungsbedarf:\n• Empfehlung für weiterführende Maßnahmen:',
-    plan: '• Nachsorge-Vereinbarung:\n• Notfallplan bei Rückfall:\n• Übergabe an: ☐ Niemand ☐ Fachstelle ☐ Therapeut\n• Abschlussbericht erstellt: ☐',
+    subjektiv: 'Rückblick, was hat geholfen:',
+    objektiv: 'Veränderungen seit Beginn, Zielerreichung:',
+    assessment: 'Gesamteinschätzung, Prognose:',
+    plan: 'Nachsorge, Übergabe an:',
     setting: 'Einzelgespräch',
   },
   verlauf: {
-    subjektiv: '• Allgemeines Befinden:\n• Veränderungen bemerkt?\n• Zufriedenheit mit der Arbeit (0-10):',
-    objektiv: '• Vergleich mit Baseline-Screening:\n• Verhaltensbeobachtungen:\n• Wohlbefinden-Trend:',
-    assessment: '• Zielerreichung:\n• Anpassung der Ziele notwendig: ☐\n• Phase im Förderplan:\n• Wirksamkeit der Interventionen:',
-    plan: '• Ziele anpassen: ☐\n• Neue Themen aufnehmen: ☐\n• Re-Screening durchführen: ☐\n• Nächste Verlaufskontrolle in ___ Wochen',
+    subjektiv: 'Befinden, Veränderungen bemerkt:',
+    objektiv: 'Verhalten, Trend:',
+    assessment: 'Zielerreichung, Anpassung nötig ☐:',
+    plan: 'Ziele anpassen ☐, Re-Screening ☐:',
     setting: 'Einzelgespräch',
   },
 };
@@ -4358,7 +4453,7 @@ function renderScreeningZielVorschlaege() {
   if (screenings.length === 0) { container.innerHTML = ''; return; }
   const latest = screenings.sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
   const s = DB.getSchuelerById(sid);
-  const name = s ? s.name : '[Name]';
+  const name = s ? (s.vorname || s.nachname || 'der Jugendliche') : 'der Jugendliche';
 
   const vorschlaege = [];
   for (const domId in latest.scores) {
@@ -4371,15 +4466,40 @@ function renderScreeningZielVorschlaege() {
   }
   if (vorschlaege.length === 0) { container.innerHTML = ''; return; }
 
+  // Sortiere nach höchstem Score (relativ zum Cutoff) — die dringendsten zuerst
+  vorschlaege.sort((a, b) => {
+    const scoreA = latest.scores[a.domain.id] || 0;
+    const scoreB = latest.scores[b.domain.id] || 0;
+    return scoreB - scoreA;
+  });
+
+  const MAX_VISIBLE = 5;
+  const sichtbar = vorschlaege.slice(0, MAX_VISIBLE);
+  const restAnzahl = vorschlaege.length - MAX_VISIBLE;
+
   container.innerHTML = '<div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:10px;padding:12px;margin-bottom:12px;">'
-    + '<div style="font-size:12px;font-weight:600;color:#1D4ED8;margin-bottom:8px;">💡 Zielvorschläge aus Screening-Ergebnissen</div>'
-    + '<div style="display:flex;flex-direction:column;gap:4px;">'
-    + vorschlaege.map(v =>
+    + '<div style="font-size:12px;font-weight:600;color:#1D4ED8;margin-bottom:8px;">💡 Top-Zielvorschläge aus Screening <span style="font-weight:400;color:#6B7280;">(' + vorschlaege.length + ' total)</span></div>'
+    + '<div id="ziel-vorschlaege-liste" style="display:flex;flex-direction:column;gap:4px;">'
+    + sichtbar.map(v =>
       '<button class="btn btn-outline btn-sm" style="font-size:11px;text-align:left;white-space:normal;line-height:1.4;padding:6px 10px;border-color:' + v.domain.farbe + '40;" onclick="quickAddZiel(\'' + v.text.replace(/'/g, "\\'") + '\')">'
       + '<span style="color:' + v.domain.farbe + ';font-weight:600;">' + v.domain.icon + ' ' + v.domain.label + ':</span> '
       + v.text + '</button>'
     ).join('')
+    + (restAnzahl > 0 ? '<button class="btn btn-outline btn-sm" style="font-size:11px;color:#6B7280;" onclick="zeigeAlleZielvorschlaege()">+ ' + restAnzahl + ' weitere anzeigen</button>' : '')
     + '</div></div>';
+
+  // Speichere alle Vorschläge für "Mehr anzeigen"
+  window._alleZielVorschlaege = vorschlaege;
+}
+
+function zeigeAlleZielvorschlaege() {
+  const liste = document.getElementById('ziel-vorschlaege-liste');
+  if (!liste || !window._alleZielVorschlaege) return;
+  liste.innerHTML = window._alleZielVorschlaege.map(v =>
+    '<button class="btn btn-outline btn-sm" style="font-size:11px;text-align:left;white-space:normal;line-height:1.4;padding:6px 10px;border-color:' + v.domain.farbe + '40;" onclick="quickAddZiel(\'' + v.text.replace(/'/g, "\\'") + '\')">'
+    + '<span style="color:' + v.domain.farbe + ';font-weight:600;">' + v.domain.icon + ' ' + v.domain.label + ':</span> '
+    + v.text + '</button>'
+  ).join('');
 }
 
 function quickAddZiel(text) {
@@ -6768,7 +6888,7 @@ function renderTreatmentResponse(schuelerId) {
     <div style="font-size:13px;font-weight:700;color:#DC2626;">⚠️ Plötzliche Verschlechterung erkannt</div>
     <div style="font-size:12px;color:#374151;margin-top:4px;">SRS fiel von <strong>${scAlert.vonSrs}</strong> auf <strong>${scAlert.nachSrs}</strong> (${scAlert.diff} Punkte) in Sitzung #${scAlert.sitzungNr}${scAlert.datum ? ' am ' + formatDatum(scAlert.datum) : ''}.</div>
     <div style="font-size:11px;color:#991B1B;margin-top:6px;font-weight:500;">Empfehlung: Risiko-Check durchführen und therapeutische Beziehung reflektieren.</div>
-    <button class="btn btn-xs" style="margin-top:6px;background:#EF4444;color:#fff;border:none;" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
+    <button class="btn btn-xs" style="margin-top:6px;background:#EF4444;color:#fff;border:none;" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('treatment-tab'),100);">Verlauf prüfen</button>
   </div>` : '';
 
   el.innerHTML = `
@@ -8927,7 +9047,7 @@ function renderSafetyBanner(containerId) {
     </div>`).join('')}
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn btn-xs" style="background:${bannerFarbe};color:#fff;border:none;" onclick="showPhase('begleitung');setTimeout(()=>showSubTab('themen'),100);setTimeout(()=>quickStartSession('krisenintervention'),300);">Krisenintervention starten</button>
-      <button class="btn btn-xs" style="background:#fff;color:${bannerFarbe};border:1px solid ${bannerFarbe};" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('verlauf-tracker'),100);">Risiko-Check öffnen</button>
+      <button class="btn btn-xs" style="background:#fff;color:${bannerFarbe};border:1px solid ${bannerFarbe};" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('treatment-tab'),100);">Verlauf prüfen</button>
     </div>
   </div>`;
   container.innerHTML = html;

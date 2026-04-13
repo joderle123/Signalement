@@ -436,15 +436,16 @@
             </div>
           </details>
         </div>
+        <div id="themen-im-foerderplan" style="margin-top:24px;"></div>
       </div>
 
-      <!-- THEMEN & SITZUNGEN (zusammengelegt) -->
+      <!-- THEMEN & SITZUNGEN (legacy, wird über Förderplan erreicht) -->
       <div class="profil-tab-content" data-tab="themen">
         <div id="themen-container"></div>
         <div id="sitzungen-im-themen-tab" style="margin-top:24px;"></div>
       </div>
 
-      <!-- NOTIZEN (kein eigener Tab, aber über showProfilTab('notizen') erreichbar) -->
+      <!-- SITZUNGEN (Notizen + Konferenzen zusammen) -->
       <div class="profil-tab-content" data-tab="notizen">
 
         <!-- Modus-Toggle -->
@@ -858,6 +859,7 @@
         </div>
 
         <div id="notizen-liste"></div>
+        <div id="konferenzen-in-sitzungen" style="margin-top:24px;"></div>
       </div>
 
       <!-- Ziele jetzt in Förderplan integriert -->
@@ -870,12 +872,13 @@
         <div id="staerken-container"></div>
       </div>
 
-      <!-- 5P-FALLFORMULIERUNG -->
+      <!-- FALLBILD (5P + Hypothesen) -->
       <div class="profil-tab-content" data-tab="fallformulierung">
         <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
           <button onclick="showToolLegitimation('fivep')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;">📚 Was ist die 5P-Fallformulierung?</button>
         </div>
         <div id="fallformulierung-container"></div>
+        <div id="hypothesen-im-fallbild" style="margin-top:24px;"></div>
       </div>
 
       <!-- Wiki jetzt als Floating Panel -->

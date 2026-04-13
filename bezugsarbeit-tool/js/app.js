@@ -19203,7 +19203,7 @@ const NOTIZ_FARBEN = [
   { id: 'weiss', label: 'Weiss', bg: '#FFFFFF', border: '#E5E7EB', dark_bg: '#1F2937', dark_border: '#4B5563' },
 ];
 
-const NOTIZ_KATEGORIEN = [
+const PERS_NOTIZ_KATEGORIEN = [
   { id: 'allgemein', label: 'Allgemein', icon: '📝' },
   { id: 'ideen', label: 'Ideen', icon: '💡' },
   { id: 'meeting', label: 'Meeting', icon: '👥' },
@@ -19227,7 +19227,7 @@ function renderPersNotizen() {
   // Category filter tabs
   html += '<div class="pn-filter-bar">';
   html += '<button class="pn-filter-btn ' + (NOTIZEN_KATEGORIE === 'alle' ? 'active' : '') + '" onclick="NOTIZEN_KATEGORIE=\'alle\';renderPersNotizen();">Alle (' + alle.length + ')</button>';
-  for (const kat of NOTIZ_KATEGORIEN) {
+  for (const kat of PERS_NOTIZ_KATEGORIEN) {
     const cnt = alle.filter(n => n.kategorie === kat.id).length;
     html += '<button class="pn-filter-btn ' + (NOTIZEN_KATEGORIE === kat.id ? 'active' : '') + '" onclick="NOTIZEN_KATEGORIE=\'' + kat.id + '\';renderPersNotizen();">' + kat.icon + ' ' + kat.label + (cnt > 0 ? ' (' + cnt + ')' : '') + '</button>';
   }
@@ -19244,7 +19244,7 @@ function renderPersNotizen() {
     html += '<div class="pn-grid" id="pn-grid">';
     for (const notiz of gefiltert) {
       const farbe = NOTIZ_FARBEN.find(f => f.id === notiz.farbe) || NOTIZ_FARBEN[0];
-      const kat = NOTIZ_KATEGORIEN.find(k => k.id === notiz.kategorie) || NOTIZ_KATEGORIEN[0];
+      const kat = PERS_NOTIZ_KATEGORIEN.find(k => k.id === notiz.kategorie) || PERS_NOTIZ_KATEGORIEN[0];
       const preview = escapeHtml((notiz.text || '').substring(0, 200));
       const datum = notiz.geaendert ? new Date(notiz.geaendert).toLocaleDateString('de-LU', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
       html += '<div class="pn-card" style="background:' + farbe.bg + ';border-color:' + farbe.border + ';" onclick="editPersNotiz(\'' + notiz.id + '\')">';
@@ -19283,7 +19283,7 @@ function openNotizEditor(notiz) {
     '<button type="button" class="pn-farb-btn ' + (notiz.farbe === f.id ? 'active' : '') + '" data-farbe="' + f.id + '" style="background:' + f.bg + ';border-color:' + f.border + ';" onclick="selectNotizFarbe(this)" title="' + f.label + '"></button>'
   ).join('');
 
-  let katOptionen = NOTIZ_KATEGORIEN.map(k =>
+  let katOptionen = PERS_NOTIZ_KATEGORIEN.map(k =>
     '<option value="' + k.id + '" ' + (notiz.kategorie === k.id ? 'selected' : '') + '>' + k.icon + ' ' + k.label + '</option>'
   ).join('');
 

@@ -38,10 +38,7 @@
         <span class="rail-icon" aria-hidden="true">📅</span>
         <span class="rail-dot"></span>
       </div>
-      <div class="rail-item" id="nav-zeiterfassung" onclick="showView('zeiterfassung')" role="button" tabindex="0" data-tooltip="Zeiterfassung">
-        <span class="rail-icon" aria-hidden="true">⏱️</span>
-        <span class="rail-dot"></span>
-      </div>
+      <!-- Zeiterfassung entfernt -->
       <div class="rail-item" id="nav-aufgaben" onclick="showView('aufgaben')" role="button" tabindex="0" data-tooltip="Aufgaben">
         <span class="rail-icon" aria-hidden="true">✅</span>
         <span class="rail-dot"></span>
@@ -101,9 +98,7 @@
       <div class="fp-nav-item" onclick="showView('kalender')">
         <span class="fp-nav-icon">📅</span> Kalender
       </div>
-      <div class="fp-nav-item" onclick="showView('zeiterfassung')">
-        <span class="fp-nav-icon">⏱️</span> Zeiterfassung
-      </div>
+      <!-- Zeiterfassung entfernt -->
       <div class="fp-nav-item" onclick="showView('aufgaben')">
         <span class="fp-nav-icon">✅</span> Aufgaben
       </div>
@@ -838,21 +833,7 @@
     </div>
   </div>
 
-  <!-- ---- ZEITERFASSUNG VIEW ---- -->
-  <div class="view" id="view-zeiterfassung">
-    <div class="topbar">
-      <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
-      <div class="topbar-breadcrumbs" id="bc-zeiterfassung"></div>
-      <div class="topbar-cmd-trigger" onclick="renderCommandPalette()" title="Cmd+K">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span>Suche oder springe zu...</span><kbd>⌘K</kbd>
-      </div>
-      <div class="topbar-actions"></div>
-    </div>
-    <div class="content" id="zeiterfassung-content">
-      <!-- Wird von renderZeiterfassung() gefüllt -->
-    </div>
-  </div>
+  <!-- Zeiterfassung VIEW entfernt -->
 
   <!-- ---- AUFGABEN VIEW ---- -->
   <div class="view" id="view-aufgaben">

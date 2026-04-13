@@ -542,7 +542,7 @@ function migrateRoadmapsTo7Phasen() {
 // ============================================================
 // Section color map
 const SECTION_COLORS = {
-  home: '#6366F1', kalender: '#10B981', zeiterfassung: '#F59E0B',
+  home: '#6366F1', kalender: '#10B981',
   aufgaben: '#8B5CF6', notizen: '#EC4899', bibliothek: '#0EA5E9',
   weiterbildung: '#14B8A6', screening: '#EF4444', profil: '#6366F1'
 };
@@ -590,10 +590,6 @@ function showView(view, schuelerId = null) {
     document.getElementById('view-screening').classList.add('active');
     updateSidebarActive(schuelerId);
     renderScreening(schuelerId);
-  } else if (view === 'zeiterfassung') {
-    document.getElementById('view-zeiterfassung').classList.add('active');
-    document.getElementById('nav-zeiterfassung').classList.add('active');
-    renderZeiterfassung();
   } else if (view === 'aufgaben') {
     document.getElementById('view-aufgaben').classList.add('active');
     document.getElementById('nav-aufgaben').classList.add('active');
@@ -613,7 +609,7 @@ function showView(view, schuelerId = null) {
 
 function updateFpNavActive(view) {
   const VIEW_LABELS = {
-    home: 'Dashboard', kalender: 'Kalender', zeiterfassung: 'Zeiterfassung',
+    home: 'Dashboard', kalender: 'Kalender',
     aufgaben: 'Aufgaben', notizen: 'Notizen', bibliothek: 'Bibliothek',
     weiterbildung: 'Weiterbildung'
   };
@@ -629,7 +625,6 @@ function updateFpNavActive(view) {
 const VIEW_META = {
   home:           { icon: '🏠', label: 'Dashboard' },
   kalender:       { icon: '📅', label: 'Kalender' },
-  zeiterfassung:  { icon: '⏱️', label: 'Zeiterfassung' },
   aufgaben:       { icon: '✅', label: 'Aufgaben' },
   notizen:        { icon: '📝', label: 'Notizen' },
   bibliothek:     { icon: '📚', label: 'Bibliothek' },
@@ -878,11 +873,6 @@ function renderHome() {
             <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#A78BFA,#8B5CF6);">✅</div>
             <div class="onboarding-feature-title">Aufgaben</div>
             <div class="onboarding-feature-desc">To-Dos tracken, Prioritaten setzen, nichts vergessen.</div>
-          </div>
-          <div class="onboarding-feature-card" onclick="showView('zeiterfassung')">
-            <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#FCD34D,#F59E0B);">⏱️</div>
-            <div class="onboarding-feature-title">Zeiterfassung</div>
-            <div class="onboarding-feature-desc">Arbeitszeit erfassen, Kategorien zuordnen, exportieren.</div>
           </div>
           <div class="onboarding-feature-card" onclick="showView('bibliothek')">
             <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#38BDF8,#0EA5E9);">📚</div>
@@ -18988,88 +18978,76 @@ function renderAufgaben() {
   if (!container) return;
 
   const alle = DB.getAufgaben();
-  const schueler = DB.getSchueler();
   const heute = new Date().toISOString().split('T')[0];
 
-  const offen = alle.filter(a => !a.erledigt);
-  const erledigt = alle.filter(a => a.erledigt);
-  const filtered = AUFGABEN_FILTER === 'offen' ? offen : AUFGABEN_FILTER === 'erledigt' ? erledigt : alle;
-  const sorted = filtered.sort((a, b) => {
-    if (!a.erledigt && b.erledigt) return -1;
-    if (a.erledigt && !b.erledigt) return 1;
+  const offen = alle.filter(a => !a.erledigt).sort((a, b) => {
     const priOrd = { dringend: 0, normal: 1, warten: 2 };
     return (priOrd[a.prioritaet] || 1) - (priOrd[b.prioritaet] || 1);
   });
+  const erledigt = alle.filter(a => a.erledigt).sort((a, b) => new Date(b.erledigtAm || 0) - new Date(a.erledigtAm || 0));
 
   let html = '';
 
-  // Stats
-  const ueberfaellig = offen.filter(a => a.faellig && a.faellig < heute).length;
-  html += `<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-    <div class="card" style="flex:1;min-width:100px;"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:22px;font-weight:800;color:var(--primary);">${offen.length}</div><div style="font-size:11px;color:var(--text-muted);">Offen</div></div></div>
-    <div class="card" style="flex:1;min-width:100px;"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#EF4444;">${ueberfaellig}</div><div style="font-size:11px;color:var(--text-muted);">Überfällig</div></div></div>
-    <div class="card" style="flex:1;min-width:100px;"><div class="card-body" style="padding:12px;text-align:center;"><div style="font-size:22px;font-weight:800;color:#10B981;">${erledigt.length}</div><div style="font-size:11px;color:var(--text-muted);">Erledigt</div></div></div>
+  // Quick-Add (einzeilig, Todoist-Style)
+  html += `<div style="display:flex;gap:8px;margin-bottom:20px;">
+    <input type="text" id="aufgabe-text" placeholder="Neue Aufgabe..." style="flex:1;padding:12px 16px;border:1px solid var(--border,#E5E7EB);border-radius:12px;font-size:14px;background:var(--bg-card,#fff);" onkeydown="if(event.key==='Enter')addAufgabeEintrag()">
+    <button class="btn btn-primary" onclick="addAufgabeEintrag()" style="padding:12px 20px;border-radius:12px;white-space:nowrap;">+ Aufgabe</button>
   </div>`;
 
-  // Filter
-  html += `<div style="display:flex;gap:6px;margin-bottom:14px;">
-    <button class="btn btn-sm ${AUFGABEN_FILTER === 'offen' ? 'btn-primary' : 'btn-secondary'}" onclick="AUFGABEN_FILTER='offen';renderAufgaben();">Offen (${offen.length})</button>
-    <button class="btn btn-sm ${AUFGABEN_FILTER === 'erledigt' ? 'btn-primary' : 'btn-secondary'}" onclick="AUFGABEN_FILTER='erledigt';renderAufgaben();">Erledigt (${erledigt.length})</button>
-    <button class="btn btn-sm ${AUFGABEN_FILTER === 'alle' ? 'btn-primary' : 'btn-secondary'}" onclick="AUFGABEN_FILTER='alle';renderAufgaben();">Alle</button>
-  </div>`;
-
-  // Formular
-  html += '<div class="card" style="margin-bottom:16px;">';
-  html += '<div class="card-header"><span>➕</span><div class="card-title">Neue Aufgabe</div></div>';
-  html += '<div class="card-body">';
-  html += '<div class="form-grid">';
-  html += '<div class="form-group" style="flex:2;"><label>Aufgabe *</label><input type="text" id="aufgabe-text" placeholder="Was muss erledigt werden?"></div>';
-  html += `<div class="form-group"><label>Priorität</label><select id="aufgabe-prio">${Object.entries(AUFGABE_PRIORITAETEN).map(([k, v]) => `<option value="${k}">${v.icon} ${v.label}</option>`).join('')}</select></div>`;
-  html += '<div class="form-group"><label>Fällig bis</label><input type="date" id="aufgabe-faellig"></div>';
-  html += `<div class="form-group"><label>Klient (optional)</label><select id="aufgabe-schueler"><option value="">— Keiner —</option>${schueler.map(s => `<option value="${s.id}">${escapeHtml(s.vorname)} ${escapeHtml(s.nachname)}</option>`).join('')}</select></div>`;
-  html += '</div>';
-  html += '<button class="btn btn-primary btn-sm" onclick="addAufgabeEintrag()" style="margin-top:8px;">✅ Aufgabe speichern</button>';
-  html += '</div></div>';
-
-  // Liste
-  if (sorted.length > 0) {
-    html += '<div class="card"><div class="card-body" style="padding:8px;">';
-    sorted.forEach(a => {
+  // Offene Aufgaben
+  if (offen.length > 0) {
+    html += '<div style="display:flex;flex-direction:column;gap:0;">';
+    offen.forEach(a => {
       const prio = AUFGABE_PRIORITAETEN[a.prioritaet] || AUFGABE_PRIORITAETEN.normal;
-      const ueberfaelligItem = !a.erledigt && a.faellig && a.faellig < heute;
-      const schuelerName = a.schuelerId ? schueler.find(s => s.id === a.schuelerId) : null;
-      html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 8px;border-bottom:1px solid var(--border);${a.erledigt ? 'opacity:0.5;' : ''}">
-        <input type="checkbox" ${a.erledigt ? 'checked' : ''} onchange="toggleAufgabe('${a.id}')" style="width:18px;height:18px;cursor:pointer;accent-color:${prio.farbe};">
+      const ueberfaellig = a.faellig && a.faellig < heute;
+      html += `<div style="display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--border,#F3F4F6);">
+        <input type="checkbox" onchange="toggleAufgabe('${a.id}')" style="width:18px;height:18px;cursor:pointer;accent-color:${prio.farbe};flex-shrink:0;">
         <div style="flex:1;min-width:0;">
-          <div style="font-size:13px;color:var(--text);${a.erledigt ? 'text-decoration:line-through;' : ''}">${escapeHtml(a.text)}</div>
-          <div style="font-size:10px;color:var(--text-muted);display:flex;gap:8px;margin-top:2px;">
-            <span>${prio.icon} ${prio.label}</span>
-            ${a.faellig ? `<span style="${ueberfaelligItem ? 'color:#EF4444;font-weight:600;' : ''}">📅 ${formatDatum(a.faellig)}</span>` : ''}
-            ${schuelerName ? `<span>👤 ${escapeHtml(schuelerName.vorname)}</span>` : ''}
-          </div>
+          <div style="font-size:14px;color:var(--text,#1F2937);">${escapeHtml(a.text)}</div>
+          ${a.faellig ? `<span style="font-size:11px;${ueberfaellig ? 'color:#EF4444;font-weight:600;' : 'color:var(--text-muted,#9CA3AF);'}">${ueberfaellig ? 'Überfällig: ' : ''}${formatDatum(a.faellig)}</span>` : ''}
         </div>
-        <button class="btn-icon btn-sm" style="font-size:11px;" onclick="deleteAufgabeEintrag('${a.id}')">🗑</button>
+        <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${prio.farbe}15;color:${prio.farbe};font-weight:600;flex-shrink:0;">${prio.label}</span>
+        <button style="background:none;border:none;cursor:pointer;color:#D1D5DB;font-size:13px;padding:4px;" onclick="deleteAufgabeEintrag('${a.id}')">✕</button>
       </div>`;
     });
-    html += '</div></div>';
+    html += '</div>';
   } else {
-    html += renderEmptyState('✅', 'Keine Aufgaben', AUFGABEN_FILTER === 'offen' ? 'Alles erledigt! Erstelle neue Aufgaben oben.' : 'Keine Aufgaben in dieser Kategorie.');
+    html += `<div style="text-align:center;padding:40px 20px;color:var(--text-muted,#9CA3AF);">
+      <div style="font-size:13px;">Keine offenen Aufgaben</div>
+    </div>`;
+  }
+
+  // Erledigte (collapsed)
+  if (erledigt.length > 0) {
+    html += `<details style="margin-top:16px;">
+      <summary style="font-size:12px;font-weight:600;color:var(--text-muted,#9CA3AF);cursor:pointer;padding:8px 0;">Erledigt (${erledigt.length})</summary>
+      <div style="display:flex;flex-direction:column;gap:0;">`;
+    erledigt.forEach(a => {
+      html += `<div style="display:flex;align-items:center;gap:12px;padding:8px 4px;border-bottom:1px solid var(--border,#F3F4F6);opacity:0.5;">
+        <input type="checkbox" checked onchange="toggleAufgabe('${a.id}')" style="width:16px;height:16px;cursor:pointer;flex-shrink:0;">
+        <span style="font-size:13px;text-decoration:line-through;color:var(--text-muted,#9CA3AF);flex:1;">${escapeHtml(a.text)}</span>
+        <button style="background:none;border:none;cursor:pointer;color:#D1D5DB;font-size:12px;padding:4px;" onclick="deleteAufgabeEintrag('${a.id}')">✕</button>
+      </div>`;
+    });
+    html += '</div></details>';
   }
 
   container.innerHTML = html;
 }
 
 function addAufgabeEintrag() {
-  const text = document.getElementById('aufgabe-text')?.value?.trim();
-  if (!text) { showToast('Bitte Aufgabe eingeben', 'error'); return; }
+  const input = document.getElementById('aufgabe-text');
+  const text = input?.value?.trim();
+  if (!text) return;
   DB.addAufgabe({
     text: text,
-    prioritaet: document.getElementById('aufgabe-prio')?.value || 'normal',
-    faellig: document.getElementById('aufgabe-faellig')?.value || '',
-    schuelerId: document.getElementById('aufgabe-schueler')?.value || null,
+    prioritaet: 'normal',
+    faellig: '',
+    schuelerId: null,
     erledigt: false
   });
-  showToast('Aufgabe erstellt', 'success');
+  input.value = '';
+  input.focus();
   renderAufgaben();
 }
 

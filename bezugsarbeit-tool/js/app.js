@@ -9106,10 +9106,7 @@ function renderDashboard() {
   renderQuickEntry('quick-entry-dashboard');
   renderIntakeProgress();
   renderDashboardSummary();
-  renderWohlbefinden();
-  renderDashKalender();
   renderDashTodo();
-  renderNotizbuch();
 }
 
 // ---- HYPOTHESEN → 5P ÜBERTRAGUNG ----

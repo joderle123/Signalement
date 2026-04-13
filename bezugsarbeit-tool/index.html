@@ -313,31 +313,6 @@
 
         <div class="dashboard-grid">
 
-          <!-- Mini-Kalender -->
-          <div class="card dashboard-card-kalender">
-            <div class="card-header">
-              <span>📅</span>
-              <div class="card-title">Kalender</div>
-              <div class="dash-kal-nav">
-                <button class="btn-icon" onclick="navigateDashKalender(-1)">‹</button>
-                <span id="dash-kalender-monat" class="dash-kal-monat"></span>
-                <button class="btn-icon" onclick="navigateDashKalender(1)">›</button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div id="dash-kalender-grid"></div>
-              <div id="dash-kalender-notiz-form" class="dash-kal-form" style="display:none;">
-                <div class="dash-kal-form-datum" id="dash-kal-form-datum"></div>
-                <textarea id="dash-kalender-notiz-text" placeholder="Notiz für diesen Tag..."></textarea>
-                <div style="display:flex;gap:8px;margin-top:8px;">
-                  <button class="btn btn-primary btn-sm" onclick="saveDashKalenderNotiz()">Speichern</button>
-                  <button class="btn btn-secondary btn-sm" onclick="closeDashKalenderNotiz()">Abbrechen</button>
-                </div>
-              </div>
-              <div id="dash-kalender-notizen-liste"></div>
-            </div>
-          </div>
-
           <!-- To-Do -->
           <div class="card dashboard-card-todo">
             <div class="card-header">
@@ -354,39 +329,7 @@
             </div>
           </div>
 
-          <!-- Wohlbefinden -->
-          <div class="card dashboard-card-wohlbefinden">
-            <div class="card-header">
-              <span>📈</span>
-              <div class="card-title">Wohlbefinden</div>
-            </div>
-            <div class="card-body">
-              <div class="wohlbefinden-eingabe">
-                <div class="wohlbefinden-skala" id="wohlbefinden-skala"></div>
-                <div id="who5-items-container" style="margin:8px 0;padding:8px;background:#F8FAFC;border-radius:8px;border:1px solid #E2E8F0;"></div>
-                <input type="text" id="wohlbefinden-notiz" placeholder="Kurze Notiz (optional)..."
-                  onkeydown="if(event.key==='Enter') saveWohlbefinden()">
-              </div>
-              <div class="wohlbefinden-chart-container">
-                <canvas id="wohlbefinden-chart" height="120"></canvas>
-              </div>
-              <div id="wohlbefinden-historie"></div>
-            </div>
-          </div>
-
         </div><!-- end dashboard-grid -->
-
-        <!-- Notizbuch (OneNote-Stil) -->
-        <div class="card dashboard-notizbuch">
-          <div class="card-header">
-            <span>📓</span>
-            <div class="card-title">Notizbuch</div>
-          </div>
-          <div class="card-body" style="padding:0;">
-            <div class="notizbuch-tabs" id="notizbuch-tabs"></div>
-            <div class="notizbuch-inhalt" id="notizbuch-inhalt"></div>
-          </div>
-        </div>
 
         <!-- Gesprächsleitfäden Widget -->
         <div id="gespraechsleitfaeden-widget"></div>

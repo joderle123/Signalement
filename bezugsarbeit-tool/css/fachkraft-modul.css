@@ -758,3 +758,308 @@ body {
 
   a { text-decoration: none; color: inherit; }
 }
+
+/* ============================================================
+   HTML-ALIAS KLASSEN
+   Die HTML-Dateien verwenden diese Klassennamen.
+   ============================================================ */
+
+/* --- Header (alias für fm-kopfzeile) --- */
+.fm-header {
+  background: linear-gradient(135deg, var(--farbe) 0%, color-mix(in srgb, var(--farbe) 72%, #0F172A) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -14mm;
+  margin-left: -16mm;
+  margin-right: -16mm;
+  padding: 16px 16mm 14px;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+
+.fm-header-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(255,255,255,0.16);
+  border: 1.5px solid rgba(255,255,255,0.28);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.fm-header-text {
+  flex: 1;
+}
+
+.fm-header-titel {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 3px;
+  letter-spacing: -0.4px;
+}
+
+.fm-header-sub {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 600;
+}
+
+.fm-seitenzahl {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.90);
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* --- Quickinfo Item (alias für fm-qi-box) --- */
+.fm-qi-item {
+  background: var(--farbe-hell);
+  border: 1px solid color-mix(in srgb, var(--farbe) 25%, white);
+  border-radius: var(--radius);
+  padding: 7px 10px;
+  text-align: center;
+}
+
+/* --- Überschriften --- */
+.fm-abschnitt-titel {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--farbe);
+  margin: 16px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid color-mix(in srgb, var(--farbe) 20%, white);
+  letter-spacing: -0.2px;
+}
+
+.fm-unter-titel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 12px 0 6px;
+}
+
+.fm-text {
+  font-size: 11px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+/* --- Zwei-Spalten (mit Bindestrich) --- */
+.fm-zwei-spalten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.fm-spalte {
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* --- Ampel-System (alias) --- */
+.fm-ampel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.fm-ampel-item {
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.fm-ampel-item ul {
+  list-style: none;
+  padding: 4px 0 4px 18px;
+  margin: 0;
+}
+
+.fm-ampel-item ul li {
+  padding: 2px 0;
+  position: relative;
+  font-size: 10.5px;
+}
+
+.fm-ampel-item ul li::before {
+  content: '▸';
+  position: absolute;
+  left: -14px;
+  font-size: 9px;
+  top: 2px;
+}
+
+.fm-ampel-item.fm-gruen {
+  background: var(--ampel-gruen-hell);
+  border: 1px solid #BBF7D0;
+}
+
+.fm-ampel-item.fm-gruen ul li::before { color: var(--ampel-gruen); }
+
+.fm-ampel-item.fm-gelb {
+  background: var(--ampel-gelb-hell);
+  border: 1px solid #FDE68A;
+}
+
+.fm-ampel-item.fm-gelb ul li::before { color: var(--ampel-gelb); }
+
+.fm-ampel-item.fm-rot {
+  background: var(--ampel-rot-hell);
+  border: 1px solid #FECACA;
+}
+
+.fm-ampel-item.fm-rot ul li::before { color: var(--ampel-rot); }
+
+.fm-ampel-farbe {
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.fm-ampel-titel {
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+
+.fm-ampel-item.fm-gruen .fm-ampel-titel { color: var(--ampel-gruen); }
+.fm-ampel-item.fm-gelb .fm-ampel-titel { color: var(--ampel-gelb); }
+.fm-ampel-item.fm-rot .fm-ampel-titel { color: var(--ampel-rot); }
+
+.fm-ampel-handlung {
+  margin-top: 6px;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.fm-ampel-item.fm-gruen .fm-ampel-handlung { background: #DCFCE7; color: #166534; }
+.fm-ampel-item.fm-gelb .fm-ampel-handlung { background: #FEF3C7; color: #92400E; }
+.fm-ampel-item.fm-rot .fm-ampel-handlung { background: #FEE2E2; color: #991B1B; }
+
+/* --- Gesprächsbeispiele (alias) --- */
+.fm-gespraech-gut,
+.fm-gespraech-schlecht {
+  margin-bottom: 8px;
+}
+
+.fm-gespraech-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 5px 10px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin-bottom: 0;
+}
+
+.fm-gespraech-gut .fm-gespraech-label { background: #DCFCE7; color: #166534; }
+.fm-gespraech-schlecht .fm-gespraech-label { background: #FEE2E2; color: #991B1B; }
+
+.fm-gespraech-beispiel {
+  padding: 5px 10px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--border);
+}
+
+.fm-gespraech-gut .fm-gespraech-beispiel {
+  border-left: 3px solid var(--ampel-gruen);
+  background: #F0FDF4;
+}
+
+.fm-gespraech-schlecht .fm-gespraech-beispiel {
+  border-left: 3px solid var(--ampel-rot);
+  background: #FEF2F2;
+}
+
+/* --- Methode Header (alias) --- */
+.fm-methode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.fm-sterne {
+  font-size: 13px;
+  flex-shrink: 0;
+  color: var(--evidenz-gold);
+  letter-spacing: -2px;
+}
+
+/* --- Ressource (alias) --- */
+.fm-ressource-tel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--farbe);
+  margin: 3px 0;
+}
+
+.fm-ressource-info {
+  font-size: 10px;
+  color: var(--grau);
+  line-height: 1.5;
+}
+
+.fm-ressource-krise {
+  border-color: var(--cave-border);
+  background: #FFFBFB;
+}
+
+/* --- Krisen-Schritte (alias) --- */
+.fm-krisen-schritte {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fm-krisen-schritt {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px 8px;
+  background: white;
+  border: 1px solid #FECACA;
+  border-radius: var(--radius);
+}
+
+/* --- Print overrides for aliases --- */
+@media print {
+  .fm-header {
+    margin-top: -14mm;
+    margin-left: -16mm;
+    margin-right: -16mm;
+    background: linear-gradient(135deg, var(--farbe) 0%, color-mix(in srgb, var(--farbe) 72%, #0F172A) 100%) !important;
+  }
+
+  .fm-ampel-item.fm-gruen { background: var(--ampel-gruen-hell) !important; }
+  .fm-ampel-item.fm-gelb { background: var(--ampel-gelb-hell) !important; }
+  .fm-ampel-item.fm-rot { background: var(--ampel-rot-hell) !important; }
+
+  .fm-gespraech-gut .fm-gespraech-beispiel { background: #F0FDF4 !important; }
+  .fm-gespraech-schlecht .fm-gespraech-beispiel { background: #FEF2F2 !important; }
+}

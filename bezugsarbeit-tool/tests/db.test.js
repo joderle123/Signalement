@@ -8,16 +8,16 @@ import { describe, it, expect, beforeEach } from 'vitest';
 // ---------------------------------------------------------------------------
 
 const KEYS = {
-  SCHUELER: 'cdse_schueler',
-  NOTIZEN: 'cdse_notizen',
-  TERMINE: 'cdse_termine',
-  SCREENINGS: 'cdse_screenings',
-  ROADMAPS: 'cdse_roadmaps',
-  WOHLBEFINDEN: 'cdse_wohlbefinden',
-  FALLFORMULIERUNGEN: 'cdse_fallformulierungen',
-  VERLAUF: 'cdse_verlauf',
-  KONTAKTE: 'cdse_kontakte',
-  RISIKO: 'cdse_risiko',
+  SCHUELER: 'pw_schueler',
+  NOTIZEN: 'pw_notizen',
+  TERMINE: 'pw_termine',
+  SCREENINGS: 'pw_screenings',
+  ROADMAPS: 'pw_roadmaps',
+  WOHLBEFINDEN: 'pw_wohlbefinden',
+  FALLFORMULIERUNGEN: 'pw_fallformulierungen',
+  VERLAUF: 'pw_verlauf',
+  KONTAKTE: 'pw_kontakte',
+  RISIKO: 'pw_risiko',
 };
 
 /** Faithful replica of the DB object from js/data.js */
@@ -534,21 +534,21 @@ describe('Corrupted localStorage handling', () => {
 // -------------------------------------------------------------------------
 describe('localStorage keys', () => {
   it('uses the correct key prefixes', () => {
-    expect(DB.KEYS.SCHUELER).toBe('cdse_schueler');
-    expect(DB.KEYS.NOTIZEN).toBe('cdse_notizen');
-    expect(DB.KEYS.TERMINE).toBe('cdse_termine');
-    expect(DB.KEYS.SCREENINGS).toBe('cdse_screenings');
-    expect(DB.KEYS.ROADMAPS).toBe('cdse_roadmaps');
-    expect(DB.KEYS.WOHLBEFINDEN).toBe('cdse_wohlbefinden');
-    expect(DB.KEYS.FALLFORMULIERUNGEN).toBe('cdse_fallformulierungen');
-    expect(DB.KEYS.VERLAUF).toBe('cdse_verlauf');
-    expect(DB.KEYS.KONTAKTE).toBe('cdse_kontakte');
-    expect(DB.KEYS.RISIKO).toBe('cdse_risiko');
+    expect(DB.KEYS.SCHUELER).toBe('pw_schueler');
+    expect(DB.KEYS.NOTIZEN).toBe('pw_notizen');
+    expect(DB.KEYS.TERMINE).toBe('pw_termine');
+    expect(DB.KEYS.SCREENINGS).toBe('pw_screenings');
+    expect(DB.KEYS.ROADMAPS).toBe('pw_roadmaps');
+    expect(DB.KEYS.WOHLBEFINDEN).toBe('pw_wohlbefinden');
+    expect(DB.KEYS.FALLFORMULIERUNGEN).toBe('pw_fallformulierungen');
+    expect(DB.KEYS.VERLAUF).toBe('pw_verlauf');
+    expect(DB.KEYS.KONTAKTE).toBe('pw_kontakte');
+    expect(DB.KEYS.RISIKO).toBe('pw_risiko');
   });
 
   it('createSchueler writes to the correct localStorage key', () => {
     DB.createSchueler({ vorname: 'Test' });
-    const raw = localStorage.getItem('cdse_schueler');
+    const raw = localStorage.getItem('pw_schueler');
     expect(raw).toBeTruthy();
     const parsed = JSON.parse(raw);
     expect(parsed).toHaveLength(1);
@@ -557,14 +557,14 @@ describe('localStorage keys', () => {
 
   it('createNotiz writes to the correct localStorage key', () => {
     DB.createNotiz({ schuelerId: 'x', inhalt: 'Hi' });
-    const raw = localStorage.getItem('cdse_notizen');
+    const raw = localStorage.getItem('pw_notizen');
     expect(raw).toBeTruthy();
     expect(JSON.parse(raw)).toHaveLength(1);
   });
 
   it('createTermin writes to the correct localStorage key', () => {
     DB.createTermin({ datum: '2026-01-01' });
-    const raw = localStorage.getItem('cdse_termine');
+    const raw = localStorage.getItem('pw_termine');
     expect(raw).toBeTruthy();
     expect(JSON.parse(raw)).toHaveLength(1);
   });

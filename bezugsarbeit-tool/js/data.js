@@ -6140,23 +6140,45 @@ const RISIKO_STUFEN = {
 
 // Datenverwaltung (localStorage)
 // ============================================================
+
+// Auto-migrate legacy cdse_ keys → pw_ (Pathways)
+(function migrateStoragePrefix() {
+  const migrations = [
+    ['cdse_schueler','pw_schueler'], ['cdse_notizen','pw_notizen'],
+    ['cdse_termine','pw_termine'], ['cdse_screenings','pw_screenings'],
+    ['cdse_roadmaps','pw_roadmaps'], ['cdse_wohlbefinden','pw_wohlbefinden'],
+    ['cdse_fallformulierungen','pw_fallformulierungen'], ['cdse_verlauf','pw_verlauf'],
+    ['cdse_kontakte','pw_kontakte'], ['cdse_risiko','pw_risiko'],
+    ['cdse_helfer','pw_helfer'], ['cdse_zeit','pw_zeit'],
+    ['cdse_konferenzen','pw_konferenzen'], ['cdse_aufgaben','pw_aufgaben'],
+    ['cdse_persnotizen','pw_persnotizen']
+  ];
+  migrations.forEach(function(pair) {
+    var old = localStorage.getItem(pair[0]);
+    if (old !== null && localStorage.getItem(pair[1]) === null) {
+      localStorage.setItem(pair[1], old);
+      localStorage.removeItem(pair[0]);
+    }
+  });
+})();
+
 const DB = {
   KEYS: {
-    SCHUELER: 'cdse_schueler',
-    NOTIZEN: 'cdse_notizen',
-    TERMINE: 'cdse_termine',
-    SCREENINGS: 'cdse_screenings',
-    ROADMAPS: 'cdse_roadmaps',
-    WOHLBEFINDEN: 'cdse_wohlbefinden',
-    FALLFORMULIERUNGEN: 'cdse_fallformulierungen',
-    VERLAUF: 'cdse_verlauf',
-    KONTAKTE: 'cdse_kontakte',
-    RISIKO: 'cdse_risiko',
-    HELFER: 'cdse_helfer',
-    ZEIT: 'cdse_zeit',
-    KONFERENZEN: 'cdse_konferenzen',
-    AUFGABEN: 'cdse_aufgaben',
-    PERSNOTIZEN: 'cdse_persnotizen',
+    SCHUELER: 'pw_schueler',
+    NOTIZEN: 'pw_notizen',
+    TERMINE: 'pw_termine',
+    SCREENINGS: 'pw_screenings',
+    ROADMAPS: 'pw_roadmaps',
+    WOHLBEFINDEN: 'pw_wohlbefinden',
+    FALLFORMULIERUNGEN: 'pw_fallformulierungen',
+    VERLAUF: 'pw_verlauf',
+    KONTAKTE: 'pw_kontakte',
+    RISIKO: 'pw_risiko',
+    HELFER: 'pw_helfer',
+    ZEIT: 'pw_zeit',
+    KONFERENZEN: 'pw_konferenzen',
+    AUFGABEN: 'pw_aufgaben',
+    PERSNOTIZEN: 'pw_persnotizen',
   },
 
   // Safe localStorage wrapper with quota protection
@@ -24136,7 +24158,7 @@ const CDSS_GEMEINSAME_VARIABLEN = [
       { id: 'regelschule-ok', label: 'Regelschule — unauffällig', tags: ['schule-ok'] },
       { id: 'regelschule-schwierig', label: 'Regelschule — mit Schwierigkeiten', tags: ['schule-schwierig'] },
       { id: 'foerderschule', label: 'Förderschule / Spezialklasse', tags: ['foerderbedarf'] },
-      { id: 'cdse', label: 'CDSE-Begleitung aktiv', tags: ['cdse-aktiv'] },
+      { id: 'begleitung-aktiv', label: 'Therapeutische Begleitung aktiv', tags: ['begleitung-aktiv'] },
       { id: 'kein-schulbesuch', label: 'Kein Schulbesuch aktuell', tags: ['kein-schulbesuch', 'dringend'] }
     ]
   },
@@ -26932,7 +26954,7 @@ const CDSS_PROBLEME = [
           { id: 'grundschule-sek', label: 'Grundschule → Sekundarstufe', tags: ['sw-uebergang'] },
           { id: 'schulwechsel', label: 'Schulwechsel (neue Schule, gleiche Stufe)', tags: ['sw-wechsel'] },
           { id: 'klassenwechsel', label: 'Klassenwechsel / neue Klasse', tags: ['sw-klasse'] },
-          { id: 'foerder', label: 'Wechsel in Förderschule / CDSE', tags: ['sw-foerder'] }
+          { id: 'foerder', label: 'Wechsel in Förderschule / Spezialangebot', tags: ['sw-foerder'] }
         ]
       },
       {

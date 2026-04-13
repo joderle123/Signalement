@@ -110,7 +110,7 @@ function updateSaveIndicator(state) {
 
 function autoBackup() {
   try {
-    const keys = ['cdse_schueler', 'cdse_notizen', 'cdse_termine', 'cdse_screenings', 'cdse_roadmaps', 'cdse_wohlbefinden', 'cdse_fallformulierungen'];
+    const keys = ['pw_schueler', 'pw_notizen', 'pw_termine', 'pw_screenings', 'pw_roadmaps', 'pw_wohlbefinden', 'pw_fallformulierungen'];
     const snapshot = {};
     keys.forEach(k => {
       const v = localStorage.getItem(k);
@@ -204,7 +204,7 @@ async function initApp() {
   const origSetItem = localStorage.setItem.bind(localStorage);
   localStorage.setItem = function(key, value) {
     origSetItem(key, value);
-    if (key.startsWith('cdse_')) {
+    if (key.startsWith('pw_')) {
       markDirty();
       origSetItem('pathways_lastSave', String(Date.now()));
     }
@@ -417,6 +417,41 @@ function restoreSidebarState() {}
     }
   });
 })();
+
+// ---- About Pathways Modal ----
+function showAboutPathways() {
+  const year = new Date().getFullYear();
+  const overlay = document.createElement('div');
+  overlay.className = 'about-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `
+    <div class="about-modal">
+      <button class="about-close" onclick="this.closest('.about-overlay').remove()" aria-label="Schliessen">&times;</button>
+      <div class="about-logo">
+        <svg width="56" height="56" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="14" fill="url(#abg)"/>
+          <path d="M16 32 L24 14 L32 32 M19 26 h10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="abg" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#818CF8"/><stop offset="100%" stop-color="#6366F1"/></linearGradient></defs>
+        </svg>
+      </div>
+      <h2 class="about-title">Pathways</h2>
+      <p class="about-version">v2.1 — Therapeutic Case Management</p>
+      <div class="about-divider"></div>
+      <div class="about-creator-section">
+        <div class="about-creator-label">Designed & Developed by</div>
+        <div class="about-creator-name">Joey Guedes</div>
+      </div>
+      <div class="about-divider"></div>
+      <div class="about-copyright">&copy; ${year} Joey Guedes. All rights reserved.</div>
+      <p class="about-legal">This software and its contents, including all therapeutic frameworks, screening tools, evaluation forms, and educational materials, are the intellectual property of Joey Guedes. Unauthorized reproduction, distribution, or modification is prohibited.</p>
+      <div class="about-footer">
+        <span class="about-footer-item">Made with dedication</span>
+        <span class="about-footer-dot">&middot;</span>
+        <span class="about-footer-item">For those who care</span>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
 
 // ---- Loading Overlay ----
 function showLoading(text) {
@@ -875,6 +910,16 @@ function renderHome() {
         <div class="onboarding-hint">
           <span class="onboarding-hint-icon">💡</span>
           <span>Du kannst Kalender, Aufgaben und Weiterbildung sofort nutzen — auch ohne Klienten. Oder lege direkt deinen ersten Klienten an und entdecke Screening, 5P-Analyse und mehr.</span>
+        </div>
+
+        <!-- Creator Signature -->
+        <div class="onboarding-creator" onclick="showAboutPathways()">
+          <div class="onboarding-creator-line"></div>
+          <div class="onboarding-creator-text">
+            <span class="onboarding-creator-made">Designed & built by</span>
+            <span class="onboarding-creator-name">Joey Guedes</span>
+          </div>
+          <div class="onboarding-creator-line"></div>
         </div>
       </div>`;
     }
@@ -14180,11 +14225,11 @@ function evaluateCSSRS() {
 
   // Ergebnis in Screening speichern
   if (APP.currentScreeningId) {
-    const screenings = JSON.parse(localStorage.getItem('cdse_screenings') || '[]');
+    const screenings = JSON.parse(localStorage.getItem('pw_screenings') || '[]');
     const scr = screenings.find(s => s.id === APP.currentScreeningId);
     if (scr) {
       scr.cssrsErgebnis = { jaCount, antworten, datum: new Date().toISOString() };
-      localStorage.setItem('cdse_screenings', JSON.stringify(screenings));
+      localStorage.setItem('pw_screenings', JSON.stringify(screenings));
     }
   }
 
@@ -17733,24 +17778,24 @@ function deletePersonalData(schuelerId) {
     '<strong>Diese Aktion kann nicht rückgängig gemacht werden.</strong>',
     () => {
       // Delete all associated data
-      const notizenAlle = JSON.parse(localStorage.getItem('cdse_notizen') || '[]').filter(n => n.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_notizen', JSON.stringify(notizenAlle));
-      const termineAlle = JSON.parse(localStorage.getItem('cdse_termine') || '[]').filter(t => t.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_termine', JSON.stringify(termineAlle));
-      const screeningsAlle = JSON.parse(localStorage.getItem('cdse_screenings') || '[]').filter(s => s.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_screenings', JSON.stringify(screeningsAlle));
-      const roadmapsAlle = JSON.parse(localStorage.getItem('cdse_roadmaps') || '[]').filter(r => r.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_roadmaps', JSON.stringify(roadmapsAlle));
-      const wbAlle = JSON.parse(localStorage.getItem('cdse_wohlbefinden') || '[]').filter(w => w.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_wohlbefinden', JSON.stringify(wbAlle));
-      const ffAlle = JSON.parse(localStorage.getItem('cdse_fallformulierungen') || '[]').filter(f => f.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_fallformulierungen', JSON.stringify(ffAlle));
-      const vlAlle = JSON.parse(localStorage.getItem('cdse_verlauf') || '[]').filter(v => v.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_verlauf', JSON.stringify(vlAlle));
-      const ktAlle = JSON.parse(localStorage.getItem('cdse_kontakte') || '[]').filter(k => k.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_kontakte', JSON.stringify(ktAlle));
-      const rsAlle = JSON.parse(localStorage.getItem('cdse_risiko') || '[]').filter(r => r.schuelerId !== schuelerId);
-      localStorage.setItem('cdse_risiko', JSON.stringify(rsAlle));
+      const notizenAlle = JSON.parse(localStorage.getItem('pw_notizen') || '[]').filter(n => n.schuelerId !== schuelerId);
+      localStorage.setItem('pw_notizen', JSON.stringify(notizenAlle));
+      const termineAlle = JSON.parse(localStorage.getItem('pw_termine') || '[]').filter(t => t.schuelerId !== schuelerId);
+      localStorage.setItem('pw_termine', JSON.stringify(termineAlle));
+      const screeningsAlle = JSON.parse(localStorage.getItem('pw_screenings') || '[]').filter(s => s.schuelerId !== schuelerId);
+      localStorage.setItem('pw_screenings', JSON.stringify(screeningsAlle));
+      const roadmapsAlle = JSON.parse(localStorage.getItem('pw_roadmaps') || '[]').filter(r => r.schuelerId !== schuelerId);
+      localStorage.setItem('pw_roadmaps', JSON.stringify(roadmapsAlle));
+      const wbAlle = JSON.parse(localStorage.getItem('pw_wohlbefinden') || '[]').filter(w => w.schuelerId !== schuelerId);
+      localStorage.setItem('pw_wohlbefinden', JSON.stringify(wbAlle));
+      const ffAlle = JSON.parse(localStorage.getItem('pw_fallformulierungen') || '[]').filter(f => f.schuelerId !== schuelerId);
+      localStorage.setItem('pw_fallformulierungen', JSON.stringify(ffAlle));
+      const vlAlle = JSON.parse(localStorage.getItem('pw_verlauf') || '[]').filter(v => v.schuelerId !== schuelerId);
+      localStorage.setItem('pw_verlauf', JSON.stringify(vlAlle));
+      const ktAlle = JSON.parse(localStorage.getItem('pw_kontakte') || '[]').filter(k => k.schuelerId !== schuelerId);
+      localStorage.setItem('pw_kontakte', JSON.stringify(ktAlle));
+      const rsAlle = JSON.parse(localStorage.getItem('pw_risiko') || '[]').filter(r => r.schuelerId !== schuelerId);
+      localStorage.setItem('pw_risiko', JSON.stringify(rsAlle));
 
       DB.deleteSchueler(schuelerId);
       AuditLog.log('dsgvo-loeschung', 'Vollständige Datenlöschung für ' + name);

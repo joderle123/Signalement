@@ -25,16 +25,16 @@ function generateId() {
 // Replicate the export data structure from exportDaten() (app.js line 4804)
 // ---------------------------------------------------------------------------
 const DB_KEYS = {
-  SCHUELER: 'cdse_schueler',
-  NOTIZEN: 'cdse_notizen',
-  TERMINE: 'cdse_termine',
-  SCREENINGS: 'cdse_screenings',
-  ROADMAPS: 'cdse_roadmaps',
-  WOHLBEFINDEN: 'cdse_wohlbefinden',
-  FALLFORMULIERUNGEN: 'cdse_fallformulierungen',
-  VERLAUF: 'cdse_verlauf',
-  KONTAKTE: 'cdse_kontakte',
-  RISIKO: 'cdse_risiko',
+  SCHUELER: 'pw_schueler',
+  NOTIZEN: 'pw_notizen',
+  TERMINE: 'pw_termine',
+  SCREENINGS: 'pw_screenings',
+  ROADMAPS: 'pw_roadmaps',
+  WOHLBEFINDEN: 'pw_wohlbefinden',
+  FALLFORMULIERUNGEN: 'pw_fallformulierungen',
+  VERLAUF: 'pw_verlauf',
+  KONTAKTE: 'pw_kontakte',
+  RISIKO: 'pw_risiko',
 };
 
 function buildExportData() {

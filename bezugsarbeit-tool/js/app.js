@@ -2235,7 +2235,6 @@ function renderCDSSErgebnis(container) {
       <div class="card-header"><span>📚</span><div class="card-title">Empfohlene Materialien</div></div>
       <div class="card-body">
         <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${(e.materialien.arbeitsblaetter || []).map(a => `<span style="font-size:11px;padding:4px 10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:6px;cursor:pointer;color:#16A34A;" onclick="window.open('arbeitsblaetter/${a}','_blank')">📄 ${a.replace('.html','').replace(/-/g,' ')}</span>`).join('')}
           ${(e.materialien.therapiemodule || []).map(t => `<span style="font-size:11px;padding:4px 10px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:6px;cursor:pointer;color:#2563EB;" onclick="window.open('therapiemodule/${t}','_blank')">📘 ${t.replace('.html','').replace(/-/g,' ')}</span>`).join('')}
           ${(e.materialien.elterninfo || []).map(ei => `<span style="font-size:11px;padding:4px 10px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;cursor:pointer;color:#D97706;" onclick="window.open('eltern-infoblaetter/${ei}','_blank')">👨‍👩‍👧 ${ei.replace('.html','').replace(/-/g,' ')}</span>`).join('')}
         </div>
@@ -2419,198 +2418,15 @@ function showProfilTab(tab) {
 }
 
 // ============================================================
-// WISSEN: Unified Bibliothek — alle Inhalte an einem Ort
+// WISSEN: Unified Bibliothek — thematisch gruppiert
 // ============================================================
 var bibliothekFilter = 'alle';
 var bibliothekSuche = '';
+var bibliothekOpenSections = {};
 
 function renderBibliothek() {
   const container = document.getElementById('bibliothek-container');
   if (!container) return;
-
-  // ── Alle Inhalte sammeln ──
-  const allItems = [];
-
-  // 1. Fachkraft-Module (📚 blau)
-  const fachFiles = new Map();
-  Object.entries(FACHKRAFT_MODULE_DATEIEN).forEach(([themaId, datei]) => {
-    if (!fachFiles.has(datei)) {
-      let label = themaId;
-      for (const kat of THEMEN_KATEGORIEN) {
-        const t = kat.themen.find(th => th.id === themaId);
-        if (t) { label = t.titel; break; }
-      }
-      fachFiles.set(datei, { id: 'fk-' + datei, label, datei, typ: 'fachkraft', themen: [themaId] });
-    } else {
-      fachFiles.get(datei).themen.push(themaId);
-    }
-  });
-  fachFiles.forEach(item => allItems.push(item));
-
-  // 2. Therapie-Module (🎓 grün)
-  const therapieFiles = new Map();
-  Object.entries(THERAPIE_MODULE_DATEIEN).forEach(([themaId, datei]) => {
-    if (!therapieFiles.has(datei)) {
-      let label = themaId;
-      for (const kat of THEMEN_KATEGORIEN) {
-        const t = kat.themen.find(th => th.id === themaId);
-        if (t) { label = t.titel; break; }
-      }
-      therapieFiles.set(datei, { id: 'tm-' + datei, label, datei, typ: 'therapie', themen: [themaId] });
-    } else {
-      therapieFiles.get(datei).themen.push(themaId);
-    }
-  });
-  therapieFiles.forEach(item => allItems.push(item));
-
-  // 3. Interventionen (🎯 orange)
-  for (const kat of THEMEN_KATEGORIEN) {
-    for (const t of kat.themen) {
-      const inters = THEMA_INTERVENTIONEN[t.id];
-      if (inters && inters.length > 0) {
-        allItems.push({
-          id: 'int-' + t.id,
-          label: t.titel,
-          typ: 'intervention',
-          themaId: t.id,
-          anzahl: inters.length,
-          farbe: kat.farbe,
-        });
-      }
-    }
-  }
-
-  // 4. Arbeitsblätter (📝 lila)
-  const abFiles = new Map();
-  for (const [themaId, blaetter] of Object.entries(ARBEITSBLÄTTER)) {
-    for (const ab of blaetter) {
-      if (!abFiles.has(ab.datei)) {
-        abFiles.set(ab.datei, { id: 'ab-' + ab.datei, label: ab.titel, datei: ab.datei, typ: 'arbeitsblatt' });
-      }
-    }
-  }
-  abFiles.forEach(item => allItems.push(item));
-
-  // 5. Wiki-Artikel (📖 teal)
-  if (typeof WIKI_ARTIKEL !== 'undefined') {
-    WIKI_ARTIKEL.forEach(w => {
-      allItems.push({
-        id: 'wiki-' + w.id,
-        label: w.titel,
-        typ: 'wiki',
-        wikiId: w.id,
-        icon: w.icon,
-        kategorie: w.kategorie,
-      });
-    });
-  }
-
-  // 6. Eltern-Infoblätter (👨‍👩‍👧 teal)
-  if (typeof ELTERN_INFOBLAETTER !== 'undefined') {
-    const eiFiles = new Map();
-    for (const [themaId, blaetter] of Object.entries(ELTERN_INFOBLAETTER)) {
-      for (const ei of blaetter) {
-        if (!eiFiles.has(ei.datei)) {
-          eiFiles.set(ei.datei, { id: 'ei-' + ei.datei, label: ei.titel, datei: ei.datei, typ: 'elterninfo' });
-        }
-      }
-    }
-    eiFiles.forEach(item => allItems.push(item));
-  }
-
-  // 7. Gesprächsleitfäden (🗣️ violett)
-  if (typeof ELTERN_GESPRAECHSLEITFAEDEN !== 'undefined') {
-    ELTERN_GESPRAECHSLEITFAEDEN.forEach(gl => {
-      allItems.push({
-        id: 'gl-' + gl.id,
-        label: gl.titel,
-        datei: gl.datei,
-        typ: 'leitfaden_eltern',
-        beschreibung: gl.beschreibung,
-      });
-    });
-  }
-
-  // 8. Evaluationsbögen (📊 violett)
-  if (typeof EVALUATIONSBOEGEN !== 'undefined') {
-    EVALUATIONSBOEGEN.forEach(ev => {
-      allItems.push({
-        id: 'ev-' + ev.id,
-        label: ev.titel,
-        datei: ev.datei,
-        typ: 'evaluation',
-        beschreibung: ev.beschreibung,
-        frequenz: ev.frequenz,
-      });
-    });
-  }
-
-  // 9. Überweisungsleitfaden (🏥 blau)
-  if (typeof UEBERWEISUNGSLEITFADEN !== 'undefined') {
-    UEBERWEISUNGSLEITFADEN.forEach(ue => {
-      allItems.push({
-        id: 'ue-' + ue.id,
-        label: ue.titel,
-        datei: ue.datei,
-        typ: 'ueberweisung',
-      });
-    });
-  }
-
-  // ── Ebenen-Zuordnung + Evidenz-Level ──
-  allItems.forEach(item => {
-    if (item.typ === 'arbeitsblatt' || item.typ === 'intervention') {
-      item.ebene = 'praxis';
-    } else if (item.typ === 'therapie') {
-      item.ebene = 'leitfaden';
-    } else if (item.typ === 'elterninfo' || item.typ === 'leitfaden_eltern') {
-      item.ebene = 'elternarbeit';
-    } else if (item.typ === 'evaluation') {
-      item.ebene = 'evaluation';
-    } else if (item.typ === 'ueberweisung') {
-      item.ebene = 'vernetzung';
-    } else {
-      item.ebene = 'fachwissen'; // fachkraft + wiki
-    }
-
-    // Evidenz-Level zuweisen (1-3 Sterne)
-    if (item.typ === 'therapie') item.evidenz = 3;
-    else if (item.typ === 'fachkraft') item.evidenz = 3;
-    else if (item.typ === 'wiki') item.evidenz = 2;
-    else if (item.typ === 'intervention') item.evidenz = 2;
-    else if (item.typ === 'leitfaden_eltern') item.evidenz = 3;
-    else if (item.typ === 'elterninfo') item.evidenz = 2;
-    else if (item.typ === 'evaluation') item.evidenz = 3;
-    else if (item.typ === 'ueberweisung') item.evidenz = 2;
-    else item.evidenz = 1;
-  });
-
-  // ── Favoriten laden ──
-  const favKey = 'pathways_bibliothek_favoriten';
-  let favoriten = [];
-  try { favoriten = JSON.parse(localStorage.getItem(favKey) || '[]'); } catch(e) { favoriten = []; }
-
-  // Favoriten-Status setzen
-  allItems.forEach(item => { item.favorit = favoriten.includes(item.id); });
-
-  // ── Filtern ──
-  const q = bibliothekSuche.toLowerCase().trim();
-  const filtered = allItems.filter(item => {
-    if (bibliothekFilter === 'favoriten') {
-      if (!item.favorit) return false;
-    } else if (bibliothekFilter !== 'alle') {
-      // Support both old typ-based and new ebene-based filtering
-      if (item.ebene !== bibliothekFilter && item.typ !== bibliothekFilter) return false;
-    }
-    if (q) {
-      const searchText = (item.label + ' ' + (item.datei || '') + ' ' + (item.themen || []).join(' ') + ' ' + (item.wikiId || '') + ' ' + (item.kategorie || '')).toLowerCase();
-      if (!searchText.includes(q)) return false;
-    }
-    return true;
-  });
-
-  // Favoriten zuerst sortieren
-  filtered.sort((a, b) => (b.favorit ? 1 : 0) - (a.favorit ? 1 : 0));
 
   // ── Typ-Konfiguration ──
   const typConfig = {
@@ -2625,152 +2441,324 @@ function renderBibliothek() {
     ueberweisung:    { icon: '🏥', label: 'Überweisung',        farbe: '#1D4ED8', bg: '#EFF6FF' },
   };
 
-  // ── Ebenen-Konfiguration ──
-  const ebenenConfig = {
-    praxis:       { icon: '🛠️', label: 'Praxis',       farbe: '#6366F1', desc: 'Arbeitsblätter & Aktivitäten für die Sitzung' },
-    leitfaden:    { icon: '📋', label: 'Leitfaden',     farbe: '#00B894', desc: 'Sitzungsanleitungen für Therapeuten' },
-    fachwissen:   { icon: '🎓', label: 'Fachwissen',    farbe: '#6C5CE7', desc: 'Hintergrundwissen, ICD-Codes, Fachpersonal-Material' },
-    elternarbeit: { icon: '👨‍👩‍👧', label: 'Elternarbeit', farbe: '#0F766E', desc: 'Infoblätter, Leitfäden & Gesprächsvorbereitung für Eltern' },
-    evaluation:   { icon: '📊', label: 'Evaluation',    farbe: '#7C3AED', desc: 'Standardisierte Bewertungsinstrumente' },
-    vernetzung:   { icon: '🏥', label: 'Vernetzung',    farbe: '#1D4ED8', desc: 'Überweisungsleitfaden & Luxemburger Hilfsangebote' },
-  };
+  // ── Favoriten laden ──
+  const favKey = 'pathways_bibliothek_favoriten';
+  let favoriten = [];
+  try { favoriten = JSON.parse(localStorage.getItem(favKey) || '[]'); } catch(e) { favoriten = []; }
 
-  // ── Zähler pro Ebene ──
-  const ebeneCounts = {};
-  allItems.forEach(i => { ebeneCounts[i.ebene] = (ebeneCounts[i.ebene] || 0) + 1; });
-  const totalCount = allItems.length;
+  // ── Items pro Thema-ID sammeln ──
+  function getItemsForThema(themaId) {
+    const items = [];
+
+    // Arbeitsblätter
+    const abs = ARBEITSBLÄTTER[themaId] || [];
+    abs.forEach(function(ab) {
+      items.push({ id: 'ab-' + ab.datei, label: ab.titel, datei: ab.datei, typ: 'arbeitsblatt' });
+    });
+
+    // Interventionen
+    const inters = THEMA_INTERVENTIONEN[themaId] || [];
+    if (inters.length > 0) {
+      items.push({ id: 'int-' + themaId, label: themaId, typ: 'intervention', themaId: themaId, anzahl: inters.length });
+    }
+
+    // Fachkraft-Module
+    if (typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[themaId]) {
+      items.push({ id: 'fk-' + FACHKRAFT_MODULE_DATEIEN[themaId], label: themaId, datei: FACHKRAFT_MODULE_DATEIEN[themaId], typ: 'fachkraft', themen: [themaId] });
+    }
+
+    // Therapie-Module
+    if (typeof THERAPIE_MODULE_DATEIEN !== 'undefined' && THERAPIE_MODULE_DATEIEN[themaId]) {
+      items.push({ id: 'tm-' + THERAPIE_MODULE_DATEIEN[themaId], label: themaId, datei: THERAPIE_MODULE_DATEIEN[themaId], typ: 'therapie', themen: [themaId] });
+    }
+
+    // Eltern-Infoblätter
+    if (typeof ELTERN_INFOBLAETTER !== 'undefined' && ELTERN_INFOBLAETTER[themaId]) {
+      ELTERN_INFOBLAETTER[themaId].forEach(function(ei) {
+        items.push({ id: 'ei-' + ei.datei, label: ei.titel, datei: ei.datei, typ: 'elterninfo' });
+      });
+    }
+
+    // De-duplicate + set favorit
+    const seen = {};
+    const unique = [];
+    items.forEach(function(item) {
+      if (!seen[item.id]) {
+        seen[item.id] = true;
+        item.favorit = favoriten.includes(item.id);
+        unique.push(item);
+      }
+    });
+    return unique;
+  }
+
+  // ── Allgemeine Ressourcen (nicht thema-spezifisch) ──
+  function getGeneralItems() {
+    const items = [];
+
+    // Wiki-Artikel
+    if (typeof WIKI_ARTIKEL !== 'undefined') {
+      WIKI_ARTIKEL.forEach(function(w) {
+        items.push({ id: 'wiki-' + w.id, label: w.titel, typ: 'wiki', wikiId: w.id, icon: w.icon, kategorie: w.kategorie });
+      });
+    }
+
+    // Gesprächsleitfäden
+    if (typeof ELTERN_GESPRAECHSLEITFAEDEN !== 'undefined') {
+      ELTERN_GESPRAECHSLEITFAEDEN.forEach(function(gl) {
+        items.push({ id: 'gl-' + gl.id, label: gl.titel, datei: gl.datei, typ: 'leitfaden_eltern', beschreibung: gl.beschreibung });
+      });
+    }
+
+    // Evaluationsbögen
+    if (typeof EVALUATIONSBOEGEN !== 'undefined') {
+      EVALUATIONSBOEGEN.forEach(function(ev) {
+        items.push({ id: 'ev-' + ev.id, label: ev.titel, datei: ev.datei, typ: 'evaluation', beschreibung: ev.beschreibung, frequenz: ev.frequenz });
+      });
+    }
+
+    // Überweisungsleitfaden
+    if (typeof UEBERWEISUNGSLEITFADEN !== 'undefined') {
+      UEBERWEISUNGSLEITFADEN.forEach(function(ue) {
+        items.push({ id: 'ue-' + ue.id, label: ue.titel, datei: ue.datei, typ: 'ueberweisung' });
+      });
+    }
+
+    items.forEach(function(item) { item.favorit = favoriten.includes(item.id); });
+    return items;
+  }
+
+  // ── Suche + Filter ──
+  const q = bibliothekSuche.toLowerCase().trim();
+
+  function matchesFilter(item) {
+    if (bibliothekFilter === 'favoriten' && !item.favorit) return false;
+    if (bibliothekFilter !== 'alle' && bibliothekFilter !== 'favoriten') {
+      if (item.typ !== bibliothekFilter) return false;
+    }
+    if (q) {
+      const searchText = (item.label + ' ' + (item.datei || '') + ' ' + (item.typ || '')).toLowerCase();
+      if (!searchText.includes(q)) return false;
+    }
+    return true;
+  }
+
+  // ── Typ-Zähler für Filter-Buttons ──
+  var typCounts = {};
+  var totalCount = 0;
+  THEMEN_KATEGORIEN.forEach(function(kat) {
+    kat.themen.forEach(function(t) {
+      var items = getItemsForThema(t.id);
+      items.forEach(function(item) {
+        typCounts[item.typ] = (typCounts[item.typ] || 0) + 1;
+        totalCount++;
+      });
+    });
+  });
+  var generalItems = getGeneralItems();
+  generalItems.forEach(function(item) {
+    typCounts[item.typ] = (typCounts[item.typ] || 0) + 1;
+    totalCount++;
+  });
+
+  // ── Thematische Sektionen bauen ──
+  var sectionsHtml = '';
+
+  THEMEN_KATEGORIEN.forEach(function(kat) {
+    // Sammle alle Items dieser Kategorie
+    var katItems = [];
+    var themenMitItems = [];
+
+    kat.themen.forEach(function(t) {
+      var items = getItemsForThema(t.id).filter(matchesFilter);
+      if (items.length > 0) {
+        themenMitItems.push({ thema: t, items: items });
+        items.forEach(function(i) { katItems.push(i); });
+      }
+    });
+
+    if (katItems.length === 0) return;
+
+    var isOpen = bibliothekOpenSections[kat.id] !== false;
+    if (q) isOpen = true; // Bei Suche immer offen
+
+    sectionsHtml += '<div class="bib-section" style="margin-bottom:16px;">';
+    sectionsHtml += '<button class="bib-section-header" onclick="toggleBibSection(\'' + kat.id + '\')" style="width:100%;display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,' + kat.farbe + '08,' + kat.farbe + '15);border:1px solid ' + kat.farbe + '30;border-radius:12px;cursor:pointer;text-align:left;transition:all 0.2s;">';
+    sectionsHtml += '<span style="width:36px;height:36px;border-radius:10px;background:' + kat.farbe + ';display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0;">' + (kat.icon === 'home' ? '🏠' : kat.icon === 'heart' ? '💜' : kat.icon === 'users' ? '👥' : kat.icon === 'exclamation' ? '⚠️' : kat.icon === 'academic-cap' ? '🎓' : kat.icon === 'shield' ? '🛡️' : kat.icon === 'map' ? '🗺️' : kat.icon === 'document' ? '📜' : kat.icon === 'sparkles' ? '✨' : kat.icon === 'bolt' ? '⚡' : '📁') + '</span>';
+    sectionsHtml += '<div style="flex:1;min-width:0;">';
+    sectionsHtml += '<div style="font-weight:700;font-size:15px;color:#1F2937;">' + kat.titel + '</div>';
+    sectionsHtml += '<div style="font-size:12px;color:#6B7280;margin-top:1px;">' + katItems.length + ' Ressourcen · ' + themenMitItems.length + ' Themen</div>';
+    sectionsHtml += '</div>';
+    sectionsHtml += '<span style="font-size:18px;color:#9CA3AF;transition:transform 0.2s;transform:rotate(' + (isOpen ? '0' : '-90') + 'deg);">▼</span>';
+    sectionsHtml += '</button>';
+
+    if (isOpen) {
+      sectionsHtml += '<div class="bib-section-body" style="padding:12px 0 0;">';
+
+      themenMitItems.forEach(function(entry) {
+        var t = entry.thema;
+        var items = entry.items;
+
+        sectionsHtml += '<div class="bib-thema-group" style="margin-bottom:12px;">';
+        sectionsHtml += '<div style="font-size:12px;font-weight:600;color:' + kat.farbe + ';padding:4px 0 8px;border-bottom:1px solid ' + kat.farbe + '20;margin-bottom:8px;display:flex;align-items:center;gap:6px;">';
+        sectionsHtml += '<span style="width:6px;height:6px;border-radius:50%;background:' + kat.farbe + ';"></span>';
+        sectionsHtml += t.titel;
+        sectionsHtml += '<span style="font-size:10px;color:#9CA3AF;font-weight:400;margin-left:4px;">' + items.length + '</span>';
+        sectionsHtml += '</div>';
+
+        sectionsHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">';
+        items.forEach(function(item) {
+          var cfg = typConfig[item.typ];
+          sectionsHtml += renderBibliothekKarte(item, cfg);
+        });
+        sectionsHtml += '</div>';
+        sectionsHtml += '</div>';
+      });
+
+      sectionsHtml += '</div>';
+    }
+
+    sectionsHtml += '</div>';
+  });
+
+  // ── Allgemeine Ressourcen Sektion ──
+  var filteredGeneral = generalItems.filter(matchesFilter);
+  if (filteredGeneral.length > 0) {
+    var genOpen = bibliothekOpenSections['_general'] !== false;
+    if (q) genOpen = true;
+
+    // Gruppierung nach Typ
+    var genByTyp = {};
+    filteredGeneral.forEach(function(item) {
+      if (!genByTyp[item.typ]) genByTyp[item.typ] = [];
+      genByTyp[item.typ].push(item);
+    });
+
+    sectionsHtml += '<div class="bib-section" style="margin-bottom:16px;">';
+    sectionsHtml += '<button class="bib-section-header" onclick="toggleBibSection(\'_general\')" style="width:100%;display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#6B728008,#6B728015);border:1px solid #6B728030;border-radius:12px;cursor:pointer;text-align:left;transition:all 0.2s;">';
+    sectionsHtml += '<span style="width:36px;height:36px;border-radius:10px;background:#6B7280;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0;">📦</span>';
+    sectionsHtml += '<div style="flex:1;min-width:0;">';
+    sectionsHtml += '<div style="font-weight:700;font-size:15px;color:#1F2937;">Allgemeine Ressourcen</div>';
+    sectionsHtml += '<div style="font-size:12px;color:#6B7280;margin-top:1px;">' + filteredGeneral.length + ' Ressourcen · Wiki, Evaluation, Elternarbeit, Vernetzung</div>';
+    sectionsHtml += '</div>';
+    sectionsHtml += '<span style="font-size:18px;color:#9CA3AF;transition:transform 0.2s;transform:rotate(' + (genOpen ? '0' : '-90') + 'deg);">▼</span>';
+    sectionsHtml += '</button>';
+
+    if (genOpen) {
+      sectionsHtml += '<div class="bib-section-body" style="padding:12px 0 0;">';
+
+      Object.keys(genByTyp).forEach(function(typ) {
+        var items = genByTyp[typ];
+        var cfg = typConfig[typ];
+        if (!cfg) return;
+
+        sectionsHtml += '<div class="bib-thema-group" style="margin-bottom:12px;">';
+        sectionsHtml += '<div style="font-size:12px;font-weight:600;color:' + cfg.farbe + ';padding:4px 0 8px;border-bottom:1px solid ' + cfg.farbe + '20;margin-bottom:8px;display:flex;align-items:center;gap:6px;">';
+        sectionsHtml += cfg.icon + ' ' + cfg.label;
+        sectionsHtml += '<span style="font-size:10px;color:#9CA3AF;font-weight:400;margin-left:4px;">' + items.length + '</span>';
+        sectionsHtml += '</div>';
+
+        sectionsHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">';
+        items.forEach(function(item) {
+          sectionsHtml += renderBibliothekKarte(item, cfg);
+        });
+        sectionsHtml += '</div>';
+        sectionsHtml += '</div>';
+      });
+
+      sectionsHtml += '</div>';
+    }
+
+    sectionsHtml += '</div>';
+  }
+
+  // ── Filter-Buttons ──
+  var filterBtns = '';
+  filterBtns += '<button onclick="bibliothekFilter=\'alle\';renderBibliothek()" style="padding:7px 16px;border-radius:20px;border:2px solid ' + (bibliothekFilter === 'alle' ? '#2563EB' : '#E5E7EB') + ';background:' + (bibliothekFilter === 'alle' ? '#2563EB' : '#fff') + ';color:' + (bibliothekFilter === 'alle' ? '#fff' : '#374151') + ';font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;">Alle</button>';
+  filterBtns += '<button onclick="bibliothekFilter=\'favoriten\';renderBibliothek()" style="padding:7px 16px;border-radius:20px;border:2px solid ' + (bibliothekFilter === 'favoriten' ? '#F59E0B' : '#E5E7EB') + ';background:' + (bibliothekFilter === 'favoriten' ? '#F59E0B' : '#fff') + ';color:' + (bibliothekFilter === 'favoriten' ? '#fff' : '#374151') + ';font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;">⭐ Favoriten</button>';
+
+  Object.keys(typConfig).forEach(function(typ) {
+    if (!typCounts[typ]) return;
+    var cfg = typConfig[typ];
+    var active = bibliothekFilter === typ;
+    filterBtns += '<button onclick="bibliothekFilter=\'' + typ + '\';renderBibliothek()" style="padding:7px 16px;border-radius:20px;border:2px solid ' + (active ? cfg.farbe : '#E5E7EB') + ';background:' + (active ? cfg.farbe : '#fff') + ';color:' + (active ? '#fff' : '#374151') + ';font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;">' + cfg.icon + ' ' + cfg.label + '</button>';
+  });
 
   // ── Render ──
-  container.innerHTML = `
-    <div style="margin-bottom:24px;">
-      <h2 style="margin:0 0 4px;font-size:22px;font-weight:700;">📚 Bibliothek</h2>
-      <p style="margin:0;font-size:13px;color:#6B7280;">${totalCount} Ressourcen — Fachwissen, Therapie-Module, Interventionen, Arbeitsblätter & Wiki</p>
-    </div>
-
-    <!-- Suchleiste -->
-    <div style="margin-bottom:16px;">
-      <input type="text" id="bib-suche" placeholder="Suche nach Thema, Modul, Stichwort..."
-        value="${escapeHtml(bibliothekSuche)}"
-        oninput="bibliothekSuche=this.value;renderBibliothek()"
-        style="width:100%;padding:12px 16px;border:2px solid #E5E7EB;border-radius:12px;font-size:15px;box-sizing:border-box;transition:border-color 0.2s;outline:none;"
-        onfocus="this.style.borderColor='#2563EB'" onblur="this.style.borderColor='#E5E7EB'">
-    </div>
-
-    <!-- 3-Ebenen-Filter + Favoriten -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
-      <button onclick="bibliothekFilter='alle';renderBibliothek()"
-        style="padding:8px 18px;border-radius:20px;border:2px solid ${bibliothekFilter === 'alle' ? '#2563EB' : '#E5E7EB'};background:${bibliothekFilter === 'alle' ? '#2563EB' : '#fff'};color:${bibliothekFilter === 'alle' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
-        Alle <span style="opacity:0.7;">${totalCount}</span>
-      </button>
-      <button onclick="bibliothekFilter='favoriten';renderBibliothek()"
-        style="padding:8px 18px;border-radius:20px;border:2px solid ${bibliothekFilter === 'favoriten' ? '#F59E0B' : '#E5E7EB'};background:${bibliothekFilter === 'favoriten' ? '#F59E0B' : '#fff'};color:${bibliothekFilter === 'favoriten' ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
-        ⭐ Favoriten <span style="opacity:0.7;">${favoriten.length}</span>
-      </button>
-      ${Object.entries(ebenenConfig).map(([ebene, cfg]) => {
-        const count = ebeneCounts[ebene] || 0;
-        if (count === 0) return '';
-        const active = bibliothekFilter === ebene;
-        return `<button onclick="bibliothekFilter='${ebene}';renderBibliothek()"
-          style="padding:8px 18px;border-radius:20px;border:2px solid ${active ? cfg.farbe : '#E5E7EB'};background:${active ? cfg.farbe : '#fff'};color:${active ? '#fff' : '#374151'};font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
-          ${cfg.icon} ${cfg.label} <span style="opacity:0.7;">${count}</span>
-        </button>`;
-      }).join('')}
-    </div>
-
-    <!-- Ergebnis-Info -->
-    ${q || bibliothekFilter !== 'alle' ? `<div style="font-size:12px;color:#6B7280;margin-bottom:12px;">${filtered.length} Ergebnis${filtered.length !== 1 ? 'se' : ''}${q ? ' für "' + escapeHtml(q) + '"' : ''}${bibliothekFilter !== 'alle' && ebenenConfig[bibliothekFilter] ? ' in ' + ebenenConfig[bibliothekFilter].label : ''}</div>` : ''}
-
-    <!-- Karten-Grid -->
-    <div class="bibliothek-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
-      ${filtered.length === 0 ? '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF;">Keine Ergebnisse gefunden.</div>' : ''}
-      ${filtered.map(item => {
-        const cfg = typConfig[item.typ];
-        return renderBibliothekKarte(item, cfg);
-      }).join('')}
-    </div>
-  `;
+  container.innerHTML =
+    '<div style="margin-bottom:20px;">' +
+      '<h2 style="margin:0 0 4px;font-size:22px;font-weight:700;">📚 Bibliothek</h2>' +
+      '<p style="margin:0;font-size:13px;color:#6B7280;">Alle Ressourcen nach Themenbereich organisiert</p>' +
+    '</div>' +
+    '<div style="margin-bottom:14px;">' +
+      '<input type="text" id="bib-suche" placeholder="Suche nach Thema, Arbeitsblatt, Modul..." value="' + escapeHtml(bibliothekSuche) + '" oninput="bibliothekSuche=this.value;renderBibliothek()" style="width:100%;padding:11px 16px;border:2px solid #E5E7EB;border-radius:12px;font-size:14px;box-sizing:border-box;transition:border-color 0.2s;outline:none;" onfocus="this.style.borderColor=\'#2563EB\'" onblur="this.style.borderColor=\'#E5E7EB\'">' +
+    '</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;">' + filterBtns + '</div>' +
+    (sectionsHtml || '<div style="text-align:center;padding:40px;color:#9CA3AF;">Keine Ergebnisse gefunden.</div>');
 
   // Focus erhalten
   if (q) {
-    const inp = document.getElementById('bib-suche');
+    var inp = document.getElementById('bib-suche');
     if (inp) { inp.focus(); inp.setSelectionRange(q.length, q.length); }
   }
 }
 
+function toggleBibSection(sectionId) {
+  bibliothekOpenSections[sectionId] = bibliothekOpenSections[sectionId] === false ? true : false;
+  renderBibliothek();
+}
+
 function renderBibliothekKarte(item, cfg) {
-  let actionHtml = '';
-  let metaHtml = '';
+  var actionHtml = '';
+  var metaHtml = '';
 
   switch (item.typ) {
     case 'fachkraft':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('fachkraft-module/${item.datei}', '_blank')">Öffnen</button>`;
-      metaHtml = item.themen.length > 1 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.themen.length} Themen</div>` : '';
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="window.open(\'fachkraft-module/' + item.datei + '\', \'_blank\')">Öffnen</button>';
       break;
     case 'therapie':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('therapie-module/${item.datei}', '_blank')">Öffnen</button>`;
-      metaHtml = item.themen.length > 1 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.themen.length} Themen</div>` : '';
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="window.open(\'therapie-module/' + item.datei + '\', \'_blank\')">Öffnen</button>';
       break;
     case 'intervention':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="renderAktivitaetenBrowser('${item.themaId}')">Anzeigen</button>`;
-      metaHtml = `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.anzahl} Aktivitäten</div>`;
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="renderAktivitaetenBrowser(\'' + item.themaId + '\')">Anzeigen</button>';
+      metaHtml = '<div style="font-size:10px;color:#6B7280;margin-top:2px;">' + item.anzahl + ' Aktivitäten</div>';
       break;
     case 'arbeitsblatt':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('arbeitsblatter/${item.datei}', '_blank')">Öffnen</button>`;
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="window.open(\'arbeitsblatter/' + item.datei + '\', \'_blank\')">Öffnen</button>';
       break;
     case 'wiki':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="openWikiArtikel('${item.wikiId}')">Lesen</button>`;
-      metaHtml = item.kategorie ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.kategorie}</div>` : '';
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="openWikiArtikel(\'' + item.wikiId + '\')">Lesen</button>';
+      metaHtml = item.kategorie ? '<div style="font-size:10px;color:#6B7280;margin-top:2px;">' + item.kategorie + '</div>' : '';
       break;
     case 'elterninfo':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('eltern-infoblaetter/${item.datei}', '_blank')">Öffnen</button>`;
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="window.open(\'eltern-infoblaetter/' + item.datei + '\', \'_blank\')">Öffnen</button>';
       break;
     case 'leitfaden_eltern':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('eltern-infoblaetter/${item.datei}', '_blank')">Öffnen</button>`;
-      metaHtml = item.beschreibung ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.beschreibung}</div>` : '';
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="window.open(\'eltern-infoblaetter/' + item.datei + '\', \'_blank\')">Öffnen</button>';
+      metaHtml = item.beschreibung ? '<div style="font-size:10px;color:#6B7280;margin-top:2px;">' + item.beschreibung + '</div>' : '';
       break;
     case 'evaluation':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('evaluationsboegen/${item.datei}', '_blank')">Öffnen</button>`;
-      metaHtml = item.frequenz ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">${item.frequenz}</div>` : '';
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="window.open(\'evaluationsboegen/' + item.datei + '\', \'_blank\')">Öffnen</button>';
+      metaHtml = item.frequenz ? '<div style="font-size:10px;color:#6B7280;margin-top:2px;">' + item.frequenz + '</div>' : '';
       break;
     case 'ueberweisung':
-      actionHtml = `<button class="btn btn-sm" style="background:${cfg.farbe};color:#fff;border:none;border-radius:8px;padding:5px 14px;font-size:12px;cursor:pointer;" onclick="window.open('ueberweisungen/${item.datei}', '_blank')">Öffnen</button>`;
+      actionHtml = '<button class="btn btn-sm" style="background:' + cfg.farbe + ';color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;" onclick="window.open(\'ueberweisungen/' + item.datei + '\', \'_blank\')">Öffnen</button>';
       break;
   }
 
-  const ebene = item.ebene || 'praxis';
-  const ebCfg = { praxis: { label: 'Praxis', icon: '🛠️' }, leitfaden: { label: 'Leitfaden', icon: '📋' }, fachwissen: { label: 'Fachwissen', icon: '🎓' }, elternarbeit: { label: 'Elternarbeit', icon: '👨‍👩‍👧' }, evaluation: { label: 'Evaluation', icon: '📊' }, vernetzung: { label: 'Vernetzung', icon: '🏥' } }[ebene];
-  const fachpersonalBadge = item.typ === 'fachkraft' ? '<span style="font-size:9px;padding:2px 6px;border-radius:8px;background:#FEF3C7;color:#92400E;font-weight:600;margin-left:auto;">Fachpersonal</span>' : '';
+  var favStar = item.favorit ? '⭐' : '☆';
+  var favBtnHtml = '<button onclick="event.stopPropagation();toggleBibliothekFavorit(\'' + item.id + '\')" style="background:none;border:none;font-size:14px;cursor:pointer;padding:2px;line-height:1;" title="' + (item.favorit ? 'Favorit entfernen' : 'Als Favorit merken') + '">' + favStar + '</button>';
 
-  // Evidenz-Sterne (1-3)
-  const evidenz = item.evidenz || 1;
-  const evidenzLabels = { 1: 'Ergänzend', 2: 'Praxisbewährt', 3: 'Evidenzbasiert' };
-  const sterne = '★'.repeat(evidenz) + '☆'.repeat(3 - evidenz);
-  const evidenzHtml = `<span style="font-size:10px;color:#F59E0B;" title="${evidenzLabels[evidenz]}">${sterne}</span>`;
-
-  // Favorit-Button
-  const favStar = item.favorit ? '⭐' : '☆';
-  const favBtnHtml = `<button onclick="event.stopPropagation();toggleBibliothekFavorit('${item.id}')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;line-height:1;" title="${item.favorit ? 'Favorit entfernen' : 'Als Favorit merken'}">${favStar}</button>`;
-
-  return `
-    <div class="bibliothek-karte" style="background:#fff;border:1px solid ${item.favorit ? '#FDE68A' : '#E5E7EB'};border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:box-shadow 0.2s,transform 0.2s;cursor:default;border-top:3px solid ${cfg.farbe};"
-      onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';this.style.transform='translateY(-2px)'"
-      onmouseout="this.style.boxShadow='none';this.style.transform='none'">
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <span style="font-size:18px;">${item.icon || cfg.icon}</span>
-        <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${cfg.bg};color:${cfg.farbe};font-weight:600;">${cfg.label}</span>
-        <span style="font-size:9px;padding:2px 6px;border-radius:8px;background:#F3F4F6;color:#6B7280;">${ebCfg.icon} ${ebCfg.label}</span>
-        ${evidenzHtml}
-        ${fachpersonalBadge}
-        <span style="margin-left:auto;">${favBtnHtml}</span>
-      </div>
-      <div style="font-weight:600;font-size:14px;color:#1F2937;line-height:1.3;">${item.label}</div>
-      ${metaHtml}
-      <div style="margin-top:auto;padding-top:8px;display:flex;align-items:center;gap:8px;">
-        ${actionHtml}
-        <span style="font-size:10px;color:#9CA3AF;margin-left:auto;">${evidenzLabels[evidenz]}</span>
-      </div>
-    </div>
-  `;
+  return '<div class="bibliothek-karte" style="background:#fff;border:1px solid ' + (item.favorit ? '#FDE68A' : '#E5E7EB') + ';border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;transition:box-shadow 0.2s,transform 0.2s;cursor:default;border-left:3px solid ' + cfg.farbe + ';" onmouseover="this.style.boxShadow=\'0 4px 12px rgba(0,0,0,0.08)\';this.style.transform=\'translateY(-1px)\'" onmouseout="this.style.boxShadow=\'none\';this.style.transform=\'none\'">' +
+    '<div style="display:flex;align-items:center;gap:6px;">' +
+      '<span style="font-size:15px;">' + (item.icon || cfg.icon) + '</span>' +
+      '<span style="font-size:10px;padding:1px 7px;border-radius:8px;background:' + cfg.bg + ';color:' + cfg.farbe + ';font-weight:600;">' + cfg.label + '</span>' +
+      '<span style="margin-left:auto;">' + favBtnHtml + '</span>' +
+    '</div>' +
+    '<div style="font-weight:600;font-size:13px;color:#1F2937;line-height:1.3;">' + item.label + '</div>' +
+    metaHtml +
+    '<div style="margin-top:auto;padding-top:6px;">' + actionHtml + '</div>' +
+  '</div>';
 }
 
 function filterBibliothek(query) {
@@ -2944,7 +2932,6 @@ function openThemaPanel(katId, themaId) {
 }
 
 function renderArbeitsblaetter(themaId) {
-  const blaetter = ARBEITSBLÄTTER[themaId] || [];
   const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
   const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
   const modul = typeof THEMA_MODULE !== 'undefined' ? (THEMA_MODULE[themaId] || null) : null;
@@ -2952,7 +2939,7 @@ function renderArbeitsblaetter(themaId) {
   const fkDatei = typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' ? (FACHKRAFT_MODULE_DATEIEN[themaId] || null) : null;
   const elternInfos = typeof ELTERN_INFOBLAETTER !== 'undefined' ? (ELTERN_INFOBLAETTER[themaId] || []) : [];
 
-  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul && !tmDatei && !fkDatei && elternInfos.length === 0) return '';
+  if (aktivitaeten.length === 0 && interventionen.length === 0 && !modul && !tmDatei && !fkDatei && elternInfos.length === 0) return '';
 
   const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0 || tmDatei;
   const hasFachkraft = !!fkDatei;
@@ -2963,7 +2950,7 @@ function renderArbeitsblaetter(themaId) {
       <div class="panel-tabs" id="panel-tabs-${themaId}">
         <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">
           🛠️ Praxis
-          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Arbeitsblätter & Aktivitäten</span>
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Aktivitäten & Interventionen</span>
         </button>
         ${hasModul ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','tm')">
           📋 Leitfaden
@@ -2980,19 +2967,8 @@ function renderArbeitsblaetter(themaId) {
       </div>
 
       <div id="pt-ab-${themaId}" class="panel-tab-content">
-        ${blaetter.length > 0 ? `
-        <div style="font-size:11px;font-weight:600;color:#1D4ED8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">📋 Arbeitsblätter</div>
-        ${blaetter.map(b => `
-          <a href="arbeitsblatter/${b.datei}" target="_blank"
-             style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;
-                    background:#EFF6FF;border:1.5px solid #BAE6FD;border-radius:6px;
-                    text-decoration:none;color:#1D4ED8;font-size:12px;font-weight:600;">
-            <span style="font-size:16px;">📋</span>
-            <span style="flex:1;">${b.titel}</span>
-            <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
-          </a>`).join('')}` : ''}
         ${interventionen.length > 0 ? `
-        <div style="font-size:11px;font-weight:600;color:#F59E0B;text-transform:uppercase;letter-spacing:0.5px;margin:${blaetter.length > 0 ? '14px' : '0'} 0 8px;">🎯 Aktivitäten (${interventionen.length})</div>
+        <div style="font-size:11px;font-weight:600;color:#F59E0B;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">🎯 Aktivitäten (${interventionen.length})</div>
         ${interventionen.slice(0, 5).map(iv => `
           <div style="padding:8px 12px;margin-bottom:6px;background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:6px;">
             <div style="font-weight:600;font-size:12px;color:#92400E;">${iv.titel}</div>
@@ -3001,7 +2977,7 @@ function renderArbeitsblaetter(themaId) {
           </div>`).join('')}
         ${interventionen.length > 5 ? `<button class="btn btn-secondary btn-sm" onclick="renderAktivitaetenBrowser('${themaId}')" style="width:100%;margin-top:4px;">Alle ${interventionen.length} Aktivitäten anzeigen →</button>` : ''}
         ` : ''}
-        ${blaetter.length === 0 && interventionen.length === 0 ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Praxis-Materialien verfügbar</p>' : ''}
+        ${interventionen.length === 0 ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Praxis-Materialien verfügbar</p>' : ''}
       </div>
 
       ${hasModul ? `
@@ -5353,8 +5329,7 @@ function renderHypothesen(hypothesen) {
                 const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
                 const fkDatei = fkTid ? FACHKRAFT_MODULE_DATEIEN[fkTid] : null;
                 return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
-                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '')
-                  + renderArbeitsblattChipsFromThemenIds(themenIds);
+                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '');
               }).join('')}
               ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => '<span style="background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:6px;font-size:10px;font-family:monospace;">' + c + '</span>').join('') : ''}
             </div>
@@ -6568,18 +6543,7 @@ function renderJustInTimeWissen(schuelerId) {
       });
     }
 
-    // 2. Arbeitsblatt
-    if (domain.worksheets && domain.worksheets.length > 0) {
-      const ws = domain.worksheets[0];
-      empfehlungen.push({
-        typ: 'arbeitsblatt',
-        icon: '📄',
-        titel: ws.replace('.html', '').replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()),
-        detail: `Arbeitsblatt für ${domain.label}`,
-        domain: domain.label,
-        aktion: `window.open('arbeitsblaetter/${ws}','_blank')`
-      });
-    }
+    // (Arbeitsblätter sind jetzt nur in der Bibliothek verfügbar)
 
     // 3. Fachmodul (wenn nicht gelesen)
     const relevantPfade = (DOMAIN_LERNPFAD_MAP[domain.id] || [])
@@ -8666,8 +8630,7 @@ function showQuickEntryPanel(themaId, katId) {
   const thema = kat ? kat.themen.find(t => t.id === themaId) : null;
   if (!thema) return;
 
-  // Arbeitsblätter & Module
-  const arbeitsblaetter = ARBEITSBLÄTTER[themaId] || [];
+  // Module
   const therapieModul = THERAPIE_MODULE_DATEIEN[themaId];
   const fachkraftModul = FACHKRAFT_MODULE_DATEIEN[themaId];
 
@@ -8726,27 +8689,25 @@ function showQuickEntryPanel(themaId, katId) {
         <div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
           <div style="font-weight:700;font-size:13px;color:#1D4ED8;margin-bottom:10px;">${icon('clipboard', 16)} Sofort-Handlungsweg</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            ${arbeitsblaetter.length > 0 ? arbeitsblaetter.map(ab => `
-              <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span>
-                <span><strong>Arbeitsblatt:</strong> ${ab.titel}</span>
-                <a href="arbeitsblaetter/${ab.datei}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
-              </div>
-            `).join('') : '<div style="font-size:12px;color:#6B7280;">Kein Arbeitsblatt verfügbar</div>'}
             ${therapieModul ? `
               <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span>
+                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span>
                 <span><strong>Therapiemodul:</strong> Detaillierter Sitzungsleitfaden</span>
                 <a href="therapie-module/${therapieModul}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
               </div>
             ` : ''}
             ${fachkraftModul ? `
               <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span>
+                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">${therapieModul ? '2' : '1'}</span>
                 <span><strong>Fachkraft-Hintergrund:</strong> Klinisches Wissen</span>
                 <a href="fachkraft-module/${fachkraftModul}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
               </div>
             ` : ''}
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+              <span style="width:20px;height:20px;border-radius:50%;background:#6366F1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">📚</span>
+              <span><strong>Bibliothek:</strong> Alle Materialien zu diesem Thema</span>
+              <span onclick="showView('bibliothek');document.getElementById('quick-entry-panel')?.remove();" style="margin-left:auto;color:#6366F1;font-size:11px;cursor:pointer;">Bibliothek →</span>
+            </div>
           </div>
         </div>
 
@@ -9980,17 +9941,15 @@ function renderSitzungsvorschlag() {
   } catch(e) { /* silent */ }
 
   // ── Material für empfohlenes Thema sammeln ──
-  const empfAB = ARBEITSBLÄTTER[empfohlenesThema.id] || [];
   const empfIV = THEMA_INTERVENTIONEN[empfohlenesThema.id] || [];
   const empfWiki = typeof findWikiForThema === 'function' ? findWikiForThema(empfohlenesThema.id) : null;
   const empfPrio = typeof getThemaPrioritaet === 'function' ? getThemaPrioritaet(empfohlenesThema.id, DB.getRoadmap(sid)) : null;
 
   let materialHTML = '';
-  if (empfAB.length > 0 || empfIV.length > 0 || empfWiki) {
+  if (empfIV.length > 0 || empfWiki) {
     materialHTML = `<div class="sitzungsvorschlag-materialien">
       <div class="sitzungsvorschlag-materialien-header">Materialien & Interventionen</div>
       <div class="roadmap-material-links">
-        ${empfAB.map(ab => `<a href="arbeitsblatter/${ab.datei}" target="_blank" class="roadmap-material-btn arbeitsblatt">📋 ${ab.titel}</a>`).join('')}
         ${empfIV.slice(0, 3).map(iv => `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${empfohlenesThema.id}')" title="${(iv.beschreibung || '').substring(0, 100)}">🔧 ${iv.titel} <span style="font-size:10px;opacity:.7;">${iv.dauer || ''}</span></button>`).join('')}
         ${empfIV.length > 3 ? `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${empfohlenesThema.id}')">+${empfIV.length - 3} weitere</button>` : ''}
         ${empfWiki ? `<button class="roadmap-material-btn wiki" onclick="openWikiArtikel('${empfWiki.id}')">📚 Wiki</button>` : ''}
@@ -13179,16 +13138,12 @@ function renderFokusThemaKarte(thema, themaIdx, phase, roadmap) {
   }
 
   // Material sammeln
-  const arbeitsblaetter = ARBEITSBLÄTTER[thema.id] || [];
   const interventionen = THEMA_INTERVENTIONEN[thema.id] || [];
   const wiki = typeof findWikiForThema === 'function' ? findWikiForThema(thema.id) : null;
 
   let materialHtml = '';
-  if (arbeitsblaetter.length > 0 || interventionen.length > 0 || wiki) {
+  if (interventionen.length > 0 || wiki) {
     materialHtml = '<div class="roadmap-material-links">';
-    arbeitsblaetter.forEach(ab => {
-      materialHtml += `<a href="arbeitsblatter/${ab.datei}" target="_blank" class="roadmap-material-btn arbeitsblatt">📋 ${ab.titel}</a>`;
-    });
     interventionen.slice(0, 3).forEach(iv => {
       materialHtml += `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${thema.id}')" title="${iv.beschreibung || ''}">🔧 ${iv.titel}</button>`;
     });
@@ -14213,7 +14168,7 @@ function evaluateCSSRS() {
         - Therapeutische Anbindung einleiten<br>
         - Re-Assessment innerhalb 1 Woche
       </div>
-      <button class="btn btn-warning btn-sm" onclick="window.open('arbeitsblaetter/krisenplan.html','_blank');document.getElementById('cssrs-overlay').remove();" style="margin-top:8px;">Krisenplan-Arbeitsblatt öffnen</button>`;
+      <button class="btn btn-warning btn-sm" onclick="window.open('arbeitsblatter/krisenplan.html','_blank');document.getElementById('cssrs-overlay').remove();" style="margin-top:8px;">Krisenplan-Arbeitsblatt öffnen</button>`;
     farbe = '#FEF3C7';
   } else {
     ergebnis = `<div style="color:#DC2626;font-weight:600;">AKUTE GEFÄHRDUNG (${jaCount}/5 positiv)</div>
@@ -14309,7 +14264,7 @@ function renderScreeningErgebnis(scr) {
         ${d.cutoffQuelle ? `<div style="font-size:10px;color:#9CA3AF;margin-top:2px;">Cutoff ≥${d.cutoff}: ${d.cutoffQuelle}</div>` : ''}
         <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
         ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#2563EB;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#EFF6FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1D4ED8;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
-        ${(() => { const _wiki = (typeof findWikiForScreeningDomain === 'function') ? findWikiForScreeningDomain(d.id) : null; return _wiki ? '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;align-items:center;">' + renderWikiLink(_wiki.id) + renderArbeitsblattChipsFromThemenIds(_wiki.themen_ids) + '</div>' : ''; })()}
+        ${(() => { const _wiki = (typeof findWikiForScreeningDomain === 'function') ? findWikiForScreeningDomain(d.id) : null; return _wiki ? '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;align-items:center;">' + renderWikiLink(_wiki.id) + '</div>' : ''; })()}
       </div>`;
     }).join('') + '</div>'
     + '<div style="font-size:11px;color:#6B7280;padding:8px 12px;margin-top:8px;background:#F9FAFB;border-radius:6px;line-height:1.5;">ℹ️ <strong>Was bedeutet „auffällig"?</strong> Scores über dem Cutoff-Wert deuten auf erhöhte Belastung hin. Diese Bereiche sollten im Förderplan priorisiert und bei der 5P-Analyse als „Presenting" aufgenommen werden.</div>';
@@ -14381,15 +14336,7 @@ function renderScrNaechsteSchritte(scr) {
     }
   });
 
-  // Arbeitsblätter basierend auf flagged domains via Wiki
-  const relevanteThemenIds = [];
-  flagged.forEach(fId => {
-    const wiki = typeof findWikiForScreeningDomain === 'function' ? findWikiForScreeningDomain(fId) : null;
-    if (wiki && wiki.themen_ids) wiki.themen_ids.forEach(tid => {
-      if (relevanteThemenIds.indexOf(tid) === -1) relevanteThemenIds.push(tid);
-    });
-  });
-  const abChipsHtml = renderArbeitsblattChipsFromThemenIds(relevanteThemenIds);
+  // (Arbeitsblätter sind jetzt nur in der Bibliothek verfügbar)
 
   // Krise erkannt?
   const krisenDomains = flagged.filter(f => ['selbstverletzung', 'suizidalitaet', 'psychose'].includes(f));
@@ -14448,19 +14395,8 @@ function renderScrNaechsteSchritte(scr) {
             </div>
           </div>` : ''}
 
-          ${abChipsHtml ? `
           <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
-            <span class="scr-wizard-nr" style="background:#C2410C;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${relevanteModule.length > 0 ? '4' : '3'}</span>
-            <div style="flex:1;">
-              <div style="font-weight:600;font-size:13px;">Arbeitsblätter für die Sitzung</div>
-              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">
-                ${abChipsHtml}
-              </div>
-            </div>
-          </div>` : ''}
-
-          <div class="scr-wizard-step" style="display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:white;border-radius:8px;border:1px solid #E2E8F0;">
-            <span class="scr-wizard-nr" style="background:#D97706;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${(relevanteModule.length > 0 ? 1 : 0) + (abChipsHtml ? 1 : 0) + 3}</span>
+            <span class="scr-wizard-nr" style="background:#D97706;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${(relevanteModule.length > 0 ? 1 : 0) + 3}</span>
             <div style="flex:1;">
               <div style="font-weight:600;font-size:13px;">Förderplan erstellen</div>
               <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Screening-basierte Roadmap mit priorisierten Themen und Sitzungsvorschlägen</div>
@@ -14877,31 +14813,10 @@ function renderScrRadarChart(scr) {
 
 function renderScrEmpfehlungen(scr) {
   const el = document.getElementById('scr-empfehlungen-liste');
-  const recs = scr.worksheetRecommendations || [];
-
-  if (!recs.length) {
-    el.innerHTML = '<div style="color:#888;padding:20px;text-align:center;">Keine Empfehlungen verfügbar.</div>';
-    return;
-  }
-
-  el.innerHTML = recs.map((rec, i) => {
-    const domain = SCREENING_DOMAINS.find(d => (d.worksheets || []).includes(rec.datei));
-    const icon = domain ? domain.icon : '📋';
-    const farbe = domain ? domain.farbe : '#3B6CB7';
-    // Find worksheet title from ARBEITSBLÄTTER
-    const key = rec.datei.replace('.html', '');
-    const titel = (ARBEITSBLÄTTER[key] && ARBEITSBLÄTTER[key][0]) ?
-      ARBEITSBLÄTTER[key][0].titel : rec.datei;
-
-    return `<div class="scr-empfehlung-card" style="border-left:4px solid ${farbe};">
-      <div class="scr-empf-rank">${i + 1}</div>
-      <div class="scr-empf-info">
-        <div class="scr-empf-titel">${icon} ${titel}</div>
-        <div class="scr-empf-meta">Relevanz-Score: ${rec.score}</div>
-      </div>
-      <a class="btn btn-secondary btn-sm" href="arbeitsblatter/${rec.datei}" target="_blank">📄 Öffnen</a>
-    </div>`;
-  }).join('');
+  el.innerHTML = '<div style="padding:20px;text-align:center;">' +
+    '<p style="color:#6B7280;font-size:13px;margin-bottom:12px;">Alle Arbeitsblätter und Materialien findest du in der Bibliothek, thematisch sortiert.</p>' +
+    '<button class="btn btn-primary btn-sm" onclick="showView(\'bibliothek\')">📚 Bibliothek öffnen</button>' +
+  '</div>';
 }
 
 function renderScrVerlauf(schuelerId) {
@@ -15643,7 +15558,7 @@ function renderVerhaltensEintrag(e, farbe) {
   if (typeof findWikiForVerhalten === 'function') {
     var wikiArt = findWikiForVerhalten(e.id);
     if (wikiArt) {
-      html += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">' + renderWikiLink(wikiArt.id) + renderArbeitsblattChipsFromThemenIds(wikiArt.themen_ids) + '</div>';
+      html += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">' + renderWikiLink(wikiArt.id) + '</div>';
     }
   }
 
@@ -16448,16 +16363,6 @@ function renderWikiRessourcen(a) {
   // Sammle alle verlinkten Ressourcen
   var links = [];
 
-  // Arbeitsblätter
-  if (a.themen_ids && typeof ARBEITSBLÄTTER !== 'undefined') {
-    a.themen_ids.forEach(function(tid) {
-      var ab = ARBEITSBLÄTTER[tid];
-      if (ab) ab.forEach(function(b) {
-        links.push({ typ: 'Arbeitsblatt', icon: '📝', titel: b.titel, href: 'arbeitsblatter/' + b.datei });
-      });
-    });
-  }
-
   // Therapiemodule
   if (a.themen_ids && typeof THERAPIE_MODULE_DATEIEN !== 'undefined') {
     a.themen_ids.forEach(function(tid) {
@@ -16512,19 +16417,8 @@ function renderWikiLink(artikelId) {
 }
 
 function renderArbeitsblattChipsFromThemenIds(themenIds) {
-  if (!themenIds || !themenIds.length || typeof ARBEITSBLÄTTER === 'undefined') return '';
-  var seen = {};
-  var chips = [];
-  themenIds.forEach(function(tid) {
-    var abs = ARBEITSBLÄTTER[tid];
-    if (abs) abs.forEach(function(ab) {
-      if (!seen[ab.datei]) {
-        seen[ab.datei] = true;
-        chips.push('<a href="arbeitsblatter/' + ab.datei + '" target="_blank" style="cursor:pointer;background:#FFF7ED;border:1px solid #FED7AA;color:#C2410C;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;">📝 ' + ab.titel + '</a>');
-      }
-    });
-  });
-  return chips.join('');
+  // Arbeitsblätter sind jetzt nur in der Bibliothek verfügbar
+  return '';
 }
 
 function findWikiForScreeningDomain(domainId) {

@@ -2766,6 +2766,11 @@ function filterBibliothek(query) {
   renderBibliothek();
 }
 
+function openBibliothekMitSuche(suchbegriff) {
+  bibliothekSuche = suchbegriff;
+  showView('bibliothek');
+}
+
 function toggleBibliothekFavorit(itemId) {
   const favKey = 'pathways_bibliothek_favoriten';
   let favoriten = [];
@@ -12444,7 +12449,7 @@ function renderHandlungsTriage(ff, sid) {
         <div style="padding:8px 12px;background:#fff;border:1px solid #BFDBFE;border-left:4px solid #4F46E5;border-radius:6px;margin-bottom:6px;">
           <div style="font-weight:600;color:#4338CA;">${dom.icon} ${dom.label} <span style="font-weight:400;color:#6B7280;">(Score: ${score})</span></div>
           ${dom.ueberweisungAn ? `<div style="font-size:12px;color:#4F46E5;margin-top:4px;">\u{1F4CB} \u00DCberweisung an: <strong>${dom.ueberweisungAn}</strong></div>` : ''}
-          ${themen.length > 0 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">Was wir parallel tun k\u00F6nnen: ${themen.map(t => `<em>${t}</em>`).join(', ')}</div>` : ''}
+          ${themen.length > 0 ? `<div style="font-size:11px;color:#6B7280;margin-top:4px;">Was wir parallel tun k\u00F6nnen: ${themen.map(t => `<em onclick="openBibliothekMitSuche('${t.replace(/'/g, "\\'")}')" style="cursor:pointer;color:#4F46E5;text-decoration:underline;text-decoration-style:dotted;">${t}</em>`).join(', ')}</div>` : ''}
         </div>`;
     });
     html += '</div>';
@@ -12460,14 +12465,14 @@ function renderHandlungsTriage(ff, sid) {
       const themen = getThemenForDomain(dom.id);
       themen.forEach(t => { if (!allThemen.includes(t)) allThemen.push(t); });
       html += `
-        <span style="display:inline-block;padding:4px 10px;background:#fff;border:1px solid #BFDBFE;border-radius:16px;font-size:12px;color:#1D4ED8;margin:0 4px 4px 0;">
+        <span onclick="openBibliothekMitSuche('${dom.label.replace(/'/g, "\\'")}')" style="display:inline-block;padding:4px 10px;background:#fff;border:1px solid #BFDBFE;border-radius:16px;font-size:12px;color:#1D4ED8;margin:0 4px 4px 0;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#DBEAFE';this.style.borderColor='#3B82F6'" onmouseout="this.style.background='#fff';this.style.borderColor='#BFDBFE'">
           ${dom.icon} ${dom.label} (${score})
         </span>`;
     });
     if (allThemen.length > 0) {
       html += `
         <div style="font-size:12px;color:#6B7280;margin-top:8px;">
-          Empfohlene Themen: ${allThemen.slice(0, 6).map(t => `<strong>${t}</strong>`).join(', ')}
+          Empfohlene Themen: ${allThemen.slice(0, 6).map(t => `<strong onclick="openBibliothekMitSuche('${t.replace(/'/g, "\\'")}')" style="cursor:pointer;color:#2563EB;text-decoration:underline;text-decoration-style:dotted;" onmouseover="this.style.color='#1D4ED8'" onmouseout="this.style.color='#2563EB'">${t}</strong>`).join(', ')}
         </div>`;
     }
     html += '</div>';
@@ -12480,7 +12485,7 @@ function renderHandlungsTriage(ff, sid) {
         <div style="font-size:13px;font-weight:700;color:#6B7280;margin-bottom:8px;">\u{1F441}\u{FE0F} BEOBACHTEN</div>`;
     grouped.beobachtung.forEach(({ dom, score }) => {
       html += `
-        <span style="display:inline-block;padding:4px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:16px;font-size:12px;color:#6B7280;margin:0 4px 4px 0;">
+        <span onclick="openBibliothekMitSuche('${dom.label.replace(/'/g, "\\'")}')" style="display:inline-block;padding:4px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:16px;font-size:12px;color:#6B7280;margin:0 4px 4px 0;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#F3F4F6';this.style.borderColor='#9CA3AF'" onmouseout="this.style.background='#fff';this.style.borderColor='#E5E7EB'">
           ${dom.icon} ${dom.label} (${score}) \u2014 st\u00E4rken
         </span>`;
     });

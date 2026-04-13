@@ -174,18 +174,16 @@
     <div class="content">
       <div id="hero-card"></div>
       <div class="home-stats" id="home-stats"></div>
-      <!-- Ansicht-Toggle: Klienten / Kaseload -->
+      <!-- Ansicht-Toggle -->
       <div style="display:flex;gap:6px;margin:8px 0 12px 0;" id="home-view-toggle">
         <button class="btn btn-sm active" id="btn-view-klienten" onclick="switchHomeView('klienten')" style="font-size:12px;padding:4px 12px;">👥 Klienten</button>
-        <button class="btn btn-sm" id="btn-view-kaseload" onclick="switchHomeView('kaseload')" style="font-size:12px;padding:4px 12px;">📊 Kaseload</button>
+        <button class="btn btn-sm" id="btn-view-kaseload" onclick="switchHomeView('kaseload')" style="font-size:12px;padding:4px 12px;">📊 Analysen</button>
       </div>
       <div id="ampelsystem"></div>
-      <!-- Therapeutischer Zwilling: Spiegel (Berater-Selbstreflexion) -->
-      <div id="spiegel-widget"></div>
-      <!-- Wirkungsmaschine: Klinischer Fingerabdruck -->
-      <div id="klinischer-fingerabdruck-widget"></div>
       <div class="home-grid" id="home-grid"></div>
       <div id="kaseload-view" style="display:none;"></div>
+      <div id="spiegel-widget"></div>
+      <div id="klinischer-fingerabdruck-widget"></div>
     </div>
   </div>
 
@@ -473,157 +471,43 @@
 
         <!-- Sitzungsprotokoll-Template (SOAP) — Wizard-Stepper -->
         <div id="notiz-modus-protokoll" class="notiz-form" style="display:none;">
-          <div class="protokoll-titel">📋 Sitzungsprotokoll (SOAP)</div>
+          <!-- ═══ SOAP — Alles auf einer Seite ═══ -->
 
-          <!-- Wizard-Stepper Navigation -->
-          <div class="soap-wizard-stepper">
-            <div class="soap-step-item">
-              <div class="soap-step-dot active" data-step="1" onclick="soapWizardGo(1)">① Setup</div>
-            </div>
-            <div class="soap-step-line" id="soap-line-1"></div>
-            <div class="soap-step-item">
-              <div class="soap-step-dot" data-step="2" onclick="soapWizardGo(2)">② SOAP</div>
-            </div>
-            <div class="soap-step-line" id="soap-line-2"></div>
-            <div class="soap-step-item">
-              <div class="soap-step-dot" data-step="3" onclick="soapWizardGo(3)">③ Bewertung</div>
-            </div>
-            <div class="soap-step-line" id="soap-line-3"></div>
-            <div class="soap-step-item">
-              <div class="soap-step-dot" data-step="4" onclick="soapWizardGo(4)">④ Abschluss</div>
-            </div>
-          </div>
-
-          <!-- ═══ STEP 1: Setup ═══ -->
-          <div class="soap-wizard-step" id="soap-step-1">
-            <div class="protokoll-meta-grid">
-              <div class="form-group">
-                <label>Datum</label>
-                <input type="date" id="prot-datum">
-              </div>
-              <div class="form-group">
-                <label>Dauer</label>
-                <select id="prot-dauer">
-                  <option value="15">15 Min.</option>
-                  <option value="30">30 Min.</option>
-                  <option value="45" selected>45 Min.</option>
-                  <option value="60">60 Min.</option>
-                  <option value="90">90 Min.</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Setting</label>
-                <select id="prot-setting">
-                  <option>Einzelgespräch</option>
-                  <option>Gruppengespräch</option>
-                  <option>Elterngespräch</option>
-                  <option>Telefon</option>
-                  <option>Außenaktivität</option>
-                  <option>Krisenintervention</option>
-                  <option>Hausbesuch</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Sitzungsnr.</label>
-                <input type="number" id="prot-nr" min="1" placeholder="#" style="width:70px;">
-              </div>
-            </div>
-
-            <!-- Stimmung -->
-            <div class="prot-stimmung-row">
-              <label>Stimmung des Jugendlichen:</label>
-              <div class="prot-stimmung-btns" id="prot-stimmung-btns">
-                <button class="prot-stimmung-btn" data-val="sehr-schlecht" onclick="selectProtStimmung(this)">😫<span>Sehr schlecht</span></button>
-                <button class="prot-stimmung-btn" data-val="schlecht" onclick="selectProtStimmung(this)">😞<span>Schlecht</span></button>
-                <button class="prot-stimmung-btn" data-val="neutral" onclick="selectProtStimmung(this)">😐<span>Neutral</span></button>
-                <button class="prot-stimmung-btn" data-val="gut" onclick="selectProtStimmung(this)">🙂<span>Gut</span></button>
-                <button class="prot-stimmung-btn" data-val="sehr-gut" onclick="selectProtStimmung(this)">😄<span>Sehr gut</span></button>
-              </div>
-            </div>
-
-            <!-- Polyvagal Check-in -->
-            <div class="pvt-checkin">
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <label class="pvt-label">🧠 Polyvagal Check-in — Wo ist der Jugendliche heute?</label>
-                <button onclick="showToolLegitimation('pvt')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;color:#6B7280;" title="Fachliche Grundlage anzeigen">📚 Was ist PVT?</button>
-              </div>
-              <div class="pvt-cards" id="pvt-cards">
-                <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVT(this)">
-                  <span class="pvt-dot" style="background:#22C55E;"></span>
-                  <span class="pvt-card-titel">Sicher & offen</span>
-                  <span class="pvt-card-desc">Entspannt, neugierig, Augenkontakt, bereit zu arbeiten</span>
-                </button>
-                <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVT(this)">
-                  <span class="pvt-dot" style="background:#F59E0B;"></span>
-                  <span class="pvt-card-titel">Angespannt / unruhig</span>
-                  <span class="pvt-card-desc">Nervös, ausweichend, Körper angespannt, schwer erreichbar</span>
-                </button>
-                <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVT(this)">
-                  <span class="pvt-dot" style="background:#8B5CF6;"></span>
-                  <span class="pvt-card-titel">Eingefroren / abwesend</span>
-                  <span class="pvt-card-desc">Leer, einsilbig, kein Kontakt, dissoziiert wirkend</span>
-                </button>
-              </div>
-              <div id="pvt-empfehlung" class="pvt-empfehlung" style="display:none;"></div>
-            </div>
-
-            <!-- Engagement-Einschätzung -->
-            <div class="form-group" style="margin-top:12px;">
-              <label>🎯 Engagement des Jugendlichen</label>
-              <div class="srs-slider-wrap">
-                <span style="font-size:11px;color:#9CA3AF;">Gering</span>
-                <input type="range" min="0" max="10" value="5" id="prot-engagement" class="srs-range" style="accent-color:#8B5CF6;" oninput="document.getElementById('prot-engagement-val').textContent=this.value">
-                <span style="font-size:11px;color:#9CA3AF;">Hoch</span>
-                <span class="srs-val" id="prot-engagement-val">5</span>
-              </div>
-            </div>
-
-            <!-- Interventionstyp -->
+          <!-- Setup-Leiste -->
+          <div class="protokoll-meta-grid" style="margin-bottom:12px;">
             <div class="form-group">
-              <label>🛠️ Hauptintervention</label>
-              <select id="prot-interventionstyp" style="width:100%;">
-                <option value="">— Nicht angegeben —</option>
-                <option value="gespraechsfuehrung">Gesprächsführung</option>
-                <option value="psychoedukation">Psychoedukation</option>
-                <option value="rollenspiel">Rollenspiel</option>
-                <option value="achtsamkeit">Achtsamkeit / Grounding</option>
-                <option value="kreativ">Kreativ / Kunst</option>
-                <option value="outdoor">Outdoor / Erlebnispädagogik</option>
-                <option value="sozialkompetenz">Sozialkompetenz-Training</option>
-                <option value="krisenintervention">Krisenintervention</option>
-                <option value="arbeitsblatt">Arbeitsblatt / Übung</option>
-                <option value="elternarbeit">Elterngespräch-Nachbereitung</option>
-                <option value="motivational">Motivational Interviewing</option>
-                <option value="verhaltensaktivierung">Verhaltensaktivierung</option>
+              <label>Datum</label>
+              <input type="date" id="prot-datum">
+            </div>
+            <div class="form-group">
+              <label>Dauer</label>
+              <select id="prot-dauer">
+                <option value="15">15 Min.</option>
+                <option value="30">30 Min.</option>
+                <option value="45" selected>45 Min.</option>
+                <option value="60">60 Min.</option>
+                <option value="90">90 Min.</option>
               </select>
             </div>
-
-            <!-- Externe Ereignisse -->
             <div class="form-group">
-              <label>📌 Externe Ereignisse diese Woche</label>
-              <div class="soap-chip-group">
-                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="streit-zuhause"><span>Streit zu Hause</span></label>
-                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="schulprobleme"><span>Schulprobleme</span></label>
-                <label class="soap-chip soap-chip-positive"><input type="checkbox" class="ext-ereignis-cb" value="positiv"><span>Positives Erlebnis</span></label>
-                <label class="soap-chip soap-chip-danger"><input type="checkbox" class="ext-ereignis-cb" value="krise"><span>Krise / Notfall</span></label>
-                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="veraenderung"><span>Veränderung</span></label>
-                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="krankheit"><span>Krankheit</span></label>
-                <label class="soap-chip soap-chip-muted"><input type="checkbox" class="ext-ereignis-cb" value="keine"><span>Keine besonderen</span></label>
-              </div>
-            </div>
-
-            <!-- Themen-Verknüpfung -->
-            <div class="form-group">
-              <label>Bearbeitetes Thema</label>
-              <select id="prot-thema-id">
-                <option value="">— Kein Thema verknüpft —</option>
+              <label>Setting</label>
+              <select id="prot-setting">
+                <option>Einzelgespräch</option>
+                <option>Gruppengespräch</option>
+                <option>Elterngespräch</option>
+                <option>Telefon</option>
+                <option>Außenaktivität</option>
+                <option>Krisenintervention</option>
+                <option>Hausbesuch</option>
               </select>
             </div>
-
-            <!-- Vorlage -->
-            <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
-              <span style="font-size:12px;color:#6B7280;">📝 Vorlage:</span>
-              <select id="soap-vorlage" onchange="applySoapVorlage(this.value)" style="padding:4px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:12px;cursor:pointer;color:#374151;">
+            <div class="form-group">
+              <label>Nr.</label>
+              <input type="number" id="prot-nr" min="1" placeholder="#" style="width:70px;">
+            </div>
+            <div class="form-group">
+              <label>Vorlage</label>
+              <select id="soap-vorlage" onchange="applySoapVorlage(this.value)">
                 <option value="">— Leer —</option>
                 <option value="erstgespraech">Erstgespräch</option>
                 <option value="regulaer">Reguläre Sitzung</option>
@@ -633,228 +517,178 @@
                 <option value="verlauf">Verlaufskontrolle</option>
               </select>
             </div>
+          </div>
 
-            <div class="soap-wizard-nav">
-              <span></span>
-              <button class="btn-wizard-next primary" onclick="soapWizardGo(2)">Weiter: SOAP-Dokumentation →</button>
+          <!-- Stimmung -->
+          <div class="prot-stimmung-row" style="margin-bottom:10px;">
+            <label>Stimmung:</label>
+            <div class="prot-stimmung-btns" id="prot-stimmung-btns">
+              <button class="prot-stimmung-btn" data-val="sehr-schlecht" onclick="selectProtStimmung(this)">😫</button>
+              <button class="prot-stimmung-btn" data-val="schlecht" onclick="selectProtStimmung(this)">😞</button>
+              <button class="prot-stimmung-btn" data-val="neutral" onclick="selectProtStimmung(this)">😐</button>
+              <button class="prot-stimmung-btn" data-val="gut" onclick="selectProtStimmung(this)">🙂</button>
+              <button class="prot-stimmung-btn" data-val="sehr-gut" onclick="selectProtStimmung(this)">😄</button>
             </div>
           </div>
 
-          <!-- ═══ STEP 2: SOAP Felder ═══ -->
-          <div class="soap-wizard-step" id="soap-step-2" style="display:none;">
-            <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
-              <button onclick="showToolLegitimation('soap')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#6B7280;">📚 Was ist SOAP?</button>
-            </div>
-            <div class="protokoll-soap">
-              <div class="soap-section soap-s">
-                <div class="soap-header"><span class="soap-letter">S</span> Subjektiv — Was berichtet der Jugendliche? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('subjektiv')" title="Beispiel anzeigen">💡</button></div>
-                <div class="soap-beispiel-box" id="soap-beispiel-subjektiv" style="display:none;"></div>
-                <textarea id="prot-subjektiv" class="notiz-textarea" rows="4" maxlength="5000"
-                  placeholder="Eigene Aussagen, Sorgen, Wünsche, Themen die aufkamen..."></textarea>
-              </div>
-              <div class="soap-section soap-o">
-                <div class="soap-header"><span class="soap-letter">O</span> Objektiv — Was beobachtest du? <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('objektiv')" title="Beispiel anzeigen">💡</button></div>
-                <div class="soap-beispiel-box" id="soap-beispiel-objektiv" style="display:none;"></div>
-                <textarea id="prot-objektiv" class="notiz-textarea" rows="4" maxlength="5000"
-                  placeholder="Verhalten, Stimmung, Körpersprache, Veränderungen..."></textarea>
-              </div>
-              <div class="soap-section soap-a">
-                <div class="soap-header"><span class="soap-letter">A</span> Assessment — Deine fachliche Einschätzung <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('assessment')" title="Beispiel anzeigen">💡</button></div>
-                <div class="soap-beispiel-box" id="soap-beispiel-assessment" style="display:none;"></div>
-                <textarea id="prot-assessment" class="notiz-textarea" rows="4" maxlength="5000"
-                  placeholder="Einordnung, Hypothesen, Risiken, Fortschritte..."></textarea>
-              </div>
-              <div class="soap-section soap-p">
-                <div class="soap-header"><span class="soap-letter">P</span> Plan — Nächste Schritte <button class="soap-beispiel-btn" onclick="toggleSoapBeispiel('plan')" title="Beispiel anzeigen">💡</button></div>
-                <div class="soap-beispiel-box" id="soap-beispiel-plan" style="display:none;"></div>
-                <textarea id="prot-plan" class="notiz-textarea" rows="4" maxlength="5000"
-                  placeholder="Vereinbarungen, Interventionen, Überweisungen, Ziele bis nächste Sitzung..."></textarea>
-              </div>
-            </div>
+          <!-- Thema -->
+          <div class="form-group" style="margin-bottom:12px;">
+            <label>Bearbeitetes Thema</label>
+            <select id="prot-thema-id">
+              <option value="">— Kein Thema verknüpft —</option>
+            </select>
+          </div>
 
-            <div class="soap-wizard-nav">
-              <button class="btn-wizard-back" onclick="soapWizardGo(1)">← Setup</button>
-              <button class="btn-wizard-next primary" onclick="soapWizardGo(3)">Weiter: Bewertung →</button>
+          <!-- SOAP Felder -->
+          <div class="protokoll-soap">
+            <div class="soap-section soap-s">
+              <div class="soap-header"><span class="soap-letter">S</span> Subjektiv</div>
+              <textarea id="prot-subjektiv" class="notiz-textarea" rows="3" maxlength="5000"
+                placeholder="Was berichtet der Jugendliche? Aussagen, Sorgen, Themen..."></textarea>
+            </div>
+            <div class="soap-section soap-o">
+              <div class="soap-header"><span class="soap-letter">O</span> Objektiv</div>
+              <textarea id="prot-objektiv" class="notiz-textarea" rows="3" maxlength="5000"
+                placeholder="Was beobachtest du? Verhalten, Stimmung, Körpersprache..."></textarea>
+            </div>
+            <div class="soap-section soap-a">
+              <div class="soap-header"><span class="soap-letter">A</span> Assessment</div>
+              <textarea id="prot-assessment" class="notiz-textarea" rows="3" maxlength="5000"
+                placeholder="Deine Einschätzung: Fortschritte, Risiken, Hypothesen..."></textarea>
+            </div>
+            <div class="soap-section soap-p">
+              <div class="soap-header"><span class="soap-letter">P</span> Plan</div>
+              <textarea id="prot-plan" class="notiz-textarea" rows="3" maxlength="5000"
+                placeholder="Nächste Schritte, Vereinbarungen, nächster Termin..."></textarea>
             </div>
           </div>
 
-          <!-- ═══ STEP 3: Bewertung + Materialien ═══ -->
-          <div class="soap-wizard-step" id="soap-step-3" style="display:none;">
-            <!-- Risiko-Check (Sicherheits-Ampel) -->
-            <div id="risiko-check-section"></div>
+          <!-- Materialien -->
+          <div class="form-group" style="margin-top:10px;">
+            <input type="text" id="prot-materialien" placeholder="Eingesetzte Materialien / Methoden (optional)">
+          </div>
 
-            <!-- Suizidalitäts-Schweregrad (C-SSRS angelehnt) -->
-            <div id="soap-cssrs-schweregrad" style="display:none;margin-top:12px;padding:12px 16px;background:#FEF2F2;border:2px solid #FECACA;border-radius:10px;">
-              <div style="font-size:13px;font-weight:700;color:#991B1B;margin-bottom:8px;">⚠️ Suizidalitäts-Schweregrad (C-SSRS angelehnt)</div>
-              <div style="display:flex;flex-direction:column;gap:6px;" id="cssrs-schweregrad-options">
-                <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:12px;">
-                  <input type="radio" name="cssrs-schweregrad" value="1"> <strong>Stufe 1:</strong> Todeswünsche — "Ich wünschte, ich wäre nicht da"
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:12px;">
-                  <input type="radio" name="cssrs-schweregrad" value="2"> <strong>Stufe 2:</strong> Unspezifische Suizidgedanken — ohne Plan
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;cursor:pointer;font-size:12px;">
-                  <input type="radio" name="cssrs-schweregrad" value="3"> <strong>Stufe 3:</strong> Suizidgedanken mit Plan — ohne Handlungsabsicht
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEE2E2;border:1px solid #FECACA;border-radius:6px;cursor:pointer;font-size:12px;">
-                  <input type="radio" name="cssrs-schweregrad" value="4"> <strong>Stufe 4:</strong> Suizidgedanken mit Plan + Handlungsabsicht
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEE2E2;border:2px solid #EF4444;border-radius:6px;cursor:pointer;font-size:12px;">
-                  <input type="radio" name="cssrs-schweregrad" value="5"> <strong>Stufe 5:</strong> Vorbereitendes/suizidales Verhalten
-                </label>
-              </div>
-              <div id="soap-sicherheitsplan-pflicht" style="display:none;margin-top:10px;padding:10px;background:#7F1D1D10;border:2px solid #7F1D1D;border-radius:8px;">
-                <div style="font-size:12px;font-weight:700;color:#7F1D1D;">🚨 Sicherheitsplan PFLICHT bei Stufe 3+</div>
-                <div style="font-size:11px;color:#7F1D1D;margin-top:6px;padding:6px 8px;background:#FEF2F2;border-radius:6px;line-height:1.5;">
-                  Sicherheitsplan mit dem Arbeitsblatt <strong>«Mein Sicherheitsplan»</strong> (Stanley &amp; Brown, 6 Schritte) ausfüllen und in der Akte dokumentieren.
-                  <br><a href="arbeitsblaetter/krisenplan.html" target="_blank" style="color:#7F1D1D;font-weight:600;text-decoration:underline;cursor:pointer;">Arbeitsblatt «Mein Sicherheitsplan» öffnen</a>
-                </div>
-                <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" id="soap-sicherheitsplan-check">
-                  Sicherheitsplan wurde besprochen und dokumentiert
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" id="soap-supervisor-check">
-                  Supervisor / Fachperson wurde informiert
-                </label>
-              </div>
-            </div>
+          <!-- Ausklappbar: Bewertungsskalen -->
+          <details style="margin-top:12px;border:1px solid var(--border,#E5E7EB);border-radius:10px;overflow:hidden;">
+            <summary style="padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;background:var(--bg-muted,#F9FAFB);color:var(--text,#374151);">📊 Bewertungsskalen (ORS / SRS / PVT)</summary>
+            <div style="padding:12px 14px;">
 
-            <!-- Materialien -->
-            <div class="protokoll-zusatz">
-              <div class="form-group">
-                <label>Eingesetzte Materialien / Methoden</label>
-                <input type="text" id="prot-materialien" placeholder="z.B. Arbeitsblatt Emotionen, Rollenspiel, Genogramm...">
+              <!-- ORS -->
+              <div class="srs-section" style="border-left-color:#3B82F6;margin-bottom:12px;">
+                <div class="srs-header">📈 ORS — Befindlichkeit</div>
+                <div class="srs-sliders">
+                  <div class="srs-row"><label>Persönlich</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="5" id="ors-individual" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()"><span class="srs-val" id="ors-val-individual">5</span></div></div>
+                  <div class="srs-row"><label>Beziehungen</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="5" id="ors-interpersonal" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()"><span class="srs-val" id="ors-val-interpersonal">5</span></div></div>
+                  <div class="srs-row"><label>Sozial</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="5" id="ors-social" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()"><span class="srs-val" id="ors-val-social">5</span></div></div>
+                  <div class="srs-row"><label>Insgesamt</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="5" id="ors-overall" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()"><span class="srs-val" id="ors-val-overall">5</span></div></div>
+                </div>
+                <div class="srs-total" style="background:#EFF6FF;border-color:#BFDBFE;"><span class="srs-total-zahl" id="ors-total-zahl" style="color:#2563EB;">20</span><span class="srs-total-text">/ 40</span></div>
+                <div id="ors-alert" class="srs-alert" style="display:none;background:#EFF6FF;border-color:#93C5FD;color:#1E40AF;">⚠️ ORS unter klinischem Cutoff (28).</div>
               </div>
-            </div>
 
-            <!-- ORS Outcome Rating Scale -->
-            <div class="srs-section" style="border-left-color:#3B82F6;">
-              <div class="srs-header">📈 Befindlichkeit (ORS) <span class="srs-sub">Wie geht es dem Schüler? (1 Minute)</span> <button onclick="showToolLegitimation('ors')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist ORS?</button></div>
-              <div class="srs-sliders">
-                <div class="srs-row">
-                  <label>Persönlich <span>— Wie geht es mir innerlich?</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="5" id="ors-individual" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
-                    <span class="srs-val" id="ors-val-individual">5</span>
-                  </div>
+              <!-- SRS -->
+              <div class="srs-section" style="margin-bottom:12px;">
+                <div class="srs-header">📊 SRS — Sitzungsbewertung</div>
+                <div class="srs-sliders">
+                  <div class="srs-row"><label>Beziehung</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="7" id="srs-relationship" class="srs-range" oninput="updateSRS()"><span class="srs-val" id="srs-val-relationship">7</span></div></div>
+                  <div class="srs-row"><label>Ziele & Themen</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="7" id="srs-goals" class="srs-range" oninput="updateSRS()"><span class="srs-val" id="srs-val-goals">7</span></div></div>
+                  <div class="srs-row"><label>Ansatz</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="7" id="srs-approach" class="srs-range" oninput="updateSRS()"><span class="srs-val" id="srs-val-approach">7</span></div></div>
+                  <div class="srs-row"><label>Gesamteindruck</label><div class="srs-slider-wrap"><input type="range" min="0" max="10" value="7" id="srs-overall" class="srs-range" oninput="updateSRS()"><span class="srs-val" id="srs-val-overall">7</span></div></div>
                 </div>
-                <div class="srs-row">
-                  <label>Beziehungen <span>— Wie läuft es mit Familie & nahestehenden Menschen?</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="5" id="ors-interpersonal" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
-                    <span class="srs-val" id="ors-val-interpersonal">5</span>
-                  </div>
-                </div>
-                <div class="srs-row">
-                  <label>Sozial <span>— Wie läuft es in Schule, Arbeit, Freizeit?</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="5" id="ors-social" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
-                    <span class="srs-val" id="ors-val-social">5</span>
-                  </div>
-                </div>
-                <div class="srs-row">
-                  <label>Insgesamt <span>— Wie geht es mir insgesamt?</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="5" id="ors-overall" class="srs-range" style="accent-color:#3B82F6;" oninput="updateORS()">
-                    <span class="srs-val" id="ors-val-overall">5</span>
-                  </div>
-                </div>
+                <div class="srs-total"><span class="srs-total-zahl" id="srs-total-zahl">28</span><span class="srs-total-text">/ 40</span></div>
+                <div id="srs-alert" class="srs-alert" style="display:none;">⚠️ Score unter 25 — Reflexion empfohlen.</div>
               </div>
-              <div class="srs-total" style="background:#EFF6FF;border-color:#BFDBFE;">
-                <span class="srs-total-zahl" id="ors-total-zahl" style="color:#2563EB;">20</span>
-                <span class="srs-total-text">von 40 Punkten</span>
-              </div>
-              <div id="ors-alert" class="srs-alert" style="display:none;background:#EFF6FF;border-color:#93C5FD;color:#1E40AF;">
-                ⚠️ <strong>ORS unter klinischem Cutoff (28).</strong><br>
-                Der Schüler zeigt relevante Belastungen — Zielorientierung und Interventionsbedarf prüfen.
-              </div>
-              <div class="ref-inline">Klinischer Cutoff Jugendliche: 28/40 (Miller et al., 2003). Unter 28 = klinisch auffällige Belastung. Validiert mit r = .93 zum OQ-45.</div>
-            </div>
 
-            <!-- SRS Session Rating Scale -->
-            <div class="srs-section">
-              <div class="srs-header">📊 Sitzungsbewertung (SRS) <span class="srs-sub">Wie war diese Sitzung? (1 Minute)</span> <button onclick="showToolLegitimation('srs')" style="background:none;border:1px solid #D1D5DB;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer;color:#6B7280;margin-left:8px;">📚 Was ist SRS?</button></div>
-              <div class="srs-sliders">
-                <div class="srs-row">
-                  <label>Beziehung <span>— Ich fühlte mich gehört und verstanden</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="7" id="srs-relationship" class="srs-range" oninput="updateSRS()">
-                    <span class="srs-val" id="srs-val-relationship">7</span>
+              <!-- PVT -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div>
+                  <label style="font-size:12px;font-weight:600;margin-bottom:6px;display:block;">🧠 PVT Start</label>
+                  <div class="pvt-cards" id="pvt-cards" style="flex-direction:column;">
+                    <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVT(this)" style="padding:6px 10px;"><span class="pvt-dot" style="background:#22C55E;"></span><span class="pvt-card-titel">Sicher</span></button>
+                    <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVT(this)" style="padding:6px 10px;"><span class="pvt-dot" style="background:#F59E0B;"></span><span class="pvt-card-titel">Angespannt</span></button>
+                    <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVT(this)" style="padding:6px 10px;"><span class="pvt-dot" style="background:#8B5CF6;"></span><span class="pvt-card-titel">Eingefroren</span></button>
                   </div>
                 </div>
-                <div class="srs-row">
-                  <label>Ziele & Themen <span>— Wir haben an dem gearbeitet was wichtig war</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="7" id="srs-goals" class="srs-range" oninput="updateSRS()">
-                    <span class="srs-val" id="srs-val-goals">7</span>
-                  </div>
-                </div>
-                <div class="srs-row">
-                  <label>Ansatz & Methode <span>— Die Vorgehensweise hat gepasst</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="7" id="srs-approach" class="srs-range" oninput="updateSRS()">
-                    <span class="srs-val" id="srs-val-approach">7</span>
-                  </div>
-                </div>
-                <div class="srs-row">
-                  <label>Gesamteindruck <span>— Insgesamt war diese Sitzung gut für mich</span></label>
-                  <div class="srs-slider-wrap">
-                    <input type="range" min="0" max="10" value="7" id="srs-overall" class="srs-range" oninput="updateSRS()">
-                    <span class="srs-val" id="srs-val-overall">7</span>
+                <div>
+                  <label style="font-size:12px;font-weight:600;margin-bottom:6px;display:block;">🧠 PVT Ende</label>
+                  <div class="pvt-cards" id="pvt-ende-cards" style="flex-direction:column;">
+                    <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVTEnde(this)" style="padding:6px 10px;"><span class="pvt-dot" style="background:#22C55E;"></span><span class="pvt-card-titel">Sicher</span></button>
+                    <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVTEnde(this)" style="padding:6px 10px;"><span class="pvt-dot" style="background:#F59E0B;"></span><span class="pvt-card-titel">Angespannt</span></button>
+                    <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVTEnde(this)" style="padding:6px 10px;"><span class="pvt-dot" style="background:#8B5CF6;"></span><span class="pvt-card-titel">Eingefroren</span></button>
                   </div>
                 </div>
               </div>
-              <div class="srs-total">
-                <span class="srs-total-zahl" id="srs-total-zahl">28</span>
-                <span class="srs-total-text">von 40 Punkten</span>
-              </div>
-              <div id="srs-alert" class="srs-alert" style="display:none;">
-                ⚠️ <strong>Score unter 25 — Reflexion empfohlen.</strong><br>
-                Mögliche Fragen: Was könnte die Beziehung belastet haben? War das Thema zu früh? War der Schüler reguliert genug?
-              </div>
-              <div class="ref-inline">Allianz-Cutoff: 36/40 (Duncan et al., 2003). Unter 36 = therapeutische Beziehung prüfen. SRS ist das weltweit meistverwendete Feedback-Instrument.</div>
-            </div>
-
-            <!-- PVT-Check am Ende der Sitzung -->
-            <div class="pvt-checkin" style="margin-top:16px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <label class="pvt-label">🧠 PVT-Check am Ende — Wo ist der Jugendliche jetzt?</label>
-              </div>
-              <div class="pvt-cards" id="pvt-ende-cards">
-                <button class="pvt-card pvt-safe" data-val="safe" onclick="selectPVTEnde(this)">
-                  <span class="pvt-dot" style="background:#22C55E;"></span>
-                  <span class="pvt-card-titel">Sicher & offen</span>
-                  <span class="pvt-card-desc">Entspannt, reguliert, guter Kontakt</span>
-                </button>
-                <button class="pvt-card pvt-activated" data-val="activated" onclick="selectPVTEnde(this)">
-                  <span class="pvt-dot" style="background:#F59E0B;"></span>
-                  <span class="pvt-card-titel">Angespannt / unruhig</span>
-                  <span class="pvt-card-desc">Noch aktiviert, nicht vollständig reguliert</span>
-                </button>
-                <button class="pvt-card pvt-frozen" data-val="frozen" onclick="selectPVTEnde(this)">
-                  <span class="pvt-dot" style="background:#8B5CF6;"></span>
-                  <span class="pvt-card-titel">Eingefroren / abwesend</span>
-                  <span class="pvt-card-desc">Noch dissoziiert, wenig Kontakt</span>
-                </button>
-              </div>
+              <div id="pvt-empfehlung" class="pvt-empfehlung" style="display:none;"></div>
               <div id="pvt-ende-feedback" style="display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:13px;border:1px solid;"></div>
-            </div>
 
-            <div class="soap-wizard-nav">
-              <button class="btn-wizard-back" onclick="soapWizardGo(2)">← SOAP</button>
-              <button class="btn-wizard-next primary" onclick="soapWizardGo(4)">Weiter: Vorschau & Speichern →</button>
+              <!-- Engagement + Intervention -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+                <div class="form-group">
+                  <label>🎯 Engagement</label>
+                  <div class="srs-slider-wrap">
+                    <input type="range" min="0" max="10" value="5" id="prot-engagement" class="srs-range" style="accent-color:#8B5CF6;" oninput="document.getElementById('prot-engagement-val').textContent=this.value">
+                    <span class="srs-val" id="prot-engagement-val">5</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>🛠️ Intervention</label>
+                  <select id="prot-interventionstyp" style="width:100%;">
+                    <option value="">—</option>
+                    <option value="gespraechsfuehrung">Gesprächsführung</option>
+                    <option value="psychoedukation">Psychoedukation</option>
+                    <option value="rollenspiel">Rollenspiel</option>
+                    <option value="achtsamkeit">Achtsamkeit</option>
+                    <option value="kreativ">Kreativ</option>
+                    <option value="outdoor">Outdoor</option>
+                    <option value="sozialkompetenz">Sozialkompetenz</option>
+                    <option value="krisenintervention">Krisenintervention</option>
+                    <option value="arbeitsblatt">Arbeitsblatt</option>
+                    <option value="elternarbeit">Elterngespräch</option>
+                    <option value="motivational">Motivational Interviewing</option>
+                    <option value="verhaltensaktivierung">Verhaltensaktivierung</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Externe Ereignisse -->
+              <div class="form-group" style="margin-top:8px;">
+                <label>📌 Externe Ereignisse</label>
+                <div class="soap-chip-group">
+                  <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="streit-zuhause"><span>Streit</span></label>
+                  <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="schulprobleme"><span>Schule</span></label>
+                  <label class="soap-chip soap-chip-positive"><input type="checkbox" class="ext-ereignis-cb" value="positiv"><span>Positiv</span></label>
+                  <label class="soap-chip soap-chip-danger"><input type="checkbox" class="ext-ereignis-cb" value="krise"><span>Krise</span></label>
+                  <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="veraenderung"><span>Veränderung</span></label>
+                  <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="krankheit"><span>Krankheit</span></label>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Risiko-Check (hidden unless needed) -->
+          <div id="risiko-check-section"></div>
+          <div id="soap-cssrs-schweregrad" style="display:none;margin-top:12px;padding:12px 16px;background:#FEF2F2;border:2px solid #FECACA;border-radius:10px;">
+            <div style="font-size:13px;font-weight:700;color:#991B1B;margin-bottom:8px;">⚠️ Suizidalitäts-Schweregrad (C-SSRS)</div>
+            <div style="display:flex;flex-direction:column;gap:6px;" id="cssrs-schweregrad-options">
+              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="1"> <strong>1:</strong> Todeswünsche</label>
+              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="2"> <strong>2:</strong> Suizidgedanken ohne Plan</label>
+              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="3"> <strong>3:</strong> Mit Plan, ohne Absicht</label>
+              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEE2E2;border:1px solid #FECACA;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="4"> <strong>4:</strong> Mit Plan + Absicht</label>
+              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEE2E2;border:2px solid #EF4444;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="5"> <strong>5:</strong> Suizidales Verhalten</label>
+            </div>
+            <div id="soap-sicherheitsplan-pflicht" style="display:none;margin-top:10px;padding:10px;background:#7F1D1D10;border:2px solid #7F1D1D;border-radius:8px;">
+              <div style="font-size:12px;font-weight:700;color:#7F1D1D;">🚨 Sicherheitsplan PFLICHT bei Stufe 3+</div>
+              <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;cursor:pointer;"><input type="checkbox" id="soap-sicherheitsplan-check"> Sicherheitsplan besprochen</label>
+              <label style="display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;cursor:pointer;"><input type="checkbox" id="soap-supervisor-check"> Supervisor informiert</label>
             </div>
           </div>
 
-          <!-- ═══ STEP 4: Zusammenfassung + Speichern ═══ -->
-          <div class="soap-wizard-step" id="soap-step-4" style="display:none;">
-            <div id="soap-vorschau"></div>
+          <!-- Vorschau (hidden) -->
+          <div id="soap-vorschau" style="display:none;"></div>
 
-            <div class="soap-wizard-nav" style="margin-top:20px;">
-              <button class="btn-wizard-back" onclick="soapWizardGo(3)">← Bewertung</button>
-              <button class="btn btn-primary" onclick="addProtokoll()" style="padding:12px 28px;font-size:15px;">📋 Protokoll speichern</button>
-            </div>
+          <!-- Speichern -->
+          <div style="display:flex;justify-content:flex-end;margin-top:16px;gap:8px;">
+            <button class="btn btn-primary" onclick="addProtokoll()" style="padding:10px 24px;font-size:14px;">📋 Protokoll speichern</button>
           </div>
         </div>
 
@@ -1247,6 +1081,7 @@
             <div id="scr-severity-badge" class="scr-severity-badge"></div>
             <div id="scr-datum-info" class="scr-datum-info"></div>
             <div style="margin-left:auto;display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="scrShowContainer('liste');renderScreeningHistorie(APP.currentSchuelerId)">📋 Alle Screenings</button>
               <button class="btn btn-secondary btn-sm" onclick="screeningBearbeiten()">✏️ Bearbeiten</button>
               <button class="btn btn-danger btn-sm" onclick="screeningLoeschen()">🗑 Löschen</button>
             </div>

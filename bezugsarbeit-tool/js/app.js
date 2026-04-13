@@ -817,28 +817,16 @@ function renderHome() {
     const statusAbgeschlossen = schueler.filter(s => s.status === 'abgeschlossen').length;
     statsEl.innerHTML = `
       <div class="stat-box">
-        <div class="stat-box-zahl">${schueler.length}</div>
-        <div class="stat-box-label">Schüler gesamt</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-box-zahl blue">${aktiveThemen}</div>
-        <div class="stat-box-label">Aktive Themen</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-box-zahl">${alleNotizen}</div>
-        <div class="stat-box-label">Notizen & Sitzungen</div>
+        <div class="stat-box-zahl">${statusAktiv}</div>
+        <div class="stat-box-label">Aktive Klienten</div>
       </div>
       <div class="stat-box">
         <div class="stat-box-zahl ${hochrisiko > 0 ? 'red' : ''}">${hochrisiko}</div>
         <div class="stat-box-label">Hochrisiko</div>
       </div>
       <div class="stat-box">
-        <div class="stat-box-zahl ${offeneIntake > 0 ? 'orange' : ''}">${offeneIntake}</div>
-        <div class="stat-box-label">Offene Intake</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-box-zahl">${statusAktiv}<span style="font-size:10px;color:#9CA3AF;">/${statusPausiert}/${statusAbgeschlossen}</span></div>
-        <div class="stat-box-label">Aktiv / Paus. / Abg.</div>
+        <div class="stat-box-zahl blue">${aktiveThemen}</div>
+        <div class="stat-box-label">Aktive Themen</div>
       </div>`;
   } else if (statsEl) {
     statsEl.innerHTML = '';
@@ -847,11 +835,7 @@ function renderHome() {
   // Ampelsystem — Aufmerksamkeit erforderlich
   renderAmpelsystem(schueler, statsEl);
 
-  // Spiegel — Berater-Selbstreflexion
-  renderSpiegelHinweise(schueler);
-
-  // Klinischer Fingerabdruck — Aggregierte Wirksamkeit
-  renderKlinischerFingerabdruck(schueler);
+  // Spiegel + Fingerabdruck → nur im Kaseload-View, nicht auf der Startseite
 
   if (gefiltert.length === 0) {
     if (filter) {
@@ -1130,6 +1114,10 @@ function renderKaseloadView() {
   `;
 
   container.innerHTML = sanitize(html);
+
+  // Spiegel + Fingerabdruck im Kaseload-View (nicht auf der Startseite)
+  renderSpiegelHinweise(schueler);
+  renderKlinischerFingerabdruck(schueler);
 }
 
 function renderAmpelsystem(schueler, afterEl) {
@@ -3761,46 +3749,15 @@ function toggleNotizModus(modus) {
     btnFrei.classList.remove('active');
     const d = document.getElementById('prot-datum');
     if (!d.value) d.value = new Date().toISOString().split('T')[0];
-    // Reset wizard to step 1
-    soapWizardGo(1);
+    // Risiko-Check initialisieren wenn nötig
+    if (typeof renderRisikoCheck === 'function') renderRisikoCheck();
   }
 }
 
-// ── SOAP Wizard Navigation ──
-APP.soapWizardStep = 1;
-
+// ── SOAP — Single-Page (kein Wizard mehr) ──
+// soapWizardGo existiert nur noch als No-Op für Rückwärtskompatibilität
 function soapWizardGo(step) {
-  const totalSteps = 4;
-  if (step < 1 || step > totalSteps) return;
-
-  // Wenn Step 3: Risiko-Check initialisieren
-  if (step === 3 && typeof renderRisikoCheck === 'function') renderRisikoCheck();
-  // Wenn Step 4: Vorschau generieren
-  if (step === 4) renderSoapVorschau();
-
-  // Alle Steps ausblenden
-  for (let i = 1; i <= totalSteps; i++) {
-    const el = document.getElementById(`soap-step-${i}`);
-    if (el) el.style.display = i === step ? '' : 'none';
-  }
-
-  // Stepper-Dots aktualisieren
-  document.querySelectorAll('.soap-step-dot').forEach(dot => {
-    const dotStep = parseInt(dot.dataset.step);
-    dot.classList.remove('active', 'done');
-    if (dotStep === step) dot.classList.add('active');
-    else if (dotStep < step) dot.classList.add('done');
-  });
-
-  // Stepper-Lines aktualisieren
-  for (let i = 1; i < totalSteps; i++) {
-    const line = document.getElementById(`soap-line-${i}`);
-    if (line) {
-      line.classList.toggle('done', i < step);
-    }
-  }
-
-  APP.soapWizardStep = step;
+  // Einzelseiten-Layout — kein Wizard-Schritt nötig
 }
 
 function renderSoapVorschau() {
@@ -3893,7 +3850,7 @@ function renderSoapVorschau() {
       ${!subjektiv && !objektiv && !assessment && !plan ? `
         <div style="text-align:center;padding:20px;color:#9CA3AF;">
           <div style="font-size:24px;margin-bottom:8px;">⚠️</div>
-          Noch keine SOAP-Felder ausgefüllt. Gehe zurück zu Schritt 2.
+          Noch keine SOAP-Felder ausgefüllt.
         </div>` : ''}
     </div>`;
 }
@@ -4009,7 +3966,9 @@ function addProtokoll() {
     const sicherheitsplanOk = document.getElementById('soap-sicherheitsplan-check')?.checked;
     if (!sicherheitsplanOk) {
       showToast('⚠️ Bei Suizidalitäts-Schweregrad ≥ 3 muss der Sicherheitsplan dokumentiert werden!', 'error');
-      soapWizardGo(3); // Zurück zu Step 3
+      // Zum C-SSRS-Abschnitt scrollen
+      const cssrsEl = document.getElementById('soap-cssrs-schweregrad');
+      if (cssrsEl) cssrsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
   }
@@ -13863,15 +13822,36 @@ function renderScreening(schuelerId) {
   const s = DB.getSchuelerById(schuelerId);
   if (!s) return;
 
-  document.getElementById('screening-topbar-titel').textContent =
-    `Screening – ${s.vorname} ${s.nachname}`;
+  const titelEl = document.getElementById('screening-topbar-titel');
+  if (titelEl) titelEl.textContent = `Screening – ${s.vorname} ${s.nachname}`;
   document.getElementById('screening-alert-banner').style.display = 'none';
 
-  // Reset to list view
-  scrShowContainer('liste');
-  APP.currentScreeningId = null;
+  // Direkt zum letzten Ergebnis springen (kein Doppelklick)
+  const screenings = DB.getScreenings(schuelerId).sort(
+    (a, b) => new Date(b.datum) - new Date(a.datum)
+  );
+  const abgeschlossene = screenings.filter(sc => sc.abgeschlossen);
+  const entwuerfe = screenings.filter(sc => !sc.abgeschlossen);
 
-  renderScreeningHistorie(schuelerId);
+  if (abgeschlossene.length > 0) {
+    // Direkt neuestes Ergebnis anzeigen
+    APP.currentScreeningId = abgeschlossene[0].id;
+    scrShowContainer('ergebnis');
+    renderScreeningErgebnis(abgeschlossene[0]);
+  } else if (entwuerfe.length > 0) {
+    // Offenen Entwurf fortsetzen
+    const draft = entwuerfe[0];
+    APP.currentScreeningId = draft.id;
+    APP.screeningAntworten = { ...draft.antworten };
+    APP.screeningStep = 0;
+    scrShowContainer('formular');
+    renderScreeningSchritt(0);
+  } else {
+    // Kein Screening vorhanden → direkt neues starten
+    scrShowContainer('liste');
+    APP.currentScreeningId = null;
+    renderScreeningHistorie(schuelerId);
+  }
 }
 
 function renderScreeningHistorie(schuelerId) {

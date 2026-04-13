@@ -5205,29 +5205,62 @@ body.dark-mode .stimmung-seg:hover { background: #374151; }
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 12px;
 }
-.bibliothek-karte {
+/* ── Bibliothek Karten (modern) ── */
+.bib-karte {
   background: var(--bg-card, #fff);
   border: 1px solid var(--border, #E5E7EB);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  cursor: default;
+}
+.bib-karte:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+.bib-karte-icon {
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
-  padding: 14px 16px;
-  transition: box-shadow 0.15s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
 }
-.bibliothek-karte:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transform: translateY(-1px);
+.bib-karte-body { flex: 1; min-width: 0; }
+.bib-karte-typ {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
 }
-.bibliothek-karte-titel {
+.bib-karte-titel {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-  line-height: 1.3;
+  color: var(--text, #1F2937);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.bibliothek-karte-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-bottom: 10px;
+.bib-karte-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 4px;
 }
+body.dark-mode .bib-karte { background: var(--bg-card); border-color: var(--border); }
+body.dark-mode .bib-karte-titel { color: var(--text); }
+
+/* Legacy compat */
+.bibliothek-karte { display: none; }
 @media (max-width: 640px) {
   .bibliothek-grid { grid-template-columns: 1fr; }
 }

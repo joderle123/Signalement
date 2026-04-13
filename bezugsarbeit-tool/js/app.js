@@ -2731,17 +2731,16 @@ function renderBibliothekKarte(item, cfg) {
   }
 
   var favStar = item.favorit ? '⭐' : '☆';
-  var favBtnHtml = '<button onclick="event.stopPropagation();toggleBibliothekFavorit(\'' + item.id + '\')" style="background:none;border:none;font-size:14px;cursor:pointer;padding:2px;line-height:1;" title="' + (item.favorit ? 'Favorit entfernen' : 'Als Favorit merken') + '">' + favStar + '</button>';
+  var favBtnHtml = '<button onclick="event.stopPropagation();toggleBibliothekFavorit(\'' + item.id + '\')" style="background:none;border:none;font-size:13px;cursor:pointer;padding:2px;line-height:1;opacity:0.5;transition:opacity 0.15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" title="' + (item.favorit ? 'Favorit entfernen' : 'Als Favorit merken') + '">' + favStar + '</button>';
 
-  return '<div class="bibliothek-karte" style="background:#fff;border:1px solid ' + (item.favorit ? '#FDE68A' : '#E5E7EB') + ';border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;transition:box-shadow 0.2s,transform 0.2s;cursor:default;border-left:3px solid ' + cfg.farbe + ';" onmouseover="this.style.boxShadow=\'0 4px 12px rgba(0,0,0,0.08)\';this.style.transform=\'translateY(-1px)\'" onmouseout="this.style.boxShadow=\'none\';this.style.transform=\'none\'">' +
-    '<div style="display:flex;align-items:center;gap:6px;">' +
-      '<span style="font-size:15px;">' + (item.icon || cfg.icon) + '</span>' +
-      '<span style="font-size:10px;padding:1px 7px;border-radius:8px;background:' + cfg.bg + ';color:' + cfg.farbe + ';font-weight:600;">' + cfg.label + '</span>' +
-      '<span style="margin-left:auto;">' + favBtnHtml + '</span>' +
+  return '<div class="bib-karte">' +
+    '<div class="bib-karte-icon" style="background:' + cfg.bg + ';color:' + cfg.farbe + ';">' + (item.icon || cfg.icon) + '</div>' +
+    '<div class="bib-karte-body">' +
+      '<div class="bib-karte-typ" style="color:' + cfg.farbe + ';">' + cfg.label + '</div>' +
+      '<div class="bib-karte-titel">' + item.label + '</div>' +
+      metaHtml +
     '</div>' +
-    '<div style="font-weight:600;font-size:13px;color:#1F2937;line-height:1.3;">' + item.label + '</div>' +
-    metaHtml +
-    '<div style="margin-top:auto;padding-top:6px;">' + actionHtml + '</div>' +
+    '<div class="bib-karte-footer">' + actionHtml + favBtnHtml + '</div>' +
   '</div>';
 }
 
@@ -19120,49 +19119,64 @@ function renderPersNotizen() {
     if (!a.angepinnt && b.angepinnt) return 1;
     return new Date(b.geaendert) - new Date(a.geaendert);
   });
-  const gefiltert = NOTIZEN_KATEGORIE === 'alle' ? alle : alle.filter(n => n.kategorie === NOTIZEN_KATEGORIE);
 
   let html = '';
 
-  // Category filter tabs
-  html += '<div class="pn-filter-bar">';
-  html += '<button class="pn-filter-btn ' + (NOTIZEN_KATEGORIE === 'alle' ? 'active' : '') + '" onclick="NOTIZEN_KATEGORIE=\'alle\';renderPersNotizen();">Alle (' + alle.length + ')</button>';
-  for (const kat of PERS_NOTIZ_KATEGORIEN) {
-    const cnt = alle.filter(n => n.kategorie === kat.id).length;
-    html += '<button class="pn-filter-btn ' + (NOTIZEN_KATEGORIE === kat.id ? 'active' : '') + '" onclick="NOTIZEN_KATEGORIE=\'' + kat.id + '\';renderPersNotizen();">' + kat.icon + ' ' + kat.label + (cnt > 0 ? ' (' + cnt + ')' : '') + '</button>';
-  }
-  html += '</div>';
-
-  // Search
+  // Search only (no category tabs)
   html += '<div class="pn-search-row">';
   html += '<input type="text" id="pn-search" placeholder="Notizen durchsuchen..." oninput="filterPersNotizen()" class="pn-search-input">';
   html += '</div>';
 
-  if (gefiltert.length === 0) {
-    html += renderEmptyState('📝', 'Keine Notizen', 'Erstelle deine erste Notiz mit dem Button oben.');
+  if (alle.length === 0) {
+    html += '<div style="text-align:center;padding:48px 20px;">';
+    html += '<div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#FEF9C3,#FDE68A);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;">📝</div>';
+    html += '<p style="font-size:15px;font-weight:600;color:var(--text,#1F2937);margin:0 0 4px;">Dein Notizbuch ist leer</p>';
+    html += '<p style="font-size:12px;color:var(--text-muted,#9CA3AF);margin:0 0 16px;">Klicke auf "+ Neue Notiz" um zu starten</p>';
+    html += '</div>';
   } else {
-    html += '<div class="pn-grid" id="pn-grid">';
-    for (const notiz of gefiltert) {
-      const farbe = NOTIZ_FARBEN.find(f => f.id === notiz.farbe) || NOTIZ_FARBEN[0];
-      const kat = PERS_NOTIZ_KATEGORIEN.find(k => k.id === notiz.kategorie) || PERS_NOTIZ_KATEGORIEN[0];
-      const preview = escapeHtml((notiz.text || '').substring(0, 200));
-      const datum = notiz.geaendert ? new Date(notiz.geaendert).toLocaleDateString('de-LU', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-      html += '<div class="pn-card" style="background:' + farbe.bg + ';border-color:' + farbe.border + ';" onclick="editPersNotiz(\'' + notiz.id + '\')">';
-      html += '<div class="pn-card-header">';
-      html += '<span class="pn-card-kat">' + kat.icon + ' ' + kat.label + '</span>';
-      html += '<div class="pn-card-actions">';
-      if (notiz.angepinnt) html += '<span class="pn-pin active" title="Angepinnt">📌</span>';
+    // Pinned section
+    const angepinnt = alle.filter(n => n.angepinnt);
+    const rest = alle.filter(n => !n.angepinnt);
+
+    if (angepinnt.length > 0) {
+      html += '<div style="margin-bottom:6px;font-size:11px;font-weight:600;color:var(--text-muted,#9CA3AF);text-transform:uppercase;letter-spacing:0.5px;padding-left:4px;">Angepinnt</div>';
+      html += '<div class="pn-grid" id="pn-grid-pinned">';
+      for (const notiz of angepinnt) {
+        html += renderNotizCard(notiz);
+      }
       html += '</div>';
-      html += '</div>';
-      html += '<div class="pn-card-title">' + escapeHtml(notiz.titel || 'Unbenannt') + '</div>';
-      html += '<div class="pn-card-preview">' + preview + '</div>';
-      html += '<div class="pn-card-footer">' + datum + '</div>';
+      if (rest.length > 0) {
+        html += '<div style="margin:16px 0 6px;font-size:11px;font-weight:600;color:var(--text-muted,#9CA3AF);text-transform:uppercase;letter-spacing:0.5px;padding-left:4px;">Alle Notizen</div>';
+      }
+    }
+
+    if (rest.length > 0) {
+      html += '<div class="pn-grid" id="pn-grid">';
+      for (const notiz of rest) {
+        html += renderNotizCard(notiz);
+      }
       html += '</div>';
     }
-    html += '</div>';
   }
 
   container.innerHTML = sanitize(html);
+
+  function renderNotizCard(notiz) {
+    const farbe = NOTIZ_FARBEN.find(f => f.id === notiz.farbe) || NOTIZ_FARBEN[0];
+    const preview = escapeHtml((notiz.text || '').substring(0, 200));
+    const datum = notiz.geaendert ? new Date(notiz.geaendert).toLocaleDateString('de-LU', { day: '2-digit', month: 'short' }) : '';
+    let card = '<div class="pn-card" style="background:' + farbe.bg + ';border-color:' + farbe.border + ';" onclick="editPersNotiz(\'' + notiz.id + '\')">';
+    card += '<div class="pn-card-header">';
+    card += '<span class="pn-card-footer" style="margin:0;">' + datum + '</span>';
+    card += '<div class="pn-card-actions">';
+    if (notiz.angepinnt) card += '<span class="pn-pin active" title="Angepinnt">📌</span>';
+    card += '</div>';
+    card += '</div>';
+    if (notiz.titel) card += '<div class="pn-card-title">' + escapeHtml(notiz.titel) + '</div>';
+    card += '<div class="pn-card-preview">' + preview + '</div>';
+    card += '</div>';
+    return card;
+  }
 }
 
 function addPersNotiz() {
@@ -19183,10 +19197,6 @@ function openNotizEditor(notiz) {
     '<button type="button" class="pn-farb-btn ' + (notiz.farbe === f.id ? 'active' : '') + '" data-farbe="' + f.id + '" style="background:' + f.bg + ';border-color:' + f.border + ';" onclick="selectNotizFarbe(this)" title="' + f.label + '"></button>'
   ).join('');
 
-  let katOptionen = PERS_NOTIZ_KATEGORIEN.map(k =>
-    '<option value="' + k.id + '" ' + (notiz.kategorie === k.id ? 'selected' : '') + '>' + k.icon + ' ' + k.label + '</option>'
-  ).join('');
-
   const html = '<div class="modal-overlay" id="notiz-editor-overlay" onclick="closeNotizEditor()">' +
     '<div class="modal-content pn-editor-modal" onclick="event.stopPropagation()">' +
     '<div class="pn-editor-header">' +
@@ -19198,7 +19208,6 @@ function openNotizEditor(notiz) {
     '<div class="pn-editor-body">' +
     '<input type="text" id="pn-edit-titel" class="pn-title-input" placeholder="Titel..." value="' + escapeHtml(notiz.titel || '') + '">' +
     '<div class="pn-editor-meta">' +
-    '<select id="pn-edit-kat" class="pn-kat-select">' + katOptionen + '</select>' +
     '<div class="pn-farb-picker">' + farbOptionen + '</div>' +
     '<label class="pn-pin-label"><input type="checkbox" id="pn-edit-pin" ' + (notiz.angepinnt ? 'checked' : '') + '> 📌 Anpinnen</label>' +
     '</div>' +

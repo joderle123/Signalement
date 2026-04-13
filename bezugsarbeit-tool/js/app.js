@@ -2932,6 +2932,7 @@ function openThemaPanel(katId, themaId) {
 }
 
 function renderArbeitsblaetter(themaId) {
+  const blaetter = ARBEITSBLÄTTER[themaId] || [];
   const aktivitaeten = THEMA_AKTIVITÄTEN[themaId] || [];
   const interventionen = THEMA_INTERVENTIONEN[themaId] || [];
   const modul = typeof THEMA_MODULE !== 'undefined' ? (THEMA_MODULE[themaId] || null) : null;
@@ -2939,7 +2940,7 @@ function renderArbeitsblaetter(themaId) {
   const fkDatei = typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' ? (FACHKRAFT_MODULE_DATEIEN[themaId] || null) : null;
   const elternInfos = typeof ELTERN_INFOBLAETTER !== 'undefined' ? (ELTERN_INFOBLAETTER[themaId] || []) : [];
 
-  if (aktivitaeten.length === 0 && interventionen.length === 0 && !modul && !tmDatei && !fkDatei && elternInfos.length === 0) return '';
+  if (blaetter.length === 0 && aktivitaeten.length === 0 && interventionen.length === 0 && !modul && !tmDatei && !fkDatei && elternInfos.length === 0) return '';
 
   const hasModul = modul || aktivitaeten.length > 0 || interventionen.length > 0 || tmDatei;
   const hasFachkraft = !!fkDatei;
@@ -2950,7 +2951,7 @@ function renderArbeitsblaetter(themaId) {
       <div class="panel-tabs" id="panel-tabs-${themaId}">
         <button class="panel-tab active" onclick="switchPanelTab('${themaId}','ab')">
           🛠️ Praxis
-          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Aktivitäten & Interventionen</span>
+          <span style="font-size:10px;font-weight:400;opacity:0.65;display:block;margin-top:1px;">Arbeitsblätter & Aktivitäten</span>
         </button>
         ${hasModul ? `<button class="panel-tab" onclick="switchPanelTab('${themaId}','tm')">
           📋 Leitfaden
@@ -2967,8 +2968,19 @@ function renderArbeitsblaetter(themaId) {
       </div>
 
       <div id="pt-ab-${themaId}" class="panel-tab-content">
+        ${blaetter.length > 0 ? `
+        <div style="font-size:11px;font-weight:600;color:#1D4ED8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">📋 Arbeitsblätter</div>
+        ${blaetter.map(b => `
+          <a href="arbeitsblatter/${b.datei}" target="_blank"
+             style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:6px;
+                    background:#EFF6FF;border:1.5px solid #BAE6FD;border-radius:6px;
+                    text-decoration:none;color:#1D4ED8;font-size:12px;font-weight:600;">
+            <span style="font-size:16px;">📋</span>
+            <span style="flex:1;">${b.titel}</span>
+            <span style="font-size:11px;opacity:0.7;">Öffnen →</span>
+          </a>`).join('')}` : ''}
         ${interventionen.length > 0 ? `
-        <div style="font-size:11px;font-weight:600;color:#F59E0B;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">🎯 Aktivitäten (${interventionen.length})</div>
+        <div style="font-size:11px;font-weight:600;color:#F59E0B;text-transform:uppercase;letter-spacing:0.5px;margin:${blaetter.length > 0 ? '14px' : '0'} 0 8px;">🎯 Aktivitäten (${interventionen.length})</div>
         ${interventionen.slice(0, 5).map(iv => `
           <div style="padding:8px 12px;margin-bottom:6px;background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:6px;">
             <div style="font-weight:600;font-size:12px;color:#92400E;">${iv.titel}</div>
@@ -2977,7 +2989,7 @@ function renderArbeitsblaetter(themaId) {
           </div>`).join('')}
         ${interventionen.length > 5 ? `<button class="btn btn-secondary btn-sm" onclick="renderAktivitaetenBrowser('${themaId}')" style="width:100%;margin-top:4px;">Alle ${interventionen.length} Aktivitäten anzeigen →</button>` : ''}
         ` : ''}
-        ${interventionen.length === 0 ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Praxis-Materialien verfügbar</p>' : ''}
+        ${blaetter.length === 0 && interventionen.length === 0 ? '<p style="color:var(--text-muted);font-size:12px;text-align:center;padding:14px 0;">Keine Praxis-Materialien verfügbar</p>' : ''}
       </div>
 
       ${hasModul ? `
@@ -5329,7 +5341,8 @@ function renderHypothesen(hypothesen) {
                 const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
                 const fkDatei = fkTid ? FACHKRAFT_MODULE_DATEIEN[fkTid] : null;
                 return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
-                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '');
+                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '')
+                  + renderArbeitsblattChipsFromThemenIds(themenIds);
               }).join('')}
               ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => '<span style="background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:6px;font-size:10px;font-family:monospace;">' + c + '</span>').join('') : ''}
             </div>
@@ -8630,7 +8643,8 @@ function showQuickEntryPanel(themaId, katId) {
   const thema = kat ? kat.themen.find(t => t.id === themaId) : null;
   if (!thema) return;
 
-  // Module
+  // Arbeitsblätter & Module
+  const arbeitsblaetter = ARBEITSBLÄTTER[themaId] || [];
   const therapieModul = THERAPIE_MODULE_DATEIEN[themaId];
   const fachkraftModul = FACHKRAFT_MODULE_DATEIEN[themaId];
 
@@ -8689,25 +8703,27 @@ function showQuickEntryPanel(themaId, katId) {
         <div style="background:#EFF6FF;border:1px solid #BAE6FD;border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
           <div style="font-weight:700;font-size:13px;color:#1D4ED8;margin-bottom:10px;">${icon('clipboard', 16)} Sofort-Handlungsweg</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            ${therapieModul ? `
+            ${arbeitsblaetter.length > 0 ? arbeitsblaetter.map(ab => `
               <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
                 <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span>
+                <span><strong>Arbeitsblatt:</strong> ${ab.titel}</span>
+                <a href="arbeitsblatter/${ab.datei}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
+              </div>
+            `).join('') : '<div style="font-size:12px;color:#6B7280;">Kein Arbeitsblatt verfügbar</div>'}
+            ${therapieModul ? `
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span>
                 <span><strong>Therapiemodul:</strong> Detaillierter Sitzungsleitfaden</span>
                 <a href="therapie-module/${therapieModul}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
               </div>
             ` : ''}
             ${fachkraftModul ? `
               <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">${therapieModul ? '2' : '1'}</span>
+                <span style="width:20px;height:20px;border-radius:50%;background:#1D4ED8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span>
                 <span><strong>Fachkraft-Hintergrund:</strong> Klinisches Wissen</span>
                 <a href="fachkraft-module/${fachkraftModul}" target="_blank" style="margin-left:auto;color:#1D4ED8;font-size:11px;">Öffnen →</a>
               </div>
             ` : ''}
-            <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
-              <span style="width:20px;height:20px;border-radius:50%;background:#6366F1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">📚</span>
-              <span><strong>Bibliothek:</strong> Alle Materialien zu diesem Thema</span>
-              <span onclick="showView('bibliothek');document.getElementById('quick-entry-panel')?.remove();" style="margin-left:auto;color:#6366F1;font-size:11px;cursor:pointer;">Bibliothek →</span>
-            </div>
           </div>
         </div>
 
@@ -9941,15 +9957,17 @@ function renderSitzungsvorschlag() {
   } catch(e) { /* silent */ }
 
   // ── Material für empfohlenes Thema sammeln ──
+  const empfAB = ARBEITSBLÄTTER[empfohlenesThema.id] || [];
   const empfIV = THEMA_INTERVENTIONEN[empfohlenesThema.id] || [];
   const empfWiki = typeof findWikiForThema === 'function' ? findWikiForThema(empfohlenesThema.id) : null;
   const empfPrio = typeof getThemaPrioritaet === 'function' ? getThemaPrioritaet(empfohlenesThema.id, DB.getRoadmap(sid)) : null;
 
   let materialHTML = '';
-  if (empfIV.length > 0 || empfWiki) {
+  if (empfAB.length > 0 || empfIV.length > 0 || empfWiki) {
     materialHTML = `<div class="sitzungsvorschlag-materialien">
       <div class="sitzungsvorschlag-materialien-header">Materialien & Interventionen</div>
       <div class="roadmap-material-links">
+        ${empfAB.map(ab => `<a href="arbeitsblatter/${ab.datei}" target="_blank" class="roadmap-material-btn arbeitsblatt">📋 ${ab.titel}</a>`).join('')}
         ${empfIV.slice(0, 3).map(iv => `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${empfohlenesThema.id}')" title="${(iv.beschreibung || '').substring(0, 100)}">🔧 ${iv.titel} <span style="font-size:10px;opacity:.7;">${iv.dauer || ''}</span></button>`).join('')}
         ${empfIV.length > 3 ? `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${empfohlenesThema.id}')">+${empfIV.length - 3} weitere</button>` : ''}
         ${empfWiki ? `<button class="roadmap-material-btn wiki" onclick="openWikiArtikel('${empfWiki.id}')">📚 Wiki</button>` : ''}
@@ -13138,12 +13156,16 @@ function renderFokusThemaKarte(thema, themaIdx, phase, roadmap) {
   }
 
   // Material sammeln
+  const arbeitsblaetter = ARBEITSBLÄTTER[thema.id] || [];
   const interventionen = THEMA_INTERVENTIONEN[thema.id] || [];
   const wiki = typeof findWikiForThema === 'function' ? findWikiForThema(thema.id) : null;
 
   let materialHtml = '';
-  if (interventionen.length > 0 || wiki) {
+  if (arbeitsblaetter.length > 0 || interventionen.length > 0 || wiki) {
     materialHtml = '<div class="roadmap-material-links">';
+    arbeitsblaetter.forEach(ab => {
+      materialHtml += `<a href="arbeitsblatter/${ab.datei}" target="_blank" class="roadmap-material-btn arbeitsblatt">📋 ${ab.titel}</a>`;
+    });
     interventionen.slice(0, 3).forEach(iv => {
       materialHtml += `<button class="roadmap-material-btn intervention" onclick="openRoadmapThema('${thema.id}')" title="${iv.beschreibung || ''}">🔧 ${iv.titel}</button>`;
     });
@@ -14264,7 +14286,7 @@ function renderScreeningErgebnis(scr) {
         ${d.cutoffQuelle ? `<div style="font-size:10px;color:#9CA3AF;margin-top:2px;">Cutoff ≥${d.cutoff}: ${d.cutoffQuelle}</div>` : ''}
         <div style="font-size:11px;color:${interpretColor};margin-top:4px;font-weight:500;">${interpretText}</div>
         ${typeof SCREENING_INTERPRETATION !== 'undefined' && SCREENING_INTERPRETATION[d.id] ? `<details style="margin-top:6px;"><summary style="font-size:11px;cursor:pointer;color:#2563EB;font-weight:500;">💡 Was tun? Details anzeigen</summary><div style="font-size:11px;line-height:1.6;margin-top:6px;padding:8px;background:#EFF6FF;border-radius:6px;"><div style="margin-bottom:6px;color:#1E3A5F;">${SCREENING_INTERPRETATION[d.id].was_bedeutet_auffaellig}</div><div style="font-weight:600;margin-bottom:3px;color:#1D4ED8;">Sofortmaßnahmen:</div><ul style="margin:0 0 6px 16px;padding:0;">${SCREENING_INTERPRETATION[d.id].sofort_massnahmen.map(m => '<li style="margin-bottom:2px;">' + m + '</li>').join('')}</ul><div style="font-size:10px;color:#DC2626;font-weight:500;">${SCREENING_INTERPRETATION[d.id].wann_ueberweisen}</div></div></details>` : ''}
-        ${(() => { const _wiki = (typeof findWikiForScreeningDomain === 'function') ? findWikiForScreeningDomain(d.id) : null; return _wiki ? '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;align-items:center;">' + renderWikiLink(_wiki.id) + '</div>' : ''; })()}
+        ${(() => { const _wiki = (typeof findWikiForScreeningDomain === 'function') ? findWikiForScreeningDomain(d.id) : null; return _wiki ? '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;align-items:center;">' + renderWikiLink(_wiki.id) + renderArbeitsblattChipsFromThemenIds(_wiki.themen_ids) + '</div>' : ''; })()}
       </div>`;
     }).join('') + '</div>'
     + '<div style="font-size:11px;color:#6B7280;padding:8px 12px;margin-top:8px;background:#F9FAFB;border-radius:6px;line-height:1.5;">ℹ️ <strong>Was bedeutet „auffällig"?</strong> Scores über dem Cutoff-Wert deuten auf erhöhte Belastung hin. Diese Bereiche sollten im Förderplan priorisiert und bei der 5P-Analyse als „Presenting" aufgenommen werden.</div>';
@@ -15558,7 +15580,7 @@ function renderVerhaltensEintrag(e, farbe) {
   if (typeof findWikiForVerhalten === 'function') {
     var wikiArt = findWikiForVerhalten(e.id);
     if (wikiArt) {
-      html += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">' + renderWikiLink(wikiArt.id) + '</div>';
+      html += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">' + renderWikiLink(wikiArt.id) + renderArbeitsblattChipsFromThemenIds(wikiArt.themen_ids) + '</div>';
     }
   }
 
@@ -16363,6 +16385,16 @@ function renderWikiRessourcen(a) {
   // Sammle alle verlinkten Ressourcen
   var links = [];
 
+  // Arbeitsblätter
+  if (a.themen_ids && typeof ARBEITSBLÄTTER !== 'undefined') {
+    a.themen_ids.forEach(function(tid) {
+      var ab = ARBEITSBLÄTTER[tid];
+      if (ab) ab.forEach(function(b) {
+        links.push({ typ: 'Arbeitsblatt', icon: '📝', titel: b.titel, href: 'arbeitsblatter/' + b.datei });
+      });
+    });
+  }
+
   // Therapiemodule
   if (a.themen_ids && typeof THERAPIE_MODULE_DATEIEN !== 'undefined') {
     a.themen_ids.forEach(function(tid) {
@@ -16417,8 +16449,19 @@ function renderWikiLink(artikelId) {
 }
 
 function renderArbeitsblattChipsFromThemenIds(themenIds) {
-  // Arbeitsblätter sind jetzt nur in der Bibliothek verfügbar
-  return '';
+  if (!themenIds || !themenIds.length || typeof ARBEITSBLÄTTER === 'undefined') return '';
+  var seen = {};
+  var chips = [];
+  themenIds.forEach(function(tid) {
+    var abs = ARBEITSBLÄTTER[tid];
+    if (abs) abs.forEach(function(ab) {
+      if (!seen[ab.datei]) {
+        seen[ab.datei] = true;
+        chips.push('<a href="arbeitsblatter/' + ab.datei + '" target="_blank" style="cursor:pointer;background:#FFF7ED;border:1px solid #FED7AA;color:#C2410C;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;text-decoration:none;">📝 ' + ab.titel + '</a>');
+      }
+    });
+  });
+  return chips.join('');
 }
 
 function findWikiForScreeningDomain(domainId) {

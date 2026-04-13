@@ -163,9 +163,7 @@ body {
   position: relative;
   width: var(--rail-width);
   flex-shrink: 0;
-  z-index: 50;
   height: 100vh;
-  overflow: visible;
 }
 
 /* ── Icon Rail (48px, always visible) ── */
@@ -177,6 +175,8 @@ body {
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  position: relative;
+  z-index: 51;
   overflow: hidden;
   padding: 12px 0;
   gap: 2px;
@@ -281,7 +281,7 @@ body {
 
 /* ── Floating Panel (280px, appears on hover) ── */
 .sidebar-floating-panel {
-  position: absolute; top: 0; left: var(--rail-width);
+  position: fixed; top: 0; left: var(--rail-width);
   width: var(--floating-panel-width); height: 100vh;
   background: var(--bg-sidebar); color: white;
   border-right: 1px solid rgba(255,255,255,0.08);
@@ -291,7 +291,7 @@ body {
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
   will-change: transform, opacity;
-  z-index: 49;
+  z-index: 50;
   overflow: hidden;
 }
 

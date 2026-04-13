@@ -388,25 +388,25 @@ function toggleSidebarCollapse() {}
 function restoreSidebarState() {}
 
 // ---- Floating Panel hover logic ----
-// Only show panel when hovering the rail (#sidebar) or the panel itself.
-// CSS :hover on the wrapper doesn't work because the absolute panel
-// extends the wrapper's hover hitbox over the content area.
+// Panel is position:fixed, only visible when .panel-open on wrapper.
+// Hover on rail or panel shows it; leaving both hides it after 180ms.
+function closeFloatingPanel() {
+  var w = document.getElementById('sidebar-wrapper');
+  if (w) w.classList.remove('panel-open');
+}
 (function initFloatingPanelHover() {
-  let hideTimer = null;
+  var hideTimer = null;
   function showPanel() {
     clearTimeout(hideTimer);
-    const w = document.getElementById('sidebar-wrapper');
+    var w = document.getElementById('sidebar-wrapper');
     if (w) w.classList.add('panel-open');
   }
   function scheduleHide() {
-    hideTimer = setTimeout(function() {
-      const w = document.getElementById('sidebar-wrapper');
-      if (w) w.classList.remove('panel-open');
-    }, 180);
+    hideTimer = setTimeout(closeFloatingPanel, 180);
   }
   document.addEventListener('DOMContentLoaded', function() {
-    const rail = document.getElementById('sidebar');
-    const panel = document.getElementById('sidebar-floating-panel');
+    var rail = document.getElementById('sidebar');
+    var panel = document.getElementById('sidebar-floating-panel');
     if (rail) {
       rail.addEventListener('mouseenter', showPanel);
       rail.addEventListener('mouseleave', scheduleHide);
@@ -414,6 +414,12 @@ function restoreSidebarState() {}
     if (panel) {
       panel.addEventListener('mouseenter', showPanel);
       panel.addEventListener('mouseleave', scheduleHide);
+      // Close panel when clicking a nav item (view switch)
+      panel.addEventListener('click', function(e) {
+        if (e.target.closest('.fp-nav-item') || e.target.closest('.schueler-item')) {
+          setTimeout(closeFloatingPanel, 100);
+        }
+      });
     }
   });
 })();

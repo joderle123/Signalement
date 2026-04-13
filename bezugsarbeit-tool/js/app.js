@@ -3562,6 +3562,143 @@ function addThemaNotiz(themaId) {
 // ============================================================
 APP.notizenFilter = 'alle';
 
+function renderOrsStatsPanel(alleNotizen) {
+  var sitzungen = alleNotizen.filter(function(n) { return n.soap; });
+  var mitOrs = sitzungen.filter(function(n) { return n.soap && n.soap.ors && n.soap.ors.total != null; })
+    .sort(function(a, b) { return a.datum.localeCompare(b.datum); });
+  var mitSrs = sitzungen.filter(function(n) { return n.soap && n.soap.srs && n.soap.srs.total != null; })
+    .sort(function(a, b) { return a.datum.localeCompare(b.datum); });
+
+  if (mitOrs.length === 0 && mitSrs.length === 0) return '';
+
+  // Calculate stats
+  var orsValues = mitOrs.map(function(n) { return n.soap.ors.total; });
+  var srsValues = mitSrs.map(function(n) { return n.soap.srs.total; });
+  var avgOrs = orsValues.length > 0 ? Math.round(orsValues.reduce(function(a, b) { return a + b; }, 0) / orsValues.length * 10) / 10 : null;
+  var avgSrs = srsValues.length > 0 ? Math.round(srsValues.reduce(function(a, b) { return a + b; }, 0) / srsValues.length * 10) / 10 : null;
+  var lastOrs = orsValues.length > 0 ? orsValues[orsValues.length - 1] : null;
+  var lastSrs = srsValues.length > 0 ? srsValues[srsValues.length - 1] : null;
+  var firstOrs = orsValues.length > 0 ? orsValues[0] : null;
+  var orsDelta = (lastOrs !== null && firstOrs !== null && orsValues.length >= 2) ? lastOrs - firstOrs : null;
+  var orsTrend = orsDelta !== null ? (orsDelta > 2 ? 'up' : orsDelta < -2 ? 'down' : 'stable') : null;
+
+  // Clinical cutoff ORS = 25 (klinisch relevant)
+  var orsCutoff = 25;
+  var aboveCutoff = lastOrs !== null && lastOrs >= orsCutoff;
+
+  // ORS mini sparkline (SVG)
+  var sparkHtml = '';
+  if (orsValues.length >= 2) {
+    var svgW = 220, svgH = 50, pad = 4;
+    var maxV = 40, minV = 0;
+    var points = orsValues.map(function(v, i) {
+      var x = pad + (i / (orsValues.length - 1)) * (svgW - 2 * pad);
+      var y = svgH - pad - ((v - minV) / (maxV - minV)) * (svgH - 2 * pad);
+      return x + ',' + y;
+    });
+    var cutoffY = svgH - pad - ((orsCutoff - minV) / (maxV - minV)) * (svgH - 2 * pad);
+    sparkHtml = '<svg width="' + svgW + '" height="' + svgH + '" style="display:block;">'
+      + '<line x1="' + pad + '" y1="' + cutoffY + '" x2="' + (svgW - pad) + '" y2="' + cutoffY + '" stroke="#10B981" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>'
+      + '<polyline points="' + points.join(' ') + '" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    // Last point dot
+    var lastPt = points[points.length - 1].split(',');
+    sparkHtml += '<circle cx="' + lastPt[0] + '" cy="' + lastPt[1] + '" r="3.5" fill="#3B82F6"/>';
+    sparkHtml += '</svg>';
+  }
+
+  // SRS mini sparkline
+  var srsSparkHtml = '';
+  if (srsValues.length >= 2) {
+    var svgW2 = 220, svgH2 = 50, pad2 = 4;
+    var srsCutoff = 36;
+    var points2 = srsValues.map(function(v, i) {
+      var x = pad2 + (i / (srsValues.length - 1)) * (svgW2 - 2 * pad2);
+      var y = svgH2 - pad2 - ((v - 0) / (40 - 0)) * (svgH2 - 2 * pad2);
+      return x + ',' + y;
+    });
+    var cutoffY2 = svgH2 - pad2 - ((srsCutoff - 0) / (40 - 0)) * (svgH2 - 2 * pad2);
+    srsSparkHtml = '<svg width="' + svgW2 + '" height="' + svgH2 + '" style="display:block;">'
+      + '<line x1="' + pad2 + '" y1="' + cutoffY2 + '" x2="' + (svgW2 - pad2) + '" y2="' + cutoffY2 + '" stroke="#10B981" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>'
+      + '<polyline points="' + points2.join(' ') + '" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    var lastPt2 = points2[points2.length - 1].split(',');
+    srsSparkHtml += '<circle cx="' + lastPt2[0] + '" cy="' + lastPt2[1] + '" r="3.5" fill="#8B5CF6"/>';
+    srsSparkHtml += '</svg>';
+  }
+
+  var trendIcon = orsTrend === 'up' ? '↑' : orsTrend === 'down' ? '↓' : '→';
+  var trendColor = orsTrend === 'up' ? '#10B981' : orsTrend === 'down' ? '#EF4444' : '#F59E0B';
+  var orsColor = lastOrs >= 28 ? '#10B981' : lastOrs >= 20 ? '#F59E0B' : '#EF4444';
+  var srsColorVal = lastSrs >= 30 ? '#10B981' : lastSrs >= 25 ? '#F59E0B' : '#EF4444';
+
+  var html = '<div class="ors-stats-panel">';
+
+  // Row: ORS + SRS cards side by side
+  html += '<div class="ors-stats-grid">';
+
+  // ORS Card
+  if (lastOrs !== null) {
+    html += '<div class="ors-stat-card">'
+      + '<div class="ors-stat-header">'
+      + '<div class="ors-stat-title">ORS <span class="ors-stat-subtitle">Outcome Rating</span></div>'
+      + (orsDelta !== null ? '<span class="ors-trend-badge" style="color:' + trendColor + '">' + trendIcon + ' ' + (orsDelta >= 0 ? '+' : '') + orsDelta + '</span>' : '')
+      + '</div>'
+      + '<div class="ors-stat-body">'
+      + '<div class="ors-stat-value" style="color:' + orsColor + '">' + lastOrs + '<span class="ors-stat-max">/40</span></div>'
+      + '<div class="ors-stat-meta">'
+      + '<div>∅ ' + avgOrs + ' · ' + orsValues.length + ' Messungen</div>'
+      + '<div style="color:' + (aboveCutoff ? '#10B981' : '#EF4444') + '">' + (aboveCutoff ? '✓ Über' : '✗ Unter') + ' Cutoff (25)</div>'
+      + '</div>'
+      + '</div>'
+      + (sparkHtml ? '<div class="ors-spark">' + sparkHtml + '</div>' : '')
+      + '</div>';
+  }
+
+  // SRS Card
+  if (lastSrs !== null) {
+    html += '<div class="ors-stat-card ors-stat-card-srs">'
+      + '<div class="ors-stat-header">'
+      + '<div class="ors-stat-title">SRS <span class="ors-stat-subtitle">Session Rating</span></div>'
+      + '</div>'
+      + '<div class="ors-stat-body">'
+      + '<div class="ors-stat-value" style="color:' + srsColorVal + '">' + lastSrs + '<span class="ors-stat-max">/40</span></div>'
+      + '<div class="ors-stat-meta">'
+      + '<div>∅ ' + avgSrs + ' · ' + srsValues.length + ' Messungen</div>'
+      + '<div style="color:' + (lastSrs >= 36 ? '#10B981' : '#F59E0B') + '">' + (lastSrs >= 36 ? '✓ Gute Allianz' : '⚠ Allianz prüfen') + '</div>'
+      + '</div>'
+      + '</div>'
+      + (srsSparkHtml ? '<div class="ors-spark">' + srsSparkHtml + '</div>' : '')
+      + '</div>';
+  }
+
+  html += '</div>';
+
+  // Session history table (compact)
+  if (mitOrs.length >= 2) {
+    html += '<div class="ors-history">'
+      + '<div class="ors-history-title">Verlauf</div>'
+      + '<div class="ors-history-items">';
+    var recent = mitOrs.slice(-8);
+    recent.forEach(function(n, i) {
+      var ors = n.soap.ors.total;
+      var srs = n.soap.srs ? n.soap.srs.total : null;
+      var prev = i > 0 ? recent[i - 1].soap.ors.total : null;
+      var delta = prev !== null ? ors - prev : null;
+      var deltaStr = delta !== null ? (delta >= 0 ? '+' + delta : '' + delta) : '';
+      var deltaColor = delta > 0 ? '#10B981' : delta < 0 ? '#EF4444' : '#9CA3AF';
+      html += '<div class="ors-history-item">'
+        + '<span class="ors-history-date">' + formatDatum(n.datum) + '</span>'
+        + '<span class="ors-history-score" style="color:' + (ors >= 25 ? '#10B981' : '#EF4444') + '">ORS ' + ors + '</span>'
+        + (srs !== null ? '<span class="ors-history-score" style="color:' + (srs >= 36 ? '#10B981' : '#F59E0B') + '">SRS ' + srs + '</span>' : '')
+        + (deltaStr ? '<span class="ors-history-delta" style="color:' + deltaColor + '">' + deltaStr + '</span>' : '')
+        + '</div>';
+    });
+    html += '</div></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
 function renderNotizen() {
   populateProtThemen();
 
@@ -3569,6 +3706,9 @@ function renderNotizen() {
     .sort((a, b) => new Date(b.datum) - new Date(a.datum));
 
   const liste = document.getElementById('notizen-liste');
+
+  // ORS/SRS Stats Panel
+  var orsPanel = renderOrsStatsPanel(alleNotizen);
 
   // Zähler pro Kategorie
   const counts = { alle: alleNotizen.length };
@@ -3613,7 +3753,7 @@ function renderNotizen() {
     html += notizen.map(n => renderNotizKarte(n)).join('');
   }
 
-  liste.innerHTML = html;
+  liste.innerHTML = orsPanel + html;
 }
 
 function setNotizenFilter(filter) {
@@ -11785,26 +11925,6 @@ function renderFallformulierung() {
     { key: 'protective',     label: 'Protective',     farbe: '#10B981', bg: '#ECFDF5', desc: 'Schutzfaktoren & Ressourcen' },
   ];
 
-  // Hypothesen-Zusammenfassung (kompakt statt volle Inline-Liste)
-  let hypoSummaryHtml = '';
-  try {
-    const hypos = generateHypothesen(sid);
-    if (hypos && hypos.length > 0) {
-      const top3 = hypos.slice(0, 3).map(h => {
-        const icon = h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
-        return `<span style="font-size:12px;">${icon} ${h.titel}</span>`;
-      }).join(' · ');
-      hypoSummaryHtml = `
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;margin-top:12px;">
-          <span style="font-size:14px;">🧠</span>
-          <div style="flex:1;font-size:12px;color:#374151;">
-            <strong>${hypos.length} Hypothesen aktiv</strong> — ${top3}${hypos.length > 3 ? ` <span style="color:#9CA3AF;">+${hypos.length - 3} weitere</span>` : ''}
-          </div>
-          <button class="btn btn-sm btn-secondary" onclick="showProfilTab('hypothesen-tab')" style="font-size:11px;white-space:nowrap;">Alle anzeigen →</button>
-        </div>`;
-    }
-  } catch(e) { console.warn('Pathways:', e); }
-
   container.innerHTML = `
     <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div>
@@ -11869,44 +11989,7 @@ function renderFallformulierung() {
       }).join('')}
     </div>
 
-    ${ff ? `
-    <div style="margin-top:12px;">
-      <div style="font-size:12px;font-weight:600;color:#6B7280;margin-bottom:4px;">💡 Zusammenfassende Hypothese</div>
-      <textarea class="fivep-hypothese-input" id="fivep-hypothese" rows="3"
-        style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:8px;padding:8px 12px;resize:vertical;"
-        placeholder="Zusammenfassende klinische Hypothese basierend auf den 5P-Faktoren…"
-        onchange="save5PHypothese(this.value)">${ff.hypothese || ''}</textarea>
-    </div>` : ''}
-
-    ${hypoSummaryHtml}
-
-    <div style="margin-top:16px;">
-      ${ff ? renderCollapsible('triage', '🚦 Handlungstriage', renderHandlungsTriage(ff, sid), ff.triageOpen || false) : ''}
-      ${ff ? renderCollapsible('muster', '📊 Muster & Analyse', render5PPatternAnalysis(ff) + render5PKomorbidity(ff)) : ''}
-
-      ${renderCollapsible('radar', '📈 Radar-Visualisierung', `
-        <div id="fivep-radar-container" style="max-width:400px;margin:0 auto;">
-          <canvas id="fivep-radar-chart" width="400" height="300"></canvas>
-        </div>
-      `)}
-    </div>
   `;
-
-  // Radar-Chart initialisieren
-  if (ff) setTimeout(render5PRadar, 50);
-
-  // Auto-Hypothese: Wenn genug Tags vorhanden aber keine Hypothese geschrieben
-  if (ff && !ff.hypothese) {
-    const totalTags = ['presenting','predisposing','precipitating','perpetuating','protective']
-      .reduce((sum, k) => sum + (ff[k] || []).length, 0);
-    if (totalTags >= 5) {
-      setTimeout(() => {
-        generate5PHypothese();
-        const panel = document.getElementById('panel-hypo');
-        if (panel) panel.open = true;
-      }, 200);
-    }
-  }
 }
 
 // Accept a hypothesis-based suggestion into 5P

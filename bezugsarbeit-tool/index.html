@@ -600,28 +600,14 @@
             <!-- Externe Ereignisse -->
             <div class="form-group">
               <label>📌 Externe Ereignisse diese Woche</label>
-              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" class="ext-ereignis-cb" value="streit-zuhause"> Streit zu Hause
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" class="ext-ereignis-cb" value="schulprobleme"> Schulprobleme
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" class="ext-ereignis-cb" value="positiv"> Positives Erlebnis
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" class="ext-ereignis-cb" value="krise"> Krise / Notfall
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" class="ext-ereignis-cb" value="veraenderung"> Veränderung (Umzug etc.)
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" class="ext-ereignis-cb" value="krankheit"> Krankheit
-                </label>
-                <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;cursor:pointer;">
-                  <input type="checkbox" class="ext-ereignis-cb" value="keine"> Keine besonderen Ereignisse
-                </label>
+              <div class="soap-chip-group">
+                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="streit-zuhause"><span>Streit zu Hause</span></label>
+                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="schulprobleme"><span>Schulprobleme</span></label>
+                <label class="soap-chip soap-chip-positive"><input type="checkbox" class="ext-ereignis-cb" value="positiv"><span>Positives Erlebnis</span></label>
+                <label class="soap-chip soap-chip-danger"><input type="checkbox" class="ext-ereignis-cb" value="krise"><span>Krise / Notfall</span></label>
+                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="veraenderung"><span>Veränderung</span></label>
+                <label class="soap-chip"><input type="checkbox" class="ext-ereignis-cb" value="krankheit"><span>Krankheit</span></label>
+                <label class="soap-chip soap-chip-muted"><input type="checkbox" class="ext-ereignis-cb" value="keine"><span>Keine besonderen</span></label>
               </div>
             </div>
 

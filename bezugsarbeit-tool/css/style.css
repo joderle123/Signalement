@@ -279,9 +279,9 @@ body {
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-/* ── Floating Panel (280px, appears on hover) ── */
+/* ── Floating Panel (280px, appears on hover, overlays Rail) ── */
 .sidebar-floating-panel {
-  position: fixed; top: 0; left: var(--rail-width);
+  position: fixed; top: 0; left: 0;
   width: var(--floating-panel-width); height: 100vh;
   background: var(--bg-sidebar); color: white;
   border-right: 1px solid rgba(255,255,255,0.08);
@@ -291,7 +291,7 @@ body {
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
   will-change: transform, opacity;
-  z-index: 50;
+  z-index: 52;
   overflow: hidden;
 }
 
@@ -2165,6 +2165,16 @@ label {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+/* SOAP form labels: softer, no uppercase */
+.soap-wizard-step label,
+.soap-wizard-step .form-group > label {
+  text-transform: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-secondary);
+}
+.soap-chip { text-transform: none; letter-spacing: 0; }
 
 input[type="text"],
 input[type="date"],
@@ -3481,6 +3491,55 @@ select {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-top: none;
+}
+
+/* ── SOAP Chip Selectors (Externe Ereignisse etc.) ── */
+.soap-chip-group {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;
+}
+.soap-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 12.5px; font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.soap-chip:hover {
+  border-color: var(--primary-200);
+  background: var(--primary-50);
+  color: var(--text);
+}
+.soap-chip input[type="checkbox"] {
+  display: none;
+}
+.soap-chip:has(input:checked) {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+}
+.soap-chip.soap-chip-positive:has(input:checked) {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  box-shadow: 0 2px 8px rgba(16,185,129,0.25);
+}
+.soap-chip.soap-chip-danger:has(input:checked) {
+  background: var(--danger);
+  border-color: var(--danger);
+  box-shadow: 0 2px 8px rgba(239,68,68,0.25);
+}
+.soap-chip.soap-chip-muted:has(input:checked) {
+  background: var(--text-muted);
+  border-color: var(--text-muted);
+  box-shadow: none;
+}
+[data-theme="dark"] .soap-chip {
+  background: var(--bg-card); border-color: var(--border); color: var(--text-light);
 }
 
 /* Zusatz */
@@ -7653,11 +7712,13 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 0;
-  padding: 14px;
-  margin-bottom: 16px;
-  background: var(--bg-subtle);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  background: rgba(248,248,247,0.7);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-xs);
 }
 .soap-step-item {
   display: flex;

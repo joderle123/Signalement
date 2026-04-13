@@ -2422,7 +2422,7 @@ function renderBibliothek() {
   try { favoriten = JSON.parse(localStorage.getItem(favKey) || '[]'); } catch(e) { favoriten = []; }
 
   // ── Items pro Thema-ID sammeln ──
-  function getItemsForThema(themaId) {
+  function getItemsForThema(themaId, themaTitel) {
     const items = [];
 
     // Arbeitsblätter
@@ -2434,17 +2434,17 @@ function renderBibliothek() {
     // Interventionen
     const inters = THEMA_INTERVENTIONEN[themaId] || [];
     if (inters.length > 0) {
-      items.push({ id: 'int-' + themaId, label: themaId, typ: 'intervention', themaId: themaId, anzahl: inters.length });
+      items.push({ id: 'int-' + themaId, label: themaTitel || themaId, typ: 'intervention', themaId: themaId, anzahl: inters.length, desc: inters.length + ' Aktivitäten' });
     }
 
     // Fachkraft-Module
     if (typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[themaId]) {
-      items.push({ id: 'fk-' + FACHKRAFT_MODULE_DATEIEN[themaId], label: themaId, datei: FACHKRAFT_MODULE_DATEIEN[themaId], typ: 'fachkraft', themen: [themaId] });
+      items.push({ id: 'fk-' + FACHKRAFT_MODULE_DATEIEN[themaId], label: themaTitel || themaId, datei: FACHKRAFT_MODULE_DATEIEN[themaId], typ: 'fachkraft', themen: [themaId], desc: 'Fachliches Hintergrundwissen' });
     }
 
     // Therapie-Module
     if (typeof THERAPIE_MODULE_DATEIEN !== 'undefined' && THERAPIE_MODULE_DATEIEN[themaId]) {
-      items.push({ id: 'tm-' + THERAPIE_MODULE_DATEIEN[themaId], label: themaId, datei: THERAPIE_MODULE_DATEIEN[themaId], typ: 'therapie', themen: [themaId] });
+      items.push({ id: 'tm-' + THERAPIE_MODULE_DATEIEN[themaId], label: themaTitel || themaId, datei: THERAPIE_MODULE_DATEIEN[themaId], typ: 'therapie', themen: [themaId], desc: 'Strukturierter Sitzungsleitfaden' });
     }
 
     // Eltern-Infoblätter
@@ -2545,7 +2545,7 @@ function renderBibliothek() {
     var themenMitItems = [];
 
     kat.themen.forEach(function(t) {
-      var items = getItemsForThema(t.id).filter(matchesFilter);
+      var items = getItemsForThema(t.id, t.titel).filter(matchesFilter);
       if (items.length > 0) {
         themenMitItems.push({ thema: t, items: items });
         items.forEach(function(i) { katItems.push(i); });
@@ -2724,11 +2724,14 @@ function renderBibliothekKarte(item, cfg) {
   var favStar = item.favorit ? '⭐' : '☆';
   var favBtnHtml = '<button onclick="event.stopPropagation();toggleBibliothekFavorit(\'' + item.id + '\')" style="background:none;border:none;font-size:13px;cursor:pointer;padding:2px;line-height:1;opacity:0.5;transition:opacity 0.15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" title="' + (item.favorit ? 'Favorit entfernen' : 'Als Favorit merken') + '">' + favStar + '</button>';
 
+  var descHtml = item.desc ? '<div style="font-size:10px;color:#6B7280;margin-top:3px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + item.desc + '</div>' : '';
+
   return '<div class="bib-karte">' +
     '<div class="bib-karte-icon" style="background:' + cfg.bg + ';color:' + cfg.farbe + ';">' + (item.icon || cfg.icon) + '</div>' +
     '<div class="bib-karte-body">' +
       '<div class="bib-karte-typ" style="color:' + cfg.farbe + ';">' + cfg.label + '</div>' +
       '<div class="bib-karte-titel">' + item.label + '</div>' +
+      descHtml +
       metaHtml +
     '</div>' +
     '<div class="bib-karte-footer">' + actionHtml + favBtnHtml + '</div>' +

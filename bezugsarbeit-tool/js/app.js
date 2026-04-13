@@ -387,6 +387,37 @@ function toggleMobileSidebar() {
 function toggleSidebarCollapse() {}
 function restoreSidebarState() {}
 
+// ---- Floating Panel hover logic ----
+// Only show panel when hovering the rail (#sidebar) or the panel itself.
+// CSS :hover on the wrapper doesn't work because the absolute panel
+// extends the wrapper's hover hitbox over the content area.
+(function initFloatingPanelHover() {
+  let hideTimer = null;
+  function showPanel() {
+    clearTimeout(hideTimer);
+    const w = document.getElementById('sidebar-wrapper');
+    if (w) w.classList.add('panel-open');
+  }
+  function scheduleHide() {
+    hideTimer = setTimeout(function() {
+      const w = document.getElementById('sidebar-wrapper');
+      if (w) w.classList.remove('panel-open');
+    }, 180);
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    const rail = document.getElementById('sidebar');
+    const panel = document.getElementById('sidebar-floating-panel');
+    if (rail) {
+      rail.addEventListener('mouseenter', showPanel);
+      rail.addEventListener('mouseleave', scheduleHide);
+    }
+    if (panel) {
+      panel.addEventListener('mouseenter', showPanel);
+      panel.addEventListener('mouseleave', scheduleHide);
+    }
+  });
+})();
+
 // ---- Loading Overlay ----
 function showLoading(text) {
   const overlay = document.createElement('div');

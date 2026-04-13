@@ -164,6 +164,7 @@ body {
   flex-shrink: 0;
   z-index: 50;
   height: 100vh;
+  overflow: visible;
 }
 
 /* ── Icon Rail (48px, always visible) ── */
@@ -293,7 +294,8 @@ body {
   overflow: hidden;
 }
 
-#sidebar-wrapper:hover .sidebar-floating-panel,
+/* Panel shown via .panel-open class (JS hover on rail + panel) */
+#sidebar-wrapper.panel-open .sidebar-floating-panel,
 #sidebar-wrapper:focus-within .sidebar-floating-panel {
   opacity: 1; transform: translateX(0); pointer-events: auto;
 }

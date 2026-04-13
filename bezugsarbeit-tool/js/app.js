@@ -816,18 +816,66 @@ function renderHome() {
     if (filter) {
       grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔍</div><div class="empty-state-title">Kein Treffer</div><div class="empty-state-text">Keine Klienten gefunden für "${escapeHtml(filter)}".</div></div>`;
     } else {
-      grid.innerHTML = `<div style="grid-column:1/-1;max-width:600px;margin:40px auto;text-align:center;">
-        <div style="font-size:48px;margin-bottom:16px;">🧭</div>
-        <h2 style="font-size:22px;font-weight:800;color:var(--text);margin:0 0 8px;">Willkommen bei Pathways</h2>
-        <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:24px;">Dein professionelles Werkzeug für therapeutische Bezugsarbeit. Beginne damit, deinen ersten Klienten anzulegen — danach stehen dir Screening, Fallformulierung, Sitzungsprotokolle und vieles mehr zur Verfügung.</p>
-        <button class="btn btn-primary" onclick="openSchuelerModal()" style="font-size:14px;padding:12px 24px;">+ Ersten Klienten anlegen</button>
-        <div style="display:flex;gap:16px;justify-content:center;margin-top:32px;flex-wrap:wrap;">
-          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">📅</div><div style="font-size:11px;color:var(--text-muted);">Kalender</div></div>
-          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">✅</div><div style="font-size:11px;color:var(--text-muted);">Aufgaben</div></div>
-          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">⏱</div><div style="font-size:11px;color:var(--text-muted);">Zeiterfassung</div></div>
-          <div style="text-align:center;padding:16px;"><div style="font-size:24px;margin-bottom:4px;">🎓</div><div style="font-size:11px;color:var(--text-muted);">Weiterbildung</div></div>
+      grid.innerHTML = `<div class="onboarding-welcome" style="grid-column:1/-1;">
+        <!-- Hero Section -->
+        <div class="onboarding-hero">
+          <div class="onboarding-hero-bg"></div>
+          <div class="onboarding-hero-content">
+            <div class="onboarding-logo-mark">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect width="48" height="48" rx="14" fill="url(#og)"/>
+                <path d="M16 32 L24 14 L32 32 M19 26 h10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs><linearGradient id="og" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#818CF8"/><stop offset="100%" stop-color="#6366F1"/></linearGradient></defs>
+              </svg>
+            </div>
+            <h1 class="onboarding-title">Willkommen bei Pathways</h1>
+            <p class="onboarding-subtitle">Dein professionelles Werkzeug fur therapeutische Bezugsarbeit.<br>Screening, Fallformulierung, Sitzungsprotokolle — alles an einem Ort.</p>
+            <button class="btn btn-primary onboarding-cta" onclick="openSchuelerModal()">
+              <span style="font-size:18px;">+</span> Ersten Klienten anlegen
+            </button>
+          </div>
         </div>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:16px;">Tipp: Du kannst auch ohne Klienten den Kalender, Aufgaben und die Weiterbildung nutzen.</p>
+
+        <!-- Feature Grid: Was dich erwartet -->
+        <div class="onboarding-section-label">Was dich erwartet</div>
+        <div class="onboarding-features">
+          <div class="onboarding-feature-card" onclick="openSchuelerModal()">
+            <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#818CF8,#6366F1);">👤</div>
+            <div class="onboarding-feature-title">Klienten verwalten</div>
+            <div class="onboarding-feature-desc">Profile anlegen, Risiko einschatzen, Fortschritt dokumentieren.</div>
+          </div>
+          <div class="onboarding-feature-card" onclick="showView('kalender')">
+            <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#34D399,#10B981);">📅</div>
+            <div class="onboarding-feature-title">Kalender & Termine</div>
+            <div class="onboarding-feature-desc">Sitzungen planen, Erinnerungen setzen, Woche im Blick.</div>
+          </div>
+          <div class="onboarding-feature-card" onclick="showView('aufgaben')">
+            <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#A78BFA,#8B5CF6);">✅</div>
+            <div class="onboarding-feature-title">Aufgaben</div>
+            <div class="onboarding-feature-desc">To-Dos tracken, Prioritaten setzen, nichts vergessen.</div>
+          </div>
+          <div class="onboarding-feature-card" onclick="showView('zeiterfassung')">
+            <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#FCD34D,#F59E0B);">⏱️</div>
+            <div class="onboarding-feature-title">Zeiterfassung</div>
+            <div class="onboarding-feature-desc">Arbeitszeit erfassen, Kategorien zuordnen, exportieren.</div>
+          </div>
+          <div class="onboarding-feature-card" onclick="showView('bibliothek')">
+            <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#38BDF8,#0EA5E9);">📚</div>
+            <div class="onboarding-feature-title">Wissens-Bibliothek</div>
+            <div class="onboarding-feature-desc">Fachliche Ressourcen, Interventionen, Theorien nachschlagen.</div>
+          </div>
+          <div class="onboarding-feature-card" onclick="showView('weiterbildung')">
+            <div class="onboarding-feature-icon" style="background:linear-gradient(135deg,#2DD4BF,#14B8A6);">🎓</div>
+            <div class="onboarding-feature-title">Weiterbildung</div>
+            <div class="onboarding-feature-desc">Fortbildungen planen, Zertifikate verwalten, Stunden tracken.</div>
+          </div>
+        </div>
+
+        <!-- Quick-Start Hint -->
+        <div class="onboarding-hint">
+          <span class="onboarding-hint-icon">💡</span>
+          <span>Du kannst Kalender, Aufgaben und Weiterbildung sofort nutzen — auch ohne Klienten. Oder lege direkt deinen ersten Klienten an und entdecke Screening, 5P-Analyse und mehr.</span>
+        </div>
       </div>`;
     }
     return;

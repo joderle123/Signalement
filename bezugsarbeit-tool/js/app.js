@@ -830,6 +830,20 @@ function renderHome() {
   // Ampelsystem — Aufmerksamkeit erforderlich
   renderAmpelsystem(schueler, statsEl);
 
+  // Schnellhilfe Quick-Access (nach Stats)
+  if (statsEl && schueler.length > 0) {
+    statsEl.insertAdjacentHTML('beforeend',
+      '<div onclick="WB_ACTIVE_TAB=\'schnellhilfe\';showView(\'weiterbildung\');" style="grid-column:1/-1;margin-top:12px;display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(135deg,#FEF2F2,#FFF1F2);border:1.5px solid #FECACA;border-radius:12px;cursor:pointer;transition:all 0.15s;" onmouseenter="this.style.transform=\'translateY(-1px)\';this.style.boxShadow=\'0 6px 20px rgba(220,38,38,0.12)\'" onmouseleave="this.style.transform=\'\';this.style.boxShadow=\'\'">'
+      + '<div style="width:42px;height:42px;background:#DC2626;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;flex-shrink:0;">🆘</div>'
+      + '<div style="flex:1;min-width:0;">'
+      + '<div style="font-size:14px;font-weight:700;color:#DC2626;">Schnellhilfe — "Was mache ich jetzt?"</div>'
+      + '<div style="font-size:11px;color:#6B7280;margin-top:2px;">Problem auswählen → Situation beschreiben → Handlungsempfehlung erhalten</div>'
+      + '</div>'
+      + '<div style="font-size:20px;color:#DC2626;">→</div>'
+      + '</div>'
+    );
+  }
+
   // Spiegel + Fingerabdruck → nur im Kaseload-View, nicht auf der Startseite
 
   if (gefiltert.length === 0) {

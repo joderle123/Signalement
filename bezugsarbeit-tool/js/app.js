@@ -2443,7 +2443,7 @@ function renderBibliothek() {
     // Arbeitsblätter
     const abs = ARBEITSBLÄTTER[themaId] || [];
     abs.forEach(function(ab) {
-      items.push({ id: 'ab-' + ab.datei, label: ab.titel, datei: ab.datei, typ: 'arbeitsblatt' });
+      items.push({ id: 'ab-' + ab.datei, label: ab.titel, datei: ab.datei, typ: 'arbeitsblatt', desc: ab.beschreibung || 'Druckbares Arbeitsblatt für die Praxis' });
     });
 
     // Interventionen
@@ -2465,7 +2465,7 @@ function renderBibliothek() {
     // Eltern-Infoblätter
     if (typeof ELTERN_INFOBLAETTER !== 'undefined' && ELTERN_INFOBLAETTER[themaId]) {
       ELTERN_INFOBLAETTER[themaId].forEach(function(ei) {
-        items.push({ id: 'ei-' + ei.datei, label: ei.titel, datei: ei.datei, typ: 'elterninfo' });
+        items.push({ id: 'ei-' + ei.datei, label: ei.titel, datei: ei.datei, typ: 'elterninfo', desc: ei.beschreibung || 'Informationsblatt für Eltern & Erziehungsberechtigte' });
       });
     }
 
@@ -2489,28 +2489,28 @@ function renderBibliothek() {
     // Wiki-Artikel
     if (typeof WIKI_ARTIKEL !== 'undefined') {
       WIKI_ARTIKEL.forEach(function(w) {
-        items.push({ id: 'wiki-' + w.id, label: w.titel, typ: 'wiki', wikiId: w.id, icon: w.icon, kategorie: w.kategorie });
+        items.push({ id: 'wiki-' + w.id, label: w.titel, typ: 'wiki', wikiId: w.id, icon: w.icon, kategorie: w.kategorie, desc: w.beschreibung || w.kategorie || 'Wissensdatenbank-Artikel' });
       });
     }
 
     // Gesprächsleitfäden
     if (typeof ELTERN_GESPRAECHSLEITFAEDEN !== 'undefined') {
       ELTERN_GESPRAECHSLEITFAEDEN.forEach(function(gl) {
-        items.push({ id: 'gl-' + gl.id, label: gl.titel, datei: gl.datei, typ: 'leitfaden_eltern', beschreibung: gl.beschreibung });
+        items.push({ id: 'gl-' + gl.id, label: gl.titel, datei: gl.datei, typ: 'leitfaden_eltern', beschreibung: gl.beschreibung, desc: gl.beschreibung || 'Leitfaden für Elterngespräche' });
       });
     }
 
     // Evaluationsbögen
     if (typeof EVALUATIONSBOEGEN !== 'undefined') {
       EVALUATIONSBOEGEN.forEach(function(ev) {
-        items.push({ id: 'ev-' + ev.id, label: ev.titel, datei: ev.datei, typ: 'evaluation', beschreibung: ev.beschreibung, frequenz: ev.frequenz });
+        items.push({ id: 'ev-' + ev.id, label: ev.titel, datei: ev.datei, typ: 'evaluation', beschreibung: ev.beschreibung, frequenz: ev.frequenz, desc: ev.beschreibung || (ev.frequenz ? ev.frequenz : 'Evaluationsinstrument') });
       });
     }
 
     // Überweisungsleitfaden
     if (typeof UEBERWEISUNGSLEITFADEN !== 'undefined') {
       UEBERWEISUNGSLEITFADEN.forEach(function(ue) {
-        items.push({ id: 'ue-' + ue.id, label: ue.titel, datei: ue.datei, typ: 'ueberweisung' });
+        items.push({ id: 'ue-' + ue.id, label: ue.titel, datei: ue.datei, typ: 'ueberweisung', desc: ue.beschreibung || 'Überweisungsleitfaden für externe Stellen' });
       });
     }
 
@@ -2739,9 +2739,9 @@ function renderBibliothekKarte(item, cfg) {
   var favStar = item.favorit ? '⭐' : '☆';
   var favBtnHtml = '<button onclick="event.stopPropagation();toggleBibliothekFavorit(\'' + item.id + '\')" style="background:none;border:none;font-size:13px;cursor:pointer;padding:2px;line-height:1;opacity:0.5;transition:opacity 0.15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" title="' + (item.favorit ? 'Favorit entfernen' : 'Als Favorit merken') + '">' + favStar + '</button>';
 
-  var descHtml = item.desc ? '<div style="font-size:10px;color:#6B7280;margin-top:3px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + item.desc + '</div>' : '';
+  var descHtml = item.desc ? '<div class="bib-karte-desc">' + item.desc + '</div>' : '';
 
-  return '<div class="bib-karte">' +
+  return '<div class="bib-karte" style="--bib-accent:' + cfg.farbe + ';">' +
     '<div class="bib-karte-icon" style="background:' + cfg.bg + ';color:' + cfg.farbe + ';">' + (item.icon || cfg.icon) + '</div>' +
     '<div class="bib-karte-body">' +
       '<div class="bib-karte-typ" style="color:' + cfg.farbe + ';">' + cfg.label + '</div>' +

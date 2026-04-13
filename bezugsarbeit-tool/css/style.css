@@ -5209,38 +5209,45 @@ body.dark-mode .stimmung-seg:hover { background: #374151; }
 .bib-karte {
   background: var(--bg-card, #fff);
   border: 1px solid var(--border, #E5E7EB);
-  border-radius: 14px;
-  padding: 16px;
+  border-left: 4px solid var(--bib-accent, #6366F1);
+  border-radius: 12px;
+  padding: 14px 16px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  transition: box-shadow 0.25s ease, transform 0.15s ease, border-color 0.2s;
   cursor: default;
+  position: relative;
+  min-height: 72px;
 }
 .bib-karte:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.1);
   transform: translateY(-2px);
+  border-left-width: 4px;
 }
 .bib-karte-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 20px;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .bib-karte-body { flex: 1; min-width: 0; }
 .bib-karte-typ {
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 3px;
+  letter-spacing: 0.6px;
+  margin-bottom: 2px;
+  opacity: 0.85;
 }
 .bib-karte-titel {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text, #1F2937);
   line-height: 1.35;
@@ -5249,15 +5256,26 @@ body.dark-mode .stimmung-seg:hover { background: #374151; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.bib-karte-desc {
+  font-size: 11px;
+  color: #6B7280;
+  margin-top: 3px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .bib-karte-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: auto;
-  padding-top: 4px;
+  gap: 6px;
+  flex-shrink: 0;
+  align-self: center;
 }
-body.dark-mode .bib-karte { background: var(--bg-card); border-color: var(--border); }
+body.dark-mode .bib-karte { background: var(--bg-card); border-color: var(--border); border-left-color: var(--bib-accent, #6366F1); }
 body.dark-mode .bib-karte-titel { color: var(--text); }
+body.dark-mode .bib-karte-desc { color: #9CA3AF; }
 
 /* Legacy compat */
 .bibliothek-karte { display: none; }

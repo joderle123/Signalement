@@ -4325,14 +4325,9 @@ function renderZiele() {
   const liste = document.getElementById('ziele-liste');
 
   if (ziele.length === 0) {
-    liste.innerHTML = '<div style="text-align:center;padding:24px 16px;">'
-      + '<div style="font-size:28px;margin-bottom:8px;">🎯</div>'
-      + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;">Noch keine Ziele definiert</div>'
-      + '<div style="font-size:12px;color:var(--text-muted,#6B7280);margin-bottom:14px;line-height:1.5;">Ziele machen Fortschritte sichtbar und geben dem Jugendlichen Orientierung.<br>Formuliere Ziele nach der SMART-Methode: Spezifisch, Messbar, Erreichbar, Relevant, Zeitgebunden.</div>'
-      + '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">'
-      + SMART_BEISPIELE.map(b => '<button class="btn btn-outline btn-sm" style="font-size:11px;" onclick="quickAddZiel(\'' + b.replace(/'/g, "\\'") + '\')">' + b + '</button>').join('')
-      + '</div>'
-      + '</div>';
+    liste.innerHTML = `<div style="text-align:center;padding:24px 16px;color:var(--text-muted,#9CA3AF);font-size:13px;">
+      Noch keine Ziele. Nutze das Feld unten, um das erste Ziel zu erfassen.
+    </div>`;
     return;
   }
 
@@ -4352,58 +4347,71 @@ function renderZiele() {
   }
 
   liste.innerHTML = `
-    <div class="ziel-gesamt-fortschritt" style="margin-bottom:14px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Gesamt-Fortschritt</span>
-        <span style="font-size:14px;font-weight:700;color:${avgColor};">${avgFortschritt}%</span>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 16px;background:var(--bg-muted,#F9FAFB);border-radius:12px;">
+      <div style="position:relative;width:48px;height:48px;flex-shrink:0;">
+        <svg width="48" height="48" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#E5E7EB" stroke-width="4"/>
+          <circle cx="24" cy="24" r="20" fill="none" stroke="${avgColor}" stroke-width="4"
+            stroke-dasharray="${Math.round(125.6 * avgFortschritt / 100)} 125.6"
+            stroke-linecap="round" transform="rotate(-90 24 24)" style="transition:stroke-dasharray 0.4s ease;"/>
+        </svg>
+        <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:${avgColor};">${avgFortschritt}%</span>
       </div>
-      <div style="height:6px;background:#E5E7EB;border-radius:3px;overflow:hidden;">
-        <div style="height:100%;width:${avgFortschritt}%;background:${avgColor};border-radius:3px;transition:width 0.3s ease;"></div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--text,#1F2937);">Gesamt-Fortschritt</div>
+        <div style="font-size:11px;color:var(--text-muted,#6B7280);">${ziele.length} Ziel${ziele.length > 1 ? 'e' : ''} definiert</div>
       </div>
     </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
     ${ziele.map((z, i) => {
       const pct = z.fortschritt || (z.erledigt ? 100 : 0);
       const farbe = pct >= 70 ? '#10B981' : (pct >= 30 ? '#F59E0B' : '#EF4444');
       const meilensteine = z.meilensteine || [];
       const erledigteMeilensteine = meilensteine.filter(m => m.erledigt).length;
       const roadmapLink = z.roadmapThema ? roadmapThemen.find(t => (t.id || t) === z.roadmapThema) : null;
+      const isDone = pct >= 100;
       return `
-        <div class="ziel-item-enhanced">
-          <div class="ziel-item-header">
-            <input type="checkbox" class="ziel-checkbox" ${pct >= 100 ? 'checked' : ''}
+        <div class="ziel-card" style="padding:14px 16px;border:1px solid var(--border,#E5E7EB);border-radius:12px;background:var(--bg-card,#fff);${isDone ? 'opacity:0.65;' : ''}border-left:3px solid ${farbe};">
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <input type="checkbox" style="margin-top:3px;width:16px;height:16px;accent-color:${farbe};cursor:pointer;" ${isDone ? 'checked' : ''}
               onchange="toggleZiel(${i})">
-            <span class="ziel-text ${pct >= 100 ? 'erledigt' : ''}">${escapeHtml(z.text)}</span>
-            <span class="ziel-pct" style="color:${farbe};">${pct}%</span>
-            <button class="btn-icon btn-sm" style="font-size:12px;" onclick="deleteZiel(${i})">🗑</button>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;color:var(--text,#1F2937);${isDone ? 'text-decoration:line-through;color:var(--text-muted,#9CA3AF);' : ''}">${escapeHtml(z.text)}</div>
+              ${roadmapLink ? `<div style="font-size:10px;color:#6366F1;margin-top:2px;">Phase ${roadmapLink.phase}: ${escapeHtml(roadmapLink.titel)}</div>` : ''}
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              <span style="font-size:12px;font-weight:700;color:${farbe};">${pct}%</span>
+              <button style="background:none;border:none;cursor:pointer;color:#D1D5DB;font-size:14px;padding:2px;" onclick="deleteZiel(${i})" title="Löschen">✕</button>
+            </div>
           </div>
-          ${roadmapLink ? `<div style="font-size:10px;color:#6366F1;margin:2px 0 2px 24px;">🗺️ Verknüpft: ${escapeHtml(roadmapLink.titel)} (Phase ${roadmapLink.phase})</div>` : ''}
-          <div class="ziel-slider-row">
+          <div style="margin:8px 0 0 26px;">
             <input type="range" min="0" max="100" step="5" value="${pct}"
-              class="ziel-slider" style="--ziel-farbe:${farbe};"
+              style="width:100%;height:4px;accent-color:${farbe};cursor:pointer;"
               oninput="updateZielFortschritt(${i}, this.value)">
           </div>
           ${meilensteine.length > 0 ? `
-            <div class="meilensteine-liste" style="margin:4px 0 4px 24px;">
+            <div style="margin:8px 0 0 26px;display:flex;flex-direction:column;gap:3px;">
               ${meilensteine.map((m, mi) => `
-                <div style="display:flex;align-items:center;gap:6px;padding:2px 0;">
-                  <input type="checkbox" ${m.erledigt ? 'checked' : ''} onchange="toggleMeilenstein(${i},${mi})" style="margin:0;">
-                  <span style="font-size:11px;color:${m.erledigt ? '#10B981' : '#6B7280'};${m.erledigt ? 'text-decoration:line-through;' : ''}">${escapeHtml(m.text)}</span>
-                  <button style="background:none;border:none;font-size:10px;cursor:pointer;color:#D1D5DB;" onclick="deleteMeilenstein(${i},${mi})">✕</button>
-                </div>
+                <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:2px 0;">
+                  <input type="checkbox" ${m.erledigt ? 'checked' : ''} onchange="toggleMeilenstein(${i},${mi})" style="width:13px;height:13px;accent-color:#6366F1;">
+                  <span style="font-size:11px;color:${m.erledigt ? '#10B981' : 'var(--text-muted,#6B7280)'};${m.erledigt ? 'text-decoration:line-through;' : ''}">${escapeHtml(m.text)}</span>
+                  <button style="background:none;border:none;font-size:9px;cursor:pointer;color:#D1D5DB;margin-left:auto;" onclick="deleteMeilenstein(${i},${mi})">✕</button>
+                </label>
               `).join('')}
-              <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">✅ ${erledigteMeilensteine}/${meilensteine.length} Meilensteine</div>
+              <div style="font-size:10px;color:#9CA3AF;margin-top:1px;">${erledigteMeilensteine}/${meilensteine.length} erledigt</div>
             </div>
           ` : ''}
-          <div style="display:flex;gap:4px;margin:4px 0 2px 24px;">
-            <input type="text" id="meilenstein-input-${i}" placeholder="Meilenstein hinzufügen..." style="font-size:11px;padding:3px 8px;border:1px solid #E5E7EB;border-radius:6px;flex:1;" onkeydown="if(event.key==='Enter')addMeilenstein(${i})">
-            <button class="btn btn-xs btn-secondary" onclick="addMeilenstein(${i})" style="font-size:10px;">+</button>
-            ${roadmapThemen.length > 0 && !z.roadmapThema ? `<select onchange="linkZielRoadmap(${i},this.value)" style="font-size:10px;padding:2px 4px;border:1px solid #E5E7EB;border-radius:6px;">
-              <option value="">🗺️ Verknüpfen...</option>
+          <div style="display:flex;gap:4px;margin:6px 0 0 26px;">
+            <input type="text" id="meilenstein-input-${i}" placeholder="Teilschritt..." style="font-size:11px;padding:4px 10px;border:1px solid var(--border,#E5E7EB);border-radius:8px;flex:1;background:var(--bg-muted,#F9FAFB);" onkeydown="if(event.key==='Enter')addMeilenstein(${i})">
+            <button class="btn btn-xs btn-secondary" onclick="addMeilenstein(${i})" style="font-size:10px;border-radius:8px;">+</button>
+            ${roadmapThemen.length > 0 && !z.roadmapThema ? `<select onchange="linkZielRoadmap(${i},this.value)" style="font-size:10px;padding:2px 6px;border:1px solid var(--border,#E5E7EB);border-radius:8px;background:var(--bg-card,#fff);">
+              <option value="">Verknüpfen...</option>
               ${roadmapThemen.map(t => `<option value="${t.id || t}">${escapeHtml(t.titel)}</option>`).join('')}
             </select>` : ''}
           </div>
         </div>`;
     }).join('')}
+    </div>
   `;
 }
 
@@ -13847,10 +13855,8 @@ function renderScreening(schuelerId) {
     scrShowContainer('formular');
     renderScreeningSchritt(0);
   } else {
-    // Kein Screening vorhanden → direkt neues starten
-    scrShowContainer('liste');
-    APP.currentScreeningId = null;
-    renderScreeningHistorie(schuelerId);
+    // Kein Screening vorhanden → direkt neues Screening starten
+    neuesScreeningStarten();
   }
 }
 
@@ -14961,7 +14967,7 @@ function renderScreeningEmbedded() {
           <span>📊</span>
           <div class="card-title">Letztes Screening</div>
           <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
-            ${renderSeverityBadge(latestScr.severity, false)}
+            ${severityBadgeHtml(latestScr.severity, false)}
             <span style="font-size:12px;color:#6B7280;">${new Date(latestScr.datum).toLocaleDateString('de-DE')}</span>
           </div>
         </div>
@@ -14982,27 +14988,18 @@ function renderScreeningEmbedded() {
   }
 
   container.innerHTML = `
-    <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-      <div>
-        <h3 style="margin:0;font-size:18px;">🔍 Screening</h3>
-        <p style="margin:4px 0 0;font-size:12px;color:#6B7280;">Multi-dimensionales Belastungsscreening</p>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-primary btn-sm" onclick="showView('screening', '${sid}')">
-          ${abgeschlossene.length > 0 ? '📊 Ergebnisse öffnen' : '+ Neues Screening'}
-        </button>
-      </div>
-    </div>
-
     ${scrSummary}
 
-    <!-- Screening-Historie -->
     ${abgeschlossene.length > 0 ? `
+    <!-- Screening-Verlauf -->
     <div class="card">
       <div class="card-header">
         <span>📋</span>
         <div class="card-title">Screening-Verlauf</div>
-        <span style="margin-left:auto;font-size:12px;color:#6B7280;">${abgeschlossene.length} durchgeführt</span>
+        <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+          <span style="font-size:12px;color:#6B7280;">${abgeschlossene.length} durchgeführt</span>
+          <button class="btn btn-primary btn-sm" onclick="showView('screening', '${sid}')">+ Neues Screening</button>
+        </div>
       </div>
       <div class="card-body">
         ${abgeschlossene.map(scr => {
@@ -15010,7 +15007,7 @@ function renderScreeningEmbedded() {
           return `
           <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #F3F4F6;cursor:pointer;"
                onclick="showView('screening', '${sid}')">
-            ${renderSeverityBadge(scr.severity, false)}
+            ${severityBadgeHtml(scr.severity, false)}
             <span style="font-size:13px;font-weight:500;">${new Date(scr.datum).toLocaleDateString('de-DE')}</span>
             <span style="font-size:12px;color:#6B7280;">${flagged.length} auffällige Bereiche</span>
             <span style="margin-left:auto;color:#9CA3AF;">→</span>
@@ -15018,18 +15015,12 @@ function renderScreeningEmbedded() {
         }).join('')}
       </div>
     </div>` : `
-    <div style="text-align:center;padding:40px;color:#6B7280;">
-      <div style="font-size:32px;margin-bottom:12px;">🔍</div>
-      <p style="font-size:14px;margin-bottom:12px;">Noch kein Screening durchgeführt</p>
-      <p style="font-size:12px;color:#9CA3AF;margin-bottom:16px;">
-        Das Screening hilft, Belastungsbereiche systematisch zu erfassen und den Förderbedarf zu ermitteln.
-      </p>
-      <button class="btn btn-primary" onclick="showView('screening', '${sid}')">+ Erstes Screening starten</button>
+    <div style="text-align:center;padding:32px 20px;">
+      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#EEF2FF,#E0E7FF);display:inline-flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;">🔍</div>
+      <p style="font-size:15px;font-weight:600;color:var(--text,#1F2937);margin:0 0 4px;">Screening starten</p>
+      <p style="font-size:12px;color:var(--text-muted,#9CA3AF);margin:0 0 16px;">Belastungsbereiche systematisch erfassen</p>
+      <button class="btn btn-primary" onclick="showView('screening', '${sid}')" style="padding:10px 28px;">Screening durchführen</button>
     </div>`}
-
-    <div class="screening-disclaimer" style="margin-top:16px;">
-      <strong>⚠️ Hinweis:</strong> Dieses Screening-Tool ist kein diagnostisches Instrument und ersetzt keine klinische Diagnose.
-    </div>
   `;
 }
 

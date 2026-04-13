@@ -352,30 +352,18 @@
           <button onclick="showToolLegitimation('roadmap')" class="btn-ref-inline">📚 Förderplan & Zielplanung</button>
         </div>
         <div id="roadmap-container"></div>
-        <div id="roadmap-ziele-section" style="margin-top:16px;">
-          <details class="collapsible-panel" open>
-            <summary class="collapsible-header">🎯 Ziele & Fortschritte</summary>
-            <div class="collapsible-body">
-              <div id="screening-ziel-vorschlaege"></div>
-              <div id="ziele-liste" style="margin-bottom:16px;"></div>
-              <details class="smart-hilfe" style="margin-bottom:12px;">
-                <summary style="font-size:12px;color:#3B82F6;cursor:pointer;font-weight:600;">📐 SMART-Methode — Wie formuliere ich gute Ziele? <span onclick="event.stopPropagation();showToolLegitimation('smart')" style="margin-left:8px;color:#6B7280;font-weight:400;text-decoration:underline;cursor:pointer;">📚 Evidenz</span></summary>
-                <div style="font-size:12px;color:#6B7280;padding:8px 12px;background:#F0F7FF;border-radius:8px;margin-top:6px;line-height:1.6;">
-                  <strong>S</strong>pezifisch — Was genau soll erreicht werden?<br>
-                  <strong>M</strong>essbar — Woran erkenne ich den Fortschritt?<br>
-                  <strong>E</strong>rreichbar — Ist das Ziel realistisch für diesen Jugendlichen?<br>
-                  <strong>R</strong>elevant — Passt es zu den identifizierten Problemen?<br>
-                  <strong>T</strong>erminiert — Bis wann soll es erreicht sein?<br>
-                  <em style="display:block;margin-top:6px;">Nicht: „Besser in der Schule" — Sondern: „In 4 Wochen kann Max 3x wöchentlich ohne Streit in der Pause spielen"</em>
-                </div>
-              </details>
-              <div style="display:flex;gap:10px;">
-                <input type="text" id="neues-ziel-input" placeholder="z.B. In 4 Wochen kann Max 3x/Woche ohne Streit in der Pause spielen"
-                  onkeydown="if(event.key==='Enter') addZiel()">
-                <button class="btn btn-success btn-sm" onclick="addZiel()">+ Hinzufügen</button>
-              </div>
-            </div>
-          </details>
+        <div id="roadmap-ziele-section" style="margin-top:20px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="font-size:15px;font-weight:700;color:var(--text,#1F2937);">Ziele</div>
+            <div id="screening-ziel-vorschlaege" style="display:inline;"></div>
+          </div>
+          <div id="ziele-liste" style="margin-bottom:12px;"></div>
+          <div class="ziel-add-bar" style="display:flex;gap:8px;">
+            <input type="text" id="neues-ziel-input" placeholder="Neues Ziel hinzufügen..."
+              style="flex:1;padding:10px 14px;border:1px solid var(--border,#E5E7EB);border-radius:10px;font-size:13px;background:var(--bg-card,#fff);"
+              onkeydown="if(event.key==='Enter') addZiel()">
+            <button class="btn btn-primary btn-sm" onclick="addZiel()" style="padding:10px 18px;border-radius:10px;">+ Ziel</button>
+          </div>
         </div>
         <div id="themen-im-foerderplan" style="margin-top:24px;"></div>
       </div>

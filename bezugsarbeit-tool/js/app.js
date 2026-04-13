@@ -4697,20 +4697,78 @@ function editMedikament(idx) {
   formContainer.innerHTML = renderMedForm(med, idx);
 }
 
+// Gängige Medikamente in der Kinder-/Jugendpsychiatrie
+const MEDIKAMENTEN_LISTE = [
+  { name: 'Methylphenidat (Ritalin)', wirkstoff: 'Methylphenidat', indikation: 'ADHS', info: 'Stimulans. Verbessert Aufmerksamkeit und Impulskontrolle. Häufige NW: Appetitminderung, Schlafstörungen, Kopfschmerzen. Wirkdauer: 3-4h (retard 8-12h). Regelmäßige Gewichts-/Größenkontrolle empfohlen.' },
+  { name: 'Methylphenidat (Concerta)', wirkstoff: 'Methylphenidat', indikation: 'ADHS', info: 'Retardiertes Methylphenidat, Wirkdauer ~12h. Gleiche NW wie Ritalin. Tablette darf nicht zerteilt werden. Morgendliche Einnahme.' },
+  { name: 'Methylphenidat (Medikinet)', wirkstoff: 'Methylphenidat', indikation: 'ADHS', info: 'Verfügbar als Retard-Kapsel. Kann geöffnet und über Essen gestreut werden (bei Schluckproblemen). NW: Appetitminderung, Unruhe, Schlafstörungen.' },
+  { name: 'Lisdexamfetamin (Elvanse)', wirkstoff: 'Lisdexamfetamin', indikation: 'ADHS', info: 'Prodrug-Stimulans, gleichmäßige Wirkung über 12-14h. Geringeres Missbrauchspotenzial als Methylphenidat. NW: Appetitminderung, Schlafstörungen, Mundtrockenheit. Besonders bei unzureichender Ritalin-Wirkung.' },
+  { name: 'Atomoxetin (Strattera)', wirkstoff: 'Atomoxetin', indikation: 'ADHS', info: 'Kein Stimulans — Noradrenalin-Wiederaufnahmehemmer. Wirkt erst nach 4-6 Wochen voll. NW: Übelkeit, Müdigkeit, Stimmungsschwankungen. Kein Missbrauchspotenzial. Option bei Tic-Störung oder Angst + ADHS.' },
+  { name: 'Guanfacin (Intuniv)', wirkstoff: 'Guanfacin', indikation: 'ADHS', info: 'Alpha-2-Agonist, kein Stimulans. Besonders wirksam bei Hyperaktivität/Impulsivität und Tic-Störungen. NW: Müdigkeit, niedriger Blutdruck, Schwindel. Langsam ein-/ausschleichen.' },
+  { name: 'Sertralin (Zoloft)', wirkstoff: 'Sertralin', indikation: 'Depression, Angst, Zwang', info: 'SSRI, ab 6 Jahre zugelassen für Zwangsstörung. Häufig off-label bei Depression/Angst. NW: Übelkeit, Durchfall, Unruhe (initial). Wirkeintritt 2-4 Wochen. ACHTUNG: Suizidalität kann initial steigen — engmaschig beobachten!' },
+  { name: 'Fluoxetin (Prozac)', wirkstoff: 'Fluoxetin', indikation: 'Depression', info: 'Einziges SSRI mit Zulassung ab 8 Jahre für Depression. Lange HWZ (4-6 Tage). NW: Übelkeit, Kopfschmerzen, Unruhe. ACHTUNG: Suizidalität kann initial steigen — engmaschig beobachten!' },
+  { name: 'Escitalopram (Cipralex)', wirkstoff: 'Escitalopram', indikation: 'Depression, Angst', info: 'SSRI, off-label bei Jugendlichen. Gut verträglich. NW: Übelkeit, Schlafstörungen, Kopfschmerzen. Wirkeintritt 2-4 Wochen.' },
+  { name: 'Fluvoxamin (Fevarin)', wirkstoff: 'Fluvoxamin', indikation: 'Zwangsstörung, Angst', info: 'SSRI, zugelassen für Zwangsstörung ab 8 Jahre. NW: Übelkeit, Schläfrigkeit. Viele Wechselwirkungen beachten.' },
+  { name: 'Risperidon (Risperdal)', wirkstoff: 'Risperidon', indikation: 'Verhaltensauffälligkeiten, Autismus', info: 'Atypisches Antipsychotikum. Zugelassen bei schwerer Aggression (ab 5 Jahre). NW: Gewichtszunahme (!), Müdigkeit, Prolaktinanstieg. Regelmäßige Gewichtskontrolle. Niedrigste wirksame Dosis anstreben.' },
+  { name: 'Aripiprazol (Abilify)', wirkstoff: 'Aripiprazol', indikation: 'Schizophrenie, Bipolar, Reizbarkeit bei Autismus', info: 'Atypisches Antipsychotikum. Weniger Gewichtszunahme als Risperidon. NW: Unruhe (Akathisie), Übelkeit, Schlafstörungen. Ab 13 Jahre für Schizophrenie, ab 15 für Bipolar.' },
+  { name: 'Quetiapin (Seroquel)', wirkstoff: 'Quetiapin', indikation: 'Bipolar, Schlafstörungen', info: 'Atypisches Antipsychotikum. Off-label häufig als Schlafmittel in niedriger Dosis. NW: Sedierung (!), Gewichtszunahme, Schwindel. Metabolische Kontrollen empfohlen.' },
+  { name: 'Melatonin (Circadin/Slenyto)', wirkstoff: 'Melatonin', indikation: 'Schlafstörungen', info: 'Schlafhormon. Slenyto ab 2 Jahre für Autismus/ADHS zugelassen. Gut verträglich. NW: Kopfschmerzen, Müdigkeit morgens. 30-60 Min vor dem Schlafengehen. Kein Abhängigkeitspotenzial.' },
+  { name: 'Lamotrigin (Lamictal)', wirkstoff: 'Lamotrigin', indikation: 'Epilepsie, Bipolare Störung', info: 'Antikonvulsivum/Stimmungsstabilisierer. Sehr langsam eindosieren (Hautausschlag-Risiko!). NW: Hautausschlag (sofort Arzt!), Kopfschmerzen, Schwindel. Stevens-Johnson-Syndrom möglich bei zu schneller Dosierung.' },
+  { name: 'Valproat (Depakine)', wirkstoff: 'Valproinsäure', indikation: 'Epilepsie, Bipolare Störung', info: 'Antikonvulsivum/Stimmungsstabilisierer. NICHT bei Mädchen/Frauen im gebärfähigen Alter (teratogen!). NW: Gewichtszunahme, Übelkeit, Tremor, Haarausfall. Regelmäßige Blutkontrollen nötig.' },
+  { name: 'Lorazepam (Tavor/Temesta)', wirkstoff: 'Lorazepam', indikation: 'Akute Angst, Panikattacken', info: 'Benzodiazepin — NUR kurzfristig! Hohes Abhängigkeitspotenzial. NW: Sedierung, Konzentrationsstörung. Max. 2-4 Wochen. In der Jugendpsychiatrie nur als Notfallmedikation.' },
+];
+
 function renderMedForm(med, idx) {
   const isEdit = idx !== undefined;
+  const medValue = (med && med.name) || '';
+
+  // Dropdown-Optionen für Medikamente
+  var medOptionen = '<option value="">— Medikament auswählen —</option>';
+  MEDIKAMENTEN_LISTE.forEach(function(m) {
+    medOptionen += '<option value="' + escapeHtml(m.name) + '"' + (medValue === m.name ? ' selected' : '') + '>' + escapeHtml(m.name) + ' — ' + m.indikation + '</option>';
+  });
+  medOptionen += '<option value="__andere">Anderes Medikament (Freitext)</option>';
+
   return '<div class="med-form">'
     + '<div class="med-form-grid">'
-    + '<div class="form-group"><label>Medikament *</label><input type="text" id="med-name" placeholder="z.B. Ritalin, Sertralin..." value="' + escapeHtml((med && med.name) || '') + '"></div>'
+    + '<div class="form-group"><label>Medikament *</label>'
+    + '<select id="med-name-select" onchange="onMedSelect()" style="width:100%;padding:8px;border:1px solid #D1D5DB;border-radius:8px;font-size:13px;">' + medOptionen + '</select>'
+    + '<input type="text" id="med-name-custom" placeholder="Medikamentenname eingeben..." value="' + escapeHtml(medValue) + '" style="display:' + (medValue && !MEDIKAMENTEN_LISTE.some(function(m){return m.name===medValue;}) ? 'block' : 'none') + ';margin-top:6px;">'
+    + '<div id="med-info-box" style="display:none;margin-top:8px;padding:10px 12px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:8px;font-size:12px;line-height:1.5;color:#1E40AF;"></div>'
+    + '</div>'
     + '<div class="form-group"><label>Dosierung</label><input type="text" id="med-dosierung" placeholder="z.B. 10mg 2x täglich" value="' + escapeHtml((med && med.dosierung) || '') + '"></div>'
     + '<div class="form-group"><label>Verordnet von</label><input type="text" id="med-arzt" placeholder="Arzt / Fachperson" value="' + escapeHtml((med && med.arzt) || '') + '"></div>'
     + '<div class="form-group"><label>Seit</label><input type="date" id="med-seit" value="' + ((med && med.seit) || '') + '"></div>'
-    + '<div class="form-group" style="grid-column:1/-1;"><label>Nebenwirkungen / Hinweise</label><textarea id="med-nebenwirkungen" rows="2" placeholder="Bekannte Nebenwirkungen, Wechselwirkungen, Einnahmehinweise...">' + escapeHtml((med && med.nebenwirkungen) || '') + '</textarea></div>'
     + '</div>'
     + '<div class="med-form-actions">'
     + '<button class="btn btn-secondary btn-sm" onclick="cancelMedForm()">Abbrechen</button>'
     + '<button class="btn btn-primary btn-sm" onclick="saveMedikament(' + (isEdit ? idx : -1) + ')">' + (isEdit ? 'Aktualisieren' : 'Speichern') + '</button>'
     + '</div></div>';
+}
+
+function onMedSelect() {
+  var sel = document.getElementById('med-name-select');
+  var custom = document.getElementById('med-name-custom');
+  var infoBox = document.getElementById('med-info-box');
+  if (!sel) return;
+
+  if (sel.value === '__andere') {
+    custom.style.display = 'block';
+    custom.focus();
+    infoBox.style.display = 'none';
+  } else if (sel.value) {
+    custom.style.display = 'none';
+    custom.value = sel.value;
+    // Info anzeigen
+    var med = MEDIKAMENTEN_LISTE.find(function(m) { return m.name === sel.value; });
+    if (med && infoBox) {
+      infoBox.style.display = 'block';
+      infoBox.innerHTML = '<strong>💊 ' + med.indikation + '</strong><br>' + med.info;
+    }
+  } else {
+    custom.style.display = 'none';
+    infoBox.style.display = 'none';
+  }
 }
 
 function cancelMedForm() {
@@ -4904,8 +4962,6 @@ function _getAnamneseScreeningContext() {
 
 function renderAnamneseChips(kat, anamnese) {
   const activeCount = kat.items.filter(it => anamnese.includes(it.id)).length;
-  // Screening-Kontext: welche Domains sind auffällig?
-  const scrContext = _getAnamneseScreeningContext();
   return `
     <div class="anamnese-kategorie">
       <div class="anamnese-kategorie-header" style="border-left:4px solid ${kat.farbe}">
@@ -4914,17 +4970,12 @@ function renderAnamneseChips(kat, anamnese) {
       </div>
       <div class="anamnese-chips">
         ${kat.items.map(item => {
-          const isHochGewichtet = item.gewicht >= 2;
-          const scrMatch = scrContext.matchedItems.has(item.id);
-          const badges = [];
-          if (isHochGewichtet) badges.push('<span class="anamnese-gewicht-badge" title="Hohes Risiko-Gewicht — besonders beachten">⚠️</span>');
-          if (scrMatch) badges.push('<span class="anamnese-scr-badge" title="Passt zum auffälligen Screening-Ergebnis">📊</span>');
           return `
-          <div class="anamnese-chip ${anamnese.includes(item.id) ? 'active' : ''} ${isHochGewichtet ? 'anamnese-wichtig' : ''} ${scrMatch ? 'anamnese-scr-match' : ''}"
+          <div class="anamnese-chip ${anamnese.includes(item.id) ? 'active' : ''}"
                style="--chip-color:${kat.farbe}"
                onclick="toggleAnamneseItem('${item.id}')"
-               title="${item.evidenz}${isHochGewichtet ? ' · ⚠️ Hohes Gewicht' : ''}${scrMatch ? ' · 📊 Screening-Match' : ''}">
-            ${item.label}${badges.length > 0 ? ' ' + badges.join('') : ''}
+               title="${item.evidenz}">
+            ${item.label}
           </div>`;
         }).join('')}
       </div>
@@ -4933,7 +4984,6 @@ function renderAnamneseChips(kat, anamnese) {
 }
 
 function renderAnamneseFelder(kat, anamnese) {
-  const scrContext = _getAnamneseScreeningContext();
   const felderHtml = kat.felder.map(feld => {
     const isMulti = feld.typ === 'multi';
     return `
@@ -4941,17 +4991,12 @@ function renderAnamneseFelder(kat, anamnese) {
         <div class="anamnese-feld-label">${feld.label}${!isMulti ? ' <span class="anamnese-feld-hint">(eines wählen)</span>' : ''}</div>
         <div class="anamnese-chips">
           ${feld.optionen.map(opt => {
-            const isHochGewichtet = (opt.gewicht || 0) >= 2;
-            const scrMatch = scrContext.matchedItems.has(opt.id);
-            const badges = [];
-            if (isHochGewichtet) badges.push('<span class="anamnese-gewicht-badge" title="Hohes Risiko-Gewicht">⚠️</span>');
-            if (scrMatch) badges.push('<span class="anamnese-scr-badge" title="Passt zum Screening">📊</span>');
             return `
-            <div class="anamnese-chip ${anamnese.includes(opt.id) ? 'active' : ''} ${isHochGewichtet ? 'anamnese-wichtig' : ''} ${scrMatch ? 'anamnese-scr-match' : ''}"
+            <div class="anamnese-chip ${anamnese.includes(opt.id) ? 'active' : ''}"
                  style="--chip-color:${kat.farbe}"
                  onclick="toggleAnamneseItem('${opt.id}', '${feld.id}', '${feld.typ}')"
-                 title="${opt.evidenz || ''}${isHochGewichtet ? ' · ⚠️ Hohes Gewicht' : ''}${scrMatch ? ' · 📊 Screening-Match' : ''}">
-              ${opt.label}${badges.length > 0 ? ' ' + badges.join('') : ''}
+                 title="${opt.evidenz || ''}">
+              ${opt.label}
             </div>`;
           }).join('')}
         </div>

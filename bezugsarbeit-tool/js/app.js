@@ -3749,8 +3749,6 @@ function toggleNotizModus(modus) {
     btnFrei.classList.remove('active');
     const d = document.getElementById('prot-datum');
     if (!d.value) d.value = new Date().toISOString().split('T')[0];
-    // Risiko-Check initialisieren wenn nötig
-    if (typeof renderRisikoCheck === 'function') renderRisikoCheck();
   }
 }
 
@@ -3957,20 +3955,6 @@ function addProtokoll() {
   if (!datum) { showToast('Datum ist ein Pflichtfeld', 'error'); return; }
   if (!subjektiv && !objektiv && !assessment && !plan) {
     showToast('Bitte mindestens ein SOAP-Feld ausfüllen', 'error'); return;
-  }
-
-  // C-SSRS Schweregrad-Prüfung: Bei Stufe 3+ → Sicherheitsplan muss angehakt sein
-  const cssrsSchweregradEl = document.querySelector('input[name="cssrs-schweregrad"]:checked');
-  const cssrsSchweregrad = cssrsSchweregradEl ? parseInt(cssrsSchweregradEl.value) : 0;
-  if (cssrsSchweregrad >= 3) {
-    const sicherheitsplanOk = document.getElementById('soap-sicherheitsplan-check')?.checked;
-    if (!sicherheitsplanOk) {
-      showToast('⚠️ Bei Suizidalitäts-Schweregrad ≥ 3 muss der Sicherheitsplan dokumentiert werden!', 'error');
-      // Zum C-SSRS-Abschnitt scrollen
-      const cssrsEl = document.getElementById('soap-cssrs-schweregrad');
-      if (cssrsEl) cssrsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
   }
 
   // Find theme title
@@ -4183,6 +4167,25 @@ function selectProtStimmung(btn) {
   document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   APP.protStimmung = btn.dataset.val;
+}
+
+// ---- Stimmung 1-10 Skala (professionell) ----
+const STIMMUNG_LABELS = {
+  1: 'Krise', 2: 'Sehr schlecht', 3: 'Schlecht', 4: 'Eher schlecht',
+  5: 'Gemischt', 6: 'Eher gut', 7: 'Gut', 8: 'Sehr gut', 9: 'Ausgezeichnet', 10: 'Optimal'
+};
+
+function selectProtStimmungScale(btn) {
+  document.querySelectorAll('.stimmung-seg').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const val = parseInt(btn.dataset.val);
+  // Map 1-10 to old string values for backwards compatibility
+  const map = { 1: 'sehr-schlecht', 2: 'sehr-schlecht', 3: 'schlecht', 4: 'schlecht',
+    5: 'neutral', 6: 'neutral', 7: 'gut', 8: 'gut', 9: 'sehr-gut', 10: 'sehr-gut' };
+  APP.protStimmung = map[val] || 'neutral';
+  APP.protStimmungScore = val;
+  const label = document.getElementById('prot-stimmung-label');
+  if (label) label.textContent = `${val}/10 — ${STIMMUNG_LABELS[val] || ''}`;
 }
 
 // ---- Polyvagal Check-in ----

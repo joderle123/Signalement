@@ -462,15 +462,27 @@
             </div>
           </div>
 
-          <!-- Stimmung -->
-          <div class="prot-stimmung-row" style="margin-bottom:10px;">
-            <label>Stimmung:</label>
-            <div class="prot-stimmung-btns" id="prot-stimmung-btns">
-              <button class="prot-stimmung-btn" data-val="sehr-schlecht" onclick="selectProtStimmung(this)">😫</button>
-              <button class="prot-stimmung-btn" data-val="schlecht" onclick="selectProtStimmung(this)">😞</button>
-              <button class="prot-stimmung-btn" data-val="neutral" onclick="selectProtStimmung(this)">😐</button>
-              <button class="prot-stimmung-btn" data-val="gut" onclick="selectProtStimmung(this)">🙂</button>
-              <button class="prot-stimmung-btn" data-val="sehr-gut" onclick="selectProtStimmung(this)">😄</button>
+          <!-- Stimmung — professionelle 1-10 Skala -->
+          <div class="prot-stimmung-scale" style="margin-bottom:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <label style="font-size:13px;font-weight:600;color:var(--text,#374151);">Stimmung</label>
+              <span id="prot-stimmung-label" style="font-size:12px;color:var(--text-muted,#6B7280);min-width:80px;text-align:right;"></span>
+            </div>
+            <div class="stimmung-scale-track" id="prot-stimmung-btns">
+              <button class="stimmung-seg" data-val="1" onclick="selectProtStimmungScale(this)"><span>1</span></button>
+              <button class="stimmung-seg" data-val="2" onclick="selectProtStimmungScale(this)"><span>2</span></button>
+              <button class="stimmung-seg" data-val="3" onclick="selectProtStimmungScale(this)"><span>3</span></button>
+              <button class="stimmung-seg" data-val="4" onclick="selectProtStimmungScale(this)"><span>4</span></button>
+              <button class="stimmung-seg" data-val="5" onclick="selectProtStimmungScale(this)"><span>5</span></button>
+              <button class="stimmung-seg" data-val="6" onclick="selectProtStimmungScale(this)"><span>6</span></button>
+              <button class="stimmung-seg" data-val="7" onclick="selectProtStimmungScale(this)"><span>7</span></button>
+              <button class="stimmung-seg" data-val="8" onclick="selectProtStimmungScale(this)"><span>8</span></button>
+              <button class="stimmung-seg" data-val="9" onclick="selectProtStimmungScale(this)"><span>9</span></button>
+              <button class="stimmung-seg" data-val="10" onclick="selectProtStimmungScale(this)"><span>10</span></button>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <span style="font-size:10px;color:var(--text-muted,#9CA3AF);">Sehr schlecht</span>
+              <span style="font-size:10px;color:var(--text-muted,#9CA3AF);">Sehr gut</span>
             </div>
           </div>
 
@@ -607,24 +619,6 @@
               </div>
             </div>
           </details>
-
-          <!-- Risiko-Check (hidden unless needed) -->
-          <div id="risiko-check-section"></div>
-          <div id="soap-cssrs-schweregrad" style="display:none;margin-top:12px;padding:12px 16px;background:#FEF2F2;border:2px solid #FECACA;border-radius:10px;">
-            <div style="font-size:13px;font-weight:700;color:#991B1B;margin-bottom:8px;">⚠️ Suizidalitäts-Schweregrad (C-SSRS)</div>
-            <div style="display:flex;flex-direction:column;gap:6px;" id="cssrs-schweregrad-options">
-              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="1"> <strong>1:</strong> Todeswünsche</label>
-              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="2"> <strong>2:</strong> Suizidgedanken ohne Plan</label>
-              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEF3C7;border:1px solid #FDE68A;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="3"> <strong>3:</strong> Mit Plan, ohne Absicht</label>
-              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEE2E2;border:1px solid #FECACA;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="4"> <strong>4:</strong> Mit Plan + Absicht</label>
-              <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#FEE2E2;border:2px solid #EF4444;border-radius:6px;cursor:pointer;font-size:12px;"><input type="radio" name="cssrs-schweregrad" value="5"> <strong>5:</strong> Suizidales Verhalten</label>
-            </div>
-            <div id="soap-sicherheitsplan-pflicht" style="display:none;margin-top:10px;padding:10px;background:#7F1D1D10;border:2px solid #7F1D1D;border-radius:8px;">
-              <div style="font-size:12px;font-weight:700;color:#7F1D1D;">🚨 Sicherheitsplan PFLICHT bei Stufe 3+</div>
-              <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;cursor:pointer;"><input type="checkbox" id="soap-sicherheitsplan-check"> Sicherheitsplan besprochen</label>
-              <label style="display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px;cursor:pointer;"><input type="checkbox" id="soap-supervisor-check"> Supervisor informiert</label>
-            </div>
-          </div>
 
           <!-- Vorschau (hidden) -->
           <div id="soap-vorschau" style="display:none;"></div>

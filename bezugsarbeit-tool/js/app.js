@@ -2791,19 +2791,20 @@ function renderHypothesenTab() {
   renderHypothesenDashboard(container, hypothesen, branchenRisiken, sid);
 }
 
-// Hypothesen direkt im Fallbild (unter 5P) rendern
+// Hypothesen direkt im Fallbild (unter 5P) rendern — volles Dashboard
 function renderHypothesenImFallbild() {
   const container = document.getElementById('hypothesen-im-fallbild');
   if (!container) return;
   const sid = APP.currentSchuelerId;
   if (!sid) return;
   const hypothesen = generateHypothesen(sid);
+  const branchenRisiken = generateBranchenRisiken(sid);
   container.innerHTML = '<div style="border-top:2px solid var(--border,#E5E7EB);padding-top:20px;">'
-    + '<h3 style="font-size:16px;margin:0 0 12px;color:var(--text,#1F2937);font-weight:700;">Klinische Hypothesen</h3>'
+    + '<h3 style="font-size:16px;margin:0 0 12px;color:var(--text,#1F2937);font-weight:700;">🔬 Klinische Hypothesen & Analyse</h3>'
     + '<div id="hypothesen-fallbild-inner"></div>'
     + '</div>';
   const inner = document.getElementById('hypothesen-fallbild-inner');
-  if (inner) renderHypothesen(inner, hypothesen);
+  if (inner) renderHypothesenDashboard(inner, hypothesen, branchenRisiken, sid);
 }
 
 // Themen-Übersicht im Förderplan rendern

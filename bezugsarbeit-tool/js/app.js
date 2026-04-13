@@ -4655,25 +4655,28 @@ function renderMedikation() {
     html += '<div class="med-empty">Keine Medikamente erfasst</div>';
   } else {
     meds.forEach((med, idx) => {
-      html += '<div class="med-card">';
+      var medInfo = MEDIKAMENTEN_LISTE.find(function(m) { return m.name === med.name; });
+      html += '<div class="med-card" style="cursor:pointer;" onclick="toggleMedInfo(' + idx + ')">';
       html += '<div class="med-card-header">';
-      html += '<span class="med-card-name">' + escapeHtml(med.name || 'Unbenannt') + '</span>';
-      html += med.seit ? '<span class="med-card-since">seit ' + escapeHtml(med.seit) + '</span>' : '';
-      html += '</div>';
+      html += '<span class="med-card-name">💊 ' + escapeHtml(med.name || 'Unbenannt') + '</span>';
+      html += '<span style="display:flex;gap:8px;align-items:center;">';
+      if (med.dosierung) html += '<span style="font-size:12px;color:#6B7280;background:#F3F4F6;padding:2px 8px;border-radius:12px;">' + escapeHtml(med.dosierung) + '</span>';
+      if (med.seit) html += '<span class="med-card-since">seit ' + escapeHtml(med.seit) + '</span>';
+      html += '</span></div>';
+      // Info-Box (klappbar)
+      html += '<div class="med-info-detail" id="med-info-' + idx + '" style="display:none;margin-top:10px;">';
+      if (medInfo) {
+        html += '<div style="padding:10px 12px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:8px;font-size:12px;line-height:1.6;color:#1E40AF;margin-bottom:8px;">';
+        html += '<strong>' + medInfo.indikation + '</strong> · ' + medInfo.wirkstoff + '<br>' + medInfo.info;
+        html += '</div>';
+      }
       html += '<div class="med-card-fields">';
-      if (med.dosierung) {
-        html += '<div class="med-field"><span class="med-field-label">Dosierung</span><span class="med-field-value">' + escapeHtml(med.dosierung) + '</span></div>';
-      }
-      if (med.arzt) {
-        html += '<div class="med-field"><span class="med-field-label">Verordnet von</span><span class="med-field-value">' + escapeHtml(med.arzt) + '</span></div>';
-      }
-      if (med.nebenwirkungen) {
-        html += '<div class="med-field"><span class="med-field-label">Nebenwirkungen / Hinweise</span><span class="med-field-value">' + escapeHtml(med.nebenwirkungen) + '</span></div>';
-      }
+      if (med.arzt) html += '<div class="med-field"><span class="med-field-label">Verordnet von</span><span class="med-field-value">' + escapeHtml(med.arzt) + '</span></div>';
       html += '</div>';
-      html += '<div class="med-card-actions">';
-      html += '<button class="btn btn-secondary btn-xs" onclick="editMedikament(' + idx + ')">Bearbeiten</button>';
-      html += '<button class="btn btn-danger btn-xs" onclick="deleteMedikament(' + idx + ')">Entfernen</button>';
+      html += '<div class="med-card-actions" style="margin-top:8px;">';
+      html += '<button class="btn btn-secondary btn-xs" onclick="event.stopPropagation();editMedikament(' + idx + ')">Bearbeiten</button>';
+      html += '<button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteMedikament(' + idx + ')">Entfernen</button>';
+      html += '</div>';
       html += '</div>';
       html += '</div>';
     });
@@ -4771,6 +4774,11 @@ function onMedSelect() {
   }
 }
 
+function toggleMedInfo(idx) {
+  var el = document.getElementById('med-info-' + idx);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
 function cancelMedForm() {
   const formContainer = document.getElementById('med-form-container');
   if (formContainer) formContainer.innerHTML = '';
@@ -4779,8 +4787,17 @@ function cancelMedForm() {
 function saveMedikament(idx) {
   const sid = APP.currentSchuelerId;
   if (!sid) return;
-  const name = document.getElementById('med-name')?.value?.trim();
-  if (!name) { showToast('Bitte Medikamentenname eingeben', 'error'); return; }
+  const sel = document.getElementById('med-name-select');
+  const custom = document.getElementById('med-name-custom');
+  let name = '';
+  if (sel && sel.value === '__andere') {
+    name = custom ? custom.value.trim() : '';
+  } else if (sel && sel.value) {
+    name = sel.value;
+  } else if (custom) {
+    name = custom.value.trim();
+  }
+  if (!name) { showToast('Bitte Medikament auswählen', 'error'); return; }
 
   const entry = {
     name,
@@ -5345,258 +5362,63 @@ function renderHypothesen(hypothesen) {
   if (!el) return;
 
   if (hypothesen.length === 0) {
-    el.innerHTML = renderEmptyState('🔍', 'Keine Hypothesen', 'Hypothesen werden automatisch aus Anamnese-Daten und Screening-Ergebnissen generiert.');
+    el.innerHTML = renderEmptyState('🔍', 'Keine Hypothesen', 'Hypothesen werden automatisch aus Anamnese und Screening generiert.');
     return;
   }
 
-  // ── Hypothesen-Diff: Was hat sich verändert? ──
-  let diffHtml = '';
-  const s = DB.getSchuelerById(APP.currentSchuelerId);
-  if (s) {
-    const verlauf = s.hypothesenVerlauf || [];
-    if (verlauf.length >= 2) {
-      const vorletzter = verlauf[verlauf.length - 2];
-      const aktuelleIds = hypothesen.map(h => h.id);
-      const vorherigeIds = vorletzter.hypothesenIds || [];
+  // Sortiere: Schutzfaktoren zuletzt, Rest nach Staerke absteigend
+  const sorted = [...hypothesen].sort((a, b) => {
+    if (a.typ === 'schutz' && b.typ !== 'schutz') return 1;
+    if (b.typ === 'schutz' && a.typ !== 'schutz') return -1;
+    return (b.staerkeWert || 0) - (a.staerkeWert || 0);
+  });
 
-      const neueIds = aktuelleIds.filter(id => !vorherigeIds.includes(id));
-      const verschwundenIds = vorherigeIds.filter(id => !aktuelleIds.includes(id));
-      const hochgestuft = hypothesen.filter(h => h._dynamischHochgestuft);
+  const risiken = sorted.filter(h => h.typ !== 'schutz');
+  const schutz = sorted.filter(h => h.typ === 'schutz');
 
-      if (neueIds.length > 0 || verschwundenIds.length > 0 || hochgestuft.length > 0) {
-        const regelMap = {};
-        for (const r of HYPOTHESEN_REGELN) regelMap[r.id] = r.titel;
-
-        diffHtml = `
-          <div class="hypothesen-diff">
-            <div class="hypothesen-diff-header">🔄 Veränderungen seit letzter Auswertung</div>
-            ${neueIds.length > 0 ? `<div class="hypothesen-diff-section diff-neu">
-              ${neueIds.map(id => `<span class="diff-chip diff-chip-neu">+ ${regelMap[id] || id}</span>`).join('')}
-            </div>` : ''}
-            ${verschwundenIds.length > 0 ? `<div class="hypothesen-diff-section diff-weg">
-              ${verschwundenIds.map(id => `<span class="diff-chip diff-chip-weg">- ${regelMap[id] || id}</span>`).join('')}
-            </div>` : ''}
-            ${hochgestuft.length > 0 ? `<div class="hypothesen-diff-section diff-hoch">
-              ${hochgestuft.map(h => `<span class="diff-chip diff-chip-hoch">📈 ${h.titel} (${h._originalStaerke} → ${h.staerke})</span>`).join('')}
-            </div>` : ''}
-          </div>
-        `;
-      }
-    }
-  }
-
-  // Ebenen-Konfiguration
-  const EBENEN = [
-    { id: 'einzelfaktor', label: 'Einzelfaktor', icon: '🔹', beschreibung: 'Einzelne Anamnese-Daten lösen aus' },
-    { id: 'kombination', label: 'Kombinationen', icon: '🔗', beschreibung: 'Mehrere Anamnese-Faktoren kombiniert' },
-    { id: 'dynamisch', label: 'Dynamisch', icon: '⚡', beschreibung: 'Anamnese + Screening kreuzreferenziert' },
-    { id: 'schutz', label: 'Schutzfaktoren', icon: '🛡️', beschreibung: 'Protektive Gegenhypothesen' },
-    { id: 'differenzial', label: 'Differenzial', icon: '🔀', beschreibung: 'Differenzialdiagnostische Abgrenzung' },
-  ];
-
-  function hypotheseCard(h) {
-    let borderColor, badgeBg, badgeText;
-    const isEskalation = h.staerkeWert >= 5;
+  function simpleCard(h) {
+    var borderColor, prioritaet;
     if (h.typ === 'schutz') {
-      borderColor = '#10B981'; badgeBg = '#ECFDF5'; badgeText = '#065F46';
-    } else if (h.typ === 'differenzial') {
-      borderColor = '#6366F1'; badgeBg = '#EEF2FF'; badgeText = '#4338CA';
-    } else if (isEskalation) {
-      borderColor = '#991B1B'; badgeBg = '#991B1B'; badgeText = '#FFFFFF';
+      borderColor = '#10B981'; prioritaet = 'Schutzfaktor';
+    } else if (h.staerkeWert >= 4) {
+      borderColor = '#DC2626'; prioritaet = 'Hoch';
     } else if (h.staerkeWert >= 3) {
-      borderColor = '#EF4444'; badgeBg = '#FEF2F2'; badgeText = '#991B1B';
-    } else if (h.staerkeWert >= 2) {
-      borderColor = '#F59E0B'; badgeBg = '#FFFBEB'; badgeText = '#92400E';
+      borderColor = '#F59E0B'; prioritaet = 'Mittel';
     } else {
-      borderColor = '#9CA3AF'; badgeBg = '#F3F4F6'; badgeText = '#374151';
+      borderColor = '#9CA3AF'; prioritaet = 'Hinweis';
     }
 
-    const staerkeLabel = isEskalation ? '🚨 ESKALATION'
-      : h.staerke === 'sehr-wahrscheinlich' ? 'Sehr wahrscheinlich'
-      : h.staerke === 'wahrscheinlich' ? 'Wahrscheinlich' : 'Hinweis';
+    var empfehlungHtml = h.empfehlung ? '<div style="font-size:12px;color:#1D4ED8;margin-top:6px;padding:6px 10px;background:#EFF6FF;border-radius:6px;">→ ' + h.empfehlung + '</div>' : '';
 
-    const typIcon = isEskalation ? '🚨' : h.typ === 'schutz' ? '🛡️' : h.typ === 'differenzial' ? '🔀' : '⚠️';
-
-    const daten = h._ausloesendeDaten || [];
-
-    // Screening-Score-Badges: erkennen und anreichern
-    const screeningBadges = [];
-    const textDaten = [];
-    daten.forEach(d => {
-      const m = d.match(/^Screening\s+(.+?):\s*(\d+)\/(\d+)\s*\(Cutoff\s*(\d+)\)/i);
-      if (m) {
-        const [, label, score, max, cutoff] = m;
-        const pct = Math.round(((+score) / (+max)) * 100);
-        const ueber = +score - +cutoff;
-        const farbe = ueber >= 3 ? '#DC2626' : ueber >= 1 ? '#F59E0B' : '#6B7280';
-        screeningBadges.push(`<span style="display:inline-flex;align-items:center;gap:3px;background:${farbe}11;border:1px solid ${farbe}44;color:${farbe};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;" title="${label}: ${score}/${max} (Cutoff ${cutoff}, +${ueber})">📊 ${label}: ${score}/${max} <span style="font-size:9px;opacity:.8;">(Cut ${cutoff})</span></span>`);
-      } else {
-        textDaten.push(d);
-      }
-    });
-
-    // Quick-Actions bestimmen
-    const quickActions = [];
-    // 5P übernehmen
-    const p5Ziel = h.typ === 'schutz' ? 'protective' : h.typ === 'differenzial' ? 'presenting' : 'predisposing';
-    quickActions.push(`<button class="hypo-quick-btn" onclick="event.stopPropagation();quickHypo5P('${h.id}','${p5Ziel}')" title="In 5P-Fallformulierung übernehmen">→ 5P</button>`);
-    // Fachkraft-Modul (wenn wiki_ids vorhanden)
-    if (h.wiki_ids && h.wiki_ids.length > 0) {
-      const fkLinks = [];
-      h.wiki_ids.forEach(wId => {
-        const wiki = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.find(a => a.id === wId) : null;
-        if (!wiki) return;
-        const themenIds = wiki.themen_ids || [];
-        const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
-        if (fkTid) fkLinks.push({ datei: FACHKRAFT_MODULE_DATEIEN[fkTid], label: wiki.titel });
-      });
-      if (fkLinks.length > 0) {
-        quickActions.push(`<button class="hypo-quick-btn hypo-quick-fk" onclick="event.stopPropagation();window.open('fachkraft-module/${fkLinks[0].datei}','_blank')" title="Fachkraft-Modul: ${fkLinks[0].label}">🎓 Modul</button>`);
-      }
-    }
-    // Abklärung empfehlen (bei handlung oder empfehlung mit "abklär" / "KJP" / "fachärzt")
-    if (h.empfehlung && /abklär|KJP|fachärzt|psychiatr/i.test(h.empfehlung)) {
-      quickActions.push(`<button class="hypo-quick-btn hypo-quick-warn" onclick="event.stopPropagation();quickHypoAbklaerung('${h.id}')" title="Abklärungsempfehlung in SOAP-Notiz übernehmen">⚕️ Abklärung</button>`);
-    }
-
-    // Dynamische Verlaufs-Info
-    let verlaufHtml = '';
-    if (h._dynamischHochgestuft) {
-      const originalLabel = h._originalStaerke === 'sehr-wahrscheinlich' ? 'Sehr wahrsch.'
-        : h._originalStaerke === 'wahrscheinlich' ? 'Wahrsch.' : 'Hinweis';
-      verlaufHtml = `<span class="hypothese-hochgestuft" title="Dynamisch hochgestuft: ${h._auftritte} Bestätigungen über Zeit">📈 ${originalLabel} → ${staerkeLabel}</span>`;
-    } else if (h._verlaufAnzahl > 1) {
-      const seit = h._erstesAuftreten ? new Date(h._erstesAuftreten).toLocaleDateString('de-CH') : '';
-      verlaufHtml = `<span class="hypothese-verlauf-info" title="Seit ${seit} in ${h._verlaufAnzahl} Auswertungen bestätigt">🔄 ${h._verlaufAnzahl}x bestätigt</span>`;
-    }
-
-    // Treatment-Response Badge
-    let trBadgeHtml = '';
-    if (h._trBestaetigt) {
-      trBadgeHtml = `<span style="background:#ECFDF5;color:#065F46;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px;" title="${h._trHinweis || ''}">✅ Durch Verlauf bestätigt</span>`;
-    } else if (h._trHinterfragen) {
-      trBadgeHtml = `<span style="background:#FFFBEB;color:#92400E;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-left:4px;" title="${h._trHinweis || ''}">🔄 Response niedrig — überprüfen</span>`;
-    }
-
-    return `
-      <div class="hypothese-card ${isEskalation ? 'hypothese-eskalation' : ''}" data-ebene="${h.ebene || ''}" data-staerke="${h.staerkeWert}" data-typ="${h.typ}" style="border-left:4px solid ${borderColor}">
-        <div class="hypothese-header">
-          <span class="hypothese-titel">${typIcon} ${h.titel}</span>
-          ${verlaufHtml}
-          ${trBadgeHtml}
-          ${h._konfidenz != null ? `<span class="hypothese-konfidenz" title="Konfidenz: ${h._konfidenz}% — basierend auf Datenpunkten, Verlauf und Screening">${h._konfidenz}%</span>` : ''}
-          <span class="hypothese-badge" style="background:${badgeBg};color:${badgeText}">${staerkeLabel}</span>
-        </div>
-        ${screeningBadges.length > 0 ? `<div class="hypothese-screening-scores" style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px;">${screeningBadges.join('')}</div>` : ''}
-        ${textDaten.length > 0 ? `<div class="hypothese-daten">Basierend auf: ${textDaten.join(' · ')}</div>` : ''}
-        ${h.quelle ? `<div style="font-size:11px;color:#6366F1;margin-top:4px;line-height:1.4;font-style:italic;">📚 ${h.quelle}</div>` : ''}
-        <details class="hypothese-details">
-          <summary>Erklärung & Evidenz</summary>
-          <div class="hypothese-details-body">
-            <p>${h.erklaerung}</p>
-            <p class="hypothese-evidenz">${h.evidenz}</p>
-            <p class="hypothese-quelle">📚 ${h.quelle}</p>
-            ${h.gegenHypothese ? `<p class="hypothese-gegen"><strong>Gegenhypothese:</strong> ${h.gegenHypothese}</p>` : ''}
-            ${h.empfehlung ? `<p class="hypothese-empfehlung"><strong>→ Empfehlung:</strong> ${h.empfehlung}</p>` : ''}
-          </div>
-        </details>
-        ${h.wiki_ids && h.wiki_ids.length > 0 ? `
-          <div class="hypothese-wissen" style="margin-top:8px;padding:8px 10px;background:#F8FAFC;border-radius:8px;border:1px solid #E2E8F0;">
-            <div style="font-size:10px;font-weight:600;color:#64748B;margin-bottom:6px;">📚 Nachschlagen & Vertiefen</div>
-            <div style="display:flex;flex-wrap:wrap;gap:4px;">
-              ${h.wiki_ids.map(wId => {
-                const wiki = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.find(a => a.id === wId) : null;
-                if (!wiki) return '';
-                const themenIds = wiki.themen_ids || [];
-                const fkTid = themenIds.find(tid => typeof FACHKRAFT_MODULE_DATEIEN !== 'undefined' && FACHKRAFT_MODULE_DATEIEN[tid]);
-                const fkDatei = fkTid ? FACHKRAFT_MODULE_DATEIEN[fkTid] : null;
-                return '<span class="hypothese-wiki-chip" onclick="openWikiArtikel(\'' + wId + '\')" style="cursor:pointer;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;padding:3px 8px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:3px;">' + wiki.icon + ' ' + wiki.titel + '</span>'
-                  + (fkDatei ? '<span onclick="window.open(\'fachkraft-module/' + fkDatei + '\',\'_blank\')" style="cursor:pointer;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46;padding:3px 8px;border-radius:8px;font-size:10px;display:inline-flex;align-items:center;gap:2px;">🎓 Praxis</span>' : '')
-                  + renderArbeitsblattChipsFromThemenIds(themenIds);
-              }).join('')}
-              ${h.icd10 && h.icd10.length > 0 ? h.icd10.map(c => '<span style="background:#F3F4F6;color:#6B7280;padding:2px 6px;border-radius:6px;font-size:10px;font-family:monospace;">' + c + '</span>').join('') : ''}
-            </div>
-          </div>
-        ` : ''}
-        ${quickActions.length > 0 ? `<div class="hypo-quick-actions" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;padding-top:6px;border-top:1px solid #F1F5F9;">${quickActions.join('')}</div>` : ''}
-      </div>
-    `;
+    return '<div style="padding:12px 14px;background:var(--bg-card,#fff);border-radius:0 8px 8px 0;margin-bottom:8px;border:1px solid var(--border,#E5E7EB);border-left:4px solid ' + borderColor + ';">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">'
+      + '<div style="font-weight:600;font-size:14px;color:var(--text,#1F2937);">' + h.titel + '</div>'
+      + (h.typ !== 'schutz' ? '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:' + borderColor + '15;color:' + borderColor + ';font-weight:600;white-space:nowrap;">' + prioritaet + '</span>' : '')
+      + '</div>'
+      + '<div style="font-size:12px;color:var(--text-muted,#6B7280);margin-top:4px;line-height:1.5;">' + h.erklaerung + '</div>'
+      + empfehlungHtml
+      + '</div>';
   }
 
-  // Gruppiert nach Ebene
-  const gruppiertHtml = EBENEN.map(eb => {
-    const items = hypothesen.filter(h => h.ebene === eb.id);
-    if (items.length === 0) return '';
-    return `
-      <div class="hypothesen-ebene-gruppe">
-        <div class="hypothesen-ebene-header">
-          <span class="hypothesen-ebene-icon">${eb.icon}</span>
-          <span class="hypothesen-ebene-titel">${eb.label}</span>
-          <span class="hypothesen-ebene-count">${items.length}</span>
-          <span class="hypothesen-ebene-desc">${eb.beschreibung}</span>
-        </div>
-        <div class="hypothesen-ebene-cards">
-          ${items.map(hypotheseCard).join('')}
-        </div>
-      </div>
-    `;
-  }).join('');
+  var html = '';
 
-  // Flat view (sortiert nach Stärke)
-  const flatHtml = hypothesen.map(hypotheseCard).join('');
+  if (risiken.length > 0) {
+    html += '<div style="margin-bottom:16px;">';
+    html += '<div style="font-size:13px;font-weight:700;color:#1F2937;margin-bottom:8px;">Erkannte Belastungsmuster <span style="font-size:12px;font-weight:400;color:#6B7280;">' + risiken.length + '</span></div>';
+    html += risiken.map(simpleCard).join('');
+    html += '</div>';
+  }
 
-  // Zähler pro Ebene für Filterleiste
-  const ebeneCounts = EBENEN.map(eb => {
-    const count = hypothesen.filter(h => h.ebene === eb.id).length;
-    return { ...eb, count };
-  }).filter(eb => eb.count > 0);
+  if (schutz.length > 0) {
+    html += '<div>';
+    html += '<div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:8px;">Schutzfaktoren <span style="font-size:12px;font-weight:400;color:#6B7280;">' + schutz.length + '</span></div>';
+    html += schutz.map(simpleCard).join('');
+    html += '</div>';
+  }
 
-  el.innerHTML = `
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-header">
-        <span>🧠</span>
-        <div class="card-title">Klinische Hypothesen</div>
-        <span style="font-size:12px;color:var(--text-muted);margin-left:auto;">${hypothesen.length} aktiv</span>
-      </div>
-      <div class="card-body">
-        <div class="hypothesen-controls">
-          <div class="hypothesen-ansicht-toggle">
-            <button class="hypothesen-ansicht-btn active" data-ansicht="ebenen" onclick="toggleHypothesenAnsicht('ebenen')">📊 Nach Ebenen</button>
-            <button class="hypothesen-ansicht-btn" data-ansicht="flat" onclick="toggleHypothesenAnsicht('flat')">📋 Alle (nach Stärke)</button>
-          </div>
-          <div class="hypothesen-filter-bar">
-            ${ebeneCounts.map(eb => `
-              <button class="hypothesen-filter-chip active" data-filter-ebene="${eb.id}" onclick="toggleHypothesenFilter('${eb.id}')">
-                ${eb.icon} ${eb.label} <span class="hypothesen-filter-count">${eb.count}</span>
-              </button>
-            `).join('')}
-            <span class="hypothesen-filter-separator"></span>
-            <button class="hypothesen-sort-btn" onclick="toggleHypothesenSort()" title="Sortierung umschalten">
-              🔽 <span id="hypothesen-sort-label">Stärke</span>
-            </button>
-          </div>
-        </div>
-        ${diffHtml}
-        <div id="hypothesen-ansicht-ebenen" class="hypothesen-ansicht">
-          ${gruppiertHtml}
-        </div>
-        <div id="hypothesen-ansicht-flat" class="hypothesen-ansicht" style="display:none;">
-          ${flatHtml}
-        </div>
-        <div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center;">
-          <button class="btn btn-sm btn-primary" onclick="openHypothesen5PModal()">
-            🔀 Hypothesen → 5P-Analyse
-          </button>
-          <button class="btn btn-sm btn-secondary" onclick="generateHypothesenBericht()">
-            🖨️ Bericht drucken
-          </button>
-        </div>
-        <div class="hypothesen-disclaimer">
-          Diese Hypothesen sind Arbeitshilfen für Fachkräfte — kein Ersatz für klinische Diagnostik. Alle Angaben basieren auf den eingegebenen Daten.
-        </div>
-      </div>
-    </div>
-  `;
+  html += '<div style="font-size:11px;color:#9CA3AF;text-align:center;margin-top:12px;">Automatisch generiert — kein Ersatz fuer klinische Diagnostik.</div>';
+
+  el.innerHTML = html;
 }
 
 // ============================================================

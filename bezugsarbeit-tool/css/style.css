@@ -5996,6 +5996,458 @@ body.dark-mode .bib-karte-titel { color: var(--text); }
   border-radius: 12px;
 }
 
+/* ============================================================
+   MODERN HYPOTHESEN DASHBOARD
+   ============================================================ */
+.hypo-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Source status bar */
+.hypo-sources-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.hypo-source {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E5E7EB);
+  background: var(--bg-card, #fff);
+  transition: all 0.2s;
+}
+.hypo-source-active {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.04);
+}
+.hypo-source-inactive {
+  opacity: 0.5;
+  border-style: dashed;
+}
+.hypo-source-icon { font-size: 20px; }
+.hypo-source-name { font-weight: 600; font-size: 13px; color: var(--text, #1F2937); }
+.hypo-source-detail { font-size: 11px; color: var(--text-muted, #6B7280); }
+
+/* Summary row */
+.hypo-summary-row {
+  display: flex;
+  gap: 10px;
+}
+.hypo-summary-stat {
+  flex: 1;
+  text-align: center;
+  padding: 14px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #E5E7EB);
+  background: var(--bg-card, #fff);
+}
+.hypo-stat-num {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+.hypo-stat-label {
+  font-size: 11px;
+  color: var(--text-muted, #6B7280);
+  margin-top: 4px;
+  font-weight: 500;
+}
+.hypo-stat-risiko .hypo-stat-num { color: #EF4444; }
+.hypo-stat-diff .hypo-stat-num { color: #6366F1; }
+.hypo-stat-schutz .hypo-stat-num { color: #10B981; }
+.hypo-stat-branchen .hypo-stat-num { color: #F59E0B; }
+
+/* Sections */
+.hypo-section { margin-bottom: 4px; }
+.hypo-section-label {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hypo-section-risiko { color: #DC2626; border-bottom-color: #FECACA; }
+.hypo-section-diff { color: #6366F1; border-bottom-color: #C7D2FE; }
+.hypo-section-schutz { color: #10B981; border-bottom-color: #A7F3D0; }
+.hypo-section-count {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted, #6B7280);
+}
+
+/* Hypothesis Card */
+.hypo-card {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #E5E7EB);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.hypo-card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+.hypo-card-accent {
+  width: 4px;
+  flex-shrink: 0;
+}
+.hypo-card-body {
+  flex: 1;
+  padding: 14px 16px;
+  min-width: 0;
+}
+.hypo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.hypo-card-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text, #1F2937);
+  line-height: 1.3;
+}
+.hypo-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.hypo-badge {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.hypo-dynamic-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: rgba(220,38,38,0.1);
+  color: #DC2626;
+  white-space: nowrap;
+}
+.hypo-tr-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: rgba(16,185,129,0.1);
+  color: #10B981;
+  white-space: nowrap;
+}
+.hypo-tr-warn-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: rgba(245,158,11,0.1);
+  color: #F59E0B;
+  white-space: nowrap;
+}
+.hypo-card-desc {
+  font-size: 12px;
+  color: var(--text-muted, #6B7280);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Source chips */
+.hypo-source-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.hypo-source-chip {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hypo-chip-anamnese {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+.hypo-chip-screening {
+  background: #EDE9FE;
+  color: #5B21B6;
+  border: 1px solid #DDD6FE;
+}
+.hypo-chip-staerken {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+/* Card footer */
+.hypo-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Confidence bar */
+.hypo-konfidenz {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.hypo-konfidenz-bar {
+  width: 60px;
+  height: 4px;
+  background: var(--border, #E5E7EB);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.hypo-konfidenz-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.hypo-konfidenz-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted, #6B7280);
+  min-width: 28px;
+}
+
+/* ICD chips */
+.hypo-icd-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.hypo-icd-chip {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  background: var(--bg-hover, #F3F4F6);
+  color: var(--text-muted, #6B7280);
+  border: 1px solid var(--border, #E5E7EB);
+}
+
+/* Expand button */
+.hypo-expand-btn {
+  font-size: 11px;
+  padding: 3px 10px;
+  border: 1px solid var(--border, #E5E7EB);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted, #6B7280);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.hypo-expand-btn:hover {
+  background: var(--bg-hover, #F3F4F6);
+  color: var(--text, #1F2937);
+}
+
+/* Expandable details */
+.hypo-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.2s ease;
+}
+.hypo-details.open {
+  max-height: 600px;
+  padding-top: 12px;
+  margin-top: 10px;
+  border-top: 1px solid var(--border, #E5E7EB);
+}
+.hypo-detail-section {
+  margin-bottom: 10px;
+}
+.hypo-detail-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted, #6B7280);
+  margin-bottom: 3px;
+}
+.hypo-detail-text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-secondary, #4B5563);
+}
+.hypo-detail-text.hypo-quelle {
+  font-style: italic;
+  color: var(--text-muted, #6B7280);
+}
+.hypo-detail-text.hypo-gegen {
+  background: #FFF7ED;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border-left: 3px solid #F59E0B;
+}
+.hypo-detail-text.hypo-empfehlung {
+  background: #EFF6FF;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border-left: 3px solid #3B82F6;
+  color: #1E40AF;
+}
+
+/* ── Branchen-Risiken ──────────────────────────────────────── */
+.hypo-branchen-section {
+  padding: 16px;
+  background: rgba(239, 68, 68, 0.02);
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  border-radius: 12px;
+}
+.hypo-branchen-section.hypo-branchen-schutz {
+  background: rgba(16, 185, 129, 0.02);
+  border-color: rgba(16, 185, 129, 0.1);
+}
+.hypo-branchen-header { margin-bottom: 12px; }
+.hypo-branchen-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #DC2626;
+}
+.hypo-branchen-subtitle {
+  font-size: 11px;
+  color: var(--text-muted, #6B7280);
+  margin-top: 2px;
+}
+.hypo-branchen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.branchen-karte {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #FECACA;
+  background: rgba(239,68,68,0.04);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.branchen-karte:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.branchen-karte-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.branchen-icon { font-size: 16px; }
+.branchen-statistik {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+.branchen-titel {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text, #1F2937);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.branchen-desc {
+  font-size: 11px;
+  color: var(--text-muted, #6B7280);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+.branchen-quelle {
+  font-size: 10px;
+  color: var(--text-muted, #9CA3AF);
+  font-style: italic;
+}
+
+/* Disclaimer */
+.hypo-disclaimer {
+  font-size: 11px;
+  color: var(--text-muted, #9CA3AF);
+  text-align: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border, #E5E7EB);
+}
+
+/* ── Dark Mode ─────────────────────────────────────────────── */
+[data-theme="dark"] .hypo-source-active {
+  background: rgba(16,185,129,0.08);
+  border-color: rgba(16,185,129,0.3);
+}
+[data-theme="dark"] .hypo-chip-anamnese {
+  background: rgba(254,243,199,0.15);
+  border-color: rgba(253,230,138,0.3);
+  color: #FDE68A;
+}
+[data-theme="dark"] .hypo-chip-screening {
+  background: rgba(237,233,254,0.15);
+  border-color: rgba(221,214,254,0.3);
+  color: #DDD6FE;
+}
+[data-theme="dark"] .hypo-chip-staerken {
+  background: rgba(209,250,229,0.15);
+  border-color: rgba(167,243,208,0.3);
+  color: #A7F3D0;
+}
+[data-theme="dark"] .hypo-detail-text.hypo-gegen {
+  background: rgba(255,247,237,0.08);
+}
+[data-theme="dark"] .hypo-detail-text.hypo-empfehlung {
+  background: rgba(239,246,255,0.08);
+  color: #93C5FD;
+}
+[data-theme="dark"] .hypo-branchen-section {
+  background: rgba(239,68,68,0.04);
+  border-color: rgba(239,68,68,0.15);
+}
+[data-theme="dark"] .hypo-branchen-section.hypo-branchen-schutz {
+  background: rgba(16,185,129,0.04);
+  border-color: rgba(16,185,129,0.15);
+}
+[data-theme="dark"] .branchen-karte {
+  background: rgba(239,68,68,0.06);
+  border-color: rgba(254,202,202,0.2);
+}
+
+/* ── Mobile ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hypo-sources-bar { grid-template-columns: 1fr; }
+  .hypo-summary-row { flex-wrap: wrap; }
+  .hypo-summary-stat { min-width: calc(50% - 6px); }
+  .hypo-branchen-grid { grid-template-columns: 1fr; }
+  .hypo-card-header { flex-direction: column; }
+  .hypo-card-badges { justify-content: flex-start; }
+}
+
+@media print {
+  .hypo-expand-btn { display: none !important; }
+  .hypo-details { max-height: none !important; padding-top: 8px !important; border-top: 1px solid #ddd !important; }
+}
+
 /* Treatment-Response */
 .treatment-gesamt-trend {
   padding: 8px 12px;

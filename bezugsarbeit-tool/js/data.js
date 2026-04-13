@@ -5535,6 +5535,204 @@ const HYPOTHESEN_REGELN = [
 ];
 
 // ============================================================
+// BRANCHEN-RISIKEN — Epidemiologische Risikokennzahlen
+// Populationsbasierte statistische Risikofaktoren aus der Fachliteratur
+// ============================================================
+const BRANCHEN_RISIKEN = [
+  {
+    id: 'ace4-suizid',
+    titel: 'ACE ≥ 4 → 12× Suizidversuch-Risiko',
+    statistik: 'OR 12.2',
+    risikoProzent: '1200%',
+    beschreibung: 'Personen mit 4+ belastenden Kindheitserfahrungen haben ein 12-fach erhöhtes Risiko für Suizidversuche im Vergleich zur Allgemeinbevölkerung.',
+    quelle: 'Felitti et al. (1998), n = 17\'337',
+    kategorie: 'ace',
+    icon: '⚠',
+    bedingung: (ctx) => {
+      const aceKat = typeof ANAMNESE_KATEGORIEN !== 'undefined' ? ANAMNESE_KATEGORIEN.find(k => k.id === 'ace') : null;
+      if (!aceKat || !aceKat.items) return false;
+      return aceKat.items.filter(it => ctx.anamnese.includes(it.id)).length >= 4;
+    }
+  },
+  {
+    id: 'ace4-depression',
+    titel: 'ACE ≥ 4 → 4.6× Depressionsrisiko',
+    statistik: 'OR 4.6',
+    risikoProzent: '460%',
+    beschreibung: '4+ belastende Kindheitserfahrungen erhöhen das Risiko für lebenslange Depression um Faktor 4.6.',
+    quelle: 'Felitti et al. (1998), n = 17\'337',
+    kategorie: 'ace',
+    icon: '📊',
+    bedingung: (ctx) => {
+      const aceKat = typeof ANAMNESE_KATEGORIEN !== 'undefined' ? ANAMNESE_KATEGORIEN.find(k => k.id === 'ace') : null;
+      if (!aceKat || !aceKat.items) return false;
+      return aceKat.items.filter(it => ctx.anamnese.includes(it.id)).length >= 4;
+    }
+  },
+  {
+    id: 'ace4-sucht',
+    titel: 'ACE ≥ 4 → 7× Alkoholismus-Risiko',
+    statistik: 'OR 7.4',
+    risikoProzent: '740%',
+    beschreibung: '4+ ACEs erhöhen das Risiko für Alkoholabhängigkeit um Faktor 7.4.',
+    quelle: 'Felitti et al. (1998), n = 17\'337',
+    kategorie: 'ace',
+    icon: '📊',
+    bedingung: (ctx) => {
+      const aceKat = typeof ANAMNESE_KATEGORIEN !== 'undefined' ? ANAMNESE_KATEGORIEN.find(k => k.id === 'ace') : null;
+      if (!aceKat || !aceKat.items) return false;
+      return aceKat.items.filter(it => ctx.anamnese.includes(it.id)).length >= 4;
+    }
+  },
+  {
+    id: 'vaterfigur-extern',
+    titel: 'Vaterfigur fehlt → 2-3× Externalisierungsrisiko',
+    statistik: 'OR 2-3',
+    risikoProzent: '200-300%',
+    beschreibung: 'Väterliche Abwesenheit erhöht das Risiko für externalisierende Verhaltensprobleme bei Jungen um Faktor 2-3.',
+    quelle: 'McLanahan & Sandefur (1994)',
+    kategorie: 'familie',
+    icon: '👨',
+    bedingung: (ctx) => ctx.anamnese.includes('kein_vater') || ctx.anamnese.includes('vater_verstorben')
+  },
+  {
+    id: 'desorg-bindung-dissoz',
+    titel: 'Desorganisierte Bindung → 3.5× Dissoziationsrisiko',
+    statistik: 'OR 3.5',
+    risikoProzent: '350%',
+    beschreibung: 'Desorganisierte Bindung ist der stärkste Einzelprädiktor für dissoziative Symptome im Jugendalter.',
+    quelle: 'van IJzendoorn et al. (1999), Meta-Analyse',
+    kategorie: 'bindung',
+    icon: '🔗',
+    bedingung: (ctx) => {
+      const a = ctx.anamnese;
+      return (a.includes('haeufige_umzuege') || a.includes('heim') || a.includes('pflegefamilie')) && (a.includes('kein_vater') || a.includes('kein_mutter'));
+    }
+  },
+  {
+    id: 'svv-suizid',
+    titel: 'Selbstverletzung → 6-10× Suizidrisiko',
+    statistik: 'OR 6-10',
+    risikoProzent: '600-1000%',
+    beschreibung: 'Selbstverletzung ist der stärkste Einzelprädiktor für Suizid bei Jugendlichen.',
+    quelle: 'Hawton et al. (2012), Lancet',
+    kategorie: 'krise',
+    icon: '🚨',
+    bedingung: (ctx) => ctx.anamnese.includes('svv_aktiv') || ctx.screening.flaggedAreas.includes('selbstverletzung')
+  },
+  {
+    id: 'sucht-haushalt-kind',
+    titel: 'Sucht im Haushalt → 4-8× Suchtrisiko',
+    statistik: 'OR 4-8',
+    risikoProzent: '400-800%',
+    beschreibung: 'Kinder suchtkranker Eltern haben ein 4-8-fach erhöhtes Risiko für eigene Suchtentwicklung.',
+    quelle: 'Sher (1991); Chassin et al. (1999)',
+    kategorie: 'familie',
+    icon: '🏠',
+    bedingung: (ctx) => ctx.anamnese.includes('sucht_haushalt')
+  },
+  {
+    id: 'fremdplatzierung-bindung',
+    titel: 'Fremdplatzierung → 3-7× Bindungsstörung',
+    statistik: 'OR 3-7',
+    risikoProzent: '300-700%',
+    beschreibung: 'Fremdplatzierte Kinder zeigen 3-7-fach höheres Risiko für Bindungsstörungen.',
+    quelle: 'Dozier et al. (2012)',
+    kategorie: 'bindung',
+    icon: '🏠',
+    bedingung: (ctx) => ctx.anamnese.includes('heim') || ctx.anamnese.includes('pflegefamilie')
+  },
+  {
+    id: 'depression-angst-komorbid',
+    titel: 'Depression + Angst → 50-70% Komorbidität',
+    statistik: '50-70%',
+    risikoProzent: null,
+    beschreibung: 'Depression und Angststörungen treten bei 50-70% der Jugendlichen komorbid auf — die häufigste Komorbidität im Jugendalter.',
+    quelle: 'Angold et al. (1999)',
+    kategorie: 'screening',
+    icon: '📋',
+    bedingung: (ctx) => ctx.screening.flaggedAreas.includes('depression') && (ctx.screening.flaggedAreas.includes('angst-generalisiert') || ctx.screening.flaggedAreas.includes('angst-sozial'))
+  },
+  {
+    id: 'mobbing-depression',
+    titel: 'Mobbing-Opfer → 2× Depressionsrisiko',
+    statistik: 'OR 2.0',
+    risikoProzent: '200%',
+    beschreibung: 'Mobbing-Opfer haben ein doppelt so hohes Risiko für Depression.',
+    quelle: 'Ttofi et al. (2011), Meta-Analyse',
+    kategorie: 'sozial',
+    icon: '👥',
+    bedingung: (ctx) => ctx.anamnese.includes('mobbing_opfer') || ctx.anamnese.includes('mobbing_beides')
+  },
+  {
+    id: 'gang-gewalt',
+    titel: 'Gang-Zugehörigkeit → 3-5× Gewalttäterrisiko',
+    statistik: 'OR 3-5',
+    risikoProzent: '300-500%',
+    beschreibung: 'Gangmitgliedschaft erhöht das Risiko für Gewaltdelinquenz um Faktor 3-5.',
+    quelle: 'Thornberry et al. (2003)',
+    kategorie: 'sozial',
+    icon: '⚡',
+    bedingung: (ctx) => ctx.anamnese.includes('gang')
+  },
+  {
+    id: 'inhaftierung-delinquenz',
+    titel: 'Inhaftierter Elternteil → 2-3× Delinquenzrisiko',
+    statistik: 'OR 2-3',
+    risikoProzent: '200-300%',
+    beschreibung: 'Kinder inhaftierter Eltern haben ein 2-3-fach erhöhtes Risiko für eigene Delinquenz und psychische Störungen.',
+    quelle: 'Murray et al. (2012)',
+    kategorie: 'familie',
+    icon: '🔒',
+    bedingung: (ctx) => ctx.anamnese.includes('inhaftierung_elternteil')
+  },
+  {
+    id: 'psych-eltern-kind',
+    titel: 'Psych. erkrankte Eltern → 3-4× Erkrankungsrisiko',
+    statistik: 'OR 3-4',
+    risikoProzent: '300-400%',
+    beschreibung: 'Kinder psychisch erkrankter Eltern haben ein 3-4-fach erhöhtes eigenes Erkrankungsrisiko (Genetik + Umgebung).',
+    quelle: 'Goodman & Gotlib (1999)',
+    kategorie: 'familie',
+    icon: '🧬',
+    bedingung: (ctx) => ctx.anamnese.includes('psych_erkrankung_eltern')
+  },
+  {
+    id: 'schutz-bezugsperson-resilienz',
+    titel: 'Stabile Bezugsperson → 50-70% Risikoreduktion',
+    statistik: 'RR 0.3-0.5',
+    risikoProzent: null,
+    beschreibung: 'Eine stabile Bezugsperson reduziert das Risiko für psychische Störungen um 50-70% — stärkster Resilienzfaktor.',
+    quelle: 'Werner & Smith (1992), Kauai-Studie',
+    kategorie: 'schutz',
+    icon: '🛡',
+    bedingung: (ctx) => ctx.anamnese.includes('stabile_bezugsperson')
+  },
+  {
+    id: 'schutz-sport-depression',
+    titel: 'Sport → 20-30% weniger Depressionssymptome',
+    statistik: 'RR 0.7-0.8',
+    risikoProzent: null,
+    beschreibung: 'Regelmässige körperliche Aktivität reduziert Depressionssymptome um 20-30%.',
+    quelle: 'Biddle & Asare (2011), Meta-Analyse',
+    kategorie: 'schutz',
+    icon: '🛡',
+    bedingung: (ctx) => ctx.staerken && ctx.staerken.sport >= 7
+  },
+  {
+    id: 'schutz-freundschaft-depression',
+    titel: 'Enge Freundschaft → 40% weniger Depressionsrisiko',
+    statistik: 'RR 0.6',
+    risikoProzent: null,
+    beschreibung: 'Eine enge Freundschaft reduziert das Depressionsrisiko um 40%.',
+    quelle: 'Bukowski et al. (1996)',
+    kategorie: 'schutz',
+    icon: '🛡',
+    bedingung: (ctx) => ctx.anamnese.includes('freundschaft')
+  }
+];
+
+// ============================================================
 // HYPOTHESEN → THEMEN MAPPING
 // Verbindet wiki_ids aus Hypothesen mit konkreten Therapie-Themen
 // ============================================================

@@ -2305,6 +2305,7 @@ const PHASE_TABS = {
     { id: 'notizen', label: 'Sitzungen' }
   ],
   auswertung: [
+    { id: 'hypothesen-tab', label: 'Hypothesen' },
     { id: 'treatment-tab', label: 'Verlauf' },
     { id: 'berichte', label: 'Berichte' }
   ]
@@ -2763,13 +2764,13 @@ function toggleBibliothekFavorit(itemId) {
 // ANALYSE: Hypothesen-Tab
 // ============================================================
 function renderHypothesenTab() {
-  const container = document.getElementById('hypothesen-container');
+  const container = document.getElementById('hypothesen-dashboard');
   if (!container) return;
-  renderHypothesen(APP.currentSchuelerId);
-  const zeitContainer = document.getElementById('hypothesen-zeitstrahl-container');
-  if (zeitContainer) {
-    try { renderHypothesenZeitstrahl(APP.currentSchuelerId); } catch(e) { console.warn('Pathways:', e); }
-  }
+  const sid = APP.currentSchuelerId;
+  if (!sid) return;
+  const hypothesen = generateHypothesen(sid);
+  const branchenRisiken = generateBranchenRisiken(sid);
+  renderHypothesenDashboard(container, hypothesen, branchenRisiken, sid);
 }
 
 // Hypothesen direkt im Fallbild (unter 5P) rendern
@@ -2778,16 +2779,13 @@ function renderHypothesenImFallbild() {
   if (!container) return;
   const sid = APP.currentSchuelerId;
   if (!sid) return;
-
-  // Hypothesen-Container dynamisch erzeugen
-  container.innerHTML = '<div style="border-top:2px solid #E5E7EB;padding-top:20px;">'
-    + '<h3 style="font-size:16px;margin:0 0 12px;color:#1F2937;">🔬 Klinische Hypothesen</h3>'
-    + '<div id="hypothesen-container"></div>'
-    + '<div id="hypothesen-zeitstrahl-container" style="margin-top:16px;"></div>'
+  const hypothesen = generateHypothesen(sid);
+  container.innerHTML = '<div style="border-top:2px solid var(--border,#E5E7EB);padding-top:20px;">'
+    + '<h3 style="font-size:16px;margin:0 0 12px;color:var(--text,#1F2937);font-weight:700;">Klinische Hypothesen</h3>'
+    + '<div id="hypothesen-fallbild-inner"></div>'
     + '</div>';
-
-  renderHypothesen(sid);
-  try { renderHypothesenZeitstrahl(sid); } catch(e) { console.warn('Pathways:', e); }
+  const inner = document.getElementById('hypothesen-fallbild-inner');
+  if (inner) renderHypothesen(inner, hypothesen);
 }
 
 // Themen-Übersicht im Förderplan rendern
@@ -4578,7 +4576,8 @@ function renderInfo() {
   renderAnamneseZusammenfassung(s);
 
   const hypothesen = generateHypothesen(APP.currentSchuelerId);
-  renderHypothesen(hypothesen);
+  var hypoEl = document.getElementById('hypothesen-container');
+  if (hypoEl) renderHypothesen(hypoEl, hypothesen);
   renderTreatmentResponse(APP.currentSchuelerId);
   renderHypothesenZeitstrahl(APP.currentSchuelerId);
   renderScreeningVerlauf(APP.currentSchuelerId);
@@ -5163,7 +5162,7 @@ function generateHypothesen(schuelerId) {
       scores: latestScreening.scores || {},
       flaggedAreas: latestScreening.flaggedAreas || [],
     },
-    staerken: s.staerkenProfil || {},
+    staerken: (s.staerkenProfil && s.staerkenProfil.ratings) ? s.staerkenProfil.ratings : {},
     fiveP: fiveP,
     verhalten: s.topicStatus || {},
     // NEU: Wohlbefinden-Verlauf
@@ -5316,68 +5315,259 @@ function generateHypothesen(schuelerId) {
   return aktive;
 }
 
-function renderHypothesen(hypothesen) {
-  const el = document.getElementById('hypothesen-container');
-  if (!el) return;
+// ── Branchen-Risiken generieren ─────────────────────────────
+function generateBranchenRisiken(schuelerId) {
+  if (typeof BRANCHEN_RISIKEN === 'undefined') return [];
+  const s = DB.getSchuelerById(schuelerId);
+  if (!s) return [];
+  const screenings = DB.getScreenings(schuelerId);
+  const latestScreening = screenings.length
+    ? screenings.sort((a, b) => b.erstellt.localeCompare(a.erstellt))[0]
+    : { scores: {}, flaggedAreas: [] };
+  const ctx = {
+    anamnese: s.anamnese || [],
+    screening: { scores: latestScreening.scores || {}, flaggedAreas: latestScreening.flaggedAreas || [] },
+    staerken: (s.staerkenProfil && s.staerkenProfil.ratings) ? s.staerkenProfil.ratings : {},
+  };
+  const aktive = [];
+  for (const r of BRANCHEN_RISIKEN) {
+    try { if (r.bedingung(ctx)) aktive.push(r); } catch(e) { /* silent */ }
+  }
+  return aktive;
+}
 
+// ── Moderne Hypothesen-Karte ────────────────────────────────
+function hypoCard(h) {
+  var borderColor, prioritaet, badgeBg;
+  if (h.typ === 'schutz') {
+    borderColor = '#10B981'; prioritaet = 'Schutzfaktor'; badgeBg = 'rgba(16,185,129,0.1)';
+  } else if (h.typ === 'differenzial') {
+    borderColor = '#6366F1'; prioritaet = 'Differenzial'; badgeBg = 'rgba(99,102,241,0.1)';
+  } else if (h.staerkeWert >= 4) {
+    borderColor = '#DC2626'; prioritaet = 'Hoch'; badgeBg = 'rgba(220,38,38,0.1)';
+  } else if (h.staerkeWert >= 3) {
+    borderColor = '#F59E0B'; prioritaet = 'Mittel'; badgeBg = 'rgba(245,158,11,0.1)';
+  } else {
+    borderColor = '#9CA3AF'; prioritaet = 'Hinweis'; badgeBg = 'rgba(156,163,175,0.1)';
+  }
+
+  // Source attribution chips
+  var daten = h._ausloesendeDaten || [];
+  var chipHtml = '';
+  if (daten.length > 0) {
+    chipHtml = '<div class="hypo-source-chips">';
+    daten.forEach(function(d) {
+      var chipClass = 'hypo-chip-anamnese';
+      if (d.startsWith('Screening:') || d.startsWith('Screening ')) chipClass = 'hypo-chip-screening';
+      else if (d.startsWith('Stärke:') || d.startsWith('Stärke ')) chipClass = 'hypo-chip-staerken';
+      chipHtml += '<span class="hypo-source-chip ' + chipClass + '">' + d + '</span>';
+    });
+    chipHtml += '</div>';
+  }
+
+  // Confidence bar
+  var konfidenz = h._konfidenz || 0;
+  var konfColor = konfidenz >= 70 ? '#10B981' : konfidenz >= 40 ? '#F59E0B' : '#9CA3AF';
+  var konfHtml = '<div class="hypo-konfidenz">'
+    + '<div class="hypo-konfidenz-bar"><div class="hypo-konfidenz-fill" style="width:' + konfidenz + '%;background:' + konfColor + '"></div></div>'
+    + '<span class="hypo-konfidenz-label">' + konfidenz + '%</span></div>';
+
+  // ICD-10 chips
+  var icdHtml = '';
+  if (h.icd10 && h.icd10.length > 0) {
+    icdHtml = '<div class="hypo-icd-chips">' + h.icd10.map(function(c) {
+      return '<span class="hypo-icd-chip">' + c + '</span>';
+    }).join('') + '</div>';
+  }
+
+  // Expandable details
+  var detailId = 'hypo-detail-' + h.id;
+  var detailHtml = '<div class="hypo-details" id="' + detailId + '">';
+  if (h.evidenz) detailHtml += '<div class="hypo-detail-section"><div class="hypo-detail-label">Evidenz</div><div class="hypo-detail-text">' + h.evidenz + '</div></div>';
+  if (h.quelle) detailHtml += '<div class="hypo-detail-section"><div class="hypo-detail-label">Quellen</div><div class="hypo-detail-text hypo-quelle">' + h.quelle + '</div></div>';
+  if (h.gegenHypothese) detailHtml += '<div class="hypo-detail-section"><div class="hypo-detail-label">Gegenhypothese</div><div class="hypo-detail-text hypo-gegen">' + h.gegenHypothese + '</div></div>';
+  if (h.empfehlung) detailHtml += '<div class="hypo-detail-section"><div class="hypo-detail-label">Empfehlung</div><div class="hypo-detail-text hypo-empfehlung">' + h.empfehlung + '</div></div>';
+  detailHtml += '</div>';
+
+  // Dynamic elevation badge
+  var dynamicHtml = '';
+  if (h._dynamischHochgestuft) {
+    dynamicHtml = '<span class="hypo-dynamic-badge" title="Über ' + (h._auftritte || 0) + ' Zeitpunkte bestätigt">↑ Hochgestuft</span>';
+  }
+  if (h._trBestaetigt) {
+    dynamicHtml += '<span class="hypo-tr-badge" title="' + (h._trHinweis || '') + '">✓ Response</span>';
+  }
+  if (h._trHinterfragen) {
+    dynamicHtml += '<span class="hypo-tr-warn-badge" title="' + (h._trHinweis || '') + '">? Prüfen</span>';
+  }
+
+  return '<div class="hypo-card" data-typ="' + h.typ + '" data-ebene="' + (h.ebene || '') + '" data-id="' + h.id + '">'
+    + '<div class="hypo-card-accent" style="background:' + borderColor + '"></div>'
+    + '<div class="hypo-card-body">'
+    + '<div class="hypo-card-header">'
+    + '<div class="hypo-card-title">' + h.titel + '</div>'
+    + '<div class="hypo-card-badges">'
+    + '<span class="hypo-badge" style="background:' + badgeBg + ';color:' + borderColor + '">' + prioritaet + '</span>'
+    + dynamicHtml
+    + '</div>'
+    + '</div>'
+    + '<div class="hypo-card-desc">' + h.erklaerung + '</div>'
+    + chipHtml
+    + '<div class="hypo-card-footer">'
+    + konfHtml
+    + icdHtml
+    + '<button class="hypo-expand-btn" onclick="toggleHypoDetail(\'' + h.id + '\')" aria-expanded="false">Details</button>'
+    + '</div>'
+    + detailHtml
+    + '</div></div>';
+}
+
+function toggleHypoDetail(id) {
+  var el = document.getElementById('hypo-detail-' + id);
+  if (!el) return;
+  var btn = el.parentElement.querySelector('.hypo-expand-btn');
+  var isOpen = el.classList.toggle('open');
+  if (btn) {
+    btn.textContent = isOpen ? 'Weniger' : 'Details';
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+}
+
+// ── Hypothesen in Container rendern (Fallbild-Variante) ─────
+function renderHypothesen(el, hypothesen) {
+  if (!el) return;
   if (hypothesen.length === 0) {
-    el.innerHTML = renderEmptyState('🔍', 'Keine Hypothesen', 'Hypothesen werden automatisch aus Anamnese und Screening generiert.');
+    el.innerHTML = renderEmptyState('🔍', 'Keine Hypothesen', 'Hypothesen werden automatisch aus Anamnese, Screening und Stärken generiert.');
+    return;
+  }
+  var risiken = hypothesen.filter(function(h) { return h.typ === 'risiko'; });
+  var differenzial = hypothesen.filter(function(h) { return h.typ === 'differenzial'; });
+  var schutz = hypothesen.filter(function(h) { return h.typ === 'schutz'; });
+  var html = '';
+  if (risiken.length > 0) {
+    html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-risiko">Belastungsmuster <span class="hypo-section-count">' + risiken.length + '</span></div>';
+    html += risiken.map(hypoCard).join('') + '</div>';
+  }
+  if (differenzial.length > 0) {
+    html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-diff">Differenzialdiagnosen <span class="hypo-section-count">' + differenzial.length + '</span></div>';
+    html += differenzial.map(hypoCard).join('') + '</div>';
+  }
+  if (schutz.length > 0) {
+    html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-schutz">Schutzfaktoren <span class="hypo-section-count">' + schutz.length + '</span></div>';
+    html += schutz.map(hypoCard).join('') + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+// ── Branchen-Risiken Karte ──────────────────────────────────
+function branchenRisikoKarte(r) {
+  var isSchutz = r.kategorie === 'schutz';
+  var accentColor = isSchutz ? '#10B981' : '#EF4444';
+  var bgColor = isSchutz ? 'rgba(16,185,129,0.06)' : 'rgba(239,68,68,0.06)';
+  return '<div class="branchen-karte" style="border-color:' + accentColor + ';background:' + bgColor + '">'
+    + '<div class="branchen-karte-header">'
+    + '<span class="branchen-icon">' + (r.icon || '📊') + '</span>'
+    + '<span class="branchen-statistik" style="color:' + accentColor + '">' + r.statistik + '</span>'
+    + '</div>'
+    + '<div class="branchen-titel">' + r.titel + '</div>'
+    + '<div class="branchen-desc">' + r.beschreibung + '</div>'
+    + '<div class="branchen-quelle">' + r.quelle + '</div>'
+    + '</div>';
+}
+
+// ── Hypothesen Dashboard (Hauptansicht) ─────────────────────
+function renderHypothesenDashboard(container, hypothesen, branchenRisiken, schuelerId) {
+  if (!container) return;
+  var s = DB.getSchuelerById(schuelerId);
+  if (!s) { container.innerHTML = renderEmptyState('🔍', 'Kein Klient', 'Bitte wähle einen Klienten aus.'); return; }
+
+  if (hypothesen.length === 0 && branchenRisiken.length === 0) {
+    container.innerHTML = renderEmptyState('🔬', 'Keine Hypothesen verfügbar',
+      'Hypothesen werden automatisch generiert, sobald Daten aus Anamnese, Screening oder Stärken vorliegen.');
     return;
   }
 
-  // Sortiere: Schutzfaktoren zuletzt, Rest nach Staerke absteigend
-  const sorted = [...hypothesen].sort((a, b) => {
-    if (a.typ === 'schutz' && b.typ !== 'schutz') return 1;
-    if (b.typ === 'schutz' && a.typ !== 'schutz') return -1;
-    return (b.staerkeWert || 0) - (a.staerkeWert || 0);
-  });
+  var risiken = hypothesen.filter(function(h) { return h.typ === 'risiko'; });
+  var differenzial = hypothesen.filter(function(h) { return h.typ === 'differenzial'; });
+  var schutz = hypothesen.filter(function(h) { return h.typ === 'schutz'; });
+  var brRisiko = branchenRisiken.filter(function(r) { return r.kategorie !== 'schutz'; });
+  var brSchutz = branchenRisiken.filter(function(r) { return r.kategorie === 'schutz'; });
 
-  const risiken = sorted.filter(h => h.typ !== 'schutz');
-  const schutz = sorted.filter(h => h.typ === 'schutz');
+  // Check data completeness
+  var anamnLen = (s.anamnese || []).length;
+  var screenings = DB.getScreenings(schuelerId).filter(function(sc) { return sc.abgeschlossen; });
+  var staerkenCount = s.staerkenProfil && s.staerkenProfil.ratings
+    ? Object.values(s.staerkenProfil.ratings).filter(function(v) { return v > 0; }).length : 0;
 
-  function simpleCard(h) {
-    var borderColor, prioritaet;
-    if (h.typ === 'schutz') {
-      borderColor = '#10B981'; prioritaet = 'Schutzfaktor';
-    } else if (h.staerkeWert >= 4) {
-      borderColor = '#DC2626'; prioritaet = 'Hoch';
-    } else if (h.staerkeWert >= 3) {
-      borderColor = '#F59E0B'; prioritaet = 'Mittel';
-    } else {
-      borderColor = '#9CA3AF'; prioritaet = 'Hinweis';
-    }
+  // Summary stats
+  var html = '<div class="hypo-dashboard">';
 
-    var empfehlungHtml = h.empfehlung ? '<div style="font-size:12px;color:#1D4ED8;margin-top:6px;padding:6px 10px;background:#EFF6FF;border-radius:6px;">→ ' + h.empfehlung + '</div>' : '';
+  // Source status bar
+  html += '<div class="hypo-sources-bar">';
+  html += '<div class="hypo-source ' + (anamnLen >= 3 ? 'hypo-source-active' : 'hypo-source-inactive') + '">'
+    + '<div class="hypo-source-icon">📋</div>'
+    + '<div class="hypo-source-info"><div class="hypo-source-name">Anamnese</div>'
+    + '<div class="hypo-source-detail">' + anamnLen + ' Einträge</div></div></div>';
+  html += '<div class="hypo-source ' + (screenings.length > 0 ? 'hypo-source-active' : 'hypo-source-inactive') + '">'
+    + '<div class="hypo-source-icon">🎯</div>'
+    + '<div class="hypo-source-info"><div class="hypo-source-name">Screening</div>'
+    + '<div class="hypo-source-detail">' + screenings.length + ' abgeschlossen</div></div></div>';
+  html += '<div class="hypo-source ' + (staerkenCount >= 3 ? 'hypo-source-active' : 'hypo-source-inactive') + '">'
+    + '<div class="hypo-source-icon">💪</div>'
+    + '<div class="hypo-source-info"><div class="hypo-source-name">Stärken</div>'
+    + '<div class="hypo-source-detail">' + staerkenCount + ' bewertet</div></div></div>';
+  html += '</div>';
 
-    return '<div style="padding:12px 14px;background:var(--bg-card,#fff);border-radius:0 8px 8px 0;margin-bottom:8px;border:1px solid var(--border,#E5E7EB);border-left:4px solid ' + borderColor + ';">'
-      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">'
-      + '<div style="font-weight:600;font-size:14px;color:var(--text,#1F2937);">' + h.titel + '</div>'
-      + (h.typ !== 'schutz' ? '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:' + borderColor + '15;color:' + borderColor + ';font-weight:600;white-space:nowrap;">' + prioritaet + '</span>' : '')
-      + '</div>'
-      + '<div style="font-size:12px;color:var(--text-muted,#6B7280);margin-top:4px;line-height:1.5;">' + h.erklaerung + '</div>'
-      + empfehlungHtml
-      + '</div>';
+  // Summary counters
+  html += '<div class="hypo-summary-row">';
+  html += '<div class="hypo-summary-stat hypo-stat-risiko"><div class="hypo-stat-num">' + risiken.length + '</div><div class="hypo-stat-label">Risiken</div></div>';
+  html += '<div class="hypo-summary-stat hypo-stat-diff"><div class="hypo-stat-num">' + differenzial.length + '</div><div class="hypo-stat-label">Differenzial</div></div>';
+  html += '<div class="hypo-summary-stat hypo-stat-schutz"><div class="hypo-stat-num">' + schutz.length + '</div><div class="hypo-stat-label">Schutz</div></div>';
+  if (branchenRisiken.length > 0) {
+    html += '<div class="hypo-summary-stat hypo-stat-branchen"><div class="hypo-stat-num">' + branchenRisiken.length + '</div><div class="hypo-stat-label">Statistiken</div></div>';
+  }
+  html += '</div>';
+
+  // Branchen-Risiken section
+  if (brRisiko.length > 0) {
+    html += '<div class="hypo-branchen-section">';
+    html += '<div class="hypo-branchen-header">';
+    html += '<div class="hypo-branchen-title">Statistische Risikofaktoren</div>';
+    html += '<div class="hypo-branchen-subtitle">Epidemiologische Kennzahlen basierend auf dem Profil</div>';
+    html += '</div>';
+    html += '<div class="hypo-branchen-grid">' + brRisiko.map(branchenRisikoKarte).join('') + '</div>';
+    html += '</div>';
   }
 
-  var html = '';
-
+  // Hypothesis sections
   if (risiken.length > 0) {
-    html += '<div style="margin-bottom:16px;">';
-    html += '<div style="font-size:13px;font-weight:700;color:#1F2937;margin-bottom:8px;">Erkannte Belastungsmuster <span style="font-size:12px;font-weight:400;color:#6B7280;">' + risiken.length + '</span></div>';
-    html += risiken.map(simpleCard).join('');
-    html += '</div>';
+    html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-risiko">Erkannte Belastungsmuster <span class="hypo-section-count">' + risiken.length + '</span></div>';
+    html += risiken.map(hypoCard).join('') + '</div>';
   }
-
+  if (differenzial.length > 0) {
+    html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-diff">Differenzialdiagnosen <span class="hypo-section-count">' + differenzial.length + '</span></div>';
+    html += differenzial.map(hypoCard).join('') + '</div>';
+  }
   if (schutz.length > 0) {
-    html += '<div>';
-    html += '<div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:8px;">Schutzfaktoren <span style="font-size:12px;font-weight:400;color:#6B7280;">' + schutz.length + '</span></div>';
-    html += schutz.map(simpleCard).join('');
+    html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-schutz">Schutzfaktoren <span class="hypo-section-count">' + schutz.length + '</span></div>';
+    html += schutz.map(hypoCard).join('') + '</div>';
+  }
+
+  // Schutz-Statistiken
+  if (brSchutz.length > 0) {
+    html += '<div class="hypo-branchen-section hypo-branchen-schutz">';
+    html += '<div class="hypo-branchen-header">';
+    html += '<div class="hypo-branchen-title" style="color:#10B981">Protektive Statistiken</div>';
+    html += '<div class="hypo-branchen-subtitle">Evidenzbasierte Schutzfaktoren</div>';
+    html += '</div>';
+    html += '<div class="hypo-branchen-grid">' + brSchutz.map(branchenRisikoKarte).join('') + '</div>';
     html += '</div>';
   }
 
-  html += '<div style="font-size:11px;color:#9CA3AF;text-align:center;margin-top:12px;">Automatisch generiert — kein Ersatz fuer klinische Diagnostik.</div>';
+  html += '<div class="hypo-disclaimer">Automatisch generiert aus Falldaten — kein Ersatz für klinische Diagnostik.</div>';
+  html += '</div>';
 
-  el.innerHTML = html;
+  container.innerHTML = html;
 }
 
 // ============================================================

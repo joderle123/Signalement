@@ -2310,28 +2310,222 @@ const SCREENING_THEMA_MAP = {
 };
 
 // Roadmap-Phasen-Definitionen
+// Pädagogisches Rahmenmodell: Beziehungsbasierte Sozialpädagogik
+// Fundierung: Bowlby (Bindungstheorie), Grawe (Wirkfaktoren), Gahleitner (2017),
+// Prochaska & DiClemente (Stages of Change), Thiersch (Lebensweltorientierung)
 const ROADMAP_PHASEN = [
-  { nr: 0, label: 'Vorbereitung', farbe: '#6B7280', icon: 'clipboard',
-    beschreibung: 'Daten sammeln, Screening, 5P-Analyse, Stärken erfassen',
-    dauer: '1–2 Wochen', schwerpunkt: ['emotionserkennung', 'soziale-wahrnehmung', 'familienzusammensetzung'] },
-  { nr: 1, label: 'Sicherheit & Beziehung', farbe: '#DC2626', icon: 'shield',
-    beschreibung: 'Vertrauen aufbauen, akute Krisen stabilisieren, Sicherheit schaffen',
-    dauer: '2–4 Wochen', schwerpunkt: ['krisenintervention', 'suizidpraevention', 'selbstverletzung', 'trauma'] },
-  { nr: 2, label: 'Exploration', farbe: '#D97706', icon: 'eye',
-    beschreibung: 'Probleme verstehen, Stärken erkennen, Muster identifizieren',
-    dauer: '2–3 Wochen', schwerpunkt: ['selbstwertgefuehl', 'emotionsregulation', 'selbstbild'] },
-  { nr: 3, label: 'Ziele & Plan', farbe: '#2563EB', icon: 'target',
-    beschreibung: 'Gemeinsame Ziele definieren, Förderplan konkretisieren',
-    dauer: '1–2 Wochen', schwerpunkt: ['zukunftsplanung', 'motivation', 'lernstrategien'] },
-  { nr: 4, label: 'Intervention', farbe: '#7C3AED', icon: 'wrench',
-    beschreibung: 'Kernthemen bearbeiten, Kompetenzen aufbauen, Interventionen durchführen',
-    dauer: '6–12 Wochen', schwerpunkt: [] },
-  { nr: 5, label: 'Konsolidierung', farbe: '#059669', icon: 'leaf',
-    beschreibung: 'Gelerntes festigen, Rückfallprävention, Erfolge sichern',
-    dauer: '2–4 Wochen', schwerpunkt: ['resilienz', 'soziales-netzwerk', 'lebenssinn'] },
-  { nr: 6, label: 'Abschluss', farbe: '#0EA5E9', icon: 'academic-cap',
-    beschreibung: 'Transfer in den Alltag, Abschied gestalten, Nachsorge planen',
-    dauer: '1–2 Wochen', schwerpunkt: ['zukunftsplanung', 'berufsorientierung'] },
+  {
+    nr: 0, label: 'Orientierung', farbe: '#6B7280', icon: 'clipboard',
+    beschreibung: 'Ankommen, kennenlernen, Rahmen schaffen — bevor die eigentliche Arbeit beginnt.',
+    dauer: '1–2 Wochen',
+    schwerpunkt: ['emotionserkennung', 'soziale-wahrnehmung', 'familienzusammensetzung'],
+    rahmenmodell: {
+      name: 'Lebensweltorientierung (Thiersch)',
+      prinzip: 'Bevor wir handeln, müssen wir verstehen, in welcher Welt der/die Jugendliche lebt.',
+      quelle: 'Thiersch, H. (2020). Lebensweltorientierte Soziale Arbeit. Beltz Juventa.'
+    },
+    ziel: 'Der/die Jugendliche weiss, wer ich bin, was meine Rolle ist, und fühlt sich willkommen.',
+    kernAktivitaeten: [
+      { text: 'Akten und Vorgeschichte studieren', beschreibung: 'Berichte, Diagnosen, bisherige Massnahmen sichten — was ist schon bekannt?', dauer: '30 Min' },
+      { text: 'Raum vorbereiten', beschreibung: 'Gesprächsraum einladend gestalten: kein kaltes Büro. Getränke, bequeme Sitzgelegenheit, Privatsphäre.', dauer: '15 Min' },
+      { text: 'Erstgespräch führen', beschreibung: 'Informelles Kennenlernen: Wer bist du? Was magst du? Was nervt dich? KEIN Fragebogen im Erstgespräch.', dauer: '30–45 Min' },
+      { text: 'Screening vorbereiten', beschreibung: 'Passendes Screening-Instrument wählen und Zeitpunkt mit Jugendliche/m absprechen.', dauer: '15 Min' },
+      { text: 'Bezugssystem kartieren', beschreibung: 'Wer gehört zum Netzwerk? Genogramm und Helfersystem in der App erfassen.', dauer: '20 Min' },
+    ],
+    beziehungsarbeit: [
+      { methode: 'Willkommensritual', beschreibung: 'Persönliche Begrüssung: Name merken, Blickkontakt, kurzer Small Talk über Interessen.', wpirinzip: 'Zugehörigkeit' },
+      { methode: '"Ich bin für dich da"-Botschaft', beschreibung: 'Klar kommunizieren: "Ich bin deine Bezugsperson. Du kannst zu mir kommen wenn etwas ist."', wpirinzip: 'Sicherheit' },
+      { methode: 'Erste gemeinsame Aktivität', beschreibung: 'Etwas Lockeres zusammen machen: Spaziergang, Tischkicker, gemeinsam etwas trinken — kein Gesprächsdruck.', wpirinzip: 'Rapport' },
+    ],
+    abschlussIndikatoren: [
+      'Erstgespräch geführt',
+      'Screening abgesprochen oder durchgeführt',
+      'Genogramm/Netzwerk erfasst',
+      'Jugendliche/r kennt dich als Bezugsperson',
+    ],
+  },
+  {
+    nr: 1, label: 'Sichere Basis', farbe: '#DC2626', icon: 'shield',
+    beschreibung: 'Vertrauen aufbauen, Sicherheit schaffen, akute Krisen stabilisieren.',
+    dauer: '2–4 Wochen',
+    schwerpunkt: ['krisenintervention', 'suizidpraevention', 'selbstverletzung', 'trauma'],
+    rahmenmodell: {
+      name: 'Sichere Basis (Bowlby / Ainsworth)',
+      prinzip: 'Nur wenn der/die Jugendliche die Bezugsperson als sichere Basis erlebt, kann Exploration und Veränderung beginnen.',
+      quelle: 'Bowlby, J. (1988). A Secure Base. Routledge. / Gahleitner, S.B. (2017). Soziale Arbeit als Beziehungsprofession. Beltz Juventa.'
+    },
+    ziel: 'Der/die Jugendliche erlebt dich als verlässlich, vorhersagbar und sicher. Akute Krisen sind stabilisiert.',
+    kernAktivitaeten: [
+      { text: 'Verlässliche Erreichbarkeit etablieren', beschreibung: 'Klare Zeiten kommunizieren: "Du erreichst mich Mo–Fr 8–17 Uhr. Im Notfall 24h über..."', dauer: 'Laufend' },
+      { text: 'Tagesstruktur unterstützen', beschreibung: 'Bei Bedarf: Morgenroutine, Mahlzeiten, Schlafenszeiten gemeinsam planen.', dauer: '20 Min' },
+      { text: 'Krisenplan erstellen', beschreibung: 'Gemeinsam: Was mache ich wenn es mir schlecht geht? Wen rufe ich an? Wohin kann ich gehen?', dauer: '30 Min' },
+      { text: 'Sicherheits-Assessment', beschreibung: 'Suizidalität, Selbstverletzung, häusliche Gewalt abklären — direkt und empathisch fragen.', dauer: '20 Min' },
+      { text: 'Erstes Screening durchführen', beschreibung: 'Systematisches Screening, um Belastungsbereiche zu identifizieren. Ergebnisse gemeinsam besprechen.', dauer: '30–40 Min' },
+    ],
+    beziehungsarbeit: [
+      { methode: 'Rituale etablieren', beschreibung: 'Feste wöchentliche Gesprächszeit, immer gleicher Ort, gleiche Begrüssung — Vorhersagbarkeit schafft Sicherheit.', wpirinzip: 'Bindungssicherheit' },
+      { methode: 'Zuverlässigkeit demonstrieren', beschreibung: 'Termine einhalten. Versprechen halten. Wenn du etwas zusagst, tu es. Wenn du es nicht kannst, sage es ehrlich.', wpirinzip: 'Vertrauensaufbau' },
+      { methode: 'Emotionale Verfügbarkeit', beschreibung: 'Wenn der/die Jugendliche Gefühle zeigt: Da sein, aushalten, nicht sofort lösen wollen. "Ich halte das aus mit dir."', wpirinzip: 'Co-Regulation' },
+      { methode: 'Reparatur nach Brüchen', beschreibung: 'Wenn etwas schief geht (vergessener Termin, Missverständnis): Aktiv ansprechen und reparieren.', wpirinzip: 'Rupture & Repair' },
+    ],
+    abschlussIndikatoren: [
+      'SRS-Wert ≥ 30 (Therapeutische Beziehung positiv)',
+      'Kein akutes Krisenverhalten',
+      'Krisenplan vorhanden',
+      'Jugendliche/r kommt zuverlässig zu Terminen',
+    ],
+  },
+  {
+    nr: 2, label: 'Verstehen', farbe: '#D97706', icon: 'eye',
+    beschreibung: 'Gemeinsam ergründen: Was belastet? Was sind Stärken? Welche Muster gibt es?',
+    dauer: '2–3 Wochen',
+    schwerpunkt: ['selbstwertgefuehl', 'emotionsregulation', 'selbstbild'],
+    rahmenmodell: {
+      name: 'Problemaktualisierung & Motivationale Klärung (Grawe)',
+      prinzip: 'Veränderung beginnt mit Verstehen. Erst wenn der/die Jugendliche erlebt, dass Probleme hier sicher angesprochen werden können, öffnet sich der Weg.',
+      quelle: 'Grawe, K. (2004). Neuropsychotherapie. Hogrefe. — Wirkfaktor: Problemaktualisierung.'
+    },
+    ziel: 'Wir haben gemeinsam ein Verständnis erarbeitet: Warum ist es so, wie es ist? Was sind Stärken?',
+    kernAktivitaeten: [
+      { text: 'Stärken-Profil erstellen', beschreibung: 'Was kann der/die Jugendliche gut? Wofür begeistert er/sie sich? Stärken in der App erfassen.', dauer: '30 Min' },
+      { text: 'Lebensgeschichte anhören', beschreibung: 'Biographische Timeline: Wichtige Ereignisse, Wendepunkte, Verluste, Erfolge.', dauer: '30–45 Min' },
+      { text: 'Muster identifizieren', beschreibung: 'Wann geht es dir gut? Wann schlecht? Was triggert dich? Zusammen Auslöser-Muster erkennen.', dauer: '20 Min' },
+      { text: '5P-Fallformulierung', beschreibung: 'Presenting, Predisposing, Precipitating, Perpetuating, Protective — Fallbild strukturiert zusammenfassen.', dauer: '20 Min' },
+      { text: 'Hypothesen besprechen', beschreibung: 'Klinische Hypothesen aus dem Gesamtbild gemeinsam anschauen und mit Jugendlicher/m validieren.', dauer: '20 Min' },
+    ],
+    beziehungsarbeit: [
+      { methode: 'Aktives Zuhören', beschreibung: 'Zusammenfassen, was du gehört hast. "Habe ich richtig verstanden, dass...?" — Nicht interpretieren, verstehen.', wpirinzip: 'Validierung' },
+      { methode: 'Neugier statt Bewertung', beschreibung: '"Das ist ja interessant — erzähl mir mehr davon." Nicht: "Das solltest du nicht tun."', wpirinzip: 'Exploration' },
+      { methode: 'Stärken spiegeln', beschreibung: 'Wenn du eine Stärke siehst, benenne sie: "Ich finde es bemerkenswert, dass du trotzdem jeden Tag aufstehst."', wpirinzip: 'Ressourcenaktivierung' },
+      { methode: 'Normalisierung', beschreibung: '"Es ist normal, dass du dich so fühlst nach dem, was du erlebt hast." — Entlastung von Scham.', wpirinzip: 'Entpathologisierung' },
+    ],
+    abschlussIndikatoren: [
+      'Stärken-Profil ausgefüllt',
+      '5P-Fallformulierung erstellt',
+      'Jugendliche/r kann eigene Muster/Trigger benennen',
+      'Hypothesen sind besprochen und validiert',
+    ],
+  },
+  {
+    nr: 3, label: 'Ziele setzen', farbe: '#2563EB', icon: 'target',
+    beschreibung: 'Gemeinsam Ziele definieren — was will der/die Jugendliche verändern?',
+    dauer: '1–2 Wochen',
+    schwerpunkt: ['zukunftsplanung', 'motivation', 'lernstrategien'],
+    rahmenmodell: {
+      name: 'Motivational Interviewing (Miller & Rollnick)',
+      prinzip: 'Ziele kommen vom Jugendlichen, nicht vom Helfersystem. Unsere Aufgabe ist es, die eigene Motivation des Jugendlichen zu entdecken und zu stärken.',
+      quelle: 'Miller, W.R. & Rollnick, S. (2013). Motivational Interviewing. Guilford Press.'
+    },
+    ziel: '2–3 Ziele sind gemeinsam formuliert. Der/die Jugendliche fühlt Ownership und Motivation.',
+    kernAktivitaeten: [
+      { text: 'Wunderfrage stellen', beschreibung: '"Stell dir vor, morgen früh ist alles anders. Was wäre dann? Woran merkst du es?" — Zielvision entwickeln.', dauer: '20 Min' },
+      { text: 'Skalierungsfrage nutzen', beschreibung: '"Auf einer Skala von 1–10: Wo stehst du jetzt? Wo willst du hin? Was wäre ein erster Schritt von 4 auf 5?"', dauer: '15 Min' },
+      { text: 'SMART-Ziele formulieren', beschreibung: 'Spezifisch, Messbar, Attraktiv, Realistisch, Terminiert — abstrakte Wünsche in konkrete Ziele übersetzen.', dauer: '20 Min' },
+      { text: 'Meilensteine festlegen', beschreibung: 'Grosse Ziele in kleine Schritte zerlegen. "Was ist der erste Schritt, den du diese Woche tun kannst?"', dauer: '15 Min' },
+      { text: 'Hindernisse antizipieren', beschreibung: '"Was könnte dazwischenkommen?" — Gemeinsam Strategien für erwartbare Hindernisse entwickeln.', dauer: '15 Min' },
+    ],
+    beziehungsarbeit: [
+      { methode: 'Autonomie stärken', beschreibung: '"Was ist DIR wichtig? Was willst DU verändern?" — Nicht was Eltern, Schule oder Heim wollen.', wpirinzip: 'Selbstbestimmung' },
+      { methode: 'Ambivalenz aushalten', beschreibung: 'Wenn Jugendliche "Ich weiss nicht" sagen: Das ist okay. Ambivalenz ist Teil des Prozesses, nicht Widerstand.', wpirinzip: 'Change Talk' },
+      { methode: 'Zuversicht vermitteln', beschreibung: '"Ich glaube daran, dass du das schaffen kannst. Und ich bin dabei." — Positive Erwartung.', wpirinzip: 'Hoffnung' },
+    ],
+    abschlussIndikatoren: [
+      '2–3 konkrete Ziele sind formuliert (in der App erfasst)',
+      'Jugendliche/r kann Ziele in eigenen Worten beschreiben',
+      'Erste Meilensteine sind definiert',
+    ],
+  },
+  {
+    nr: 4, label: 'Veränderung', farbe: '#7C3AED', icon: 'wrench',
+    beschreibung: 'Die Kernarbeit: Themen bearbeiten, neue Kompetenzen aufbauen, Veränderung üben.',
+    dauer: '6–12 Wochen',
+    schwerpunkt: [],
+    rahmenmodell: {
+      name: 'Ressourcenaktivierung & Problembewältigung (Grawe)',
+      prinzip: 'Veränderung entsteht durch das Zusammenspiel von Ressourcenaktivierung (Stärken nutzen) und aktiver Problembewältigung (neue Strategien lernen und üben).',
+      quelle: 'Grawe, K. (2004). Neuropsychotherapie. Hogrefe. — Wirkfaktoren: Ressourcenaktivierung + Problembewältigung.'
+    },
+    ziel: 'Fortschritte in Kernthemen sind sichtbar. Neue Kompetenzen werden im Alltag eingesetzt.',
+    kernAktivitaeten: [
+      { text: 'Themenspezifische Interventionen durchführen', beschreibung: 'Aus der Themenliste unten: passende Übungen, Arbeitsblätter und Methoden auswählen und durchführen.', dauer: 'Variabel' },
+      { text: 'Skills üben und anwenden', beschreibung: 'Neue Strategien nicht nur besprechen — im geschützten Rahmen üben und dann im Alltag ausprobieren lassen.', dauer: '20–30 Min' },
+      { text: 'Fortschritte dokumentieren', beschreibung: 'ORS/SRS nach jeder Sitzung erfassen. Sitzungsnotizen schreiben. Veränderungen sichtbar machen.', dauer: '5 Min' },
+      { text: 'Regelmässige Standortbestimmung', beschreibung: 'Alle 2–3 Wochen: Wo stehen wir? Was hat funktioniert? Was müssen wir anpassen?', dauer: '15 Min' },
+      { text: 'Netzwerk einbeziehen', beschreibung: 'Schule, Familie, andere Fachpersonen informieren und einbeziehen wo sinnvoll und gewünscht.', dauer: '15 Min' },
+    ],
+    beziehungsarbeit: [
+      { methode: 'Cheerleading', beschreibung: 'Kleine Fortschritte erkennen und benennen: "Letzte Woche konntest du das noch nicht — jetzt schon!"', wpirinzip: 'Selbstwirksamkeit' },
+      { methode: 'Rückschläge normalisieren', beschreibung: '"Ein Rückfall ist kein Versagen, sondern Teil des Lernprozesses." — Nicht enttäuscht reagieren.', wpirinzip: 'Fehlertoleranz' },
+      { methode: 'Co-Regulation anbieten', beschreibung: 'In emotionalen Momenten: Ruhig bleiben, atmen, da sein. "Wir schaffen das zusammen."', wpirinzip: 'Emotionale Sicherheit' },
+      { methode: 'Authentische Rückmeldung', beschreibung: 'Ehrlich und wertschätzend Feedback geben: Was siehst du? Was fällt dir auf? Was beeindruckt dich?', wpirinzip: 'Kongruenz' },
+    ],
+    abschlussIndikatoren: [
+      'ORS-Wert steigt oder bleibt stabil',
+      'Kernthemen zeigen Fortschritte (Themen-Status)',
+      'Jugendliche/r wendet neue Strategien im Alltag an',
+      'Weniger Krisensituationen als zu Beginn',
+    ],
+  },
+  {
+    nr: 5, label: 'Festigung', farbe: '#059669', icon: 'leaf',
+    beschreibung: 'Gelerntes verankern, Rückfallprävention, Selbständigkeit stärken.',
+    dauer: '2–4 Wochen',
+    schwerpunkt: ['resilienz', 'soziales-netzwerk', 'lebenssinn'],
+    rahmenmodell: {
+      name: 'Maintenance & Relapse Prevention (Prochaska & DiClemente)',
+      prinzip: 'Nachhaltige Veränderung braucht bewusste Festigung. Der/die Jugendliche lernt, Warnsignale zu erkennen und selbstständig gegenzusteuern.',
+      quelle: 'Prochaska, J.O. & DiClemente, C.C. (1983). Stages of Change. / Marlatt, G.A. & Gordon, J.R. (1985). Relapse Prevention.'
+    },
+    ziel: 'Der/die Jugendliche kann Strategien selbstständig anwenden und Frühwarnsignale erkennen.',
+    kernAktivitaeten: [
+      { text: 'Rückfall-Warnsignale identifizieren', beschreibung: '"Woran merkst du, dass es dir wieder schlechter geht?" — Persönliche Frühwarnsignale-Liste erstellen.', dauer: '20 Min' },
+      { text: 'Notfallplan aktualisieren', beschreibung: 'Krisenplan aus Phase 1 überarbeiten: Ist er noch aktuell? Was hat sich verändert?', dauer: '15 Min' },
+      { text: 'Netzwerk stärken', beschreibung: 'Wer unterstützt nach der Begleitung? Kontakte zu Vereinen, Beratungsstellen, Vertrauenspersonen herstellen.', dauer: '20 Min' },
+      { text: 'Erfolge sichtbar machen', beschreibung: 'Gemeinsam zurückblicken: Vorher-Nachher-Vergleich (ORS/SRS), Wirkungsnachweis besprechen.', dauer: '20 Min' },
+      { text: 'Autonomie-Test', beschreibung: 'Bewusst Abstände zwischen Treffen vergrössern. Schafft der/die Jugendliche 2 Wochen ohne Termin?', dauer: 'Laufend' },
+    ],
+    beziehungsarbeit: [
+      { methode: 'Loslassen vorbereiten', beschreibung: '"Du brauchst mich immer weniger — und das ist das beste Zeichen." — Positive Rahmung der Ablösung.', wpirinzip: 'Autonomieförderung' },
+      { methode: 'Kompetenz spiegeln', beschreibung: '"Erinnerst du dich, wie es vor 3 Monaten war? Schau, was du alles gelernt hast!" — Selbstwirksamkeit stärken.', wpirinzip: 'Ressourcenaktivierung' },
+      { methode: 'Auf Augenhöhe kommen', beschreibung: 'Nicht mehr "Ich zeige dir" sondern "Was denkst du, was hier am besten hilft?" — Expertise anerkennen.', wpirinzip: 'Empowerment' },
+    ],
+    abschlussIndikatoren: [
+      'Frühwarnsignale-Liste vorhanden',
+      'Jugendliche/r schafft längere Abstände ohne Krise',
+      'Unterstützungsnetzwerk steht (mind. 2 Kontakte)',
+      'Zweites Screening zeigt Verbesserung',
+    ],
+  },
+  {
+    nr: 6, label: 'Abschluss & Übergang', farbe: '#0EA5E9', icon: 'academic-cap',
+    beschreibung: 'Würdigen, verabschieden, Nachsorge sichern — ein guter Abschluss ist ein guter Anfang.',
+    dauer: '1–2 Wochen',
+    schwerpunkt: ['zukunftsplanung', 'berufsorientierung'],
+    rahmenmodell: {
+      name: 'Beziehungsbeendigung & Übergangsobjekte (Gahleitner / Winnicott)',
+      prinzip: 'Ein bewusster, wertschätzender Abschluss heilt Beziehungsabbrüche der Vergangenheit. "Die Tür steht offen" ist die wichtigste Botschaft.',
+      quelle: 'Gahleitner, S.B. (2017). Soziale Arbeit als Beziehungsprofession. Beltz Juventa.'
+    },
+    ziel: 'Ein positiver Abschluss. Nachsorge ist organisiert. Der/die Jugendliche geht mit einem guten Gefühl.',
+    kernAktivitaeten: [
+      { text: 'Gemeinsamen Rückblick gestalten', beschreibung: '"Was haben wir zusammen erlebt? Was hat geholfen? Was nimmst du mit?" — Wertschätzender Rückblick.', dauer: '30 Min' },
+      { text: 'Abschlussbericht schreiben', beschreibung: 'Bericht für Akten und ggf. Nachfolge-Fachpersonen: Verlauf, Fortschritte, Empfehlungen.', dauer: '30 Min' },
+      { text: 'Nachsorge organisieren', beschreibung: 'Anschlussangebote klären: Therapie, Beratung, Verein, Mentoring — warme Übergabe wenn möglich.', dauer: '20 Min' },
+      { text: 'Abschiedsritual durchführen', beschreibung: 'Etwas Besonderes zum Abschluss: Brief, kleines Geschenk, gemeinsame Aktivität. Nicht einfach aufhören.', dauer: '30 Min' },
+      { text: 'Nachkontakt vereinbaren', beschreibung: '"In 4 Wochen melde ich mich nochmal — wie geht es dir?" — Weiches Ende, nicht harter Schnitt.', dauer: '10 Min' },
+    ],
+    beziehungsarbeit: [
+      { methode: 'Würdigung aussprechen', beschreibung: '"Es war mir eine Ehre, dich zu begleiten. Du hast Grossartiges geleistet." — Authentisch und persönlich.', wpirinzip: 'Wertschätzung' },
+      { methode: 'Abschiedsschmerz erlauben', beschreibung: 'Wenn Trauer da ist: Das ist normal und zeigt, dass die Beziehung etwas bedeutet hat.', wpirinzip: 'Emotionale Ehrlichkeit' },
+      { methode: '"Die Tür steht offen"', beschreibung: '"Wenn du nochmal etwas brauchst, weisst du wo du mich findest." — Keine endgültige Trennung.', wpirinzip: 'Nachhaltige Sicherheit' },
+    ],
+    abschlussIndikatoren: [
+      'Abschlussbericht geschrieben',
+      'Nachsorge organisiert',
+      'Abschiedsritual durchgeführt',
+      'Nachkontakt-Termin vereinbart',
+    ],
+  },
 ];
 
 // ============================================================

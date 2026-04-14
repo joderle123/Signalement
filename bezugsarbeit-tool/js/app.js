@@ -2221,6 +2221,179 @@ function unmarkLernpfadGelesen(id) {
   showToast('Markierung entfernt', '');
 }
 
+// ═══════════════════════════════════════════════════════════════
+// LERN-PLAYER (Mikroschritt 4b–4d)
+// ═══════════════════════════════════════════════════════════════
+
+// State fuer aktiven Player
+if (typeof APP !== 'undefined' && !APP.lernplayer) APP.lernplayer = null;
+
+function openLernplayer(moduleId, startIndex) {
+  const lp = (typeof WB_LERNPFADE !== 'undefined' ? WB_LERNPFADE : []).find(function(p) { return p.id === moduleId; });
+  if (!lp || !Array.isArray(lp.schritte) || lp.schritte.length === 0) {
+    if (typeof showToast === 'function') showToast('Keine Lernschritte in diesem Modul', 'error');
+    return;
+  }
+  var idx = Math.max(0, Math.min(startIndex || 0, lp.schritte.length - 1));
+  APP.lernplayer = { moduleId: moduleId, aktuellerSchritt: idx };
+
+  // Overlay aufbauen (einmal), Inhalte werden bei Navigation neu gerendert
+  var existing = document.getElementById('lernplayer-overlay');
+  if (existing) existing.remove();
+
+  var overlay = document.createElement('div');
+  overlay.id = 'lernplayer-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.92);z-index:10000;display:flex;flex-direction:column;animation:overlayFadeIn 0.25s ease;';
+  overlay.innerHTML = '<div id="lernplayer-frame" style="flex:1;display:flex;flex-direction:column;max-width:1100px;width:100%;margin:0 auto;padding:0;"></div>';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  renderLernplayerFrame();
+}
+
+function closeLernplayer() {
+  var overlay = document.getElementById('lernplayer-overlay');
+  if (overlay) overlay.remove();
+  document.body.style.overflow = '';
+  APP.lernplayer = null;
+}
+
+function lernplayerWeiter() {
+  if (!APP.lernplayer) return;
+  var lp = WB_LERNPFADE.find(function(p) { return p.id === APP.lernplayer.moduleId; });
+  if (!lp) return;
+  // Persistiere aktuellen Schritt als abgeschlossen (4d verfeinert das mit XP + Badges)
+  schrittAlsAbgeschlossenMarkieren(APP.lernplayer.moduleId, APP.lernplayer.aktuellerSchritt);
+  if (APP.lernplayer.aktuellerSchritt < lp.schritte.length - 1) {
+    APP.lernplayer.aktuellerSchritt++;
+    renderLernplayerFrame();
+  } else {
+    // Letzter Schritt abgeschlossen → Modul abschliessen
+    lernplayerAbschliessen();
+  }
+}
+
+function lernplayerZurueck() {
+  if (!APP.lernplayer) return;
+  if (APP.lernplayer.aktuellerSchritt > 0) {
+    APP.lernplayer.aktuellerSchritt--;
+    renderLernplayerFrame();
+  }
+}
+
+function lernplayerSpringeZu(idx) {
+  if (!APP.lernplayer) return;
+  var lp = WB_LERNPFADE.find(function(p) { return p.id === APP.lernplayer.moduleId; });
+  if (!lp) return;
+  if (idx >= 0 && idx < lp.schritte.length) {
+    APP.lernplayer.aktuellerSchritt = idx;
+    renderLernplayerFrame();
+  }
+}
+
+function schrittAlsAbgeschlossenMarkieren(moduleId, schrittIdx) {
+  var p = getWBProgress();
+  if (!p.schritteFortschritt) p.schritteFortschritt = {};
+  if (!p.schritteFortschritt[moduleId]) p.schritteFortschritt[moduleId] = { abgeschlosseneSchritte: [] };
+  var arr = p.schritteFortschritt[moduleId].abgeschlosseneSchritte;
+  if (arr.indexOf(schrittIdx) === -1) {
+    arr.push(schrittIdx);
+    saveWBProgress(p);
+    // XP + Gamification kommt in 4d
+  }
+}
+
+function lernplayerAbschliessen() {
+  if (!APP.lernplayer) return;
+  var moduleId = APP.lernplayer.moduleId;
+  // Als gelesen markieren (existing mechanic)
+  var p = getWBProgress();
+  if (!p.geleseneModule) p.geleseneModule = [];
+  if (p.geleseneModule.indexOf(moduleId) === -1) p.geleseneModule.push(moduleId);
+  saveWBProgress(p);
+  if (typeof showToast === 'function') showToast('🎉 Modul abgeschlossen!', 'success');
+  closeLernplayer();
+  if (typeof renderWeiterbildung === 'function') renderWeiterbildung();
+}
+
+function renderLernplayerFrame() {
+  var frame = document.getElementById('lernplayer-frame');
+  if (!frame || !APP.lernplayer) return;
+  var lp = WB_LERNPFADE.find(function(p) { return p.id === APP.lernplayer.moduleId; });
+  if (!lp) return;
+  var idx = APP.lernplayer.aktuellerSchritt;
+  var total = lp.schritte.length;
+  var schritt = lp.schritte[idx];
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var bg = isDark ? '#1E293B' : '#FFFFFF';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+  var progressPct = Math.round(((idx + 1) / total) * 100);
+  var istLetzter = idx === total - 1;
+
+  var progress = getWBProgress();
+  var sf = (progress.schritteFortschritt || {})[lp.id] || { abgeschlosseneSchritte: [] };
+  var doneIdx = sf.abgeschlosseneSchritte || [];
+
+  // Schritt-Inhalt (Platzhalter in 4b — richtige Renderer kommen in 4c)
+  var inhaltHtml = renderLernschrittInhalt(schritt, lp, idx);
+
+  // Mini-Stepper am oberen Rand
+  var stepperHtml = lp.schritte.map(function(s, i) {
+    var done = doneIdx.indexOf(i) !== -1;
+    var isAktiv = i === idx;
+    var dotColor = isAktiv ? lp.farbe : (done ? '#16A34A' : (isDark ? '#334155' : '#CBD5E1'));
+    var dotBorder = isAktiv ? '3px solid ' + lp.farbe + '40' : 'none';
+    return '<button onclick="lernplayerSpringeZu(' + i + ')" title="' + escapeHtml(s.titel || getSchrittTypLabel(s.typ)) + '" style="width:' + (isAktiv ? '14' : '10') + 'px;height:' + (isAktiv ? '14' : '10') + 'px;border-radius:50%;background:' + dotColor + ';border:' + dotBorder + ';cursor:pointer;padding:0;transition:all 0.2s;flex-shrink:0;"></button>';
+  }).join('<div style="height:1px;flex:1;background:' + (isDark ? '#334155' : '#E5E7EB') + ';min-width:4px;"></div>');
+
+  frame.innerHTML = ''
+    // Header
+    + '<div style="background:' + bg + ';border-radius:16px 16px 0 0;padding:16px 24px;border-bottom:1px solid ' + border + ';margin-top:24px;">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;">'
+    + '<div style="display:flex;align-items:center;gap:12px;min-width:0;">'
+    + '<span style="font-size:22px;flex-shrink:0;">' + lp.icon + '</span>'
+    + '<div style="min-width:0;">'
+    + '<div style="font-size:15px;font-weight:700;color:' + text + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(lp.titel) + '</div>'
+    + '<div style="font-size:11px;color:' + muted + ';">Schritt ' + (idx + 1) + ' von ' + total + ' · ' + getSchrittTypLabel(schritt.typ) + '</div>'
+    + '</div></div>'
+    + '<button onclick="closeLernplayer()" style="background:' + (isDark ? '#334155' : '#F3F4F6') + ';border:none;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:18px;color:' + muted + ';flex-shrink:0;">✕</button>'
+    + '</div>'
+    + '<div style="display:flex;align-items:center;gap:6px;">' + stepperHtml + '</div>'
+    + '<div style="height:4px;background:' + (isDark ? '#0F172A' : '#F3F4F6') + ';border-radius:2px;overflow:hidden;margin-top:10px;">'
+    + '<div style="height:100%;width:' + progressPct + '%;background:' + lp.farbe + ';transition:width 0.4s ease;"></div>'
+    + '</div>'
+    + '</div>'
+    // Content
+    + '<div style="background:' + bg + ';flex:1;overflow-y:auto;padding:28px 32px;">'
+    + inhaltHtml
+    + '</div>'
+    // Footer
+    + '<div style="background:' + bg + ';border-top:1px solid ' + border + ';padding:16px 24px;border-radius:0 0 16px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px;">'
+    + '<button onclick="lernplayerZurueck()" ' + (idx === 0 ? 'disabled' : '') + ' style="padding:10px 18px;background:' + (isDark ? '#334155' : '#F3F4F6') + ';color:' + text + ';border:1px solid ' + border + ';border-radius:10px;font-size:13px;font-weight:600;cursor:' + (idx === 0 ? 'not-allowed' : 'pointer') + ';font-family:inherit;opacity:' + (idx === 0 ? '0.4' : '1') + ';">← Zurück</button>'
+    + '<div style="font-size:12px;color:' + muted + ';">' + (idx + 1) + ' / ' + total + '</div>'
+    + '<button onclick="lernplayerWeiter()" style="padding:10px 22px;background:' + lp.farbe + ';color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px ' + lp.farbe + '40;">' + (istLetzter ? '🎉 Abschliessen' : 'Weiter →') + '</button>'
+    + '</div>';
+}
+
+// Schritt-Inhalt (in 4b nur Platzhalter — echte Renderer in 4c)
+function renderLernschrittInhalt(schritt, lp, idx) {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+  return '<div style="text-align:center;padding:60px 20px;">'
+    + '<div style="font-size:80px;margin-bottom:20px;">' + getSchrittTypIcon(schritt.typ) + '</div>'
+    + '<div style="font-size:12px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">' + getSchrittTypLabel(schritt.typ) + '</div>'
+    + '<h2 style="font-size:24px;font-weight:800;color:' + text + ';margin:0 0 14px;line-height:1.3;">' + escapeHtml(schritt.titel || '') + '</h2>'
+    + (schritt.dauer ? '<div style="font-size:13px;color:' + muted + ';margin-bottom:24px;">⏱ ' + escapeHtml(schritt.dauer) + '</div>' : '')
+    + '<div style="max-width:520px;margin:20px auto 0;padding:16px 20px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px dashed ' + border + ';border-radius:12px;font-size:13px;color:' + muted + ';line-height:1.6;">'
+    + 'Schritt-Inhalt folgt in Mikroschritt 4c (iframe für Lektüre, Quiz-UI, Reflexion-Textfeld etc.).'
+    + (schritt.datei ? '<div style="margin-top:10px;font-size:11px;font-family:monospace;color:' + text + ';">📎 ' + escapeHtml(schritt.datei) + '</div>' : '')
+    + '</div></div>';
+}
+
 function renderWBNachschlagewerke(container) {
   const fmCount = Object.keys(FACHKRAFT_MODULE_DATEIEN).length;
   const wikiCount = typeof WIKI_ARTIKEL !== 'undefined' ? WIKI_ARTIKEL.length : 0;

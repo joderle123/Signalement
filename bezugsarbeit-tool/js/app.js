@@ -2377,8 +2377,15 @@ function renderLernplayerFrame() {
     + '</div>';
 }
 
-// Schritt-Inhalt (in 4b nur Platzhalter — echte Renderer in 4c)
+// Schritt-Inhalt — Dispatcher nach Typ
 function renderLernschrittInhalt(schritt, lp, idx) {
+  switch (schritt.typ) {
+    case 'einfuehrung': return renderSchrittEinfuehrung(schritt, lp, idx);
+    default: return renderSchrittPlatzhalter(schritt, lp, idx);
+  }
+}
+
+function renderSchrittPlatzhalter(schritt, lp, idx) {
   var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   var text = isDark ? '#E2E8F0' : '#1F2937';
   var muted = isDark ? '#94A3B8' : '#6B7280';
@@ -2389,9 +2396,54 @@ function renderLernschrittInhalt(schritt, lp, idx) {
     + '<h2 style="font-size:24px;font-weight:800;color:' + text + ';margin:0 0 14px;line-height:1.3;">' + escapeHtml(schritt.titel || '') + '</h2>'
     + (schritt.dauer ? '<div style="font-size:13px;color:' + muted + ';margin-bottom:24px;">⏱ ' + escapeHtml(schritt.dauer) + '</div>' : '')
     + '<div style="max-width:520px;margin:20px auto 0;padding:16px 20px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px dashed ' + border + ';border-radius:12px;font-size:13px;color:' + muted + ';line-height:1.6;">'
-    + 'Schritt-Inhalt folgt in Mikroschritt 4c (iframe für Lektüre, Quiz-UI, Reflexion-Textfeld etc.).'
+    + 'Renderer für „' + getSchrittTypLabel(schritt.typ) + '" folgt in einem der nächsten Mikroschritte.'
     + (schritt.datei ? '<div style="margin-top:10px;font-size:11px;font-family:monospace;color:' + text + ';">📎 ' + escapeHtml(schritt.datei) + '</div>' : '')
     + '</div></div>';
+}
+
+// 4c1 — Einführungs-Schritt: warmes Willkommen mit Lernzielen + Praxishinweis
+function renderSchrittEinfuehrung(schritt, lp, idx) {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+  var einf = (typeof WB_EINFUEHRUNGEN !== 'undefined' && WB_EINFUEHRUNGEN[lp.id]) || null;
+
+  var lernzieleHtml = '';
+  if (einf && einf.lernziele && einf.lernziele.length) {
+    lernzieleHtml = '<div style="margin-top:24px;padding:18px 22px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px solid ' + border + ';border-radius:12px;">'
+      + '<div style="font-size:12px;font-weight:700;color:' + lp.farbe + ';margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">📋 Was du hier lernst</div>'
+      + '<ul style="margin:0;padding-left:20px;font-size:14px;color:' + text + ';line-height:1.9;list-style:disc;">'
+      + einf.lernziele.map(function(z) { return '<li style="margin-bottom:4px;">' + escapeHtml(z) + '</li>'; }).join('')
+      + '</ul></div>';
+  }
+
+  var praxisHtml = '';
+  if (einf && einf.praxishinweis) {
+    praxisHtml = '<div style="margin-top:16px;padding:14px 18px;background:' + (isDark ? '#1E3A2F' : '#FEF9C3') + ';border-left:4px solid ' + (isDark ? '#FDE68A' : '#F59E0B') + ';border-radius:0 10px 10px 0;font-size:14px;color:' + (isDark ? '#FDE68A' : '#92400E') + ';line-height:1.7;">'
+      + '<div style="font-weight:700;margin-bottom:4px;">💡 Für deine Praxis</div>'
+      + escapeHtml(einf.praxishinweis)
+      + '</div>';
+  }
+
+  var textAbschnitt = einf && einf.text
+    ? '<p style="font-size:16px;color:' + text + ';line-height:1.75;margin:0 0 8px;max-width:640px;">' + escapeHtml(einf.text) + '</p>'
+    : '<p style="font-size:15px;color:' + muted + ';line-height:1.7;margin:0 0 8px;max-width:640px;">' + escapeHtml(lp.beschreibung || '') + '</p>';
+
+  var titel = (einf && einf.titel) || schritt.titel || 'Willkommen';
+
+  return '<div style="max-width:720px;margin:0 auto;padding:20px 0;">'
+    + '<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">'
+    + '<div style="width:64px;height:64px;background:' + lp.farbe + '20;border:2px solid ' + lp.farbe + '30;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;">👋</div>'
+    + '<div>'
+    + '<div style="font-size:12px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Einführung</div>'
+    + '<h2 style="font-size:26px;font-weight:800;color:' + text + ';margin:0;line-height:1.25;">' + escapeHtml(titel) + '</h2>'
+    + '</div></div>'
+    + textAbschnitt
+    + lernzieleHtml
+    + praxisHtml
+    + '<div style="margin-top:24px;font-size:13px;color:' + muted + ';">Wenn du bereit bist, klick auf <strong style="color:' + lp.farbe + ';">Weiter →</strong> um loszulegen.</div>'
+    + '</div>';
 }
 
 function renderWBNachschlagewerke(container) {

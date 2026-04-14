@@ -2552,6 +2552,159 @@ const STAERKEN_DIMENSIONEN = [
 // 10 Kern-Dimensionen + 4 VIA-Erweiterungen. Keine psychometrische Validierung — als Gesprächsgrundlage konzipiert.
 
 // ============================================================
+// INTERESSEN-KATALOG — Beziehungsarbeit & Freeze-Aktivitäten
+// Jedes Interesse liefert konkrete Aktivitäten für:
+// 1. Beziehungsaufbau (gemeinsam etwas tun)
+// 2. Blockade/Freeze (wenn Reden nicht geht)
+// ============================================================
+const INTERESSEN_KATALOG = [
+  {
+    id: 'sport', label: 'Sport & Bewegung', icon: '⚽', farbe: '#10B981',
+    beziehung: [
+      { text: 'Gemeinsam eine Runde kicken, Basketball werfen oder joggen', beschreibung: 'Keine Gesprächserwartung — einfach zusammen bewegen. Gespräche entstehen nebenbei.' },
+      { text: 'Tischtennis oder Federball spielen', beschreibung: 'Leichter Wettbewerb, viel Lachen, wenig Druck. Ideal für erste Begegnungen.' },
+      { text: 'Gemeinsamer Spaziergang', beschreibung: 'Side-by-side statt Face-to-face. Nebeneinander gehen senkt die Hemmschwelle zu reden.' },
+    ],
+    freeze: [
+      { text: 'Aufstehen und 5 Minuten draussen laufen', beschreibung: 'Bewegung löst Freeze. Nicht fragen, einfach vorschlagen: "Komm, wir gehen kurz raus."' },
+      { text: 'Ball hin- und herwerfen', beschreibung: 'Rhythmische Bewegung reguliert das Nervensystem. Kein Reden nötig.' },
+    ],
+  },
+  {
+    id: 'musik', label: 'Musik', icon: '🎵', farbe: '#8B5CF6',
+    beziehung: [
+      { text: 'Lieblingsmusik gegenseitig vorstellen', beschreibung: '"Zeig mir dein Lieblingslied — ich zeig dir meins." Musik zeigt Persönlichkeit ohne grosse Worte.' },
+      { text: 'Gemeinsam Playlist erstellen', beschreibung: 'Für verschiedene Stimmungen: "Dein Gute-Laune-Song? Dein Wut-Song? Dein Trauer-Song?"' },
+      { text: 'Zusammen Musik hören', beschreibung: 'Einfach nebeneinander sitzen und zuhören. Stille ist erlaubt.' },
+    ],
+    freeze: [
+      { text: 'Kopfhörer anbieten und Lieblingsmusik hören lassen', beschreibung: 'Musik reguliert Emotionen. "Willst du kurz Musik hören?" — Pause ohne Erwartung.' },
+      { text: 'Fragen: "Welches Lied passt gerade zu deiner Stimmung?"', beschreibung: 'Indirekter Zugang zu Gefühlen über Musik statt direkte Frage.' },
+    ],
+  },
+  {
+    id: 'gaming', label: 'Gaming & Zocken', icon: '🎮', farbe: '#6366F1',
+    beziehung: [
+      { text: 'Gemeinsam ein Spiel spielen (Konsole, Handy, Brettspiel)', beschreibung: 'Gaming ist die Sprache vieler Jugendlicher. Interesse zeigen = Wertschätzung zeigen.' },
+      { text: 'Sich das Lieblingsgame erklären lassen', beschreibung: '"Zeig mir mal, wie das funktioniert." — Der Jugendliche ist der Experte, du der Lernende.' },
+      { text: 'Gaming-Analogien nutzen', beschreibung: '"Welches Level bist du gerade im echten Leben? Was brauchst du für den nächsten Boss?"' },
+    ],
+    freeze: [
+      { text: 'Kurz zusammen am Handy spielen', beschreibung: 'Keine Erwartung an Gespräch. Einfach 5 Min nebeneinander zocken. Regulation durch Fokus.' },
+      { text: '"Stell dir vor, du bist in einem Game. Welchen Move machst du jetzt?"', beschreibung: 'Distanzierung durch Metapher — leichterer Zugang als direkte Gefühlsfrage.' },
+    ],
+  },
+  {
+    id: 'kochen', label: 'Kochen & Backen', icon: '🍳', farbe: '#F59E0B',
+    beziehung: [
+      { text: 'Zusammen ein einfaches Rezept kochen', beschreibung: 'Gemeinsam etwas erschaffen und dann zusammen essen. Kochen = Fürsorge zeigen.' },
+      { text: 'Lieblingsessen des Jugendlichen kochen', beschreibung: '"Was isst du am liebsten? Das machen wir zusammen." — Wertschätzung der Herkunft/Vorlieben.' },
+      { text: 'Zusammen Snacks für die Gruppe machen', beschreibung: 'Für andere etwas machen stärkt Zugehörigkeit und Selbstwert.' },
+    ],
+    freeze: [
+      { text: 'Gemeinsam Tee oder Kakao machen', beschreibung: 'Einfache Handlung, warmes Getränk. Wärme reguliert. "Magst du einen Tee?"' },
+      { text: 'Dem Jugendlichen eine konkrete Aufgabe geben', beschreibung: '"Kannst du die Rüebli schälen?" — Handlung statt Reden, sinnvolle Beschäftigung.' },
+    ],
+  },
+  {
+    id: 'natur', label: 'Natur & Draussen', icon: '🌿', farbe: '#059669',
+    beziehung: [
+      { text: 'Gemeinsamer Waldspaziergang', beschreibung: 'Natur senkt Cortisol. Gespräche entstehen natürlich beim Gehen. Kein Zeitdruck.' },
+      { text: 'Feuer machen und am Feuer sitzen', beschreibung: 'Feuer fasziniert. Ins Feuer schauen statt in die Augen — leichtere Gespräche.' },
+      { text: 'Gartenarbeit oder Pflanzen pflegen', beschreibung: 'Etwas wachsen sehen = Hoffnung. Verantwortung für eine Pflanze = Selbstwirksamkeit.' },
+    ],
+    freeze: [
+      { text: 'Rausgehen und Naturgeräusche hören', beschreibung: '"Komm, wir gehen 5 Minuten raus. Du musst nichts sagen." — Sinneswahrnehmung erdet.' },
+      { text: 'Einen Stein oder Stock suchen lassen', beschreibung: '"Such mir den coolsten Stein hier." — Fokus nach aussen, weg von der inneren Blockade.' },
+    ],
+  },
+  {
+    id: 'tiere', label: 'Tiere', icon: '🐕', farbe: '#D97706',
+    beziehung: [
+      { text: 'Gemeinsam mit einem Tier spazieren oder spielen', beschreibung: 'Tiere urteilen nicht. Ein Hund dabei = sofort tieferer Kontakt.' },
+      { text: 'Über eigene Haustiere oder Lieblingstiere sprechen', beschreibung: 'Kinder und Jugendliche reden leichter über Tiere als über sich selbst.' },
+      { text: 'Tiervideos zusammen schauen', beschreibung: 'Niedlich und lustig. Gemeinsam lachen schafft Verbindung.' },
+    ],
+    freeze: [
+      { text: 'Tier streicheln lassen (wenn vorhanden)', beschreibung: 'Taktile Stimulation und Oxytocin. Streicheln reguliert das Nervensystem.' },
+      { text: '"Welches Tier wärst du gerade und warum?"', beschreibung: 'Projektive Frage — leichterer Zugang als "Wie fühlst du dich?"' },
+    ],
+  },
+  {
+    id: 'kunst', label: 'Zeichnen & Kunst', icon: '🎨', farbe: '#EC4899',
+    beziehung: [
+      { text: 'Zusammen zeichnen oder malen', beschreibung: 'Nebeneinander kreativ sein. Kein Druck auf Ergebnis — der Prozess zählt.' },
+      { text: 'Graffiti oder Sticker designen', beschreibung: 'Streetart-Bezug = jugendnah. "Design deinen eigenen Tag/Sticker."' },
+      { text: 'Collage zu einem Thema erstellen', beschreibung: 'Aus Zeitschriften schneiden: Wer bin ich? Was will ich? Was macht mich stark?' },
+    ],
+    freeze: [
+      { text: 'Einfach kritzeln lassen', beschreibung: '"Hier ist Papier und Stifte." — Keine Erwartung. Kritzeln reguliert.' },
+      { text: '"Mal deine Stimmung als Farbe oder Wetter"', beschreibung: 'Nonverbaler Zugang: Welche Farbe hat dein Gefühl? Gewitter? Nebel? Sonne?' },
+    ],
+  },
+  {
+    id: 'handwerk', label: 'Handwerk & Basteln', icon: '🔨', farbe: '#78716C',
+    beziehung: [
+      { text: 'Zusammen etwas bauen oder reparieren', beschreibung: 'Etwas mit den Händen machen schafft Stolz. "Wollen wir das zusammen reparieren?"' },
+      { text: 'Armbänder knüpfen oder Schlüsselanhänger machen', beschreibung: 'Einfach, repetitiv, beruhigend. Ergebnis als Erinnerungsstück.' },
+    ],
+    freeze: [
+      { text: 'Knete, Fidget-Toy oder taktiles Material anbieten', beschreibung: 'Hände beschäftigen hilft bei Freeze. Einfach hinlegen ohne Kommentar.' },
+    ],
+  },
+  {
+    id: 'film', label: 'Filme & Serien', icon: '🎬', farbe: '#7C3AED',
+    beziehung: [
+      { text: 'Gemeinsam einen kurzen Film oder eine Episode schauen', beschreibung: 'Danach: "Welche Figur bist du? Was hättest du anders gemacht?" — Projektion.' },
+      { text: 'Lieblingsfilm erklären lassen', beschreibung: '"Was ist dein Lieblingsfilm und warum?" — Sagt viel über Werte und Sehnsüchte.' },
+    ],
+    freeze: [
+      { text: 'Kurzes lustiges Video zusammen schauen', beschreibung: 'Humor reguliert. 2 Minuten TikTok/YouTube kann die Stimmung brechen.' },
+    ],
+  },
+  {
+    id: 'social-media', label: 'Social Media', icon: '📱', farbe: '#0EA5E9',
+    beziehung: [
+      { text: 'Sich zeigen lassen, was der Jugendliche online macht', beschreibung: '"Zeig mir mal dein TikTok/Insta." — Interesse an der digitalen Lebenswelt.' },
+      { text: 'Zusammen Memes anschauen oder erstellen', beschreibung: 'Humor und Kreativität. Memes als Kommunikationsmedium nutzen.' },
+    ],
+    freeze: [
+      { text: '"Schick mir ein Meme das zeigt wie du dich fühlst"', beschreibung: 'Wenn Reden nicht geht — Bilder schicken als Brücke.' },
+    ],
+  },
+  {
+    id: 'lesen', label: 'Lesen & Geschichten', icon: '📖', farbe: '#14B8A6',
+    beziehung: [
+      { text: 'Kurze Geschichte oder Gedicht zusammen lesen', beschreibung: 'Geschichten ermöglichen Identifikation. "Kennst du das Gefühl von der Figur?"' },
+      { text: 'Gemeinsam eine Geschichte erfinden', beschreibung: '"Es war einmal ein Jugendlicher der..." — Narrativer Zugang, spielerisch.' },
+    ],
+    freeze: [
+      { text: 'Vorlesen (ja, auch bei Teenagern)', beschreibung: 'Ruhige Stimme reguliert. "Soll ich dir was vorlesen?" — Regression ist erlaubt.' },
+    ],
+  },
+  {
+    id: 'tanzen', label: 'Tanzen & Bewegung', icon: '💃', farbe: '#DB2777',
+    beziehung: [
+      { text: 'Zusammen zu Musik bewegen', beschreibung: 'Kein perfektes Tanzen nötig. Einfach zusammen zur Musik bewegen. Körperausdruck = Emotionsausdruck.' },
+      { text: 'Choreografie lernen (TikTok-Tanz)', beschreibung: 'Jugendkultur ernst nehmen. Zusammen etwas Neues lernen = Gleichwertigkeit.' },
+    ],
+    freeze: [
+      { text: 'Körperübung: Schütteln und Ausatmen', beschreibung: 'Aufstehen, 30 Sekunden den ganzen Körper ausschütteln. Löst körperlichen Freeze.' },
+    ],
+  },
+];
+
+// ── Freeze-Universalstrategien (unabhängig von Interessen) ──
+const FREEZE_STRATEGIEN = [
+  { text: '5-4-3-2-1 Grounding', beschreibung: '5 Dinge sehen, 4 hören, 3 fühlen, 2 riechen, 1 schmecken. Bringt zurück ins Hier-und-Jetzt.' },
+  { text: 'Kaltes Wasser über die Hände laufen lassen', beschreibung: 'Starker sensorischer Reiz. Aktiviert den Vagusnerv und reguliert das Nervensystem.' },
+  { text: 'Gemeinsam tief atmen (4-7-8)', beschreibung: '4 Sekunden einatmen, 7 halten, 8 ausatmen. Zusammen machen, nicht nur anleiten.' },
+  { text: 'Einfach still daneben sitzen', beschreibung: 'Nichts tun ist eine Intervention. Präsenz zeigen ohne Erwartung. "Ich bin da, du musst nichts sagen."' },
+  { text: 'Ortswechsel anbieten', beschreibung: '"Wollen wir woanders hingehen?" — Neuer Ort kann die Blockade lösen.' },
+  { text: 'Etwas zum Trinken oder Essen anbieten', beschreibung: 'Grundbedürfnisse zuerst. Wasser, Tee, Keks — Fürsorge zeigen, Parasympathikus aktivieren.' },
+];
+
+// ============================================================
 // STRUKTURIERTE ANAMNESE — Kategorien & Items
 // ============================================================
 const ANAMNESE_KATEGORIEN = [

@@ -1868,6 +1868,98 @@ function renderWBUebersicht(container) {
 }
 
 let WB_FILTER_KAT = '';
+let WB_VIEW_MODE = 'map'; // 'map' | 'list'
+
+// ── Freischaltungs-Reihenfolge pro Ast ────────────────────────
+var WB_BRANCH_ORDER = {
+  stoerungsbilder: ['01-internalisierende','02-externalisierende','03-trauma','04-bindungsstoerung','05-selbstverletzung-suizidalitaet','06-adhs-praxis','07-dissoziation','08-essstoerungen'],
+  eltern: ['09-helikopter-eltern','10-eltern-vom-fach','11-verweigernde-eltern','12-psychisch-belastete-eltern','13-hochstrittige-trennung','14-kulturelle-erziehung'],
+  situationen: ['15-schweigender-jugendlicher','16-migration-flucht','17-lgbtq-jugendliche','18-schulverweigerung','19-substanzkonsum','20-uebergaenge-leaving-care']
+};
+
+function getModuleState(moduleId) {
+  var p = getWBProgress();
+  var gelesen = p.geleseneModule || [];
+  // completed?
+  if (gelesen.includes(moduleId)) return 'completed';
+  // inProgress?
+  var sf = (p.schritteFortschritt || {})[moduleId];
+  if (sf && sf.abgeschlosseneSchritte && sf.abgeschlosseneSchritte.length > 0) return 'inProgress';
+  // available? = erstes im Ast ODER Vorgänger ist completed
+  var branches = WB_BRANCH_ORDER;
+  for (var kat in branches) {
+    var order = branches[kat];
+    var idx = order.indexOf(moduleId);
+    if (idx === -1) continue;
+    if (idx === 0) return 'available'; // erstes im Ast
+    var vorgaenger = order[idx - 1];
+    if (gelesen.includes(vorgaenger)) return 'available';
+    return 'locked';
+  }
+  return 'available'; // fallback
+}
+
+function renderProgressionMap() {
+  var p = getWBProgress();
+  var gelesen = p.geleseneModule || [];
+  var kategorien = typeof WB_KATEGORIEN !== 'undefined' ? WB_KATEGORIEN : {};
+  var lernpfade = typeof WB_LERNPFADE !== 'undefined' ? WB_LERNPFADE : [];
+
+  var html = '<div class="lernapp-map">';
+
+  Object.keys(WB_BRANCH_ORDER).forEach(function(kat) {
+    var order = WB_BRANCH_ORDER[kat];
+    var katInfo = kategorien[kat] || {};
+    var doneCount = order.filter(function(id) { return gelesen.includes(id); }).length;
+
+    html += '<div class="lernapp-branch">';
+    // Branch header
+    html += '<div class="lernapp-branch-header" style="--branch-farbe:' + (katInfo.farbe || '#6366F1') + ';">'
+      + '<span class="lernapp-branch-icon">' + (katInfo.icon || '📚') + '</span>'
+      + '<div class="lernapp-branch-info">'
+      + '<span class="lernapp-branch-name">' + (katInfo.label || kat) + '</span>'
+      + '<span class="lernapp-branch-progress">' + doneCount + ' / ' + order.length + '</span>'
+      + '</div>'
+      + '</div>';
+
+    // Nodes
+    order.forEach(function(moduleId, idx) {
+      var lp = lernpfade.find(function(p) { return p.id === moduleId; });
+      if (!lp) return;
+      var state = getModuleState(moduleId);
+      var isClickable = state !== 'locked';
+
+      // Connector line (before each node except first)
+      if (idx > 0) {
+        var prevState = getModuleState(order[idx - 1]);
+        var connClass = 'lernapp-connector';
+        if (prevState === 'completed' && (state === 'completed' || state === 'available' || state === 'inProgress')) {
+          connClass += ' completed';
+        } else {
+          connClass += ' locked';
+        }
+        html += '<div class="' + connClass + '" style="--branch-farbe:' + (katInfo.farbe || '#6366F1') + ';"></div>';
+      }
+
+      // Node
+      html += '<div class="lernapp-node ' + state + '"'
+        + ' style="--node-farbe:' + lp.farbe + ';"'
+        + (isClickable ? ' onclick="showLernpfadDetail(\'' + moduleId + '\')"' : '')
+        + ' title="' + lp.titel + (state === 'locked' ? ' (gesperrt)' : '') + '">'
+        + '<div class="lernapp-node-icon">'
+        + (state === 'completed' ? '<span class="lernapp-node-check">✓</span>' : '')
+        + (state === 'locked' ? '<span class="lernapp-node-lock">🔒</span>' : '<span>' + lp.icon + '</span>')
+        + '</div>'
+        + '<div class="lernapp-node-title">' + lp.titel + '</div>'
+        + '</div>';
+    });
+
+    html += '</div>'; // branch
+  });
+
+  html += '</div>'; // map
+  return html;
+}
 
 function renderGamificationHeader() {
   var p = getWBProgress();
@@ -1903,53 +1995,63 @@ function renderGamificationHeader() {
 function renderWBLernpfade(container) {
   const progress = getWBProgress();
   const gelesen = progress.geleseneModule || [];
-
-  // Filter
   const kategorien = Object.entries(WB_KATEGORIEN);
   const filtered = WB_FILTER_KAT ? WB_LERNPFADE.filter(p => p.kategorie === WB_FILTER_KAT) : WB_LERNPFADE;
 
-  container.innerHTML = `
-    <!-- Gamification Header -->
-    ${renderGamificationHeader()}
-
-    <!-- Filter -->
-    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-      <button class="btn btn-sm ${!WB_FILTER_KAT ? 'btn-primary' : 'btn-secondary'}" onclick="WB_FILTER_KAT='';renderWeiterbildung();">Alle (${WB_LERNPFADE.length})</button>
-      ${kategorien.map(([key, kat]) => `
-        <button class="btn btn-sm ${WB_FILTER_KAT === key ? 'btn-primary' : 'btn-secondary'}" onclick="WB_FILTER_KAT='${key}';renderWeiterbildung();">
-          ${kat.icon} ${kat.label} (${WB_LERNPFADE.filter(p => p.kategorie === key).length})
-        </button>
-      `).join('')}
-    </div>
-
-    <!-- Grid -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
-      ${filtered.map((lp, idx) => {
-        const done = gelesen.includes(lp.id);
-        const quizScore = (progress.quizScores || {})[lp.id];
-        return `
-          <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative;overflow:hidden;${done ? 'border-left:3px solid #16A34A;' : ''}" onclick="showLernpfadDetail('${lp.id}')" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
-            <div class="card-body" style="padding:18px;">
-              <div style="display:flex;align-items:flex-start;gap:12px;">
-                <div style="width:44px;height:44px;background:${lp.farbe}15;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${lp.icon}</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                    <span style="font-size:14px;font-weight:700;color:var(--text,#1F2937);line-height:1.3;">${lp.titel}</span>
-                    ${done ? '<span style="font-size:10px;padding:2px 6px;background:#F0FDF4;color:#16A34A;border-radius:4px;font-weight:600;">Absolviert</span>' : ''}
-                  </div>
-                  <p style="font-size:12px;color:var(--text-muted,#6B7280);line-height:1.5;margin-bottom:8px;">${lp.beschreibung}</p>
-                  <div style="display:flex;align-items:center;gap:12px;">
-                    <span style="font-size:11px;color:#9CA3AF;display:flex;align-items:center;gap:4px;">⏱ ${lp.dauer}</span>
-                    <span style="font-size:10px;padding:2px 8px;background:${lp.farbe}15;color:${lp.farbe};border-radius:4px;font-weight:600;">${WB_KATEGORIEN[lp.kategorie]?.label || ''}</span>
-                    ${quizScore ? `<span style="font-size:11px;color:${Math.round(quizScore.score/quizScore.total*100)>=80?'#16A34A':'#D97706'};font-weight:600;">Quiz: ${quizScore.score}/${quizScore.total}</span>` : ''}
+  // View-Toggle + Content
+  var viewContent = '';
+  if (WB_VIEW_MODE === 'map') {
+    viewContent = renderProgressionMap();
+  } else {
+    // Listenansicht (altes Grid)
+    viewContent = `
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <button class="btn btn-sm ${!WB_FILTER_KAT ? 'btn-primary' : 'btn-secondary'}" onclick="WB_FILTER_KAT='';renderWeiterbildung();">Alle (${WB_LERNPFADE.length})</button>
+        ${kategorien.map(([key, kat]) => `
+          <button class="btn btn-sm ${WB_FILTER_KAT === key ? 'btn-primary' : 'btn-secondary'}" onclick="WB_FILTER_KAT='${key}';renderWeiterbildung();">
+            ${kat.icon} ${kat.label} (${WB_LERNPFADE.filter(p => p.kategorie === key).length})
+          </button>
+        `).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+        ${filtered.map(lp => {
+          const done = gelesen.includes(lp.id);
+          const quizScore = (progress.quizScores || {})[lp.id];
+          return `
+            <div class="card" style="cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative;overflow:hidden;${done ? 'border-left:3px solid #16A34A;' : ''}" onclick="showLernpfadDetail('${lp.id}')" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+              <div class="card-body" style="padding:18px;">
+                <div style="display:flex;align-items:flex-start;gap:12px;">
+                  <div style="width:44px;height:44px;background:${lp.farbe}15;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${lp.icon}</div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                      <span style="font-size:14px;font-weight:700;color:var(--text,#1F2937);line-height:1.3;">${lp.titel}</span>
+                      ${done ? '<span style="font-size:10px;padding:2px 6px;background:#F0FDF4;color:#16A34A;border-radius:4px;font-weight:600;">Absolviert</span>' : ''}
+                    </div>
+                    <p style="font-size:12px;color:var(--text-muted,#6B7280);line-height:1.5;margin-bottom:8px;">${lp.beschreibung}</p>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <span style="font-size:11px;color:#9CA3AF;display:flex;align-items:center;gap:4px;">⏱ ${lp.dauer}</span>
+                      <span style="font-size:10px;padding:2px 8px;background:${lp.farbe}15;color:${lp.farbe};border-radius:4px;font-weight:600;">${WB_KATEGORIEN[lp.kategorie]?.label || ''}</span>
+                      ${quizScore ? `<span style="font-size:11px;color:${Math.round(quizScore.score/quizScore.total*100)>=80?'#16A34A':'#D97706'};font-weight:600;">Quiz: ${quizScore.score}/${quizScore.total}</span>` : ''}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        `;
-      }).join('')}
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    ${renderGamificationHeader()}
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+      <div style="display:flex;gap:4px;background:var(--bg-muted,#F3F4F6);border-radius:8px;padding:3px;">
+        <button class="btn btn-sm ${WB_VIEW_MODE === 'map' ? 'btn-primary' : ''}" style="font-size:12px;padding:4px 12px;" onclick="WB_VIEW_MODE='map';renderWeiterbildung();">🗺️ Skill-Tree</button>
+        <button class="btn btn-sm ${WB_VIEW_MODE === 'list' ? 'btn-primary' : ''}" style="font-size:12px;padding:4px 12px;" onclick="WB_VIEW_MODE='list';renderWeiterbildung();">📋 Liste</button>
+      </div>
     </div>
+    ${viewContent}
   `;
 }
 

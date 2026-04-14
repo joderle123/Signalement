@@ -2382,6 +2382,7 @@ function renderLernschrittInhalt(schritt, lp, idx) {
   switch (schritt.typ) {
     case 'einfuehrung': return renderSchrittEinfuehrung(schritt, lp, idx);
     case 'lektuere': return renderSchrittLektuere(schritt, lp, idx);
+    case 'arbeitsblatt': return renderSchrittArbeitsblatt(schritt, lp, idx);
     default: return renderSchrittPlatzhalter(schritt, lp, idx);
   }
 }
@@ -2400,6 +2401,44 @@ function renderSchrittPlatzhalter(schritt, lp, idx) {
     + 'Renderer für „' + getSchrittTypLabel(schritt.typ) + '" folgt in einem der nächsten Mikroschritte.'
     + (schritt.datei ? '<div style="margin-top:10px;font-size:11px;font-family:monospace;color:' + text + ';">📎 ' + escapeHtml(schritt.datei) + '</div>' : '')
     + '</div></div>';
+}
+
+// 4c3 — Arbeitsblatt-Schritt: iframe + Download/Drucken + "Bearbeitet"-Hinweis
+function renderSchrittArbeitsblatt(schritt, lp, idx) {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+  var iframeBg = isDark ? '#0F172A' : '#FFFFFF';
+
+  var hatDatei = !!schritt.datei;
+  var dateiUrl = hatDatei ? schritt.datei : '';
+
+  var iframeHtml = hatDatei
+    ? '<iframe src="' + escapeHtml(dateiUrl) + '" style="width:100%;height:62vh;min-height:420px;border:1px solid ' + border + ';border-radius:12px;background:' + iframeBg + ';" loading="lazy"></iframe>'
+    : '<div style="padding:40px 20px;background:' + iframeBg + ';border:1px dashed ' + border + ';border-radius:12px;text-align:center;color:' + muted + ';font-size:14px;">Kein Arbeitsblatt referenziert.</div>';
+
+  var aktionen = '';
+  if (hatDatei) {
+    aktionen = '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+      + '<a href="' + escapeHtml(dateiUrl) + '" target="_blank" rel="noopener" style="padding:7px 12px;background:' + lp.farbe + ';color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">↗ Öffnen & ausfüllen</a>'
+      + '<a href="' + escapeHtml(dateiUrl) + '" download style="padding:7px 12px;background:transparent;color:' + lp.farbe + ';border:1px solid ' + lp.farbe + '50;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">⬇ Herunterladen</a>'
+      + '</div>';
+  }
+
+  return '<div style="max-width:1000px;margin:0 auto;">'
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:14px;flex-wrap:wrap;">'
+    + '<div>'
+    + '<div style="font-size:11px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">📝 Arbeitsblatt' + (schritt.dauer ? ' · ⏱ ' + escapeHtml(schritt.dauer) : '') + '</div>'
+    + '<h2 style="font-size:20px;font-weight:800;color:' + text + ';margin:0;line-height:1.3;">' + escapeHtml(schritt.titel || 'Arbeitsblatt') + '</h2>'
+    + '</div>'
+    + aktionen
+    + '</div>'
+    + iframeHtml
+    + '<div style="margin-top:12px;padding:12px 16px;background:' + (isDark ? '#1E3A2F' : '#EFF6FF') + ';border-left:3px solid ' + (isDark ? '#60A5FA' : '#3B82F6') + ';border-radius:0 10px 10px 0;font-size:13px;color:' + text + ';line-height:1.6;">'
+    + '<strong style="color:' + (isDark ? '#93C5FD' : '#1E40AF') + ';">✍ Aktiv werden:</strong> Bearbeite das Arbeitsblatt jetzt (ausdrucken oder digital ausfüllen). Wenn du fertig bist, klick auf <strong>Weiter →</strong>.'
+    + '</div>'
+    + '</div>';
 }
 
 // 4c2 — Lektüre-Schritt: iframe mit HTML-Dokument + "Gelesen"-Button

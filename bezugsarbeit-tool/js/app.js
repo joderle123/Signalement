@@ -14410,15 +14410,26 @@ const STABILISIERUNGS_PHASEN = [0, 1]; // Phasen 0 + 1 müssen ≥80% erledigt s
 function checkPhaseGate(roadmap, targetPhaseNr) {
   if (targetPhaseNr < 3) return { erlaubt: true }; // Phasen 0-2 immer erlaubt
 
-  // Prüfe ob Stabilisierungsphasen (0+1) ≥80% erledigt
+  // Prüfe ob Stabilisierungsphasen (0+1) erledigt oder ≥80% Themen done
   let totalThemen = 0, doneThemen = 0;
+  let alleStabPhasenErledigt = true;
   STABILISIERUNGS_PHASEN.forEach(phNr => {
     const ph = roadmap.phasen.find(p => p.nr === phNr);
     if (ph) {
-      totalThemen += ph.themen.length;
-      doneThemen += ph.themen.filter(t => t.status === 'abgeschlossen').length;
+      // Wenn Phase als "erledigt" markiert ist, zählt sie als 100%
+      if (ph.status === 'erledigt') {
+        totalThemen += Math.max(ph.themen.length, 1);
+        doneThemen += Math.max(ph.themen.length, 1);
+      } else {
+        alleStabPhasenErledigt = false;
+        totalThemen += ph.themen.length;
+        doneThemen += ph.themen.filter(t => t.status === 'abgeschlossen').length;
+      }
     }
   });
+
+  // Wenn alle Stabilisierungsphasen als erledigt markiert sind, immer erlaubt
+  if (alleStabPhasenErledigt) return { erlaubt: true };
 
   const pct = totalThemen > 0 ? Math.round(doneThemen / totalThemen * 100) : 100;
   if (pct < 80 && totalThemen > 0) {

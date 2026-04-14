@@ -365,31 +365,8 @@
       <!-- SITZUNGEN (Notizen + Konferenzen zusammen) -->
       <div class="profil-tab-content" data-tab="notizen">
 
-        <!-- Modus-Toggle -->
-        <div class="segmented-control" id="notiz-toggle">
-          <button class="seg-btn active" id="btn-freie-notiz" onclick="toggleNotizModus('frei')">✏️ Freie Notiz</button>
-          <button class="seg-btn" id="btn-protokoll" onclick="toggleNotizModus('protokoll')">📋 Sitzungsprotokoll</button>
-        </div>
-
-        <!-- Freie Notiz -->
-        <div id="notiz-modus-frei" class="notiz-form">
-          <div class="notiz-form-row">
-            <select id="neue-notiz-kategorie" style="width:160px;">
-              <option value="session">💬 Sitzung</option>
-              <option value="beobachtung">👁 Beobachtung</option>
-              <option value="wichtig">⚠️ Wichtig</option>
-              <option value="fortschritt">📈 Fortschritt</option>
-              <option value="elternkontakt">📞 Elternkontakt</option>
-            </select>
-            <input type="date" id="neue-notiz-datum" style="width:160px;">
-            <button class="btn btn-primary btn-sm" onclick="addNotiz()" style="margin-left:auto;">+ Speichern</button>
-          </div>
-          <textarea id="neue-notiz-text" class="notiz-textarea"
-            placeholder="Notiz, Beobachtung oder Protokoll eingeben..."></textarea>
-        </div>
-
-        <!-- Sitzungsprotokoll-Template (SOAP) — Wizard-Stepper -->
-        <div id="notiz-modus-protokoll" class="notiz-form" style="display:none;">
+        <!-- Sitzungsprotokoll (SOAP) -->
+        <div id="notiz-modus-protokoll" class="notiz-form">
           <!-- ═══ SOAP — Alles auf einer Seite ═══ -->
 
           <!-- Setup-Leiste -->

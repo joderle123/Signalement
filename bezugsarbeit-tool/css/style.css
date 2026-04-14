@@ -10605,3 +10605,57 @@ body.dark-mode .fp-int-gruppe-header {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Förderplan kompakte Topbar (ersetzt alten Header) ── */
+.roadmap-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  margin-bottom: 8px;
+}
+.roadmap-topbar-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.roadmap-topbar-pct {
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.roadmap-topbar-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--border, #E5E7EB);
+  border-radius: 3px;
+  overflow: hidden;
+  max-width: 200px;
+}
+.roadmap-topbar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366F1, #10B981);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.roadmap-topbar-label {
+  font-size: 12px;
+  color: #9CA3AF;
+  flex-shrink: 0;
+}
+.roadmap-topbar-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+body.dark-mode .roadmap-topbar-bar {
+  background: #374151;
+}
+@media (max-width: 640px) {
+  .roadmap-topbar {
+    flex-wrap: wrap;
+  }
+}

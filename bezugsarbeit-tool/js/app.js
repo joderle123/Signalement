@@ -14165,26 +14165,24 @@ function renderRoadmap() {
 
   let html = '';
 
-  // Header
+  // Kompakte Aktionsleiste (kein grosser Header)
   html += `
-    <div class="roadmap-header">
-      <div class="roadmap-header-left">
-        <h2 class="roadmap-titel">🗺️ Förderplan — ${s.vorname} ${s.nachname}</h2>
-        <div class="roadmap-meta">
-          Erstellt: ${new Date(roadmap.erstellt).toLocaleDateString('de-DE')} ·
-          ${totalThemen} Themen · ${gesamtFortschritt}% gesamt
-        </div>
+    <div class="roadmap-topbar">
+      <div class="roadmap-topbar-progress">
+        <span class="roadmap-topbar-pct" style="color:${gesamtFortschritt >= 50 ? '#10B981' : '#6B7280'};">${gesamtFortschritt}%</span>
+        <div class="roadmap-topbar-bar"><div class="roadmap-topbar-fill" style="width:${gesamtFortschritt}%;"></div></div>
+        <span class="roadmap-topbar-label">${erledigteThemen}/${totalThemen} Themen</span>
       </div>
-      <div class="roadmap-header-actions">
-        ${latestScreening ? `<button class="btn btn-secondary btn-sm" onclick="generateRoadmapFromScreening('${latestScreening.id}')">🔄 Aktualisieren</button>` : ''}
-        <button class="btn btn-secondary btn-sm" onclick="druckeRoadmap()">🖨️</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteCurrentRoadmap()">🗑</button>
+      <div class="roadmap-topbar-actions">
+        ${latestScreening ? `<button class="btn btn-secondary btn-sm" onclick="generateRoadmapFromScreening('${latestScreening.id}')" title="Aus Screening aktualisieren">🔄</button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="druckeRoadmap()" title="Drucken">🖨️</button>
+        <button class="btn btn-secondary btn-sm" onclick="deleteCurrentRoadmap()" title="Löschen">🗑</button>
       </div>
     </div>`;
 
-  // Gesamtfortschritt
+  // Gesamtfortschritt (versteckt, ersetzt durch topbar)
   html += `
-    <div class="roadmap-progress-bar-container">
+    <div class="roadmap-progress-bar-container" style="display:none;">
       <div class="roadmap-progress-label">
         <span>Gesamtfortschritt</span>
         <span>${gesamtFortschritt}% (${erledigteThemen}/${totalThemen})</span>

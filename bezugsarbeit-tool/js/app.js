@@ -1481,13 +1481,146 @@ function renderWeiterbildung() {
 }
 
 function getWBProgress() {
+  var p;
   try {
-    return JSON.parse(localStorage.getItem('pathways_wb_progress') || '{}');
-  } catch(e) { return {}; }
+    p = JSON.parse(localStorage.getItem('pathways_wb_progress') || '{}');
+  } catch(e) { p = {}; }
+  // Migration: sicherstellen dass alle neuen Felder existieren
+  if (!p.geleseneModule) p.geleseneModule = [];
+  if (!p.quizScores) p.quizScores = {};
+  if (typeof p.xp !== 'number') p.xp = 0;
+  if (!p.schritteFortschritt) p.schritteFortschritt = {};
+  if (!p.reflexionen) p.reflexionen = {};
+  if (!p.badges) p.badges = [];
+  if (!p.streak) p.streak = { aktuellerStreak: 0, laengsterStreak: 0, letzterTag: null };
+  if (!p.lernTage) p.lernTage = [];
+  if (!p.szenarioErgebnisse) p.szenarioErgebnisse = {};
+  return p;
 }
 
 function saveWBProgress(progress) {
   localStorage.setItem('pathways_wb_progress', JSON.stringify(progress));
+}
+
+// ── Gamification Helpers ──────────────────────────────────────
+function getCurrentLevel(xp) {
+  if (typeof WB_LEVEL_SYSTEM === 'undefined') return { level: 1, name: 'Einsteiger', icon: '🌱', farbe: '#10B981', xpMin: 0, xpMax: 99 };
+  for (var i = WB_LEVEL_SYSTEM.length - 1; i >= 0; i--) {
+    if (xp >= WB_LEVEL_SYSTEM[i].xpMin) return WB_LEVEL_SYSTEM[i];
+  }
+  return WB_LEVEL_SYSTEM[0];
+}
+
+function awardXP(amount, reason) {
+  var p = getWBProgress();
+  var oldLevel = getCurrentLevel(p.xp);
+  p.xp = (p.xp || 0) + amount;
+  var newLevel = getCurrentLevel(p.xp);
+  saveWBProgress(p);
+  // Toast für XP
+  if (typeof showToast === 'function') showToast('+' + amount + ' XP' + (reason ? ' — ' + reason : ''), 'success');
+  // Level-Up?
+  if (newLevel.level > oldLevel.level) {
+    setTimeout(function() {
+      if (typeof showToast === 'function') showToast('Level Up! ' + newLevel.icon + ' ' + newLevel.name, 'success');
+    }, 800);
+  }
+  return p;
+}
+
+function updateStreak() {
+  var p = getWBProgress();
+  var heute = new Date().toISOString().split('T')[0];
+  if (p.streak.letzterTag === heute) return p; // schon heute gelernt
+  // Gestern?
+  var gestern = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  if (p.streak.letzterTag === gestern) {
+    p.streak.aktuellerStreak = (p.streak.aktuellerStreak || 0) + 1;
+  } else {
+    p.streak.aktuellerStreak = 1;
+  }
+  if (p.streak.aktuellerStreak > (p.streak.laengsterStreak || 0)) {
+    p.streak.laengsterStreak = p.streak.aktuellerStreak;
+  }
+  p.streak.letzterTag = heute;
+  // Lerntage tracken
+  if (!p.lernTage) p.lernTage = [];
+  if (!p.lernTage.includes(heute)) p.lernTage.push(heute);
+  saveWBProgress(p);
+  return p;
+}
+
+function checkBadges() {
+  if (typeof WB_BADGES === 'undefined') return [];
+  var p = getWBProgress();
+  var neueBadges = [];
+  var gelesen = p.geleseneModule || [];
+  var lernpfade = typeof WB_LERNPFADE !== 'undefined' ? WB_LERNPFADE : [];
+
+  WB_BADGES.forEach(function(badge) {
+    if ((p.badges || []).includes(badge.id)) return; // schon verdient
+    var verdient = false;
+    switch (badge.bedingung) {
+      case 'firstStep':
+        verdient = Object.keys(p.schritteFortschritt || {}).some(function(k) {
+          var sf = p.schritteFortschritt[k];
+          return sf && sf.abgeschlosseneSchritte && sf.abgeschlosseneSchritte.length > 0;
+        });
+        break;
+      case 'firstModule':
+        verdient = gelesen.length >= 1;
+        break;
+      case 'perfectQuiz':
+        verdient = Object.values(p.quizScores || {}).some(function(q) { return q.score === q.total && q.total > 0; });
+        break;
+      case 'streak3':
+        verdient = (p.streak.aktuellerStreak || 0) >= 3;
+        break;
+      case 'streak7':
+        verdient = (p.streak.aktuellerStreak || 0) >= 7;
+        break;
+      case 'allModules':
+        verdient = gelesen.length >= 20;
+        break;
+      case 'reflections10':
+        var reflCount = Object.keys(p.reflexionen || {}).length;
+        verdient = reflCount >= 10;
+        break;
+      case 'quizStreak5':
+        var qScores = Object.values(p.quizScores || {});
+        var passedCount = qScores.filter(function(q) { return q.score >= Math.ceil(q.total * 0.7); }).length;
+        verdient = passedCount >= 5;
+        break;
+      case 'fiveInWeek':
+        if ((p.lernTage || []).length >= 5) {
+          var letzte7 = p.lernTage.slice(-7);
+          var modulInWoche = gelesen.length; // vereinfacht
+          verdient = modulInWoche >= 5;
+        }
+        break;
+      default:
+        // categoryComplete:stoerungsbilder etc.
+        if (badge.bedingung.startsWith('categoryComplete:')) {
+          var kat = badge.bedingung.split(':')[1];
+          var katModule = lernpfade.filter(function(lp) { return lp.kategorie === kat; });
+          verdient = katModule.length > 0 && katModule.every(function(lp) { return gelesen.includes(lp.id); });
+        }
+    }
+    if (verdient) {
+      neueBadges.push(badge);
+      p.badges.push(badge.id);
+    }
+  });
+
+  if (neueBadges.length > 0) {
+    saveWBProgress(p);
+    neueBadges.forEach(function(b) {
+      setTimeout(function() {
+        if (typeof showToast === 'function') showToast(b.icon + ' Badge: ' + b.titel, 'success');
+      }, 300);
+    });
+  }
+  return neueBadges;
 }
 
 function renderWBUebersicht(container) {
@@ -1736,6 +1869,37 @@ function renderWBUebersicht(container) {
 
 let WB_FILTER_KAT = '';
 
+function renderGamificationHeader() {
+  var p = getWBProgress();
+  var xp = p.xp || 0;
+  var lvl = getCurrentLevel(xp);
+  var xpInLevel = xp - lvl.xpMin;
+  var xpNeeded = (lvl.xpMax === Infinity) ? 1 : (lvl.xpMax - lvl.xpMin + 1);
+  var pct = lvl.xpMax === Infinity ? 100 : Math.min(100, Math.round(xpInLevel / xpNeeded * 100));
+  var streak = (p.streak && p.streak.aktuellerStreak) || 0;
+  var badgeCount = (p.badges || []).length;
+  var gelesen = (p.geleseneModule || []).length;
+  var total = typeof WB_LERNPFADE !== 'undefined' ? WB_LERNPFADE.length : 20;
+
+  return '<div class="lernapp-gami-header">'
+    // Level Badge
+    + '<div class="lernapp-level-badge" style="--lvl-farbe:' + lvl.farbe + ';">'
+    + '<span class="lernapp-level-icon">' + lvl.icon + '</span>'
+    + '<div class="lernapp-level-info">'
+    + '<span class="lernapp-level-name">Level ' + lvl.level + ' — ' + lvl.name + '</span>'
+    + '<div class="lernapp-xp-bar"><div class="lernapp-xp-bar-fill" style="width:' + pct + '%;background:' + lvl.farbe + ';"></div></div>'
+    + '<span class="lernapp-xp-text">' + xp + ' XP' + (lvl.xpMax !== Infinity ? ' / ' + (lvl.xpMax + 1) + ' XP' : '') + '</span>'
+    + '</div>'
+    + '</div>'
+    // Stats
+    + '<div class="lernapp-gami-stats">'
+    + '<div class="lernapp-gami-stat" title="Tage-Streak"><span class="lernapp-gami-stat-icon">' + (streak > 0 ? '🔥' : '❄️') + '</span><span class="lernapp-gami-stat-val">' + streak + '</span><span class="lernapp-gami-stat-label">Streak</span></div>'
+    + '<div class="lernapp-gami-stat" title="Verdiente Badges"><span class="lernapp-gami-stat-icon">🏅</span><span class="lernapp-gami-stat-val">' + badgeCount + '</span><span class="lernapp-gami-stat-label">Badges</span></div>'
+    + '<div class="lernapp-gami-stat" title="Module abgeschlossen"><span class="lernapp-gami-stat-icon">📚</span><span class="lernapp-gami-stat-val">' + gelesen + '/' + total + '</span><span class="lernapp-gami-stat-label">Module</span></div>'
+    + '</div>'
+    + '</div>';
+}
+
 function renderWBLernpfade(container) {
   const progress = getWBProgress();
   const gelesen = progress.geleseneModule || [];
@@ -1745,6 +1909,9 @@ function renderWBLernpfade(container) {
   const filtered = WB_FILTER_KAT ? WB_LERNPFADE.filter(p => p.kategorie === WB_FILTER_KAT) : WB_LERNPFADE;
 
   container.innerHTML = `
+    <!-- Gamification Header -->
+    ${renderGamificationHeader()}
+
     <!-- Filter -->
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
       <button class="btn btn-sm ${!WB_FILTER_KAT ? 'btn-primary' : 'btn-secondary'}" onclick="WB_FILTER_KAT='';renderWeiterbildung();">Alle (${WB_LERNPFADE.length})</button>
@@ -1767,10 +1934,10 @@ function renderWBLernpfade(container) {
                 <div style="width:44px;height:44px;background:${lp.farbe}15;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${lp.icon}</div>
                 <div style="flex:1;min-width:0;">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                    <span style="font-size:14px;font-weight:700;color:#1F2937;line-height:1.3;">${lp.titel}</span>
+                    <span style="font-size:14px;font-weight:700;color:var(--text,#1F2937);line-height:1.3;">${lp.titel}</span>
                     ${done ? '<span style="font-size:10px;padding:2px 6px;background:#F0FDF4;color:#16A34A;border-radius:4px;font-weight:600;">Absolviert</span>' : ''}
                   </div>
-                  <p style="font-size:12px;color:#6B7280;line-height:1.5;margin-bottom:8px;">${lp.beschreibung}</p>
+                  <p style="font-size:12px;color:var(--text-muted,#6B7280);line-height:1.5;margin-bottom:8px;">${lp.beschreibung}</p>
                   <div style="display:flex;align-items:center;gap:12px;">
                     <span style="font-size:11px;color:#9CA3AF;display:flex;align-items:center;gap:4px;">⏱ ${lp.dauer}</span>
                     <span style="font-size:10px;padding:2px 8px;background:${lp.farbe}15;color:${lp.farbe};border-radius:4px;font-weight:600;">${WB_KATEGORIEN[lp.kategorie]?.label || ''}</span>

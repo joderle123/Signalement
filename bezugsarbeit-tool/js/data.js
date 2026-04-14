@@ -24556,6 +24556,32 @@ const WB_KATEGORIEN = {
 };
 
 // ============================================================
+// LERN-APP GAMIFICATION — Level-System & Badges
+// ============================================================
+const WB_LEVEL_SYSTEM = [
+  { level: 1, name: 'Einsteiger',      xpMin: 0,    xpMax: 99,   icon: '🌱', farbe: '#10B981' },
+  { level: 2, name: 'Grundlagen',      xpMin: 100,  xpMax: 349,  icon: '📗', farbe: '#3B82F6' },
+  { level: 3, name: 'Fortgeschritten', xpMin: 350,  xpMax: 799,  icon: '📘', farbe: '#6366F1' },
+  { level: 4, name: 'Experte',         xpMin: 800,  xpMax: 1499, icon: '📕', farbe: '#8B5CF6' },
+  { level: 5, name: 'Meister',         xpMin: 1500, xpMax: Infinity, icon: '👑', farbe: '#D97706' }
+];
+
+const WB_BADGES = [
+  { id: 'erste-lektion',   titel: 'Erste Schritte',         icon: '🏅', beschreibung: 'Ersten Lernschritt abgeschlossen', bedingung: 'firstStep' },
+  { id: 'erstes-modul',    titel: 'Modul-Absolvent',        icon: '🎓', beschreibung: 'Erstes Modul komplett', bedingung: 'firstModule' },
+  { id: 'quiz-meister',    titel: 'Quiz-Meister',           icon: '🧠', beschreibung: 'Einen Quiz mit 100% bestanden', bedingung: 'perfectQuiz' },
+  { id: 'streak-3',        titel: '3-Tage-Streak',          icon: '🔥', beschreibung: '3 Tage in Folge gelernt', bedingung: 'streak3' },
+  { id: 'streak-7',        titel: 'Wochen-Warrior',         icon: '💪', beschreibung: '7 Tage in Folge gelernt', bedingung: 'streak7' },
+  { id: 'stoerungsbilder', titel: 'Störungsbilder komplett', icon: '🧠', beschreibung: 'Alle 8 Störungsbilder-Module abgeschlossen', bedingung: 'categoryComplete:stoerungsbilder' },
+  { id: 'eltern',          titel: 'Eltern-Profi',           icon: '👨‍👩‍👧', beschreibung: 'Alle 6 Eltern-Module abgeschlossen', bedingung: 'categoryComplete:eltern' },
+  { id: 'situationen',     titel: 'Situationen gemeistert', icon: '🎯', beschreibung: 'Alle 6 Situationen-Module abgeschlossen', bedingung: 'categoryComplete:situationen' },
+  { id: 'alle-module',     titel: 'Vollständig',            icon: '🏆', beschreibung: 'Alle 20 Module abgeschlossen', bedingung: 'allModules' },
+  { id: 'reflektiert',     titel: 'Selbst-Reflektiert',     icon: '🪞', beschreibung: '10 Reflexionen geschrieben', bedingung: 'reflections10' },
+  { id: 'schnell-lerner',  titel: 'Schnell-Lerner',         icon: '⚡', beschreibung: '5 Module in einer Woche', bedingung: 'fiveInWeek' },
+  { id: 'quiz-serie',      titel: 'Quiz-Serie',             icon: '🎯', beschreibung: '5 Quizze in Folge bestanden', bedingung: 'quizStreak5' }
+];
+
+// ============================================================
 // THEMEN_KEYWORDS — Schlüsselwörter pro Screening-Domäne
 // Für Text-Analyse in SOAP-Notizen (Therapeutischer Zwilling)
 // ============================================================

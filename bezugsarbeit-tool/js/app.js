@@ -15679,6 +15679,59 @@ function renderAktivePhase(roadmap, phase, idx) {
       </div>
     </div>` : '';
 
+  // ── 9b: Phase-Erklärung (einheitlich, klar) ──
+  const erklaerung = (typeof PHASEN_ERKLAERUNGEN !== 'undefined') ? PHASEN_ERKLAERUNGEN[idx] : null;
+  const erklaerungHtml = erklaerung ? `
+    <div class="fp-phase-erklaerung" style="border-left-color:${def.farbe};">
+      <div class="fp-phase-erklaerung-header">
+        <span>📖 Was in dieser Phase passiert</span>
+      </div>
+      <div class="fp-phase-erklaerung-text">${erklaerung.worumGeht}</div>
+      <ul class="fp-phase-schritte">
+        ${(erklaerung.schritte || []).map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>` : '';
+
+  // ── 9c: Arbeitsblätter für diese Phase (aggregiert) ──
+  const schuelerObj = DB.getSchuelerById ? DB.getSchuelerById(APP.currentSchuelerId) : DB.getSchueler().find(s => s.id === APP.currentSchuelerId);
+  const abGruppen = (typeof getArbeitsblaetterFuerPhase === 'function')
+    ? getArbeitsblaetterFuerPhase(idx, schuelerObj, roadmap)
+    : { standardthemen: [], eigene: [], screening: [], anamnese: [] };
+
+  const renderAbGruppe = (liste, label) => {
+    if (!liste || liste.length === 0) return '';
+    return `
+      <div class="fp-ab-kategorie-header">${label}</div>
+      <div class="fp-arbeitsblaetter-liste">
+        ${liste.map(ab => `
+          <a class="fp-ab-karte" href="arbeitsblatter/${ab.datei}" target="_blank">
+            <span class="fp-ab-karte-icon">📋</span>
+            <div class="fp-ab-karte-body">
+              <div class="fp-ab-karte-titel">${ab.titel}</div>
+              <div class="fp-ab-karte-quelle">${ab.quelle || ''}</div>
+            </div>
+          </a>
+        `).join('')}
+      </div>`;
+  };
+
+  const abTotal = abGruppen.standardthemen.length + abGruppen.eigene.length
+                + abGruppen.screening.length + abGruppen.anamnese.length;
+  const arbeitsblaetterSectionHtml = abTotal > 0 ? `
+    <div class="fp-section fp-arbeitsblaetter-section">
+      <div class="fp-section-header">
+        <span>📝 Arbeitsblätter für diese Phase</span>
+        <span class="fp-section-badge">${abTotal}</span>
+      </div>
+      <div style="font-size:13px;color:#6B7280;margin-bottom:8px;">
+        Passende Arbeitsblätter aus Phasen-Schwerpunkten, Screening-Ergebnissen und Anamnese — direkt hier verfügbar.
+      </div>
+      ${renderAbGruppe(abGruppen.standardthemen, '📚 Standard-Themen dieser Phase')}
+      ${renderAbGruppe(abGruppen.eigene,         '🎯 Eigene Themen der Phase')}
+      ${renderAbGruppe(abGruppen.screening,      '🩺 Aus Screening abgeleitet')}
+      ${renderAbGruppe(abGruppen.anamnese,       '📂 Aus Anamnese abgeleitet')}
+    </div>` : '';
+
   // ── Kernaktivitäten ──
   const aktivitaetenHtml = (def.kernAktivitaeten || []).length > 0 ? `
     <div class="fp-section">
@@ -15833,8 +15886,14 @@ function renderAktivePhase(roadmap, phase, idx) {
       <!-- Phasenziel -->
       ${zielHtml}
 
+      <!-- 9b: Phase-Erklärung (einheitlich) -->
+      ${erklaerungHtml}
+
       <!-- Kernaktivitäten -->
       ${aktivitaetenHtml}
+
+      <!-- 9c: Arbeitsblätter für diese Phase (aggregiert) -->
+      ${arbeitsblaetterSectionHtml}
 
       <!-- Beziehungsarbeit -->
       ${bezHtml}

@@ -1805,14 +1805,19 @@ function showLernpfadDetail(id) {
     sektionenHtml = lp.sektionen.map(function(s, i) {
       var items = '';
       if (s.punkte && s.punkte.length > 0) {
-        items = '<ul style="margin:8px 0 0;padding-left:18px;font-size:13px;color:' + text + ';line-height:1.8;">'
-          + s.punkte.map(function(p) { return '<li>' + p + '</li>'; }).join('')
+        items = '<ul style="margin:10px 0 0;padding-left:20px;font-size:14px;color:' + text + ';line-height:1.9;list-style:disc;">'
+          + s.punkte.map(function(p) { return '<li style="margin-bottom:6px;">' + p + '</li>'; }).join('')
           + '</ul>';
       }
-      var textHtml = s.text ? '<p style="font-size:13px;color:' + text + ';line-height:1.7;margin:8px 0 0;">' + s.text + '</p>' : '';
-      var hinweisHtml = s.hinweis ? '<div style="margin-top:10px;padding:10px 14px;background:' + (isDark ? '#1E3A2F' : '#FEF9C3') + ';border-radius:8px;font-size:12px;color:' + (isDark ? '#FDE68A' : '#92400E') + ';line-height:1.5;">⚠️ ' + s.hinweis + '</div>' : '';
-      return '<div style="margin-bottom:20px;">'
-        + '<div style="font-size:14px;font-weight:700;color:' + lp.farbe + ';margin-bottom:6px;">' + (s.icon || '') + ' ' + s.titel + '</div>'
+      var textHtml = s.text ? '<p style="font-size:14px;color:' + text + ';line-height:1.8;margin:10px 0 0;">' + s.text + '</p>' : '';
+      var hinweisHtml = s.hinweis ? '<div style="margin-top:12px;padding:12px 16px;background:' + (isDark ? '#1E3A2F' : '#FEF9C3') + ';border-left:3px solid ' + (isDark ? '#FDE68A' : '#F59E0B') + ';border-radius:0 8px 8px 0;font-size:13px;color:' + (isDark ? '#FDE68A' : '#92400E') + ';line-height:1.6;">⚠️ ' + s.hinweis + '</div>' : '';
+      var sectionBg = isDark ? '#0F172A' : '#F8FAFC';
+      var sectionBorder = i < (lp.sektionen.length - 1) ? 'border-bottom:1px solid ' + border + ';' : '';
+      return '<div style="padding:20px 0;' + sectionBorder + '">'
+        + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+        + '<span style="width:32px;height:32px;border-radius:8px;background:' + lp.farbe + '15;display:flex;align-items:center;justify-content:center;font-size:16px;">' + (s.icon || '📄') + '</span>'
+        + '<h3 style="font-size:16px;font-weight:700;color:' + lp.farbe + ';margin:0;">' + s.titel + '</h3>'
+        + '</div>'
         + textHtml + items + hinweisHtml
         + '</div>';
     }).join('');
@@ -1831,24 +1836,26 @@ function showLernpfadDetail(id) {
   overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:overlayFadeIn 0.2s ease;';
   overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
   overlay.innerHTML = `
-    <div style="background:${bg};border-radius:16px;width:95%;max-width:700px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);animation:modalIn 0.35s cubic-bezier(0.16,1,0.3,1);">
-      <div style="padding:24px;border-bottom:1px solid ${border};position:sticky;top:0;background:${bg};z-index:1;border-radius:16px 16px 0 0;">
+    <div style="background:${bg};border-radius:16px;width:95%;max-width:820px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);animation:modalIn 0.35s cubic-bezier(0.16,1,0.3,1);">
+      <div style="background:linear-gradient(135deg,${lp.farbe}18,${lp.farbe}08);padding:28px 28px 20px;border-bottom:1px solid ${border};position:sticky;top:0;z-index:1;border-radius:16px 16px 0 0;backdrop-filter:blur(8px);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div style="display:flex;gap:14px;align-items:center;">
-            <div style="width:52px;height:52px;background:${lp.farbe}20;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;">${lp.icon}</div>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <div style="width:56px;height:56px;background:${lp.farbe}20;border:2px solid ${lp.farbe}30;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">${lp.icon}</div>
             <div>
-              <h2 style="font-size:18px;font-weight:800;color:${text};margin:0 0 4px;">${escapeHtml(lp.titel)}</h2>
-              <div style="display:flex;gap:10px;align-items:center;">
-                <span style="font-size:11px;padding:3px 8px;background:${lp.farbe}15;color:${lp.farbe};border-radius:5px;font-weight:600;">${katInfo.label || ''}</span>
+              <h2 style="font-size:22px;font-weight:800;color:${text};margin:0 0 6px;line-height:1.2;">${escapeHtml(lp.titel)}</h2>
+              <p style="font-size:13px;color:${muted};margin:0 0 8px;line-height:1.4;">${escapeHtml(lp.beschreibung)}</p>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <span style="font-size:11px;padding:3px 10px;background:${lp.farbe}15;color:${lp.farbe};border-radius:6px;font-weight:600;">${katInfo.label || ''}</span>
                 <span style="font-size:11px;color:${muted};">⏱ ${lp.dauer}</span>
-                ${istGelesen ? '<span style="font-size:11px;padding:3px 8px;background:#F0FDF4;color:#16A34A;border-radius:5px;font-weight:600;">✓ Absolviert</span>' : ''}
+                <span style="font-size:11px;color:${muted};">${lp.sektionen ? lp.sektionen.length + ' Kapitel' : ''}</span>
+                ${istGelesen ? '<span style="font-size:11px;padding:3px 10px;background:#F0FDF4;color:#16A34A;border-radius:6px;font-weight:600;">✓ Absolviert</span>' : ''}
               </div>
             </div>
           </div>
-          <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="background:${isDark ? '#334155' : '#F3F4F6'};border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;color:${muted};">✕</button>
+          <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="background:${isDark ? '#334155' : '#F3F4F6'};border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;color:${muted};flex-shrink:0;">✕</button>
         </div>
       </div>
-      <div style="padding:24px;">
+      <div style="padding:4px 28px 28px;">
         ${sektionenHtml}
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid ${border};">
           ${!istGelesen ? `<button onclick="markLernpfadGelesen('${id}');this.closest('div[style*=\\'position:fixed\\']').remove();" style="padding:10px 20px;background:${lp.farbe};color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">✓ Als gelesen markieren</button>` : `<button onclick="unmarkLernpfadGelesen('${id}');this.closest('div[style*=\\'position:fixed\\']').remove();" style="padding:10px 20px;background:${isDark ? '#334155' : '#F3F4F6'};color:${text};border:1px solid ${border};border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Markierung entfernen</button>`}

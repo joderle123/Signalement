@@ -3117,14 +3117,21 @@ function renderHypothesenImFallbild() {
   if (!container) return;
   const sid = APP.currentSchuelerId;
   if (!sid) return;
-  const hypothesen = generateHypothesen(sid);
-  const branchenRisiken = generateBranchenRisiken(sid);
-  container.innerHTML = '<div style="border-top:2px solid var(--border,#E5E7EB);padding-top:20px;">'
-    + '<h3 style="font-size:16px;margin:0 0 12px;color:var(--text,#1F2937);font-weight:700;">🔬 Klinische Hypothesen & Analyse</h3>'
-    + '<div id="hypothesen-fallbild-inner"></div>'
-    + '</div>';
-  const inner = document.getElementById('hypothesen-fallbild-inner');
-  if (inner) renderHypothesenDashboard(inner, hypothesen, branchenRisiken, sid);
+  var hypothesen = generateHypothesen(sid);
+  var risiken = hypothesen.filter(function(h) { return h.typ === 'risiko'; }).length;
+  var schutz = hypothesen.filter(function(h) { return h.typ === 'schutz'; }).length;
+  var badge = hypothesen.length > 0
+    ? '<span style="font-size:12px;color:#6B7280;margin-left:8px;">' + hypothesen.length + ' Hypothesen · ' + risiken + ' Risiken · ' + schutz + ' Schutz</span>'
+    : '<span style="font-size:12px;color:#9CA3AF;margin-left:8px;">Noch keine Daten</span>';
+  container.innerHTML = '<div style="border-top:2px solid var(--border,#E5E7EB);padding-top:16px;">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">'
+    + '<div style="display:flex;align-items:center;">'
+    + '<span style="font-size:16px;font-weight:700;color:var(--text,#1F2937);">🔬 Klinische Hypothesen & Analyse</span>'
+    + badge
+    + '</div>'
+    + '<button class="btn btn-sm" onclick="showPhase(\'auswertung\');setTimeout(function(){showSubTab(\'gesamtbild\')},100);" style="background:#6366F1;color:#fff;border:none;padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;">'
+    + '→ Klinisches Gesamtbild anzeigen</button>'
+    + '</div></div>';
 }
 
 // Themen-Übersicht im Förderplan rendern

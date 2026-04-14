@@ -2383,6 +2383,7 @@ function renderLernschrittInhalt(schritt, lp, idx) {
     case 'einfuehrung': return renderSchrittEinfuehrung(schritt, lp, idx);
     case 'lektuere': return renderSchrittLektuere(schritt, lp, idx);
     case 'arbeitsblatt': return renderSchrittArbeitsblatt(schritt, lp, idx);
+    case 'quiz': return renderSchrittQuiz(schritt, lp, idx);
     default: return renderSchrittPlatzhalter(schritt, lp, idx);
   }
 }
@@ -2401,6 +2402,117 @@ function renderSchrittPlatzhalter(schritt, lp, idx) {
     + 'Renderer für „' + getSchrittTypLabel(schritt.typ) + '" folgt in einem der nächsten Mikroschritte.'
     + (schritt.datei ? '<div style="margin-top:10px;font-size:11px;font-family:monospace;color:' + text + ';">📎 ' + escapeHtml(schritt.datei) + '</div>' : '')
     + '</div></div>';
+}
+
+// 4c4 — Quiz-Schritt: Multiple-Choice Fragen aus WB_QUIZ_FRAGEN
+// Antwort-State wird in APP.lernplayer.quizAntworten gespeichert
+function renderSchrittQuiz(schritt, lp, idx) {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+
+  var fragen = (typeof WB_QUIZ_FRAGEN !== 'undefined' && WB_QUIZ_FRAGEN[lp.id]) || [];
+
+  // Platzhalter, falls noch keine Fragen existieren (kommen in Mikroschritt 5)
+  if (!fragen.length) {
+    return '<div style="max-width:720px;margin:0 auto;padding:40px 20px;text-align:center;">'
+      + '<div style="font-size:72px;margin-bottom:16px;">❓</div>'
+      + '<div style="font-size:11px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Quiz</div>'
+      + '<h2 style="font-size:24px;font-weight:800;color:' + text + ';margin:0 0 14px;">' + escapeHtml(schritt.titel || 'Wissens-Check') + '</h2>'
+      + '<div style="max-width:480px;margin:16px auto 0;padding:18px 22px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px dashed ' + border + ';border-radius:12px;font-size:14px;color:' + muted + ';line-height:1.7;">'
+      + 'Quiz-Fragen für dieses Modul werden in Mikroschritt 5 ergänzt. Klick <strong>Weiter →</strong>, um den Schritt als abgeschlossen zu markieren.'
+      + '</div></div>';
+  }
+
+  if (!APP.lernplayer.quizAntworten) APP.lernplayer.quizAntworten = {};
+  var quizState = APP.lernplayer.quizAntworten[idx] || { antworten: {}, ausgewertet: false };
+  APP.lernplayer.quizAntworten[idx] = quizState;
+
+  var fragenHtml = fragen.map(function(frage, fi) {
+    var gewaehlt = quizState.antworten[fi];
+    var ausgewertet = quizState.ausgewertet;
+    var optionenHtml = (frage.optionen || []).map(function(opt, oi) {
+      var isGewaehlt = gewaehlt === oi;
+      var isKorrekt = oi === frage.korrekt;
+      var optBg, optBorder, optColor;
+      if (ausgewertet) {
+        if (isKorrekt) { optBg = isDark ? '#0F2A1E' : '#F0FDF4'; optBorder = '#16A34A'; optColor = isDark ? '#86EFAC' : '#166534'; }
+        else if (isGewaehlt) { optBg = isDark ? '#2A0F15' : '#FEF2F2'; optBorder = '#DC2626'; optColor = isDark ? '#FCA5A5' : '#991B1B'; }
+        else { optBg = isDark ? '#0F172A' : '#F9FAFB'; optBorder = border; optColor = muted; }
+      } else {
+        optBg = isGewaehlt ? lp.farbe + '15' : (isDark ? '#0F172A' : '#F9FAFB');
+        optBorder = isGewaehlt ? lp.farbe : border;
+        optColor = isGewaehlt ? text : text;
+      }
+      var marker = ausgewertet && isKorrekt ? ' ✓' : (ausgewertet && isGewaehlt && !isKorrekt ? ' ✗' : '');
+      return '<button ' + (ausgewertet ? 'disabled' : '') + ' onclick="quizAntworten(' + idx + ',' + fi + ',' + oi + ')" style="display:block;width:100%;text-align:left;padding:12px 16px;margin-bottom:8px;background:' + optBg + ';border:2px solid ' + optBorder + ';border-radius:10px;font-size:14px;font-weight:500;color:' + optColor + ';cursor:' + (ausgewertet ? 'default' : 'pointer') + ';font-family:inherit;transition:all 0.15s;line-height:1.5;">'
+        + escapeHtml(opt) + marker
+        + '</button>';
+    }).join('');
+
+    var erklaerungHtml = ausgewertet && frage.erklaerung
+      ? '<div style="margin-top:10px;padding:12px 16px;background:' + (isDark ? '#1E293B' : '#EFF6FF') + ';border-left:3px solid ' + (isDark ? '#60A5FA' : '#3B82F6') + ';border-radius:0 8px 8px 0;font-size:13px;color:' + text + ';line-height:1.6;">'
+      + '<strong style="color:' + (isDark ? '#93C5FD' : '#1E40AF') + ';">💡 Erklärung:</strong> ' + escapeHtml(frage.erklaerung)
+      + '</div>' : '';
+
+    return '<div style="margin-bottom:24px;padding:18px 20px;background:' + (isDark ? '#1E293B' : '#FFFFFF') + ';border:1px solid ' + border + ';border-radius:12px;">'
+      + '<div style="font-size:11px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Frage ' + (fi + 1) + ' / ' + fragen.length + '</div>'
+      + '<div style="font-size:15px;font-weight:700;color:' + text + ';margin-bottom:14px;line-height:1.5;">' + escapeHtml(frage.frage) + '</div>'
+      + optionenHtml
+      + erklaerungHtml
+      + '</div>';
+  }).join('');
+
+  var alleBeantwortet = fragen.every(function(_, fi) { return typeof quizState.antworten[fi] === 'number'; });
+  var richtig = fragen.filter(function(f, fi) { return quizState.antworten[fi] === f.korrekt; }).length;
+
+  var ergebnisHtml = quizState.ausgewertet
+    ? '<div style="padding:20px;background:' + (richtig === fragen.length ? (isDark ? '#0F2A1E' : '#F0FDF4') : (isDark ? '#1E293B' : '#FFFBEB')) + ';border:2px solid ' + (richtig === fragen.length ? '#16A34A' : '#F59E0B') + ';border-radius:12px;text-align:center;margin-bottom:14px;">'
+      + '<div style="font-size:40px;margin-bottom:8px;">' + (richtig === fragen.length ? '🎉' : '📚') + '</div>'
+      + '<div style="font-size:18px;font-weight:800;color:' + text + ';">' + richtig + ' von ' + fragen.length + ' richtig</div>'
+      + '<div style="font-size:13px;color:' + muted + ';margin-top:4px;">' + (richtig === fragen.length ? 'Perfekt! Klick Weiter, um fortzufahren.' : 'Lies die Erklärungen und klick Weiter, wenn du bereit bist.') + '</div>'
+      + '</div>' : '';
+
+  var auswertenBtn = !quizState.ausgewertet
+    ? '<button onclick="quizAuswerten(' + idx + ')" ' + (alleBeantwortet ? '' : 'disabled') + ' style="padding:12px 24px;background:' + (alleBeantwortet ? lp.farbe : border) + ';color:' + (alleBeantwortet ? '#fff' : muted) + ';border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:' + (alleBeantwortet ? 'pointer' : 'not-allowed') + ';font-family:inherit;display:block;margin:0 auto;">Antworten prüfen</button>'
+    : '';
+
+  return '<div style="max-width:720px;margin:0 auto;">'
+    + '<div style="margin-bottom:18px;">'
+    + '<div style="font-size:11px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">❓ Wissens-Check</div>'
+    + '<h2 style="font-size:22px;font-weight:800;color:' + text + ';margin:0;line-height:1.3;">' + escapeHtml(schritt.titel || 'Quiz') + '</h2>'
+    + '</div>'
+    + fragenHtml
+    + ergebnisHtml
+    + auswertenBtn
+    + '</div>';
+}
+
+function quizAntworten(schrittIdx, frageIdx, optionIdx) {
+  if (!APP.lernplayer || !APP.lernplayer.quizAntworten) return;
+  var state = APP.lernplayer.quizAntworten[schrittIdx];
+  if (!state || state.ausgewertet) return;
+  state.antworten[frageIdx] = optionIdx;
+  renderLernplayerFrame();
+}
+
+function quizAuswerten(schrittIdx) {
+  if (!APP.lernplayer || !APP.lernplayer.quizAntworten) return;
+  var state = APP.lernplayer.quizAntworten[schrittIdx];
+  if (!state) return;
+  state.ausgewertet = true;
+  // Score speichern (fuer Badges etc. — wird in 4d genutzt)
+  var lp = WB_LERNPFADE.find(function(p) { return p.id === APP.lernplayer.moduleId; });
+  if (lp) {
+    var fragen = (typeof WB_QUIZ_FRAGEN !== 'undefined' && WB_QUIZ_FRAGEN[lp.id]) || [];
+    var richtig = fragen.filter(function(f, fi) { return state.antworten[fi] === f.korrekt; }).length;
+    var p = getWBProgress();
+    if (!p.quizScores) p.quizScores = {};
+    p.quizScores[lp.id + '_' + schrittIdx] = { score: richtig, total: fragen.length, datum: new Date().toISOString() };
+    saveWBProgress(p);
+  }
+  renderLernplayerFrame();
 }
 
 // 4c3 — Arbeitsblatt-Schritt: iframe + Download/Drucken + "Bearbeitet"-Hinweis

@@ -9909,3 +9909,328 @@ body.dark-mode .ors-history-item:nth-child(odd) {
     font-size: 26px;
   }
 }
+
+/* ============================================================
+   GESAMTBILD — Klinisches Gesamtbild
+   ============================================================ */
+
+/* Status-Header */
+.gb-status-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%);
+  border: 1px solid #E0E7FF;
+}
+.gb-status-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+.gb-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+.gb-source-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.gb-source-ok {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+.gb-source-miss {
+  background: rgba(107, 114, 128, 0.1);
+  color: #9CA3AF;
+}
+
+/* Collapsible Sections */
+.gb-section {
+  border: 1px solid var(--border, #E5E7EB);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: var(--bg-card, #fff);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.gb-section:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.gb-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.gb-section-header:hover {
+  background: rgba(99, 102, 241, 0.04);
+}
+.gb-section-icon {
+  font-size: 16px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.gb-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #1F2937);
+}
+.gb-section-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(99, 102, 241, 0.08);
+  color: #6366F1;
+  font-weight: 600;
+}
+.gb-section-arrow {
+  margin-left: auto;
+  font-size: 14px;
+  color: #9CA3AF;
+  transition: transform 0.2s;
+}
+.gb-open .gb-section-arrow {
+  transform: rotate(0deg);
+}
+.gb-section:not(.gb-open) .gb-section-arrow {
+  transform: rotate(-90deg);
+}
+.gb-section-body {
+  display: none;
+  padding: 0 16px 16px;
+}
+.gb-open .gb-section-body {
+  display: block;
+}
+
+/* Screening-Überblick */
+.gb-screening-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.gb-screening-datum {
+  font-size: 13px;
+  color: var(--text-sec, #6B7280);
+}
+.gb-severity-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+.gb-flagged-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.gb-flagged-chip {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Hypothesen Summary */
+.gb-hypo-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.gb-hypo-count {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+.gb-hypo-risiko {
+  background: rgba(220, 38, 38, 0.08);
+  color: #DC2626;
+}
+.gb-hypo-diff {
+  background: rgba(99, 102, 241, 0.08);
+  color: #6366F1;
+}
+.gb-hypo-schutz {
+  background: rgba(16, 185, 129, 0.08);
+  color: #059669;
+}
+
+/* Branchen-Grid */
+.gb-branchen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+/* Wirkungs-Grid */
+.gb-wirkungs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.gb-wirkungs-card {
+  background: var(--bg, #F9FAFB);
+  border: 1px solid var(--border, #E5E7EB);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.gb-wirkungs-label {
+  font-size: 11px;
+  color: #6B7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.gb-wirkungs-value {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.gb-wirkungs-sub {
+  font-size: 11px;
+  color: #9CA3AF;
+  margin-top: 4px;
+}
+
+/* Stärken */
+.gb-staerken-group {
+  margin-bottom: 14px;
+}
+.gb-staerken-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-sec, #6B7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.gb-staerken-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.gb-staerken-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.gb-staerken-icon {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.gb-staerken-name {
+  width: 130px;
+  flex-shrink: 0;
+  color: var(--text, #1F2937);
+  font-weight: 600;
+}
+.gb-staerken-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border, #E5E7EB);
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 60px;
+}
+.gb-staerken-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+.gb-staerken-wert {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 600;
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Gesamtbild Dark Mode ── */
+body.dark-mode .gb-status-header {
+  background: linear-gradient(135deg, #1F2937 0%, #1E1B4B 100%);
+  border-color: #374151;
+}
+body.dark-mode .gb-source-ok {
+  background: rgba(16, 185, 129, 0.15);
+}
+body.dark-mode .gb-source-miss {
+  background: rgba(107, 114, 128, 0.15);
+  color: #6B7280;
+}
+body.dark-mode .gb-section {
+  background: var(--bg-card, #1F2937);
+  border-color: var(--border, #374151);
+}
+body.dark-mode .gb-section-header:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+body.dark-mode .gb-section-title {
+  color: var(--text, #F3F4F6);
+}
+body.dark-mode .gb-section-badge {
+  background: rgba(99, 102, 241, 0.15);
+}
+body.dark-mode .gb-wirkungs-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border, #374151);
+}
+body.dark-mode .gb-staerken-name {
+  color: var(--text, #F3F4F6);
+}
+body.dark-mode .gb-staerken-bar {
+  background: #374151;
+}
+body.dark-mode .gb-flagged-chip {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ── Gesamtbild Mobile ── */
+@media (max-width: 640px) {
+  .gb-status-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .gb-sources {
+    margin-left: 0;
+    margin-top: 6px;
+  }
+  .gb-wirkungs-grid,
+  .gb-branchen-grid {
+    grid-template-columns: 1fr;
+  }
+  .gb-staerken-name {
+    width: 100px;
+  }
+  .gb-section-header {
+    padding: 10px 12px;
+  }
+  .gb-section-body {
+    padding: 0 12px 12px;
+  }
+}

@@ -15262,6 +15262,116 @@ function getSchuelerPrioritaeten(schuelerId) {
   return prioritaeten;
 }
 
+// ============================================================
+// PRIORITÄTEN — Render-Funktion (neuer Tab)
+// ============================================================
+function renderPrioritaeten() {
+  const container = document.getElementById('prioritaeten-container');
+  if (!container) return;
+
+  const sid = APP.currentSchuelerId;
+  if (!sid) { container.innerHTML = ''; return; }
+
+  const schueler = DB.getSchueler().find(s => s.id === sid);
+  if (!schueler) { container.innerHTML = ''; return; }
+
+  const prio = getSchuelerPrioritaeten(sid);
+
+  if (prio.length === 0) {
+    container.innerHTML = `
+      <div class="prio-empty">
+        <div class="prio-empty-icon">📋</div>
+        <h3>Noch keine Prioritäten erkennbar</h3>
+        <p>Sobald Screening, Anamnese oder Fallformulierung ausgefüllt sind, erscheinen hier die wichtigsten Ansatzpunkte in der Reihenfolge ihrer Dringlichkeit.</p>
+        <div class="prio-empty-actions">
+          <button class="btn btn-primary btn-sm" onclick="showProfilTab('screening')">🩺 Screening starten</button>
+          <button class="btn btn-secondary btn-sm" onclick="showProfilTab('info')">📝 Anamnese</button>
+          <button class="btn btn-secondary btn-sm" onclick="showProfilTab('fallformulierung')">🧩 Fallbild</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Gruppierung nach Dringlichkeit für visuelles Framing
+  const dringlichkeitLabel = {
+    kritisch: '🚨 Kritisch — sofortiges Handeln',
+    dringend: '⚡ Dringend — zeitnah bearbeiten',
+    hoch:     '📌 Hoch — als nächstes fokussieren',
+    mittel:   '💡 Mittel — im Verlauf aufgreifen',
+    niedrig:  '• Niedrig — im Blick behalten'
+  };
+
+  let html = `
+    <div class="prio-header">
+      <div class="prio-header-text">
+        <h2>🎯 Prioritäten für ${schueler.vorname || ''}${schueler.nachname ? ' ' + schueler.nachname : ''}</h2>
+        <p class="prio-subtitle">Aggregiert aus Screening · Anamnese · Fallformulierung · Zielen. Sortiert nach Dringlichkeit.</p>
+      </div>
+      <div class="prio-header-meta">
+        <span class="prio-count">${prio.length} Priorität${prio.length === 1 ? '' : 'en'}</span>
+      </div>
+    </div>`;
+
+  // Zusammenfassungsleiste
+  const counts = {};
+  prio.forEach(p => { counts[p.dringlichkeit] = (counts[p.dringlichkeit] || 0) + 1; });
+  html += '<div class="prio-summary">';
+  ['kritisch', 'dringend', 'hoch', 'mittel', 'niedrig'].forEach(key => {
+    if (counts[key]) {
+      html += `<span class="prio-chip prio-chip-${key}">${dringlichkeitLabel[key].split(' — ')[0]} · ${counts[key]}</span>`;
+    }
+  });
+  html += '</div>';
+
+  // Karten-Liste
+  html += '<div class="prio-liste">';
+  prio.forEach((p, idx) => {
+    const rangNummer = idx + 1;
+    const abHtml = (p.arbeitsblaetter || []).length > 0
+      ? `<div class="prio-arbeitsblaetter">
+          <div class="prio-ab-label">📝 Passende Arbeitsblätter:</div>
+          <div class="prio-ab-liste">
+            ${p.arbeitsblaetter.map(ab => `<a class="prio-ab-btn" href="arbeitsblatter/${ab.datei}" target="_blank">📋 ${ab.titel}</a>`).join('')}
+          </div>
+        </div>`
+      : '';
+
+    const themenHtml = (p.themenIds || []).length > 0
+      ? `<div class="prio-themen-liste">${p.themenIds.map(tid => {
+          const titel = typeof getThemaTitel === 'function' ? getThemaTitel(tid) : tid;
+          return `<button class="prio-thema-btn" onclick="openRoadmapThema('${tid}')">→ ${titel}</button>`;
+        }).join('')}</div>`
+      : '';
+
+    html += `
+      <div class="prio-karte prio-karte-${p.dringlichkeit}" style="border-left:5px solid ${p.farbe};">
+        <div class="prio-karte-rang">#${rangNummer}</div>
+        <div class="prio-karte-body">
+          <div class="prio-karte-top">
+            <span class="prio-karte-icon" style="background:${p.farbe}15;color:${p.farbe};">${p.icon}</span>
+            <div class="prio-karte-titel-wrap">
+              <div class="prio-karte-titel">${p.titel}</div>
+              <div class="prio-karte-quelle">${p.quelle}</div>
+            </div>
+            <span class="prio-karte-badge" style="background:${p.farbe};">${dringlichkeitLabel[p.dringlichkeit].split(' — ')[0]}</span>
+          </div>
+          <div class="prio-karte-beschr">${p.beschreibung}</div>
+          ${themenHtml}
+          ${abHtml}
+        </div>
+      </div>`;
+  });
+  html += '</div>';
+
+  // Hinweis-Footer
+  html += `
+    <div class="prio-footer-hinweis">
+      💡 Diese Liste aktualisiert sich automatisch, wenn Screening, Anamnese oder Fallformulierung geändert werden.
+    </div>`;
+
+  container.innerHTML = html;
+}
+
 // ── Phasen-Stepper (horizontale Dot-Navigation) ──
 function renderPhasenStepper(roadmap) {
   let html = '<div class="roadmap-stepper">';

@@ -2296,11 +2296,34 @@ function schrittAlsAbgeschlossenMarkieren(moduleId, schrittIdx) {
   if (!p.schritteFortschritt) p.schritteFortschritt = {};
   if (!p.schritteFortschritt[moduleId]) p.schritteFortschritt[moduleId] = { abgeschlosseneSchritte: [] };
   var arr = p.schritteFortschritt[moduleId].abgeschlosseneSchritte;
-  if (arr.indexOf(schrittIdx) === -1) {
+  var warSchonDrin = arr.indexOf(schrittIdx) !== -1;
+  if (!warSchonDrin) {
     arr.push(schrittIdx);
     saveWBProgress(p);
-    // XP + Gamification kommt in 4d
+    // XP pro Schritt-Typ (nur beim ersten Abschluss)
+    var lp = WB_LERNPFADE.find(function(x) { return x.id === moduleId; });
+    if (lp && lp.schritte[schrittIdx]) {
+      var xp = getXPfuerSchrittTyp(lp.schritte[schrittIdx].typ);
+      if (xp > 0 && typeof awardXP === 'function') {
+        awardXP(xp, getSchrittTypLabel(lp.schritte[schrittIdx].typ));
+      }
+    }
+    // Badges pruefen (u.a. firstStep)
+    if (typeof checkBadges === 'function') checkBadges();
   }
+}
+
+// XP-Tabelle pro Schritt-Typ
+function getXPfuerSchrittTyp(typ) {
+  var xpMap = {
+    einfuehrung: 2,
+    lektuere: 8,
+    arbeitsblatt: 10,
+    quiz: 10,
+    reflexion: 8,
+    zusammenfassung: 5
+  };
+  return xpMap[typ] || 5;
 }
 
 function lernplayerAbschliessen() {

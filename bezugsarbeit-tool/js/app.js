@@ -2811,13 +2811,16 @@ function toggleGBSection(sectionId) {
   setGBSectionState(sectionId, isOpen);
 }
 
-function gbSection(id, icon, title, badge, defaultOpen, bodyHtml) {
+function gbSection(id, icon, title, badge, defaultOpen, bodyHtml, desc) {
   var state = getGBSectionState();
   var isOpen = state[id] !== undefined ? state[id] : defaultOpen;
   return '<div class="gb-section' + (isOpen ? ' gb-open' : '') + '" data-section="' + id + '">'
     + '<div class="gb-section-header" onclick="toggleGBSection(\'' + id + '\')">'
     + '<span class="gb-section-icon">' + icon + '</span>'
+    + '<div class="gb-section-title-group">'
     + '<span class="gb-section-title">' + title + '</span>'
+    + (desc ? '<span class="gb-section-desc">' + desc + '</span>' : '')
+    + '</div>'
     + (badge ? '<span class="gb-section-badge">' + badge + '</span>' : '')
     + '<span class="gb-section-arrow">▾</span>'
     + '</div>'
@@ -2898,7 +2901,8 @@ function renderGesamtbild() {
   // ════════════════════════════════════════════
   var orsHtml = renderOrsStatsPanel(notizen);
   if (orsHtml) {
-    html += gbSection('ors-srs', '📈', 'ORS/SRS Verlauf', sitzungen.length + ' Sitzungen', true, orsHtml);
+    html += gbSection('ors-srs', '📈', 'ORS/SRS Verlauf', sitzungen.length + ' Sitzungen', true, orsHtml,
+      'Outcome Rating Scale (ORS) misst das subjektive Wohlbefinden des Klienten, Session Rating Scale (SRS) die therapeutische Allianz — beides pro Sitzung erhoben.');
   }
 
   // ════════════════════════════════════════════
@@ -2946,7 +2950,8 @@ function renderGesamtbild() {
   } else {
     screenHtml = '<div style="color:#6B7280;font-size:13px;">Kein abgeschlossenes Screening vorhanden.</div>';
   }
-  html += gbSection('screening', '🎯', 'Screening-Überblick', screenings.length > 0 ? screenings.length + ' Screening(s)' : '', true, screenHtml);
+  html += gbSection('screening', '🎯', 'Screening-Überblick', screenings.length > 0 ? screenings.length + ' Screening(s)' : '', true, screenHtml,
+    'Standardisiertes Screening über mehrere Domänen (Emotionen, Verhalten, Soziales u.a.). Auffällige Bereiche werden geflaggt und bei mehreren Zeitpunkten im Verlauf verglichen.');
 
   // ════════════════════════════════════════════
   // SEKTION 4: Klinische Hypothesen
@@ -2964,24 +2969,28 @@ function renderGesamtbild() {
     if (schutz.length) hypoHtml += '<span class="gb-hypo-count gb-hypo-schutz">' + schutz.length + ' Schutzfaktoren</span>';
     hypoHtml += '</div>';
 
-    // Hypothesen-Karten gruppiert
+    // Hypothesen-Karten gruppiert mit Erklärungen
     if (risiken.length > 0) {
       hypoHtml += '<div class="hypo-section"><div class="hypo-section-label hypo-section-risiko">Belastungsmuster <span class="hypo-section-count">' + risiken.length + '</span></div>';
+      hypoHtml += '<div class="hypo-section-desc">Identifizierte Belastungen und Risikofaktoren aus Anamnese und Screening — erhöhte Aufmerksamkeit in der Begleitung erforderlich.</div>';
       hypoHtml += risiken.map(hypoCard).join('') + '</div>';
     }
     if (differenzial.length > 0) {
       hypoHtml += '<div class="hypo-section"><div class="hypo-section-label hypo-section-diff">Differenzialdiagnosen <span class="hypo-section-count">' + differenzial.length + '</span></div>';
+      hypoHtml += '<div class="hypo-section-desc">Mögliche klinische Erklärungen mit ICD-10/11-Bezug — dient der fachlichen Einordnung, nicht als Diagnose.</div>';
       hypoHtml += differenzial.map(hypoCard).join('') + '</div>';
     }
     if (schutz.length > 0) {
       hypoHtml += '<div class="hypo-section"><div class="hypo-section-label hypo-section-schutz">Schutzfaktoren <span class="hypo-section-count">' + schutz.length + '</span></div>';
+      hypoHtml += '<div class="hypo-section-desc">Vorhandene Ressourcen und Resilienzfaktoren — Stärken, auf die in der Begleitung aufgebaut werden kann.</div>';
       hypoHtml += schutz.map(hypoCard).join('') + '</div>';
     }
   } else {
     hypoHtml = '<div style="color:#6B7280;font-size:13px;">Hypothesen werden automatisch generiert, sobald Daten aus Anamnese, Screening oder Stärken vorliegen.</div>';
   }
   var hypoBadge = hypothesen.length > 0 ? hypothesen.length + ' Hypothesen' : '';
-  html += gbSection('hypothesen', '🧠', 'Klinische Hypothesen', hypoBadge, true, hypoHtml);
+  html += gbSection('hypothesen', '🧠', 'Klinische Hypothesen', hypoBadge, true, hypoHtml,
+    'Automatisch generierte Hypothesen aus Anamnese, Screening und Stärken. Belastungsmuster zeigen identifizierte Risiken, Differenzialdiagnosen mögliche klinische Erklärungen mit ICD-Bezug, und Schutzfaktoren vorhandene Ressourcen und Resilienz.');
 
   // ════════════════════════════════════════════
   // SEKTION 5: Statistische Risikofaktoren
@@ -2994,13 +3003,15 @@ function renderGesamtbild() {
   } else {
     branchenHtml = '<div style="color:#6B7280;font-size:13px;">Keine epidemiologischen Risikofaktoren erkannt.</div>';
   }
-  html += gbSection('branchen', '📊', 'Statistische Risikofaktoren', branchenRisiken.length > 0 ? branchenRisiken.length + ' Faktoren' : '', false, branchenHtml);
+  html += gbSection('branchen', '📊', 'Statistische Risikofaktoren', branchenRisiken.length > 0 ? branchenRisiken.length + ' Faktoren' : '', false, branchenHtml,
+    'Epidemiologische Kennzahlen aus der Forschung — Prävalenz, Odds Ratio und relative Risiken, basierend auf den erfassten Merkmalen des Klienten.');
 
   // ════════════════════════════════════════════
   // SEKTION 6: Treatment-Response
   // ════════════════════════════════════════════
   var trHtml = '<div id="treatment-response-container"></div>';
-  html += gbSection('treatment', '💊', 'Treatment-Response', '', false, trHtml);
+  html += gbSection('treatment', '💊', 'Treatment-Response', '', false, trHtml,
+    'Analyse des Ansprechens auf die Begleitung: Welche Themen und Methoden zeigen positive Wirkung? Basiert auf SRS-Trends pro Sitzungsthema.');
 
   // ════════════════════════════════════════════
   // SEKTION 7: Wirkungsnachweis
@@ -3038,7 +3049,8 @@ function renderGesamtbild() {
   } else {
     wirkHtml = '<div style="color:#6B7280;font-size:13px;">Mindestens 4 ORS-Messungen erforderlich für Wirkungsnachweis.</div>';
   }
-  html += gbSection('wirkung', '🏆', 'Wirkungsnachweis', klass ? klass.label : '', false, wirkHtml);
+  html += gbSection('wirkung', '🏆', 'Wirkungsnachweis', klass ? klass.label : '', false, wirkHtml,
+    'Reliable Change Index (RCI) prüft, ob die Veränderung statistisch zuverlässig ist. Cohen\'s d zeigt die Effektstärke. Die klinische Klassifikation (Recovered/Improved/Unchanged/Deteriorated) kombiniert beides mit dem ORS-Cutoff von 28.');
 
   // ════════════════════════════════════════════
   // SEKTION 8: Stärken-Zusammenfassung
@@ -3085,7 +3097,8 @@ function renderGesamtbild() {
   } else {
     staerkenHtml = '<div style="color:#6B7280;font-size:13px;">Noch keine Stärken bewertet.</div>';
   }
-  html += gbSection('staerken', '💪', 'Stärken-Zusammenfassung', staerkenCount > 0 ? staerkenCount + ' bewertet' : '', false, staerkenHtml);
+  html += gbSection('staerken', '💪', 'Stärken-Zusammenfassung', staerkenCount > 0 ? staerkenCount + ' bewertet' : '', false, staerkenHtml,
+    'Überblick über bewertete Stärken-Dimensionen: Die Top-Stärken sind Ressourcen für die Begleitung, die Entwicklungsfelder zeigen Förderpotenzial.');
 
   // ── Alles ins DOM ──
   container.innerHTML = html;

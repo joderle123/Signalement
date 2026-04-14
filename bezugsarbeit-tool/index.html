@@ -817,7 +817,7 @@
     </div>
   </div>
 
-  <!-- ---- NOTIZEN VIEW (OneNote-Style) ---- -->
+  <!-- ---- NOTIZEN VIEW (OneNote-Style — unified workspace) ---- -->
   <div class="view" id="view-notizen">
     <div class="topbar">
       <button class="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
@@ -827,11 +827,11 @@
         <span>Suche oder springe zu...</span><kbd>⌘K</kbd>
       </div>
       <div class="topbar-actions">
-        <button class="btn btn-primary" onclick="addPersNotiz()">+ Neue Notiz</button>
+        <button type="button" class="btn btn-primary" onclick="addPersNotiz()">+ Neue Notiz</button>
       </div>
     </div>
     <div class="content" id="notizen-view-content">
-      <!-- Wird von renderPersNotizen() gefüllt -->
+      <!-- Wird von renderPersNotizen() gefüllt — kombiniert Notizen + Todo + Kalender -->
     </div>
   </div>
 

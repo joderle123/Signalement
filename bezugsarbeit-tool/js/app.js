@@ -20204,69 +20204,266 @@ const PERS_NOTIZ_KATEGORIEN = [
 function renderPersNotizen() {
   const container = document.getElementById('notizen-view-content');
   if (!container) return;
-  const alle = DB.getPersNotizen().sort((a, b) => {
+
+  // ── Gather all data ──
+  const alleNotizen = DB.getPersNotizen().sort((a, b) => {
     if (a.angepinnt && !b.angepinnt) return -1;
     if (!a.angepinnt && b.angepinnt) return 1;
     return new Date(b.geaendert) - new Date(a.geaendert);
   });
+  const alleAufgaben = DB.getAufgaben();
+  const alleTermine = DB.getTermine();
+  const heute = new Date().toISOString().split('T')[0];
+  const morgen = new Date(Date.now() + 86400000).toISOString().split('T')[0];
 
-  let html = '';
+  // Sort tasks
+  const offeneAufgaben = alleAufgaben.filter(a => !a.erledigt).sort((a, b) => {
+    const p = { dringend: 0, normal: 1, warten: 2 };
+    return (p[a.prioritaet] || 1) - (p[b.prioritaet] || 1);
+  });
+  const erledigteAufgaben = alleAufgaben.filter(a => a.erledigt).sort((a, b) => new Date(b.erledigtAm || 0) - new Date(a.erledigtAm || 0));
 
-  // Search only (no category tabs)
-  html += '<div class="pn-search-row">';
-  html += '<input type="text" id="pn-search" placeholder="Notizen durchsuchen..." oninput="filterPersNotizen()" class="pn-search-input">';
+  // Upcoming events (next 14 days)
+  const kommend = alleTermine
+    .filter(t => t.datum >= heute)
+    .sort((a, b) => (a.datum + (a.uhrzeit || '')).localeCompare(b.datum + (b.uhrzeit || '')))
+    .slice(0, 8);
+
+  // Today's items
+  const heuteTermine = alleTermine.filter(t => t.datum === heute);
+  const heuteAufgaben = offeneAufgaben.filter(a => a.faellig === heute);
+  const ueberfaellig = offeneAufgaben.filter(a => a.faellig && a.faellig < heute);
+
+  var html = '';
+
+  // ══════════════════════════════════════════════
+  // TOP: Search + Quick Add
+  // ══════════════════════════════════════════════
+  html += '<div class="on-top-bar">';
+  html += '<input type="text" id="pn-search" placeholder="Suche in Notizen & Aufgaben..." oninput="filterPersNotizen()" class="on-search">';
+  html += '<div class="on-top-actions">';
+  html += '<button type="button" class="on-btn on-btn-note" onclick="addPersNotiz()">📝 Notiz</button>';
+  html += '<button type="button" class="on-btn on-btn-task" onclick="document.getElementById(\'on-aufgabe-input\')?.focus()">✅ Aufgabe</button>';
+  html += '<button type="button" class="on-btn on-btn-termin" onclick="openTerminModal()">📅 Termin</button>';
+  html += '</div></div>';
+
+  // ══════════════════════════════════════════════
+  // MAIN: Two-column layout
+  // ══════════════════════════════════════════════
+  html += '<div class="on-workspace">';
+
+  // ── LEFT COLUMN: Todo + Aufgaben ──
+  html += '<div class="on-col-left">';
+
+  // Today section (if anything exists)
+  if (heuteTermine.length > 0 || heuteAufgaben.length > 0 || ueberfaellig.length > 0) {
+    html += '<div class="on-section on-section-today">';
+    html += '<div class="on-section-title on-today-title">Heute</div>';
+
+    // Overdue tasks
+    ueberfaellig.forEach(function(a) {
+      html += '<div class="on-task-row on-task-overdue">'
+        + '<input type="checkbox" onchange="toggleAufgabe(\'' + a.id + '\');renderPersNotizen()" class="on-check">'
+        + '<div class="on-task-text">' + escapeHtml(a.text) + '</div>'
+        + '<span class="on-overdue-badge">Überfällig</span>'
+        + '</div>';
+    });
+
+    // Today's tasks
+    heuteAufgaben.forEach(function(a) {
+      html += '<div class="on-task-row">'
+        + '<input type="checkbox" onchange="toggleAufgabe(\'' + a.id + '\');renderPersNotizen()" class="on-check">'
+        + '<div class="on-task-text">' + escapeHtml(a.text) + '</div>'
+        + '</div>';
+    });
+
+    // Today's events
+    heuteTermine.forEach(function(t) {
+      html += '<div class="on-termin-row on-termin-today">'
+        + '<span class="on-termin-time">' + (t.uhrzeit || '—') + '</span>'
+        + '<span class="on-termin-titel">' + escapeHtml(t.titel) + '</span>'
+        + '</div>';
+    });
+    html += '</div>';
+  }
+
+  // ── Aufgaben section ──
+  html += '<div class="on-section">';
+  html += '<div class="on-section-title">Aufgaben</div>';
+
+  // Quick-add inline
+  html += '<div class="on-task-add">';
+  html += '<input type="text" id="on-aufgabe-input" placeholder="Neue Aufgabe..." class="on-task-input" onkeydown="if(event.key===\'Enter\'){addAufgabeFromWorkspace();}">';
+  html += '<select id="on-aufgabe-prio" class="on-prio-select">';
+  html += '<option value="normal">Normal</option>';
+  html += '<option value="dringend">Dringend</option>';
+  html += '<option value="warten">Warten</option>';
+  html += '</select>';
+  html += '<button type="button" class="on-add-btn" onclick="addAufgabeFromWorkspace()">+</button>';
   html += '</div>';
 
-  if (alle.length === 0) {
-    html += '<div style="text-align:center;padding:48px 20px;">';
-    html += '<div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#FEF9C3,#FDE68A);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;">📝</div>';
-    html += '<p style="font-size:15px;font-weight:600;color:var(--text,#1F2937);margin:0 0 4px;">Dein Notizbuch ist leer</p>';
-    html += '<p style="font-size:12px;color:var(--text-muted,#9CA3AF);margin:0 0 16px;">Klicke auf "+ Neue Notiz" um zu starten</p>';
-    html += '</div>';
+  // Group tasks by priority
+  var dringend = offeneAufgaben.filter(function(a) { return a.prioritaet === 'dringend'; });
+  var normal = offeneAufgaben.filter(function(a) { return !a.prioritaet || a.prioritaet === 'normal'; });
+  var warten = offeneAufgaben.filter(function(a) { return a.prioritaet === 'warten'; });
+
+  function renderTaskGroup(label, tasks, color) {
+    if (tasks.length === 0) return '';
+    var g = '<div class="on-task-group">';
+    g += '<div class="on-task-group-label" style="color:' + color + ';">' + label + '</div>';
+    tasks.forEach(function(a) {
+      var overdue = a.faellig && a.faellig < heute;
+      g += '<div class="on-task-row' + (overdue ? ' on-task-overdue' : '') + '">'
+        + '<input type="checkbox" onchange="toggleAufgabe(\'' + a.id + '\');renderPersNotizen()" class="on-check" style="accent-color:' + color + ';">'
+        + '<div class="on-task-body">'
+        + '<div class="on-task-text">' + escapeHtml(a.text) + '</div>'
+        + (a.faellig ? '<span class="on-task-date' + (overdue ? ' overdue' : '') + '">' + formatDatum(a.faellig) + '</span>' : '')
+        + '</div>'
+        + '<button type="button" class="on-task-delete" onclick="event.stopPropagation();deleteAufgabeEintrag(\'' + a.id + '\');renderPersNotizen()">✕</button>'
+        + '</div>';
+    });
+    g += '</div>';
+    return g;
+  }
+
+  html += renderTaskGroup('Dringend', dringend, '#EF4444');
+  html += renderTaskGroup('Normal', normal, '#F59E0B');
+  html += renderTaskGroup('Warten', warten, '#3B82F6');
+
+  if (offeneAufgaben.length === 0) {
+    html += '<div class="on-empty-small">Keine offenen Aufgaben</div>';
+  }
+
+  // Completed (collapsed)
+  if (erledigteAufgaben.length > 0) {
+    html += '<details class="on-done-details">';
+    html += '<summary class="on-done-summary">Erledigt (' + erledigteAufgaben.length + ')</summary>';
+    erledigteAufgaben.slice(0, 10).forEach(function(a) {
+      html += '<div class="on-task-row on-task-done">'
+        + '<input type="checkbox" checked onchange="toggleAufgabe(\'' + a.id + '\');renderPersNotizen()" class="on-check">'
+        + '<span class="on-task-text on-done-text">' + escapeHtml(a.text) + '</span>'
+        + '<button type="button" class="on-task-delete" onclick="event.stopPropagation();deleteAufgabeEintrag(\'' + a.id + '\');renderPersNotizen()">✕</button>'
+        + '</div>';
+    });
+    html += '</details>';
+  }
+
+  html += '</div>'; // end Aufgaben section
+  html += '</div>'; // end left column
+
+  // ── RIGHT COLUMN: Termine + Mini info ──
+  html += '<div class="on-col-right">';
+
+  // Upcoming events
+  html += '<div class="on-section">';
+  html += '<div class="on-section-title">📅 Termine</div>';
+  if (kommend.length === 0) {
+    html += '<div class="on-empty-small">Keine anstehenden Termine</div>';
   } else {
-    // Pinned section
-    const angepinnt = alle.filter(n => n.angepinnt);
-    const rest = alle.filter(n => !n.angepinnt);
-
-    if (angepinnt.length > 0) {
-      html += '<div style="margin-bottom:6px;font-size:11px;font-weight:600;color:var(--text-muted,#9CA3AF);text-transform:uppercase;letter-spacing:0.5px;padding-left:4px;">Angepinnt</div>';
-      html += '<div class="pn-grid" id="pn-grid-pinned">';
-      for (const notiz of angepinnt) {
-        html += renderNotizCard(notiz);
+    kommend.forEach(function(t) {
+      var isToday = t.datum === heute;
+      var isTomorrow = t.datum === morgen;
+      var datumLabel = isToday ? 'Heute' : (isTomorrow ? 'Morgen' : new Date(t.datum).toLocaleDateString('de-DE', { weekday: 'short', day: 'numeric', month: 'short' }));
+      var sName = '';
+      if (t.schuelerId) {
+        var s = DB.getSchuelerById(t.schuelerId);
+        if (s) sName = ' · ' + s.vorname;
       }
+      html += '<div class="on-termin-row' + (isToday ? ' on-termin-today' : '') + '">'
+        + '<div class="on-termin-date">' + datumLabel + '</div>'
+        + '<div class="on-termin-info">'
+        + '<div class="on-termin-titel">' + escapeHtml(t.titel) + '</div>'
+        + '<div class="on-termin-meta">' + (t.uhrzeit || '') + sName + '</div>'
+        + '</div>'
+        + '</div>';
+    });
+  }
+  html += '<button type="button" class="on-add-termin-btn" onclick="openTerminModal()">+ Neuer Termin</button>';
+  html += '</div>';
+
+  // Quick stats
+  html += '<div class="on-stats">';
+  html += '<div class="on-stat"><span class="on-stat-num">' + offeneAufgaben.length + '</span><span class="on-stat-label">Offen</span></div>';
+  html += '<div class="on-stat"><span class="on-stat-num">' + erledigteAufgaben.length + '</span><span class="on-stat-label">Erledigt</span></div>';
+  html += '<div class="on-stat"><span class="on-stat-num">' + alleNotizen.length + '</span><span class="on-stat-label">Notizen</span></div>';
+  html += '<div class="on-stat"><span class="on-stat-num">' + kommend.length + '</span><span class="on-stat-label">Termine</span></div>';
+  html += '</div>';
+
+  html += '</div>'; // end right column
+  html += '</div>'; // end workspace
+
+  // ══════════════════════════════════════════════
+  // BOTTOM: Note cards grid
+  // ══════════════════════════════════════════════
+  if (alleNotizen.length > 0 || true) {
+    html += '<div class="on-notes-section">';
+    html += '<div class="on-notes-header">';
+    html += '<div class="on-section-title">📝 Notizen</div>';
+    html += '<button type="button" class="on-btn on-btn-note" onclick="addPersNotiz()">+ Neue Notiz</button>';
+    html += '</div>';
+
+    if (alleNotizen.length === 0) {
+      html += '<div class="on-empty-notes">';
+      html += '<div style="font-size:28px;margin-bottom:8px;">📝</div>';
+      html += '<div style="font-size:14px;font-weight:600;color:var(--text);">Noch keine Notizen</div>';
+      html += '<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Erstelle deine erste Notiz um zu starten</div>';
       html += '</div>';
+    } else {
+      // Pinned
+      var angepinnt = alleNotizen.filter(function(n) { return n.angepinnt; });
+      var rest = alleNotizen.filter(function(n) { return !n.angepinnt; });
+
+      if (angepinnt.length > 0) {
+        html += '<div class="on-notes-label">📌 Angepinnt</div>';
+        html += '<div class="pn-grid" id="pn-grid-pinned">';
+        angepinnt.forEach(function(n) { html += renderONCard(n); });
+        html += '</div>';
+      }
+
       if (rest.length > 0) {
-        html += '<div style="margin:16px 0 6px;font-size:11px;font-weight:600;color:var(--text-muted,#9CA3AF);text-transform:uppercase;letter-spacing:0.5px;padding-left:4px;">Alle Notizen</div>';
+        if (angepinnt.length > 0) html += '<div class="on-notes-label">Alle Notizen</div>';
+        html += '<div class="pn-grid" id="pn-grid">';
+        rest.forEach(function(n) { html += renderONCard(n); });
+        html += '</div>';
       }
     }
-
-    if (rest.length > 0) {
-      html += '<div class="pn-grid" id="pn-grid">';
-      for (const notiz of rest) {
-        html += renderNotizCard(notiz);
-      }
-      html += '</div>';
-    }
+    html += '</div>';
   }
 
   container.innerHTML = sanitize(html);
 
-  function renderNotizCard(notiz) {
-    const farbe = NOTIZ_FARBEN.find(f => f.id === notiz.farbe) || NOTIZ_FARBEN[0];
-    const preview = escapeHtml((notiz.text || '').substring(0, 200));
-    const datum = notiz.geaendert ? new Date(notiz.geaendert).toLocaleDateString('de-LU', { day: '2-digit', month: 'short' }) : '';
-    let card = '<div class="pn-card" style="background:' + farbe.bg + ';border-color:' + farbe.border + ';" onclick="editPersNotiz(\'' + notiz.id + '\')">';
+  function renderONCard(notiz) {
+    var farbe = NOTIZ_FARBEN.find(function(f) { return f.id === notiz.farbe; }) || NOTIZ_FARBEN[0];
+    var preview = escapeHtml((notiz.text || '').substring(0, 200));
+    var datum = notiz.geaendert ? new Date(notiz.geaendert).toLocaleDateString('de-LU', { day: '2-digit', month: 'short' }) : '';
+    var card = '<div class="pn-card" style="background:' + farbe.bg + ';border-color:' + farbe.border + ';" onclick="editPersNotiz(\'' + notiz.id + '\')">';
     card += '<div class="pn-card-header">';
     card += '<span class="pn-card-footer" style="margin:0;">' + datum + '</span>';
     card += '<div class="pn-card-actions">';
     if (notiz.angepinnt) card += '<span class="pn-pin active" title="Angepinnt">📌</span>';
-    card += '</div>';
-    card += '</div>';
+    card += '</div></div>';
     if (notiz.titel) card += '<div class="pn-card-title">' + escapeHtml(notiz.titel) + '</div>';
     card += '<div class="pn-card-preview">' + preview + '</div>';
     card += '</div>';
     return card;
   }
+}
+
+// Quick-add task from unified workspace
+function addAufgabeFromWorkspace() {
+  var input = document.getElementById('on-aufgabe-input');
+  var prio = document.getElementById('on-aufgabe-prio');
+  if (!input || !input.value.trim()) return;
+  DB.addAufgabe({
+    text: input.value.trim(),
+    prioritaet: prio ? prio.value : 'normal',
+    faellig: '',
+    schuelerId: null,
+    erledigt: false
+  });
+  input.value = '';
+  showToast('Aufgabe erstellt', 'success');
+  renderPersNotizen();
 }
 
 function addPersNotiz() {

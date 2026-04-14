@@ -15047,6 +15047,221 @@ function getThemaPrioritaet(themaId, roadmap) {
   return { level: 'optional', label: '💡 Optional', css: 'roadmap-prioritaet-optional', score: maxSeverity };
 }
 
+// ============================================================
+// PRIORITÄTEN-AGGREGATION
+// Aggregiert alle Prioritäten für einen Schüler aus:
+//   1. Screening-Scores (Severity pro Domain)
+//   2. Risiko-Flag (rot/gelb/grün)
+//   3. Anamnese (ACE, Familiensituation, Schulgeschichte)
+//   4. 5P-Fallformulierung (Hypothesen)
+// Liefert sortierte Liste (dringlichste zuerst) mit Arbeitsblatt-Vorschlägen.
+// ============================================================
+function getSchuelerPrioritaeten(schuelerId) {
+  const schueler = DB.getSchueler().find(s => s.id === schuelerId);
+  if (!schueler) return [];
+
+  const prioritaeten = [];
+  const seenThemen = new Set(); // Deduplizierung von Arbeitsblatt-Themen
+
+  // ── 1. RISIKO (höchste Priorität wenn rot) ──
+  if (schueler.risiko === 'hoch' || schueler.risiko === 'rot') {
+    prioritaeten.push({
+      id: 'risiko-hoch',
+      rang: 100,
+      dringlichkeit: 'kritisch',
+      icon: '🚨',
+      titel: 'Akute Risikosituation',
+      quelle: 'Risiko-Einstufung',
+      beschreibung: 'Diese/r Jugendliche ist als Hochrisiko eingestuft. Sofortige Sicherheitsplanung und engmaschige Begleitung.',
+      themenIds: ['krisenintervention', 'suizidpraevention'],
+      farbe: '#DC2626'
+    });
+  }
+
+  // ── 2. SCREENING-DOMAINS (severity-basiert) ──
+  const screenings = DB.getScreenings ? DB.getScreenings().filter(s => s.schuelerId === schuelerId) : [];
+  const letztesScreening = screenings.sort((a, b) => new Date(b.datum || 0) - new Date(a.datum || 0))[0];
+
+  if (letztesScreening && letztesScreening.scores && typeof SCREENING_DOMAINS !== 'undefined') {
+    for (const dom of SCREENING_DOMAINS) {
+      const score = letztesScreening.scores[dom.id];
+      if (score === undefined || score === null) continue;
+      const max = (dom.items || []).length * 3;
+      if (max === 0) continue;
+      const severity = score / max;
+      if (severity < 0.25) continue; // unter Schwelle, nicht prioritär
+
+      let dringlichkeit, icon, rangBasis;
+      if (severity >= 0.7) { dringlichkeit = 'dringend'; icon = '⚡'; rangBasis = 80; }
+      else if (severity >= 0.5) { dringlichkeit = 'hoch'; icon = '📌'; rangBasis = 60; }
+      else if (severity >= 0.35) { dringlichkeit = 'mittel'; icon = '💡'; rangBasis = 40; }
+      else { dringlichkeit = 'niedrig'; icon = '•'; rangBasis = 20; }
+
+      const themenIds = (typeof SCREENING_THEMA_MAP !== 'undefined' && SCREENING_THEMA_MAP[dom.id]) ? SCREENING_THEMA_MAP[dom.id] : [];
+      prioritaeten.push({
+        id: 'screen-' + dom.id,
+        rang: rangBasis + severity * 10,
+        dringlichkeit,
+        icon,
+        titel: dom.label + (dom.icd ? ' (' + dom.icd + ')' : ''),
+        quelle: 'Screening · ' + (dom.instrument || dom.label),
+        beschreibung: `Score ${score}/${max} (${Math.round(severity * 100)}%) — Cutoff überschritten, zeigt deutliche Belastung in diesem Bereich.`,
+        themenIds,
+        farbe: dom.farbe || '#5B6ABF'
+      });
+    }
+  }
+
+  // ── 3. ANAMNESE-basierte Prioritäten ──
+  const a = Array.isArray(schueler.anamnese) ? schueler.anamnese : [];
+
+  // Schwere ACE
+  const schwereAce = ['missbrauch_sexuell', 'misshandlung_physisch', 'misshandlung_emotional',
+                      'haeusliche_gewalt', 'vernachlaessigung_emotional', 'vernachlaessigung_physisch',
+                      'tod_elternteil'];
+  const aceTreffer = schwereAce.filter(id => a.includes(id));
+  if (aceTreffer.length > 0) {
+    prioritaeten.push({
+      id: 'anam-ace',
+      rang: 70 + aceTreffer.length * 2,
+      dringlichkeit: aceTreffer.length >= 2 ? 'dringend' : 'hoch',
+      icon: '⚠️',
+      titel: 'Trauma-relevante Kindheitserfahrungen',
+      quelle: 'Anamnese · ACE (' + aceTreffer.length + ' Faktor' + (aceTreffer.length > 1 ? 'en' : '') + ')',
+      beschreibung: 'Belastende Kindheitserfahrungen im Hintergrund — Traumasensibler Zugang und Stabilisierung vor konfrontativer Arbeit.',
+      themenIds: ['trauma', 'resilienz', 'emotionsregulation', 'krisenintervention'],
+      farbe: '#B91C1C'
+    });
+  }
+
+  // Bindungsrelevante Konstellation
+  const bindungsFlags = ['heim', 'pflegefamilie', 'kein_mutter', 'mutter_verstorben',
+                         'kein_vater', 'vater_verstorben'];
+  if (bindungsFlags.some(id => a.includes(id))) {
+    prioritaeten.push({
+      id: 'anam-bindung',
+      rang: 55,
+      dringlichkeit: 'hoch',
+      icon: '🧷',
+      titel: 'Bindungsrelevante Lebenssituation',
+      quelle: 'Anamnese · Familie',
+      beschreibung: 'Unterbrochene oder fehlende primäre Bezugspersonen — Beziehungsaufbau braucht besondere Sorgfalt und Verlässlichkeit.',
+      themenIds: ['eltern-kind-beziehung', 'familienzusammensetzung', 'emotionsregulation'],
+      farbe: '#7C3AED'
+    });
+  }
+
+  // Substanzkonsum / Sucht im Haushalt
+  if (a.includes('sucht_haushalt')) {
+    prioritaeten.push({
+      id: 'anam-sucht-hh',
+      rang: 45,
+      dringlichkeit: 'mittel',
+      icon: '🍷',
+      titel: 'Sucht im Elternhaus',
+      quelle: 'Anamnese · ACE',
+      beschreibung: 'Erhöhtes Eigen-Konsumrisiko und Parentifizierungsmuster beachten.',
+      themenIds: ['alkohol', 'cannabis', 'parentifizierung'],
+      farbe: '#F59E0B'
+    });
+  }
+
+  // Migration/Flucht
+  if (a.includes('flucht') || a.includes('migration')) {
+    prioritaeten.push({
+      id: 'anam-migration',
+      rang: 30,
+      dringlichkeit: 'mittel',
+      icon: '🌍',
+      titel: 'Migrations-/Fluchthintergrund',
+      quelle: 'Anamnese · Familie',
+      beschreibung: 'Akkulturationsstress, Identitätsfragen und mögliche traumatische Erfahrungen mitdenken.',
+      themenIds: ['kulturelle-identitaet', 'resilienz', 'trauma'],
+      farbe: '#0891B2'
+    });
+  }
+
+  // Schulabsentismus
+  if (a.includes('absentismus') || a.includes('schulverweigerung')) {
+    prioritaeten.push({
+      id: 'anam-absentismus',
+      rang: 50,
+      dringlichkeit: 'hoch',
+      icon: '🏫',
+      titel: 'Schulabsentismus',
+      quelle: 'Anamnese · Schule',
+      beschreibung: 'Schulvermeidung ist oft Symptom anderer Probleme (Angst, Depression, Mobbing) — Ursachen abklären.',
+      themenIds: ['schulisches-engagement', 'stress-angst', 'motivation'],
+      farbe: '#F97316'
+    });
+  }
+
+  // ── 4. 5P-FALLFORMULIERUNG — hypothetische Treiber ──
+  const ff = DB.getFallformulierung ? DB.getFallformulierung(schuelerId) : null;
+  if (ff && Array.isArray(ff.perpetuating) && ff.perpetuating.length > 0) {
+    prioritaeten.push({
+      id: 'ff-perpetuating',
+      rang: 48,
+      dringlichkeit: 'hoch',
+      icon: '🔁',
+      titel: 'Aufrechterhaltende Faktoren (5P)',
+      quelle: 'Fallformulierung · Perpetuating',
+      beschreibung: ff.perpetuating.slice(0, 3).map(f => '• ' + (typeof f === 'string' ? f : f.text || f.label || '')).join('<br>'),
+      themenIds: [],
+      farbe: '#DB2777'
+    });
+  }
+  if (ff && Array.isArray(ff.presenting) && ff.presenting.length > 0) {
+    prioritaeten.push({
+      id: 'ff-presenting',
+      rang: 42,
+      dringlichkeit: 'mittel',
+      icon: '📣',
+      titel: 'Aktuelles Beschwerdebild (5P)',
+      quelle: 'Fallformulierung · Presenting',
+      beschreibung: ff.presenting.slice(0, 3).map(f => '• ' + (typeof f === 'string' ? f : f.text || f.label || '')).join('<br>'),
+      themenIds: [],
+      farbe: '#2563EB'
+    });
+  }
+
+  // ── 5. ZIELE (vom Jugendlichen selbst) ──
+  const ziele = Array.isArray(schueler.ziele) ? schueler.ziele.filter(z => z && (z.aktiv !== false)) : [];
+  if (ziele.length > 0) {
+    prioritaeten.push({
+      id: 'ziele-eigene',
+      rang: 65,
+      dringlichkeit: 'hoch',
+      icon: '🎯',
+      titel: 'Eigene Ziele der/des Jugendlichen',
+      quelle: 'Selbstformuliert',
+      beschreibung: ziele.slice(0, 3).map(z => '• ' + (z.text || z.titel || z)).join('<br>'),
+      themenIds: [],
+      farbe: '#059669'
+    });
+  }
+
+  // ── Sortieren: höchster rang zuerst ──
+  prioritaeten.sort((p1, p2) => p2.rang - p1.rang);
+
+  // ── Arbeitsblätter auflösen ──
+  prioritaeten.forEach(p => {
+    const ab = [];
+    (p.themenIds || []).forEach(tid => {
+      if (typeof ARBEITSBLÄTTER !== 'undefined' && ARBEITSBLÄTTER[tid]) {
+        ARBEITSBLÄTTER[tid].forEach(blatt => {
+          if (!ab.find(x => x.datei === blatt.datei)) {
+            ab.push(blatt);
+          }
+        });
+      }
+    });
+    p.arbeitsblaetter = ab;
+  });
+
+  return prioritaeten;
+}
+
 // ── Phasen-Stepper (horizontale Dot-Navigation) ──
 function renderPhasenStepper(roadmap) {
   let html = '<div class="roadmap-stepper">';

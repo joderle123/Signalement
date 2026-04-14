@@ -366,8 +366,12 @@
       <div class="profil-tab-content" data-tab="notizen">
 
         <!-- Sitzungsprotokoll (SOAP) -->
-        <div id="notiz-modus-protokoll" class="notiz-form">
-          <!-- ═══ SOAP — Alles auf einer Seite ═══ -->
+        <div id="notiz-modus-protokoll" class="notiz-form soap-form-enhanced">
+          <!-- ═══ SOAP — Sitzungsprotokoll ═══ -->
+          <div class="soap-banner">
+            <div class="soap-banner-title">Sitzungsprotokoll</div>
+            <div class="soap-banner-sub">Dokumentiere die Sitzung im SOAP-Format — Subjektiv, Objektiv, Assessment, Plan</div>
+          </div>
 
           <!-- Setup-Leiste -->
           <div class="protokoll-meta-grid" style="margin-bottom:12px;">
@@ -577,11 +581,14 @@
           <div id="soap-vorschau" style="display:none;"></div>
 
           <!-- Speichern -->
-          <div style="display:flex;justify-content:flex-end;margin-top:16px;gap:8px;">
-            <button class="btn btn-primary" onclick="addProtokoll()" style="padding:10px 24px;font-size:14px;">📋 Protokoll speichern</button>
+          <div class="soap-save-bar">
+            <button class="btn soap-save-btn" onclick="addProtokoll()">Sitzung speichern</button>
           </div>
         </div>
 
+        <div class="soap-list-divider">
+          <span class="soap-list-divider-label">Bisherige Sitzungen</span>
+        </div>
         <div id="notizen-liste"></div>
         <div id="konferenzen-in-sitzungen" style="margin-top:24px;"></div>
       </div>

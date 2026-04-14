@@ -3543,6 +3543,121 @@ body.dark-mode .stimmung-seg:hover { background: #374151; }
   background: var(--bg-card); border-color: var(--border); color: var(--text-light);
 }
 
+/* ── SOAP Enhanced Styling ── */
+.soap-form-enhanced {
+  padding: 0 !important;
+  overflow: hidden;
+}
+.soap-form-enhanced > *:not(.soap-banner) {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.soap-form-enhanced > .protokoll-meta-grid {
+  padding-top: 16px;
+}
+.soap-form-enhanced > .soap-save-bar {
+  padding-bottom: 20px;
+}
+.soap-banner {
+  background: linear-gradient(135deg, #2563EB 0%, #6366F1 50%, #7C3AED 100%);
+  color: #fff;
+  padding: 16px 20px;
+  margin-bottom: 4px;
+}
+.soap-banner-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.soap-banner-sub {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 3px;
+  font-weight: 400;
+}
+.protokoll-soap {
+  background: var(--bg-muted, #F9FAFB);
+  border-radius: 10px;
+  padding: 12px;
+}
+/* border-left colors handled via .soap-section.soap-s etc. at higher specificity */
+.soap-letter {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.soap-header {
+  padding: 12px 14px;
+  font-size: 13px;
+}
+.soap-section .notiz-textarea::placeholder {
+  color: #9CA3AF;
+}
+.soap-save-bar {
+  margin-top: 16px;
+}
+.soap-save-btn {
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2563EB 0%, #6366F1 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+.soap-save-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+.soap-save-btn:active {
+  transform: translateY(0);
+}
+.soap-list-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+.soap-list-divider::before,
+.soap-list-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border, #E5E7EB);
+}
+.soap-list-divider-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted, #6B7280);
+  white-space: nowrap;
+}
+
+/* SOAP Dark Mode */
+body.dark-mode .soap-banner {
+  background: linear-gradient(135deg, #1E40AF 0%, #4338CA 50%, #5B21B6 100%);
+}
+body.dark-mode .protokoll-soap {
+  background: var(--bg-muted, #1F2937);
+}
+body.dark-mode .soap-save-btn {
+  background: linear-gradient(135deg, #1E40AF 0%, #4338CA 100%);
+  box-shadow: 0 2px 8px rgba(67, 56, 202, 0.35);
+}
+body.dark-mode .soap-save-btn:hover {
+  box-shadow: 0 4px 14px rgba(67, 56, 202, 0.5);
+}
+body.dark-mode .soap-section .notiz-textarea::placeholder {
+  color: #6B7280;
+}
+body.dark-mode .soap-list-divider-label {
+  color: var(--text-muted, #9CA3AF);
+}
+
 /* Zusatz */
 .protokoll-zusatz {
   margin-bottom: 12px;
@@ -9575,10 +9690,10 @@ textarea:required:invalid:not(:placeholder-shown) {
 }
 
 /* SOAP section headers — colored accent line */
-.soap-section.soap-s { border-left: 3px solid #3B82F6; }
-.soap-section.soap-o { border-left: 3px solid #8B5CF6; }
-.soap-section.soap-a { border-left: 3px solid #F59E0B; }
-.soap-section.soap-p { border-left: 3px solid #10B981; }
+.soap-section.soap-s { border-left: 3px solid #2563EB; }
+.soap-section.soap-o { border-left: 3px solid #16A34A; }
+.soap-section.soap-a { border-left: 3px solid #EA580C; }
+.soap-section.soap-p { border-left: 3px solid #4F46E5; }
 
 /* Onboarding overlay */
 .onboarding-overlay {
@@ -10704,5 +10819,15 @@ body.dark-mode .roadmap-topbar-bar {
   }
   .hypo-section {
     grid-template-columns: 1fr;
+  }
+  .soap-form-enhanced > *:not(.soap-banner) {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .soap-banner {
+    padding: 14px 12px;
+  }
+  .protokoll-soap {
+    padding: 8px;
   }
 }

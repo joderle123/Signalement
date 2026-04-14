@@ -2793,10 +2793,309 @@ function toggleBibliothekFavorit(itemId) {
 // ============================================================
 // ANALYSE: Klinisches Gesamtbild
 // ============================================================
+
+// Collapse-Zustand persistent speichern
+function getGBSectionState() {
+  try {
+    return JSON.parse(localStorage.getItem('pathways_gesamtbild_sections') || '{}');
+  } catch(e) { return {}; }
+}
+function setGBSectionState(sectionId, open) {
+  var state = getGBSectionState();
+  state[sectionId] = open;
+  try { localStorage.setItem('pathways_gesamtbild_sections', JSON.stringify(state)); } catch(e) {}
+}
+function toggleGBSection(sectionId) {
+  var el = document.querySelector('.gb-section[data-section="' + sectionId + '"]');
+  if (!el) return;
+  var isOpen = el.classList.toggle('gb-open');
+  setGBSectionState(sectionId, isOpen);
+}
+
+function gbSection(id, icon, title, badge, defaultOpen, bodyHtml) {
+  var state = getGBSectionState();
+  var isOpen = state[id] !== undefined ? state[id] : defaultOpen;
+  return '<div class="gb-section' + (isOpen ? ' gb-open' : '') + '" data-section="' + id + '">'
+    + '<div class="gb-section-header" onclick="toggleGBSection(\'' + id + '\')">'
+    + '<span class="gb-section-icon">' + icon + '</span>'
+    + '<span class="gb-section-title">' + title + '</span>'
+    + (badge ? '<span class="gb-section-badge">' + badge + '</span>' : '')
+    + '<span class="gb-section-arrow">▾</span>'
+    + '</div>'
+    + '<div class="gb-section-body">' + bodyHtml + '</div>'
+    + '</div>';
+}
+
 function renderGesamtbild() {
   var container = document.getElementById('gesamtbild-container');
   if (!container) return;
-  container.innerHTML = '<div style="padding:40px;text-align:center;color:#6B7280;">Gesamtbild wird geladen...</div>';
+  var sid = APP.currentSchuelerId;
+  var s = DB.getSchuelerById(sid);
+  if (!s) {
+    container.innerHTML = renderEmptyState('📊', 'Kein Klient ausgewählt', 'Bitte wähle einen Klienten aus.');
+    return;
+  }
+
+  // ── Daten sammeln ──
+  var notizen = DB.getNotizen(sid);
+  var screenings = DB.getScreenings(sid).filter(function(sc) { return sc.abgeschlossen; });
+  screenings.sort(function(a, b) { return a.erstellt.localeCompare(b.erstellt); });
+  var latestScreening = screenings.length > 0 ? screenings[screenings.length - 1] : null;
+  var hypothesen = generateHypothesen(sid);
+  var branchenRisiken = generateBranchenRisiken(sid);
+  var sitzungen = notizen.filter(function(n) { return n.soap; });
+  var mitOrs = sitzungen.filter(function(n) { return n.soap && n.soap.ors && n.soap.ors.total != null; })
+    .sort(function(a, b) { return a.datum.localeCompare(b.datum); });
+  var orsValues = mitOrs.map(function(n) { return n.soap.ors.total; });
+  var anamnLen = (s.anamnese || []).length;
+  var staerkenCount = s.staerkenProfil && s.staerkenProfil.ratings
+    ? Object.values(s.staerkenProfil.ratings).filter(function(v) { return v > 0; }).length : 0;
+
+  // ── Klinische Berechnung ──
+  var rci = orsValues.length >= 4 ? berechneRCI(orsValues) : null;
+  var klass = null;
+  if (rci && orsValues.length >= 4) {
+    var preORS = (orsValues[0] + orsValues[1]) / 2;
+    var postORS = (orsValues[orsValues.length - 2] + orsValues[orsValues.length - 1]) / 2;
+    klass = berechneKlinischeKlassifikation(preORS, postORS, rci);
+  }
+  // Cohen's d
+  var cohenD = null;
+  if (orsValues.length >= 4) {
+    var half = Math.floor(orsValues.length / 2);
+    cohenD = berechneCohenD(orsValues.slice(0, half), orsValues.slice(half));
+  }
+
+  // ── Risiko-Berechnung ──
+  var risikoHypos = hypothesen.filter(function(h) { return h.typ === 'risiko' && h.staerkeWert >= 4; });
+  var risikoLevel = risikoHypos.length >= 3 ? 'hoch' : risikoHypos.length >= 1 ? 'mittel' : 'niedrig';
+  var risikoFarbe = risikoLevel === 'hoch' ? '#DC2626' : risikoLevel === 'mittel' ? '#F59E0B' : '#10B981';
+  var risikoLabel = risikoLevel === 'hoch' ? 'Erhöhtes Risiko' : risikoLevel === 'mittel' ? 'Moderates Risiko' : 'Geringes Risiko';
+
+  var html = '';
+
+  // ════════════════════════════════════════════
+  // SEKTION 1: Status-Header (immer sichtbar)
+  // ════════════════════════════════════════════
+  html += '<div class="gb-status-header">';
+  // Risiko-Ampel
+  html += '<div class="gb-status-pill" style="background:' + risikoFarbe + '">' + risikoLabel + '</div>';
+  // Klinische Klassifikation
+  if (klass) {
+    html += '<div class="gb-status-pill gb-status-klass" style="background:' + klass.farbe + '">'
+      + klass.icon + ' ' + klass.label + '</div>';
+  }
+  // Datenquellen-Status
+  html += '<div class="gb-sources">';
+  html += '<span class="gb-source-badge ' + (anamnLen >= 3 ? 'gb-source-ok' : 'gb-source-miss') + '">Anamnese ' + (anamnLen >= 3 ? '✓' : '✗') + '</span>';
+  html += '<span class="gb-source-badge ' + (screenings.length > 0 ? 'gb-source-ok' : 'gb-source-miss') + '">Screening ' + (screenings.length > 0 ? '✓' : '✗') + '</span>';
+  html += '<span class="gb-source-badge ' + (staerkenCount >= 3 ? 'gb-source-ok' : 'gb-source-miss') + '">Stärken ' + (staerkenCount >= 3 ? '✓' : '✗') + '</span>';
+  html += '<span class="gb-source-badge ' + (sitzungen.length > 0 ? 'gb-source-ok' : 'gb-source-miss') + '">Sitzungen ' + (sitzungen.length > 0 ? '✓' : '✗') + '</span>';
+  html += '</div>';
+  html += '</div>';
+
+  // ════════════════════════════════════════════
+  // SEKTION 2: ORS/SRS Verlauf (immer expanded)
+  // ════════════════════════════════════════════
+  var orsHtml = renderOrsStatsPanel(notizen);
+  if (orsHtml) {
+    html += gbSection('ors-srs', '📈', 'ORS/SRS Verlauf', sitzungen.length + ' Sitzungen', true, orsHtml);
+  }
+
+  // ════════════════════════════════════════════
+  // SEKTION 3: Screening-Überblick
+  // ════════════════════════════════════════════
+  var screenHtml = '';
+  if (latestScreening) {
+    var scores = latestScreening.scores || {};
+    var flagged = latestScreening.flaggedAreas || [];
+    var domains = typeof SCREENING_DOMAINS !== 'undefined' ? SCREENING_DOMAINS : [];
+    var datum = new Date(latestScreening.erstellt).toLocaleDateString('de-CH');
+
+    // Severity berechnen
+    var totalScore = Object.values(scores).reduce(function(a, b) { return a + b; }, 0);
+    var maxPossible = domains.reduce(function(sum, d) { return sum + (d.items ? d.items.length * 3 : 15); }, 0);
+    var severityPct = maxPossible > 0 ? Math.round(totalScore / maxPossible * 100) : 0;
+    var severityLabel = severityPct >= 60 ? 'Schwer' : severityPct >= 35 ? 'Moderat' : 'Leicht';
+    var severityColor = severityPct >= 60 ? '#DC2626' : severityPct >= 35 ? '#F59E0B' : '#10B981';
+
+    screenHtml += '<div class="gb-screening-header">';
+    screenHtml += '<span class="gb-screening-datum">Letztes Screening: ' + datum + '</span>';
+    screenHtml += '<span class="gb-severity-badge" style="background:' + severityColor + '">' + severityLabel + ' (' + severityPct + '%)</span>';
+    screenHtml += '</div>';
+
+    // Geflaggte Domänen als Chips
+    if (flagged.length > 0) {
+      screenHtml += '<div class="gb-flagged-chips">';
+      flagged.forEach(function(domId) {
+        var dom = domains.find(function(d) { return d.id === domId; });
+        if (dom) {
+          screenHtml += '<span class="gb-flagged-chip" style="background:' + (dom.farbe || '#9CA3AF') + '22;color:' + (dom.farbe || '#9CA3AF') + ';border:1px solid ' + (dom.farbe || '#9CA3AF') + '44">'
+            + (dom.icon || '') + ' ' + dom.label + ' (' + (scores[domId] || 0) + '/' + (dom.cutoff || '?') + ')'
+            + '</span>';
+        }
+      });
+      screenHtml += '</div>';
+    } else {
+      screenHtml += '<div style="color:#6B7280;font-size:13px;margin-top:8px;">Keine auffälligen Domänen geflaggt.</div>';
+    }
+
+    // Delta-Verlauf Container (renderScreeningVerlauf schreibt hierhin)
+    if (screenings.length >= 2) {
+      screenHtml += '<div id="screening-verlauf-container" style="margin-top:12px;"></div>';
+    }
+  } else {
+    screenHtml = '<div style="color:#6B7280;font-size:13px;">Kein abgeschlossenes Screening vorhanden.</div>';
+  }
+  html += gbSection('screening', '🎯', 'Screening-Überblick', screenings.length > 0 ? screenings.length + ' Screening(s)' : '', true, screenHtml);
+
+  // ════════════════════════════════════════════
+  // SEKTION 4: Klinische Hypothesen
+  // ════════════════════════════════════════════
+  var hypoHtml = '';
+  if (hypothesen.length > 0) {
+    var risiken = hypothesen.filter(function(h) { return h.typ === 'risiko'; });
+    var differenzial = hypothesen.filter(function(h) { return h.typ === 'differenzial'; });
+    var schutz = hypothesen.filter(function(h) { return h.typ === 'schutz'; });
+
+    // Summary-Zähler
+    hypoHtml += '<div class="gb-hypo-summary">';
+    if (risiken.length) hypoHtml += '<span class="gb-hypo-count gb-hypo-risiko">' + risiken.length + ' Belastungen</span>';
+    if (differenzial.length) hypoHtml += '<span class="gb-hypo-count gb-hypo-diff">' + differenzial.length + ' Differenzial</span>';
+    if (schutz.length) hypoHtml += '<span class="gb-hypo-count gb-hypo-schutz">' + schutz.length + ' Schutzfaktoren</span>';
+    hypoHtml += '</div>';
+
+    // Hypothesen-Karten gruppiert
+    if (risiken.length > 0) {
+      hypoHtml += '<div class="hypo-section"><div class="hypo-section-label hypo-section-risiko">Belastungsmuster <span class="hypo-section-count">' + risiken.length + '</span></div>';
+      hypoHtml += risiken.map(hypoCard).join('') + '</div>';
+    }
+    if (differenzial.length > 0) {
+      hypoHtml += '<div class="hypo-section"><div class="hypo-section-label hypo-section-diff">Differenzialdiagnosen <span class="hypo-section-count">' + differenzial.length + '</span></div>';
+      hypoHtml += differenzial.map(hypoCard).join('') + '</div>';
+    }
+    if (schutz.length > 0) {
+      hypoHtml += '<div class="hypo-section"><div class="hypo-section-label hypo-section-schutz">Schutzfaktoren <span class="hypo-section-count">' + schutz.length + '</span></div>';
+      hypoHtml += schutz.map(hypoCard).join('') + '</div>';
+    }
+  } else {
+    hypoHtml = '<div style="color:#6B7280;font-size:13px;">Hypothesen werden automatisch generiert, sobald Daten aus Anamnese, Screening oder Stärken vorliegen.</div>';
+  }
+  var hypoBadge = hypothesen.length > 0 ? hypothesen.length + ' Hypothesen' : '';
+  html += gbSection('hypothesen', '🧠', 'Klinische Hypothesen', hypoBadge, true, hypoHtml);
+
+  // ════════════════════════════════════════════
+  // SEKTION 5: Statistische Risikofaktoren
+  // ════════════════════════════════════════════
+  var branchenHtml = '';
+  if (branchenRisiken.length > 0) {
+    branchenHtml += '<div class="gb-branchen-grid">';
+    branchenHtml += branchenRisiken.map(branchenRisikoKarte).join('');
+    branchenHtml += '</div>';
+  } else {
+    branchenHtml = '<div style="color:#6B7280;font-size:13px;">Keine epidemiologischen Risikofaktoren erkannt.</div>';
+  }
+  html += gbSection('branchen', '📊', 'Statistische Risikofaktoren', branchenRisiken.length > 0 ? branchenRisiken.length + ' Faktoren' : '', false, branchenHtml);
+
+  // ════════════════════════════════════════════
+  // SEKTION 6: Treatment-Response
+  // ════════════════════════════════════════════
+  var trHtml = '<div id="treatment-response-container"></div>';
+  html += gbSection('treatment', '💊', 'Treatment-Response', '', false, trHtml);
+
+  // ════════════════════════════════════════════
+  // SEKTION 7: Wirkungsnachweis
+  // ════════════════════════════════════════════
+  var wirkHtml = '';
+  if (orsValues.length >= 4) {
+    wirkHtml += '<div class="gb-wirkungs-grid">';
+    // RCI
+    if (rci) {
+      var rciColor = rci.reliable ? (rci.richtung === 'verbessert' ? '#10B981' : '#DC2626') : '#6B7280';
+      wirkHtml += '<div class="gb-wirkungs-card">'
+        + '<div class="gb-wirkungs-label">Reliable Change Index</div>'
+        + '<div class="gb-wirkungs-value" style="color:' + rciColor + '">' + rci.rci + '</div>'
+        + '<div class="gb-wirkungs-sub">' + (rci.reliable ? 'Statistisch signifikant' : 'Nicht signifikant') + ' · ' + rci.richtung + '</div>'
+        + '</div>';
+    }
+    // Cohen's d
+    if (cohenD) {
+      var dColor = cohenD.richtung === 'verbessert' ? '#10B981' : cohenD.richtung === 'verschlechtert' ? '#DC2626' : '#6B7280';
+      wirkHtml += '<div class="gb-wirkungs-card">'
+        + '<div class="gb-wirkungs-label">Effektstärke (Cohen\'s d)</div>'
+        + '<div class="gb-wirkungs-value" style="color:' + dColor + '">' + cohenD.d + '</div>'
+        + '<div class="gb-wirkungs-sub">' + cohenD.interpretation + ' · ' + cohenD.richtung + '</div>'
+        + '</div>';
+    }
+    // Klinische Klassifikation
+    if (klass) {
+      wirkHtml += '<div class="gb-wirkungs-card">'
+        + '<div class="gb-wirkungs-label">Klinische Klassifikation</div>'
+        + '<div class="gb-wirkungs-value" style="color:' + klass.farbe + '">' + klass.icon + ' ' + klass.label + '</div>'
+        + '<div class="gb-wirkungs-sub">ORS Cutoff: 28</div>'
+        + '</div>';
+    }
+    wirkHtml += '</div>';
+  } else {
+    wirkHtml = '<div style="color:#6B7280;font-size:13px;">Mindestens 4 ORS-Messungen erforderlich für Wirkungsnachweis.</div>';
+  }
+  html += gbSection('wirkung', '🏆', 'Wirkungsnachweis', klass ? klass.label : '', false, wirkHtml);
+
+  // ════════════════════════════════════════════
+  // SEKTION 8: Stärken-Zusammenfassung
+  // ════════════════════════════════════════════
+  var staerkenHtml = '';
+  var ratings = s.staerkenProfil && s.staerkenProfil.ratings ? s.staerkenProfil.ratings : {};
+  var dims = typeof STAERKEN_DIMENSIONEN !== 'undefined' ? STAERKEN_DIMENSIONEN : [];
+  var rated = dims.filter(function(d) { return ratings[d.id] && ratings[d.id] > 0; })
+    .map(function(d) { return { id: d.id, label: d.label, icon: d.icon, farbe: d.farbe, wert: ratings[d.id] }; })
+    .sort(function(a, b) { return b.wert - a.wert; });
+
+  if (rated.length > 0) {
+    // Top 3 Stärken
+    var top3 = rated.slice(0, 3);
+    staerkenHtml += '<div class="gb-staerken-group">';
+    staerkenHtml += '<div class="gb-staerken-label">Top-Stärken</div>';
+    staerkenHtml += '<div class="gb-staerken-items">';
+    top3.forEach(function(d) {
+      staerkenHtml += '<div class="gb-staerken-item">'
+        + '<span class="gb-staerken-icon">' + d.icon + '</span>'
+        + '<span class="gb-staerken-name">' + d.label + '</span>'
+        + '<span class="gb-staerken-bar"><span class="gb-staerken-fill" style="width:' + (d.wert / 5 * 100) + '%;background:' + d.farbe + '"></span></span>'
+        + '<span class="gb-staerken-wert">' + d.wert + '/5</span>'
+        + '</div>';
+    });
+    staerkenHtml += '</div></div>';
+
+    // Bottom 3 / Entwicklungsfelder
+    if (rated.length >= 4) {
+      var bottom3 = rated.slice(-3).reverse();
+      staerkenHtml += '<div class="gb-staerken-group">';
+      staerkenHtml += '<div class="gb-staerken-label">Entwicklungsfelder</div>';
+      staerkenHtml += '<div class="gb-staerken-items">';
+      bottom3.forEach(function(d) {
+        staerkenHtml += '<div class="gb-staerken-item">'
+          + '<span class="gb-staerken-icon">' + d.icon + '</span>'
+          + '<span class="gb-staerken-name">' + d.label + '</span>'
+          + '<span class="gb-staerken-bar"><span class="gb-staerken-fill" style="width:' + (d.wert / 5 * 100) + '%;background:' + d.farbe + '"></span></span>'
+          + '<span class="gb-staerken-wert">' + d.wert + '/5</span>'
+          + '</div>';
+      });
+      staerkenHtml += '</div></div>';
+    }
+  } else {
+    staerkenHtml = '<div style="color:#6B7280;font-size:13px;">Noch keine Stärken bewertet.</div>';
+  }
+  html += gbSection('staerken', '💪', 'Stärken-Zusammenfassung', staerkenCount > 0 ? staerkenCount + ' bewertet' : '', false, staerkenHtml);
+
+  // ── Alles ins DOM ──
+  container.innerHTML = html;
+
+  // ── Nachgelagerte DOM-schreibende Funktionen aufrufen ──
+  if (screenings.length >= 2) {
+    try { renderScreeningVerlauf(sid); } catch(e) { /* silent */ }
+  }
+  try { renderTreatmentResponse(sid); } catch(e) { /* silent */ }
 }
 
 // ============================================================

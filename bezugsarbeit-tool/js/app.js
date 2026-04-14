@@ -5886,7 +5886,17 @@ function hypoCard(h) {
     dynamicHtml += '<span class="hypo-tr-warn-badge" title="' + (h._trHinweis || '') + '">? Prüfen</span>';
   }
 
-  return '<div class="hypo-card" data-typ="' + h.typ + '" data-ebene="' + (h.ebene || '') + '" data-id="' + h.id + '">'
+  // Kompakte Karte: Nur Titel + Badge + Konfidenz sichtbar
+  // Beschreibung, Chips, ICD, Evidenz etc. erst bei Klick
+  var expandId = 'hypo-expand-' + h.id;
+  var expandHtml = '<div class="hypo-expand-content" id="' + expandId + '">'
+    + '<div class="hypo-card-desc">' + h.erklaerung + '</div>'
+    + chipHtml
+    + icdHtml
+    + detailHtml
+    + '</div>';
+
+  return '<div class="hypo-card hypo-card-compact" data-typ="' + h.typ + '" data-ebene="' + (h.ebene || '') + '" data-id="' + h.id + '" onclick="toggleHypoExpand(\'' + h.id + '\')">'
     + '<div class="hypo-card-accent" style="background:' + borderColor + '"></div>'
     + '<div class="hypo-card-body">'
     + '<div class="hypo-card-header">'
@@ -5896,15 +5906,18 @@ function hypoCard(h) {
     + dynamicHtml
     + '</div>'
     + '</div>'
-    + '<div class="hypo-card-desc">' + h.erklaerung + '</div>'
-    + chipHtml
     + '<div class="hypo-card-footer">'
     + konfHtml
-    + icdHtml
-    + '<button class="hypo-expand-btn" onclick="toggleHypoDetail(\'' + h.id + '\')" aria-expanded="false">Details</button>'
     + '</div>'
-    + detailHtml
+    + expandHtml
     + '</div></div>';
+}
+
+function toggleHypoExpand(id) {
+  var el = document.getElementById('hypo-expand-' + id);
+  if (!el) return;
+  var card = el.closest('.hypo-card');
+  if (card) card.classList.toggle('hypo-expanded');
 }
 
 function toggleHypoDetail(id) {

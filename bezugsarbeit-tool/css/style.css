@@ -6080,8 +6080,16 @@ body.dark-mode .bib-karte-desc { color: #9CA3AF; }
 .hypo-stat-schutz .hypo-stat-num { color: #10B981; }
 .hypo-stat-branchen .hypo-stat-num { color: #F59E0B; }
 
-/* Sections */
-.hypo-section { margin-bottom: 4px; }
+/* Sections — Grid-Layout für kompakte Karten */
+.hypo-section {
+  margin-bottom: 4px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 8px;
+}
+.hypo-section-label {
+  grid-column: 1 / -1;
+}
 .hypo-section-label {
   font-size: 13px;
   font-weight: 700;
@@ -6101,7 +6109,12 @@ body.dark-mode .bib-karte-desc { color: #9CA3AF; }
   color: var(--text-muted, #6B7280);
 }
 
-/* Hypothesis Card */
+/* Hypothesis Card — kompakt, expandiert bei Klick */
+.hypo-card-compact { cursor: pointer; }
+.hypo-expand-content { display: none; margin-top: 8px; }
+.hypo-card.hypo-expanded .hypo-expand-content { display: block; }
+.hypo-card.hypo-expanded { grid-column: 1 / -1; }
+
 .hypo-card {
   display: flex;
   border-radius: 10px;
@@ -10657,5 +10670,8 @@ body.dark-mode .roadmap-topbar-bar {
 @media (max-width: 640px) {
   .roadmap-topbar {
     flex-wrap: wrap;
+  }
+  .hypo-section {
+    grid-template-columns: 1fr;
   }
 }

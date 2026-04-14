@@ -15374,6 +15374,172 @@ function renderPrioritaeten() {
   container.innerHTML = html;
 }
 
+// ============================================================
+// ARBEITSBLÄTTER PRO PHASE
+// Aggregiert Arbeitsblätter für eine spezifische Phase aus:
+//   1. ROADMAP_PHASEN[idx].schwerpunkt (Phasen-Standardthemen)
+//   2. Phasen-eigene themen (aus roadmap.phasen[idx].themen)
+//   3. Screening-flaggedAreas (nur Phasen 0–2 relevant)
+//   4. Anamnese-Flags (Phase-passend)
+// Liefert Gruppen: { standardthemen, screening, anamnese, eigene }
+// ============================================================
+function getArbeitsblaetterFuerPhase(phaseIdx, schueler, roadmap) {
+  const gruppen = { standardthemen: [], eigene: [], screening: [], anamnese: [] };
+  const alleDateien = new Set(); // Deduplizierung
+
+  const addTo = (gruppe, themaId, quelle) => {
+    if (typeof ARBEITSBLÄTTER === 'undefined' || !ARBEITSBLÄTTER[themaId]) return;
+    ARBEITSBLÄTTER[themaId].forEach(blatt => {
+      if (alleDateien.has(blatt.datei)) return;
+      alleDateien.add(blatt.datei);
+      gruppe.push({ ...blatt, themaId, quelle });
+    });
+  };
+
+  const phaseDef = (typeof ROADMAP_PHASEN !== 'undefined') ? ROADMAP_PHASEN[phaseIdx] : null;
+
+  // ── 1. Standardthemen der Phase (aus ROADMAP_PHASEN) ──
+  if (phaseDef && Array.isArray(phaseDef.schwerpunkt)) {
+    phaseDef.schwerpunkt.forEach(tid => {
+      const themaTitel = typeof getThemaTitel === 'function' ? getThemaTitel(tid) : tid;
+      addTo(gruppen.standardthemen, tid, themaTitel);
+    });
+  }
+
+  // ── 2. Eigene zugewiesene Themen der Phase ──
+  if (roadmap && roadmap.phasen && roadmap.phasen[phaseIdx]) {
+    const phase = roadmap.phasen[phaseIdx];
+    (phase.themen || []).forEach(t => {
+      const themaTitel = typeof getThemaTitel === 'function' ? getThemaTitel(t.id) : t.id;
+      addTo(gruppen.eigene, t.id, themaTitel);
+    });
+  }
+
+  // ── 3. Screening-basierte Arbeitsblätter (primär in frühen Phasen) ──
+  if (schueler && phaseIdx <= 3) {
+    const screenings = DB.getScreenings ? DB.getScreenings().filter(s => s.schuelerId === schueler.id) : [];
+    const letztesScreening = screenings.sort((a, b) => new Date(b.datum || 0) - new Date(a.datum || 0))[0];
+    if (letztesScreening && Array.isArray(letztesScreening.flaggedAreas) && typeof SCREENING_THEMA_MAP !== 'undefined') {
+      letztesScreening.flaggedAreas.forEach(domId => {
+        const themen = SCREENING_THEMA_MAP[domId] || [];
+        const dom = (typeof SCREENING_DOMAINS !== 'undefined') ? SCREENING_DOMAINS.find(d => d.id === domId) : null;
+        const label = dom ? dom.label : domId;
+        themen.forEach(tid => addTo(gruppen.screening, tid, 'Screening: ' + label));
+      });
+    }
+  }
+
+  // ── 4. Anamnese-basierte Arbeitsblätter ──
+  if (schueler && Array.isArray(schueler.anamnese)) {
+    const a = schueler.anamnese;
+    const anamneseMap = [
+      { flags: ['missbrauch_sexuell', 'misshandlung_physisch', 'misshandlung_emotional', 'haeusliche_gewalt'],
+        themen: ['trauma', 'krisenintervention'], label: 'ACE / Trauma-Hintergrund' },
+      { flags: ['vernachlaessigung_emotional', 'vernachlaessigung_physisch'],
+        themen: ['emotionsregulation', 'resilienz'], label: 'Vernachlässigung' },
+      { flags: ['heim', 'pflegefamilie'],
+        themen: ['eltern-kind-beziehung', 'familienzusammensetzung'], label: 'Fremdplatzierung' },
+      { flags: ['scheidung', 'trennung_eltern'],
+        themen: ['trennung-scheidung', 'familienzusammensetzung'], label: 'Trennung/Scheidung' },
+      { flags: ['sucht_haushalt'],
+        themen: ['alkohol', 'cannabis'], label: 'Sucht im Haushalt' },
+      { flags: ['tod_elternteil'],
+        themen: ['trauer-verlust'], label: 'Verlust einer Bezugsperson' },
+      { flags: ['flucht', 'migration'],
+        themen: ['kulturelle-identitaet', 'resilienz'], label: 'Migration/Flucht' },
+      { flags: ['absentismus', 'schulverweigerung'],
+        themen: ['schulisches-engagement', 'lernstrategien'], label: 'Schulabsentismus' },
+      { flags: ['mobbing_erlebt', 'mobbing'],
+        themen: ['mobbing', 'selbstwertgefuehl'], label: 'Mobbing-Erfahrung' },
+    ];
+    anamneseMap.forEach(entry => {
+      if (entry.flags.some(f => a.includes(f))) {
+        entry.themen.forEach(tid => addTo(gruppen.anamnese, tid, 'Anamnese: ' + entry.label));
+      }
+    });
+  }
+
+  return gruppen;
+}
+
+// ============================================================
+// PHASEN-ERKLÄRUNGEN — klar, schrittweise, einheitlich
+// Eine einheitliche Erklärung pro Phase: "Worum geht's?" +
+// konkrete Handlungsschritte in Reihenfolge.
+// ============================================================
+const PHASEN_ERKLAERUNGEN = {
+  0: {
+    worumGeht: 'In der Orientierungsphase geht es primär darum, einen sicheren Rahmen zu schaffen. Noch keine Intervention — erst einmal ankommen, kennenlernen, Vertrauen aufbauen.',
+    schritte: [
+      'Erstgespräch führen: Rolle und Schweigepflicht erklären.',
+      'Lebenswelt erkunden: Zuhause, Schule, Freunde, Hobbys.',
+      'Anamnese dokumentieren (Familie, Schulgeschichte, ACE).',
+      'Ersten Vertrauenskontakt herstellen — keinen Druck.',
+      'Realistische Erwartungen besprechen (was kann die Begleitung leisten, was nicht).'
+    ]
+  },
+  1: {
+    worumGeht: 'Bindung aufbauen und gleichzeitig erste Diagnostik durchführen. Der/die Jugendliche soll erleben: "Hier werde ich nicht beurteilt, sondern verstanden."',
+    schritte: [
+      'Regelmäßige, verlässliche Kontakte etablieren.',
+      'Screening (PHQ-A, GAD-7, SDQ o.ä.) durchführen.',
+      'Stärken und Ressourcen explizit benennen.',
+      'Genogramm und Helfersystem visualisieren.',
+      'Erste Hypothesen bilden (5P-Fallformulierung starten).'
+    ]
+  },
+  2: {
+    worumGeht: 'Gemeinsam Ziele formulieren und entscheiden, welche Themen zuerst angegangen werden. Der/die Jugendliche gestaltet aktiv mit.',
+    schritte: [
+      'Prioritätenliste gemeinsam sichten (→ Tab Prioritäten).',
+      '2-3 konkrete, messbare Ziele formulieren (SMART-Prinzip).',
+      'Arbeitsblätter zum Thema einführen und ausprobieren.',
+      'Ambivalenzen ernst nehmen — Motivational Interviewing.',
+      'Vereinbarungen schriftlich festhalten.'
+    ]
+  },
+  3: {
+    worumGeht: 'Die eigentliche psychoedukative und therapeutische Arbeit. Themen vertiefen, Strategien üben, Transfer in den Alltag.',
+    schritte: [
+      'Thematische Arbeit mit Arbeitsblättern strukturieren.',
+      'Coping-Strategien einüben (z.B. Emotionsregulation).',
+      'Rollenspiele und Verhaltensexperimente einsetzen.',
+      'Elternarbeit oder Systemarbeit parallel führen.',
+      'Zwischenbilanzen ziehen und Anpassungen vornehmen.'
+    ]
+  },
+  4: {
+    worumGeht: 'Das Gelernte in schwierigen Alltagssituationen testen und festigen. Rückfälle sind Lernchancen, keine Niederlagen.',
+    schritte: [
+      'Konkrete Alltagssituationen analysieren und vorbereiten.',
+      'Rückfall-Prävention einplanen (Was tun wenn…?).',
+      'Ressourcen im Umfeld aktivieren (Peers, Familie, Vereine).',
+      'Selbstwirksamkeit durch Erfolgserlebnisse verstärken.',
+      'Auswertung mit dem/der Jugendlichen: "Was trägt dich?"'
+    ]
+  },
+  5: {
+    worumGeht: 'Die Begleitung bewusst und gut zu Ende bringen. Übergabe an andere Strukturen oder Eigenständigkeit.',
+    schritte: [
+      'Abschlussreflexion: Was war hilfreich, was nicht?',
+      'Meilensteine würdigen — schriftliche oder symbolische Form.',
+      'Nachsorge-Plan erstellen: Wo kann er/sie sich bei Bedarf hinwenden?',
+      'Übergabe an Anschlusssystem dokumentieren.',
+      'Abschiedsritual — Trennung darf spürbar sein.'
+    ]
+  },
+  6: {
+    worumGeht: 'Gesamtauswertung für Dokumentation und Fachreflexion. Was hat gewirkt, was nicht, was würde ich anders machen?',
+    schritte: [
+      'Fallverlauf in Gesamtbild-Tab zusammentragen.',
+      'Abschlussbericht für Auftraggeber erstellen.',
+      'Kollegiale Fallreflexion oder Supervision einplanen.',
+      'Eigene Lernpunkte notieren.',
+      'Akte abschließen und archivieren.'
+    ]
+  }
+};
+
 // ── Phasen-Stepper (horizontale Dot-Navigation) ──
 function renderPhasenStepper(roadmap) {
   let html = '<div class="roadmap-stepper">';

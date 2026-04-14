@@ -2384,6 +2384,7 @@ function renderLernschrittInhalt(schritt, lp, idx) {
     case 'lektuere': return renderSchrittLektuere(schritt, lp, idx);
     case 'arbeitsblatt': return renderSchrittArbeitsblatt(schritt, lp, idx);
     case 'quiz': return renderSchrittQuiz(schritt, lp, idx);
+    case 'reflexion': return renderSchrittReflexion(schritt, lp, idx);
     default: return renderSchrittPlatzhalter(schritt, lp, idx);
   }
 }
@@ -2402,6 +2403,58 @@ function renderSchrittPlatzhalter(schritt, lp, idx) {
     + 'Renderer für „' + getSchrittTypLabel(schritt.typ) + '" folgt in einem der nächsten Mikroschritte.'
     + (schritt.datei ? '<div style="margin-top:10px;font-size:11px;font-family:monospace;color:' + text + ';">📎 ' + escapeHtml(schritt.datei) + '</div>' : '')
     + '</div></div>';
+}
+
+// 4c5 — Reflexion-Schritt: 2-3 Leitfragen + Textarea, persistiert in progress.reflexionen
+function renderSchrittReflexion(schritt, lp, idx) {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+
+  // Default-Leitfragen, falls Schritt keine eigenen hat
+  var fragen = (schritt.fragen && schritt.fragen.length ? schritt.fragen : [
+    'An welchen Jugendlichen/Fall aus deiner Praxis hast du beim Lesen gedacht?',
+    'Welche eine konkrete Handlung nimmst du dir für die nächste Begegnung vor?',
+    'Was war für dich die wichtigste neue Erkenntnis?'
+  ]);
+
+  var progress = getWBProgress();
+  if (!progress.reflexionen) progress.reflexionen = {};
+  var key = lp.id + '_' + idx;
+  var gespeichert = progress.reflexionen[key] || {};
+
+  var textareasHtml = fragen.map(function(f, fi) {
+    var val = gespeichert['frage_' + fi] || '';
+    return '<div style="margin-bottom:18px;">'
+      + '<label style="display:block;font-size:14px;font-weight:600;color:' + text + ';margin-bottom:8px;line-height:1.5;">'
+      + '<span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:' + lp.farbe + '20;color:' + lp.farbe + ';font-size:12px;font-weight:700;text-align:center;line-height:22px;margin-right:8px;">' + (fi + 1) + '</span>'
+      + escapeHtml(f) + '</label>'
+      + '<textarea id="reflexion-' + idx + '-' + fi + '" oninput="reflexionSpeichern(\'' + lp.id + '\',' + idx + ',' + fi + ',this.value)" placeholder="Deine Gedanken..." style="width:100%;min-height:90px;padding:12px 14px;background:' + (isDark ? '#0F172A' : '#FFFFFF') + ';border:1px solid ' + border + ';border-radius:10px;font-size:14px;color:' + text + ';font-family:inherit;resize:vertical;line-height:1.6;box-sizing:border-box;">' + escapeHtml(val) + '</textarea>'
+      + '</div>';
+  }).join('');
+
+  return '<div style="max-width:720px;margin:0 auto;">'
+    + '<div style="margin-bottom:20px;">'
+    + '<div style="font-size:11px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">💭 Reflexion</div>'
+    + '<h2 style="font-size:22px;font-weight:800;color:' + text + ';margin:0 0 8px;line-height:1.3;">' + escapeHtml(schritt.titel || 'Praxis-Reflexion') + '</h2>'
+    + '<p style="font-size:14px;color:' + muted + ';margin:0;line-height:1.6;">Nimm dir einen Moment. Deine Antworten werden automatisch gespeichert — nur für dich sichtbar.</p>'
+    + '</div>'
+    + textareasHtml
+    + '<div style="margin-top:8px;padding:12px 16px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px solid ' + border + ';border-radius:10px;font-size:12px;color:' + muted + ';line-height:1.6;">'
+    + '💾 Gespeichert auf diesem Gerät. Keine Serverübertragung.'
+    + '</div>'
+    + '</div>';
+}
+
+function reflexionSpeichern(moduleId, schrittIdx, frageIdx, value) {
+  var p = getWBProgress();
+  if (!p.reflexionen) p.reflexionen = {};
+  var key = moduleId + '_' + schrittIdx;
+  if (!p.reflexionen[key]) p.reflexionen[key] = {};
+  p.reflexionen[key]['frage_' + frageIdx] = value;
+  p.reflexionen[key].datum = new Date().toISOString();
+  saveWBProgress(p);
 }
 
 // 4c4 — Quiz-Schritt: Multiple-Choice Fragen aus WB_QUIZ_FRAGEN

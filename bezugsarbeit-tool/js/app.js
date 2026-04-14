@@ -2350,8 +2350,60 @@ function lernplayerAbschliessen() {
   if (typeof checkBadges === 'function') setTimeout(function() { checkBadges(); }, 1000);
 
   if (typeof showToast === 'function') showToast('🎉 Modul abgeschlossen!', 'success');
+  if (erstmalig && typeof zeigeConfetti === 'function') zeigeConfetti();
   closeLernplayer();
   if (typeof renderWeiterbildung === 'function') renderWeiterbildung();
+}
+
+// 4d3 — Confetti-Animation (leichtgewichtig, ohne Lib)
+function zeigeConfetti() {
+  var canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:10001;';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  var farben = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899','#14B8A6'];
+  var teilchen = [];
+  for (var i = 0; i < 140; i++) {
+    teilchen.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+      y: canvas.height / 2 + (Math.random() - 0.5) * 60,
+      vx: (Math.random() - 0.5) * 14,
+      vy: -(Math.random() * 14 + 6),
+      g: 0.35,
+      size: Math.random() * 8 + 4,
+      farbe: farben[Math.floor(Math.random() * farben.length)],
+      rot: Math.random() * Math.PI * 2,
+      vrot: (Math.random() - 0.5) * 0.3,
+      leben: 1
+    });
+  }
+  var frames = 0;
+  function tick() {
+    frames++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    teilchen.forEach(function(t) {
+      t.vy += t.g;
+      t.x += t.vx;
+      t.y += t.vy;
+      t.rot += t.vrot;
+      t.leben -= 0.006;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, t.leben);
+      ctx.translate(t.x, t.y);
+      ctx.rotate(t.rot);
+      ctx.fillStyle = t.farbe;
+      ctx.fillRect(-t.size/2, -t.size/2, t.size, t.size * 0.6);
+      ctx.restore();
+    });
+    if (frames < 180) {
+      requestAnimationFrame(tick);
+    } else {
+      canvas.remove();
+    }
+  }
+  tick();
 }
 
 function renderLernplayerFrame() {

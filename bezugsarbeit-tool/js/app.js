@@ -2334,8 +2334,7 @@ const PHASE_TABS = {
     { id: 'notizen', label: 'Sitzungen' }
   ],
   auswertung: [
-    { id: 'hypothesen-tab', label: 'Hypothesen' },
-    { id: 'treatment-tab', label: 'Verlauf' },
+    { id: 'gesamtbild', label: 'Gesamtbild' },
     { id: 'berichte', label: 'Berichte' }
   ]
 };
@@ -2413,8 +2412,7 @@ function showProfilTab(tab) {
   if (tab === 'genogramm') renderGenogramm();
   // Wissen
   if (tab === 'bibliothek') renderBibliothek();
-  if (tab === 'hypothesen-tab') renderHypothesenTab();
-  if (tab === 'treatment-tab') renderTreatmentTab();
+  if (tab === 'gesamtbild') renderGesamtbild();
   if (tab === 'verlauf-tracker') { renderVerlaufTracker(); renderRisikoTimeline(); } // legacy fallback
   if (tab === 'kontaktlog') renderKontaktlog();
   if (tab === 'helfersystem') renderHelfersystem();
@@ -2793,7 +2791,16 @@ function toggleBibliothekFavorit(itemId) {
 }
 
 // ============================================================
-// ANALYSE: Hypothesen-Tab
+// ANALYSE: Klinisches Gesamtbild
+// ============================================================
+function renderGesamtbild() {
+  var container = document.getElementById('gesamtbild-container');
+  if (!container) return;
+  container.innerHTML = '<div style="padding:40px;text-align:center;color:#6B7280;">Gesamtbild wird geladen...</div>';
+}
+
+// ============================================================
+// ANALYSE: Hypothesen-Tab (Legacy — wird durch Gesamtbild ersetzt)
 // ============================================================
 function renderHypothesenTab() {
   const container = document.getElementById('hypothesen-dashboard');
@@ -7077,7 +7084,7 @@ function renderTreatmentResponse(schuelerId) {
     <div style="font-size:13px;font-weight:700;color:#DC2626;">⚠️ Plötzliche Verschlechterung erkannt</div>
     <div style="font-size:12px;color:#374151;margin-top:4px;">SRS fiel von <strong>${scAlert.vonSrs}</strong> auf <strong>${scAlert.nachSrs}</strong> (${scAlert.diff} Punkte) in Sitzung #${scAlert.sitzungNr}${scAlert.datum ? ' am ' + formatDatum(scAlert.datum) : ''}.</div>
     <div style="font-size:11px;color:#991B1B;margin-top:6px;font-weight:500;">Empfehlung: Risiko-Check durchführen und therapeutische Beziehung reflektieren.</div>
-    <button class="btn btn-xs" style="margin-top:6px;background:#EF4444;color:#fff;border:none;" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('treatment-tab'),100);">Verlauf prüfen</button>
+    <button class="btn btn-xs" style="margin-top:6px;background:#EF4444;color:#fff;border:none;" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('gesamtbild'),100);">Verlauf prüfen</button>
   </div>` : '';
 
   el.innerHTML = `
@@ -9236,7 +9243,7 @@ function renderSafetyBanner(containerId) {
     </div>`).join('')}
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn btn-xs" style="background:${bannerFarbe};color:#fff;border:none;" onclick="showPhase('begleitung');setTimeout(()=>showSubTab('themen'),100);setTimeout(()=>quickStartSession('krisenintervention'),300);">Krisenintervention starten</button>
-      <button class="btn btn-xs" style="background:#fff;color:${bannerFarbe};border:1px solid ${bannerFarbe};" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('treatment-tab'),100);">Verlauf prüfen</button>
+      <button class="btn btn-xs" style="background:#fff;color:${bannerFarbe};border:1px solid ${bannerFarbe};" onclick="showPhase('auswertung');setTimeout(()=>showSubTab('gesamtbild'),100);">Verlauf prüfen</button>
     </div>
   </div>`;
   container.innerHTML = html;
@@ -11840,7 +11847,7 @@ function navigate5PSource(el) {
     'Anamnese': 'info',
     'Stärken': 'staerken',
     'SOAP': 'notizen',
-    'Hypothese': 'hypothesen-tab',
+    'Hypothese': 'gesamtbild',
     'Verhalten': 'verhalten',
     'Wohlbefinden': 'treatment-tab',
   };
@@ -12082,7 +12089,7 @@ function render5PInlineHypothesen(hypothesen) {
   html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">';
   html += '<h3 style="margin:0;font-size:16px;">🧠 Klinische Hypothesen</h3>';
   html += `<span style="font-size:12px;color:#6B7280;">${hypothesen.length} aktiv</span>`;
-  html += `<button class="btn btn-sm btn-outline-primary" style="margin-left:auto;font-size:11px;" onclick="showPhase('auswertung', 'hypothesen-tab')">Alle anzeigen →</button>`;
+  html += `<button class="btn btn-sm btn-outline-primary" style="margin-left:auto;font-size:11px;" onclick="showPhase('auswertung', 'gesamtbild')">Alle anzeigen →</button>`;
   html += '</div>';
 
   // Differenzialdiagnosen (prominently)
@@ -14676,7 +14683,7 @@ function renderScrNaechsteSchritte(scr) {
               <div style="font-weight:600;font-size:13px;">Hypothesen prüfen</div>
               <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${hypothesen.length} Hypothesen generiert${neueHypo > 0 ? `, davon ${neueHypo} dynamisch (Screening + Anamnese)` : ''}</div>
             </div>
-            <button class="btn btn-sm btn-secondary" onclick="showProfilTab('hypothesen-tab');showView('profil','${scr.schuelerId}');">Hypothesen →</button>
+            <button class="btn btn-sm btn-secondary" onclick="showProfilTab('gesamtbild');showView('profil','${scr.schuelerId}');">Hypothesen →</button>
           </div>
 
           ${relevanteModule.length > 0 ? `

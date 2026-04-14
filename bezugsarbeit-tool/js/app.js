@@ -2607,7 +2607,7 @@ function renderBibliothek() {
         sectionsHtml += '<span style="font-size:10px;color:#9CA3AF;font-weight:400;margin-left:4px;">' + items.length + '</span>';
         sectionsHtml += '</div>';
 
-        sectionsHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">';
+        sectionsHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;">';
         items.forEach(function(item) {
           var cfg = typConfig[item.typ];
           sectionsHtml += renderBibliothekKarte(item, cfg);
@@ -2659,7 +2659,7 @@ function renderBibliothek() {
         sectionsHtml += '<span style="font-size:10px;color:#9CA3AF;font-weight:400;margin-left:4px;">' + items.length + '</span>';
         sectionsHtml += '</div>';
 
-        sectionsHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">';
+        sectionsHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;">';
         items.forEach(function(item) {
           sectionsHtml += renderBibliothekKarte(item, cfg);
         });
@@ -2753,9 +2753,11 @@ function renderBibliothekKarte(item, cfg) {
   var descHtml = item.desc ? '<div class="bib-karte-desc">' + item.desc + '</div>' : '';
 
   return '<div class="bib-karte" style="--bib-accent:' + cfg.farbe + ';">' +
-    '<div class="bib-karte-icon" style="background:' + cfg.bg + ';color:' + cfg.farbe + ';">' + (item.icon || cfg.icon) + '</div>' +
-    '<div class="bib-karte-body">' +
+    '<div class="bib-karte-top">' +
+      '<div class="bib-karte-icon" style="background:' + cfg.bg + ';color:' + cfg.farbe + ';">' + (item.icon || cfg.icon) + '</div>' +
       '<div class="bib-karte-typ" style="color:' + cfg.farbe + ';">' + cfg.label + '</div>' +
+    '</div>' +
+    '<div class="bib-karte-body">' +
       '<div class="bib-karte-titel">' + item.label + '</div>' +
       descHtml +
       metaHtml +

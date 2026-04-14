@@ -15198,34 +15198,11 @@ function getSchuelerPrioritaeten(schuelerId) {
     });
   }
 
-  // ── 4. 5P-FALLFORMULIERUNG — hypothetische Treiber ──
-  const ff = DB.getFallformulierung ? DB.getFallformulierung(schuelerId) : null;
-  if (ff && Array.isArray(ff.perpetuating) && ff.perpetuating.length > 0) {
-    prioritaeten.push({
-      id: 'ff-perpetuating',
-      rang: 48,
-      dringlichkeit: 'hoch',
-      icon: '🔁',
-      titel: 'Aufrechterhaltende Faktoren (5P)',
-      quelle: 'Fallformulierung · Perpetuating',
-      beschreibung: ff.perpetuating.slice(0, 3).map(f => '• ' + (typeof f === 'string' ? f : f.text || f.label || '')).join('<br>'),
-      themenIds: [],
-      farbe: '#DB2777'
-    });
-  }
-  if (ff && Array.isArray(ff.presenting) && ff.presenting.length > 0) {
-    prioritaeten.push({
-      id: 'ff-presenting',
-      rang: 42,
-      dringlichkeit: 'mittel',
-      icon: '📣',
-      titel: 'Aktuelles Beschwerdebild (5P)',
-      quelle: 'Fallformulierung · Presenting',
-      beschreibung: ff.presenting.slice(0, 3).map(f => '• ' + (typeof f === 'string' ? f : f.text || f.label || '')).join('<br>'),
-      themenIds: [],
-      farbe: '#2563EB'
-    });
-  }
+  // ── 4. 5P-FALLFORMULIERUNG — nur wenn nutzergepflegt und nicht-redundant ──
+  // Hinweis: Presenting-Factors duplizieren i.d.R. Screening-Scores,
+  // Perpetuating-Factors sind oft auto-generierte Hypothesen.
+  // → Nicht mehr als eigene Priorität gelistet; stattdessen über den Fallbild-Tab zugänglich.
+  // (Entfernt in 10a auf Nutzer-Feedback: #7/#8 waren redundant & nicht klickbar.)
 
   // ── 5. ZIELE (vom Jugendlichen selbst) ──
   const ziele = Array.isArray(schueler.ziele) ? schueler.ziele.filter(z => z && (z.aktiv !== false)) : [];

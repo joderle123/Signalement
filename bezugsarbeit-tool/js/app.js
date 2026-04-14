@@ -5944,7 +5944,7 @@ function hypoCard(h) {
     + detailHtml
     + '</div>';
 
-  return '<div class="hypo-card hypo-card-compact" data-typ="' + h.typ + '" data-ebene="' + (h.ebene || '') + '" data-id="' + h.id + '" onclick="toggleHypoExpand(\'' + h.id + '\')">'
+  return '<div class="hypo-card hypo-card-compact" data-typ="' + h.typ + '" data-ebene="' + (h.ebene || '') + '" data-id="' + h.id + '" onclick="openHypoDetailModal(\'' + h.id + '\')">'
     + '<div class="hypo-card-accent" style="background:' + borderColor + '"></div>'
     + '<div class="hypo-card-body">'
     + '<div class="hypo-card-header">'
@@ -5957,15 +5957,254 @@ function hypoCard(h) {
     + '<div class="hypo-card-footer">'
     + konfHtml
     + '</div>'
-    + expandHtml
     + '</div></div>';
 }
 
 function toggleHypoExpand(id) {
+  // Legacy: inline expand (replaced by modal in most cases)
   var el = document.getElementById('hypo-expand-' + id);
   if (!el) return;
   var card = el.closest('.hypo-card');
   if (card) card.classList.toggle('hypo-expanded');
+}
+
+// ── Hypothesen-Detail-Modal ──
+function openHypoDetailModal(id) {
+  // Find hypothesis from last computed list
+  if (!APP._lastHypothesen) return;
+  var h = APP._lastHypothesen.find(function(x) { return x.id === id; });
+  if (!h) return;
+
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var bg = isDark ? '#1C1C1E' : '#fff';
+  var bgMuted = isDark ? '#2C2C2E' : '#F9FAFB';
+  var bgSection = isDark ? '#252528' : '#F0F4FF';
+  var textMain = isDark ? '#E5E5EA' : '#1F2937';
+  var textBody = isDark ? '#D1D1D6' : '#374151';
+  var textMuted = isDark ? '#8E8E93' : '#6B7280';
+  var border = isDark ? '#3A3A3C' : '#E5E7EB';
+
+  // Priority & color
+  var borderColor, prioritaet, prioDesc;
+  if (h.typ === 'schutz') {
+    borderColor = '#10B981'; prioritaet = 'Schutzfaktor';
+    prioDesc = 'Dieser Befund stellt eine Stärke oder Ressource dar, die protektiv wirkt.';
+  } else if (h.typ === 'differenzial') {
+    borderColor = '#6366F1'; prioritaet = 'Differenzialdiagnose';
+    prioDesc = 'Ein mögliches klinisches Bild, das differenzialdiagnostisch in Betracht gezogen werden sollte.';
+  } else if (h.staerkeWert >= 4) {
+    borderColor = '#DC2626'; prioritaet = 'Hoch';
+    prioDesc = 'Mehrere unabhängige Datenquellen unterstützen diese Hypothese stark.';
+  } else if (h.staerkeWert >= 3) {
+    borderColor = '#F59E0B'; prioritaet = 'Mittel';
+    prioDesc = 'Es gibt belastbare Hinweise, die eine vertiefte Abklärung erfordern.';
+  } else {
+    borderColor = '#9CA3AF'; prioritaet = 'Hinweis';
+    prioDesc = 'Ein erster Hinweis, der bei weiterer Bestätigung an Bedeutung gewinnt.';
+  }
+
+  // Confidence explanation
+  var konfidenz = h._konfidenz || 0;
+  var konfColor = konfidenz >= 70 ? '#10B981' : konfidenz >= 40 ? '#F59E0B' : '#9CA3AF';
+  var konfLabel = konfidenz >= 70 ? 'Hohe Evidenz' : konfidenz >= 40 ? 'Moderate Evidenz' : 'Erste Hinweise';
+  var konfExplain = 'Der Konfidenzwert zeigt, wie stark die vorhandenen Daten diese Hypothese stützen. ';
+  konfExplain += 'Er setzt sich zusammen aus: <strong>Schweregrad</strong> (wie gravierend der Befund ist), ';
+  konfExplain += '<strong>Anzahl Datenpunkte</strong> (wie viele unabhängige Faktoren darauf hinweisen), ';
+  konfExplain += '<strong>Screening-Bestätigung</strong> (ob standardisierte Instrumente den Befund stützen) ';
+  konfExplain += 'und <strong>Verlaufsbestätigung</strong> (ob der Befund über mehrere Zeitpunkte konsistent bleibt).';
+  konfExplain += '<br><br>Ein Wert von <strong>' + konfidenz + '%</strong> bedeutet: <strong>' + konfLabel + '</strong> — ';
+  if (konfidenz >= 70) konfExplain += 'Die Datenlage ist solide. Die Hypothese sollte aktiv in der Förderplanung berücksichtigt werden.';
+  else if (konfidenz >= 40) konfExplain += 'Es gibt belastbare Hinweise. Gezielte Beobachtung und ggf. Vertiefungsdiagnostik empfohlen.';
+  else konfExplain += 'Ein vorläufiger Befund. Weitere Daten sind nötig, bevor Massnahmen abgeleitet werden sollten.';
+
+  // Auslösende Daten (WHY)
+  var daten = h._ausloesendeDaten || [];
+  var datenHtml = '';
+  if (daten.length > 0) {
+    datenHtml = '<div style="margin-bottom:20px;">'
+      + '<div style="font-size:14px;font-weight:700;color:' + textMain + ';margin-bottom:8px;">🔍 Warum diese Hypothese?</div>'
+      + '<div style="font-size:13px;color:' + textBody + ';line-height:1.6;margin-bottom:10px;">'
+      + 'Die folgenden Datenpunkte aus Anamnese, Screening und Beobachtungen haben diese Hypothese ausgelöst:</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    daten.forEach(function(d) {
+      var chipBg = '#EFF6FF'; var chipColor = '#2563EB'; var chipBorder = '#BFDBFE';
+      if (d.startsWith('Screening:') || d.startsWith('Screening ')) {
+        chipBg = isDark ? '#1E3A5F' : '#F0FDF4'; chipColor = isDark ? '#6EE7B7' : '#16A34A'; chipBorder = isDark ? '#065F46' : '#BBF7D0';
+      } else if (d.startsWith('Stärke:') || d.startsWith('Stärke ')) {
+        chipBg = isDark ? '#3B1E54' : '#FAF5FF'; chipColor = isDark ? '#C4B5FD' : '#7C3AED'; chipBorder = isDark ? '#5B21B6' : '#DDD6FE';
+      } else {
+        chipBg = isDark ? '#1E3A5F' : '#EFF6FF'; chipColor = isDark ? '#93C5FD' : '#2563EB'; chipBorder = isDark ? '#1E40AF' : '#BFDBFE';
+      }
+      datenHtml += '<span style="font-size:12px;padding:4px 10px;border-radius:8px;background:' + chipBg + ';color:' + chipColor + ';border:1px solid ' + chipBorder + ';font-weight:500;">' + d + '</span>';
+    });
+    datenHtml += '</div></div>';
+  }
+
+  // ICD-10 chips
+  var icdHtml = '';
+  if (h.icd10 && h.icd10.length > 0) {
+    icdHtml = '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;">';
+    h.icd10.forEach(function(c) {
+      icdHtml += '<span style="font-family:monospace;font-size:11px;padding:2px 8px;border-radius:6px;background:' + (isDark ? '#2C2C2E' : '#F3F4F6') + ';color:' + textMuted + ';border:1px solid ' + border + ';">' + c + '</span>';
+    });
+    icdHtml += '</div>';
+  }
+
+  // Find related Wiki articles
+  var wikiIds = h.wiki_ids || [];
+  var relatedWiki = [];
+  if (typeof WIKI_ARTIKEL !== 'undefined' && wikiIds.length > 0) {
+    wikiIds.forEach(function(wid) {
+      var a = WIKI_ARTIKEL.find(function(x) { return x.id === wid; });
+      if (a) relatedWiki.push(a);
+    });
+  }
+  var wikiHtml = '';
+  if (relatedWiki.length > 0) {
+    wikiHtml = '<div style="margin-bottom:20px;">'
+      + '<div style="font-size:14px;font-weight:700;color:' + textMain + ';margin-bottom:8px;">📚 Fachliche Literatur</div>';
+    relatedWiki.forEach(function(w) {
+      wikiHtml += '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:' + bgMuted + ';border:1px solid ' + border + ';border-radius:10px;margin-bottom:6px;cursor:pointer;" onclick="document.querySelector(\'[onclick*=openHypoDetailModal]\')?.closest(\'.modal-overlay\')?.remove();this.closest(\'div[style*=fixed]\').remove();openWikiArtikel(\'' + w.id + '\')">'
+        + '<span style="font-size:22px;">' + (w.icon || '📄') + '</span>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-size:13px;font-weight:600;color:' + textMain + ';">' + w.titel + '</div>'
+        + '<div style="font-size:11px;color:' + textMuted + ';overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (w.definition || '').substring(0, 80) + '...</div>'
+        + '</div>'
+        + '<span style="font-size:11px;color:#2563EB;font-weight:600;flex-shrink:0;">Öffnen →</span>'
+        + '</div>';
+    });
+    wikiHtml += '</div>';
+  }
+
+  // Find related Arbeitsblätter via HYPOTHESEN_THEMA_MAP
+  var relatedAB = [];
+  var seenAB = {};
+  wikiIds.forEach(function(wid) {
+    var themaIds = (typeof HYPOTHESEN_THEMA_MAP !== 'undefined' && HYPOTHESEN_THEMA_MAP[wid]) ? HYPOTHESEN_THEMA_MAP[wid] : [];
+    themaIds.forEach(function(tid) {
+      var abs = (typeof ARBEITSBLÄTTER !== 'undefined') ? ARBEITSBLÄTTER[tid] : [];
+      if (abs) {
+        abs.forEach(function(ab) {
+          if (!seenAB[ab.datei]) {
+            seenAB[ab.datei] = true;
+            relatedAB.push({ themaId: tid, titel: ab.titel, datei: ab.datei });
+          }
+        });
+      }
+    });
+  });
+  var abHtml = '';
+  if (relatedAB.length > 0) {
+    abHtml = '<div style="margin-bottom:20px;">'
+      + '<div style="font-size:14px;font-weight:700;color:' + textMain + ';margin-bottom:8px;">📋 Arbeitsblätter</div>';
+    relatedAB.forEach(function(ab) {
+      abHtml += '<a href="arbeitsblatter/' + ab.datei + '" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:' + (isDark ? '#1E3A2E' : '#F0FDF4') + ';border:1px solid ' + (isDark ? '#065F46' : '#BBF7D0') + ';border-radius:10px;margin-bottom:6px;text-decoration:none;cursor:pointer;">'
+        + '<span style="font-size:18px;">📋</span>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-size:13px;font-weight:600;color:' + textMain + ';">' + ab.titel + '</div>'
+        + '<div style="font-size:11px;color:' + textMuted + ';">Interaktives Arbeitsblatt</div>'
+        + '</div>'
+        + '<span style="font-size:11px;color:#16A34A;font-weight:600;flex-shrink:0;">Öffnen →</span>'
+        + '</a>';
+    });
+    abHtml += '</div>';
+  }
+
+  // Dynamic badges info
+  var dynInfo = '';
+  if (h._dynamischHochgestuft) {
+    dynInfo += '<div style="padding:8px 12px;background:' + (isDark ? '#3B1E54' : '#FAF5FF') + ';border:1px solid ' + (isDark ? '#5B21B6' : '#DDD6FE') + ';border-radius:8px;font-size:12px;color:' + (isDark ? '#C4B5FD' : '#6D28D9') + ';margin-bottom:8px;">↑ <strong>Dynamisch hochgestuft</strong> — Über ' + (h._auftritte || 0) + ' Zeitpunkte konsistent bestätigt.</div>';
+  }
+  if (h._trBestaetigt) {
+    dynInfo += '<div style="padding:8px 12px;background:' + (isDark ? '#1E3A2E' : '#F0FDF4') + ';border:1px solid ' + (isDark ? '#065F46' : '#BBF7D0') + ';border-radius:8px;font-size:12px;color:' + (isDark ? '#6EE7B7' : '#16A34A') + ';margin-bottom:8px;">✓ <strong>Treatment Response</strong> — ' + (h._trHinweis || 'Positive Wirksamkeit bei zugehörigen Themen.') + '</div>';
+  }
+  if (h._trHinterfragen) {
+    dynInfo += '<div style="padding:8px 12px;background:' + (isDark ? '#451A1A' : '#FEF2F2') + ';border:1px solid ' + (isDark ? '#991B1B' : '#FECACA') + ';border-radius:8px;font-size:12px;color:' + (isDark ? '#FCA5A5' : '#DC2626') + ';margin-bottom:8px;">? <strong>Zu prüfen</strong> — ' + (h._trHinweis || 'Bisherige Interventionen zeigen geringe Wirksamkeit.') + '</div>';
+  }
+
+  // Build modal
+  var html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);" onclick="if(event.target===this)this.remove()" id="hypo-detail-modal">';
+  html += '<div style="background:' + bg + ';border-radius:16px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">';
+
+  // Header
+  html += '<div style="background:' + borderColor + ';color:#fff;padding:20px 24px;border-radius:16px 16px 0 0;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+  html += '<div style="flex:1;min-width:0;">';
+  html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.7;margin-bottom:6px;">' + prioritaet + '</div>';
+  html += '<div style="font-size:20px;font-weight:700;line-height:1.3;">' + h.titel + '</div>';
+  html += icdHtml.replace(new RegExp(textMuted, 'g'), 'rgba(255,255,255,0.7)').replace(new RegExp(border, 'g'), 'rgba(255,255,255,0.2)').replace(/background:[^;]+/g, 'background:rgba(255,255,255,0.15)');
+  html += '</div>';
+  html += '<button onclick="document.getElementById(\'hypo-detail-modal\').remove()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;margin-left:12px;">✕</button>';
+  html += '</div>';
+  // Konfidenz bar in header
+  html += '<div style="margin-top:14px;display:flex;align-items:center;gap:10px;">';
+  html += '<div style="flex:1;height:6px;background:rgba(255,255,255,0.2);border-radius:3px;overflow:hidden;"><div style="height:100%;width:' + konfidenz + '%;background:#fff;border-radius:3px;"></div></div>';
+  html += '<span style="font-size:14px;font-weight:700;">' + konfidenz + '%</span>';
+  html += '</div>';
+  html += '<div style="font-size:11px;opacity:0.7;margin-top:4px;">' + konfLabel + '</div>';
+  html += '</div>';
+
+  // Body
+  html += '<div style="padding:20px 24px;">';
+
+  // Priority description
+  html += '<div style="font-size:13px;color:' + textMuted + ';font-style:italic;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid ' + border + ';">' + prioDesc + '</div>';
+
+  // Dynamic badges
+  html += dynInfo;
+
+  // Explanation (Warum)
+  html += '<div style="font-size:14px;color:' + textBody + ';line-height:1.7;margin-bottom:20px;">' + h.erklaerung + '</div>';
+
+  // Auslösende Daten
+  html += datenHtml;
+
+  // Konfidenz-Erklärung (expandable)
+  html += '<details style="margin-bottom:20px;border:1px solid ' + border + ';border-radius:10px;overflow:hidden;">';
+  html += '<summary style="padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;background:' + bgMuted + ';color:' + textMain + ';">📊 Was bedeutet ' + konfidenz + '% Konfidenz?</summary>';
+  html += '<div style="padding:12px 14px;font-size:13px;color:' + textBody + ';line-height:1.7;">' + konfExplain + '</div>';
+  html += '</details>';
+
+  // Evidence
+  if (h.evidenz) {
+    html += '<div style="margin-bottom:16px;padding:12px 14px;background:' + bgSection + ';border-radius:10px;border-left:3px solid ' + borderColor + ';">';
+    html += '<div style="font-size:12px;font-weight:700;color:' + borderColor + ';margin-bottom:4px;">Evidenz</div>';
+    html += '<div style="font-size:13px;color:' + textBody + ';line-height:1.6;">' + h.evidenz + '</div>';
+    if (h.quelle) html += '<div style="font-size:11px;color:' + textMuted + ';margin-top:6px;font-style:italic;">' + h.quelle + '</div>';
+    html += '</div>';
+  }
+
+  // Counter-hypothesis
+  if (h.gegenHypothese) {
+    html += '<div style="margin-bottom:16px;padding:12px 14px;background:' + (isDark ? '#2C2C2E' : '#FFF7ED') + ';border-radius:10px;border-left:3px solid #F59E0B;">';
+    html += '<div style="font-size:12px;font-weight:700;color:#D97706;margin-bottom:4px;">⚖ Gegenhypothese</div>';
+    html += '<div style="font-size:13px;color:' + textBody + ';line-height:1.6;">' + h.gegenHypothese + '</div>';
+    html += '</div>';
+  }
+
+  // Recommendation
+  if (h.empfehlung) {
+    html += '<div style="margin-bottom:16px;padding:12px 14px;background:' + (isDark ? '#1E3A2E' : '#F0FDF4') + ';border-radius:10px;border-left:3px solid #10B981;">';
+    html += '<div style="font-size:12px;font-weight:700;color:#10B981;margin-bottom:4px;">💡 Empfehlung</div>';
+    html += '<div style="font-size:13px;color:' + textBody + ';line-height:1.6;">' + h.empfehlung + '</div>';
+    html += '</div>';
+  }
+
+  // Wiki articles
+  html += wikiHtml;
+
+  // Arbeitsblätter
+  html += abHtml;
+
+  html += '</div></div></div>';
+
+  // Remove existing modal
+  var existing = document.getElementById('hypo-detail-modal');
+  if (existing) existing.remove();
+
+  var div = document.createElement('div');
+  div.innerHTML = html;
+  document.body.appendChild(div.firstChild);
 }
 
 function toggleHypoDetail(id) {
@@ -5982,6 +6221,8 @@ function toggleHypoDetail(id) {
 // ── Hypothesen in Container rendern (Fallbild-Variante) ─────
 function renderHypothesen(el, hypothesen) {
   if (!el) return;
+  // Store for modal lookup
+  APP._lastHypothesen = hypothesen;
   if (hypothesen.length === 0) {
     el.innerHTML = renderEmptyState('🔍', 'Keine Hypothesen', 'Hypothesen werden automatisch aus Anamnese, Screening und Stärken generiert.');
     return;
@@ -5992,14 +6233,17 @@ function renderHypothesen(el, hypothesen) {
   var html = '';
   if (risiken.length > 0) {
     html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-risiko">Belastungsmuster <span class="hypo-section-count">' + risiken.length + '</span></div>';
+    html += '<div class="hypo-section-desc">Identifizierte Belastungen und Risikofaktoren aus Anamnese und Screening — erhöhte Aufmerksamkeit in der Begleitung erforderlich. Der Prozentwert zeigt die Konfidenz: je mehr Datenquellen den Befund stützen, desto höher. Klicke auf eine Karte für Details, Literatur und Arbeitsblätter.</div>';
     html += risiken.map(hypoCard).join('') + '</div>';
   }
   if (differenzial.length > 0) {
     html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-diff">Differenzialdiagnosen <span class="hypo-section-count">' + differenzial.length + '</span></div>';
+    html += '<div class="hypo-section-desc">Mögliche klinische Erklärungen mit ICD-10/11-Bezug — dient der fachlichen Einordnung, nicht als Diagnose. Klicke für Evidenz, Gegenhypothesen und verlinkte Materialien.</div>';
     html += differenzial.map(hypoCard).join('') + '</div>';
   }
   if (schutz.length > 0) {
     html += '<div class="hypo-section"><div class="hypo-section-label hypo-section-schutz">Schutzfaktoren <span class="hypo-section-count">' + schutz.length + '</span></div>';
+    html += '<div class="hypo-section-desc">Vorhandene Ressourcen und Resilienzfaktoren — stärken die Prognose und sollten aktiv gefördert werden.</div>';
     html += schutz.map(hypoCard).join('') + '</div>';
   }
   el.innerHTML = html;
@@ -6024,6 +6268,8 @@ function branchenRisikoKarte(r) {
 // ── Hypothesen Dashboard (Hauptansicht) ─────────────────────
 function renderHypothesenDashboard(container, hypothesen, branchenRisiken, schuelerId) {
   if (!container) return;
+  // Store for modal lookup
+  APP._lastHypothesen = hypothesen;
   var s = DB.getSchuelerById(schuelerId);
   if (!s) { container.innerHTML = renderEmptyState('🔍', 'Kein Klient', 'Bitte wähle einen Klienten aus.'); return; }
 

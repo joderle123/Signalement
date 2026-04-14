@@ -24823,6 +24823,196 @@ const WB_EINFUEHRUNGEN = {
 };
 
 // ============================================================
+// LERN-APP QUIZ-FRAGEN — 4 Fragen pro Modul
+// ============================================================
+const WB_QUIZ_FRAGEN = {
+  '01-internalisierende': [
+    {
+      frage: 'Eine 15-Jährige zieht sich seit 3 Wochen zurück, klagt über Bauchschmerzen, aber der Kinderarzt findet nichts. Wie ordnest du das ein?',
+      optionen: [
+        'Vermutlich simuliert sie, um Aufmerksamkeit zu bekommen.',
+        'Somatische Beschwerden können Ausdruck internalisierender Belastung sein — genauer hinschauen.',
+        'Solange der Arzt nichts findet, ist kein Handlungsbedarf.',
+        'Direkt an die Psychiatrie überweisen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Körperliche Beschwerden ohne medizinischen Befund sind bei Jugendlichen häufig Ausdruck von Depression, Angst oder Belastung. Beziehungsaufbau und niedrigschwellige Gespräche sind der erste Schritt.'
+    },
+    {
+      frage: 'Welches ist KEIN typisches Warnsignal für eine beginnende depressive Episode bei Jugendlichen?',
+      optionen: [
+        'Plötzlicher Rückzug von Freunden und Hobbys',
+        'Leistungsabfall in der Schule',
+        'Erhöhte soziale Aktivität und neue Interessen',
+        'Schlafstörungen und Appetitveränderungen'
+      ],
+      korrekt: 2,
+      erklaerung: 'Rückzug, Leistungsabfall und vegetative Symptome (Schlaf/Appetit) sind zentrale Depressionshinweise. Erhöhte soziale Aktivität spricht eher dagegen (oder kann manisch sein — anderes Bild).'
+    },
+    {
+      frage: 'Wie sprichst du eine mögliche Angststörung sensibel an?',
+      optionen: [
+        '"Du bist doch nur schüchtern, das wird schon."',
+        '"Ich habe beobachtet, dass dir Klassenarbeiten richtig zu schaffen machen. Magst du erzählen, wie es dir damit geht?"',
+        '"Wenn du so weitermachst, schaffst du keinen Abschluss."',
+        '"Das haben wir alle mal, keine Sorge."'
+      ],
+      korrekt: 1,
+      erklaerung: 'Konkrete, beobachtungsbasierte Ansprache ohne Bewertung öffnet Raum. Bagatellisieren („wird schon") oder Druck machen verschließen Zugänge.'
+    },
+    {
+      frage: 'Wann ist eine Überweisung an Psychotherapie klar indiziert?',
+      optionen: [
+        'Nur wenn der Jugendliche explizit darum bittet.',
+        'Bei Symptomen über 2+ Wochen mit Funktionsbeeinträchtigung (Schule, Familie, Schlaf).',
+        'Erst wenn Suizidgedanken geäußert werden.',
+        'Nie — das lässt sich alles pädagogisch lösen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Anhaltende Symptomatik mit Funktionseinschränkung ist die Schwelle. Warten auf Zuspitzung oder explizite Anfrage ist riskant — gerade bei Jugendlichen, die nicht von sich aus um Hilfe bitten.'
+    }
+  ],
+  '02-externalisierende': [
+    {
+      frage: 'Ein Jugendlicher wirft Stühle im Klassenraum. Was ist im Akutmoment am wirksamsten?',
+      optionen: [
+        'Sofort konfrontieren und Konsequenzen ankündigen.',
+        'Raum schaffen, ruhige Stimme, Gefahren entfernen — Verhandeln kommt später.',
+        'Andere Jugendliche zur Hilfe holen, um ihn festzuhalten.',
+        'Ignorieren, bis er sich beruhigt hat.'
+      ],
+      korrekt: 1,
+      erklaerung: 'In der Akutphase ist Deeskalation durch Raum, Ruhe und Sicherheit zentral. Konfrontation feuert die Erregung weiter an. Gespräche über Regeln sind erst nach der Beruhigung sinnvoll.'
+    },
+    {
+      frage: 'Was unterscheidet ODD (Oppositionelles Trotzverhalten) von reiner Pubertätsrebellion?',
+      optionen: [
+        'Es gibt keinen Unterschied — alles ist Pubertät.',
+        'Dauer (>6 Monate), Intensität und Funktionsbeeinträchtigung über mehrere Lebensbereiche.',
+        'ODD tritt nur bei Jungen auf.',
+        'ODD verschwindet immer von selbst mit 18.'
+      ],
+      korrekt: 1,
+      erklaerung: 'ODD ist durch persistente Muster (>6 Monate), die über normale Entwicklungsphasen hinausgehen und mehrere Kontexte (Schule, Familie, Peers) betreffen, definiert.'
+    },
+    {
+      frage: 'Welche Intervention ist bei chronischer Regelverletzung am wenigsten hilfreich?',
+      optionen: [
+        'Klare, konsistente Struktur mit wenigen, wichtigen Regeln.',
+        'Eskalierende Bestrafungen und öffentliche Bloßstellung.',
+        'Positive Verstärkung für Zielverhalten.',
+        'Beziehungsaufbau parallel zur Grenzsetzung.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Eskalation verstärkt oft das Problem und zerstört die Beziehung. Wirksam sind klare Struktur, Konsistenz, Beziehung und gezielte Verstärkung — nicht Bloßstellung.'
+    },
+    {
+      frage: 'Beziehung ODER Grenzen — was ist bei externalisierenden Jugendlichen richtig?',
+      optionen: [
+        'Nur Beziehung zählt, Grenzen sind autoritär.',
+        'Nur Grenzen zählen, Beziehung macht weich.',
+        'Beziehung UND Grenzen — beides gleichzeitig, sonst funktioniert nichts.',
+        'Erst monatelang Beziehung aufbauen, dann Grenzen.'
+      ],
+      korrekt: 2,
+      erklaerung: 'Warme Beziehung ohne Grenzen wirkt nicht haltend. Grenzen ohne Beziehung werden als Angriff erlebt. Beides parallel ist der Kern pädagogischer Arbeit bei externalisierendem Verhalten.'
+    }
+  ],
+  '03-trauma': [
+    {
+      frage: 'Welches Verhalten kann eine Traumafolge sein, obwohl es erstmal nicht danach aussieht?',
+      optionen: [
+        'Übermäßige Angepasstheit und „Pflegeleichtigkeit"',
+        'Normale Pubertätsrebellion',
+        'Gute schulische Leistungen',
+        'Offenes Reden über Emotionen'
+      ],
+      korrekt: 0,
+      erklaerung: 'Übermäßige Angepasstheit („Fawning") ist eine Traumareaktion und oft übersehen, weil sie keine Probleme macht. Das Kind lernt, Sicherheit durch Anpassung zu erkaufen.'
+    },
+    {
+      frage: 'Was ist bei der Arbeit mit traumatisierten Jugendlichen die zentrale Phase?',
+      optionen: [
+        'Sofort das Trauma detailliert besprechen.',
+        'Stabilisierung vor Konfrontation — Sicherheit, Ressourcen, Erdung zuerst.',
+        'Erinnerungen durch gezielte Fragen aktiv abrufen.',
+        'Vermeiden, das Thema überhaupt anzusprechen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Das phasenorientierte Modell (Herman) nennt 1. Stabilisierung, 2. Traumakonfrontation, 3. Integration. Konfrontation ohne Stabilität retraumatisiert. Stabilisierung ist Kernaufgabe der Bezugsarbeit, Konfrontation gehört in Psychotherapie.'
+    },
+    {
+      frage: 'Ein Jugendlicher „checkt aus" mitten im Gespräch, wirkt wie weggetreten. Was tust du?',
+      optionen: [
+        'Schütteln und laut rufen, damit er „aufwacht".',
+        'Erdung: Name nennen, auf Hier & Jetzt fokussieren („5 Dinge, die du siehst"), ruhig dableiben.',
+        'Gespräch tiefer führen, um das Thema zu durchdringen.',
+        'Sofort Notarzt rufen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Dissoziation braucht Erdung (sensorisch, kognitiv) und Sicherheit. Weiterbohren verschärft den Zustand. Notarzt nur bei medizinischer Gefahr.'
+    },
+    {
+      frage: 'Sequenzielle Traumatisierung bedeutet:',
+      optionen: [
+        'Ein einmaliges schweres Trauma (z.B. Unfall).',
+        'Mehrfache, aufeinanderfolgende Traumata über Zeit, z.B. bei Fluchterfahrung (Heimatverlust → Flucht → Ankunft).',
+        'Trauma, das nur in Sequenzen wiederkehrt.',
+        'Ein therapeutisches Verfahren.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Keilson/Becker: Traumata als Abfolge über Phasen (vor/während/nach Belastung). Jede Phase kann stabilisierend oder retraumatisierend wirken — relevant bei UMF, Heim, Pflegefamilien.'
+    }
+  ],
+  '04-bindungsstoerung': [
+    {
+      frage: 'Ein Jugendlicher lehnt jede neue Bezugsperson sofort ab. Was ist vermutlich los?',
+      optionen: [
+        'Er ist nur trotzig.',
+        'Mögliche desorganisierte oder vermeidende Bindung — Nähe wird als bedrohlich erlebt.',
+        'Er braucht strengere Regeln.',
+        'Er kann keine Beziehungen und wird es nie lernen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Frühe unsichere Bindungserfahrungen prägen Beziehungsmuster. Ablehnung ist oft Selbstschutz, keine Boshaftigkeit. Korrigierende Beziehungserfahrungen sind möglich — brauchen Zeit und Konstanz.'
+    },
+    {
+      frage: 'Was ist beim Beziehungsaufbau zu einem bindungsgestörten Jugendlichen am wichtigsten?',
+      optionen: [
+        'Sofortige emotionale Tiefe und Nähe erzwingen.',
+        'Verlässlichkeit und Vorhersagbarkeit — kleine Zusagen einhalten, Rituale, konstant da sein.',
+        'Häufige Bezugspersonenwechsel, damit er flexibel wird.',
+        'Distanz wahren, bis er von selbst kommt.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Vertrauen wächst durch tausend kleine Erfahrungen, dass Zusagen gelten. Aggressive Nähe triggert Abwehr, zu viel Distanz bestätigt das Schema „keiner ist da".'
+    },
+    {
+      frage: 'Welches Verhalten spricht für eine DESORGANISIERTE Bindung (nicht nur unsicher)?',
+      optionen: [
+        'Klares Festhalten an einer Bezugsperson.',
+        'Widersprüchliches Verhalten: Annäherung UND Flucht gleichzeitig, „einfrieren" in Beziehungsmomenten.',
+        'Konstante Vermeidung jeglicher Nähe.',
+        'Übermäßige Anhänglichkeit.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Desorganisiert = keine kohärente Strategie, weil die Bezugsperson gleichzeitig Schutz- und Angstquelle war. Oft bei Misshandlung/Vernachlässigung.'
+    },
+    {
+      frage: 'Wie gehst du mit Grenzverletzungen um, ohne die Beziehung zu gefährden?',
+      optionen: [
+        'Gar nicht begrenzen, um die Beziehung zu erhalten.',
+        'Grenzen klar setzen UND Beziehung gleichzeitig signalisieren („Das geht nicht — und trotzdem bist du hier willkommen").',
+        'Beziehung abbrechen bei jeder Grenzverletzung.',
+        'Nur nonverbal reagieren, um ihn nicht zu kränken.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Der Schlüssel: Verhalten vs. Person trennen. Grenze fürs Verhalten, Annahme für die Person. Das ist eine korrigierende Bindungserfahrung.'
+    }
+  ]
+};
+
+// ============================================================
 // LERN-APP GAMIFICATION — Level-System & Badges
 // ============================================================
 const WB_LEVEL_SYSTEM = [

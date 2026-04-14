@@ -2055,6 +2055,27 @@ function renderWBLernpfade(container) {
   `;
 }
 
+// Helper: Icon pro Schritt-Typ
+function getSchrittTypIcon(typ) {
+  var icons = { einfuehrung: '👋', lektuere: '📖', arbeitsblatt: '📝', quiz: '❓', reflexion: '💭', zusammenfassung: '🎯' };
+  return icons[typ] || '📄';
+}
+
+// Helper: Label pro Schritt-Typ
+function getSchrittTypLabel(typ) {
+  var labels = { einfuehrung: 'Einführung', lektuere: 'Lektüre', arbeitsblatt: 'Arbeitsblatt', quiz: 'Quiz', reflexion: 'Reflexion', zusammenfassung: 'Zusammenfassung' };
+  return labels[typ] || typ;
+}
+
+// Placeholder — echter Player kommt in Mikroschritt 4b
+function startLernpfad(id, startIndex) {
+  if (typeof openLernplayer === 'function') {
+    openLernplayer(id, startIndex || 0);
+  } else {
+    if (typeof showToast === 'function') showToast('Lern-Player kommt in Mikroschritt 4b', '');
+  }
+}
+
 function showLernpfadDetail(id) {
   const lp = WB_LERNPFADE.find(p => p.id === id);
   if (!lp) return;
@@ -2066,39 +2087,80 @@ function showLernpfadDetail(id) {
   const text = isDark ? '#E2E8F0' : '#1F2937';
   const muted = isDark ? '#94A3B8' : '#6B7280';
   const border = isDark ? '#334155' : '#E5E7EB';
-  const katInfo = WB_KATEGORIEN[lp.kategorie] || {};
+  const katInfo = (typeof WB_KATEGORIEN !== 'undefined' && WB_KATEGORIEN[lp.kategorie]) || {};
+  const einf = (typeof WB_EINFUEHRUNGEN !== 'undefined' && WB_EINFUEHRUNGEN[id]) || null;
+  const schritte = Array.isArray(lp.schritte) ? lp.schritte : [];
+  const sf = (progress.schritteFortschritt || {})[id] || { abgeschlosseneSchritte: [] };
+  const doneIdx = sf.abgeschlosseneSchritte || [];
+  const doneCount = doneIdx.length;
+  const totalSchritte = schritte.length;
+  const progressPct = totalSchritte > 0 ? Math.round((doneCount / totalSchritte) * 100) : 0;
+  // Nächster offener Schritt = erster Index, der nicht in doneIdx ist
+  var naechsterOffenerIdx = 0;
+  for (var ni = 0; ni < totalSchritte; ni++) {
+    if (doneIdx.indexOf(ni) === -1) { naechsterOffenerIdx = ni; break; }
+    if (ni === totalSchritte - 1) naechsterOffenerIdx = ni;
+  }
+  const hatAngefangen = doneCount > 0 && doneCount < totalSchritte;
+  const alleFertig = totalSchritte > 0 && doneCount >= totalSchritte;
+  const ctaLabel = alleFertig ? '🔁 Erneut durchgehen' : (hatAngefangen ? `▶ Fortsetzen bei Schritt ${naechsterOffenerIdx + 1}` : '▶ Modul starten');
 
-  // Build content sections
-  var sektionenHtml = '';
-  if (lp.sektionen && lp.sektionen.length > 0) {
-    sektionenHtml = lp.sektionen.map(function(s, i) {
-      var items = '';
-      if (s.punkte && s.punkte.length > 0) {
-        items = '<ul style="margin:10px 0 0;padding-left:20px;font-size:14px;color:' + text + ';line-height:1.9;list-style:disc;">'
-          + s.punkte.map(function(p) { return '<li style="margin-bottom:6px;">' + p + '</li>'; }).join('')
-          + '</ul>';
-      }
-      var textHtml = s.text ? '<p style="font-size:14px;color:' + text + ';line-height:1.8;margin:10px 0 0;">' + s.text + '</p>' : '';
-      var hinweisHtml = s.hinweis ? '<div style="margin-top:12px;padding:12px 16px;background:' + (isDark ? '#1E3A2F' : '#FEF9C3') + ';border-left:3px solid ' + (isDark ? '#FDE68A' : '#F59E0B') + ';border-radius:0 8px 8px 0;font-size:13px;color:' + (isDark ? '#FDE68A' : '#92400E') + ';line-height:1.6;">⚠️ ' + s.hinweis + '</div>' : '';
-      var sectionBg = isDark ? '#0F172A' : '#F8FAFC';
-      var sectionBorder = i < (lp.sektionen.length - 1) ? 'border-bottom:1px solid ' + border + ';' : '';
-      return '<div style="padding:20px 0;' + sectionBorder + '">'
-        + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
-        + '<span style="width:32px;height:32px;border-radius:8px;background:' + lp.farbe + '15;display:flex;align-items:center;justify-content:center;font-size:16px;">' + (s.icon || '📄') + '</span>'
-        + '<h3 style="font-size:16px;font-weight:700;color:' + lp.farbe + ';margin:0;">' + s.titel + '</h3>'
-        + '</div>'
-        + textHtml + items + hinweisHtml
-        + '</div>';
-    }).join('');
+  // Einführungs-Block
+  var einfuehrungHtml = '';
+  if (einf) {
+    var lernzieleHtml = '';
+    if (einf.lernziele && einf.lernziele.length) {
+      lernzieleHtml = '<div style="margin-top:14px;"><div style="font-size:12px;font-weight:700;color:' + lp.farbe + ';margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">📋 Deine Lernziele</div>'
+        + '<ul style="margin:0;padding-left:20px;font-size:13px;color:' + text + ';line-height:1.8;list-style:disc;">'
+        + einf.lernziele.map(function(z) { return '<li style="margin-bottom:4px;">' + escapeHtml(z) + '</li>'; }).join('')
+        + '</ul></div>';
+    }
+    var praxisHtml = einf.praxishinweis
+      ? '<div style="margin-top:14px;padding:12px 16px;background:' + (isDark ? '#1E3A2F' : '#FEF9C3') + ';border-left:3px solid ' + (isDark ? '#FDE68A' : '#F59E0B') + ';border-radius:0 8px 8px 0;font-size:13px;color:' + (isDark ? '#FDE68A' : '#92400E') + ';line-height:1.6;">💡 <strong>Praxishinweis:</strong> ' + escapeHtml(einf.praxishinweis) + '</div>'
+      : '';
+    einfuehrungHtml = '<div style="background:linear-gradient(135deg,' + lp.farbe + '10,' + lp.farbe + '05);border:1px solid ' + lp.farbe + '30;border-radius:12px;padding:18px 20px;margin-bottom:20px;">'
+      + '<h3 style="font-size:16px;font-weight:700;color:' + lp.farbe + ';margin:0 0 8px;">' + escapeHtml(einf.titel || 'Willkommen') + '</h3>'
+      + '<p style="font-size:14px;color:' + text + ';line-height:1.7;margin:0;">' + escapeHtml(einf.text || '') + '</p>'
+      + lernzieleHtml + praxisHtml
+      + '</div>';
   } else {
-    sektionenHtml = '<p style="font-size:14px;color:' + text + ';line-height:1.7;margin-bottom:20px;">' + escapeHtml(lp.beschreibung) + '</p>'
-      + '<div style="background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px solid ' + border + ';border-radius:12px;padding:16px;margin-bottom:20px;">'
-      + '<div style="font-size:12px;font-weight:700;color:' + lp.farbe + ';margin-bottom:10px;">📋 Lernziele</div>'
-      + '<ul style="margin:0;padding-left:18px;font-size:13px;color:' + text + ';line-height:1.8;">'
-      + '<li>Erkennung und Einordnung im pädagogischen Alltag</li>'
-      + '<li>Evidenzbasierte Interventionsstrategien</li>'
-      + '<li>Grenzen der eigenen Rolle und Überweisungskriterien</li>'
-      + '</ul></div>';
+    einfuehrungHtml = '<p style="font-size:14px;color:' + text + ';line-height:1.7;margin-bottom:20px;">' + escapeHtml(lp.beschreibung) + '</p>';
+  }
+
+  // Schritt-Liste
+  var schritteListeHtml = '';
+  if (totalSchritte > 0) {
+    schritteListeHtml = '<div style="margin-bottom:20px;">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
+      + '<div style="font-size:12px;font-weight:700;color:' + text + ';text-transform:uppercase;letter-spacing:0.5px;">🪜 Lernschritte</div>'
+      + '<div style="font-size:12px;color:' + muted + ';">' + doneCount + ' / ' + totalSchritte + ' abgeschlossen</div>'
+      + '</div>'
+      + '<div style="height:6px;background:' + (isDark ? '#0F172A' : '#F3F4F6') + ';border-radius:3px;overflow:hidden;margin-bottom:14px;">'
+      + '<div style="height:100%;width:' + progressPct + '%;background:' + lp.farbe + ';transition:width 0.4s ease;"></div>'
+      + '</div>'
+      + '<div style="display:flex;flex-direction:column;gap:6px;">'
+      + schritte.map(function(s, i) {
+          var done = doneIdx.indexOf(i) !== -1;
+          var isNext = (i === naechsterOffenerIdx) && !alleFertig && !done;
+          var rowBg = done ? (isDark ? '#0F2A1E' : '#F0FDF4') : (isNext ? lp.farbe + '12' : (isDark ? '#0F172A' : '#F9FAFB'));
+          var rowBorder = done ? '#16A34A40' : (isNext ? lp.farbe + '50' : border);
+          var statusDot = done
+            ? '<span style="width:22px;height:22px;border-radius:50%;background:#16A34A;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">✓</span>'
+            : (isNext ? '<span style="width:22px;height:22px;border-radius:50%;background:' + lp.farbe + ';color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">' + (i + 1) + '</span>'
+                      : '<span style="width:22px;height:22px;border-radius:50%;background:' + (isDark ? '#334155' : '#E5E7EB') + ';color:' + muted + ';display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;">' + (i + 1) + '</span>');
+          return '<div onclick="startLernpfad(\'' + id + '\',' + i + ')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid ' + rowBorder + ';border-radius:10px;background:' + rowBg + ';cursor:pointer;transition:transform 0.12s,box-shadow 0.12s;" onmouseenter="this.style.transform=\'translateX(2px)\';this.style.boxShadow=\'0 2px 8px rgba(0,0,0,0.06)\'" onmouseleave="this.style.transform=\'\';this.style.boxShadow=\'\'">'
+            + statusDot
+            + '<span style="font-size:16px;flex-shrink:0;">' + getSchrittTypIcon(s.typ) + '</span>'
+            + '<div style="flex:1;min-width:0;">'
+            + '<div style="font-size:13px;font-weight:600;color:' + text + ';line-height:1.3;">' + escapeHtml(s.titel || getSchrittTypLabel(s.typ)) + '</div>'
+            + '<div style="font-size:11px;color:' + muted + ';margin-top:2px;">' + getSchrittTypLabel(s.typ) + (s.dauer ? ' · ⏱ ' + escapeHtml(s.dauer) : '') + '</div>'
+            + '</div>'
+            + (isNext ? '<span style="font-size:11px;padding:3px 8px;background:' + lp.farbe + ';color:#fff;border-radius:6px;font-weight:600;flex-shrink:0;">weiter</span>' : '')
+            + '</div>';
+        }).join('')
+      + '</div></div>';
+  } else {
+    schritteListeHtml = '<div style="padding:20px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border-radius:10px;font-size:13px;color:' + muted + ';text-align:center;">Keine Lernschritte definiert.</div>';
   }
 
   const overlay = document.createElement('div');
@@ -2116,7 +2178,7 @@ function showLernpfadDetail(id) {
               <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                 <span style="font-size:11px;padding:3px 10px;background:${lp.farbe}15;color:${lp.farbe};border-radius:6px;font-weight:600;">${katInfo.label || ''}</span>
                 <span style="font-size:11px;color:${muted};">⏱ ${lp.dauer}</span>
-                <span style="font-size:11px;color:${muted};">${lp.sektionen ? lp.sektionen.length + ' Kapitel' : ''}</span>
+                <span style="font-size:11px;color:${muted};">${totalSchritte} Schritte</span>
                 ${istGelesen ? '<span style="font-size:11px;padding:3px 10px;background:#F0FDF4;color:#16A34A;border-radius:6px;font-weight:600;">✓ Absolviert</span>' : ''}
               </div>
             </div>
@@ -2124,11 +2186,17 @@ function showLernpfadDetail(id) {
           <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="background:${isDark ? '#334155' : '#F3F4F6'};border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;color:${muted};flex-shrink:0;">✕</button>
         </div>
       </div>
-      <div style="padding:4px 28px 28px;">
-        ${sektionenHtml}
-        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid ${border};">
-          ${!istGelesen ? `<button onclick="markLernpfadGelesen('${id}');this.closest('div[style*=\\'position:fixed\\']').remove();" style="padding:10px 20px;background:${lp.farbe};color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">✓ Als gelesen markieren</button>` : `<button onclick="unmarkLernpfadGelesen('${id}');this.closest('div[style*=\\'position:fixed\\']').remove();" style="padding:10px 20px;background:${isDark ? '#334155' : '#F3F4F6'};color:${text};border:1px solid ${border};border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Markierung entfernen</button>`}
-          <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="padding:10px 20px;background:${isDark ? '#334155' : '#F3F4F6'};color:${text};border:1px solid ${border};border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Schliessen</button>
+      <div style="padding:20px 28px 28px;">
+        ${einfuehrungHtml}
+        ${schritteListeHtml}
+        <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid ${border};flex-wrap:wrap;">
+          <div style="display:flex;gap:8px;">
+            ${istGelesen ? `<button onclick="unmarkLernpfadGelesen('${id}');this.closest('div[style*=\\'position:fixed\\']').remove();" style="padding:8px 14px;background:transparent;color:${muted};border:1px solid ${border};border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;">Markierung entfernen</button>` : ''}
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button onclick="this.closest('div[style*=\\'position:fixed\\']').remove()" style="padding:10px 18px;background:${isDark ? '#334155' : '#F3F4F6'};color:${text};border:1px solid ${border};border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Schliessen</button>
+            ${totalSchritte > 0 ? `<button onclick="this.closest('div[style*=\\'position:fixed\\']').remove();startLernpfad('${id}',${naechsterOffenerIdx});" style="padding:10px 22px;background:${lp.farbe};color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px ${lp.farbe}40;">${ctaLabel}</button>` : ''}
+          </div>
         </div>
       </div>
     </div>

@@ -6234,10 +6234,28 @@ body.dark-mode .bib-karte-desc { color: #9CA3AF; }
 }
 
 /* Hypothesis Card — kompakt, expandiert bei Klick */
-.hypo-card-compact { cursor: pointer; }
-.hypo-expand-content { display: none; margin-top: 8px; }
-.hypo-card.hypo-expanded .hypo-expand-content { display: block; }
+.hypo-card-compact {
+  cursor: pointer;
+  margin-bottom: 0;
+}
+.hypo-card-compact .hypo-card-body {
+  padding: 10px 12px;
+}
+.hypo-card-compact .hypo-card-title {
+  font-size: 12px;
+  line-height: 1.35;
+}
+.hypo-card-compact .hypo-card-header {
+  margin-bottom: 4px;
+}
+.hypo-card-compact .hypo-card-footer {
+  margin-top: 0;
+}
+.hypo-expand-content { display: none !important; margin-top: 8px; }
+.hypo-card.hypo-expanded .hypo-expand-content { display: block !important; }
 .hypo-card.hypo-expanded { grid-column: 1 / -1; }
+.hypo-card.hypo-expanded .hypo-card-body { padding: 14px 16px; }
+.hypo-card.hypo-expanded .hypo-card-title { font-size: 14px; }
 
 .hypo-card {
   display: flex;

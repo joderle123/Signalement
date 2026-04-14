@@ -2385,6 +2385,7 @@ function renderLernschrittInhalt(schritt, lp, idx) {
     case 'arbeitsblatt': return renderSchrittArbeitsblatt(schritt, lp, idx);
     case 'quiz': return renderSchrittQuiz(schritt, lp, idx);
     case 'reflexion': return renderSchrittReflexion(schritt, lp, idx);
+    case 'zusammenfassung': return renderSchrittZusammenfassung(schritt, lp, idx);
     default: return renderSchrittPlatzhalter(schritt, lp, idx);
   }
 }
@@ -2403,6 +2404,65 @@ function renderSchrittPlatzhalter(schritt, lp, idx) {
     + 'Renderer für „' + getSchrittTypLabel(schritt.typ) + '" folgt in einem der nächsten Mikroschritte.'
     + (schritt.datei ? '<div style="margin-top:10px;font-size:11px;font-family:monospace;color:' + text + ';">📎 ' + escapeHtml(schritt.datei) + '</div>' : '')
     + '</div></div>';
+}
+
+// 4c6 — Zusammenfassung: Gratulation + Modul-Statistik + "Abschliessen"-CTA
+function renderSchrittZusammenfassung(schritt, lp, idx) {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+
+  var progress = getWBProgress();
+  var sf = (progress.schritteFortschritt || {})[lp.id] || { abgeschlosseneSchritte: [] };
+  var doneCount = (sf.abgeschlosseneSchritte || []).length;
+  var total = lp.schritte.length;
+
+  // Quiz-Scores dieses Moduls aggregieren
+  var quizEntries = Object.keys(progress.quizScores || {}).filter(function(k) { return k.indexOf(lp.id + '_') === 0; });
+  var quizScoreSum = 0, quizTotalSum = 0;
+  quizEntries.forEach(function(k) {
+    quizScoreSum += progress.quizScores[k].score || 0;
+    quizTotalSum += progress.quizScores[k].total || 0;
+  });
+  var quizStat = quizTotalSum > 0
+    ? '<div style="flex:1;min-width:140px;padding:14px;background:' + (isDark ? '#1E293B' : '#FFFFFF') + ';border:1px solid ' + border + ';border-radius:12px;text-align:center;">'
+      + '<div style="font-size:24px;font-weight:800;color:' + lp.farbe + ';">' + quizScoreSum + '/' + quizTotalSum + '</div>'
+      + '<div style="font-size:11px;color:' + muted + ';text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Quiz-Score</div>'
+      + '</div>' : '';
+
+  var reflexionenCount = Object.keys(progress.reflexionen || {}).filter(function(k) { return k.indexOf(lp.id + '_') === 0; }).length;
+  var reflexionStat = reflexionenCount > 0
+    ? '<div style="flex:1;min-width:140px;padding:14px;background:' + (isDark ? '#1E293B' : '#FFFFFF') + ';border:1px solid ' + border + ';border-radius:12px;text-align:center;">'
+      + '<div style="font-size:24px;font-weight:800;color:' + lp.farbe + ';">' + reflexionenCount + '</div>'
+      + '<div style="font-size:11px;color:' + muted + ';text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Reflexionen</div>'
+      + '</div>' : '';
+
+  var naechsteSchritte = [
+    'Beobachte in der nächsten Begegnung gezielt auf die Signale aus diesem Modul.',
+    'Nimm dir eine konkrete Handlungsidee aus deiner Reflexion und setz sie um.',
+    'Sprich im Team über einen Fall, der zu diesem Thema passt.'
+  ];
+
+  return '<div style="max-width:720px;margin:0 auto;text-align:center;padding:20px 0;">'
+    + '<div style="font-size:72px;margin-bottom:12px;">🎯</div>'
+    + '<div style="font-size:12px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Zusammenfassung</div>'
+    + '<h2 style="font-size:26px;font-weight:800;color:' + text + ';margin:0 0 10px;line-height:1.25;">' + escapeHtml(schritt.titel || 'Gut gemacht!') + '</h2>'
+    + '<p style="font-size:15px;color:' + muted + ';max-width:520px;margin:0 auto 24px;line-height:1.7;">Du hast das Modul „<strong style="color:' + text + ';">' + escapeHtml(lp.titel) + '</strong>" durchgearbeitet. Jetzt geht es darum, das Gelernte in deiner Praxis zu verankern.</p>'
+    + '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;">'
+    + '<div style="flex:1;min-width:140px;padding:14px;background:' + (isDark ? '#1E293B' : '#FFFFFF') + ';border:1px solid ' + border + ';border-radius:12px;text-align:center;">'
+    + '<div style="font-size:24px;font-weight:800;color:' + lp.farbe + ';">' + doneCount + '/' + total + '</div>'
+    + '<div style="font-size:11px;color:' + muted + ';text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Schritte</div>'
+    + '</div>'
+    + quizStat + reflexionStat
+    + '</div>'
+    + '<div style="text-align:left;padding:18px 22px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px solid ' + border + ';border-radius:12px;">'
+    + '<div style="font-size:12px;font-weight:700;color:' + lp.farbe + ';margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">🚀 Deine nächsten Schritte</div>'
+    + '<ul style="margin:0;padding-left:20px;font-size:14px;color:' + text + ';line-height:1.9;list-style:disc;">'
+    + naechsteSchritte.map(function(s) { return '<li style="margin-bottom:4px;">' + escapeHtml(s) + '</li>'; }).join('')
+    + '</ul></div>'
+    + '<div style="margin-top:20px;font-size:13px;color:' + muted + ';">Klick auf <strong style="color:' + lp.farbe + ';">🎉 Abschliessen</strong>, um das Modul zu beenden und deine XP zu sichern.</div>'
+    + '</div>';
 }
 
 // 4c5 — Reflexion-Schritt: 2-3 Leitfragen + Textarea, persistiert in progress.reflexionen

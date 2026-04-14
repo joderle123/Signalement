@@ -2057,13 +2057,13 @@ function renderWBLernpfade(container) {
 
 // Helper: Icon pro Schritt-Typ
 function getSchrittTypIcon(typ) {
-  var icons = { einfuehrung: '👋', lektuere: '📖', arbeitsblatt: '📝', quiz: '❓', reflexion: '💭', zusammenfassung: '🎯' };
+  var icons = { einfuehrung: '👋', lektuere: '📖', fallbeispiel: '🎭', arbeitsblatt: '📝', quiz: '❓', reflexion: '💭', zusammenfassung: '🎯' };
   return icons[typ] || '📄';
 }
 
 // Helper: Label pro Schritt-Typ
 function getSchrittTypLabel(typ) {
-  var labels = { einfuehrung: 'Einführung', lektuere: 'Lektüre', arbeitsblatt: 'Arbeitsblatt', quiz: 'Quiz', reflexion: 'Reflexion', zusammenfassung: 'Zusammenfassung' };
+  var labels = { einfuehrung: 'Einführung', lektuere: 'Lektüre', fallbeispiel: 'Fallbeispiel', arbeitsblatt: 'Arbeitsblatt', quiz: 'Quiz', reflexion: 'Reflexion', zusammenfassung: 'Zusammenfassung' };
   return labels[typ] || typ;
 }
 
@@ -2472,6 +2472,7 @@ function renderLernschrittInhalt(schritt, lp, idx) {
   switch (schritt.typ) {
     case 'einfuehrung': return renderSchrittEinfuehrung(schritt, lp, idx);
     case 'lektuere': return renderSchrittLektuere(schritt, lp, idx);
+    case 'fallbeispiel': return renderSchrittFallbeispiel(schritt, lp, idx);
     case 'arbeitsblatt': return renderSchrittArbeitsblatt(schritt, lp, idx);
     case 'quiz': return renderSchrittQuiz(schritt, lp, idx);
     case 'reflexion': return renderSchrittReflexion(schritt, lp, idx);
@@ -2786,6 +2787,40 @@ function renderSchrittLektuere(schritt, lp, idx) {
     + iframeHtml
     + '<div style="margin-top:12px;padding:10px 14px;background:' + (isDark ? '#0F172A' : '#F8FAFC') + ';border:1px solid ' + border + ';border-radius:10px;font-size:12px;color:' + muted + ';line-height:1.5;">'
     + '📌 Nimm dir Zeit. Wenn du durch bist, klick unten auf <strong style="color:' + text + ';">Weiter →</strong>, um den Schritt als gelesen zu markieren.'
+    + '</div>'
+    + '</div>';
+}
+
+// M11 — Fallbeispiel-Schritt: Case-Vignette + geführte Analyse (ersetzt Arbeitsblätter für Lernende)
+function renderSchrittFallbeispiel(schritt, lp, idx) {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var text = isDark ? '#E2E8F0' : '#1F2937';
+  var muted = isDark ? '#94A3B8' : '#6B7280';
+  var border = isDark ? '#334155' : '#E5E7EB';
+  var iframeBg = isDark ? '#0F172A' : '#FFFFFF';
+
+  var hatDatei = !!schritt.datei;
+  var dateiUrl = hatDatei ? schritt.datei : '';
+
+  var iframeHtml = hatDatei
+    ? '<iframe src="' + escapeHtml(dateiUrl) + '" style="width:100%;height:70vh;min-height:460px;border:1px solid ' + border + ';border-radius:12px;background:' + iframeBg + ';" loading="lazy"></iframe>'
+    : '<div style="padding:40px 20px;background:' + iframeBg + ';border:1px dashed ' + border + ';border-radius:12px;text-align:center;color:' + muted + ';font-size:14px;">Kein Fallbeispiel referenziert.</div>';
+
+  var oeffnenBtn = hatDatei
+    ? '<a href="' + escapeHtml(dateiUrl) + '" target="_blank" rel="noopener" style="padding:7px 12px;background:transparent;color:' + lp.farbe + ';border:1px solid ' + lp.farbe + '50;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">↗ In neuem Tab öffnen</a>'
+    : '';
+
+  return '<div style="max-width:1000px;margin:0 auto;">'
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:14px;flex-wrap:wrap;">'
+    + '<div>'
+    + '<div style="font-size:11px;font-weight:700;color:' + lp.farbe + ';text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">🎭 Fallbeispiel' + (schritt.dauer ? ' · ⏱ ' + escapeHtml(schritt.dauer) : '') + '</div>'
+    + '<h2 style="font-size:20px;font-weight:800;color:' + text + ';margin:0;line-height:1.3;">' + escapeHtml(schritt.titel || 'Fallbeispiel') + '</h2>'
+    + '</div>'
+    + oeffnenBtn
+    + '</div>'
+    + iframeHtml
+    + '<div style="margin-top:12px;padding:12px 16px;background:' + (isDark ? '#1E3A2F' : '#FEF3C7') + ';border-left:3px solid ' + (isDark ? '#FDE68A' : '#D97706') + ';border-radius:0 10px 10px 0;font-size:13px;color:' + text + ';line-height:1.6;">'
+    + '<strong style="color:' + (isDark ? '#FDE68A' : '#92400E') + ';">🧠 Arbeite mit dem Fall:</strong> Lies die Vignette, arbeite die Leitfragen durch und vergleiche deine Einschätzung mit der Fachanalyse. Wenn du bereit bist, klick auf <strong>Weiter →</strong>.'
     + '</div>'
     + '</div>';
 }

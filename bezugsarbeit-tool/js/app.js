@@ -2552,7 +2552,7 @@ function renderBibliothek() {
   var totalCount = 0;
   THEMEN_KATEGORIEN.forEach(function(kat) {
     kat.themen.forEach(function(t) {
-      var items = getItemsForThema(t.id);
+      var items = getItemsForThema(t.id, t.titel);
       items.forEach(function(item) {
         typCounts[item.typ] = (typCounts[item.typ] || 0) + 1;
         totalCount++;

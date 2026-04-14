@@ -6126,6 +6126,86 @@ const HYPOTHESEN_THEMA_MAP = {
 };
 
 // ============================================================
+// ICD-10 → ARBEITSBLATT-MAPPING
+// Mappt klinische Codes auf vorhandene Arbeitsblätter, damit
+// Differenzialdiagnosen und Diagnose-Hypothesen direkt klickbare
+// Materialien bekommen.
+// ============================================================
+const ICD_ARBEITSBLATT_MAP = {
+  // F3x — Affektive Störungen
+  'F32':      { themaId: 'depressive-stimmungen', titel: 'Depressive Stimmungen verstehen',           datei: 'depressive-stimmungen.html' },
+  'F33':      { themaId: 'depressive-stimmungen', titel: 'Depressive Stimmungen verstehen',           datei: 'depressive-stimmungen.html' },
+  // F4x — Neurotische, Belastungs- und somatoforme Störungen
+  'F40':      { themaId: 'stress-angst',          titel: 'Stress & Angst verstehen',                  datei: 'stress-angst.html' },
+  'F40.1':    { themaId: 'stress-angst',          titel: 'Stress & Angst verstehen (Soziale Phobie)', datei: 'stress-angst.html' },
+  'F41':      { themaId: 'stress-angst',          titel: 'Stress & Angst verstehen',                  datei: 'stress-angst.html' },
+  'F41.0':    { themaId: 'angstanfaelle',         titel: 'Angstanfälle & Panik',                      datei: 'angstanfaelle.html' },
+  'F41.1':    { themaId: 'stress-angst',          titel: 'Generalisierte Angst',                      datei: 'stress-angst.html' },
+  'F41.2':    { themaId: 'stress-angst',          titel: 'Ängstlich-depressive Mischsymptomatik',     datei: 'stress-angst.html' },
+  'F42':      { themaId: 'wiederkehrende-gedanken', titel: 'Wiederkehrende Gedanken & Zwänge',        datei: 'wiederkehrende-gedanken.html' },
+  'F43':      { themaId: 'trauma',                titel: 'Trauma & Stabilisierung',                   datei: 'trauma-stabilisierung.html' },
+  'F43.1':    { themaId: 'trauma',                titel: 'PTBS — Trauma & Stabilisierung',            datei: 'trauma-stabilisierung.html' },
+  'F43.2':    { themaId: 'stress-angst',          titel: 'Anpassungsstörung',                         datei: 'stress-angst.html' },
+  'F43.21':   { themaId: 'depressive-stimmungen', titel: 'Anhaltende depressive Reaktion',            datei: 'depressive-stimmungen.html' },
+  'F44':      { themaId: 'dissoziative-erfahrungen', titel: 'Dissoziative Erfahrungen',               datei: 'dissoziative-erfahrungen.html' },
+  'F45':      { themaId: 'koerperbeschwerden',    titel: 'Körperbeschwerden & Somatisierung',         datei: 'koerperbeschwerden.html' },
+  // F5x — Verhaltensauffälligkeiten mit körperlichen Störungen
+  'F50':      { themaId: 'essverhalten',          titel: 'Essverhalten & Körperbild',                 datei: 'essverhalten.html' },
+  // F6x — Persönlichkeits- & Verhaltensstörungen
+  'F62':      { themaId: 'trauma',                titel: 'Andauernde Persönlichkeitsveränderung nach Trauma', datei: 'trauma-stabilisierung.html' },
+  'F62.0':    { themaId: 'trauma',                titel: 'Andauernde Persönlichkeitsveränderung nach Extrembelastung', datei: 'trauma-stabilisierung.html' },
+  // F8x — Entwicklungsstörungen
+  'F80':      { themaId: 'lernstrategien',        titel: 'Lernstrategien & Schule',                   datei: 'lernstrategien-schule.html' },
+  'F82':      { themaId: 'lernstrategien',        titel: 'Lernstrategien & Schule',                   datei: 'lernstrategien-schule.html' },
+  'F84':      { themaId: 'soziale-wahrnehmung',   titel: 'Soziale Wahrnehmung (ASS-Bereich)',         datei: 'soziale-wahrnehmung.html' },
+  'F84.0':    { themaId: 'soziale-wahrnehmung',   titel: 'Frühkindlicher Autismus',                   datei: 'soziale-wahrnehmung.html' },
+  // F9x — Verhaltens- & emotionale Störungen mit Beginn in Kindheit
+  'F90':      { themaId: 'konzentration-aufmerksamkeit', titel: 'ADHS — Konzentration & Aufmerksamkeit', datei: 'konzentration-aufmerksamkeit.html' },
+  'F90.0':    { themaId: 'konzentration-aufmerksamkeit', titel: 'Einfache Aktivitäts- & Aufmerksamkeitsstörung', datei: 'konzentration-aufmerksamkeit.html' },
+  'F90.1':    { themaId: 'impulskontrolle',       titel: 'Hyperkinetische Störung des Sozialverhaltens', datei: 'impulskontrolle.html' },
+  'F91':      { themaId: 'wut-aggression',        titel: 'Wut & Aggression — Sozialverhalten',        datei: 'wut-aggression.html' },
+  'F91.1':    { themaId: 'wut-aggression',        titel: 'Ungesellig-aggressive Störung',             datei: 'wut-aggression.html' },
+  'F91.2':    { themaId: 'wut-aggression',        titel: 'Sozialverhalten bei vorhandenen Bindungen', datei: 'wut-aggression.html' },
+  'F91.3':    { themaId: 'impulskontrolle',       titel: 'Oppositionelles Trotzverhalten',            datei: 'impulskontrolle.html' },
+  'F92':      { themaId: 'wut-aggression',        titel: 'Kombinierte Störung Sozialverhalten & Emotion', datei: 'wut-aggression.html' },
+  'F93':      { themaId: 'trennungsangst',        titel: 'Emotionale Störungen der Kindheit',         datei: 'trennung-scheidung.html' },
+  'F93.0':    { themaId: 'trennungsangst',        titel: 'Emotionale Störung mit Trennungsangst',     datei: 'trennung-scheidung.html' },
+  'F94':      { themaId: 'bindungsstoerung',      titel: 'Störungen sozialer Funktionen',             datei: 'bindungsstoerung.html' },
+  'F94.1':    { themaId: 'bindungsstoerung',      titel: 'Reaktive Bindungsstörung',                  datei: 'bindungsstoerung.html' },
+  'F94.2':    { themaId: 'bindungsstoerung',      titel: 'Bindungsstörung mit Enthemmung',            datei: 'bindungsstoerung.html' },
+  // F1x — Psychische/Verhaltensstörungen durch Substanzen
+  'F10-F19':  { themaId: 'alkohol',               titel: 'Substanzkonsum — Alkohol & Drogen',         datei: 'konsum-alkohol.html' },
+  'F10':      { themaId: 'alkohol',               titel: 'Alkohol — Was ich wirklich wissen sollte',  datei: 'konsum-alkohol.html' },
+  'F12':      { themaId: 'cannabis',              titel: 'Cannabis — Fakten & Motive',                datei: 'konsum-cannabis.html' },
+  'F17':      { themaId: 'tabak',                 titel: 'Tabak & E-Zigarette',                       datei: 'konsum-tabak.html' },
+  // F2x — Schizophrene Störungen
+  'F20-F29':  { themaId: 'wahrnehmungsveraenderungen', titel: 'Wahrnehmungsveränderungen',             datei: 'wahrnehmungsveraenderungen.html' },
+  'F20':      { themaId: 'wahrnehmungsveraenderungen', titel: 'Wahrnehmungsveränderungen',             datei: 'wahrnehmungsveraenderungen.html' },
+  // G — Neurologische Erkrankungen
+  'G47':      { themaId: 'schlaf',                titel: 'Schlaf, Gesundheit & Energie',              datei: 'schlaf-gesundheit.html' },
+  // P — Perinatalperiode
+  'P07':      { themaId: 'psychoedukation',       titel: 'Frühgeburt / geringes Geburtsgewicht',      datei: 'psychoedukation.html' },
+  // X — Externe Ursachen (Suizidalität / Selbstverletzung)
+  'X71-X83':  { themaId: 'suizidpraevention',     titel: 'Sicherheitsplan & Krisenintervention',      datei: 'krisenplan.html' },
+  'X71':      { themaId: 'suizidpraevention',     titel: 'Sicherheitsplan & Krisenintervention',      datei: 'krisenplan.html' },
+  'X78':      { themaId: 'selbstverletzung',      titel: 'Selbstverletzung verstehen',                datei: 'selbstverletzung.html' },
+  // Z — Faktoren die Gesundheitszustand beeinflussen
+  'Z59':      { themaId: 'wohnsituation',         titel: 'Wohnung & Wirtschaft',                      datei: 'wohnsituation.html' },
+  'Z59.0':    { themaId: 'wohnsituation',         titel: 'Obdachlosigkeit & Wohnprobleme',            datei: 'wohnsituation.html' },
+  'Z55':      { themaId: 'schulisches-engagement', titel: 'Schule & Ausbildung',                      datei: 'schulisches-engagement.html' },
+  'Z60':      { themaId: 'diskriminierung',       titel: 'Diskriminierung & Zugehörigkeit',           datei: 'diskriminierung.html' },
+  'Z60.5':    { themaId: 'diskriminierung',       titel: 'Diskriminierung',                           datei: 'diskriminierung.html' },
+  'Z61':      { themaId: 'trauma',                titel: 'Negative Kindheitserfahrungen',             datei: 'trauma-stabilisierung.html' },
+  'Z62':      { themaId: 'eltern-kind-beziehung', titel: 'Eltern-Kind-Beziehung',                     datei: 'eltern-kind-beziehung.html' },
+  'Z62.0':    { themaId: 'eltern-kind-beziehung', titel: 'Unzureichende elterliche Aufsicht',         datei: 'eltern-kind-beziehung.html' },
+  'Z62.6':    { themaId: 'eltern-kind-beziehung', titel: 'Unangemessener elterlicher Druck',          datei: 'eltern-kind-beziehung.html' },
+  'Z62.8':    { themaId: 'eltern-kind-beziehung', titel: 'Belastende Eltern-Kind-Beziehung',          datei: 'eltern-kind-beziehung.html' },
+  'Z63':      { themaId: 'familie',               titel: 'Familie verstehen',                         datei: 'familie.html' },
+  'Z65.4':    { themaId: 'sicherheit',            titel: 'Opfer von Gewalt — Schutz & Sicherheit',    datei: 'gewalt-schutz.html' },
+  'Z91.5':    { themaId: 'selbstverletzung',      titel: 'Selbstverletzung & Selbstschutz',           datei: 'selbstverletzung.html' },
+};
+
+// ============================================================
 // FACHLITERARISCHE LEGITIMATION DER TOOLS
 // ============================================================
 const TOOL_LEGITIMATION = {

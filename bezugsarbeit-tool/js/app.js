@@ -7147,11 +7147,16 @@ function openHypoDetailModal(id) {
     wikiHtml += '</div>';
   }
 
-  // Find related Arbeitsblätter via HYPOTHESEN_THEMA_MAP
+  // Find related Arbeitsblätter via HYPOTHESEN_THEMA_MAP ODER direkt als themaId
   var relatedAB = [];
   var seenAB = {};
   wikiIds.forEach(function(wid) {
+    // 1. Versuch: via HYPOTHESEN_THEMA_MAP (wiki-id → themen)
     var themaIds = (typeof HYPOTHESEN_THEMA_MAP !== 'undefined' && HYPOTHESEN_THEMA_MAP[wid]) ? HYPOTHESEN_THEMA_MAP[wid] : [];
+    // 2. Fallback: wiki-id direkt als themaId (viele Hypothesen nutzen Theme-IDs als wiki_ids)
+    if (themaIds.length === 0 && typeof ARBEITSBLÄTTER !== 'undefined' && ARBEITSBLÄTTER[wid]) {
+      themaIds = [wid];
+    }
     themaIds.forEach(function(tid) {
       var abs = (typeof ARBEITSBLÄTTER !== 'undefined') ? ARBEITSBLÄTTER[tid] : [];
       if (abs) {
@@ -7164,6 +7169,16 @@ function openHypoDetailModal(id) {
       }
     });
   });
+  // 3. ICD-basierter Fallback: Versuche ICD10-Codes → Thema zu mappen (für Diagnose-Hypothesen)
+  if (relatedAB.length === 0 && h.icd10 && h.icd10.length > 0 && typeof ICD_ARBEITSBLATT_MAP !== 'undefined') {
+    h.icd10.forEach(function(code) {
+      var eintrag = ICD_ARBEITSBLATT_MAP[code] || ICD_ARBEITSBLATT_MAP[code.split('.')[0]];
+      if (eintrag && !seenAB[eintrag.datei]) {
+        seenAB[eintrag.datei] = true;
+        relatedAB.push({ themaId: eintrag.themaId || code, titel: eintrag.titel, datei: eintrag.datei });
+      }
+    });
+  }
   var abHtml = '';
   if (relatedAB.length > 0) {
     abHtml = '<div style="margin-bottom:20px;">'

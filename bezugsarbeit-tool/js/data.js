@@ -25009,6 +25009,190 @@ const WB_QUIZ_FRAGEN = {
       korrekt: 1,
       erklaerung: 'Der Schlüssel: Verhalten vs. Person trennen. Grenze fürs Verhalten, Annahme für die Person. Das ist eine korrigierende Bindungserfahrung.'
     }
+  ],
+  '05-selbstverletzung-suizidalitaet': [
+    {
+      frage: 'Eine 16-Jährige zeigt dir frische Schnitte am Arm. Was ist der erste Schritt?',
+      optionen: [
+        'Sofort den Eltern berichten, ohne mit ihr zu reden.',
+        'Ruhig, wertschätzend ansprechen: Sorge äußern, nach Beweggründen fragen, keine Panik.',
+        'Ihr erklären, wie gefährlich das ist, und ein Versprechen abringen, es nicht mehr zu tun.',
+        'Ignorieren — das ist nur Aufmerksamkeitssuche.'
+      ],
+      korrekt: 1,
+      erklaerung: 'SVV hat meist Regulations-Funktion (Spannungsabbau, Kontrolle). Bagatellisieren oder Dramatisieren schaden. Erster Schritt: Beziehung halten, Verständnis, dann gemeinsam Alternativen erarbeiten und Fachhilfe einbinden.'
+    },
+    {
+      frage: 'Welches ist KEIN Mythos über Suizidalität?',
+      optionen: [
+        '„Wer darüber redet, tut es nicht."',
+        '„Jugendliche drohen nur, um Aufmerksamkeit zu bekommen."',
+        '„Wer einmal suizidal war, wird nie wieder stabil."',
+        'Offenes Nachfragen nach Suizidgedanken kann entlasten und erhöht nicht das Risiko.'
+      ],
+      korrekt: 3,
+      erklaerung: 'Die ersten drei sind gefährliche Mythen. Offene Fragen nach Suizidgedanken sind evidenzbasiert sicher und oft erleichternd. „Hast du manchmal daran gedacht, dir was anzutun?" ist eine saubere Standardfrage.'
+    },
+    {
+      frage: 'Was gehört in einen Sicherheitsplan (Safety Plan)?',
+      optionen: [
+        'Ein Versprechen, nichts zu tun.',
+        'Warnsignale, eigene Bewältigungsstrategien, Kontaktpersonen, Krisennummern, Zugang zu Mitteln begrenzen.',
+        'Eine Liste aller negativen Gedanken.',
+        'Nur die Hotline-Nummer.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Stanley-Brown Safety Plan: 6 Schritte (Warnzeichen erkennen → eigene Strategien → Ablenkung → Kontakte → Profis → Mittel sichern). „No-Suicide-Contracts" sind wissenschaftlich widerlegt.'
+    },
+    {
+      frage: 'Akute Suizidalität mit Plan und Mittel — was tust du?',
+      optionen: [
+        'Abwarten und beobachten.',
+        'Nicht allein lassen, sofort Krisendienst/KJP-Klinik, Eltern einbeziehen, Mittel entfernen.',
+        'Sofort in den Unterricht schicken, Alltag strukturiert halten.',
+        'Verschweigen, um Stigma zu vermeiden.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Akute Suizidalität ist ein Notfall. Nicht alleinlassen, Fachdienste einschalten, Zugang zu Methoden entfernen. Schweigepflicht endet bei Lebensgefahr.'
+    }
+  ],
+  '06-adhs-praxis': [
+    {
+      frage: 'Welches Symptom wird bei ADHS besonders oft übersehen — vor allem bei Mädchen?',
+      optionen: [
+        'Hyperaktivität und Impulsivität.',
+        'Aufmerksamkeitsdefizit ohne Hyperaktivität („Tagträumerinnen").',
+        'Aggressives Verhalten.',
+        'Starke schulische Leistungsabfälle.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Der unaufmerksame Typus (ADS) zeigt sich ruhig, verträumt, „wegdriftend" — wird oft als „verträumt", „faul" oder „schüchtern" fehlinterpretiert. Häufiger bei Mädchen, daher Unterdiagnose.'
+    },
+    {
+      frage: 'Welche Klassenraum-Strategie ist bei ADHS am wenigsten hilfreich?',
+      optionen: [
+        'Kurze, klar strukturierte Aufgaben mit sofortigem Feedback.',
+        'Platz vorne, wenig Ablenkung.',
+        'Bewegungspausen einbauen.',
+        'Stundenlanges stilles Arbeiten ohne Unterbrechung.'
+      ],
+      korrekt: 3,
+      erklaerung: 'ADHS-Gehirne brauchen kurze Einheiten, Bewegung, klare Struktur, unmittelbares Feedback. Lange monotone Phasen sind Gift — Symptome eskalieren.'
+    },
+    {
+      frage: 'Eltern fragen dich: „Soll unser Kind Medikamente nehmen?"',
+      optionen: [
+        '„Auf keinen Fall — das macht süchtig."',
+        '„Ja, sofort — das ist der einzige Weg."',
+        '„Medikamente können wirksam sein, die Entscheidung trifft aber der Kinderpsychiater nach Diagnostik — multimodale Behandlung (Psychoedu, Verhalten, ggf. Medis) ist Standard."',
+        '„Das ist nur Familiensache."'
+      ],
+      korrekt: 2,
+      erklaerung: 'Leitlinien empfehlen multimodale Therapie. Pädagogische Fachkraft informiert ausgewogen und überweist an KJP. Keine eigene Empfehlung pro/contra Medikation — das ist ärztliche Entscheidung.'
+    },
+    {
+      frage: 'Was ist der beste Umgang mit einem impulsiven Ausbruch eines ADHS-Jugendlichen?',
+      optionen: [
+        'Sofort moralisch diskutieren, warum das falsch war.',
+        'Erst Regulation ermöglichen (Raum, Bewegung, Ruhe), dann verzögert reflektieren.',
+        'Harte Konsequenz direkt im Affekt festlegen.',
+        'Ignorieren und hoffen, dass es vergeht.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Im Affekt ist das Frontalhirn offline — Logik erreicht ihn nicht. Erst Co-Regulation, dann (Stunden später) Reflexion und Wiedergutmachung. Konsequenzen ja, aber nicht im Affekt festgelegt.'
+    }
+  ],
+  '07-dissoziation': [
+    {
+      frage: 'Woran erkennst du eine akute Dissoziation?',
+      optionen: [
+        'Der Jugendliche schläft ein.',
+        'Abwesender Blick, verlangsamte Reaktion, „Nicht-Anwesend-Sein", manchmal Verwirrung über Ort/Zeit.',
+        'Er spricht besonders schnell und aufgeregt.',
+        'Er weint laut.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Dissoziation ist ein Abspalten der Wahrnehmung — kann subtil sein („weggetreten", „nicht ganz da"). Oft verwechselt mit Unaufmerksamkeit oder Trotz.'
+    },
+    {
+      frage: 'Welche Erdungsübung hilft in einer dissoziativen Phase?',
+      optionen: [
+        'Den Jugendlichen intensiv befragen, was gerade passiert.',
+        'Sensorische Erdung: kaltes Wasser über Hände, 5-4-3-2-1-Übung, Namen nennen.',
+        'Den Raum verdunkeln und Ruhe.',
+        'Alleinlassen, bis es vorbeigeht.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Sensorische Reize holen ins Hier & Jetzt zurück. Befragen oder Dunkelheit verstärken Dissoziation. Alleinsein triggert oft mehr.'
+    },
+    {
+      frage: 'Wann überweist du unbedingt an eine Fachstelle?',
+      optionen: [
+        'Nie, das lässt sich pädagogisch lösen.',
+        'Bei häufiger, anhaltender Dissoziation mit Funktionsbeeinträchtigung oder Verdacht auf DIS/KPTBS.',
+        'Sofort bei jedem kurzen „Wegtreten".',
+        'Nur wenn die Eltern darum bitten.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Gelegentliche kurze Dissoziation bei Stress ist häufig. Chronische, belastende Dissoziation braucht psychotherapeutische/psychiatrische Abklärung — das übersteigt Bezugsarbeit.'
+    },
+    {
+      frage: 'Was solltest du in einer dissoziativen Phase NICHT tun?',
+      optionen: [
+        'Ruhig in der Nähe bleiben.',
+        'Langsam, mit normaler Stimme sprechen.',
+        'Plötzlich laut werden oder den Jugendlichen anfassen/schütteln.',
+        'Wasser anbieten.'
+      ],
+      korrekt: 2,
+      erklaerung: 'Plötzliche Reize oder Berührung können als Bedrohung erlebt werden und Reaktionen verstärken (Panik, Erstarren, Flucht). Ruhige Präsenz ist der Goldstandard.'
+    }
+  ],
+  '08-essstoerungen': [
+    {
+      frage: 'Welches Anzeichen könnte auf eine Essstörung hinweisen (neben Gewichtsveränderung)?',
+      optionen: [
+        'Normales Essverhalten beim Familienessen.',
+        'Ständiges Beschäftigen mit Kalorien, Essritualen, Rückzug vom Essen mit anderen, exzessiver Sport.',
+        'Offenes Genießen von Mahlzeiten.',
+        'Gelegentliches Ausprobieren neuer Diäten.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Essstörungen äußern sich oft im Verhalten (Rituale, Rückzug, Zwanghaftigkeit) bevor sichtbarer Gewichtsverlust eintritt. Bulimie kann bei normalem Gewicht bestehen. Genauer hinschauen.'
+    },
+    {
+      frage: 'Wie sprichst du sensibel eine vermutete Anorexie an?',
+      optionen: [
+        '„Du bist viel zu dünn, du musst essen."',
+        '„Ich mache mir Sorgen, weil ich bemerke, dass du weniger isst und dich mehr zurückziehst. Magst du erzählen?"',
+        '„Du siehst aus wie ein Skelett."',
+        '„Das ist doch nur eine Phase."'
+      ],
+      korrekt: 1,
+      erklaerung: 'Beobachtungsbasiert, wertschätzend, ohne Körperkommentare. Körperkommentare (positiv oder negativ) verstärken Essstörungen. Sorge ansprechen, ohne Druck aufzubauen.'
+    },
+    {
+      frage: 'Was ist die Grenze der Bezugsarbeit bei Essstörungen?',
+      optionen: [
+        'Pädagogik reicht immer aus.',
+        'Essstörungen sind medizinisch-psychotherapeutisch zu behandeln — Bezugsarbeit = Beziehung halten, Motivation stützen, Fachstellen einbinden.',
+        'Wir sollten das Gewicht täglich kontrollieren.',
+        'Wir verordnen Essenspläne.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Essstörungen sind lebensgefährliche Erkrankungen mit hoher Mortalität. Spezifische Behandlung gehört in spezialisierte Therapie. Bezugsarbeit = Beziehung, Motivation, Überleitung, keine Eigentherapie.'
+    },
+    {
+      frage: 'Eine Jugendliche erzählt dir im Vertrauen von Essanfällen mit Erbrechen. Was tust du?',
+      optionen: [
+        'Geheimhalten, um das Vertrauen nicht zu brechen.',
+        'Wertschätzen für das Vertrauen, medizinische Abklärung und Therapie begleiten — bei Gesundheitsrisiken Eltern einbeziehen (transparent).',
+        'Sofort allen erzählen.',
+        'Ihr erklären, wie man besser heimlich bleibt.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Bulimie ist medizinisch gefährlich (Elektrolytstörungen, Zahnschäden). Vertrauen halten, aber nicht allein tragen — Hilfe organisieren, transparent machen dass Eltern/Ärztin einbezogen werden müssen.'
+    }
   ]
 };
 

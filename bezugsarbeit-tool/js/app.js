@@ -2329,11 +2329,26 @@ function getXPfuerSchrittTyp(typ) {
 function lernplayerAbschliessen() {
   if (!APP.lernplayer) return;
   var moduleId = APP.lernplayer.moduleId;
-  // Als gelesen markieren (existing mechanic)
   var p = getWBProgress();
   if (!p.geleseneModule) p.geleseneModule = [];
-  if (p.geleseneModule.indexOf(moduleId) === -1) p.geleseneModule.push(moduleId);
+  var erstmalig = p.geleseneModule.indexOf(moduleId) === -1;
+  if (erstmalig) p.geleseneModule.push(moduleId);
   saveWBProgress(p);
+
+  // Letzten Schritt noch als abgeschlossen markieren (falls noch nicht)
+  schrittAlsAbgeschlossenMarkieren(moduleId, APP.lernplayer.aktuellerSchritt);
+
+  // Streak aktualisieren (einmal pro Tag)
+  if (typeof updateStreak === 'function') updateStreak();
+
+  // Modul-Abschluss-Bonus (nur beim ersten Mal)
+  if (erstmalig && typeof awardXP === 'function') {
+    setTimeout(function() { awardXP(25, 'Modul abgeschlossen: ' + (WB_LERNPFADE.find(function(x){return x.id===moduleId;}) || {}).titel); }, 500);
+  }
+
+  // Alle Badges re-checken (inkl. firstModule, allModules, categoryComplete, streak)
+  if (typeof checkBadges === 'function') setTimeout(function() { checkBadges(); }, 1000);
+
   if (typeof showToast === 'function') showToast('🎉 Modul abgeschlossen!', 'success');
   closeLernplayer();
   if (typeof renderWeiterbildung === 'function') renderWeiterbildung();

@@ -2345,10 +2345,10 @@ const ROADMAP_PHASEN = [
     ],
   },
   {
-    nr: 1, label: 'Sichere Basis', farbe: '#DC2626', icon: 'shield',
-    beschreibung: 'Vertrauen aufbauen, Sicherheit schaffen, akute Krisen stabilisieren.',
+    nr: 1, label: 'Sichere Basis', farbe: '#2563EB', icon: 'shield',
+    beschreibung: 'Vertrauen aufbauen, Sicherheit schaffen, ankommen lassen.',
     dauer: '2–4 Wochen',
-    schwerpunkt: ['krisenintervention', 'suizidpraevention', 'selbstverletzung', 'trauma'],
+    schwerpunkt: ['emotionserkennung', 'freundschaften', 'kommunikation', 'emotionsregulation'],
     rahmenmodell: {
       name: 'Sichere Basis (Bowlby / Ainsworth)',
       prinzip: 'Nur wenn der/die Jugendliche die Bezugsperson als sichere Basis erlebt, kann Exploration und Veränderung beginnen.',

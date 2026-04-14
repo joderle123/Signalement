@@ -3287,6 +3287,7 @@ const PHASE_TABS = {
   ],
   begleitung: [
     { id: 'fallformulierung', label: 'Fallbild' },
+    { id: 'prioritaeten', label: 'Prioritäten' },
     { id: 'roadmap', label: 'Förderplan' },
     { id: 'notizen', label: 'Sitzungen' }
   ],
@@ -3362,6 +3363,7 @@ function showProfilTab(tab) {
   if (tab === 'notizen') { renderNotizen(); renderKonferenzenInSitzungen(); var _d = document.getElementById('prot-datum'); if (_d && !_d.value) _d.value = new Date().toISOString().split('T')[0]; }
   if (tab === 'staerken') renderStaerken();
   if (tab === 'fallformulierung') { renderFallformulierung(); renderHypothesenImFallbild(); }
+  if (tab === 'prioritaeten') renderPrioritaeten();
   if (tab === 'screening') renderScreeningEmbedded();
   if (tab === 'verhalten') renderVerhalten();
   if (tab === 'berichte') renderBerichte();

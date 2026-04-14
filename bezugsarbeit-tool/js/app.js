@@ -13850,6 +13850,71 @@ function renderAktivePhase(roadmap, phase, idx) {
       </div>
     </div>` : '';
 
+  // ── Interessen-basierte Beziehungsarbeit ──
+  const interessenKatalog = typeof INTERESSEN_KATALOG !== 'undefined' ? INTERESSEN_KATALOG : [];
+  const freezeStrategien = typeof FREEZE_STRATEGIEN !== 'undefined' ? FREEZE_STRATEGIEN : [];
+  // Gespeicherte Interessen laden
+  const intKey = 'pathways_interessen_' + APP.currentSchuelerId;
+  let gewaehlteInteressen = [];
+  try { gewaehlteInteressen = JSON.parse(localStorage.getItem(intKey) || '[]'); } catch(e) {}
+
+  let interessenHtml = '';
+  if (interessenKatalog.length > 0) {
+    // Chips
+    interessenHtml += `
+    <div class="fp-section">
+      <div class="fp-section-header">
+        <span>🎯 Beziehungsarbeit nach Interessen</span>
+      </div>
+      <div class="fp-int-intro">Klicke die Interessen des Jugendlichen an — passende Aktivitäten werden vorgeschlagen.</div>
+      <div class="fp-int-chips">
+        ${interessenKatalog.map(int => {
+          const aktiv = gewaehlteInteressen.includes(int.id);
+          return `<button class="fp-int-chip ${aktiv ? 'fp-int-aktiv' : ''}" style="${aktiv ? 'background:' + int.farbe + ';color:#fff;border-color:' + int.farbe : ''}" onclick="toggleFPInteresse('${int.id}')">${int.icon} ${int.label}</button>`;
+        }).join('')}
+      </div>`;
+
+    // Generierte Aktivitäten
+    const aktiveInteressen = interessenKatalog.filter(int => gewaehlteInteressen.includes(int.id));
+    if (aktiveInteressen.length > 0) {
+      interessenHtml += `
+      <div class="fp-int-ergebnis">
+        <div class="fp-int-gruppe">
+          <div class="fp-int-gruppe-header">💗 Beziehungsaufbau</div>
+          <div class="fp-int-aktivitaeten">
+            ${aktiveInteressen.flatMap(int => int.beziehung.map(a => `
+              <div class="fp-int-karte fp-int-beziehung" style="border-left:3px solid ${int.farbe};">
+                <div class="fp-int-karte-text">${a.text}</div>
+                <div class="fp-int-karte-desc">${a.beschreibung}</div>
+                <span class="fp-int-karte-tag" style="color:${int.farbe};">${int.icon} ${int.label}</span>
+              </div>
+            `)).join('')}
+          </div>
+        </div>
+        <div class="fp-int-gruppe">
+          <div class="fp-int-gruppe-header">🧊 Bei Blockade / Freeze</div>
+          <div class="fp-int-aktivitaeten">
+            ${aktiveInteressen.flatMap(int => int.freeze.map(a => `
+              <div class="fp-int-karte fp-int-freeze" style="border-left:3px solid ${int.farbe};">
+                <div class="fp-int-karte-text">${a.text}</div>
+                <div class="fp-int-karte-desc">${a.beschreibung}</div>
+                <span class="fp-int-karte-tag" style="color:${int.farbe};">${int.icon} ${int.label}</span>
+              </div>
+            `)).join('')}
+            ${freezeStrategien.map(f => `
+              <div class="fp-int-karte fp-int-freeze fp-int-universal">
+                <div class="fp-int-karte-text">${f.text}</div>
+                <div class="fp-int-karte-desc">${f.beschreibung}</div>
+                <span class="fp-int-karte-tag" style="color:#6B7280;">🌐 Universell</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>`;
+    }
+    interessenHtml += '</div>';
+  }
+
   // ── Abschluss-Indikatoren ──
   const indHtml = (def.abschlussIndikatoren || []).length > 0 ? `
     <div class="fp-section">
@@ -13923,6 +13988,9 @@ function renderAktivePhase(roadmap, phase, idx) {
       <!-- Beziehungsarbeit -->
       ${bezHtml}
 
+      <!-- Interessen-basierte Aktivitäten -->
+      ${interessenHtml}
+
       <!-- THEMEN (bestehende Kernthemen) -->
       <div class="fp-section">
         <div class="fp-section-header">
@@ -13978,6 +14046,17 @@ function toggleFPAktivitaet(phaseNr, aktIdx) {
   try { aktDone = JSON.parse(localStorage.getItem(aktKey) || '{}'); } catch(e) {}
   aktDone[aktIdx] = !aktDone[aktIdx];
   try { localStorage.setItem(aktKey, JSON.stringify(aktDone)); } catch(e) {}
+  renderRoadmap();
+}
+
+// ── Interessen-Toggle (pro Klient, localStorage) ──
+function toggleFPInteresse(interesseId) {
+  var intKey = 'pathways_interessen_' + APP.currentSchuelerId;
+  var gewaehlt = [];
+  try { gewaehlt = JSON.parse(localStorage.getItem(intKey) || '[]'); } catch(e) {}
+  var idx = gewaehlt.indexOf(interesseId);
+  if (idx >= 0) { gewaehlt.splice(idx, 1); } else { gewaehlt.push(interesseId); }
+  try { localStorage.setItem(intKey, JSON.stringify(gewaehlt)); } catch(e) {}
   renderRoadmap();
 }
 

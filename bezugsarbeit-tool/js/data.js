@@ -25193,6 +25193,190 @@ const WB_QUIZ_FRAGEN = {
       korrekt: 1,
       erklaerung: 'Bulimie ist medizinisch gefährlich (Elektrolytstörungen, Zahnschäden). Vertrauen halten, aber nicht allein tragen — Hilfe organisieren, transparent machen dass Eltern/Ärztin einbezogen werden müssen.'
     }
+  ],
+  '09-helikopter-eltern': [
+    {
+      frage: 'Eine Mutter ruft dich mehrmals täglich an, fragt nach jedem Detail ihres 16-jährigen Sohnes. Was sagst du ihr?',
+      optionen: [
+        '„Ich rufe Sie nur noch einmal pro Woche zurück."',
+        '„Ich verstehe Ihre Sorge. Damit ihr Sohn Eigenverantwortung lernt, brauchen wir einen Kommunikationsrahmen: Wie können wir regelmäßig, aber mit Raum für ihn, im Austausch bleiben?"',
+        '„Sie übertreiben völlig. Ihr Sohn ist doch kein Kind mehr."',
+        '„Rufen Sie bitte nicht mehr an."'
+      ],
+      korrekt: 1,
+      erklaerung: 'Bindung wertschätzen, Sorge validieren, gemeinsam Struktur erarbeiten. Konfrontation oder Abblocken verstärkt Kontrollverhalten. Regelmäßige, begrenzte Updates reduzieren Angst und geben dem Jugendlichen Raum.'
+    },
+    {
+      frage: 'Was ist der pädagogische Kern bei überprotektiven Eltern?',
+      optionen: [
+        'Die Eltern möglichst ausschließen.',
+        'Autonomie des Jugendlichen stärken UND die elterliche Sorge ernst nehmen — Balance zwischen Abgrenzung und Kooperation.',
+        'Den Eltern alle Sorgen nehmen.',
+        'Den Jugendlichen schützen, indem ich die Eltern meide.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Helikopter-Eltern handeln meist aus Angst, nicht aus Böswilligkeit. Der Jugendliche braucht Autonomie — die Eltern brauchen Sicherheit, dass es gut läuft. Beides gleichzeitig, nicht gegeneinander.'
+    },
+    {
+      frage: 'Welche Haltung hilft dem Jugendlichen, seine Autonomie zu entwickeln?',
+      optionen: [
+        'Ihn von den Eltern abschirmen.',
+        'Ihn ermutigen, selbst Entscheidungen zu treffen — auch mal Fehler zu machen — und Konflikte mit den Eltern selbst auszutragen (ggf. begleitet).',
+        'Für ihn mit den Eltern sprechen, damit er sich nicht streiten muss.',
+        'Ihm sagen, dass die Eltern übergriffig sind.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Autonomie = selbst handeln dürfen, inkl. Fehler. Stellvertretende Kommunikation hält ihn klein. Eltern-Bashing zerstört Loyalität und belastet ihn.'
+    },
+    {
+      frage: 'Wann wird Helikopter-Verhalten problematisch bis schädlich?',
+      optionen: [
+        'Nie — Fürsorge ist immer gut.',
+        'Wenn es die Entwicklung blockiert: Ängstlichkeit, Unselbstständigkeit, fehlende Frustrationstoleranz, psychosomatische Symptome beim Jugendlichen.',
+        'Wenn Eltern sich einmischen.',
+        'Immer sofort.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Pathologisch wird es, wenn Jugendliche keine Selbstwirksamkeit erfahren. Folgen: Angst, Depression, Entscheidungsunfähigkeit, Schulverweigerung. Dann Fachberatung für die Eltern anregen.'
+    }
+  ],
+  '10-eltern-vom-fach': [
+    {
+      frage: 'Ein Vater ist selbst Psychologe und korrigiert deine Einschätzungen ständig mit Fachbegriffen. Wie reagierst du?',
+      optionen: [
+        'Mich verunsichern lassen und zurückziehen.',
+        'Rolle klären: „Als Vater sind Sie der wichtigste Mensch für Ihre Tochter. Meine Rolle ist die Bezugsarbeit. Lassen Sie uns die Rollen sauber halten, damit wir uns ergänzen."',
+        'Fachlich dagegenhalten, um zu zeigen, dass ich auch was weiß.',
+        'Die Mutter als Ansprechpartnerin vorziehen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Rollenklärung ist Kern: Eltern sind Eltern, auch wenn sie vom Fach sind. Konkurrenzdynamik muss explizit entschärft werden, sonst wird aus Kooperation ein Duell — der Jugendliche verliert.'
+    },
+    {
+      frage: 'Was ist das Risiko, wenn Eltern Fachleute sind?',
+      optionen: [
+        'Keine Risiken, nur Vorteile.',
+        'Doppelrolle (Elternteil + innere Fachperson) kann Kind belasten; Diagnosen im Familienalltag; Konkurrenz zu Profis; Über-Psychologisierung.',
+        'Die Kinder werden automatisch gesünder.',
+        'Eltern vom Fach brauchen keine Bezugsarbeit.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Die Doppelrolle ist anstrengend. Kinder werden oft „therapeutisiert" statt einfach bedürftig sein zu dürfen. Konkurrenz zu externen Profis blockiert Hilfe. Das muss benannt werden.'
+    },
+    {
+      frage: 'Wie kooperierst du gut mit Eltern-Fachleuten?',
+      optionen: [
+        'So wenig wie möglich kommunizieren.',
+        'Fachlichkeit anerkennen UND Grenzen klar halten: „Hier bin ich zuständig, dort Sie als Elternteil, dort die externe Therapie."',
+        'Alle Entscheidungen an sie abgeben.',
+        'Sie aus allem heraushalten.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Wertschätzung + klare Zuständigkeiten. Keine falsche Demut, aber auch keine Konkurrenz. Transparenz über eigene Überlegungen entzaubert oft Misstrauen.'
+    },
+    {
+      frage: 'Der Jugendliche sagt dir: „Zu Hause ist alles Therapie." Was macht das mit ihm?',
+      optionen: [
+        'Nichts, er profitiert nur.',
+        'Risiko: Er fühlt sich nicht einfach als Sohn/Tochter gesehen, sondern als „Fall". Er darf nicht einfach Pubertät haben.',
+        'Er wird automatisch gesünder.',
+        'Er wird faul.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Jugendliche brauchen Eltern, die sie SEHEN — nicht interpretieren. „Immer psychologisiert werden" kann Entwicklungsraum rauben. Mit Eltern sensibel besprechen.'
+    }
+  ],
+  '11-verweigernde-eltern': [
+    {
+      frage: 'Ein Vater lehnt jedes Gespräch ab, kommt nie zu Terminen. Was ist der erste Schritt?',
+      optionen: [
+        'Ihn beim Jugendamt melden.',
+        'Beziehungsorientiert anfangen: niedrigschwelliges Angebot (Telefon statt Termin, kurzes Update), Respekt für seine Ablehnung, Türen offenhalten, ohne Druck.',
+        'Ihn komplett aus der Bezugsarbeit ausschließen.',
+        'Nur über die Mutter kommunizieren.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Verweigerung hat meist Gründe (Misstrauen, Scham, schlechte Erfahrungen mit Behörden). Zwang verstärkt Widerstand. Geduld und niedrigschwellige Angebote öffnen oft Türen.'
+    },
+    {
+      frage: 'Wann ist eine Meldung ans Jugendamt zwingend?',
+      optionen: [
+        'Sobald Eltern unkooperativ sind.',
+        'Bei konkreter Kindeswohlgefährdung (Gewalt, Vernachlässigung, sexueller Missbrauch) — nicht bei bloßer Kooperationsverweigerung.',
+        'Wenn die Eltern arm sind.',
+        'Nie, das ist Verrat.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Meldepflicht/§8a SGB VIII: konkrete Gefährdung. Unkooperativ allein = keine Meldung, aber: bei Risikokonstellation kollegiale Fallberatung und ggf. Schutzauftrag aktivieren.'
+    },
+    {
+      frage: 'Wie gehst du mit offener Feindseligkeit einer Mutter um?',
+      optionen: [
+        'Dich selbst verteidigen und zurückpoltern.',
+        'Ruhig bleiben, Gefühl benennen („Sie wirken sehr wütend — verstehe ich Sie richtig, dass ..."), nicht persönlich nehmen, nach dem Interesse dahinter fragen.',
+        'Das Gespräch abbrechen.',
+        'Sofort Kollegin dazuholen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Aggression ist oft Schutz vor Scham/Angst. Deeskalation durch Benennen und Validieren öffnet oft das Gespräch. Dranbleiben, nicht persönlich nehmen.'
+    },
+    {
+      frage: 'Langfristige Kooperationsstrategie bei schwierigen Eltern:',
+      optionen: [
+        'Einmal Vertrauen gewinnen, dann läuft es.',
+        'Konsistenz, Erwartbarkeit, kleine Erfolgserlebnisse, Respekt für ihre Rolle, auch bei Rückschlägen dranbleiben.',
+        'Kurzfristig Druck aufbauen.',
+        'Nur den Jugendlichen sehen, Eltern außen vor.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Langfristiger Beziehungsaufbau ist der einzige Weg. Kleine Erfolge (Zusagen einhalten, positive Rückmeldungen geben, Kontrolle minimieren) erodieren Widerstand — braucht Monate bis Jahre.'
+    }
+  ],
+  '12-psychisch-belastete-eltern': [
+    {
+      frage: 'Die Mutter einer 14-Jährigen ist depressiv, kommt oft nicht aus dem Bett. Was ist die Priorität?',
+      optionen: [
+        'Die Mutter kritisieren, damit sie sich zusammenreißt.',
+        'Kindeswohl einschätzen: Wird das Kind parentifiziert? Grundversorgung gesichert? Vernetzung mit Familienhilfe/KJP.',
+        'Nur die Mutter behandeln.',
+        'Die Tochter komplett aus der Familie nehmen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'COPMI (Children of Parents with Mental Illness) sind Risikokinder. Erst Kindeswohl klären, dann Unterstützungssystem aufbauen (SPFH, KJP für Mutter, Entlastung für Kind). Nicht pathologisieren.'
+    },
+    {
+      frage: 'Was ist Parentifizierung?',
+      optionen: [
+        'Ein Medikament.',
+        'Kinder übernehmen elterliche Aufgaben (emotional, praktisch) und verlieren ihre Kindrolle — z.B. Sorge tragen, Geschwister versorgen, Partnerersatz.',
+        'Ein Gesetz zur Adoption.',
+        'Die Rolle als Elternsprecher.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Parentifizierung ist eine Belastung mit Langzeitfolgen (Überverantwortung, Beziehungsprobleme als Erwachsener). Erkennen und entlasten — Kind darf Kind sein.'
+    },
+    {
+      frage: 'Ein Vater hat eine Suchterkrankung. Wie handelst du?',
+      optionen: [
+        'Stigmatisieren und die Familie meiden.',
+        'Ressourcen-orientiert: Sucht ist Krankheit, Kind schützen (z.B. bei akutem Konsum), Vater zu Suchthilfe motivieren, Schutzfaktoren für Kind stärken.',
+        'Den Vater vollständig aussperren.',
+        'Nur der Mutter helfen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Sucht ist Krankheit, nicht Charakterschwäche. Kinder suchtkranker Eltern haben erhöhtes Risiko — brauchen Schutzfaktoren (stabile Bezugsperson, Psychoedukation, NACOA-Gruppen). Sucht-Hilfe parallel.'
+    },
+    {
+      frage: 'Die Mutter hat eine Borderline-Persönlichkeitsstörung, wirft dir Idealisierung und Entwertung im Wechsel entgegen. Was hilft?',
+      optionen: [
+        'Dich auf die Idealisierung einlassen und dich bestätigt fühlen.',
+        'Professionelle Distanz: nicht idealisieren lassen, Entwertung nicht persönlich nehmen, verlässliche, stabile Haltung, klare Absprachen schriftlich.',
+        'Dich verteidigen, wenn du entwertet wirst.',
+        'Die Mutter meiden.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Borderline-Dynamiken ziehen Profis oft in Spaltung. Stabilität, Transparenz, Schriftlichkeit und kollegiale Supervision sind Schutz. Nicht kränken lassen.'
+    }
   ]
 };
 

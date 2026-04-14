@@ -5566,6 +5566,118 @@ function findFeld(feldId) {
   return null;
 }
 
+// Mapping: Anamnese-Item-ID → relevante Wiki-Artikel-IDs
+var ANAMNESE_WIKI_MAP = {
+  // Familie & Bindung
+  alleinerziehend: ['bindungstheorie','resilienz'],
+  alleinerziehend_vater: ['bindungstheorie','resilienz'],
+  pflegefamilie: ['bindungsstoerung','bindungstheorie','parentifizierung'],
+  heim: ['bindungsstoerung','bindungstheorie','parentifizierung'],
+  patchwork: ['bindungstheorie'],
+  kein_vater: ['bindungsstoerung','bindungstheorie'],
+  vater_verstorben: ['bindungsstoerung','trauma-ptbs'],
+  vater_sporadisch: ['bindungsstoerung','bindungstheorie'],
+  kein_mutter: ['bindungsstoerung','bindungstheorie'],
+  mutter_verstorben: ['bindungsstoerung','trauma-ptbs'],
+  mutter_sporadisch: ['bindungsstoerung','bindungstheorie'],
+  scheidung: ['bindungstheorie','resilienz'],
+  migration: ['resilienz'],
+  flucht: ['trauma-ptbs','resilienz'],
+  haeufige_umzuege: ['resilienz'],
+  schulwechsel_haeufig: ['resilienz'],
+  // ACE
+  vernachlaessigung_emotional: ['trauma-ptbs','trauma-informed-care','bindungsstoerung'],
+  vernachlaessigung_physisch: ['trauma-ptbs','trauma-informed-care','bindungsstoerung'],
+  misshandlung_physisch: ['trauma-ptbs','trauma-informed-care'],
+  missbrauch_sexuell: ['trauma-ptbs','trauma-informed-care','dissoziation'],
+  misshandlung_emotional: ['trauma-ptbs','trauma-informed-care','bindungsstoerung'],
+  sucht_haushalt: ['parentifizierung','bindungsstoerung'],
+  psych_erkrankung_eltern: ['parentifizierung','depression'],
+  haeusliche_gewalt: ['trauma-ptbs','trauma-informed-care'],
+  inhaftierung_elternteil: ['bindungsstoerung','resilienz'],
+  tod_elternteil: ['trauma-ptbs','bindungsstoerung'],
+  // Schule
+  leistung_schwach: ['schulvermeidung'],
+  leistung_sehr_schwach: ['schulvermeidung'],
+  leistung_abbruch: ['schulvermeidung'],
+  absentismus: ['schulvermeidung'],
+  fehlzeiten_massiv: ['schulvermeidung'],
+  mobbing_opfer: ['mobbing','suizidalitaet'],
+  mobbing_taeter: ['mobbing','conduct-disorder'],
+  mobbing_beides: ['mobbing','suizidalitaet'],
+  lernbehinderung: ['adhs','psychoedukation'],
+  hochbegabung: ['psychoedukation'],
+  klassenwiederholung: ['schulvermeidung'],
+  lehrer_autoritaet: ['oppositionelles-verhalten','neue-autoritaet'],
+  lehrer_konflikt: ['neue-autoritaet'],
+  lehrer_rueckzug: ['depression','angststoerungen'],
+  sonderpaedagogik: ['psychoedukation','amenagements-raisonnables'],
+  // Soziales
+  soziale_isolation: ['depression','angststoerungen'],
+  peers_wechselnd: ['bindungsstoerung'],
+  negativer_peer_einfluss: ['conduct-disorder'],
+  gang: ['conduct-disorder'],
+  cybermobbing: ['mobbing','suizidalitaet'],
+  diskriminierung: ['resilienz'],
+  romantik_toxisch: ['bindungsstoerung'],
+  kein_stabiler_erwachsener: ['bindungsstoerung','resilienz'],
+  // Gesundheit
+  autismus_spektrum: ['autismus'],
+  essstoerung: ['essstoerungen'],
+  schlafprobleme: ['depression'],
+  entwicklungsverzoegerung: ['adhs','psychoedukation'],
+  fruehgeburt: ['adhs'],
+  chronische_erkrankung: ['psychoedukation','resilienz'],
+  medikation_psycho: ['psychoedukation'],
+  // Bindung
+  bindung_unsicher: ['bindungsstoerung','bindungstheorie'],
+  bindung_trennungen: ['bindungsstoerung','bindungstheorie'],
+  kiga_schwierig: ['trennungsangst','bindungstheorie'],
+  sprache_verzoegert: ['psychoedukation'],
+  // Psych. Vorgeschichte
+  diagnose_adhs: ['adhs'],
+  diagnose_depression: ['depression'],
+  diagnose_angst: ['angststoerungen'],
+  diagnose_trauma: ['trauma-ptbs','trauma-informed-care'],
+  diagnose_essstoerung: ['essstoerungen'],
+  suizid_ja: ['suizidalitaet','selbstverletzung'],
+  svv_aktiv: ['selbstverletzung','suizidalitaet'],
+  svv_vergangenheit: ['selbstverletzung'],
+  behandlung_klinik: ['psychoedukation'],
+  behandlung_psychiatrie: ['psychoedukation'],
+  // Wohnsituation
+  obdachlosigkeit: ['resilienz','trauma-ptbs'],
+  unsichere_nachbarschaft: ['trauma-ptbs','resilienz'],
+  beengte_verhaeltnisse: ['resilienz'],
+  // Finanzen
+  armut: ['resilienz'],
+  soziale_benachteiligung: ['resilienz'],
+  // Schutzfaktoren
+  stabile_bezugsperson: ['resilienz','bindungstheorie'],
+  vereinsmitgliedschaft: ['resilienz'],
+  hobby: ['resilienz','emotionsregulation'],
+  gute_schulleistung: ['resilienz'],
+  freundschaft: ['resilienz'],
+  gute_elternbeziehung: ['bindungstheorie','resilienz'],
+  selbstwirksamkeit: ['resilienz','emotionsregulation'],
+  prosoziales_verhalten: ['resilienz'],
+  religiose_gemeinschaft: ['resilienz'],
+  peers_stabil: ['resilienz'],
+  lehrer_positiv: ['resilienz'],
+  bindung_sicher: ['bindungstheorie','resilienz'],
+};
+
+function _anamneseWikiLinks(itemId) {
+  var ids = ANAMNESE_WIKI_MAP[itemId];
+  if (!ids || !ids.length) return '';
+  var wiki = (typeof WIKI_ARTIKEL !== 'undefined') ? WIKI_ARTIKEL : [];
+  return ids.map(function(wid) {
+    var a = wiki.find(function(x) { return x.id === wid; });
+    if (!a) return '';
+    return '<a href="#" onclick="event.preventDefault();event.stopPropagation();openWikiArtikel(\'' + wid + '\')" class="anamnese-wiki-link" title="' + a.titel + '">' + (a.icon || '📖') + ' ' + a.titel + '</a>';
+  }).filter(Boolean).join('');
+}
+
 function renderAnamneseZusammenfassung(s) {
   const anamnese = s.anamnese || [];
   const el = document.getElementById('anamnese-zusammenfassung');
@@ -5650,6 +5762,7 @@ function renderAnamneseZusammenfassung(s) {
                 <span class="anamnese-risiko-dot" style="background:${r.gewicht >= 3 ? '#DC2626' : r.gewicht >= 2 ? '#F59E0B' : '#6B7280'}"></span>
                 <span>${r.label}</span>
                 <span style="font-size:10px;color:#6366F1;font-style:italic;margin-left:4px;">📖 ${r.evidenz}</span>
+                <div class="anamnese-wiki-links">${_anamneseWikiLinks(r.id)}</div>
               </div>
             `).join('')}
           </div>
@@ -5657,7 +5770,12 @@ function renderAnamneseZusammenfassung(s) {
         ${schutz.length > 0 ? `
           <div class="anamnese-schutz-liste">
             <strong>Schutzfaktoren:</strong>
-            ${schutz.map(s => `<span class="anamnese-schutz-tag">🛡️ ${s.label}</span>`).join('')}
+            ${schutz.map(s => `
+              <div class="anamnese-schutz-item">
+                <span class="anamnese-schutz-tag">🛡️ ${s.label}</span>
+                <div class="anamnese-wiki-links">${_anamneseWikiLinks(s.id)}</div>
+              </div>
+            `).join('')}
           </div>
         ` : ''}
       </div>

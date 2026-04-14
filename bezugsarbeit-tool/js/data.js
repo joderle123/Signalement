@@ -25377,6 +25377,190 @@ const WB_QUIZ_FRAGEN = {
       korrekt: 1,
       erklaerung: 'Borderline-Dynamiken ziehen Profis oft in Spaltung. Stabilität, Transparenz, Schriftlichkeit und kollegiale Supervision sind Schutz. Nicht kränken lassen.'
     }
+  ],
+  '13-hochstrittige-trennung': [
+    {
+      frage: 'Ein 13-Jähriger sagt: „Mama sagt, Papa ist böse — aber Papa sagt, Mama lügt." Was ist die Haltung?',
+      optionen: [
+        'Partei ergreifen für den Elternteil, der fairer erscheint.',
+        'Strikte Allparteilichkeit / Neutralität — keine Bewertung der Eltern vor dem Kind, Loyalitätsdruck entlasten.',
+        'Dem Kind sagen, beide Eltern übertreiben.',
+        'Den Jugendamt-Bericht abwarten.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Loyalitätskonflikt ist ein Hauptschaden bei Hochstrittigkeit. Allparteilichkeit + Entlastung („du musst dich nicht entscheiden") sind zentral. Partei ergreifen verstärkt den Konflikt.'
+    },
+    {
+      frage: 'Welches Verhalten ist ein Warnsignal für PAS (Entfremdungsdynamik)?',
+      optionen: [
+        'Kind lehnt einen Elternteil plötzlich komplett ab, ohne nachvollziehbare Begründung.',
+        'Kind hat Schwierigkeiten mit beiden Eltern.',
+        'Kind will gelegentlich beim anderen Elternteil bleiben.',
+        'Kind vermisst einen Elternteil.'
+      ],
+      korrekt: 0,
+      erklaerung: 'PAS (Eltern-Entfremdungs-Syndrom, fachlich kontrovers) beschreibt induzierte Ablehnung eines Elternteils. Unterschied zu berechtigter Ablehnung: fehlende konkrete Gründe, Übernahme elterlicher Rhetorik. Achtung: echte Gefährdung darf nicht als PAS abgetan werden.'
+    },
+    {
+      frage: 'Die Mutter will, dass du als Bezugsperson gegen den Vater aussagst. Was tust du?',
+      optionen: [
+        'Sofort zusagen, um ihr zu helfen.',
+        'Ablehnen — deine Rolle ist Bezugsarbeit, nicht Parteinahme in Sorgerechtsverfahren. Auf Gutachter und Verfahrensbeistand verweisen.',
+        'Heimlich protokollieren, was sie erzählt.',
+        'Dich komplett raushalten.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Bezugsarbeit ≠ forensische Rolle. Gerichts-/Sorgerechtsentscheidungen brauchen Gutachter oder Verfahrensbeistand. Deine Rolle sauber halten schützt Kind und dich.'
+    },
+    {
+      frage: 'Wie entlastest du ein Kind im Loyalitätskonflikt?',
+      optionen: [
+        'Ihm sagen, welcher Elternteil recht hat.',
+        'Klar kommunizieren: „Du hast ein Recht auf beide Eltern. Du musst dich nicht entscheiden. Was du bei Mama fühlst, darf anders sein als bei Papa — beides ist okay."',
+        'Nicht über die Eltern sprechen.',
+        'Das Kind isolieren.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Die „Erlaubnis zur Loyalität zu beiden" ist der wichtigste Satz. Das Kind trägt sonst eine Last, die nicht seine ist. Aktiv entlasten, nicht nur passiv neutral sein.'
+    }
+  ],
+  '14-kulturelle-erziehung': [
+    {
+      frage: 'Ein Vater sagt: „In unserer Kultur ist Ohrfeige normal." Wie reagierst du?',
+      optionen: [
+        '„Das müssen Sie entscheiden, ich misch mich nicht ein."',
+        'Kultursensibel, aber klar: „Ich respektiere Ihre Kultur. In Deutschland ist körperliche Bestrafung gesetzlich verboten und schadet Kindern — das gilt für alle Kulturen. Lassen Sie uns andere Wege besprechen."',
+        '„Das ist eine Straftat, ich rufe sofort die Polizei."',
+        '„Sie sind ein schlechter Vater."'
+      ],
+      korrekt: 1,
+      erklaerung: '§1631 Abs. 2 BGB: Kinder haben ein Recht auf gewaltfreie Erziehung. Kulturell-sensibel heißt nicht, Kinderrechte relativieren. Respektvoll UND klar in der Sache. Alternativen anbieten.'
+    },
+    {
+      frage: 'Was bedeutet „kultursensibel" im Kern?',
+      optionen: [
+        'Alles akzeptieren, was Eltern sagen.',
+        'Die eigene kulturelle Prägung (auch meine!) reflektieren, Herkunft ernst nehmen, Kinderrechte nicht relativieren — dialogisch statt belehrend.',
+        'Die eigene Kultur durchsetzen.',
+        'Kultur ist unwichtig.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Kultursensibel = reflektiert (Selbst + Andere) + ressourcenorientiert + klar bei Kinderrechten. Weder Ethnozentrismus noch Kulturrelativismus.'
+    },
+    {
+      frage: 'Eine 16-Jährige erzählt dir von arrangierter Ehe, die ihr Vater plant. Was tust du?',
+      optionen: [
+        'Das ist Kultur, nicht einmischen.',
+        'Kindeswohl zuerst: Einvernehmen prüfen, Schutzstrategien besprechen (Beratungsstellen: TERRE DES FEMMES, KOK e.V.), ggf. Jugendamt.',
+        'Sofort die Polizei rufen, ohne mit ihr zu sprechen.',
+        'Ihr sagen, dass sie mit 18 ja ausziehen kann.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Zwangsheirat ist Straftat (§237 StGB). Unterschied arrangiert vs. Zwang = Einvernehmen. Beratung durch Spezialstellen, Schutz vor drohender Verbringung ins Ausland — aber erst mit ihr planen, sie ist Expertin ihrer Situation.'
+    },
+    {
+      frage: 'Welche Haltung ist bei Ehre-Dynamiken hilfreich?',
+      optionen: [
+        'Ehre ist rückständig, das ignorieren wir.',
+        'Ehre hat reale Bedeutung, auch wenn wir sie kritisieren. Wir nehmen die Dynamik ernst und arbeiten auf Wege hin, die Ehre der Familie nicht unnötig zu beschädigen — ohne Kinderrechte zu opfern.',
+        'Wir ehren die Ehre über alles.',
+        'Wir konfrontieren die Familie direkt mit Vorwürfen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Ehre ist soziales Kapital. Brüskierungen eskalieren Gefährdung. Schutzkonzepte funktionieren besser, wenn Familienehre nicht gleichzeitig zerstört wird — z.B. „Krankheit" als Ausrede für Schutzmaßnahme. Aber: Kinderrechte bleiben Priorität.'
+    }
+  ],
+  '15-schweigender-jugendlicher': [
+    {
+      frage: 'Ein 14-Jähriger kommt zu jedem Termin, sagt aber nichts. Was tust du?',
+      optionen: [
+        'Ihn unter Druck setzen, endlich zu reden.',
+        'Präsenz ohne Druck: Vorlesen, zeichnen, Spiele, Schweigen aushalten, kurze offene Angebote — der Raum wirkt, auch ohne Worte.',
+        'Die Termine abbrechen, es bringt nichts.',
+        'Seinen Eltern sagen, dass er nicht kooperiert.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Schweigen ist oft Schutz, nicht Verweigerung. Non-verbale Methoden (Kunst, Spiel, Musik, gemeinsames Tun), verlässliche Präsenz, keine Erwartung — das öffnet langsam Räume. Druck schließt sie.'
+    },
+    {
+      frage: 'Welche non-verbalen Methoden sind hilfreich?',
+      optionen: [
+        'Stummfilme zeigen.',
+        'Gemeinsam etwas tun (Kochen, Werken, Spaziergang), Zeichnen, Karten ziehen, Musik, Gesten — die Tätigkeit ist der Kontakt.',
+        'Ihn einfach stundenlang anschweigen.',
+        'Nur schriftliche Kommunikation.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Aktivitäten senken Selbst-Ausdrucks-Druck. „Nebeneinander" statt „gegenüber" ist oft leichter. Kreative Materialien, Karten (z.B. Emotionskarten), gemeinsames Tun — vieles geht ohne Worte.'
+    },
+    {
+      frage: 'Wann wird langes Schweigen zum Warnsignal?',
+      optionen: [
+        'Nie, Schweigen ist immer okay.',
+        'Wenn es mit starkem Rückzug, Funktionsverlust, Depression oder möglichem Trauma einhergeht — dann fachliche Abklärung einleiten.',
+        'Nach der ersten Stunde.',
+        'Wenn er die Hausaufgaben nicht macht.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Mutismus, Depression mit Rückzug, traumabedingte Sprachlosigkeit — differenzieren. Bei anhaltender Symptomatik > 4 Wochen mit Funktionsbeeinträchtigung: KJP-Abklärung anregen.'
+    },
+    {
+      frage: 'Was ist der zentrale Fehler bei schweigenden Jugendlichen?',
+      optionen: [
+        'Zu wenig offene Fragen zu stellen.',
+        'Schweigen als Widerstand oder Zeichen der Abneigung zu interpretieren und den Kontakt abzubrechen.',
+        'Zu oft zu kommen.',
+        'Auf Regeln zu bestehen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Viele beenden Bezugsarbeit mit schweigenden Jugendlichen zu früh. Dabei ist die Beziehungserfahrung („jemand bleibt, obwohl ich nichts gebe") oft das Wirksame. Dranbleiben ist der Unterschied.'
+    }
+  ],
+  '16-migration-flucht': [
+    {
+      frage: 'Ein 16-jähriger unbegleiteter minderjähriger Flüchtling (UMF) zeigt Schlafprobleme, Albträume, Schreckhaftigkeit. Was ist das wahrscheinlichste Bild?',
+      optionen: [
+        'Heimweh, vergeht von selbst.',
+        'Posttraumatische Belastung — KJP-Abklärung, traumasensible Begleitung, Psychoedukation.',
+        'Faulheit.',
+        'Drogenkonsum.'
+      ],
+      korrekt: 1,
+      erklaerung: 'UMF haben oft multiple Traumatisierungen (vor/während/nach Flucht). Schlafstörungen, Albträume, Hyperarousal sind PTBS-Kernsymptome. Fachtherapie + traumasensible Alltags­begleitung.'
+    },
+    {
+      frage: 'Wie arbeitest du mit Sprachbarrieren?',
+      optionen: [
+        'Auf Englisch improvisieren, reicht schon.',
+        'Professionelle Dolmetscher (auch Video) einsetzen, keine Familien-/Landsleute für heikle Themen, kurze Sätze, visuelle Unterstützung.',
+        'Alles übersetzen lassen vom Jugendlichen selbst.',
+        'Warten, bis er Deutsch kann.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Professionelle Dolmetscher sind unverzichtbar bei heiklen Themen. Peer-Übersetzung schafft Loyalitätsprobleme und Schweigepflicht-Lücken. Video-Dolmetscher sind meist kurzfristig verfügbar.'
+    },
+    {
+      frage: 'Ein UMF aus Afghanistan lehnt eine weibliche Bezugsperson ab. Wie gehst du damit um?',
+      optionen: [
+        'Sofort nachgeben und männliche Bezugsperson zuteilen.',
+        'Wunsch ernst nehmen und gleichzeitig pädagogisch bearbeiten: kulturelle Hintergründe, reale Angst vs. erlernte Rollen, Gleichberechtigung in Deutschland — zeitraum- und beziehungsabhängig.',
+        'Ihn zwingen, Frauen zu akzeptieren.',
+        'Ihm sagen, er ist sexistisch.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Kultursensibel + pädagogisch. Erstmal Stabilisierung, dann Bearbeitung. Abrupte Konfrontation retraumatisiert, Unterwerfung unter jeden Wunsch blockiert Integration.'
+    },
+    {
+      frage: 'Welche Ressource/Stelle ist besonders wichtig bei Migration/Flucht?',
+      optionen: [
+        'Nur die Ausländerbehörde.',
+        'Spezialisierte Beratungsstellen (z.B. refugio, BAfF), kulturdolmetschende Fachkräfte, medizinische Erstversorgung, aufenthaltsrechtliche Beratung.',
+        'Social Media.',
+        'Nur die Schule.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Multimodal: psychosozial (refugio-Zentren), rechtlich (Jugendhilfe für UMF, Asylverfahren), medizinisch, sprachlich. Vernetzung ist Kernaufgabe — du machst nicht alles selbst.'
+    }
   ]
 };
 

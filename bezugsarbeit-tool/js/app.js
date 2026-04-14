@@ -13782,6 +13782,90 @@ function renderAktivePhase(roadmap, phase, idx) {
     return (prioOrder[a._prio.level] || 2) - (prioOrder[b._prio.level] || 2);
   });
 
+  // Kernaktivitäten-Zustand aus localStorage
+  const aktKey = 'pathways_aktivitaeten_' + roadmap.id + '_' + phase.nr;
+  let aktDone = {};
+  try { aktDone = JSON.parse(localStorage.getItem(aktKey) || '{}'); } catch(e) {}
+  const aktTotal = (def.kernAktivitaeten || []).length;
+  const aktErledigt = Object.values(aktDone).filter(Boolean).length;
+
+  // ── Rahmenmodell-Box ──
+  const rahmen = def.rahmenmodell;
+  const rahmenHtml = rahmen ? `
+    <div class="fp-rahmen-box" style="border-left:4px solid ${def.farbe};">
+      <div class="fp-rahmen-header">
+        <span class="fp-rahmen-label">Pädagogisches Prinzip</span>
+        <span class="fp-rahmen-name">${rahmen.name}</span>
+      </div>
+      <div class="fp-rahmen-prinzip">${rahmen.prinzip}</div>
+      <div class="fp-rahmen-quelle">${rahmen.quelle}</div>
+    </div>` : '';
+
+  // ── Phasenziel ──
+  const zielHtml = def.ziel ? `
+    <div class="fp-ziel-box">
+      <span class="fp-ziel-icon">🎯</span>
+      <div>
+        <div class="fp-ziel-label">Ziel dieser Phase</div>
+        <div class="fp-ziel-text">${def.ziel}</div>
+      </div>
+    </div>` : '';
+
+  // ── Kernaktivitäten ──
+  const aktivitaetenHtml = (def.kernAktivitaeten || []).length > 0 ? `
+    <div class="fp-section">
+      <div class="fp-section-header">
+        <span>📋 Kernaktivitäten</span>
+        <span class="fp-section-badge">${aktErledigt}/${aktTotal}</span>
+      </div>
+      <div class="fp-aktivitaeten-liste">
+        ${def.kernAktivitaeten.map((a, i) => {
+          const done = aktDone[i];
+          return `<div class="fp-aktivitaet ${done ? 'fp-akt-done' : ''}" onclick="toggleFPAktivitaet(${phase.nr}, ${i})">
+            <div class="fp-akt-check ${done ? 'checked' : ''}">${done ? '✓' : ''}</div>
+            <div class="fp-akt-body">
+              <div class="fp-akt-text">${a.text}</div>
+              <div class="fp-akt-desc">${a.beschreibung}</div>
+              ${a.dauer ? '<span class="fp-akt-dauer">' + a.dauer + '</span>' : ''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  // ── Beziehungsarbeit ──
+  const bezHtml = (def.beziehungsarbeit || []).length > 0 ? `
+    <div class="fp-section">
+      <div class="fp-section-header">
+        <span>💗 Beziehungsarbeit — Wie ich die Beziehung gestalte</span>
+      </div>
+      <div class="fp-beziehung-liste">
+        ${def.beziehungsarbeit.map(b => `
+          <div class="fp-beziehung-karte">
+            <div class="fp-bez-methode">${b.methode}</div>
+            <div class="fp-bez-desc">${b.beschreibung}</div>
+            <span class="fp-bez-prinzip" style="background:${def.farbe}12;color:${def.farbe};">${b.wpirinzip}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>` : '';
+
+  // ── Abschluss-Indikatoren ──
+  const indHtml = (def.abschlussIndikatoren || []).length > 0 ? `
+    <div class="fp-section">
+      <div class="fp-section-header">
+        <span>✅ Bereit zum Abschluss wenn...</span>
+      </div>
+      <div class="fp-indikatoren">
+        ${def.abschlussIndikatoren.map(ind => `
+          <div class="fp-indikator">
+            <span class="fp-ind-dot" style="border-color:${def.farbe};"></span>
+            <span>${ind}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>` : '';
+
   return `
     <div class="roadmap-fokus-phase" id="roadmap-fokus-${phase.nr}">
       <div class="roadmap-fokus-phase-header">
@@ -13803,15 +13887,21 @@ function renderAktivePhase(roadmap, phase, idx) {
         </div>
       </div>
 
+      <!-- Rahmenmodell -->
+      ${rahmenHtml}
+
+      <!-- Phasenziel -->
+      ${zielHtml}
+
       <!-- Stats -->
       <div class="roadmap-fokus-stats">
         <div class="roadmap-fokus-stat">
-          <div class="roadmap-fokus-stat-value">${themenTotal}</div>
-          <div class="roadmap-fokus-stat-label">Themen</div>
+          <div class="roadmap-fokus-stat-value">${aktErledigt}/${aktTotal}</div>
+          <div class="roadmap-fokus-stat-label">Aktivitäten</div>
         </div>
         <div class="roadmap-fokus-stat">
           <div class="roadmap-fokus-stat-value">${themenDone}/${themenTotal}</div>
-          <div class="roadmap-fokus-stat-label">Erledigt</div>
+          <div class="roadmap-fokus-stat-label">Themen</div>
         </div>
         <div class="roadmap-fokus-stat">
           <div class="roadmap-fokus-stat-value" style="color:${def.farbe};">${phasePct}%</div>
@@ -13820,34 +13910,47 @@ function renderAktivePhase(roadmap, phase, idx) {
       </div>
 
       <!-- Fortschrittsbalken -->
-      ${themenTotal > 0 ? `
+      ${(themenTotal > 0 || aktTotal > 0) ? `
       <div class="roadmap-progress-bar-container" style="margin-bottom:16px;">
         <div class="roadmap-progress-bar">
           <div class="roadmap-progress-fill" style="width:${phasePct}%;background:${def.farbe};"></div>
         </div>
       </div>` : ''}
 
-      <!-- WAS JETZT ZU TUN IST -->
-      <div class="roadmap-section-header">📋 Was jetzt zu tun ist</div>
+      <!-- Kernaktivitäten -->
+      ${aktivitaetenHtml}
 
-      <div class="roadmap-themen-liste">
-        ${themenTotal === 0
-          ? `<div class="roadmap-themen-empty">Noch keine Themen zugewiesen — füge unten Themen hinzu.</div>`
-          : sortedThemen.map(t => renderFokusThemaKarte(t, t._origIdx, phase, roadmap)).join('')}
+      <!-- Beziehungsarbeit -->
+      ${bezHtml}
+
+      <!-- THEMEN (bestehende Kernthemen) -->
+      <div class="fp-section">
+        <div class="fp-section-header">
+          <span>🔧 Fachliche Themen</span>
+          <span class="fp-section-badge">${themenDone}/${themenTotal}</span>
+        </div>
+        <div class="roadmap-themen-liste">
+          ${themenTotal === 0
+            ? '<div class="roadmap-themen-empty">Noch keine Themen zugewiesen — füge unten Themen hinzu.</div>'
+            : sortedThemen.map(t => renderFokusThemaKarte(t, t._origIdx, phase, roadmap)).join('')}
+        </div>
+
+        <!-- Thema hinzufügen -->
+        <div class="roadmap-add-thema-fokus">
+          <select id="roadmap-add-select-${phase.nr}">
+            <option value="">+ Thema hinzufügen...</option>
+            ${THEMEN_KATEGORIEN.map(kat =>
+              `<optgroup label="${renderIcon(kat.icon)} ${kat.titel}">
+                ${kat.themen.map(t => `<option value="${t.id}">${t.titel}</option>`).join('')}
+              </optgroup>`
+            ).join('')}
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="addRoadmapThema(${phase.nr})">Hinzufügen</button>
+        </div>
       </div>
 
-      <!-- Thema hinzufügen -->
-      <div class="roadmap-add-thema-fokus">
-        <select id="roadmap-add-select-${phase.nr}">
-          <option value="">+ Thema hinzufügen...</option>
-          ${THEMEN_KATEGORIEN.map(kat =>
-            `<optgroup label="${renderIcon(kat.icon)} ${kat.titel}">
-              ${kat.themen.map(t => `<option value="${t.id}">${t.titel}</option>`).join('')}
-            </optgroup>`
-          ).join('')}
-        </select>
-        <button class="btn btn-secondary btn-sm" onclick="addRoadmapThema(${phase.nr})">Hinzufügen</button>
-      </div>
+      <!-- Abschluss-Indikatoren -->
+      ${indHtml}
 
       <!-- Phase-Notizen -->
       <div class="roadmap-phase-notizen" style="margin-top:16px;">
@@ -13864,6 +13967,18 @@ function renderAktivePhase(roadmap, phase, idx) {
       <!-- Phasen-Ressourcen -->
       ${typeof renderPhaseRessourcen === 'function' ? renderPhaseRessourcen(phase, idx, roadmap) : ''}
     </div>`;
+}
+
+// ── Aktivitäten-Checkbox toggle (localStorage-persistent) ──
+function toggleFPAktivitaet(phaseNr, aktIdx) {
+  var roadmap = DB.getRoadmap(APP.currentSchuelerId);
+  if (!roadmap) return;
+  var aktKey = 'pathways_aktivitaeten_' + roadmap.id + '_' + phaseNr;
+  var aktDone = {};
+  try { aktDone = JSON.parse(localStorage.getItem(aktKey) || '{}'); } catch(e) {}
+  aktDone[aktIdx] = !aktDone[aktIdx];
+  try { localStorage.setItem(aktKey, JSON.stringify(aktDone)); } catch(e) {}
+  renderRoadmap();
 }
 
 // ── Nächste Phase Vorschau ──

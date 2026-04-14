@@ -2408,7 +2408,7 @@ function showProfilTab(tab) {
   if (tab === 'dashboard') renderDashboard();
   if (tab === 'roadmap') { renderRoadmap(); renderZiele(); renderScreeningZielVorschlaege(); renderThemenImFoerderplan(); }
   if (tab === 'themen') { renderThemen(); renderSitzungenImThemenTab(); } // legacy
-  if (tab === 'notizen') { renderNotizen(); renderKonferenzenInSitzungen(); }
+  if (tab === 'notizen') { renderNotizen(); renderKonferenzenInSitzungen(); var _d = document.getElementById('prot-datum'); if (_d && !_d.value) _d.value = new Date().toISOString().split('T')[0]; }
   if (tab === 'staerken') renderStaerken();
   if (tab === 'fallformulierung') { renderFallformulierung(); renderHypothesenImFallbild(); }
   if (tab === 'screening') renderScreeningEmbedded();
@@ -4423,6 +4423,11 @@ function applySoapVorlage(vorlageId) {
 }
 
 function addProtokoll() {
+  try {
+  // Auto-set date if empty
+  var datumEl = document.getElementById('prot-datum');
+  if (datumEl && !datumEl.value) datumEl.value = new Date().toISOString().split('T')[0];
+
   const datum       = document.getElementById('prot-datum').value;
   const dauer       = document.getElementById('prot-dauer').value;
   const setting     = document.getElementById('prot-setting').value;
@@ -4515,8 +4520,12 @@ function addProtokoll() {
   }
 
   // Save risk assessment if any non-green values
-  if (typeof saveRisikoFromProtokoll === 'function') {
-    saveRisikoFromProtokoll();
+  try {
+    if (typeof saveRisikoFromProtokoll === 'function') {
+      saveRisikoFromProtokoll();
+    }
+  } catch (risikoErr) {
+    console.warn('Risiko-Save Fehler (ignoriert):', risikoErr);
   }
 
   // Reset form
@@ -4528,8 +4537,8 @@ function addProtokoll() {
   if (themaEl) themaEl.value = '';
   var nrEl = document.getElementById('prot-nr');
   if (nrEl) nrEl.value = '';
-  var datumEl = document.getElementById('prot-datum');
-  if (datumEl) datumEl.value = new Date().toISOString().split('T')[0];
+  var datumEl2 = document.getElementById('prot-datum');
+  if (datumEl2) datumEl2.value = new Date().toISOString().split('T')[0];
   var vorlageEl = document.getElementById('soap-vorlage');
   if (vorlageEl) vorlageEl.value = '';
   APP.protStimmung = null;
@@ -4581,7 +4590,11 @@ function addProtokoll() {
   if (orsAlert2) orsAlert2.style.display = 'none';
 
   renderNotizen();
-  showToast('Protokoll gespeichert (SOAP)', 'success');
+  showToast('Protokoll gespeichert ✓', 'success');
+  } catch (err) {
+    console.error('SOAP Save Fehler:', err);
+    showToast('Fehler beim Speichern: ' + (err.message || err), 'error');
+  }
 }
 
 // ---- SOAP Beispiel-Toggle ----
@@ -13978,24 +13991,31 @@ function renderAktivePhase(roadmap, phase, idx) {
       </div>
     </div>` : '';
 
+  // ── Fortschrittszusammenfassung (kompakt) ──
+  const totalItems = aktTotal + themenTotal;
+  const totalDone = aktErledigt + themenDone;
+  const totalPct = totalItems > 0 ? Math.round((totalDone / totalItems) * 100) : 0;
+
   return `
-    <div class="roadmap-fokus-phase" id="roadmap-fokus-${phase.nr}">
-      <div class="roadmap-fokus-phase-header">
-        <div class="roadmap-fokus-phase-title">
-          <div class="roadmap-fokus-icon" style="background:${def.farbe}15;color:${def.farbe};">
-            ${renderIcon(def.icon)}
+    <div class="roadmap-fokus-phase fp-vertical" id="roadmap-fokus-${phase.nr}">
+
+      <!-- Phase-Header -->
+      <div class="fp-v-header" style="border-left:4px solid ${def.farbe};">
+        <div class="fp-v-header-top">
+          <div class="fp-v-header-icon" style="background:${def.farbe}15;color:${def.farbe};">${renderIcon(def.icon)}</div>
+          <div class="fp-v-header-info">
+            <div class="fp-v-phase-label">Phase ${def.nr}: ${def.label}</div>
+            <div class="fp-v-phase-desc">${def.beschreibung}</div>
           </div>
-          <div>
-            <div class="roadmap-fokus-label">Phase ${def.nr}: ${def.label}</div>
-            <div class="roadmap-fokus-desc">${def.beschreibung}</div>
-            <div class="roadmap-fokus-timing">
-              ${def.dauer}
-              ${phase.startDatum ? ` · Gestartet: ${new Date(phase.startDatum).toLocaleDateString('de-DE')}` : ''}
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
           <span class="roadmap-phase-status-badge roadmap-status-aktiv">▶ Aktiv</span>
+        </div>
+        <div class="fp-v-progress-row">
+          <div class="fp-v-progress-bar"><div class="fp-v-progress-fill" style="width:${totalPct}%;background:${def.farbe};"></div></div>
+          <span class="fp-v-progress-text" style="color:${def.farbe};">${totalPct}%</span>
+        </div>
+        <div class="fp-v-meta">
+          ${def.dauer}${phase.startDatum ? ` · Gestartet: ${new Date(phase.startDatum).toLocaleDateString('de-DE')}` : ''}
+          · ${aktErledigt}/${aktTotal} Aktivitäten · ${themenDone}/${themenTotal} Themen
         </div>
       </div>
 
@@ -14004,30 +14024,6 @@ function renderAktivePhase(roadmap, phase, idx) {
 
       <!-- Phasenziel -->
       ${zielHtml}
-
-      <!-- Stats -->
-      <div class="roadmap-fokus-stats">
-        <div class="roadmap-fokus-stat">
-          <div class="roadmap-fokus-stat-value">${aktErledigt}/${aktTotal}</div>
-          <div class="roadmap-fokus-stat-label">Aktivitäten</div>
-        </div>
-        <div class="roadmap-fokus-stat">
-          <div class="roadmap-fokus-stat-value">${themenDone}/${themenTotal}</div>
-          <div class="roadmap-fokus-stat-label">Themen</div>
-        </div>
-        <div class="roadmap-fokus-stat">
-          <div class="roadmap-fokus-stat-value" style="color:${def.farbe};">${phasePct}%</div>
-          <div class="roadmap-fokus-stat-label">Fortschritt</div>
-        </div>
-      </div>
-
-      <!-- Fortschrittsbalken -->
-      ${(themenTotal > 0 || aktTotal > 0) ? `
-      <div class="roadmap-progress-bar-container" style="margin-bottom:16px;">
-        <div class="roadmap-progress-bar">
-          <div class="roadmap-progress-fill" style="width:${phasePct}%;background:${def.farbe};"></div>
-        </div>
-      </div>` : ''}
 
       <!-- Kernaktivitäten -->
       ${aktivitaetenHtml}
@@ -14068,15 +14064,16 @@ function renderAktivePhase(roadmap, phase, idx) {
       ${indHtml}
 
       <!-- Phase-Notizen -->
-      <div class="roadmap-phase-notizen" style="margin-top:16px;">
+      <div class="fp-section">
+        <div class="fp-section-header"><span>📝 Notizen</span></div>
         <textarea class="roadmap-notiz-input" placeholder="Notizen zu dieser Phase..."
           id="roadmap-notiz-${phase.nr}"
           onchange="saveRoadmapNotiz(${phase.nr}, this.value)">${phase.notizen || ''}</textarea>
       </div>
 
       <!-- Phase-Aktionen -->
-      <div class="roadmap-phase-actions" style="margin-top:16px;">
-        <button class="btn" style="background:${def.farbe};color:#fff;border:none;padding:10px 20px;font-size:15px;font-weight:600;border-radius:8px;box-shadow:0 2px 8px ${def.farbe}40;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>
+      <div style="margin-top:8px;">
+        <button class="btn" style="background:${def.farbe};color:#fff;border:none;padding:10px 20px;font-size:14px;font-weight:600;border-radius:8px;width:100%;box-shadow:0 2px 8px ${def.farbe}40;" onclick="setRoadmapPhaseStatus(${phase.nr}, 'erledigt')">✓ Phase abschließen</button>
       </div>
 
       <!-- Phasen-Ressourcen -->

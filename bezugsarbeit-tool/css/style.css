@@ -7944,15 +7944,15 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 }
 .roadmap-fokus-stats {
   display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 .roadmap-fokus-stat {
   flex: 1;
   background: #F9FAFB;
   border: 1px solid #E5E7EB;
   border-radius: 10px;
-  padding: 12px;
+  padding: 10px 12px;
   text-align: center;
 }
 .roadmap-fokus-stat-value {
@@ -10454,6 +10454,77 @@ body.dark-mode .gb-flagged-chip {
   margin-top: 6px;
 }
 
+/* ── Förderplan Vertical Layout ── */
+.fp-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fp-v-header {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #E5E7EB);
+  border-radius: 12px;
+  padding: 16px;
+}
+.fp-v-header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.fp-v-header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.fp-v-header-info {
+  flex: 1;
+  min-width: 0;
+}
+.fp-v-phase-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text, #1F2937);
+}
+.fp-v-phase-desc {
+  font-size: 13px;
+  color: var(--text-muted, #6B7280);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.fp-v-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.fp-v-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--border, #E5E7EB);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.fp-v-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.fp-v-progress-text {
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.fp-v-meta {
+  font-size: 11px;
+  color: var(--text-muted, #9CA3AF);
+  margin-top: 6px;
+}
+
 /* Phasenziel */
 .fp-ziel-box {
   display: flex;
@@ -10585,8 +10656,8 @@ body.dark-mode .gb-flagged-chip {
 
 /* Beziehungsarbeit */
 .fp-beziehung-liste {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 .fp-beziehung-karte {
@@ -10637,6 +10708,13 @@ body.dark-mode .gb-flagged-chip {
 }
 
 /* ── Förderplan Dark Mode ── */
+body.dark-mode .fp-v-header {
+  background: var(--bg-card, #1F2937);
+  border-color: var(--border, #374151);
+}
+body.dark-mode .fp-v-progress-bar {
+  background: var(--border, #374151);
+}
 body.dark-mode .fp-rahmen-box {
   background: rgba(255, 255, 255, 0.03);
 }

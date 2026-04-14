@@ -4437,6 +4437,9 @@ function addProtokoll() {
   const orsO = parseInt(document.getElementById('ors-overall')?.value || 0);
   const orsTotal = orsI + orsIP + orsS + orsO;
 
+  // C-SSRS Schweregrad (may not have UI element yet)
+  var cssrsSchweregrad = parseInt(document.getElementById('prot-cssrs-schweregrad')?.value) || 0;
+
   if (!datum) { showToast('Datum ist ein Pflichtfeld', 'error'); return; }
   if (!subjektiv && !objektiv && !assessment && !plan) {
     showToast('Bitte mindestens ein SOAP-Feld ausfüllen', 'error'); return;
@@ -4509,12 +4512,22 @@ function addProtokoll() {
 
   // Reset form
   ['prot-subjektiv','prot-objektiv','prot-assessment','prot-plan','prot-materialien'].forEach(id => {
-    document.getElementById(id).value = '';
+    var el = document.getElementById(id);
+    if (el) el.value = '';
   });
-  document.getElementById('prot-thema-id').value = '';
-  document.getElementById('prot-nr').value = '';
+  var themaEl = document.getElementById('prot-thema-id');
+  if (themaEl) themaEl.value = '';
+  var nrEl = document.getElementById('prot-nr');
+  if (nrEl) nrEl.value = '';
+  var datumEl = document.getElementById('prot-datum');
+  if (datumEl) datumEl.value = new Date().toISOString().split('T')[0];
+  var vorlageEl = document.getElementById('soap-vorlage');
+  if (vorlageEl) vorlageEl.value = '';
   APP.protStimmung = null;
-  document.querySelectorAll('.prot-stimmung-btn').forEach(b => b.classList.remove('selected'));
+  APP.protStimmungScore = null;
+  document.querySelectorAll('.stimmung-seg').forEach(b => b.classList.remove('active'));
+  var stimmLabel = document.getElementById('prot-stimmung-label');
+  if (stimmLabel) stimmLabel.textContent = '';
 
   // Reset PVT (Start + Ende)
   APP.protPVT = null;

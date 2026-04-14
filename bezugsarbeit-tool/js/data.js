@@ -25561,6 +25561,190 @@ const WB_QUIZ_FRAGEN = {
       korrekt: 1,
       erklaerung: 'Multimodal: psychosozial (refugio-Zentren), rechtlich (Jugendhilfe für UMF, Asylverfahren), medizinisch, sprachlich. Vernetzung ist Kernaufgabe — du machst nicht alles selbst.'
     }
+  ],
+  '17-lgbtq-jugendliche': [
+    {
+      frage: 'Ein 15-Jähriger outet sich dir als schwul. Wie antwortest du?',
+      optionen: [
+        '„Bist du dir sicher? Vielleicht ist das nur eine Phase."',
+        '„Danke, dass du mir das anvertraust. Wie geht es dir damit? Wie kann ich dich unterstützen?"',
+        '„Das musst du deinen Eltern sagen, nicht mir."',
+        '„Das hättest du dir doch denken können, wie du dich immer benimmst."'
+      ],
+      korrekt: 1,
+      erklaerung: 'Affirmative Haltung: Outing wertschätzen, keine Bewertung („nur Phase" invalidiert), nach Erleben und Unterstützungsbedarf fragen. LGBTQ+ Jugendliche haben erhöhtes Risiko für Depression/Suizidalität — Beziehung und Akzeptanz sind Schutzfaktoren.'
+    },
+    {
+      frage: 'Was bedeutet „affirmativer Ansatz"?',
+      optionen: [
+        'Jede Entwicklung als LGBTQ+ sofort festlegen.',
+        'Die Identität/Orientierung der/des Jugendlichen als gültig und gesund anerkennen — nicht pathologisieren, nicht „heilen" wollen, bei Ambivalenz offen begleiten.',
+        'LGBTQ+ ist eine Krankheit, die wir nicht behandeln.',
+        'Alle Jugendlichen als LGBTQ+ annehmen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Affirmativ (WPATH, APA): Identitäten werden als Normvariante anerkannt. „Konversionstherapie" ist wissenschaftlich widerlegt, schädlich und in Deutschland für Minderjährige gesetzlich verboten (§5 KonvBehSchG).'
+    },
+    {
+      frage: 'Die Eltern einer trans Jugendlichen akzeptieren ihre Identität nicht und wollen sie „heilen". Was tust du?',
+      optionen: [
+        'Den Eltern zustimmen.',
+        'Die Jugendliche schützen, den Eltern Psychoedukation anbieten (Leitlinien, Risiken von Ablehnung), Beratungsstellen vermitteln (z.B. Trans*ident, Queer-Verbände), bei Kindeswohlgefährdung Schutzmaßnahmen prüfen.',
+        'Das ist Sache der Familie.',
+        'Die Jugendliche an die Eltern verraten.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Familiäre Ablehnung verdoppelt bis vervierfacht das Suizidrisiko bei LGBTQ+ Jugendlichen. Schutz + elterliche Psychoedukation sind zentral. Hartnäckige Ablehnung kann Kindeswohlgefährdung sein.'
+    },
+    {
+      frage: 'Welche Sprache ist hilfreich?',
+      optionen: [
+        'Nach dem sichtbaren Geschlecht zu urteilen.',
+        'Selbstbezeichnung und Pronomen der Person übernehmen (und bei Unsicherheit respektvoll fragen), gender-offene Formulierungen.',
+        'Geschlecht ignorieren.',
+        'Nur „er" oder „sie" erlauben.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Selbstbezeichnung respektieren = affirmativ. Fragen wie „Wie möchtest du angesprochen werden?" signalisieren Respekt. „Deadnaming" (alten Namen nutzen) ist verletzend.'
+    }
+  ],
+  '18-schulverweigerung': [
+    {
+      frage: 'Ein 14-Jähriger weigert sich seit Wochen zur Schule zu gehen, klagt morgens über Bauchweh, das sich am Nachmittag auflöst. Was ist naheliegend?',
+      optionen: [
+        'Einfach Faulheit — Grenzen setzen, notfalls zwingen.',
+        'Schulangst-Bild (emotional bedingte Schulverweigerung): körperliche Symptome sind echt, multikausale Bearbeitung nötig (Psyche, Schule, Familie).',
+        'Er simuliert.',
+        'Er soll die Klasse wiederholen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Angstbedingte Schulverweigerung (Schulphobie): kein Willensproblem. Somatische Symptome sind Ausdruck der Angst und verschwinden, wenn Schule nicht droht. Frühintervention entscheidend — je länger, desto schwerer.'
+    },
+    {
+      frage: 'Wie unterscheidet sich Schulphobie (emotional) von Schulschwänzen (oppositionell)?',
+      optionen: [
+        'Kein Unterschied.',
+        'Phobie: Kind BLEIBT zu Hause, Eltern wissen Bescheid, Angst steht im Zentrum. Schwänzen: Kind ist NICHT zu Hause, Eltern wissen nichts, kein Angstleiden.',
+        'Phobie gibt es nur bei Mädchen.',
+        'Schwänzen ist harmlos.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Wichtige diagnostische Unterscheidung. Interventionen unterscheiden sich fundamental: Phobie braucht Expositionstherapie + Schulreintegration, Schwänzen braucht strukturelle Konsequenzen + Motivationsarbeit.'
+    },
+    {
+      frage: 'Was ist ein Schlüsselschritt bei angstbedingter Schulverweigerung?',
+      optionen: [
+        'Monatelange Auszeit zu Hause.',
+        'Schnelle, gestufte Reintegration (z.B. erst 1 Stunde, dann mehr), vernetzte Kooperation Schule-Eltern-Jugendlicher-KJP, Angstbehandlung parallel.',
+        'Homeschooling als Dauerlösung.',
+        'Klassenwechsel ohne Therapie.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Je länger die Abwesenheit, desto höher die Hürde. Exposition (schrittweise Rückkehr) ist Kern. Ohne Angstbehandlung (Psychotherapie) oft Rückfall.'
+    },
+    {
+      frage: 'Welche Rolle spielen Eltern bei Schulverweigerung?',
+      optionen: [
+        'Keine — das ist Sache der Schule.',
+        'Zentrale Rolle: Elternverhalten kann Vermeidung verstärken („Akkommodation"); Eltern-Coaching ist Teil der Behandlung.',
+        'Eltern müssen das Kind austricksen.',
+        'Eltern sind das Problem.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Akkommodation = Anpassung an Angst, z.B. Kind darf zu Hause bleiben → Angst wird belohnt. Eltern brauchen Anleitung, wie sie halt geben UND gleichzeitig Exposition ermöglichen.'
+    }
+  ],
+  '19-substanzkonsum': [
+    {
+      frage: 'Ein 16-Jähriger erzählt von wöchentlichem Cannabiskonsum. Welche Haltung hilft im ersten Gespräch?',
+      optionen: [
+        'Alarmiert und moralisch.',
+        'Motivational Interviewing: offene Fragen, Ambivalenz explorieren, Widerstand vermeiden, Change-Talk stärken, eigene Entscheidung fördern.',
+        'Sofort Meldung an Eltern.',
+        'Drohen mit Entzug.'
+      ],
+      korrekt: 1,
+      erklaerung: 'MI (Miller/Rollnick) ist evidenzbasiert bei Suchtproblemen. Konfrontation/Moral erzeugen Widerstand. Offene Fragen wie „Was gefällt dir daran?" UND „Was macht dir Sorgen?" öffnen Ambivalenz.'
+    },
+    {
+      frage: 'Was ist „Harm Reduction" (Risikominimierung)?',
+      optionen: [
+        'Konsum verbieten.',
+        'Wenn Konsum stattfindet, Schaden minimieren: sichereres Konsumverhalten, Pausen, kein Mischkonsum, Info über Risiken — ohne Konsum zu propagieren.',
+        'Konsum aktiv fördern.',
+        'Alles ignorieren.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Harm Reduction ist pragmatisch: Totalabstinenz oft unrealistisch bei Jugendlichen. Schaden reduzieren (nicht Auto fahren, nicht täglich, kein Mischkonsum) rettet Leben und hält Beziehung. Moralisch-ideologisch umstritten, evidenz­basiert.'
+    },
+    {
+      frage: 'Wann musst du die Eltern informieren?',
+      optionen: [
+        'Nie — Vertrauen ist wichtiger.',
+        'Bei akuter Gefährdung (Abhängigkeit, harte Drogen, gesundheitliche Risiken) — transparent mit Jugendlichem, Ziel: Hilfe, nicht Strafe.',
+        'Bei jedem Joint.',
+        'Nur wenn die Eltern danach fragen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Schweigepflicht ist hoch, aber nicht absolut. Akute Kindeswohlgefährdung überschreibt sie. Transparent: „Ich muss jetzt deine Eltern einbeziehen, weil ich mir Sorgen mache. So läuft das ab ..." Kein Hintenrum.'
+    },
+    {
+      frage: 'Welches Signal deutet auf problematischen Konsum (über Experimentieren hinaus)?',
+      optionen: [
+        'Einmaliges Ausprobieren.',
+        'Täglicher Konsum, Funktionsverlust (Schule, Beziehungen, Hobbys), Geldprobleme, Toleranzentwicklung, Entzugssymptome, harte Drogen.',
+        'Gelegentlicher Konsum auf Partys.',
+        'Neugier.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Experimentieren ≠ Abhängigkeit. Kriterien nach ICD/DSM: Kontrollverlust, Toleranz, Entzug, Priorisierung des Konsums, Funktionsverlust. Bei diesen Zeichen: Suchtberatung (CaritasSucht, caritas.de, jugendschutz.de).'
+    }
+  ],
+  '20-uebergaenge-leaving-care': [
+    {
+      frage: 'Eine 17-Jährige verlässt bald eure Einrichtung. Womit beginnst du die Übergangsplanung?',
+      optionen: [
+        'Am Tag vor dem Auszug.',
+        'Mindestens 12-18 Monate vorher: Zukunftsvorstellung, Alltagskompetenzen (Finanzen, Wohnen, Behörden), Netzwerkaufbau, Nachsorge.',
+        'Gar nicht, sie regelt das selbst.',
+        'Erst nach Volljährigkeit.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Careleaver haben ein Mehrfachrisiko (Obdachlosigkeit, psychische Krisen, Arbeitslosigkeit). Frühzeitige, schrittweise Verselbstständigung und nachgehende Hilfen (§41 SGB VIII) sind entscheidend.'
+    },
+    {
+      frage: 'Welche Alltagskompetenzen sind typischerweise unterschätzt?',
+      optionen: [
+        'Nur Kochen.',
+        'Umgang mit Ämtern/Formularen, Steuererklärung, Mietvertrag, Versicherungen, Kontoführung, Gesundheitssystem, Zeitmanagement.',
+        'Nur Putzen.',
+        'Nur Wäsche waschen.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Bürokratische Kompetenz ist oft die größte Hürde. Careleaver-Studien zeigen: Alltag scheitert oft nicht am Kochen, sondern am Umgang mit Ämtern, Briefen und Fristen.'
+    },
+    {
+      frage: 'Wie gehst du mit deinen eigenen Gefühlen beim Abschied um?',
+      optionen: [
+        'Dich komplett distanzieren, um nichts zu fühlen.',
+        'Abschied aktiv gestalten: Würdigung gemeinsamer Zeit, Kontaktangebot nach der Einrichtung, eigene Gefühle dürfen da sein — aber nicht ihre Last werden.',
+        'Gar nicht verabschieden.',
+        'Dem Jugendlichen sagen, du wirst ihn vermissen und fühlst dich allein.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Professionelle Beziehung endet nicht herzlos. Würdigung, Kontaktmöglichkeit (realistisch gehalten), eigene Gefühle reflektiert zeigen — aber nie den Jugendlichen zum Tröstenden machen.'
+    },
+    {
+      frage: 'Was sind wichtige Nachsorgestrukturen?',
+      optionen: [
+        'Keine, Erwachsenwerden heißt alleine klarkommen.',
+        'Careleaver-Treff, Patenschaftsmodelle, §41 Hilfe für junge Erwachsene (bis 21/27), Kontakt zur Einrichtung als Brücke, Careleaver-Netzwerke.',
+        'Nur die Familie.',
+        'Social Media reicht.'
+      ],
+      korrekt: 1,
+      erklaerung: 'Careleaver.de und regionale Netzwerke sind wertvoll. §41 SGB VIII sichert Hilfe für junge Volljährige bis 21, in Ausnahmen bis 27. Viele wissen nicht, dass sie diesen Anspruch haben — aktiv informieren.'
+    }
   ]
 };
 

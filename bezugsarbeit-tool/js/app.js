@@ -61,7 +61,7 @@ function sanitize(html) {
 const APP = {
   currentView: 'home',
   currentSchuelerId: null,
-  currentProfilTab: 'dashboard',
+  currentProfilTab: 'fallformulierung',
   kalenderDatum: new Date(),
   dashKalenderDatum: new Date(),
   dashKalenderSelectedTag: null,
@@ -2328,7 +2328,6 @@ const PHASE_TABS = {
     { id: 'verhalten', label: 'Verhalten' }
   ],
   begleitung: [
-    { id: 'dashboard', label: 'Heute' },
     { id: 'fallformulierung', label: 'Fallbild' },
     { id: 'roadmap', label: 'Förderplan' },
     { id: 'notizen', label: 'Sitzungen' }

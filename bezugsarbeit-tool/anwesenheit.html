@@ -479,7 +479,8 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   /* ---- Helpers ---- */
   function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-  function today(){return new Date().toISOString().slice(0,10);}
+  function toISO(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());} // lokale Datumsteile (zeitzonensicher)
+  function today(){return toISO(new Date());}
   function wdOf(iso){return new Date(iso+'T00:00:00').getDay();}
   function fmtD(iso){if(!iso)return'';var d=new Date(iso+'T00:00:00');return d.toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'2-digit'});}
   function nf(n){return (Math.round(n*100)/100).toLocaleString('de-CH');}
@@ -596,8 +597,8 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   }
 
   /* ---- Wochen-Helfer + Block-Toggle ---- */
-  function mondayOf(iso){var d=new Date(iso+'T00:00:00');var dow=(d.getDay()+6)%7;d.setDate(d.getDate()-dow);return d.toISOString().slice(0,10);}
-  function addDays(iso,n){var d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
+  function mondayOf(iso){var d=new Date(iso+'T00:00:00');var dow=(d.getDay()+6)%7;d.setDate(d.getDate()-dow);return toISO(d);}
+  function addDays(iso,n){var d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return toISO(d);}
   function toggleBlock(sid,blockId,date){
     var s=state.students.find(function(x){return x.id===sid;});if(!s)return;
     var wd=wdOf(date);if(wd<1||wd>5)return;if(holidayInfo(date))return;

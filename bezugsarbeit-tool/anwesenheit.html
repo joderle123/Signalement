@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anwesenheit — Absenzen & Präsenz</title>
+  <meta name="description" content="Absenzen und Präsenzzeiten von Schülern erfassen, zusammenzählen und nach Semester, Trimester und Wochentag auswerten.">
+  <meta name="theme-color" content="#6C5CE7">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/anwesenheit.css">
+</head>
+<body>
+
+<!-- ============================ TOPBAR ============================ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo" aria-hidden="true">📋</div>
+    <div class="logo-text">
+      <h1>Anwesenheit</h1>
+      <p>Absenzen & Präsenzzeiten</p>
+    </div>
+    <div class="topbar-spacer"></div>
+    <nav class="tabs" role="tablist" aria-label="Bereiche">
+      <button class="tab active" data-view="erfassung" role="tab">✍️ Erfassen</button>
+      <button class="tab" data-view="auswertung" role="tab">📊 Auswertung</button>
+      <button class="tab" data-view="wochentag" role="tab">📅 Wochentage</button>
+      <button class="tab" data-view="schueler" role="tab">🧑‍🎓 Schüler</button>
+      <button class="tab" data-view="perioden" role="tab">🗓️ Perioden</button>
+      <button class="tab" data-view="daten" role="tab">💾 Daten</button>
+    </nav>
+  </div>
+</header>
+
+<main class="app">
+
+  <!-- ============================ ERFASSUNG ============================ -->
+  <section class="view active" id="view-erfassung">
+    <div class="view-head">
+      <h2>Absenz erfassen</h2>
+      <p>Datum, Schüler, Status und Anzahl Lektionen eintragen. Der Wochentag wird automatisch erkannt.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">➕ Neuer Eintrag</div>
+      <form id="entry-form">
+        <input type="hidden" id="entry-id">
+        <div class="form-grid">
+          <div class="field">
+            <label for="entry-date">Datum</label>
+            <input type="date" id="entry-date" required>
+          </div>
+          <div class="field">
+            <label for="entry-student">Schüler</label>
+            <select id="entry-student" required></select>
+          </div>
+          <div class="field">
+            <label for="entry-status">Status</label>
+            <select id="entry-status" required>
+              <option value="entschuldigt">Entschuldigt</option>
+              <option value="unentschuldigt">Unentschuldigt</option>
+              <option value="verspaetet">Verspätet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="entry-lektionen">Anzahl Lektionen</label>
+            <input type="number" id="entry-lektionen" min="0" step="0.5" value="1" required>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="entry-note">Bemerkung (optional)</label>
+            <input type="text" id="entry-note" placeholder="z.B. Arzttermin, Krankheit …">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary" id="entry-submit">Eintrag speichern</button>
+          <button type="button" class="btn btn-ghost" id="entry-cancel" style="display:none;">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📑 Erfasste Einträge <span class="hint" id="entry-count"></span></div>
+      <div class="filters no-print">
+        <div class="field">
+          <label for="filter-student">Schüler</label>
+          <select id="filter-student"><option value="">Alle Schüler</option></select>
+        </div>
+        <div class="field">
+          <label for="filter-status">Status</label>
+          <select id="filter-status">
+            <option value="">Alle Status</option>
+            <option value="entschuldigt">Entschuldigt</option>
+            <option value="unentschuldigt">Unentschuldigt</option>
+            <option value="verspaetet">Verspätet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filter-period">Periode</label>
+          <select id="filter-period"><option value="">Ganzes Schuljahr</option></select>
+        </div>
+      </div>
+      <div id="entries-list"></div>
+    </div>
+  </section>
+
+  <!-- ============================ AUSWERTUNG ============================ -->
+  <section class="view" id="view-auswertung">
+    <div class="view-head">
+      <h2>Auswertung pro Schüler</h2>
+      <p>Summe der Absenz-Lektionen je Schüler — filterbar nach Semester oder Trimester.</p>
+    </div>
+
+    <div class="filters no-print">
+      <div class="field">
+        <label for="stat-period">Periode</label>
+        <select id="stat-period"><option value="">Ganzes Schuljahr</option></select>
+      </div>
+      <div class="field" style="flex:1 1 auto; min-width:220px; justify-content:end;">
+        <label>&nbsp;</label>
+        <div class="inline-actions">
+          <button class="btn btn-primary btn-sm" id="stat-pdf">📄 PDF herunterladen</button>
+          <button class="btn btn-ghost btn-sm" id="stat-export-csv">⬇️ CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-grid" id="stat-cards"></div>
+
+    <div class="card">
+      <div class="card-title">📊 Absenzen je Schüler</div>
+      <div id="stat-table"></div>
+    </div>
+  </section>
+
+  <!-- ============================ WOCHENTAGE ============================ -->
+  <section class="view" id="view-wochentag">
+    <div class="view-head">
+      <h2>Moyenne pro Wochentag</h2>
+      <p>Durchschnittliche Absenz-Lektionen pro Wochentag — z.B. „im Schnitt an Mittwochen". Der Durchschnitt teilt die Summe durch die Anzahl erfasster Tage dieses Wochentags.</p>
+    </div>
+
+    <div class="filters no-print">
+      <div class="field">
+        <label for="wt-period">Periode</label>
+        <select id="wt-period"><option value="">Ganzes Schuljahr</option></select>
+      </div>
+      <div class="field">
+        <label for="wt-student">Schüler</label>
+        <select id="wt-student"><option value="">Alle Schüler</option></select>
+      </div>
+      <div class="field">
+        <label for="wt-status">Status</label>
+        <select id="wt-status">
+          <option value="absenz">Absenzen (entsch. + unentsch.)</option>
+          <option value="entschuldigt">Nur entschuldigt</option>
+          <option value="unentschuldigt">Nur unentschuldigt</option>
+          <option value="verspaetet">Nur verspätet</option>
+          <option value="alle">Alle Status</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="stat-grid" id="wt-cards"></div>
+
+    <div class="card">
+      <div class="card-title">📅 Durchschnitt je Wochentag</div>
+      <div id="wt-table"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔢 Ø Lektionen pro Wochentag &amp; Schüler <span class="hint">Wert = Ø pro erfasstem Tag</span></div>
+      <div id="wt-matrix"></div>
+    </div>
+  </section>
+
+  <!-- ============================ SCHÜLER ============================ -->
+  <section class="view" id="view-schueler">
+    <div class="view-head">
+      <h2>Schüler verwalten</h2>
+      <p>Lege deine 8–10 Schüler an. Du kannst jederzeit weitere hinzufügen.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">➕ Schüler hinzufügen</div>
+      <form id="student-form">
+        <input type="hidden" id="student-id">
+        <div class="form-grid">
+          <div class="field" style="flex:2;">
+            <label for="student-name">Name</label>
+            <input type="text" id="student-name" placeholder="Vorname Nachname" required>
+          </div>
+          <div class="field">
+            <label for="student-klasse">Klasse (optional)</label>
+            <input type="text" id="student-klasse" placeholder="z.B. 7b">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary" id="student-submit">Hinzufügen</button>
+          <button type="button" class="btn btn-ghost" id="student-cancel" style="display:none;">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🧑‍🎓 Schülerliste <span class="hint" id="student-count"></span></div>
+      <div id="students-list"></div>
+    </div>
+  </section>
+
+  <!-- ============================ PERIODEN ============================ -->
+  <section class="view" id="view-perioden">
+    <div class="view-head">
+      <h2>Perioden (Semester / Trimester)</h2>
+      <p>Definiere Zeiträume, nach denen du die Absenzen summieren willst. In den Auswertungen kannst du danach filtern.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">➕ Periode hinzufügen</div>
+      <form id="period-form">
+        <input type="hidden" id="period-id">
+        <div class="form-grid">
+          <div class="field">
+            <label for="period-name">Bezeichnung</label>
+            <input type="text" id="period-name" placeholder="z.B. 1. Semester" required>
+          </div>
+          <div class="field">
+            <label for="period-type">Typ</label>
+            <select id="period-type">
+              <option value="semester">Semester</option>
+              <option value="trimester">Trimester</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="period-start">Von</label>
+            <input type="date" id="period-start" required>
+          </div>
+          <div class="field">
+            <label for="period-end">Bis</label>
+            <input type="date" id="period-end" required>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary" id="period-submit">Hinzufügen</button>
+          <button type="button" class="btn btn-ghost" id="period-cancel" style="display:none;">Abbrechen</button>
+          <button type="button" class="btn btn-ghost" id="period-presets">🇨🇭 Vorlage Schuljahr einfügen</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗓️ Definierte Perioden</div>
+      <div id="periods-list"></div>
+    </div>
+  </section>
+
+  <!-- ============================ DATEN ============================ -->
+  <section class="view" id="view-daten">
+    <div class="view-head">
+      <h2>Daten sichern &amp; übertragen</h2>
+      <p>Alle Daten liegen lokal in deinem Browser (localStorage). Sichere sie regelmässig als Datei.</p>
+    </div>
+
+    <div class="card" id="storage-status-card" style="display:none;">
+      <div class="card-title" style="color:var(--danger-dark);">⚠️ Achtung: Speicher nicht verfügbar</div>
+      <p class="muted">Dein Browser erlaubt keine lokale Speicherung (z.B. privater Modus). Einträge gehen beim Schliessen verloren. Bitte exportiere regelmässig ein Backup.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📄 Bericht als PDF</div>
+      <p class="muted" style="margin-bottom:1rem;">Erstellt ein sauberes, druckfertiges PDF mit allen Absenzen je Schüler und dem Wochentag-Durchschnitt. Die Periode wählst du im Tab „Auswertung".</p>
+      <div class="btn-row" style="margin-top:0;">
+        <button class="btn btn-primary" id="daten-pdf">📄 PDF-Bericht herunterladen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💾 Sicherung</div>
+      <p class="muted" style="margin-bottom:1rem;">Deine Daten bleiben dauerhaft in diesem Browser gespeichert. Damit sie <strong>auf keinen Fall</strong> verloren gehen (Gerätewechsel, Browser-Reinigung), exportiere zusätzlich regelmässig ein Backup als Datei.</p>
+      <div class="btn-row" style="margin-top:0;">
+        <button class="btn btn-primary" id="export-json">⬇️ Backup exportieren (JSON)</button>
+        <button class="btn btn-ghost" id="export-all-csv">⬇️ Einträge als CSV</button>
+        <label class="btn btn-ghost" style="cursor:pointer;">
+          ⬆️ Backup importieren
+          <input type="file" id="import-json" accept="application/json,.json" style="display:none;">
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚠️ Zurücksetzen</div>
+      <p class="muted" style="margin-bottom:1rem;">Löscht alle erfassten Daten unwiderruflich. Vorher am besten ein Backup exportieren.</p>
+      <div class="btn-row" style="margin-top:0;">
+        <button class="btn btn-danger" id="reset-all">🗑️ Alle Daten löschen</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/anwesenheit.js"></script>
+</body>
+</html>

@@ -1,305 +1,570 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anwesenheit — Absenzen & Präsenz</title>
-  <meta name="description" content="Absenzen und Präsenzzeiten von Schülern erfassen, zusammenzählen und nach Semester, Trimester und Wochentag auswerten.">
-  <meta name="theme-color" content="#6C5CE7">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="css/anwesenheit.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anwesenheit — Absenzen einfach erfassen</title>
+<meta name="theme-color" content="#6C5CE7">
+<style>
+/* ============================================================
+   Anwesenheit — einfaches, klick-basiertes Absenzen-Tool
+   EINE Datei: Design + Logik eingebaut. Funktioniert überall.
+   ============================================================ */
+:root{
+  --primary:#6C5CE7; --primary-dark:#5A4BD1; --primary-50:#F3F1FE;
+  --ok:#00B894; --ok-50:#E9FBF5;
+  --warn:#E8A317; --warn-50:#FFF7E6;
+  --danger:#E74C3C; --danger-50:#FDECEA; --danger-dark:#C0392B;
+  --info:#3B82F6; --info-50:#EAF2FE;
+  --bg:#F4F5FA; --card:#fff;
+  --text:#1A1A2E; --muted:#7A7A92; --line:#E8E8F0;
+  --radius:16px; --radius-sm:10px;
+  --shadow:0 1px 3px rgba(26,26,46,.06),0 8px 24px rgba(26,26,46,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.5; font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:880px; margin:0 auto; padding:0 16px 96px;}
+
+/* Header */
+header{
+  position:sticky; top:0; z-index:30;
+  background:linear-gradient(135deg,var(--primary),#8B7CF0);
+  color:#fff; box-shadow:0 4px 16px rgba(108,92,231,.3);
+}
+.head-inner{max-width:880px; margin:0 auto; padding:14px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.head-inner h1{font-size:20px; font-weight:800; letter-spacing:-.02em; display:flex; align-items:center; gap:8px;}
+.head-spacer{flex:1 1 auto;}
+.period-sel{
+  appearance:none; -webkit-appearance:none;
+  background:rgba(255,255,255,.18); color:#fff; border:1.5px solid rgba(255,255,255,.35);
+  border-radius:999px; padding:8px 34px 8px 14px; font-size:14px; font-weight:600; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center;
+}
+.period-sel option{color:#1A1A2E;}
+.hbtn{
+  background:rgba(255,255,255,.18); color:#fff; border:1.5px solid rgba(255,255,255,.35);
+  border-radius:999px; padding:8px 14px; font-size:14px; font-weight:700; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+}
+.hbtn:hover{background:rgba(255,255,255,.3);}
+
+/* Summary numbers */
+.summary{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:20px 0;}
+.sum{background:var(--card); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); text-align:center;}
+.sum .v{font-size:30px; font-weight:800; letter-spacing:-.03em; line-height:1;}
+.sum .l{font-size:12px; color:var(--muted); font-weight:600; margin-top:6px;}
+.sum.total .v{color:var(--primary);}
+.sum.ent .v{color:var(--ok);}
+.sum.unent .v{color:var(--danger-dark);}
+.sum.versp .v{color:var(--warn);}
+
+/* Section headings */
+.sec-head{display:flex; align-items:center; gap:10px; margin:26px 4px 12px;}
+.sec-head h2{font-size:17px; font-weight:800; letter-spacing:-.02em;}
+.sec-head .count{font-size:13px; color:var(--muted); font-weight:600;}
+
+/* Student cards */
+.student{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:14px; overflow:hidden;}
+.st-top{display:flex; align-items:center; gap:14px; padding:16px 18px;}
+.st-name{font-size:17px; font-weight:700; flex:1 1 auto; min-width:0;}
+.st-name .klasse{color:var(--muted); font-weight:500; font-size:14px;}
+.st-total{text-align:right; flex:0 0 auto;}
+.st-total .n{font-size:26px; font-weight:800; letter-spacing:-.03em; color:var(--primary);}
+.st-total .u{font-size:11px; color:var(--muted); font-weight:600; display:block; margin-top:-2px;}
+
+.st-entry{padding:0 18px 16px; display:flex; flex-direction:column; gap:12px;}
+.entry-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.entry-row label{font-size:13px; font-weight:700; color:var(--muted);}
+.date-in{
+  font:inherit; font-size:15px; padding:9px 12px; border:1.5px solid var(--line);
+  border-radius:var(--radius-sm); background:#fff; color:var(--text);
+}
+.date-in:focus{outline:none; border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-50);}
+
+/* Lesson stepper */
+.stepper{display:inline-flex; align-items:center; border:1.5px solid var(--line); border-radius:var(--radius-sm); overflow:hidden;}
+.stepper button{
+  width:40px; height:40px; border:none; background:#F7F8FC; font-size:22px; font-weight:700;
+  color:var(--primary-dark); cursor:pointer; line-height:1;
+}
+.stepper button:hover{background:var(--primary-50);}
+.stepper .val{min-width:46px; text-align:center; font-size:17px; font-weight:800; font-variant-numeric:tabular-nums;}
+
+/* Status action buttons */
+.status-btns{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+.sbtn{
+  border:1.5px solid var(--line); background:#fff; border-radius:var(--radius-sm);
+  padding:12px 8px; font:inherit; font-size:14px; font-weight:700; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:3px; transition:.12s;
+}
+.sbtn .ico{font-size:18px;}
+.sbtn:hover{transform:translateY(-1px);}
+.sbtn.ent:hover{border-color:var(--info); background:var(--info-50); color:var(--info);}
+.sbtn.unent:hover{border-color:var(--danger); background:var(--danger-50); color:var(--danger-dark);}
+.sbtn.versp:hover{border-color:var(--warn); background:var(--warn-50); color:#9A6B00;}
+
+/* Details list */
+.st-detail-toggle{
+  width:100%; border:none; border-top:1px solid var(--line); background:#FAFAFE;
+  padding:11px; font:inherit; font-size:13px; font-weight:700; color:var(--muted); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.st-detail-toggle:hover{background:var(--primary-50); color:var(--primary-dark);}
+.st-detail{padding:4px 18px 14px; display:none;}
+.st-detail.open{display:block;}
+.elist{list-style:none; display:flex; flex-direction:column; gap:6px;}
+.elist li{display:flex; align-items:center; gap:10px; padding:8px 10px; background:#F7F8FC; border-radius:8px; font-size:13px;}
+.elist .d{font-weight:600; white-space:nowrap;}
+.elist .wd{color:var(--muted);}
+.elist .lk{font-weight:700; margin-left:auto; white-space:nowrap;}
+.elist .x{border:none; background:transparent; color:var(--danger); cursor:pointer; font-size:16px; padding:2px 4px; line-height:1;}
+.tag{font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px; white-space:nowrap;}
+.tag.entschuldigt{background:var(--info-50); color:var(--info);}
+.tag.unentschuldigt{background:var(--danger-50); color:var(--danger-dark);}
+.tag.verspaetet{background:var(--warn-50); color:#9A6B00;}
+
+/* Weekday table */
+.card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:6px 4px;}
+table{width:100%; border-collapse:collapse; font-size:14px;}
+th{text-align:left; padding:11px 14px; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); border-bottom:1px solid var(--line);}
+td{padding:11px 14px; border-bottom:1px solid #F2F2F8;}
+tr:last-child td{border-bottom:none;}
+td.n,th.n{text-align:right; font-variant-numeric:tabular-nums;}
+td.big{font-weight:800; color:var(--primary); font-size:16px;}
+.wd-peak{background:var(--danger-50);}
+
+/* Empty state */
+.empty{text-align:center; padding:36px 16px; color:var(--muted);}
+.empty .i{font-size:36px;}
+.empty p{margin-top:8px; font-size:15px;}
+.empty .hint{font-size:13px; margin-top:4px;}
+
+/* Buttons generic */
+.btn{font:inherit; font-weight:700; font-size:15px; border:1.5px solid transparent; border-radius:var(--radius-sm); padding:12px 18px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;}
+.btn-primary{background:var(--primary); color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-ghost{background:#fff; color:var(--text); border-color:var(--line);}
+.btn-ghost:hover{border-color:var(--primary); color:var(--primary-dark);}
+.btn-danger{background:var(--danger-50); color:var(--danger-dark);}
+.btn-danger:hover{background:var(--danger); color:#fff;}
+.btn-block{width:100%;}
+
+/* Modal */
+.modal-bg{position:fixed; inset:0; background:rgba(26,26,46,.45); z-index:50; display:none; align-items:flex-start; justify-content:center; padding:24px 16px; overflow:auto;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff; border-radius:20px; box-shadow:0 24px 60px rgba(0,0,0,.3); width:100%; max-width:520px; padding:24px; animation:pop .2s ease;}
+@keyframes pop{from{transform:scale(.96); opacity:0;}to{transform:none; opacity:1;}}
+.modal h3{font-size:19px; font-weight:800; margin-bottom:4px;}
+.modal .sub{color:var(--muted); font-size:14px; margin-bottom:18px;}
+.modal-row{display:flex; gap:10px; margin-bottom:10px;}
+.modal-row input{flex:1; font:inherit; font-size:15px; padding:11px 13px; border:1.5px solid var(--line); border-radius:var(--radius-sm);}
+.modal-row input:focus{outline:none; border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-50);}
+.modal-list{list-style:none; margin:8px 0 18px; display:flex; flex-direction:column; gap:7px; max-height:280px; overflow:auto;}
+.modal-list li{display:flex; align-items:center; gap:10px; padding:10px 12px; background:#F7F8FC; border-radius:10px;}
+.modal-list .nm{flex:1; font-weight:600;}
+.modal-list .x{border:none; background:#fff; color:var(--danger); cursor:pointer; font-size:14px; font-weight:700; padding:6px 10px; border-radius:8px;}
+.modal-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:8px; flex-wrap:wrap;}
+.x-close{position:absolute;}
+
+/* Toast with undo */
+#toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(140%); background:var(--text); color:#fff; padding:12px 16px; border-radius:999px; font-size:14px; font-weight:600; box-shadow:var(--shadow); z-index:80; display:flex; align-items:center; gap:14px; transition:transform .3s cubic-bezier(.34,1.56,.64,1); max-width:92vw;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast button{background:rgba(255,255,255,.2); border:none; color:#fff; font:inherit; font-weight:800; padding:6px 12px; border-radius:999px; cursor:pointer;}
+#toast button:hover{background:rgba(255,255,255,.35);}
+
+@media (max-width:560px){
+  .summary{grid-template-columns:repeat(2,1fr);}
+  .head-inner h1{font-size:18px;}
+  .sum .v{font-size:24px;}
+}
+@media print{
+  header,.summary,.st-entry,.st-detail-toggle,.st-detail,.sec-head .btn,#toast,.no-print{display:none!important;}
+  body{background:#fff;}
+  .student,.card{box-shadow:none; border:1px solid #ddd;}
+}
+</style>
 </head>
 <body>
 
-<!-- ============================ TOPBAR ============================ -->
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="logo" aria-hidden="true">📋</div>
-    <div class="logo-text">
-      <h1>Anwesenheit</h1>
-      <p>Absenzen & Präsenzzeiten</p>
-    </div>
-    <div class="topbar-spacer"></div>
-    <nav class="tabs" role="tablist" aria-label="Bereiche">
-      <button class="tab active" data-view="erfassung" role="tab">✍️ Erfassen</button>
-      <button class="tab" data-view="auswertung" role="tab">📊 Auswertung</button>
-      <button class="tab" data-view="wochentag" role="tab">📅 Wochentage</button>
-      <button class="tab" data-view="schueler" role="tab">🧑‍🎓 Schüler</button>
-      <button class="tab" data-view="perioden" role="tab">🗓️ Perioden</button>
-      <button class="tab" data-view="daten" role="tab">💾 Daten</button>
-    </nav>
+<header>
+  <div class="head-inner">
+    <h1>📋 Anwesenheit</h1>
+    <div class="head-spacer"></div>
+    <select class="period-sel" id="period-sel" title="Zeitraum wählen"></select>
+    <button class="hbtn" id="btn-students">👥 Schüler</button>
+    <button class="hbtn" id="btn-pdf">📄 PDF</button>
+    <button class="hbtn" id="btn-data" title="Sichern / Laden">💾</button>
   </div>
 </header>
 
-<main class="app">
+<div class="wrap">
 
-  <!-- ============================ ERFASSUNG ============================ -->
-  <section class="view active" id="view-erfassung">
-    <div class="view-head">
-      <h2>Absenz erfassen</h2>
-      <p>Datum, Schüler, Status und Anzahl Lektionen eintragen. Der Wochentag wird automatisch erkannt.</p>
+  <div class="summary" id="summary"></div>
+
+  <div class="sec-head">
+    <h2>🧑‍🎓 Schüler</h2>
+    <span class="count" id="student-count"></span>
+    <div class="head-spacer"></div>
+    <button class="btn btn-ghost no-print" id="btn-add-student" style="padding:8px 14px;font-size:14px;">+ Schüler</button>
+  </div>
+  <div id="students"></div>
+
+  <div class="sec-head">
+    <h2>📅 Durchschnitt pro Wochentag</h2>
+    <span class="count">Ø Absenz-Lektionen je Wochentag</span>
+  </div>
+  <div class="card"><div id="weekday"></div></div>
+
+</div>
+
+<!-- Schüler-Modal -->
+<div class="modal-bg" id="modal-students">
+  <div class="modal">
+    <h3>👥 Schüler verwalten</h3>
+    <p class="sub">Lege deine 8–10 Schüler an. Eingaben werden automatisch gespeichert.</p>
+    <div class="modal-row">
+      <input type="text" id="new-student-name" placeholder="Name (z.B. Anna Muster)">
+      <input type="text" id="new-student-class" placeholder="Klasse" style="max-width:110px;">
+      <button class="btn btn-primary" id="add-student-go">+</button>
     </div>
-
-    <div class="card">
-      <div class="card-title">➕ Neuer Eintrag</div>
-      <form id="entry-form">
-        <input type="hidden" id="entry-id">
-        <div class="form-grid">
-          <div class="field">
-            <label for="entry-date">Datum</label>
-            <input type="date" id="entry-date" required>
-          </div>
-          <div class="field">
-            <label for="entry-student">Schüler</label>
-            <select id="entry-student" required></select>
-          </div>
-          <div class="field">
-            <label for="entry-status">Status</label>
-            <select id="entry-status" required>
-              <option value="entschuldigt">Entschuldigt</option>
-              <option value="unentschuldigt">Unentschuldigt</option>
-              <option value="verspaetet">Verspätet</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="entry-lektionen">Anzahl Lektionen</label>
-            <input type="number" id="entry-lektionen" min="0" step="0.5" value="1" required>
-          </div>
-          <div class="field" style="grid-column: 1 / -1;">
-            <label for="entry-note">Bemerkung (optional)</label>
-            <input type="text" id="entry-note" placeholder="z.B. Arzttermin, Krankheit …">
-          </div>
-        </div>
-        <div class="btn-row">
-          <button type="submit" class="btn btn-primary" id="entry-submit">Eintrag speichern</button>
-          <button type="button" class="btn btn-ghost" id="entry-cancel" style="display:none;">Abbrechen</button>
-        </div>
-      </form>
+    <ul class="modal-list" id="student-mgmt-list"></ul>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Fertig</button>
     </div>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="card-title">📑 Erfasste Einträge <span class="hint" id="entry-count"></span></div>
-      <div class="filters no-print">
-        <div class="field">
-          <label for="filter-student">Schüler</label>
-          <select id="filter-student"><option value="">Alle Schüler</option></select>
-        </div>
-        <div class="field">
-          <label for="filter-status">Status</label>
-          <select id="filter-status">
-            <option value="">Alle Status</option>
-            <option value="entschuldigt">Entschuldigt</option>
-            <option value="unentschuldigt">Unentschuldigt</option>
-            <option value="verspaetet">Verspätet</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="filter-period">Periode</label>
-          <select id="filter-period"><option value="">Ganzes Schuljahr</option></select>
-        </div>
-      </div>
-      <div id="entries-list"></div>
+<!-- Daten-Modal -->
+<div class="modal-bg" id="modal-data">
+  <div class="modal">
+    <h3>💾 Daten sichern &amp; laden</h3>
+    <p class="sub">Deine Daten bleiben dauerhaft in diesem Browser. Für Gerätewechsel oder als Sicherheit kannst du ein Backup als Datei speichern.</p>
+    <div id="storage-warn" style="display:none; background:var(--danger-50); color:var(--danger-dark); padding:12px; border-radius:10px; font-size:13px; font-weight:600; margin-bottom:14px;">
+      ⚠️ Dieser Browser erlaubt keine dauerhafte Speicherung (privater Modus?). Bitte regelmässig Backup exportieren.
     </div>
-  </section>
-
-  <!-- ============================ AUSWERTUNG ============================ -->
-  <section class="view" id="view-auswertung">
-    <div class="view-head">
-      <h2>Auswertung pro Schüler</h2>
-      <p>Summe der Absenz-Lektionen je Schüler — filterbar nach Semester oder Trimester.</p>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="btn btn-primary btn-block" id="export-json">⬇️ Backup speichern (Datei)</button>
+      <button class="btn btn-ghost btn-block" id="export-csv">⬇️ Als Excel/CSV exportieren</button>
+      <label class="btn btn-ghost btn-block" style="cursor:pointer;">
+        ⬆️ Backup laden
+        <input type="file" id="import-json" accept=".json,application/json" style="display:none;">
+      </label>
+      <button class="btn btn-danger btn-block" id="reset-all">🗑️ Alle Daten löschen</button>
     </div>
+    <div class="modal-actions"><button class="btn btn-ghost" data-close>Schliessen</button></div>
+  </div>
+</div>
 
-    <div class="filters no-print">
-      <div class="field">
-        <label for="stat-period">Periode</label>
-        <select id="stat-period"><option value="">Ganzes Schuljahr</option></select>
-      </div>
-      <div class="field" style="flex:1 1 auto; min-width:220px; justify-content:end;">
-        <label>&nbsp;</label>
-        <div class="inline-actions">
-          <button class="btn btn-primary btn-sm" id="stat-pdf">📄 PDF herunterladen</button>
-          <button class="btn btn-ghost btn-sm" id="stat-export-csv">⬇️ CSV</button>
-        </div>
-      </div>
-    </div>
+<div id="toast"></div>
 
-    <div class="stat-grid" id="stat-cards"></div>
+<script>
+"use strict";
+(function(){
+  var KEY='anwesenheit_v1';
+  var STATUS={
+    entschuldigt:{label:'Entschuldigt',short:'E',isAbsence:true},
+    unentschuldigt:{label:'Unentschuldigt',short:'U',isAbsence:true},
+    verspaetet:{label:'Verspätet',short:'V',isAbsence:false}
+  };
+  var WD=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  var WD_ORDER=[1,2,3,4,5,6,0];
+  var state={students:[],periods:[],entries:[]};
+  var ui={}; // per-student temp: date, lektionen, detailOpen
+  var lastUndo=null;
 
-    <div class="card">
-      <div class="card-title">📊 Absenzen je Schüler</div>
-      <div id="stat-table"></div>
-    </div>
-  </section>
+  /* ---- Persistenz ---- */
+  function storageOK(){try{var k='__t'+Date.now();localStorage.setItem(k,'1');localStorage.removeItem(k);return true;}catch(e){return false;}}
+  function load(){
+    try{var r=localStorage.getItem(KEY);if(r){var p=JSON.parse(r);
+      state.students=Array.isArray(p.students)?p.students:[];
+      state.periods=Array.isArray(p.periods)?p.periods:[];
+      state.entries=Array.isArray(p.entries)?p.entries:[];}}catch(e){console.error(e);}
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('⚠️ Speichern fehlgeschlagen — Backup machen!');}}
 
-  <!-- ============================ WOCHENTAGE ============================ -->
-  <section class="view" id="view-wochentag">
-    <div class="view-head">
-      <h2>Moyenne pro Wochentag</h2>
-      <p>Durchschnittliche Absenz-Lektionen pro Wochentag — z.B. „im Schnitt an Mittwochen". Der Durchschnitt teilt die Summe durch die Anzahl erfasster Tage dieses Wochentags.</p>
-    </div>
+  /* ---- Helpers ---- */
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function today(){return new Date().toISOString().slice(0,10);}
+  function wdOf(iso){return new Date(iso+'T00:00:00').getDay();}
+  function fmtD(iso){if(!iso)return'';var d=new Date(iso+'T00:00:00');return d.toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'2-digit'});}
+  function nf(n){return (Math.round(n*100)/100).toLocaleString('de-CH');}
+  function curPeriod(){var id=document.getElementById('period-sel').value;return state.periods.find(function(p){return p.id===id;})||null;}
+  function inPeriod(e,p){return !p||(e.date>=p.start&&e.date<=p.end);}
+  function periodEntries(){var p=curPeriod();return state.entries.filter(function(e){return inPeriod(e,p);});}
 
-    <div class="filters no-print">
-      <div class="field">
-        <label for="wt-period">Periode</label>
-        <select id="wt-period"><option value="">Ganzes Schuljahr</option></select>
-      </div>
-      <div class="field">
-        <label for="wt-student">Schüler</label>
-        <select id="wt-student"><option value="">Alle Schüler</option></select>
-      </div>
-      <div class="field">
-        <label for="wt-status">Status</label>
-        <select id="wt-status">
-          <option value="absenz">Absenzen (entsch. + unentsch.)</option>
-          <option value="entschuldigt">Nur entschuldigt</option>
-          <option value="unentschuldigt">Nur unentschuldigt</option>
-          <option value="verspaetet">Nur verspätet</option>
-          <option value="alle">Alle Status</option>
-        </select>
-      </div>
-    </div>
+  /* ---- Auto-Perioden für aktuelles Schuljahr ---- */
+  function ensurePeriods(){
+    if(state.periods.length)return;
+    var now=new Date();var y=now.getMonth()>=7?now.getFullYear():now.getFullYear()-1;var sj=y+'/'+(y+1);
+    state.periods=[
+      {id:uid(),name:'1. Semester '+sj,start:y+'-08-01',end:(y+1)+'-01-31'},
+      {id:uid(),name:'2. Semester '+sj,start:(y+1)+'-02-01',end:(y+1)+'-07-31'},
+      {id:uid(),name:'1. Trimester '+sj,start:y+'-08-01',end:y+'-11-30'},
+      {id:uid(),name:'2. Trimester '+sj,start:y+'-12-01',end:(y+1)+'-03-31'},
+      {id:uid(),name:'3. Trimester '+sj,start:(y+1)+'-04-01',end:(y+1)+'-07-31'}
+    ];
+    save();
+  }
 
-    <div class="stat-grid" id="wt-cards"></div>
+  /* ---- Toast (mit optionalem Rückgängig) ---- */
+  var toastTimer;
+  function toast(msg,undoFn){
+    var t=document.getElementById('toast');
+    t.innerHTML='<span>'+esc(msg)+'</span>';
+    if(undoFn){var b=document.createElement('button');b.textContent='Rückgängig';b.onclick=function(){undoFn();t.classList.remove('show');};t.appendChild(b);}
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){t.classList.remove('show');},undoFn?5000:2600);
+  }
 
-    <div class="card">
-      <div class="card-title">📅 Durchschnitt je Wochentag</div>
-      <div id="wt-table"></div>
-    </div>
+  /* ---- Periode-Select ---- */
+  function fillPeriods(){
+    var sel=document.getElementById('period-sel');var cur=sel.value;
+    sel.innerHTML='<option value="">Ganzes Schuljahr</option>';
+    state.periods.forEach(function(p){var o=document.createElement('option');o.value=p.id;o.textContent=p.name;sel.appendChild(o);});
+    if(cur)sel.value=cur;
+  }
 
-    <div class="card">
-      <div class="card-title">🔢 Ø Lektionen pro Wochentag &amp; Schüler <span class="hint">Wert = Ø pro erfasstem Tag</span></div>
-      <div id="wt-matrix"></div>
-    </div>
-  </section>
+  /* ---- Summary ---- */
+  function renderSummary(){
+    var list=periodEntries();var e=0,u=0,v=0;
+    list.forEach(function(x){if(x.status==='entschuldigt')e+=x.lektionen||0;else if(x.status==='unentschuldigt')u+=x.lektionen||0;else if(x.status==='verspaetet')v++;});
+    document.getElementById('summary').innerHTML=
+      card('total',nf(e+u),'Absenzen total (Lekt.)')+
+      card('ent',nf(e),'Entschuldigt')+
+      card('unent',nf(u),'Unentschuldigt')+
+      card('versp',String(v),'Verspätungen');
+  }
+  function card(cls,v,l){return '<div class="sum '+cls+'"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>';}
 
-  <!-- ============================ SCHÜLER ============================ -->
-  <section class="view" id="view-schueler">
-    <div class="view-head">
-      <h2>Schüler verwalten</h2>
-      <p>Lege deine 8–10 Schüler an. Du kannst jederzeit weitere hinzufügen.</p>
-    </div>
+  /* ---- Schülerkarten ---- */
+  function studentTotal(id){
+    var p=curPeriod();
+    return state.entries.filter(function(e){return e.studentId===id&&STATUS[e.status].isAbsence&&inPeriod(e,p);}).reduce(function(a,e){return a+(e.lektionen||0);},0);
+  }
+  function renderStudents(){
+    var box=document.getElementById('students');
+    document.getElementById('student-count').textContent=state.students.length?'· '+state.students.length:'';
+    if(!state.students.length){
+      box.innerHTML='<div class="card"><div class="empty"><div class="i">🧑‍🎓</div><p>Noch keine Schüler.</p><p class="hint">Tippe oben rechts auf „+ Schüler".</p></div></div>';
+      return;
+    }
+    box.innerHTML=state.students.map(function(s){
+      var u=ui[s.id]||(ui[s.id]={date:today(),lek:1,open:false});
+      var tot=studentTotal(s.id);
+      return '<div class="student" data-sid="'+s.id+'">'+
+        '<div class="st-top">'+
+          '<div class="st-name">'+esc(s.name)+(s.klasse?' <span class="klasse">'+esc(s.klasse)+'</span>':'')+'</div>'+
+          '<div class="st-total"><span class="n">'+nf(tot)+'</span><span class="u">Lektionen</span></div>'+
+        '</div>'+
+        '<div class="st-entry no-print">'+
+          '<div class="entry-row">'+
+            '<label>Datum</label>'+
+            '<input type="date" class="date-in" data-date="'+s.id+'" value="'+u.date+'">'+
+            '<label style="margin-left:auto;">Lektionen</label>'+
+            '<div class="stepper"><button data-step="-1" data-sid="'+s.id+'">−</button>'+
+            '<span class="val" data-val="'+s.id+'">'+nf(u.lek)+'</span>'+
+            '<button data-step="1" data-sid="'+s.id+'">+</button></div>'+
+          '</div>'+
+          '<div class="status-btns">'+
+            '<button class="sbtn ent" data-add="entschuldigt" data-sid="'+s.id+'"><span class="ico">✓</span>Entschuldigt</button>'+
+            '<button class="sbtn unent" data-add="unentschuldigt" data-sid="'+s.id+'"><span class="ico">✕</span>Unentschuldigt</button>'+
+            '<button class="sbtn versp" data-add="verspaetet" data-sid="'+s.id+'"><span class="ico">⏰</span>Verspätet</button>'+
+          '</div>'+
+        '</div>'+
+        detailBlock(s,u)+
+      '</div>';
+    }).join('');
+  }
+  function detailBlock(s,u){
+    var p=curPeriod();
+    var list=state.entries.filter(function(e){return e.studentId===s.id&&inPeriod(e,p);}).sort(function(a,b){return b.date.localeCompare(a.date);});
+    var inner;
+    if(!list.length){inner='<p style="color:var(--muted);font-size:13px;padding:6px 2px;">Noch keine Einträge in diesem Zeitraum.</p>';}
+    else{
+      inner='<ul class="elist">'+list.map(function(e){
+        return '<li><span class="d">'+fmtD(e.date)+'</span><span class="wd">'+WD[wdOf(e.date)]+'</span>'+
+          '<span class="tag '+e.status+'">'+STATUS[e.status].short+'</span>'+
+          (e.note?'<span class="wd" style="font-style:italic;">'+esc(e.note)+'</span>':'')+
+          '<span class="lk">'+nf(e.lektionen||0)+' Lekt.</span>'+
+          '<button class="x" data-del="'+e.id+'" title="Löschen">🗑</button></li>';
+      }).join('')+'</ul>';
+    }
+    return '<button class="st-detail-toggle no-print" data-toggle="'+s.id+'">'+(u.open?'▲ Einträge verbergen':'▼ Einträge anzeigen ('+list.length+')')+'</button>'+
+      '<div class="st-detail'+(u.open?' open':'')+'" data-detail="'+s.id+'">'+inner+'</div>';
+  }
 
-    <div class="card">
-      <div class="card-title">➕ Schüler hinzufügen</div>
-      <form id="student-form">
-        <input type="hidden" id="student-id">
-        <div class="form-grid">
-          <div class="field" style="flex:2;">
-            <label for="student-name">Name</label>
-            <input type="text" id="student-name" placeholder="Vorname Nachname" required>
-          </div>
-          <div class="field">
-            <label for="student-klasse">Klasse (optional)</label>
-            <input type="text" id="student-klasse" placeholder="z.B. 7b">
-          </div>
-        </div>
-        <div class="btn-row">
-          <button type="submit" class="btn btn-primary" id="student-submit">Hinzufügen</button>
-          <button type="button" class="btn btn-ghost" id="student-cancel" style="display:none;">Abbrechen</button>
-        </div>
-      </form>
-    </div>
+  /* ---- Wochentag-Durchschnitt ---- */
+  function renderWeekday(){
+    var list=periodEntries();
+    var datesByWd={},sumByWd={};
+    list.forEach(function(e){var w=wdOf(e.date);(datesByWd[w]=datesByWd[w]||new Set()).add(e.date);if(STATUS[e.status].isAbsence)sumByWd[w]=(sumByWd[w]||0)+(e.lektionen||0);});
+    var rows='',any=false,peak=null;
+    WD_ORDER.forEach(function(w){if(datesByWd[w]){var d=datesByWd[w].size,s=sumByWd[w]||0,avg=d?s/d:0;if(!peak||avg>peak.avg)peak={w:w,avg:avg};}});
+    WD_ORDER.forEach(function(w){
+      if(!datesByWd[w])return;any=true;
+      var d=datesByWd[w].size,s=sumByWd[w]||0,avg=d?s/d:0;
+      rows+='<tr'+(peak&&peak.w===w&&avg>0?' class="wd-peak"':'')+'><td><strong>'+WD[w]+'</strong></td>'+
+        '<td class="n">'+d+'</td><td class="n">'+nf(s)+'</td><td class="n big">'+nf(avg)+'</td></tr>';
+    });
+    var box=document.getElementById('weekday');
+    if(!any){box.innerHTML='<div class="empty"><div class="i">📅</div><p>Noch keine Einträge.</p></div>';return;}
+    box.innerHTML='<table><thead><tr><th>Wochentag</th><th class="n">Erfasste Tage</th><th class="n">Summe Lekt.</th><th class="n">Ø pro Tag</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  }
 
-    <div class="card">
-      <div class="card-title">🧑‍🎓 Schülerliste <span class="hint" id="student-count"></span></div>
-      <div id="students-list"></div>
-    </div>
-  </section>
+  function renderAll(){fillPeriods();renderSummary();renderStudents();renderWeekday();}
 
-  <!-- ============================ PERIODEN ============================ -->
-  <section class="view" id="view-perioden">
-    <div class="view-head">
-      <h2>Perioden (Semester / Trimester)</h2>
-      <p>Definiere Zeiträume, nach denen du die Absenzen summieren willst. In den Auswertungen kannst du danach filtern.</p>
-    </div>
+  /* ---- Aktionen ---- */
+  function addEntry(sid,status){
+    var u=ui[sid]||(ui[sid]={date:today(),lek:1,open:false});
+    if(!u.date){toast('⚠️ Bitte Datum wählen');return;}
+    var entry={id:uid(),studentId:sid,status:status,date:u.date,lektionen:u.lek,note:''};
+    state.entries.push(entry);save();
+    var s=state.students.find(function(x){return x.id===sid;});
+    renderAll();
+    toast('✓ '+esc(s?s.name:'')+' · '+WD[wdOf(u.date)]+' · '+nf(u.lek)+' Lekt. '+STATUS[status].short,function(){
+      state.entries=state.entries.filter(function(e){return e.id!==entry.id;});save();renderAll();toast('Rückgängig gemacht');
+    });
+  }
+  function delEntry(id){state.entries=state.entries.filter(function(e){return e.id!==id;});save();renderAll();toast('🗑 Eintrag gelöscht');}
 
-    <div class="card">
-      <div class="card-title">➕ Periode hinzufügen</div>
-      <form id="period-form">
-        <input type="hidden" id="period-id">
-        <div class="form-grid">
-          <div class="field">
-            <label for="period-name">Bezeichnung</label>
-            <input type="text" id="period-name" placeholder="z.B. 1. Semester" required>
-          </div>
-          <div class="field">
-            <label for="period-type">Typ</label>
-            <select id="period-type">
-              <option value="semester">Semester</option>
-              <option value="trimester">Trimester</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="period-start">Von</label>
-            <input type="date" id="period-start" required>
-          </div>
-          <div class="field">
-            <label for="period-end">Bis</label>
-            <input type="date" id="period-end" required>
-          </div>
-        </div>
-        <div class="btn-row">
-          <button type="submit" class="btn btn-primary" id="period-submit">Hinzufügen</button>
-          <button type="button" class="btn btn-ghost" id="period-cancel" style="display:none;">Abbrechen</button>
-          <button type="button" class="btn btn-ghost" id="period-presets">🇨🇭 Vorlage Schuljahr einfügen</button>
-        </div>
-      </form>
-    </div>
+  function addStudent(){
+    var n=document.getElementById('new-student-name');var c=document.getElementById('new-student-class');
+    var name=n.value.trim();if(!name)return;
+    state.students.push({id:uid(),name:name,klasse:c.value.trim()});save();
+    n.value='';c.value='';n.focus();
+    renderStudentMgmt();renderAll();
+  }
+  function delStudent(id){
+    var s=state.students.find(function(x){return x.id===id;});if(!s)return;
+    var cnt=state.entries.filter(function(e){return e.studentId===id;}).length;
+    if(!confirm('„'+s.name+'"'+(cnt?' und '+cnt+' Einträge':'')+' löschen?'))return;
+    state.students=state.students.filter(function(x){return x.id!==id;});
+    state.entries=state.entries.filter(function(e){return e.studentId!==id;});
+    save();renderStudentMgmt();renderAll();
+  }
+  function renderStudentMgmt(){
+    var ul=document.getElementById('student-mgmt-list');
+    if(!state.students.length){ul.innerHTML='<li style="background:none;color:var(--muted);">Noch keine Schüler.</li>';return;}
+    ul.innerHTML=state.students.map(function(s){
+      return '<li><span class="nm">'+esc(s.name)+(s.klasse?' <span style="color:var(--muted);font-weight:400;">('+esc(s.klasse)+')</span>':'')+'</span>'+
+        '<button class="x" data-delstudent="'+s.id+'">Löschen</button></li>';
+    }).join('');
+  }
 
-    <div class="card">
-      <div class="card-title">🗓️ Definierte Perioden</div>
-      <div id="periods-list"></div>
-    </div>
-  </section>
+  /* ---- PDF ---- */
+  function buildReport(){
+    var p=curPeriod();var label=p?p.name:'Ganzes Schuljahr';
+    var list=periodEntries();var d=new Date().toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'numeric'});
+    var gE=0,gU=0,gV=0;list.forEach(function(e){if(e.status==='entschuldigt')gE+=e.lektionen||0;else if(e.status==='unentschuldigt')gU+=e.lektionen||0;else gV++;});
+    var sRows=state.students.map(function(s){
+      var e1=0,u1=0,v1=0;list.filter(function(e){return e.studentId===s.id;}).forEach(function(e){if(e.status==='entschuldigt')e1+=e.lektionen||0;else if(e.status==='unentschuldigt')u1+=e.lektionen||0;else v1++;});
+      return '<tr><td>'+esc(s.name)+(s.klasse?' <span style="color:#999">('+esc(s.klasse)+')</span>':'')+'</td><td class="n">'+nf(e1)+'</td><td class="n">'+nf(u1)+'</td><td class="n b">'+nf(e1+u1)+'</td><td class="n">'+(v1||'–')+'</td></tr>';
+    }).join('')||'<tr><td colspan="5">Keine Schüler.</td></tr>';
+    var datesByWd={},sumByWd={};list.forEach(function(e){var w=wdOf(e.date);(datesByWd[w]=datesByWd[w]||new Set()).add(e.date);if(STATUS[e.status].isAbsence)sumByWd[w]=(sumByWd[w]||0)+(e.lektionen||0);});
+    var wRows='';WD_ORDER.forEach(function(w){if(!datesByWd[w])return;var dd=datesByWd[w].size,ss=sumByWd[w]||0;wRows+='<tr><td>'+WD[w]+'</td><td class="n">'+dd+'</td><td class="n">'+nf(ss)+'</td><td class="n b">'+nf(dd?ss/dd:0)+'</td></tr>';});
+    if(!wRows)wRows='<tr><td colspan="4">Keine Einträge.</td></tr>';
+    return '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Absenzen-Bericht</title><style>'+
+      '@page{margin:18mm 16mm;}*{box-sizing:border-box;margin:0;padding:0;}'+
+      'body{font-family:-apple-system,"Segoe UI",Arial,sans-serif;color:#1A1A2E;font-size:12px;}'+
+      '.h{display:flex;justify-content:space-between;border-bottom:2px solid #6C5CE7;padding-bottom:12px;margin-bottom:16px;}'+
+      '.h h1{font-size:20px;}.h .s{color:#777;font-size:12px;margin-top:3px;}.h .m{text-align:right;font-size:11px;color:#777;}'+
+      '.cards{display:flex;gap:10px;margin-bottom:16px;}.c{flex:1;border:1px solid #E8E8F0;border-radius:8px;padding:10px;}'+
+      '.c .l{font-size:9px;text-transform:uppercase;color:#999;font-weight:700;}.c .v{font-size:22px;font-weight:800;}'+
+      'h2{font-size:13px;margin:16px 0 7px;color:#5A4BD1;}table{width:100%;border-collapse:collapse;font-size:11.5px;}'+
+      'th{background:#F3F1FE;text-align:left;padding:7px 9px;font-size:9px;text-transform:uppercase;color:#555;}'+
+      'td{padding:6px 9px;border-bottom:1px solid #F0F0F6;}td.n,th.n{text-align:right;}td.b{font-weight:700;}'+
+      '.foot{margin-top:22px;border-top:1px solid #E8E8F0;padding-top:8px;font-size:10px;color:#999;}'+
+      '</style></head><body>'+
+      '<div class="h"><div><h1>Absenzen-Bericht</h1><div class="s">'+esc(label)+'</div></div><div class="m">Erstellt am '+d+'<br>'+state.students.length+' Schüler · '+list.length+' Einträge</div></div>'+
+      '<div class="cards"><div class="c"><div class="l">Absenzen total</div><div class="v">'+nf(gE+gU)+'</div></div>'+
+      '<div class="c"><div class="l">Entschuldigt</div><div class="v" style="color:#00B894">'+nf(gE)+'</div></div>'+
+      '<div class="c"><div class="l">Unentschuldigt</div><div class="v" style="color:#C0392B">'+nf(gU)+'</div></div>'+
+      '<div class="c"><div class="l">Verspätungen</div><div class="v" style="color:#E8A317">'+gV+'</div></div></div>'+
+      '<h2>Absenzen je Schüler (Lektionen)</h2><table><thead><tr><th>Schüler</th><th class="n">Entsch.</th><th class="n">Unentsch.</th><th class="n">Total</th><th class="n">Verspät.</th></tr></thead><tbody>'+sRows+'</tbody></table>'+
+      '<h2>Ø Absenz-Lektionen je Wochentag</h2><table><thead><tr><th>Wochentag</th><th class="n">Tage</th><th class="n">Summe</th><th class="n">Ø/Tag</th></tr></thead><tbody>'+wRows+'</tbody></table>'+
+      '<div class="foot">Anwesenheits-Tool · automatisch erstellt</div></body></html>';
+  }
+  function makePDF(){
+    var w=window.open('','_blank');if(!w){toast('⚠️ Bitte Pop-ups erlauben');return;}
+    w.document.open();w.document.write(buildReport());w.document.close();w.focus();
+    setTimeout(function(){w.print();},350);
+    toast('📄 Wähle „Als PDF speichern"');
+  }
 
-  <!-- ============================ DATEN ============================ -->
-  <section class="view" id="view-daten">
-    <div class="view-head">
-      <h2>Daten sichern &amp; übertragen</h2>
-      <p>Alle Daten liegen lokal in deinem Browser (localStorage). Sichere sie regelmässig als Datei.</p>
-    </div>
+  /* ---- Export/Import ---- */
+  function dl(name,content,type){var b=new Blob([content],{type:type});var url=URL.createObjectURL(b);var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},800);}
+  function exportJSON(){dl('anwesenheit-backup-'+today()+'.json',JSON.stringify(state,null,2),'application/json');toast('⬇️ Backup gespeichert');}
+  function csvCell(v){var s=String(v==null?'':v);return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+  function exportCSV(){
+    var lines=['Datum;Wochentag;Schueler;Klasse;Status;Lektionen;Bemerkung'];
+    state.entries.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(e){
+      var s=state.students.find(function(x){return x.id===e.studentId;});
+      lines.push([e.date,WD[wdOf(e.date)],s?s.name:'(gelöscht)',s?(s.klasse||''):'',STATUS[e.status].label,String(e.lektionen||0).replace('.',','),e.note||''].map(csvCell).join(';'));
+    });
+    dl('anwesenheit-'+today()+'.csv','﻿'+lines.join('\r\n'),'text/csv;charset=utf-8');toast('⬇️ CSV exportiert');
+  }
+  function importJSON(file){
+    var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!Array.isArray(d.students))throw 0;
+      if(!confirm('Backup laden? Aktuelle Daten werden ersetzt.'))return;
+      state.students=d.students||[];state.periods=Array.isArray(d.periods)?d.periods:[];state.entries=Array.isArray(d.entries)?d.entries:[];
+      ensurePeriods();save();renderStudentMgmt();renderAll();closeModals();toast('✅ Backup geladen');
+    }catch(e){toast('⚠️ Datei nicht lesbar');}};r.readAsText(file);
+  }
+  function resetAll(){if(!confirm('Wirklich ALLE Daten löschen?'))return;if(!confirm('Letzte Warnung: alles wird gelöscht.'))return;state={students:[],periods:[],entries:[]};ui={};ensurePeriods();save();renderStudentMgmt();renderAll();closeModals();toast('🗑 Alles gelöscht');}
 
-    <div class="card" id="storage-status-card" style="display:none;">
-      <div class="card-title" style="color:var(--danger-dark);">⚠️ Achtung: Speicher nicht verfügbar</div>
-      <p class="muted">Dein Browser erlaubt keine lokale Speicherung (z.B. privater Modus). Einträge gehen beim Schliessen verloren. Bitte exportiere regelmässig ein Backup.</p>
-    </div>
+  /* ---- Modals ---- */
+  function openModal(id){document.getElementById(id).classList.add('open');}
+  function closeModals(){document.querySelectorAll('.modal-bg').forEach(function(m){m.classList.remove('open');});}
 
-    <div class="card">
-      <div class="card-title">📄 Bericht als PDF</div>
-      <p class="muted" style="margin-bottom:1rem;">Erstellt ein sauberes, druckfertiges PDF mit allen Absenzen je Schüler und dem Wochentag-Durchschnitt. Die Periode wählst du im Tab „Auswertung".</p>
-      <div class="btn-row" style="margin-top:0;">
-        <button class="btn btn-primary" id="daten-pdf">📄 PDF-Bericht herunterladen</button>
-      </div>
-    </div>
+  /* ---- Init ---- */
+  function init(){
+    load();ensurePeriods();
 
-    <div class="card">
-      <div class="card-title">💾 Sicherung</div>
-      <p class="muted" style="margin-bottom:1rem;">Deine Daten bleiben dauerhaft in diesem Browser gespeichert. Damit sie <strong>auf keinen Fall</strong> verloren gehen (Gerätewechsel, Browser-Reinigung), exportiere zusätzlich regelmässig ein Backup als Datei.</p>
-      <div class="btn-row" style="margin-top:0;">
-        <button class="btn btn-primary" id="export-json">⬇️ Backup exportieren (JSON)</button>
-        <button class="btn btn-ghost" id="export-all-csv">⬇️ Einträge als CSV</button>
-        <label class="btn btn-ghost" style="cursor:pointer;">
-          ⬆️ Backup importieren
-          <input type="file" id="import-json" accept="application/json,.json" style="display:none;">
-        </label>
-      </div>
-    </div>
+    document.getElementById('period-sel').addEventListener('change',renderAll);
+    document.getElementById('btn-students').addEventListener('click',function(){renderStudentMgmt();openModal('modal-students');document.getElementById('new-student-name').focus();});
+    document.getElementById('btn-add-student').addEventListener('click',function(){renderStudentMgmt();openModal('modal-students');document.getElementById('new-student-name').focus();});
+    document.getElementById('btn-pdf').addEventListener('click',makePDF);
+    document.getElementById('btn-data').addEventListener('click',function(){document.getElementById('storage-warn').style.display=storageOK()?'none':'block';openModal('modal-data');});
 
-    <div class="card">
-      <div class="card-title">⚠️ Zurücksetzen</div>
-      <p class="muted" style="margin-bottom:1rem;">Löscht alle erfassten Daten unwiderruflich. Vorher am besten ein Backup exportieren.</p>
-      <div class="btn-row" style="margin-top:0;">
-        <button class="btn btn-danger" id="reset-all">🗑️ Alle Daten löschen</button>
-      </div>
-    </div>
-  </section>
+    document.getElementById('add-student-go').addEventListener('click',addStudent);
+    document.getElementById('new-student-name').addEventListener('keydown',function(e){if(e.key==='Enter')addStudent();});
+    document.getElementById('new-student-class').addEventListener('keydown',function(e){if(e.key==='Enter')addStudent();});
 
-</main>
+    document.getElementById('export-json').addEventListener('click',exportJSON);
+    document.getElementById('export-csv').addEventListener('click',exportCSV);
+    document.getElementById('reset-all').addEventListener('click',resetAll);
+    document.getElementById('import-json').addEventListener('change',function(e){if(e.target.files[0])importJSON(e.target.files[0]);e.target.value='';});
 
-<div id="toast" role="status" aria-live="polite"></div>
+    // Modal schliessen
+    document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModals();});});
+    document.body.addEventListener('click',function(e){if(e.target.closest('[data-close]'))closeModals();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModals();});
 
-<script src="js/anwesenheit.js"></script>
+    // Delegation für dynamische Elemente
+    document.getElementById('students').addEventListener('click',function(e){
+      var b=e.target.closest('button');if(!b)return;
+      if(b.dataset.add)addEntry(b.dataset.sid,b.dataset.add);
+      else if(b.dataset.step){var u=ui[b.dataset.sid];u.lek=Math.max(0,u.lek+parseInt(b.dataset.step,10));document.querySelector('[data-val="'+b.dataset.sid+'"]').textContent=nf(u.lek);}
+      else if(b.dataset.toggle){var uu=ui[b.dataset.toggle];uu.open=!uu.open;renderStudents();}
+      else if(b.dataset.del)delEntry(b.dataset.del);
+    });
+    document.getElementById('students').addEventListener('change',function(e){
+      var inp=e.target.closest('[data-date]');if(inp){ui[inp.dataset.date].date=inp.value;}
+    });
+    document.getElementById('student-mgmt-list').addEventListener('click',function(e){var b=e.target.closest('[data-delstudent]');if(b)delStudent(b.dataset.delstudent);});
+
+    renderAll();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

@@ -254,6 +254,12 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     <span class="count">Ø Absenz-Stunden je Wochentag</span>
   </div>
   <div class="card"><div id="weekday"></div></div>
+
+  <div class="sec-head">
+    <h2>📚 Durchschnitt pro Fach</h2>
+    <span class="count">Ø Absenz-Stunden je Fach &amp; Schüler</span>
+  </div>
+  <div class="card"><div id="subject"></div></div>
 </div>
 
 <!-- Schüler-Modal -->
@@ -610,7 +616,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     }else{
       state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:blockId,subject:subj,status:pen,hours:blockHours(b),note:''});
     }
-    save();rerenderStudent(sid);renderSummary();renderWeekday();
+    save();rerenderStudent(sid);renderSummary();renderWeekday();renderSubject();
   }
 
   /* ---- Wochentag-Durchschnitt ---- */
@@ -624,7 +630,31 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     box.innerHTML=any?'<table><thead><tr><th>Wochentag</th><th class="n">Erfasste Tage</th><th class="n">Summe Std.</th><th class="n">Ø pro Tag</th></tr></thead><tbody>'+rows+'</tbody></table>':'<div class="empty"><div class="i">📅</div><p>Noch keine Einträge.</p></div>';
   }
 
-  function renderAll(){fillPeriods();renderSummary();renderStudents();renderWeekday();}
+  /* ---- Durchschnitt pro Fach ---- */
+  function levelSubjects(level){var set={};if(!state.timetable[level])return set;for(var d=1;d<=5;d++){(state.timetable[level][d]||[]).forEach(function(x){if(x&&!PAUSE_SUBJECTS[x])set[x]=1;});}return set;}
+  function renderSubject(){
+    var box=document.getElementById('subject');
+    var list=periodEntries().filter(function(e){return STATUS[e.status]&&STATUS[e.status].isAbsence;});
+    if(!list.length){box.innerHTML='<div class="empty"><div class="i">📚</div><p>Noch keine Absenzen erfasst.</p></div>';return;}
+    // wie viele Schüler haben das Fach (nach Niveau)?
+    var lvlSub={L1:levelSubjects('L1'),L2:levelSubjects('L2')};
+    function studentsWith(subj){var n=0;state.students.forEach(function(s){if(lvlSub[s.level]&&lvlSub[s.level][subj])n++;});return n;}
+    var by={};
+    list.forEach(function(e){var s=e.subject||'(allgemein)';(by[s]=by[s]||{cnt:0,hrs:0,exc:0,non:0});var o=by[s];o.cnt++;o.hrs+=entryHours(e);if(e.status==='entschuldigt')o.exc++;else if(e.status==='unentschuldigt')o.non++;});
+    var names=Object.keys(by).sort(function(a,b){return by[b].hrs-by[a].hrs;});
+    var peak=null;names.forEach(function(nm){var denom=studentsWith(nm)||state.students.length||1;var avg=by[nm].hrs/denom;if(!peak||avg>peak.avg)peak={nm:nm,avg:avg};});
+    var rows=names.map(function(nm){var o=by[nm];var denom=studentsWith(nm)||state.students.length||1;var avg=o.hrs/denom;
+      return '<tr'+(peak&&peak.nm===nm&&avg>0?' class="wd-peak"':'')+'><td><strong>'+esc(nm)+'</strong></td>'+
+        '<td class="c">'+o.cnt+'</td>'+
+        '<td class="c" style="color:#2C6FB5;font-weight:700;">'+(o.exc||'·')+'</td>'+
+        '<td class="c" style="color:var(--danger-dark);font-weight:700;">'+(o.non||'·')+'</td>'+
+        '<td class="n">'+nf(o.hrs)+'</td>'+
+        '<td class="n big">'+nf(avg)+'</td></tr>';
+    }).join('');
+    box.innerHTML='<div class="table-wrap" style="overflow-x:auto;"><table><thead><tr><th>Fach</th><th class="c">Anzahl</th><th class="c">Exc.</th><th class="c">Non-exc.</th><th class="n">Summe Std.</th><th class="n">Ø Std./Schüler</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  }
+
+  function renderAll(){fillPeriods();renderSummary();renderStudents();renderWeekday();renderSubject();}
 
   /* ---- Schülerverwaltung ---- */
   function addStudent(){var n=document.getElementById('new-student-name');var c=document.getElementById('new-student-class');var l=document.getElementById('new-student-level');var name=n.value.trim();if(!name)return;state.students.push({id:uid(),name:name,klasse:c.value.trim(),level:l.value});save();n.value='';c.value='';n.focus();renderStudentMgmt();renderAll();}

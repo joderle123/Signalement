@@ -96,6 +96,31 @@ header{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--
 .blk.marked.verspaetet .mark{background:var(--warn);color:#fff;}
 .day-sum{margin-top:12px;font-size:13px;color:var(--muted);font-weight:600;}
 .no-school{padding:18px;text-align:center;color:var(--muted);background:#F7F8FC;border-radius:var(--radius-sm);}
+/* Wochen-Raster */
+.wk-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 12px;}
+.wk-nav .range{font-weight:800;color:var(--primary-dark);font-size:14px;}
+.wk-nav .date-in{font-size:13px;padding:7px 10px;}
+.wk-grid{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.wk-grid table{border-collapse:separate;border-spacing:4px;width:100%;min-width:560px;}
+.wk-grid thead th{font-size:13px;font-weight:800;text-align:center;padding:4px 2px;border-radius:8px;}
+.wk-grid thead th.today{background:var(--primary-50);color:var(--primary-dark);}
+.wk-grid thead th .dt{display:block;font-size:11px;font-weight:600;color:var(--muted);}
+.wk-grid thead th .hb{display:block;font-size:9px;font-weight:800;color:var(--danger-dark);text-transform:uppercase;letter-spacing:.03em;}
+.wk-grid td{padding:0;vertical-align:stretch;}
+.wk-grid td.todaycol{background:var(--primary-50);border-radius:8px;}
+.wk-grid .tc{font-size:10px;color:var(--muted);text-align:right;padding-right:6px;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.2;vertical-align:middle;}
+.wcell{width:100%;height:100%;min-height:46px;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:7px 5px;font:inherit;font-size:11px;font-weight:700;cursor:pointer;line-height:1.2;color:var(--text);transition:.1s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;}
+.wcell:hover{border-color:var(--primary);background:var(--primary-50);}
+.wcell.empty{background:transparent;border:1px dashed #E3E3EE;color:transparent;cursor:default;min-height:46px;}
+.wcell.pause{background:#F7F8FC;color:var(--muted);font-weight:500;}
+.wcell.marked{border-width:2.5px;}
+.wcell.marked.entschuldigt{border-color:var(--info);background:var(--info-50);color:#2C6FB5;}
+.wcell.marked.unentschuldigt{border-color:var(--danger);background:var(--danger-50);color:var(--danger-dark);}
+.wcell.marked.verspaetet{border-color:var(--warn);background:var(--warn-50);color:#9A6B00;}
+.wcell .mk{font-size:11px;font-weight:900;padding:0 6px;border-radius:999px;}
+.wcell.marked.entschuldigt .mk{background:var(--info);color:#fff;}
+.wcell.marked.unentschuldigt .mk{background:var(--danger);color:#fff;}
+.wcell.marked.verspaetet .mk{background:var(--warn);color:#fff;}
 
 /* Cards / tables */
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:6px 4px;}
@@ -247,6 +272,13 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     <p class="sub">Wie oft fehlt ein Schüler je Fach und Wochentag — z.B. „mittwochs in Français".</p>
     <div class="modal-row">
       <select id="stats-student" class="inp" style="flex:1;"></select>
+      <select id="stats-status" class="inp">
+        <option value="absenz">Alle Absenzen</option>
+        <option value="entschuldigt">Nur Excusé</option>
+        <option value="unentschuldigt">Nur Non-excusé</option>
+        <option value="verspaetet">Nur Retard</option>
+        <option value="alle">Alles (inkl. Retard)</option>
+      </select>
     </div>
     <div id="stats-body"></div>
     <div class="modal-actions"><button class="btn btn-ghost" data-close>Schliessen</button></div>
@@ -300,9 +332,9 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
 (function(){
   var KEY='anwesenheit_v1';
   var STATUS={
-    entschuldigt:{label:'Entschuldigt',short:'E',isAbsence:true},
-    unentschuldigt:{label:'Unentschuldigt',short:'U',isAbsence:true},
-    verspaetet:{label:'Verspätet',short:'V',isAbsence:false}
+    entschuldigt:{label:'Excusé',short:'E',isAbsence:true},
+    unentschuldigt:{label:'Non-excusé',short:'N',isAbsence:true},
+    verspaetet:{label:'Retard',short:'R',isAbsence:false}
   };
   var WD=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
   var WD_ORDER=[1,2,3,4,5]; // Mo–Fr (Schultage)
@@ -459,9 +491,9 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     list.forEach(function(x){if(x.status==='entschuldigt')e+=entryHours(x);else if(x.status==='unentschuldigt')u+=entryHours(x);else if(x.status==='verspaetet')v++;});
     document.getElementById('summary').innerHTML=
       sCard('total',nf(e+u),'Absenz-Stunden total')+
-      sCard('ent',nf(e),'Entschuldigt (Std.)')+
-      sCard('unent',nf(u),'Unentschuldigt (Std.)')+
-      sCard('versp',String(v),'Verspätungen');
+      sCard('ent',nf(e),'Excusé (Std.)')+
+      sCard('unent',nf(u),'Non-excusé (Std.)')+
+      sCard('versp',String(v),'Retards');
   }
   function sCard(c,v,l){return '<div class="sum '+c+'"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>';}
 
@@ -495,35 +527,43 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
         '<button class="btn btn-ghost btn-sm" data-setlevel="L1" data-sid="'+s.id+'">L1</button>'+
         '<button class="btn btn-ghost btn-sm" data-setlevel="L2" data-sid="'+s.id+'">L2</button></div>';
     }
-    var wd=wdOf(u.date);
-    var penRow='<div class="rec-row"><label>Datum</label>'+
-      '<input type="date" class="date-in" data-date="'+s.id+'" value="'+u.date+'">'+
-      '<span class="wd-label">'+WD[wd]+'</span>'+
-      '<div class="head-spacer"></div>'+
-      '<div class="pen">'+
-        penBtn('entschuldigt','✓ Entsch.')+penBtn('unentschuldigt','✕ Unentsch.')+penBtn('verspaetet','⏰ Versp.')+
-      '</div></div>';
-    var hol=holidayInfo(u.date);
-    if(hol){return penRow+'<div class="no-school">'+(hol.type==='ferien'?'🏖️ Schulferien':'🎉 Feiertag')+': <strong>'+esc(hol.name)+'</strong> — kein Unterricht.</div>';}
-    if(wd<1||wd>5){return penRow+'<div class="no-school">Kein Stundenplan an diesem Tag (Wochenende).</div>';}
-    var tt=state.timetable[s.level][wd];
-    var rows='';var dayTotal=0;
-    BLOCKS.forEach(function(b,i){
-      var subj=tt[i]||'';if(!subj)return; // leere Zelle = kein Block
-      var ent=entryFor(s.id,u.date,b.id);
+    var mon=mondayOf(u.date);
+    var days=[];for(var k=0;k<5;k++)days.push(addDays(mon,k));
+    var todayISO=today();var SHORT=['Mo','Di','Mi','Do','Fr'];
+    var penRow='<div class="rec-row" style="margin-top:14px;"><label>Status:</label>'+
+      '<div class="pen">'+penBtn('entschuldigt','✓ Excusé')+penBtn('unentschuldigt','✕ Non-excusé')+penBtn('verspaetet','⏰ Retard')+'</div></div>';
+    var nav='<div class="wk-nav">'+
+      '<button class="btn btn-ghost btn-sm" data-week="prev" data-sid="'+s.id+'">←</button>'+
+      '<span class="range">'+fmtD(days[0])+' – '+fmtD(days[4])+'</span>'+
+      '<button class="btn btn-ghost btn-sm" data-week="next" data-sid="'+s.id+'">→</button>'+
+      '<button class="btn btn-ghost btn-sm" data-week="today" data-sid="'+s.id+'">Heute</button>'+
+      '<input type="date" class="date-in" data-date="'+s.id+'" value="'+u.date+'" title="Zu Woche springen">'+
+    '</div>';
+    // Kopfzeile
+    var head='<tr><th></th>';
+    days.forEach(function(d,i){var hol=holidayInfo(d);head+='<th'+(d===todayISO?' class="today"':'')+'>'+SHORT[i]+'<span class="dt">'+fmtD(d).slice(0,5)+'</span>'+(hol?'<span class="hb">'+(hol.type==='ferien'?'Ferien':'Feiertag')+'</span>':'')+'</th>';});
+    head+='</tr>';
+    // Zeilen je Block
+    var body='';var weekTotal=0;
+    BLOCKS.forEach(function(b,bi){
       var hrs=blockHours(b);
-      var isPause=PAUSE_SUBJECTS[subj];
-      var cls='blk'+(isPause?' pause':'')+(ent?' marked '+ent.status:'');
-      if(ent&&STATUS[ent.status].isAbsence)dayTotal+=hrs;
-      rows+='<button class="'+cls+'" data-blk="'+b.id+'" data-sid="'+s.id+'">'+
-        '<span class="time">'+b.start+'–'+b.end+'</span>'+
-        '<span class="subj">'+esc(subj)+'</span>'+
-        '<span class="hrs">'+nf(hrs)+' Std.</span>'+
-        '<span class="mark">'+(ent?STATUS[ent.status].short:'')+'</span>'+
-      '</button>';
+      // Block-Zeile nur zeigen, wenn an irgendeinem Tag ein Fach existiert
+      var anySubj=days.some(function(d){var wd=wdOf(d);return wd>=1&&wd<=5&&(state.timetable[s.level][wd][bi]||'');});
+      if(!anySubj)return;
+      body+='<tr><td class="tc">'+b.start+'<br>'+b.end+'</td>';
+      days.forEach(function(d){
+        var wd=wdOf(d);var subj=(wd>=1&&wd<=5)?(state.timetable[s.level][wd][bi]||''):'';
+        var hol=holidayInfo(d);
+        if(hol||!subj){body+='<td><div class="wcell empty" aria-disabled="true">·</div></td>';return;}
+        var ent=entryFor(s.id,d,b.id);var isPause=PAUSE_SUBJECTS[subj];
+        if(ent&&STATUS[ent.status].isAbsence)weekTotal+=hrs;
+        var cls='wcell'+(isPause?' pause':'')+(ent?' marked '+ent.status:'');
+        body+='<td'+(d===todayISO?' class="todaycol"':'')+'><button class="'+cls+'" data-blk="'+b.id+'" data-sid="'+s.id+'" data-date="'+d+'">'+esc(subj)+(ent?'<span class="mk">'+STATUS[ent.status].short+'</span>':'')+'</button></td>';
+      });
+      body+='</tr>';
     });
-    return penRow+'<div class="blocks">'+rows+'</div>'+
-      '<div class="day-sum">An diesem Tag erfasst: '+nf(dayTotal)+' Std. abwesend. Tippe einen Block an/aus.</div>';
+    return penRow+nav+'<div class="wk-grid"><table><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>'+
+      '<div class="day-sum">Diese Woche erfasst: '+nf(weekTotal)+' Std. abwesend. Tippe eine Zelle an/aus (mit gewähltem Status).</div>';
   }
   function penBtn(st,label){return '<button class="'+(pen===st?'active '+st:'')+'" data-pen="'+st+'">'+label+'</button>';}
 
@@ -535,19 +575,21 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     var tEl=document.querySelector('.student[data-sid="'+sid+'"] .st-total .n');if(tEl)tEl.textContent=nf(studentTotal(sid));
   }
 
-  /* ---- Block klick: toggle ---- */
-  function toggleBlock(sid,blockId){
-    var s=state.students.find(function(x){return x.id===sid;});var u=ui[sid];if(!s)return;
-    var wd=wdOf(u.date);if(wd<1||wd>5)return;
+  /* ---- Wochen-Helfer + Block-Toggle ---- */
+  function mondayOf(iso){var d=new Date(iso+'T00:00:00');var dow=(d.getDay()+6)%7;d.setDate(d.getDate()-dow);return d.toISOString().slice(0,10);}
+  function addDays(iso,n){var d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
+  function toggleBlock(sid,blockId,date){
+    var s=state.students.find(function(x){return x.id===sid;});if(!s)return;
+    var wd=wdOf(date);if(wd<1||wd>5)return;if(holidayInfo(date))return;
     var b=BLOCKS.find(function(x){return x.id===blockId;});
-    var subj=state.timetable[s.level][wd][BLOCKS.indexOf(b)]||'';
-    var existing=entryFor(sid,u.date,blockId);
+    var subj=state.timetable[s.level][wd][BLOCKS.indexOf(b)]||'';if(!subj)return;
+    var existing=entryFor(sid,date,blockId);
     if(existing){
-      state.entries=state.entries.filter(function(e){return e!==existing;});save();rerenderStudent(sid);renderSummary();renderWeekday();
+      state.entries=state.entries.filter(function(e){return e!==existing;});
     }else{
-      state.entries.push({id:uid(),studentId:sid,date:u.date,weekday:wd,blockId:blockId,subject:subj,status:pen,hours:blockHours(b),note:''});
-      save();rerenderStudent(sid);renderSummary();renderWeekday();
+      state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:blockId,subject:subj,status:pen,hours:blockHours(b),note:''});
     }
+    save();rerenderStudent(sid);renderSummary();renderWeekday();
   }
 
   /* ---- Wochentag-Durchschnitt ---- */
@@ -590,20 +632,26 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
 
   /* ---- Detail-Auswertung (Fach × Wochentag) ---- */
   function fillStatsStudents(){var sel=document.getElementById('stats-student');var cur=sel.value;sel.innerHTML='';state.students.forEach(function(s){var o=document.createElement('option');o.value=s.id;o.textContent=s.name+(s.klasse?' ('+s.klasse+')':'')+' · '+(s.level||'?');sel.appendChild(o);});if(cur)sel.value=cur;}
+  function statusMatch(e,mode){if(mode==='alle')return true;if(mode==='absenz')return STATUS[e.status]&&STATUS[e.status].isAbsence;return e.status===mode;}
   function renderStats(){
     var sid=document.getElementById('stats-student').value;var p=curPeriod();
-    var list=state.entries.filter(function(e){return e.studentId===sid&&inPeriod(e,p);});
+    var mode=document.getElementById('stats-status').value;
+    var all=state.entries.filter(function(e){return e.studentId===sid&&inPeriod(e,p);});
+    var list=all.filter(function(e){return statusMatch(e,mode);});
     var body=document.getElementById('stats-body');
     if(!sid){body.innerHTML='<div class="empty"><p>Keine Schüler.</p></div>';return;}
-    if(!list.length){body.innerHTML='<div class="empty"><div class="i">📭</div><p>Für diesen Schüler/Zeitraum keine Absenzen.</p></div>';return;}
-    // Fächer sammeln
-    var subjects={};list.forEach(function(e){var s=e.subject||'(allgemein)';(subjects[s]=subjects[s]||{wd:{},cnt:0,hrs:0});subjects[s].wd[e.weekday]=(subjects[s].wd[e.weekday]||0)+1;subjects[s].cnt++;subjects[s].hrs+=entryHours(e);});
+    if(!list.length){body.innerHTML='<div class="empty"><div class="i">📭</div><p>Keine Einträge für diese Auswahl.</p></div>';return;}
+    // Fächer sammeln: Wochentag-Zählung (gefiltert) + Excusé/Non-excusé-Aufteilung
+    var subjects={};
+    list.forEach(function(e){var s=e.subject||'(allgemein)';(subjects[s]=subjects[s]||{wd:{},cnt:0,hrs:0,exc:0,non:0});var o=subjects[s];o.wd[e.weekday]=(o.wd[e.weekday]||0)+1;o.cnt++;o.hrs+=entryHours(e);if(e.status==='entschuldigt')o.exc++;else if(e.status==='unentschuldigt')o.non++;});
     var names=Object.keys(subjects).sort(function(a,b){return subjects[b].cnt-subjects[a].cnt;});
-    var head='<tr><th>Fach</th>';WD_ORDER.forEach(function(d){head+='<th class="c">'+WD[d].slice(0,2)+'</th>';});head+='<th class="n">Σ Anz.</th><th class="n">Σ Std.</th></tr>';
+    var head='<tr><th>Fach</th>';WD_ORDER.forEach(function(d){head+='<th class="c">'+WD[d].slice(0,2)+'</th>';});head+='<th class="c">Exc.</th><th class="c">Non-exc.</th><th class="n">Σ Anz.</th><th class="n">Σ Std.</th></tr>';
     var rows='';
-    names.forEach(function(nm){var o=subjects[nm];var r='<td><strong>'+esc(nm)+'</strong></td>';WD_ORDER.forEach(function(d){var c=o.wd[d]||0;var h=c?(c>=3?'heat3':c===2?'heat2':'heat1'):'';r+='<td class="c '+(c?'hit '+h:'')+'">'+(c||'·')+'</td>';});r+='<td class="n big">'+o.cnt+'</td><td class="n">'+nf(o.hrs)+'</td>';rows+='<tr>'+r+'</tr>';});
-    body.innerHTML='<div class="card" style="box-shadow:none;border:1px solid var(--line);"><table class="matrix"><thead>'+head+'</thead><tbody>'+rows+'</tbody></table></div>'+
-      '<p class="sub" style="margin-top:10px;">Zahl = wie oft in diesem Fach an diesem Wochentag gefehlt. Dunkler = häufiger.</p>';
+    names.forEach(function(nm){var o=subjects[nm];var r='<td><strong>'+esc(nm)+'</strong></td>';WD_ORDER.forEach(function(d){var c=o.wd[d]||0;var h=c?(c>=3?'heat3':c===2?'heat2':'heat1'):'';r+='<td class="c '+(c?'hit '+h:'')+'">'+(c||'·')+'</td>';});
+      r+='<td class="c" style="color:#2C6FB5;font-weight:700;">'+(o.exc||'·')+'</td><td class="c" style="color:var(--danger-dark);font-weight:700;">'+(o.non||'·')+'</td>';
+      r+='<td class="n big">'+o.cnt+'</td><td class="n">'+nf(o.hrs)+'</td>';rows+='<tr>'+r+'</tr>';});
+    body.innerHTML='<div class="card" style="box-shadow:none;border:1px solid var(--line);"><div class="table-wrap" style="overflow-x:auto;"><table class="matrix"><thead>'+head+'</thead><tbody>'+rows+'</tbody></table></div></div>'+
+      '<p class="sub" style="margin-top:10px;">Zahl in den Wochentag-Spalten = wie oft (im gewählten Status) gefehlt. <b>Exc.</b>/<b>Non-exc.</b> = Aufteilung excusé/non-excusé. Filter oben rechts ändert die Auswahl.</p>';
   }
 
   /* ---- Kalender ---- */
@@ -649,8 +697,8 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     var wRows='';WD_ORDER.forEach(function(w){if(!datesByWd[w])return;var dd=datesByWd[w].size,ss=sumByWd[w]||0;wRows+='<tr><td>'+WD[w]+'</td><td class="n">'+dd+'</td><td class="n">'+nf(ss)+'</td><td class="n b">'+nf(dd?ss/dd:0)+'</td></tr>';});if(!wRows)wRows='<tr><td colspan="4">Keine Einträge.</td></tr>';
     return '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Absenzen-Bericht</title><style>@page{margin:18mm 15mm;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:-apple-system,"Segoe UI",Arial,sans-serif;color:#1A1A2E;font-size:12px;}.h{display:flex;justify-content:space-between;border-bottom:2px solid #6C5CE7;padding-bottom:12px;margin-bottom:16px;}.h h1{font-size:20px;}.h .s{color:#777;font-size:12px;margin-top:3px;}.h .m{text-align:right;font-size:11px;color:#777;}.cards{display:flex;gap:10px;margin-bottom:16px;}.c{flex:1;border:1px solid #E8E8F0;border-radius:8px;padding:10px;}.c .l{font-size:9px;text-transform:uppercase;color:#999;font-weight:700;}.c .v{font-size:22px;font-weight:800;}h2{font-size:13px;margin:16px 0 7px;color:#5A4BD1;}table{width:100%;border-collapse:collapse;font-size:11.5px;}th{background:#F3F1FE;text-align:left;padding:7px 9px;font-size:9px;text-transform:uppercase;color:#555;}td{padding:6px 9px;border-bottom:1px solid #F0F0F6;}td.n,th.n{text-align:right;}td.b{font-weight:700;}.foot{margin-top:22px;border-top:1px solid #E8E8F0;padding-top:8px;font-size:10px;color:#999;}</style></head><body>'+
       '<div class="h"><div><h1>Absenzen-Bericht</h1><div class="s">'+esc(label)+'</div></div><div class="m">Erstellt am '+d+'<br>'+state.students.length+' Schüler · '+list.length+' Einträge</div></div>'+
-      '<div class="cards"><div class="c"><div class="l">Stunden total</div><div class="v">'+nf(gE+gU)+'</div></div><div class="c"><div class="l">Entschuldigt</div><div class="v" style="color:#00B894">'+nf(gE)+'</div></div><div class="c"><div class="l">Unentschuldigt</div><div class="v" style="color:#C0392B">'+nf(gU)+'</div></div><div class="c"><div class="l">Verspätungen</div><div class="v" style="color:#E8A317">'+gV+'</div></div></div>'+
-      '<h2>Absenzen je Schüler (Stunden)</h2><table><thead><tr><th>Schüler</th><th class="n">Entsch.</th><th class="n">Unentsch.</th><th class="n">Total</th><th class="n">Versp.</th><th>Häufigstes Fach</th></tr></thead><tbody>'+sRows+'</tbody></table>'+
+      '<div class="cards"><div class="c"><div class="l">Stunden total</div><div class="v">'+nf(gE+gU)+'</div></div><div class="c"><div class="l">Excusé</div><div class="v" style="color:#00B894">'+nf(gE)+'</div></div><div class="c"><div class="l">Non-excusé</div><div class="v" style="color:#C0392B">'+nf(gU)+'</div></div><div class="c"><div class="l">Retards</div><div class="v" style="color:#E8A317">'+gV+'</div></div></div>'+
+      '<h2>Absenzen je Schüler (Stunden)</h2><table><thead><tr><th>Schüler</th><th class="n">Excusé</th><th class="n">Non-exc.</th><th class="n">Total</th><th class="n">Retard</th><th>Häufigstes Fach</th></tr></thead><tbody>'+sRows+'</tbody></table>'+
       '<h2>Ø Absenz-Stunden je Wochentag</h2><table><thead><tr><th>Wochentag</th><th class="n">Tage</th><th class="n">Summe</th><th class="n">Ø/Tag</th></tr></thead><tbody>'+wRows+'</tbody></table>'+
       '<div class="foot">Anwesenheits-Tool · automatisch erstellt</div></body></html>';
   }
@@ -688,6 +736,7 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     document.getElementById('reset-all').addEventListener('click',resetAll);
     document.getElementById('import-json').addEventListener('change',function(e){if(e.target.files[0])importJSON(e.target.files[0]);e.target.value='';});
     document.getElementById('stats-student').addEventListener('change',renderStats);
+    document.getElementById('stats-status').addEventListener('change',renderStats);
 
     document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModals();});});
     document.body.addEventListener('click',function(e){if(e.target.closest('[data-close]'))closeModals();});
@@ -707,7 +756,8 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
       var t;
       if((t=e.target.closest('[data-toggle]'))){var u=ui[t.dataset.toggle];u.open=!u.open;renderStudents();return;}
       if((t=e.target.closest('[data-pen]'))){pen=t.dataset.pen;document.querySelectorAll('.pen button').forEach(function(b){b.className='';});document.querySelectorAll('[data-pen="'+pen+'"]').forEach(function(b){b.className='active '+pen;});return;}
-      if((t=e.target.closest('[data-blk]'))){toggleBlock(t.dataset.sid,t.dataset.blk);return;}
+      if((t=e.target.closest('[data-week]'))){var uu=ui[t.dataset.sid];var act=t.dataset.week;uu.date=act==='today'?today():addDays(uu.date,act==='next'?7:-7);rerenderStudent(t.dataset.sid);return;}
+      if((t=e.target.closest('[data-blk]'))){toggleBlock(t.dataset.sid,t.dataset.blk,t.dataset.date);return;}
       if((t=e.target.closest('[data-setlevel]'))){setLevel(t.dataset.sid,t.dataset.setlevel);return;}
     });
     box.addEventListener('change',function(e){var inp=e.target.closest('[data-date]');if(inp){ui[inp.dataset.date].date=inp.value;rerenderStudent(inp.dataset.date);}});

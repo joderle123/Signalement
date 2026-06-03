@@ -256,8 +256,12 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
 <!-- Kalender-Modal -->
 <div class="modal-bg" id="modal-cal">
   <div class="modal wide">
-    <h3>📆 Schulkalender Luxemburg 2025/2026</h3>
-    <p class="sub">Offizielle Daten (MENJE). Ferien rot, Feiertage gelb, heute umrandet, Punkt = an dem Tag wurde eine Absenz erfasst.</p>
+    <h3>📆 Schulkalender Luxemburg</h3>
+    <div class="modal-row" style="align-items:center;">
+      <label style="font-weight:700;color:var(--muted);font-size:14px;">Schuljahr:</label>
+      <select id="cal-year" class="inp" style="max-width:160px;"></select>
+    </div>
+    <p class="sub">Offizielle MENJE-Daten. Ferien rot, Feiertage gelb, heute umrandet, Punkt = an dem Tag wurde eine Absenz erfasst.</p>
     <div class="cal-periods" id="cal-periods"></div>
     <div class="cal-legend">
       <span><i class="sw" style="background:#FDE3DE"></i>Schulferien</span>
@@ -267,7 +271,7 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     </div>
     <div class="cal-months" id="cal-months"></div>
     <div class="modal-actions">
-      <button class="btn btn-ghost" id="cal-load-periods">🇱🇺 Korrekte Semester/Trimester laden</button>
+      <button class="btn btn-ghost" id="cal-load-periods">🇱🇺 Alle LU-Semester/Trimester laden</button>
       <button class="btn btn-ghost" data-close>Schliessen</button>
     </div>
   </div>
@@ -340,30 +344,56 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     };
   }
 
-  // ===== Offizieller Luxemburger Schulkalender 2025/2026 (MENJE) =====
-  var SCHOOL_YEAR={start:'2025-09-15',end:'2026-07-15'};
-  var HOLIDAYS=[ // Schulferien (mehrtägig)
-    {name:'Toussaint',start:'2025-11-01',end:'2025-11-09'},
-    {name:'Noël (Chrëschtdag)',start:'2025-12-20',end:'2026-01-04'},
-    {name:'Carnaval (Fuesvakanz)',start:'2026-02-14',end:'2026-02-22'},
-    {name:'Pâques (Ouschteren)',start:'2026-03-28',end:'2026-04-12'},
-    {name:'Pentecôte (Péngschten)',start:'2026-05-23',end:'2026-05-31'},
-    {name:'Grandes vacances (Summer)',start:'2026-07-16',end:'2026-09-14'}
+  // ===== Offizielle Luxemburger Schulkalender (MENJE) =====
+  var LU_YEARS=[
+    {key:'2025/26',start:'2025-09-15',end:'2026-07-15',
+     holidays:[
+       {name:'Toussaint',start:'2025-11-01',end:'2025-11-09'},
+       {name:'Noël (Chrëschtdag)',start:'2025-12-20',end:'2026-01-04'},
+       {name:'Carnaval (Fuesvakanz)',start:'2026-02-14',end:'2026-02-22'},
+       {name:'Pâques (Ouschteren)',start:'2026-03-28',end:'2026-04-12'},
+       {name:'Pentecôte (Péngschten)',start:'2026-05-23',end:'2026-05-31'},
+       {name:'Grandes vacances (Summer)',start:'2026-07-16',end:'2026-09-14'}
+     ],
+     feiertage:[
+       {name:'1. Mee (Dag vun der Aarbecht)',date:'2026-05-01'},
+       {name:'Christi Himmelfaart',date:'2026-05-14'},
+       {name:'Nationalfeierdag',date:'2026-06-23'}
+     ],
+     periods:[
+       {name:'1. Semester 2025/26',start:'2025-09-15',end:'2026-01-31'},
+       {name:'2. Semester 2025/26',start:'2026-02-01',end:'2026-07-15'},
+       {name:'1. Trimester 2025/26',start:'2025-09-15',end:'2025-12-19'},
+       {name:'2. Trimester 2025/26',start:'2026-01-05',end:'2026-03-27'},
+       {name:'3. Trimester 2025/26',start:'2026-04-13',end:'2026-07-15'}
+     ]},
+    {key:'2026/27',start:'2026-09-15',end:'2027-07-15',
+     holidays:[
+       {name:'Toussaint',start:'2026-10-31',end:'2026-11-08'},
+       {name:'Noël (Chrëschtdag)',start:'2026-12-19',end:'2027-01-03'},
+       {name:'Carnaval (Fuesvakanz)',start:'2027-02-06',end:'2027-02-14'},
+       {name:'Pâques (Ouschteren)',start:'2027-03-27',end:'2027-04-11'},
+       {name:'Pentecôte (Péngschten)',start:'2027-05-29',end:'2027-06-06'},
+       {name:'Grandes vacances (Summer)',start:'2027-07-16',end:'2027-09-14'}
+     ],
+     feiertage:[
+       {name:'Christi Himmelfaart',date:'2027-05-06'},
+       {name:'Méindeg no Péngschten',date:'2027-05-17'},
+       {name:'Nationalfeierdag',date:'2027-06-23'}
+     ],
+     periods:[
+       {name:'1. Semester 2026/27',start:'2026-09-15',end:'2027-01-31'},
+       {name:'2. Semester 2026/27',start:'2027-02-01',end:'2027-07-15'},
+       {name:'1. Trimester 2026/27',start:'2026-09-15',end:'2026-12-18'},
+       {name:'2. Trimester 2026/27',start:'2027-01-04',end:'2027-03-26'},
+       {name:'3. Trimester 2026/27',start:'2027-04-12',end:'2027-07-15'}
+     ]}
   ];
-  var FEIERTAGER=[ // einzelne schulfreie Feiertage während der Schulzeit
-    {name:'1. Mee (Dag vun der Aarbecht)',date:'2026-05-01'},
-    {name:'Christi Himmelfaart',date:'2026-05-14'},
-    {name:'Nationalfeierdag',date:'2026-06-23'}
-  ];
-  function luPeriods(){
-    return [
-      {id:uid(),name:'1. Semester 2025/26',start:'2025-09-15',end:'2026-01-31'},
-      {id:uid(),name:'2. Semester 2025/26',start:'2026-02-01',end:'2026-07-15'},
-      {id:uid(),name:'1. Trimester 2025/26',start:'2025-09-15',end:'2025-12-19'},
-      {id:uid(),name:'2. Trimester 2025/26',start:'2026-01-05',end:'2026-03-27'},
-      {id:uid(),name:'3. Trimester 2025/26',start:'2026-04-13',end:'2026-07-15'}
-    ];
-  }
+  var HOLIDAYS=[],FEIERTAGER=[];
+  LU_YEARS.forEach(function(yr){HOLIDAYS=HOLIDAYS.concat(yr.holidays);FEIERTAGER=FEIERTAGER.concat(yr.feiertage);});
+  var calYear=LU_YEARS[0].key;
+  function defaultCalYear(){var t=today();for(var i=0;i<LU_YEARS.length;i++){if(t>=LU_YEARS[i].start&&t<=LU_YEARS[i].end)return LU_YEARS[i].key;}return LU_YEARS[0].key;}
+  function luPeriods(){var out=[];LU_YEARS.forEach(function(yr){yr.periods.forEach(function(p){out.push({id:uid(),name:p.name,start:p.start,end:p.end});});});return out;}
   function holidayInfo(iso){
     for(var i=0;i<FEIERTAGER.length;i++){if(FEIERTAGER[i].date===iso)return {type:'feiertag',name:FEIERTAGER[i].name};}
     for(var j=0;j<HOLIDAYS.length;j++){if(iso>=HOLIDAYS[j].start&&iso<=HOLIDAYS[j].end)return {type:'ferien',name:HOLIDAYS[j].name};}
@@ -593,12 +623,15 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     }
     return '<div class="cal-m"><h4>'+MN[m-1]+' '+y+'</h4><div class="cal-grid">'+cells+'</div></div>';
   }
+  function fillCalYears(){var sel=document.getElementById('cal-year');sel.innerHTML='';LU_YEARS.forEach(function(yr){var o=document.createElement('option');o.value=yr.key;o.textContent=yr.key;sel.appendChild(o);});sel.value=calYear;}
   function renderCalendar(){
-    document.getElementById('cal-periods').innerHTML=state.periods.map(function(p){return '<span class="cal-chip">'+esc(p.name)+': '+fmtD(p.start)+'–'+fmtD(p.end)+'</span>';}).join('')||'<span class="cal-chip">Keine Perioden</span>';
+    var yr=LU_YEARS.find(function(y){return y.key===calYear;})||LU_YEARS[0];
+    var chips=state.periods.filter(function(p){return p.start<=yr.end&&p.end>=yr.start;});
+    document.getElementById('cal-periods').innerHTML=chips.map(function(p){return '<span class="cal-chip">'+esc(p.name)+': '+fmtD(p.start)+'–'+fmtD(p.end)+'</span>';}).join('')||'<span class="cal-chip">Keine Perioden in diesem Schuljahr — unten „Alle LU-Semester/Trimester laden"</span>';
     var absDates={};state.entries.forEach(function(e){absDates[e.date]=true;});
     var todayISO=today();
-    var sy=+SCHOOL_YEAR.start.slice(0,4),sm=+SCHOOL_YEAR.start.slice(5,7);
-    var ey=+SCHOOL_YEAR.end.slice(0,4),em=+SCHOOL_YEAR.end.slice(5,7);
+    var sy=+yr.start.slice(0,4),sm=+yr.start.slice(5,7);
+    var ey=+yr.end.slice(0,4),em=+yr.end.slice(5,7);
     var html='',y=sy,m=sm;
     while(y<ey||(y===ey&&m<=em)){html+=monthHTML(y,m,absDates,todayISO);m++;if(m>12){m=1;y++;}}
     document.getElementById('cal-months').innerHTML=html;
@@ -642,8 +675,9 @@ select.inp{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(-
     document.getElementById('btn-add-student').addEventListener('click',function(){renderStudentMgmt();openModal('modal-students');document.getElementById('new-student-name').focus();});
     document.getElementById('btn-tt').addEventListener('click',function(){renderTTGrid();openModal('modal-tt');});
     document.getElementById('btn-stats').addEventListener('click',function(){fillStatsStudents();renderStats();openModal('modal-stats');});
-    document.getElementById('btn-cal').addEventListener('click',function(){renderCalendar();openModal('modal-cal');});
-    document.getElementById('cal-load-periods').addEventListener('click',function(){if(!confirm('Korrekte Luxemburger Semester/Trimester (2025/26) laden? Bestehende Perioden werden ersetzt.'))return;state.periods=luPeriods();save();fillPeriods();renderAll();renderCalendar();toast('✅ LU-Perioden geladen');});
+    document.getElementById('btn-cal').addEventListener('click',function(){calYear=defaultCalYear();fillCalYears();renderCalendar();openModal('modal-cal');});
+    document.getElementById('cal-year').addEventListener('change',function(e){calYear=e.target.value;renderCalendar();});
+    document.getElementById('cal-load-periods').addEventListener('click',function(){if(!confirm('Alle korrekten Luxemburger Perioden (2025/26 & 2026/27) laden? Bestehende Perioden werden ersetzt.'))return;state.periods=luPeriods();save();fillPeriods();renderAll();renderCalendar();toast('✅ LU-Perioden geladen');});
     document.getElementById('btn-pdf').addEventListener('click',makePDF);
     document.getElementById('btn-data').addEventListener('click',function(){document.getElementById('storage-warn').style.display=storageOK()?'none':'block';openModal('modal-data');});
 

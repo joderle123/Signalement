@@ -364,38 +364,37 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   var WD_ORDER=[1,2,3,4,5]; // Mo–Fr (Schultage)
   var DAY_NAMES={1:'Méinden',2:'Dënschden',3:'Mëttwoch',4:'Donnëschden',5:'Freiden'};
 
-  // Feste Zeitblöcke (Stunden = echte Dauer)
+  // Feste Zeitblöcke (Stunden = echte Dauer). Schule 8:00–16:00, kein Welcome/Réckbléck.
   var BLOCKS=[
-    {id:'b1',start:'07:45',end:'08:00'},
-    {id:'b2',start:'08:00',end:'08:30'},
-    {id:'b3',start:'08:30',end:'10:00'},
-    {id:'b4',start:'10:00',end:'10:30'},
-    {id:'b5',start:'10:30',end:'12:00'},
-    {id:'b6',start:'12:00',end:'13:00'},
-    {id:'b7',start:'13:00',end:'14:00'},
-    {id:'b8',start:'14:00',end:'15:45'},
-    {id:'b9',start:'15:45',end:'16:00'}
+    {id:'b1',start:'08:00',end:'08:30'}, // Morning Meeting
+    {id:'b2',start:'08:30',end:'10:00'}, // Lektion 1 (1,5h)
+    {id:'b3',start:'10:00',end:'10:30'}, // Paus
+    {id:'b4',start:'10:30',end:'12:00'}, // Lektion 2 (1,5h)
+    {id:'b5',start:'12:00',end:'13:00'}, // Mëttespaus
+    {id:'b6',start:'13:00',end:'14:00'}, // Nachmittag 1 (1h)
+    {id:'b7',start:'14:00',end:'16:00'}  // Nachmittag 2 (2h)
   ];
   function blockHours(b){var p=function(s){var a=s.split(':');return (+a[0])*60+(+a[1]);};return (p(b.end)-p(b.start))/60;}
   var PAUSE_SUBJECTS={'Paus':1,'Mëttespaus':1};
 
   // Standard-Stundenplan (Abschrift — im Tool editierbar)
+  // row(L1, L2, N1, N2): 8:30–10:00 | 10:30–12:00 | 13:00–14:00 | 14:00–16:00
   function defaultTimetable(){
-    var fixed=function(b3,b5,b7,b8){return ['Welcome','Morning Meeting',b3,'Paus',b5,'Mëttespaus',b7,b8,'Réckbléck'];};
+    var row=function(a,b,c,d){return ['Morning Meeting',a,'Paus',b,'Mëttespaus',c,d];};
     return {
       L1:{
-        1:fixed('Culge','Deutsch','Kunst','Option 1'),
-        2:fixed('Projet','Culge','Hausaufgaben','Sport'),
-        3:fixed('Mathe','Français','Option 2',''),
-        4:fixed('Deutsch','Mathe','Inité','Skills /Atelier LLIS'),
-        5:fixed('Mathe','Français','','Fit for Life')
+        1:row('Culge','Deutsch','',''),                              // Mo: nur 8–12
+        2:row('Projet','Culge','Hausaufgaben','Sport'),
+        3:row('Mathe','Français','Option 2',''),
+        4:row('Deutsch','Mathe','Inité','Skills /Atelier LLIS'),
+        5:row('Mathe','Français','Fit for Life','Fit for Life')      // Fr: 13–16 Fit for Life
       },
       L2:{
-        1:fixed('English','Deutsch','Vieso','Option 1'),
-        2:fixed('Projet','Sciences sociales','','Sport'),
-        3:fixed('Français','Deutsch','Option 2',''),
-        4:fixed('Mathe','Deutsch','Kunst',''),
-        5:fixed('Français','Mathe','','Fit for Life')
+        1:row('English','Deutsch','',''),                            // Mo: nur 8–12
+        2:row('Projet','Sciences sociales','','Sport'),
+        3:row('Français','Deutsch','Option 2',''),
+        4:row('Mathe','Deutsch','Kunst',''),
+        5:row('Français','Mathe','Fit for Life','Fit for Life')      // Fr: 13–16 Fit for Life
       }
     };
   }
@@ -476,9 +475,9 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       if(e.weekday==null&&e.date)e.weekday=new Date(e.date+'T00:00:00').getDay();
     });
     if(!state.timetable)state.timetable=defaultTimetable();
-    // fehlende Levels/Tage ergänzen
+    // fehlende Levels/Tage ergänzen + alte Struktur (andere Blockanzahl) neu aufbauen
     var def=defaultTimetable();
-    ['L1','L2'].forEach(function(lv){if(!state.timetable[lv])state.timetable[lv]=def[lv];for(var d=1;d<=5;d++){if(!state.timetable[lv][d])state.timetable[lv][d]=def[lv][d];}});
+    ['L1','L2'].forEach(function(lv){if(!state.timetable[lv])state.timetable[lv]=def[lv];for(var d=1;d<=5;d++){if(!state.timetable[lv][d]||state.timetable[lv][d].length!==BLOCKS.length)state.timetable[lv][d]=def[lv][d];}});
   }
   function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('⚠️ Speichern fehlgeschlagen — Backup machen!');}}
 

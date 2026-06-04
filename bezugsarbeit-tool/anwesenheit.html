@@ -136,14 +136,12 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .date-in:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-50);}
 .wd-label{font-weight:800;color:var(--primary-dark);}
 
-/* Status pen */
-.pen{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;box-shadow:var(--shadow-sm);}
-.pen button{border:none;background:#fff;font:inherit;font-size:13px;font-weight:700;padding:9px 14px;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:5px;transition:.15s;}
-.pen button:hover{background:var(--bg);}
-.pen button+button{border-left:1.5px solid var(--line);}
-.pen button.active.entschuldigt{background:var(--info);color:#fff;box-shadow:inset 0 0 0 99px rgba(255,255,255,.04);}
-.pen button.active.unentschuldigt{background:var(--danger);color:#fff;}
-.pen button.active.verspaetet{background:var(--warn);color:#fff;}
+/* Klick-Zyklus-Legende */
+.cycle-legend{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.cycle-legend .cl{font-size:11px;font-weight:800;padding:5px 10px;border-radius:999px;border:1.5px solid var(--line);color:var(--muted);background:#fff;}
+.cycle-legend .cl.unentschuldigt{border-color:var(--danger);color:var(--danger-dark);background:var(--danger-50);}
+.cycle-legend .cl.entschuldigt{border-color:var(--info);color:#2C6FB5;background:var(--info-50);}
+.cycle-legend .cl.verspaetet{border-color:var(--warn);color:#9A6B00;background:var(--warn-50);}
 .day-sum{margin-top:13px;font-size:13px;color:var(--muted);font-weight:600;background:var(--primary-50);border-radius:var(--radius-sm);padding:10px 14px;}
 .no-school{padding:20px;text-align:center;color:var(--muted);background:linear-gradient(var(--bg),#fff);border:1px dashed var(--line);border-radius:var(--radius-sm);font-weight:500;}
 /* Wochen-Raster */
@@ -912,7 +910,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var days=[];for(var k=0;k<5;k++)days.push(addDays(mon,k));
     var todayISO=today();var SHORT=['Mo','Di','Mi','Do','Fr'];
     var topRow='<div class="rec-top">'+
-      '<div class="pen">'+penBtn('entschuldigt','✓ Excusé')+penBtn('unentschuldigt','✕ Non-excusé')+penBtn('verspaetet','⏰ Retard')+'</div>'+
+      '<div class="cycle-legend"><span class="cl unentschuldigt">1× Non-excusé</span><span class="cl entschuldigt">2× Excusé</span><span class="cl verspaetet">3× Retard</span><span class="cl off">4× weg</span></div>'+
       '<div class="head-spacer"></div>'+
       '<div class="wk-nav">'+
         '<button class="btn btn-ghost btn-sm" data-week="prev" data-sid="'+s.id+'">←</button>'+
@@ -922,7 +920,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
         '<input type="date" class="date-in" data-date="'+s.id+'" value="'+u.date+'" title="Zu Woche springen">'+
       '</div>'+
     '</div>';
-    var help='<div class="rec-hint">💡 Klick = Status setzen · Klick (gleicher Status) = entfernen · Klick (anderer Status) = wechseln · <b>Tag-Button</b> markiert die ganze Spalte · 📝 öffnet Klassenbuch-Notiz</div>';
+    var help='<div class="rec-hint">💡 Einfach eine Zelle <b>anklicken</b> = abwesend (Non-excusé). Nochmal klicken wechselt zu Excusé → Retard → wieder weg. <b>„Tag"</b> macht das für die ganze Spalte. <b>📝</b> = Notiz/Prüfung.</div>';
     // Kopfzeile mit „Tag markieren"
     var head='<tr><th class="th-time"></th>';
     days.forEach(function(d,i){var hol=holidayInfo(d);var wd=wdOf(d);var dayHrs=dayCounted(s.id,d);
@@ -970,7 +968,6 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var miniStats=studentMiniStats(s);
     return topRow+'<div class="wk-grid wk-grid-large"><table><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>'+help+sum+wkNotes+miniStats;
   }
-  function penBtn(st,label){return '<button class="'+(pen===st?'active '+st:'')+'" data-pen="'+st+'">'+label+'</button>';}
 
   // Pro-Schüler-Mini-Übersicht: Wochentag-Ø und Top-Fächer
   function studentMiniStats(s){
@@ -1000,30 +997,34 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   /* ---- Wochen-Helfer + Block-Toggle ---- */
   function mondayOf(iso){var d=new Date(iso+'T00:00:00');var dow=(d.getDay()+6)%7;d.setDate(d.getDate()-dow);return toISO(d);}
   function addDays(iso,n){var d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return toISO(d);}
+  // Klick-Zyklus: (leer) → Non-excusé → Excusé → Retard → (leer)
+  var CYCLE={'':'unentschuldigt',unentschuldigt:'entschuldigt',entschuldigt:'verspaetet',verspaetet:''};
   function toggleBlock(sid,blockId,date){
     var s=state.students.find(function(x){return x.id===sid;});if(!s)return;
     var wd=wdOf(date);if(wd<1||wd>5)return;if(holidayInfo(date))return;
     var b=BLOCKS.find(function(x){return x.id===blockId;});
     var subj=state.timetable[s.level][wd][BLOCKS.indexOf(b)]||'';if(!subj)return;
     var existing=entryFor(sid,date,blockId);
-    if(existing){
-      // Klick mit GLEICHEM Status → entfernen; Klick mit ANDEREM Status → wechseln
-      if(existing.status===pen){state.entries=state.entries.filter(function(e){return e!==existing;});}
-      else{existing.status=pen;}
-    }else{
-      state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:blockId,subject:subj,status:pen,hours:blockHours(b),note:'',byUser:state.currentUser||'',byUserAt:Date.now()});
-    }
+    var next=CYCLE[existing?existing.status:''];
+    if(!next){if(existing)state.entries=state.entries.filter(function(e){return e!==existing;});}
+    else if(existing){existing.status=next;existing.byUser=state.currentUser||'';existing.byUserAt=Date.now();}
+    else{state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:blockId,subject:subj,status:next,hours:blockHours(b),note:'',byUser:state.currentUser||'',byUserAt:Date.now()});}
     save();rerenderStudent(sid);renderSummary();
   }
+  // Ganzer Tag: zyklisch wie eine Zelle, aber für alle Blöcke gemeinsam
   function markWholeDay(sid,date){
     var s=state.students.find(function(x){return x.id===sid;});if(!s)return;
     var wd=wdOf(date);if(wd<1||wd>5)return;if(holidayInfo(date))return;
     var tt=state.timetable[s.level][wd];
-    BLOCKS.forEach(function(b,i){
-      var subj=tt[i]||'';if(!subj)return;
-      var ex=entryFor(sid,date,b.id);
-      if(ex){ex.status=pen;} // immer auf aktuellen Pen-Status setzen
-      else{state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:b.id,subject:subj,status:pen,hours:blockHours(b),note:'',byUser:state.currentUser||'',byUserAt:Date.now()});}
+    var blocks=[];BLOCKS.forEach(function(b,i){var subj=tt[i]||'';if(subj)blocks.push({b:b,subj:subj});});
+    // aktuellen Sammelstatus bestimmen: erster vorhandener Eintrag, sonst leer
+    var cur='';for(var k=0;k<blocks.length;k++){var ex=entryFor(sid,date,blocks[k].b.id);if(ex){cur=ex.status;break;}}
+    var next=CYCLE[cur];
+    blocks.forEach(function(o){
+      var ex=entryFor(sid,date,o.b.id);
+      if(!next){if(ex)state.entries=state.entries.filter(function(e){return e!==ex;});}
+      else if(ex){ex.status=next;ex.byUser=state.currentUser||'';ex.byUserAt=Date.now();}
+      else{state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:o.b.id,subject:o.subj,status:next,hours:blockHours(o.b),note:'',byUser:state.currentUser||'',byUserAt:Date.now()});}
     });
     save();rerenderStudent(sid);renderSummary();
   }
@@ -1071,9 +1072,9 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var txt=document.getElementById('note-text').value.trim();if(!txt)return;
     var type=document.getElementById('note-type').value;
     state.notes.push({id:uid(),date:noteCtx.date,blockId:noteCtx.blockId||null,subject:noteCtx.subject||null,level:noteCtx.level||null,type:type,text:txt,byUser:state.currentUser||'',byUserAt:Date.now()});
-    save();document.getElementById('note-text').value='';renderNoteList();renderStudents();toast('✅ Notiz hinzugefügt');
+    save();document.getElementById('note-text').value='';renderNoteList();renderStudents();renderMain();toast('✅ Notiz hinzugefügt');
   }
-  function delNote(id){state.notes=state.notes.filter(function(n){return n.id!==id;});save();renderNoteList();renderStudents();toast('🗑 Notiz gelöscht');}
+  function delNote(id){state.notes=state.notes.filter(function(n){return n.id!==id;});save();renderNoteList();renderStudents();renderMain();toast('🗑 Notiz gelöscht');}
 
   /* ---- Schülerverwaltung ---- */
   function addStudent(){var n=document.getElementById('new-student-name');var c=document.getElementById('new-student-class');var l=document.getElementById('new-student-level');var name=n.value.trim();if(!name)return;state.students.push({id:uid(),name:name,klasse:c.value.trim(),level:l.value});save();n.value='';c.value='';n.focus();renderStudentMgmt();renderAll();}
@@ -1238,7 +1239,6 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     layout.addEventListener('click',function(e){
       var t;
       if((t=e.target.closest('[data-pick]'))){activeStudentId=t.dataset.pick;renderStudents();renderMain();return;}
-      if((t=e.target.closest('[data-pen]'))){pen=t.dataset.pen;document.querySelectorAll('.pen button').forEach(function(b){b.className='';});document.querySelectorAll('[data-pen="'+pen+'"]').forEach(function(b){b.className='active '+pen;});return;}
       if((t=e.target.closest('[data-week]'))){var uu=ui[t.dataset.sid];var act=t.dataset.week;uu.date=act==='today'?today():addDays(uu.date,act==='next'?7:-7);rerenderStudent(t.dataset.sid);return;}
       if((t=e.target.closest('[data-noteact]'))){var s2=state.students.find(function(x){return x.id===t.dataset.sid;});openNoteModal({date:t.dataset.date,blockId:t.dataset.blk||null,subject:t.dataset.subj||null,level:s2?s2.level:null});return;}
       if((t=e.target.closest('[data-noteopen]'))){var n=state.notes.find(function(x){return x.id===t.dataset.noteopen;});if(n)openNoteModal({date:n.date,blockId:n.blockId,subject:n.subject,level:n.level});return;}

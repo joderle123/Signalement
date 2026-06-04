@@ -128,8 +128,8 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .chev{flex:0 0 auto;color:var(--muted);font-size:12px;transition:transform .25s;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--bg);}
 .student.open .chev{transform:rotate(180deg);color:var(--primary);background:var(--primary-50);}
 
-.recorder{display:none;padding:0 18px 18px;border-top:1px solid var(--line);}
-.student.open .recorder{display:block;}
+.recorder{display:none;padding:0;border-top:none;}
+.student.open .recorder,.recorder.open{display:block;}
 .rec-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0;}
 .rec-row label{font-size:13px;font-weight:700;color:var(--muted);}
 .date-in{font:inherit;font-size:15px;padding:9px 12px;border:1.5px solid var(--line);border-radius:var(--radius-sm);background:#fff;color:var(--text);}
@@ -574,15 +574,15 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     return {
       L1:{
         1:row('Culge','Deutsch','',''),                              // Mo: nur 8–12
-        2:row('Projet','Culge','Hausaufgaben','Sport'),
-        3:row('Mathe','Français','Option 2',''),
+        2:row('Projet','Culge','Hausaufgaben','Option'),             // Di: 14–16 Option
+        3:row('Mathe','Français','Option 2','Sport'),                // Mi: 14–16 Sport
         4:row('Deutsch','Mathe','Inité','Skills /Atelier LLIS'),
         5:row('Mathe','Français','Fit for Life','Fit for Life')      // Fr: 13–16 Fit for Life
       },
       L2:{
         1:row('English','Deutsch','',''),                            // Mo: nur 8–12
-        2:row('Projet','Sciences sociales','','Sport'),
-        3:row('Français','Deutsch','Option 2',''),
+        2:row('Projet','Sciences sociales','','Option'),             // Di: 14–16 Option
+        3:row('Français','Deutsch','Option 2','Sport'),              // Mi: 14–16 Sport
         4:row('Mathe','Deutsch','Kunst',''),
         5:row('Français','Mathe','Fit for Life','Fit for Life')      // Fr: 13–16 Fit for Life
       }
@@ -645,7 +645,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     return null;
   }
 
-  var state={students:[],periods:[],entries:[],timetable:null,notes:[],currentUser:null};
+  var state={students:[],periods:[],entries:[],timetable:null,notes:[],currentUser:null,ttVersion:0};
   var ui={}; var pen='unentschuldigt'; var ttLevel='L1'; var classFilter='L1';
   var activeStudentId=null;
   var fileHandle=null,fileConnected=false,suppressWrite=false,writeTimer=null,pollTimer=null,lastContent='';
@@ -662,6 +662,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       state.timetable=p.timetable||null;
       state.notes=Array.isArray(p.notes)?p.notes:[];
       state.currentUser=p.currentUser||null;
+      state.ttVersion=p.ttVersion||0;
     }}catch(e){console.error(e);}
     // currentUser ist gerätegebunden, nicht aus Backup übernehmen
     try{var u=localStorage.getItem('anwesenheit_user');if(u)state.currentUser=u;}catch(e){}
@@ -681,6 +682,11 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     if(!state.timetable)state.timetable=defaultTimetable();
     var def=defaultTimetable();
     ['L1','L2'].forEach(function(lv){if(!state.timetable[lv])state.timetable[lv]=def[lv];for(var d=1;d<=5;d++){if(!state.timetable[lv][d]||state.timetable[lv][d].length!==BLOCKS.length)state.timetable[lv][d]=def[lv][d];}});
+    // Einmalige Korrektur: Di 14–16 = Option, Mi 14–16 = Sport (für beide Niveaus)
+    if(!state.ttVersion||state.ttVersion<2){
+      ['L1','L2'].forEach(function(lv){if(state.timetable[lv]){if(state.timetable[lv][2])state.timetable[lv][2][6]='Option';if(state.timetable[lv][3])state.timetable[lv][3][6]='Sport';}});
+      state.ttVersion=2;
+    }
   }
   function save(){
     try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('⚠️ Speichern fehlgeschlagen — Backup machen!');}
@@ -705,7 +711,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       return false;
     });
   }
-  function fileState(){return JSON.stringify({students:state.students,periods:state.periods,entries:state.entries,timetable:state.timetable,notes:state.notes,_savedAt:Date.now(),_savedBy:state.currentUser||''});}
+  function fileState(){return JSON.stringify({students:state.students,periods:state.periods,entries:state.entries,timetable:state.timetable,notes:state.notes,ttVersion:state.ttVersion,_savedAt:Date.now(),_savedBy:state.currentUser||''});}
   function scheduleWrite(){clearTimeout(writeTimer);writeTimer=setTimeout(function(){writeTimer=null;writeFile();},700);}
   function writeFile(){
     if(!fileHandle)return Promise.resolve();
@@ -715,7 +721,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   function applyRemote(txt){
     try{var d=JSON.parse(txt);}catch(e){return;}
     suppressWrite=true;
-    state.students=d.students||[];state.periods=d.periods||[];state.entries=d.entries||[];state.timetable=d.timetable||null;state.notes=d.notes||[];
+    state.students=d.students||[];state.periods=d.periods||[];state.entries=d.entries||[];state.timetable=d.timetable||null;state.notes=d.notes||[];state.ttVersion=d.ttVersion||0;
     migrate();
     try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
     lastContent=txt;
@@ -1173,8 +1179,8 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   function exportJSON(){dl('anwesenheit-backup-'+today()+'.json',JSON.stringify(state,null,2),'application/json');toast('⬇️ Backup gespeichert');}
   function csvCell(v){var s=String(v==null?'':v);return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
   function exportCSV(){var lines=['Datum;Wochentag;Schueler;Niveau;Block;Fach;Status;Stunden'];state.entries.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(e){var s=state.students.find(function(x){return x.id===e.studentId;});var b=BLOCKS.find(function(x){return x.id===e.blockId;});lines.push([e.date,WD[e.weekday!=null?e.weekday:wdOf(e.date)],s?s.name:'(gelöscht)',s?(s.level||''):'',b?(b.start+'-'+b.end):'',e.subject||'',STATUS[e.status]?STATUS[e.status].label:e.status,String(entryHours(e)).replace('.',',')].map(csvCell).join(';'));});dl('anwesenheit-'+today()+'.csv','﻿'+lines.join('\r\n'),'text/csv;charset=utf-8');toast('⬇️ CSV exportiert');}
-  function importJSON(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!Array.isArray(d.students))throw 0;if(!confirm('Backup laden? Aktuelle Daten werden ersetzt.'))return;state.students=d.students||[];state.periods=Array.isArray(d.periods)?d.periods:[];state.entries=Array.isArray(d.entries)?d.entries:[];state.timetable=d.timetable||defaultTimetable();state.notes=Array.isArray(d.notes)?d.notes:[];ui={};load();save();renderStudentMgmt();renderAll();closeModals();toast('✅ Backup geladen');}catch(e){toast('⚠️ Datei nicht lesbar');}};r.readAsText(file);}
-  function resetAll(){if(!confirm('Wirklich ALLE Daten löschen?'))return;if(!confirm('Letzte Warnung: alles wird gelöscht.'))return;state={students:[],periods:[],entries:[],timetable:defaultTimetable(),notes:[]};ui={};ensurePeriods();save();renderStudentMgmt();renderAll();closeModals();toast('🗑 Alles gelöscht');}
+  function importJSON(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!Array.isArray(d.students))throw 0;if(!confirm('Backup laden? Aktuelle Daten werden ersetzt.'))return;state.students=d.students||[];state.periods=Array.isArray(d.periods)?d.periods:[];state.entries=Array.isArray(d.entries)?d.entries:[];state.timetable=d.timetable||defaultTimetable();state.notes=Array.isArray(d.notes)?d.notes:[];state.ttVersion=d.ttVersion||0;ui={};migrate();save();renderStudentMgmt();renderAll();closeModals();toast('✅ Backup geladen');}catch(e){toast('⚠️ Datei nicht lesbar');}};r.readAsText(file);}
+  function resetAll(){if(!confirm('Wirklich ALLE Daten löschen?'))return;if(!confirm('Letzte Warnung: alles wird gelöscht.'))return;state={students:[],periods:[],entries:[],timetable:defaultTimetable(),notes:[],currentUser:state.currentUser,ttVersion:2};ui={};ensurePeriods();save();renderStudentMgmt();renderAll();closeModals();toast('🗑 Alles gelöscht');}
 
   function openModal(id){document.getElementById(id).classList.add('open');}
   function closeModals(){document.querySelectorAll('.modal-bg').forEach(function(m){m.classList.remove('open');});}

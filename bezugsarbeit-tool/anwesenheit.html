@@ -35,13 +35,47 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helv
     radial-gradient(900px 500px at -10% 0%,rgba(12,166,120,.06),transparent 55%),
     var(--bg);
   background-attachment:fixed;}
-.wrap{max-width:940px;margin:0 auto;padding:0 18px 110px;}
+.wrap{max-width:none;flex:1 1 auto;min-width:0;padding:18px 22px 110px;}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1340px;margin:0 auto;}
+.sidebar{flex:0 0 280px;position:sticky;top:64px;align-self:flex-start;height:calc(100vh - 64px);overflow:auto;border-right:1px solid var(--line);background:#fff;padding:14px 12px;}
+.side-head{padding:0 4px;margin-bottom:10px;}
+.side-list{display:flex;flex-direction:column;gap:6px;padding-bottom:14px;}
+.side-stu{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;cursor:pointer;border:1.5px solid transparent;transition:.15s;background:#fff;}
+.side-stu:hover{background:var(--bg);}
+.side-stu.active{background:var(--primary-50);border-color:var(--primary-light);box-shadow:0 4px 12px rgba(108,92,231,.18);}
+.side-stu .avatar{width:38px;height:38px;font-size:14px;border-radius:11px;}
+.side-stu .nm{font-weight:700;font-size:14px;line-height:1.2;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.side-stu .nm small{display:block;font-weight:500;font-size:11px;color:var(--muted);margin-top:1px;}
+.side-stu .hrs{font-size:12px;font-weight:800;color:var(--primary);background:var(--primary-50);padding:3px 9px;border-radius:999px;flex:0 0 auto;}
+.side-stu.active .hrs{background:#fff;}
+.side-empty{padding:18px 10px;text-align:center;color:var(--muted);font-size:13px;}
+.main-empty{padding:60px 20px;text-align:center;color:var(--muted);background:#fff;border:1.5px dashed var(--line);border-radius:18px;margin-top:18px;}
+.main-empty .i{font-size:56px;margin-bottom:10px;opacity:.55;}
+.main-empty p{font-size:15px;font-weight:600;}
+.main-empty p.hint{font-weight:500;font-size:13px;margin-top:6px;color:var(--muted);}
+/* Hauptkarte um den Schüler */
+.stu-main{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:18px 20px;margin-top:6px;animation:rise .3s both;}
+.stu-head{display:flex;align-items:center;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:6px;flex-wrap:wrap;}
+.stu-head .avatar{width:52px;height:52px;font-size:18px;}
+.stu-head .nm{font-size:20px;font-weight:900;letter-spacing:-.02em;}
+.stu-head .nm small{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:1px;}
+.stu-head .h-spacer{flex:1 1 auto;}
+.stu-head .tot{text-align:right;}
+.stu-head .tot .v{font-size:28px;font-weight:900;color:var(--primary);}
+.stu-head .tot .l{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+@media (max-width:900px){
+  .layout{flex-direction:column;}
+  .sidebar{flex:1 1 auto;width:100%;position:relative;top:0;height:auto;max-height:none;border-right:none;border-bottom:1px solid var(--line);}
+  .side-list{flex-direction:row;flex-wrap:wrap;}
+  .side-stu{flex:1 1 200px;}
+  .wrap{padding:14px 14px 80px;}
+}
 
 header{position:sticky;top:0;z-index:30;color:#fff;
   background:linear-gradient(120deg,#6C5CE7 0%,#7E6BEC 45%,#8B7CF0 100%);
   box-shadow:0 6px 26px rgba(108,92,231,.34);}
 header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:rgba(255,255,255,.25);}
-.head-inner{max-width:940px;margin:0 auto;padding:15px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.head-inner{max-width:1340px;margin:0 auto;padding:15px 22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .head-inner h1{font-size:21px;font-weight:900;letter-spacing:-.03em;display:flex;align-items:center;gap:9px;text-shadow:0 1px 2px rgba(0,0,0,.08);}
 .head-spacer{flex:1 1 auto;}
 .period-sel{appearance:none;-webkit-appearance:none;background:rgba(255,255,255,.16);color:#fff;border:1.5px solid rgba(255,255,255,.32);border-radius:999px;padding:9px 34px 9px 15px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;backdrop-filter:blur(6px);transition:.18s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;}
@@ -50,6 +84,8 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .hbtn{background:rgba(255,255,255,.16);color:#fff;border:1.5px solid rgba(255,255,255,.32);border-radius:999px;padding:9px 14px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;backdrop-filter:blur(6px);transition:.18s;}
 .hbtn:hover{background:rgba(255,255,255,.3);transform:translateY(-1px);}
 .hbtn:active{transform:translateY(0);}
+.user-btn{padding:5px 13px 5px 5px;gap:8px;}
+.user-btn .user-ic{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.3);color:#fff;font-weight:900;font-size:12px;}
 
 .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0;}
 .sum{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 16px 18px;box-shadow:var(--shadow);overflow:hidden;transition:.2s;animation:rise .4s both;}
@@ -201,6 +237,13 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .wk-note .wn-body{flex:1 1 auto;min-width:0;}
 .wk-note .wn-txt{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .wk-notes-empty{color:var(--muted);font-size:13px;text-align:center;padding:8px;}
+/* Bediener-Auswahl */
+.user-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:14px;}
+.user-card{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--bg);border:1.5px solid var(--line);border-radius:13px;cursor:pointer;font:inherit;font-size:14px;font-weight:700;color:var(--text);transition:.15s;text-align:left;}
+.user-card:hover{border-color:var(--primary);background:var(--primary-50);transform:translateY(-1px);}
+.user-card.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 5px 14px rgba(108,92,231,.32);}
+.user-card .avatar{width:36px;height:36px;font-size:13px;border-radius:10px;flex:0 0 auto;}
+.entry-meta{font-size:10px;color:var(--muted);font-weight:600;}
 
 /* Mini-Statistik pro Schüler */
 .mini-stats{margin-top:18px;}
@@ -326,40 +369,39 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   <div class="head-inner">
     <h1>📋 Anwesenheit</h1>
     <div class="head-spacer"></div>
+    <button class="hbtn user-btn" id="btn-user" title="Bediener wechseln"><span class="user-ic" id="user-ic">?</span><span id="user-name">Wer?</span></button>
     <select class="period-sel" id="period-sel" title="Zeitraum"></select>
-    <button class="hbtn" id="btn-students">👥 Schüler</button>
-    <button class="hbtn" id="btn-tt">🗓️ Stundenplan</button>
-    <button class="hbtn" id="btn-stats">📊 Auswertung</button>
-    <button class="hbtn" id="btn-cal">📆 Kalender</button>
-    <button class="hbtn" id="btn-pdf">📄 PDF</button>
+    <button class="hbtn" id="btn-students">👥</button>
+    <button class="hbtn" id="btn-tt">🗓️</button>
+    <button class="hbtn" id="btn-cal">📆</button>
+    <button class="hbtn" id="btn-pdf">📄</button>
     <button class="hbtn" id="btn-data">💾</button>
   </div>
 </header>
 
-<div class="wrap">
-  <div class="summary" id="summary"></div>
+<div class="layout">
+  <aside class="sidebar no-print" id="sidebar">
+    <div class="side-head">
+      <div class="class-tabs" id="class-tabs" role="tablist" aria-label="Klasse"></div>
+      <button class="btn btn-ghost btn-sm" id="btn-add-student" style="margin-top:10px;width:100%;">+ Schüler</button>
+    </div>
+    <div class="side-list" id="students"></div>
+  </aside>
 
-  <div class="sec-head">
-    <h2>🧑‍🎓 Schüler</h2>
-    <span class="count" id="student-count"></span>
-    <div class="head-spacer"></div>
-    <button class="btn btn-ghost btn-sm no-print" id="btn-add-student">+ Schüler</button>
-  </div>
-  <div class="class-tabs no-print" id="class-tabs" role="tablist" aria-label="Klasse"></div>
-  <p class="count no-print" style="margin:6px 4px 12px;color:var(--muted);font-size:13px;">Klasse wählen → Schüler antippen → Datum → fehlende Blöcke anklicken.</p>
-  <div id="students"></div>
+  <main class="wrap">
+    <div class="summary" id="summary"></div>
+    <div id="main-area"></div>
+  </main>
+</div>
 
-  <div class="sec-head">
-    <h2>📅 Durchschnitt pro Wochentag</h2>
-    <span class="count">Ø Absenz-Stunden je Wochentag</span>
+<!-- Bediener-Modal -->
+<div class="modal-bg" id="modal-user">
+  <div class="modal">
+    <h3>👋 Wer bedient die App?</h3>
+    <p class="sub">Wähle deinen Namen — wird bei jedem Eintrag und jeder Notiz gespeichert.</p>
+    <div class="user-grid" id="user-grid"></div>
+    <div class="modal-actions"><button class="btn btn-ghost" data-close>Schliessen</button></div>
   </div>
-  <div class="card"><div id="weekday"></div></div>
-
-  <div class="sec-head">
-    <h2>📚 Durchschnitt pro Fach</h2>
-    <span class="count">Ø Absenz-Stunden je Fach &amp; Schüler</span>
-  </div>
-  <div class="card"><div id="subject"></div></div>
 </div>
 
 <!-- Schüler-Modal -->
@@ -585,8 +627,10 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     return null;
   }
 
-  var state={students:[],periods:[],entries:[],timetable:null,notes:[]};
-  var ui={}; var pen='unentschuldigt'; var ttLevel='L1'; var classFilter='all';
+  var state={students:[],periods:[],entries:[],timetable:null,notes:[],currentUser:null};
+  var ui={}; var pen='unentschuldigt'; var ttLevel='L1'; var classFilter='L1';
+  var activeStudentId=null;
+  var USERS=['Mireille','Carole','Sarah','Joey','Jean-Pierre','Sandy','Annick','Sandra','Miguel'];
   var NOTE_TYPES={pruefung:{label:'Prüfung',icon:'📝',color:'#C0392B'},hausaufgabe:{label:'Hausaufgabe',icon:'📒',color:'#0CA678'},bemerkung:{label:'Bemerkung',icon:'💬',color:'#6C5CE7'},allgemein:{label:'Allgemein',icon:'📌',color:'#7A7A92'}};
 
   /* ---- Persistenz / Migration ---- */
@@ -598,7 +642,10 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       state.entries=Array.isArray(p.entries)?p.entries:[];
       state.timetable=p.timetable||null;
       state.notes=Array.isArray(p.notes)?p.notes:[];
+      state.currentUser=p.currentUser||null;
     }}catch(e){console.error(e);}
+    // currentUser ist gerätegebunden, nicht aus Backup übernehmen
+    try{var u=localStorage.getItem('anwesenheit_user');if(u)state.currentUser=u;}catch(e){}
     // Migration
     state.students.forEach(function(s){if(!s.level)s.level='L1';});
     state.entries.forEach(function(e){
@@ -663,33 +710,43 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var box=document.getElementById('class-tabs');
     var cL1=state.students.filter(function(s){return s.level==='L1';}).length;
     var cL2=state.students.filter(function(s){return s.level==='L2';}).length;
-    var cAll=state.students.length;
-    box.style.display=cAll?'':'none';
     function tab(key,label,n){return '<button class="class-tab'+(classFilter===key?' active':'')+'" data-class="'+key+'" role="tab" aria-selected="'+(classFilter===key?'true':'false')+'">'+label+'<span class="ct-count">'+n+'</span></button>';}
-    box.innerHTML=tab('all','Alle',cAll)+tab('L1','Klasse L1',cL1)+tab('L2','Klasse L2',cL2);
+    box.innerHTML=tab('L1','L1',cL1)+tab('L2','L2',cL2);
   }
-  function visibleStudents(){return state.students.filter(function(s){return classFilter==='all'||s.level===classFilter;});}
+  function visibleStudents(){return state.students.filter(function(s){return s.level===classFilter;});}
   function renderStudents(){
     renderClassTabs();
     var box=document.getElementById('students');
     var list=visibleStudents();
-    document.getElementById('student-count').textContent=state.students.length?'· '+list.length+(classFilter==='all'?'':' von '+state.students.length):'';
-    if(!state.students.length){box.innerHTML='<div class="card pad"><div class="empty"><div class="i">🧑‍🎓</div><p>Noch keine Schüler.</p><p class="hint">Oben rechts „+ Schüler".</p></div></div>';return;}
-    if(!list.length){box.innerHTML='<div class="card pad"><div class="empty"><div class="i">🧑‍🎓</div><p>Keine Schüler in dieser Klasse.</p><p class="hint">Wechsle die Klasse oder lege neue Schüler an.</p></div></div>';return;}
+    if(!state.students.length){box.innerHTML='<div class="side-empty">Noch keine Schüler.<br><span style="font-size:11px;">„+ Schüler" oben</span></div>';return;}
+    if(!list.length){box.innerHTML='<div class="side-empty">Keine Schüler in '+classFilter+'.</div>';return;}
     box.innerHTML=list.map(function(s){
-      var u=ui[s.id]||(ui[s.id]={date:today(),open:false});
       var tot=studentTotal(s.id);
-      var lv=s.level||'';
-      return '<div class="student'+(u.open?' open':'')+'" data-sid="'+s.id+'">'+
-        '<div class="st-top" data-toggle="'+s.id+'">'+
-          '<span class="avatar" style="background:'+avatarBg(s.name)+'">'+esc(initials(s.name))+'</span>'+
-          '<div class="st-name">'+esc(s.name)+(s.klasse?' <span class="klasse">'+esc(s.klasse)+'</span>':'')+' <span class="lvl '+(lv||'none')+'">'+(lv||'?')+'</span></div>'+
-          '<div class="st-total"><span class="n">'+nf(tot)+'</span><span class="u">Std. abwesend</span></div>'+
-          '<span class="chev">▼</span>'+
-        '</div>'+
-        '<div class="recorder">'+(u.open?recorderHTML(s,u):'')+'</div>'+
+      return '<div class="side-stu'+(activeStudentId===s.id?' active':'')+'" data-pick="'+s.id+'">'+
+        '<span class="avatar" style="background:'+avatarBg(s.name)+'">'+esc(initials(s.name))+'</span>'+
+        '<span class="nm">'+esc(s.name)+(s.klasse?'<small>'+esc(s.klasse)+' · '+s.level+'</small>':'<small>'+s.level+'</small>')+'</span>'+
+        '<span class="hrs" title="Absenz-Stunden">'+nf(tot)+'h</span>'+
       '</div>';
     }).join('');
+  }
+
+  function renderMain(){
+    var box=document.getElementById('main-area');
+    var s=state.students.find(function(x){return x.id===activeStudentId;});
+    if(!s){
+      var hint=state.students.length?'Wähle links einen Schüler aus.':'Lege oben links Schüler an, dann erscheinen sie hier.';
+      box.innerHTML='<div class="main-empty"><div class="i">👈</div><p>Kein Schüler ausgewählt</p><p class="hint">'+hint+'</p></div>';
+      return;
+    }
+    var u=ui[s.id]||(ui[s.id]={date:today()});
+    var tot=studentTotal(s.id);
+    var head='<div class="stu-head">'+
+      '<span class="avatar" style="background:'+avatarBg(s.name)+'">'+esc(initials(s.name))+'</span>'+
+      '<div><div class="nm">'+esc(s.name)+'<small>'+(s.klasse?esc(s.klasse)+' · ':'')+'Niveau '+(s.level||'?')+'</small></div></div>'+
+      '<div class="h-spacer"></div>'+
+      '<div class="tot"><div class="v">'+nf(tot)+'</div><div class="l">Std. abwesend (Periode)</div></div>'+
+    '</div>';
+    box.innerHTML='<div class="stu-main" data-sid="'+s.id+'">'+head+'<div class="recorder open">'+recorderHTML(s,u)+'</div></div>';
   }
 
   function noteFor(date,blockId,level,subject){return state.notes.filter(function(n){return n.date===date&&((n.blockId&&n.blockId===blockId)||(n.subject&&n.subject===subject))&&(!n.level||n.level===level);});}
@@ -702,7 +759,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var DOW=['So','Mo','Di','Mi','Do','Fr','Sa'];
     var items=list.map(function(n){var nt=NOTE_TYPES[n.type]||NOTE_TYPES.allgemein;var b=BLOCKS.find(function(x){return x.id===n.blockId;});
       var meta=DOW[wdOf(n.date)]+' '+fmtD(n.date).slice(0,5)+' · '+(n.subject||'')+(b?' · '+b.start+'–'+b.end:'');
-      return '<div class="wk-note '+n.type+'" data-noteopen="'+n.id+'"><span class="wn-ic">'+nt.icon+'</span><div class="wn-body"><div class="wn-meta">'+nt.label+' · '+esc(meta)+'</div><div class="wn-txt">'+esc(n.text)+'</div></div></div>';
+      return '<div class="wk-note '+n.type+'" data-noteopen="'+n.id+'"><span class="wn-ic">'+nt.icon+'</span><div class="wn-body"><div class="wn-meta">'+nt.label+' · '+esc(meta)+(n.byUser?' · <span style="color:var(--primary-dark);">'+esc(n.byUser)+'</span>':'')+'</div><div class="wn-txt">'+esc(n.text)+'</div></div></div>';
     }).join('');
     return '<div class="wk-notes"><div class="wk-notes-head"><h4>📔 Klassenbuch — diese Woche</h4><span class="badge">'+list.length+'</span></div><div class="wk-notes-list">'+items+'</div></div>';
   }
@@ -798,11 +855,9 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   }
 
   function rerenderStudent(sid){
-    var s=state.students.find(function(x){return x.id===sid;});var u=ui[sid];if(!s)return;
-    var el=document.querySelector('.student[data-sid="'+sid+'"] .recorder');
-    if(el)el.innerHTML=u.open?recorderHTML(s,u):'';
-    // Total oben aktualisieren
-    var tEl=document.querySelector('.student[data-sid="'+sid+'"] .st-total .n');if(tEl)tEl.textContent=nf(studentTotal(sid));
+    // Nur den aktiven Schüler in der Hauptansicht neu zeichnen + Sidebar (für Total/Auswahl-Hervorhebung)
+    if(activeStudentId===sid)renderMain();
+    renderStudents();
   }
 
   /* ---- Wochen-Helfer + Block-Toggle ---- */
@@ -819,9 +874,9 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       if(existing.status===pen){state.entries=state.entries.filter(function(e){return e!==existing;});}
       else{existing.status=pen;}
     }else{
-      state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:blockId,subject:subj,status:pen,hours:blockHours(b),note:''});
+      state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:blockId,subject:subj,status:pen,hours:blockHours(b),note:'',byUser:state.currentUser||'',byUserAt:Date.now()});
     }
-    save();rerenderStudent(sid);renderSummary();renderWeekday();renderSubject();
+    save();rerenderStudent(sid);renderSummary();
   }
   function markWholeDay(sid,date){
     var s=state.students.find(function(x){return x.id===sid;});if(!s)return;
@@ -831,9 +886,9 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       var subj=tt[i]||'';if(!subj)return;
       var ex=entryFor(sid,date,b.id);
       if(ex){ex.status=pen;} // immer auf aktuellen Pen-Status setzen
-      else{state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:b.id,subject:subj,status:pen,hours:blockHours(b),note:''});}
+      else{state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:b.id,subject:subj,status:pen,hours:blockHours(b),note:'',byUser:state.currentUser||'',byUserAt:Date.now()});}
     });
-    save();rerenderStudent(sid);renderSummary();renderWeekday();renderSubject();
+    save();rerenderStudent(sid);renderSummary();
   }
   function clearWholeDay(sid,date){
     var before=state.entries.length;
@@ -841,42 +896,19 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     if(state.entries.length!==before){save();rerenderStudent(sid);renderSummary();renderWeekday();renderSubject();}
   }
 
-  /* ---- Wochentag-Durchschnitt ---- */
-  function renderWeekday(){
-    var list=periodEntries();var datesByWd={},sumByWd={};
-    list.forEach(function(e){var w=e.weekday!=null?e.weekday:wdOf(e.date);(datesByWd[w]=datesByWd[w]||new Set()).add(e.date);if(STATUS[e.status]&&STATUS[e.status].isAbsence)sumByWd[w]=(sumByWd[w]||0)+countHours(e);});
-    var peak=null;WD_ORDER.forEach(function(w){if(datesByWd[w]){var avg=(sumByWd[w]||0)/datesByWd[w].size;if(!peak||avg>peak.avg)peak={w:w,avg:avg};}});
-    var rows='',any=false;
-    WD_ORDER.forEach(function(w){if(!datesByWd[w])return;any=true;var d=datesByWd[w].size,sm=sumByWd[w]||0,avg=d?sm/d:0;rows+='<tr'+(peak&&peak.w===w&&avg>0?' class="wd-peak"':'')+'><td><strong>'+WD[w]+'</strong></td><td class="n">'+d+'</td><td class="n">'+nf(sm)+'</td><td class="n big">'+nf(avg)+'</td></tr>';});
-    var box=document.getElementById('weekday');
-    box.innerHTML=any?'<table><thead><tr><th>Wochentag</th><th class="n">Erfasste Tage</th><th class="n">Summe Std.</th><th class="n">Ø pro Tag</th></tr></thead><tbody>'+rows+'</tbody></table>':'<div class="empty"><div class="i">📅</div><p>Noch keine Einträge.</p></div>';
-  }
+  function renderAll(){fillPeriods();renderSummary();renderStudents();renderMain();renderUserUI();}
 
-  /* ---- Durchschnitt pro Fach ---- */
-  function levelSubjects(level){var set={};if(!state.timetable[level])return set;for(var d=1;d<=5;d++){(state.timetable[level][d]||[]).forEach(function(x){if(x&&!PAUSE_SUBJECTS[x])set[x]=1;});}return set;}
-  function renderSubject(){
-    var box=document.getElementById('subject');
-    var list=periodEntries().filter(function(e){return STATUS[e.status]&&STATUS[e.status].isAbsence;});
-    if(!list.length){box.innerHTML='<div class="empty"><div class="i">📚</div><p>Noch keine Absenzen erfasst.</p></div>';return;}
-    // wie viele Schüler haben das Fach (nach Niveau)?
-    var lvlSub={L1:levelSubjects('L1'),L2:levelSubjects('L2')};
-    function studentsWith(subj){var n=0;state.students.forEach(function(s){if(lvlSub[s.level]&&lvlSub[s.level][subj])n++;});return n;}
-    var by={};
-    list.forEach(function(e){var s=e.subject||'(allgemein)';(by[s]=by[s]||{cnt:0,hrs:0,exc:0,non:0});var o=by[s];o.cnt++;o.hrs+=countHours(e);if(e.status==='entschuldigt')o.exc++;else if(e.status==='unentschuldigt')o.non++;});
-    var names=Object.keys(by).sort(function(a,b){return by[b].hrs-by[a].hrs;});
-    var peak=null;names.forEach(function(nm){var denom=studentsWith(nm)||state.students.length||1;var avg=by[nm].hrs/denom;if(!peak||avg>peak.avg)peak={nm:nm,avg:avg};});
-    var rows=names.map(function(nm){var o=by[nm];var denom=studentsWith(nm)||state.students.length||1;var avg=o.hrs/denom;
-      return '<tr'+(peak&&peak.nm===nm&&avg>0?' class="wd-peak"':'')+'><td><strong>'+esc(nm)+'</strong></td>'+
-        '<td class="c">'+o.cnt+'</td>'+
-        '<td class="c" style="color:#2C6FB5;font-weight:700;">'+(o.exc||'·')+'</td>'+
-        '<td class="c" style="color:var(--danger-dark);font-weight:700;">'+(o.non||'·')+'</td>'+
-        '<td class="n">'+nf(o.hrs)+'</td>'+
-        '<td class="n big">'+nf(avg)+'</td></tr>';
-    }).join('');
-    box.innerHTML='<div class="table-wrap" style="overflow-x:auto;"><table><thead><tr><th>Fach</th><th class="c">Anzahl</th><th class="c">Exc.</th><th class="c">Non-exc.</th><th class="n">Summe Std.</th><th class="n">Ø Std./Schüler</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  /* ---- Bediener-Auswahl ---- */
+  function renderUserUI(){
+    var btn=document.getElementById('btn-user');var ic=document.getElementById('user-ic');var nm=document.getElementById('user-name');
+    if(state.currentUser){ic.textContent=initials(state.currentUser);nm.textContent=state.currentUser;btn.style.background='rgba(255,255,255,.32)';}
+    else{ic.textContent='?';nm.textContent='Wer?';btn.style.background='var(--warn)';}
   }
-
-  function renderAll(){fillPeriods();renderSummary();renderStudents();renderWeekday();renderSubject();}
+  function renderUserGrid(){
+    var box=document.getElementById('user-grid');
+    box.innerHTML=USERS.map(function(u){return '<button class="user-card'+(state.currentUser===u?' active':'')+'" data-user="'+esc(u)+'"><span class="avatar" style="background:'+avatarBg(u)+'">'+esc(initials(u))+'</span>'+esc(u)+'</button>';}).join('');
+  }
+  function setUser(u){state.currentUser=u;try{localStorage.setItem('anwesenheit_user',u);}catch(e){}save();renderUserUI();renderUserGrid();toast('👋 '+u);}
 
   /* ---- Klassenbuch (Notizen) ---- */
   var noteCtx={date:null,blockId:null,subject:null,level:null};
@@ -896,12 +928,12 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     }).sort(function(a,b){return (a.blockId||'').localeCompare(b.blockId||'');});
     var box=document.getElementById('note-existing');
     if(!list.length){box.innerHTML='<div class="empty-mini" style="margin-bottom:14px;">Noch keine Notizen für diese Auswahl.</div>';return;}
-    box.innerHTML='<div class="note-list">'+list.map(function(n){var nt=NOTE_TYPES[n.type]||NOTE_TYPES.allgemein;var b=BLOCKS.find(function(x){return x.id===n.blockId;});var meta=(b?b.start+'–'+b.end:'Tag')+(n.subject?' · '+esc(n.subject):'')+(n.level?' · '+n.level:'');return '<div class="note-item '+n.type+'"><span class="nt-ic">'+nt.icon+'</span><div class="nt-body"><div class="nt-meta">'+nt.label+' · '+meta+'</div><div class="nt-txt">'+esc(n.text)+'</div></div><button class="nt-del" data-delnote="'+n.id+'" title="Notiz löschen">✕</button></div>';}).join('')+'</div>';
+    box.innerHTML='<div class="note-list">'+list.map(function(n){var nt=NOTE_TYPES[n.type]||NOTE_TYPES.allgemein;var b=BLOCKS.find(function(x){return x.id===n.blockId;});var meta=(b?b.start+'–'+b.end:'Tag')+(n.subject?' · '+esc(n.subject):'')+(n.level?' · '+n.level:'')+(n.byUser?' · von '+esc(n.byUser):'');return '<div class="note-item '+n.type+'"><span class="nt-ic">'+nt.icon+'</span><div class="nt-body"><div class="nt-meta">'+nt.label+' · '+meta+'</div><div class="nt-txt">'+esc(n.text)+'</div></div><button class="nt-del" data-delnote="'+n.id+'" title="Notiz löschen">✕</button></div>';}).join('')+'</div>';
   }
   function addNote(){
     var txt=document.getElementById('note-text').value.trim();if(!txt)return;
     var type=document.getElementById('note-type').value;
-    state.notes.push({id:uid(),date:noteCtx.date,blockId:noteCtx.blockId||null,subject:noteCtx.subject||null,level:noteCtx.level||null,type:type,text:txt});
+    state.notes.push({id:uid(),date:noteCtx.date,blockId:noteCtx.blockId||null,subject:noteCtx.subject||null,level:noteCtx.level||null,type:type,text:txt,byUser:state.currentUser||'',byUserAt:Date.now()});
     save();document.getElementById('note-text').value='';renderNoteList();renderStudents();toast('✅ Notiz hinzugefügt');
   }
   function delNote(id){state.notes=state.notes.filter(function(n){return n.id!==id;});save();renderNoteList();renderStudents();toast('🗑 Notiz gelöscht');}
@@ -1019,11 +1051,11 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   function init(){
     load();ensurePeriods();
 
-    document.getElementById('period-sel').addEventListener('change',function(){renderAll();renderStats();});
+    document.getElementById('period-sel').addEventListener('change',function(){renderAll();});
     document.getElementById('btn-students').addEventListener('click',function(){renderStudentMgmt();openModal('modal-students');});
-    document.getElementById('btn-add-student').addEventListener('click',function(){renderStudentMgmt();openModal('modal-students');document.getElementById('new-student-name').focus();});
+    document.getElementById('btn-add-student').addEventListener('click',function(){renderStudentMgmt();document.getElementById('new-student-level').value=classFilter;openModal('modal-students');document.getElementById('new-student-name').focus();});
     document.getElementById('btn-tt').addEventListener('click',function(){renderTTGrid();openModal('modal-tt');});
-    document.getElementById('btn-stats').addEventListener('click',function(){fillStatsStudents();renderStats();openModal('modal-stats');});
+    // (Stats-Modal entfernt — Mini-Stats sind im Schüler-Drilldown)
     document.getElementById('btn-cal').addEventListener('click',function(){calYear=defaultCalYear();fillCalYears();renderCalendar();openModal('modal-cal');});
     document.getElementById('cal-year').addEventListener('change',function(e){calYear=e.target.value;renderCalendar();});
     document.getElementById('cal-load-periods').addEventListener('click',function(){if(!confirm('Alle korrekten Luxemburger Perioden (2025/26 & 2026/27) laden? Bestehende Perioden werden ersetzt.'))return;state.periods=luPeriods();save();fillPeriods();renderAll();renderCalendar();toast('✅ LU-Perioden geladen');});
@@ -1036,10 +1068,12 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     document.getElementById('export-csv').addEventListener('click',exportCSV);
     document.getElementById('reset-all').addEventListener('click',resetAll);
     document.getElementById('import-json').addEventListener('change',function(e){if(e.target.files[0])importJSON(e.target.files[0]);e.target.value='';});
-    document.getElementById('stats-student').addEventListener('change',renderStats);
-    document.getElementById('stats-status').addEventListener('change',renderStats);
+    var sse=document.getElementById('stats-student');if(sse)sse.addEventListener('change',renderStats);
+    var sst=document.getElementById('stats-status');if(sst)sst.addEventListener('change',renderStats);
     document.getElementById('note-add').addEventListener('click',addNote);
-    document.getElementById('class-tabs').addEventListener('click',function(e){var t=e.target.closest('[data-class]');if(!t)return;classFilter=t.dataset.class;renderStudents();});
+    document.getElementById('class-tabs').addEventListener('click',function(e){var t=e.target.closest('[data-class]');if(!t)return;classFilter=t.dataset.class;
+      var act=state.students.find(function(s){return s.id===activeStudentId;});if(!act||act.level!==classFilter)activeStudentId=null;
+      renderStudents();renderMain();});
     document.getElementById('note-existing').addEventListener('click',function(e){var t=e.target.closest('[data-delnote]');if(t&&confirm('Notiz löschen?'))delNote(t.dataset.delnote);});
 
     document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModals();});});
@@ -1054,11 +1088,11 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     document.getElementById('student-mgmt-list').addEventListener('click',function(e){var b=e.target.closest('[data-delstudent]');if(b)delStudent(b.dataset.delstudent);});
     document.getElementById('student-mgmt-list').addEventListener('change',function(e){var s=e.target.closest('[data-lvl]');if(s)setLevel(s.dataset.lvl,s.value);});
 
-    // Schülerkarten / Recorder
-    var box=document.getElementById('students');
-    box.addEventListener('click',function(e){
+    // Layout-Listener (Sidebar + Hauptbereich)
+    var layout=document.querySelector('.layout');
+    layout.addEventListener('click',function(e){
       var t;
-      if((t=e.target.closest('[data-toggle]'))){var u=ui[t.dataset.toggle];u.open=!u.open;renderStudents();return;}
+      if((t=e.target.closest('[data-pick]'))){activeStudentId=t.dataset.pick;renderStudents();renderMain();return;}
       if((t=e.target.closest('[data-pen]'))){pen=t.dataset.pen;document.querySelectorAll('.pen button').forEach(function(b){b.className='';});document.querySelectorAll('[data-pen="'+pen+'"]').forEach(function(b){b.className='active '+pen;});return;}
       if((t=e.target.closest('[data-week]'))){var uu=ui[t.dataset.sid];var act=t.dataset.week;uu.date=act==='today'?today():addDays(uu.date,act==='next'?7:-7);rerenderStudent(t.dataset.sid);return;}
       if((t=e.target.closest('[data-noteact]'))){var s2=state.students.find(function(x){return x.id===t.dataset.sid;});openNoteModal({date:t.dataset.date,blockId:t.dataset.blk||null,subject:t.dataset.subj||null,level:s2?s2.level:null});return;}
@@ -1067,9 +1101,15 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       if((t=e.target.closest('[data-blk]'))){toggleBlock(t.dataset.sid,t.dataset.blk,t.dataset.date);return;}
       if((t=e.target.closest('[data-setlevel]'))){setLevel(t.dataset.sid,t.dataset.setlevel);return;}
     });
-    box.addEventListener('change',function(e){var inp=e.target.closest('[data-date]');if(inp){ui[inp.dataset.date].date=inp.value;rerenderStudent(inp.dataset.date);}});
+    layout.addEventListener('change',function(e){var inp=e.target.closest('[data-date]');if(inp){ui[inp.dataset.date].date=inp.value;rerenderStudent(inp.dataset.date);}});
+
+    // Bediener
+    document.getElementById('btn-user').addEventListener('click',function(){renderUserGrid();openModal('modal-user');});
+    document.getElementById('user-grid').addEventListener('click',function(e){var t=e.target.closest('[data-user]');if(t){setUser(t.dataset.user);closeModals();}});
 
     renderAll();
+    // Bediener wählen erzwingen, falls noch keiner gewählt
+    if(!state.currentUser){renderUserGrid();openModal('modal-user');}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

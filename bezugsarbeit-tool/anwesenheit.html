@@ -67,6 +67,12 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .sec-head{display:flex;align-items:center;gap:10px;margin:30px 4px 14px;flex-wrap:wrap;}
 .sec-head h2{font-size:18px;font-weight:800;letter-spacing:-.02em;}
 .sec-head .count{font-size:13px;color:var(--muted);font-weight:600;}
+.class-tabs{display:flex;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px;box-shadow:var(--shadow-sm);width:fit-content;max-width:100%;overflow-x:auto;}
+.class-tab{border:none;background:transparent;font:inherit;font-weight:700;font-size:14px;padding:9px 18px;border-radius:999px;cursor:pointer;color:var(--muted);display:inline-flex;align-items:center;gap:7px;white-space:nowrap;transition:.15s;}
+.class-tab:hover{color:var(--text);background:var(--bg);}
+.class-tab.active{color:#fff;background:var(--primary);box-shadow:0 3px 10px rgba(108,92,231,.32);}
+.class-tab .ct-count{font-size:11px;font-weight:800;background:rgba(0,0,0,.08);padding:1px 8px;border-radius:999px;min-width:18px;text-align:center;}
+.class-tab.active .ct-count{background:rgba(255,255,255,.25);color:#fff;}
 
 /* Student cards */
 .student{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;transition:.2s;animation:rise .35s both;}
@@ -299,7 +305,8 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     <div class="head-spacer"></div>
     <button class="btn btn-ghost btn-sm no-print" id="btn-add-student">+ Schüler</button>
   </div>
-  <p class="count no-print" style="margin:-6px 4px 12px;color:var(--muted);font-size:13px;">Tippe auf einen Schüler → Datum wählen → fehlende Blöcke anklicken.</p>
+  <div class="class-tabs no-print" id="class-tabs" role="tablist" aria-label="Klasse"></div>
+  <p class="count no-print" style="margin:6px 4px 12px;color:var(--muted);font-size:13px;">Klasse wählen → Schüler antippen → Datum → fehlende Blöcke anklicken.</p>
   <div id="students"></div>
 
   <div class="sec-head">
@@ -539,7 +546,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   }
 
   var state={students:[],periods:[],entries:[],timetable:null,notes:[]};
-  var ui={}; var pen='unentschuldigt'; var ttLevel='L1';
+  var ui={}; var pen='unentschuldigt'; var ttLevel='L1'; var classFilter='all';
   var NOTE_TYPES={pruefung:{label:'Prüfung',icon:'📝',color:'#C0392B'},hausaufgabe:{label:'Hausaufgabe',icon:'📒',color:'#0CA678'},bemerkung:{label:'Bemerkung',icon:'💬',color:'#6C5CE7'},allgemein:{label:'Allgemein',icon:'📌',color:'#7A7A92'}};
 
   /* ---- Persistenz / Migration ---- */
@@ -612,11 +619,24 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   function studentTotal(id){var p=curPeriod();return state.entries.filter(function(e){return e.studentId===id&&STATUS[e.status]&&STATUS[e.status].isAbsence&&inPeriod(e,p);}).reduce(function(a,e){return a+countHours(e);},0);}
   function entryFor(sid,date,blockId){return state.entries.find(function(e){return e.studentId===sid&&e.date===date&&e.blockId===blockId;});}
 
+  function renderClassTabs(){
+    var box=document.getElementById('class-tabs');
+    var cL1=state.students.filter(function(s){return s.level==='L1';}).length;
+    var cL2=state.students.filter(function(s){return s.level==='L2';}).length;
+    var cAll=state.students.length;
+    box.style.display=cAll?'':'none';
+    function tab(key,label,n){return '<button class="class-tab'+(classFilter===key?' active':'')+'" data-class="'+key+'" role="tab" aria-selected="'+(classFilter===key?'true':'false')+'">'+label+'<span class="ct-count">'+n+'</span></button>';}
+    box.innerHTML=tab('all','Alle',cAll)+tab('L1','Klasse L1',cL1)+tab('L2','Klasse L2',cL2);
+  }
+  function visibleStudents(){return state.students.filter(function(s){return classFilter==='all'||s.level===classFilter;});}
   function renderStudents(){
+    renderClassTabs();
     var box=document.getElementById('students');
-    document.getElementById('student-count').textContent=state.students.length?'· '+state.students.length:'';
+    var list=visibleStudents();
+    document.getElementById('student-count').textContent=state.students.length?'· '+list.length+(classFilter==='all'?'':' von '+state.students.length):'';
     if(!state.students.length){box.innerHTML='<div class="card pad"><div class="empty"><div class="i">🧑‍🎓</div><p>Noch keine Schüler.</p><p class="hint">Oben rechts „+ Schüler".</p></div></div>';return;}
-    box.innerHTML=state.students.map(function(s){
+    if(!list.length){box.innerHTML='<div class="card pad"><div class="empty"><div class="i">🧑‍🎓</div><p>Keine Schüler in dieser Klasse.</p><p class="hint">Wechsle die Klasse oder lege neue Schüler an.</p></div></div>';return;}
+    box.innerHTML=list.map(function(s){
       var u=ui[s.id]||(ui[s.id]={date:today(),open:false});
       var tot=studentTotal(s.id);
       var lv=s.level||'';
@@ -959,6 +979,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     document.getElementById('stats-student').addEventListener('change',renderStats);
     document.getElementById('stats-status').addEventListener('change',renderStats);
     document.getElementById('note-add').addEventListener('click',addNote);
+    document.getElementById('class-tabs').addEventListener('click',function(e){var t=e.target.closest('[data-class]');if(!t)return;classFilter=t.dataset.class;renderStudents();});
     document.getElementById('note-existing').addEventListener('click',function(e){var t=e.target.closest('[data-delnote]');if(t&&confirm('Notiz löschen?'))delNote(t.dataset.delnote);});
 
     document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModals();});});

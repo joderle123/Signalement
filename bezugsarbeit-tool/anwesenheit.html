@@ -142,7 +142,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .wk-grid .tc{font-size:11px;color:var(--muted);text-align:right;padding:8px 8px;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.25;vertical-align:middle;font-weight:600;}
 .wk-grid .tc .tw{display:inline-block;margin-top:2px;font-size:10px;font-weight:800;color:var(--primary-dark);background:var(--primary-50);padding:1px 6px;border-radius:999px;}
 .wk-grid .tc .tw.mute{background:transparent;color:#CACAD8;}
-.wcell-wrap{position:relative;}
+.wcell-wrap{position:relative;height:100%;}
 .wcell{width:100%;height:100%;min-height:62px;border:2px solid var(--line);background:#fff;border-radius:11px;padding:10px 8px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;color:var(--text);transition:.12s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;position:relative;}
 .wcell .subj-lbl{display:block;}
 .wcell:hover{border-color:var(--primary);background:var(--primary-50);transform:translateY(-1px);box-shadow:0 3px 10px rgba(108,92,231,.15);}
@@ -157,10 +157,50 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .wcell.marked.entschuldigt .mk{background:var(--info);color:#fff;}
 .wcell.marked.unentschuldigt .mk{background:var(--danger);color:#fff;}
 .wcell.marked.verspaetet .mk{background:var(--warn);color:#fff;}
-.wcell .note-ind{position:absolute;top:3px;right:5px;font-size:11px;opacity:.85;}
-.note-btn{position:absolute;top:3px;left:5px;border:none;background:transparent;font-size:13px;cursor:pointer;opacity:0;padding:2px;line-height:1;transition:opacity .15s;border-radius:6px;}
-.wcell-wrap:hover .note-btn{opacity:.65;}
-.note-btn:hover{opacity:1!important;background:#fff;box-shadow:var(--shadow-sm);}
+/* Notiz-Markierungen — auffällig */
+.wcell{padding-top:6px;}
+.wcell.has-note{padding-top:26px;box-shadow:0 0 0 2px var(--nc,#7A7A92) inset, 0 4px 14px rgba(0,0,0,.06);}
+.note-bar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:4px;padding:4px 8px;background:var(--nc,#7A7A92);color:#fff;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:9px 9px 0 0;line-height:1.1;overflow:hidden;white-space:nowrap;cursor:pointer;font-family:inherit;z-index:2;}
+.note-bar .nb-ic{font-size:11px;flex:0 0 auto;}
+.note-bar .nb-lbl{flex:0 0 auto;}
+.note-bar .nb-cnt{margin-left:auto;background:rgba(255,255,255,.28);padding:1px 6px;border-radius:999px;font-size:9px;flex:0 0 auto;}
+.note-bar:hover{filter:brightness(1.1);}
+.note-bar.pruefung{--nc:#E74C3C;animation:pulse-soft 2.4s ease-in-out infinite;}
+.note-bar.hausaufgabe{--nc:#0CA678;}
+.note-bar.bemerkung{--nc:#6C5CE7;}
+.note-bar.allgemein{--nc:#7A7A92;}
+.wcell.has-note.note-pruefung{--nc:#E74C3C;}
+.wcell.has-note.note-hausaufgabe{--nc:#0CA678;}
+.wcell.has-note.note-bemerkung{--nc:#6C5CE7;}
+.wcell.has-note.note-allgemein{--nc:#7A7A92;}
+@keyframes pulse-soft{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.45);}50%{box-shadow:0 0 0 5px rgba(231,76,60,0);}}
+.wcell.has-note.note-pruefung{animation:none;}
+.note-btn{position:absolute;bottom:3px;right:4px;border:1.5px solid var(--line);background:#fff;font-size:13px;cursor:pointer;opacity:.55;padding:2px 6px;line-height:1;transition:.15s;border-radius:7px;box-shadow:var(--shadow-sm);}
+.wcell-wrap:hover .note-btn{opacity:1;}
+.note-btn:hover{opacity:1!important;background:var(--primary);color:#fff;border-color:var(--primary);transform:scale(1.1);}
+.wcell.has-note + .note-btn,.has-note ~ .note-btn{opacity:.85;}
+
+/* Tages-Notiz-Badge im Header */
+.day-notes-pill{display:inline-flex;align-items:center;gap:4px;background:#FFE9C8;color:#9A6B00;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800;margin-left:4px;}
+
+/* Klassenbuch-Wochenübersicht */
+.wk-notes{margin-top:14px;background:linear-gradient(#fff,#FAFAFE);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;}
+.wk-notes-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.wk-notes-head h4{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-.01em;}
+.wk-notes-head .badge{background:var(--warn);color:#fff;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;}
+.wk-notes-list{display:flex;flex-direction:column;gap:7px;}
+.wk-note{display:flex;gap:10px;align-items:center;padding:9px 12px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--nc,#7A7A92);border-radius:9px;font-size:13px;transition:.12s;cursor:pointer;}
+.wk-note:hover{transform:translateX(2px);box-shadow:var(--shadow-sm);}
+.wk-note.pruefung{--nc:#E74C3C;}
+.wk-note.hausaufgabe{--nc:#0CA678;}
+.wk-note.bemerkung{--nc:#6C5CE7;}
+.wk-note.allgemein{--nc:#7A7A92;}
+.wk-note .wn-ic{font-size:18px;flex:0 0 auto;}
+.wk-note .wn-meta{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.wk-note .wn-txt{font-size:13px;font-weight:600;line-height:1.4;margin-top:1px;}
+.wk-note .wn-body{flex:1 1 auto;min-width:0;}
+.wk-note .wn-txt{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.wk-notes-empty{color:var(--muted);font-size:13px;text-align:center;padding:8px;}
 
 /* Mini-Statistik pro Schüler */
 .mini-stats{margin-top:18px;}
@@ -653,6 +693,19 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   }
 
   function noteFor(date,blockId,level,subject){return state.notes.filter(function(n){return n.date===date&&((n.blockId&&n.blockId===blockId)||(n.subject&&n.subject===subject))&&(!n.level||n.level===level);});}
+  function weekNotesHTML(days,level){
+    var dset={};days.forEach(function(d){dset[d]=true;});
+    var list=state.notes.filter(function(n){return dset[n.date]&&(!n.level||n.level===level);});
+    if(!list.length)return '<div class="wk-notes"><div class="wk-notes-head"><h4>📔 Klassenbuch — diese Woche</h4></div><div class="wk-notes-empty">Noch keine Notizen in dieser Woche. Tippe das 📝 in einer Zelle, um eine Notiz anzulegen.</div></div>';
+    var priority={pruefung:4,hausaufgabe:3,bemerkung:2,allgemein:1};
+    list.sort(function(a,b){return (a.date.localeCompare(b.date))||((priority[b.type]||0)-(priority[a.type]||0));});
+    var DOW=['So','Mo','Di','Mi','Do','Fr','Sa'];
+    var items=list.map(function(n){var nt=NOTE_TYPES[n.type]||NOTE_TYPES.allgemein;var b=BLOCKS.find(function(x){return x.id===n.blockId;});
+      var meta=DOW[wdOf(n.date)]+' '+fmtD(n.date).slice(0,5)+' · '+(n.subject||'')+(b?' · '+b.start+'–'+b.end:'');
+      return '<div class="wk-note '+n.type+'" data-noteopen="'+n.id+'"><span class="wn-ic">'+nt.icon+'</span><div class="wn-body"><div class="wn-meta">'+nt.label+' · '+esc(meta)+'</div><div class="wn-txt">'+esc(n.text)+'</div></div></div>';
+    }).join('');
+    return '<div class="wk-notes"><div class="wk-notes-head"><h4>📔 Klassenbuch — diese Woche</h4><span class="badge">'+list.length+'</span></div><div class="wk-notes-list">'+items+'</div></div>';
+  }
   function dayCounted(sid,date){var s=0;state.entries.forEach(function(e){if(e.studentId===sid&&e.date===date&&STATUS[e.status]&&STATUS[e.status].isAbsence)s+=countHours(e);});return s;}
 
   function recorderHTML(s,u){
@@ -679,12 +732,13 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     // Kopfzeile mit „Tag markieren"
     var head='<tr><th class="th-time"></th>';
     days.forEach(function(d,i){var hol=holidayInfo(d);var wd=wdOf(d);var dayHrs=dayCounted(s.id,d);
+      var dayNoteCnt=state.notes.filter(function(n){return n.date===d&&(!n.level||n.level===s.level);}).length;
       var dayBtns=hol?'<span class="hb">'+(hol.type==='ferien'?'🏖️ Ferien':'🎉 Feiertag')+'</span>':
         '<div class="day-acts"><button class="day-btn" data-dayact="mark" data-sid="'+s.id+'" data-date="'+d+'" title="Ganzen Tag mit aktuellem Status markieren">Tag</button>'+
         '<button class="day-btn ghost" data-dayact="clear" data-sid="'+s.id+'" data-date="'+d+'" title="Tag leeren">✕</button>'+
-        '<button class="day-btn note" data-noteact="day" data-sid="'+s.id+'" data-date="'+d+'" title="Tages-Notizen">📝</button></div>';
+        '<button class="day-btn note" data-noteact="day" data-sid="'+s.id+'" data-date="'+d+'" title="Tages-Notizen">📝'+(dayNoteCnt?' '+dayNoteCnt:'')+'</button></div>';
       head+='<th'+(d===todayISO?' class="today"':'')+'>'+
-        '<div class="dh"><span class="dn">'+SHORT[i]+'</span><span class="dt">'+fmtD(d).slice(0,5)+'</span>'+(dayHrs?'<span class="dhrs">'+nf(dayHrs)+'h</span>':'')+'</div>'+
+        '<div class="dh"><span class="dn">'+SHORT[i]+'</span><span class="dt">'+fmtD(d).slice(0,5)+'</span>'+(dayHrs?'<span class="dhrs">'+nf(dayHrs)+'h</span>':'')+(dayNoteCnt?'<span class="day-notes-pill" title="'+dayNoteCnt+' Notiz(en)">📔 '+dayNoteCnt+'</span>':'')+'</div>'+
         dayBtns+
       '</th>';});
     head+='</tr>';
@@ -702,19 +756,25 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
         var ent=entryFor(s.id,d,b.id);var isPause=PAUSE_SUBJECTS[subj]||subj==='Morning Meeting';
         if(ent&&STATUS[ent.status].isAbsence)weekTotal+=blockWeight(b.id,subj);
         var notes=noteFor(d,b.id,s.level,subj);
-        var cls='wcell'+(isPause?' pause':'')+(ent?' marked '+ent.status:'')+(notes.length?' has-note':'');
-        var noteIco=notes.length?'<span class="note-ind" title="'+notes.length+' Notiz(en)">'+(notes[0]&&NOTE_TYPES[notes[0].type]?NOTE_TYPES[notes[0].type].icon:'📝')+'</span>':'';
+        // Wichtigste Notiz wählen: Prüfung > Hausaufgabe > Bemerkung > Allgemein
+        var priority={pruefung:4,hausaufgabe:3,bemerkung:2,allgemein:1};
+        var topNote=notes.slice().sort(function(a,b){return (priority[b.type]||0)-(priority[a.type]||0);})[0];
+        var noteCls=topNote?' has-note note-'+topNote.type:'';
+        var cls='wcell'+(isPause?' pause':'')+(ent?' marked '+ent.status:'')+noteCls;
+        var noteBar='';
+        if(topNote){var nt=NOTE_TYPES[topNote.type]||NOTE_TYPES.allgemein;
+          noteBar='<button class="note-bar '+topNote.type+'" data-noteact="block" data-sid="'+s.id+'" data-date="'+d+'" data-blk="'+b.id+'" data-subj="'+esc(subj)+'" title="'+esc(topNote.text)+'"><span class="nb-ic">'+nt.icon+'</span><span class="nb-lbl">'+esc(nt.label)+'</span>'+(notes.length>1?'<span class="nb-cnt">+'+(notes.length-1)+'</span>':'')+'</button>';}
         body+='<td'+(d===todayISO?' class="todaycol"':'')+'><div class="wcell-wrap"><button class="'+cls+'" data-blk="'+b.id+'" data-sid="'+s.id+'" data-date="'+d+'">'+
           '<span class="subj-lbl">'+esc(subj)+'</span>'+
           (ent?'<span class="mk">'+STATUS[ent.status].short+'</span>':'')+
-          noteIco+
-        '</button><button class="note-btn" data-noteact="block" data-sid="'+s.id+'" data-date="'+d+'" data-blk="'+b.id+'" data-subj="'+esc(subj)+'" title="Notiz zu '+esc(subj)+'">📝</button></div></td>';
+        '</button>'+noteBar+'<button class="note-btn" data-noteact="block" data-sid="'+s.id+'" data-date="'+d+'" data-blk="'+b.id+'" data-subj="'+esc(subj)+'" title="Klassenbuch-Notiz zu '+esc(subj)+'">📝</button></div></td>';
       });
       body+='</tr>';
     });
     var sum='<div class="wk-sum"><div class="wk-sum-main">📊 Woche: <b>'+nf(weekTotal)+'</b> Std. abwesend</div></div>';
+    var wkNotes=weekNotesHTML(days,s.level);
     var miniStats=studentMiniStats(s);
-    return topRow+'<div class="wk-grid wk-grid-large"><table><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>'+help+sum+miniStats;
+    return topRow+'<div class="wk-grid wk-grid-large"><table><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>'+help+sum+wkNotes+miniStats;
   }
   function penBtn(st,label){return '<button class="'+(pen===st?'active '+st:'')+'" data-pen="'+st+'">'+label+'</button>';}
 
@@ -1002,6 +1062,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       if((t=e.target.closest('[data-pen]'))){pen=t.dataset.pen;document.querySelectorAll('.pen button').forEach(function(b){b.className='';});document.querySelectorAll('[data-pen="'+pen+'"]').forEach(function(b){b.className='active '+pen;});return;}
       if((t=e.target.closest('[data-week]'))){var uu=ui[t.dataset.sid];var act=t.dataset.week;uu.date=act==='today'?today():addDays(uu.date,act==='next'?7:-7);rerenderStudent(t.dataset.sid);return;}
       if((t=e.target.closest('[data-noteact]'))){var s2=state.students.find(function(x){return x.id===t.dataset.sid;});openNoteModal({date:t.dataset.date,blockId:t.dataset.blk||null,subject:t.dataset.subj||null,level:s2?s2.level:null});return;}
+      if((t=e.target.closest('[data-noteopen]'))){var n=state.notes.find(function(x){return x.id===t.dataset.noteopen;});if(n)openNoteModal({date:n.date,blockId:n.blockId,subject:n.subject,level:n.level});return;}
       if((t=e.target.closest('[data-dayact]'))){if(t.dataset.dayact==='mark')markWholeDay(t.dataset.sid,t.dataset.date);else if(t.dataset.dayact==='clear')clearWholeDay(t.dataset.sid,t.dataset.date);return;}
       if((t=e.target.closest('[data-blk]'))){toggleBlock(t.dataset.sid,t.dataset.blk,t.dataset.date);return;}
       if((t=e.target.closest('[data-setlevel]'))){setLevel(t.dataset.sid,t.dataset.setlevel);return;}

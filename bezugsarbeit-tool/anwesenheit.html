@@ -244,6 +244,14 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .user-card.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 5px 14px rgba(108,92,231,.32);}
 .user-card .avatar{width:36px;height:36px;font-size:13px;border-radius:10px;flex:0 0 auto;}
 .entry-meta{font-size:10px;color:var(--muted);font-weight:600;}
+/* Sync */
+.reconnect-bar{position:sticky;top:64px;z-index:25;display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;background:#FFF3DB;color:#9A6B00;border-bottom:1px solid #F0D9A0;padding:10px 18px;font-size:13px;font-weight:700;}
+.sync-section{background:var(--primary-50);border:1px solid var(--primary-100);border-radius:13px;padding:14px 16px;margin-bottom:6px;}
+.sync-title{font-size:14px;font-weight:800;color:var(--primary-dark);margin-bottom:10px;}
+.sync-status{font-size:13px;color:var(--text);font-weight:500;margin-bottom:10px;line-height:1.5;}
+.sync-status.ok{color:#0A7E60;}
+.sync-status.warn{color:var(--danger-dark);}
+.modal-hr{border:none;border-top:1px solid var(--line);margin:16px 0;}
 
 /* Mini-Statistik pro Schüler */
 .mini-stats{margin-top:18px;}
@@ -379,6 +387,11 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   </div>
 </header>
 
+<div class="reconnect-bar no-print" id="reconnect-bar" style="display:none;">
+  <span>🔗 Mit gemeinsamer Datei verbunden — bitte Zugriff bestätigen, damit Änderungen gespeichert &amp; geteilt werden.</span>
+  <button class="btn btn-primary btn-sm" id="reconnect-btn">Verbinden</button>
+</div>
+
 <div class="layout">
   <aside class="sidebar no-print" id="sidebar">
     <div class="side-head">
@@ -504,8 +517,13 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
 <!-- Daten-Modal -->
 <div class="modal-bg" id="modal-data">
   <div class="modal">
-    <h3>💾 Daten sichern &amp; laden</h3>
-    <p class="sub">Daten bleiben dauerhaft im Browser. Für Gerätewechsel/Sicherheit als Datei exportieren.</p>
+    <h3>💾 Daten — Team &amp; Sicherung</h3>
+    <div class="sync-section">
+      <div class="sync-title">👥 Gemeinsame Datei (Team auf O:\)</div>
+      <div id="sync-box"></div>
+    </div>
+    <hr class="modal-hr">
+    <p class="sub">Lokale Sicherung (nur dieses Gerät) — für Backup oder Excel-Auswertung.</p>
     <div id="storage-warn" style="display:none;background:var(--danger-50);color:var(--danger-dark);padding:12px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:14px;">⚠️ Keine dauerhafte Speicherung möglich (privater Modus?). Bitte regelmässig Backup exportieren.</div>
     <div style="display:flex;flex-direction:column;gap:10px;">
       <button class="btn btn-primary btn-block" id="export-json">⬇️ Backup speichern (Datei)</button>
@@ -630,6 +648,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   var state={students:[],periods:[],entries:[],timetable:null,notes:[],currentUser:null};
   var ui={}; var pen='unentschuldigt'; var ttLevel='L1'; var classFilter='L1';
   var activeStudentId=null;
+  var fileHandle=null,fileConnected=false,suppressWrite=false,writeTimer=null,pollTimer=null,lastContent='';
   var USERS=['Mireille','Carole','Sarah','Joey','Jean-Pierre','Sandy','Annick','Sandra','Miguel'];
   var NOTE_TYPES={pruefung:{label:'Prüfung',icon:'📝',color:'#C0392B'},hausaufgabe:{label:'Hausaufgabe',icon:'📒',color:'#0CA678'},bemerkung:{label:'Bemerkung',icon:'💬',color:'#6C5CE7'},allgemein:{label:'Allgemein',icon:'📌',color:'#7A7A92'}};
 
@@ -646,7 +665,13 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     }}catch(e){console.error(e);}
     // currentUser ist gerätegebunden, nicht aus Backup übernehmen
     try{var u=localStorage.getItem('anwesenheit_user');if(u)state.currentUser=u;}catch(e){}
-    // Migration
+    migrate();
+  }
+  function migrate(){
+    if(!Array.isArray(state.students))state.students=[];
+    if(!Array.isArray(state.periods))state.periods=[];
+    if(!Array.isArray(state.entries))state.entries=[];
+    if(!Array.isArray(state.notes))state.notes=[];
     state.students.forEach(function(s){if(!s.level)s.level='L1';});
     state.entries.forEach(function(e){
       if(e.hours==null)e.hours=(e.lektionen!=null?e.lektionen:1);
@@ -654,11 +679,117 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       if(e.weekday==null&&e.date)e.weekday=new Date(e.date+'T00:00:00').getDay();
     });
     if(!state.timetable)state.timetable=defaultTimetable();
-    // fehlende Levels/Tage ergänzen + alte Struktur (andere Blockanzahl) neu aufbauen
     var def=defaultTimetable();
     ['L1','L2'].forEach(function(lv){if(!state.timetable[lv])state.timetable[lv]=def[lv];for(var d=1;d<=5;d++){if(!state.timetable[lv][d]||state.timetable[lv][d].length!==BLOCKS.length)state.timetable[lv][d]=def[lv][d];}});
   }
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('⚠️ Speichern fehlgeschlagen — Backup machen!');}}
+  function save(){
+    try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('⚠️ Speichern fehlgeschlagen — Backup machen!');}
+    if(fileConnected&&!suppressWrite)scheduleWrite();
+  }
+
+  /* ============================================================
+     Sync mit gemeinsamer Datei (File System Access API, Chrome/Edge)
+     ============================================================ */
+  function fsSupported(){return ('showOpenFilePicker' in window)&&('showSaveFilePicker' in window);}
+  // IndexedDB für den Datei-Handle (überlebt Neuladen)
+  function idbOpen(){return new Promise(function(res,rej){var r=indexedDB.open('anwesenheit-sync',1);r.onupgradeneeded=function(){r.result.createObjectStore('h');};r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error);};});}
+  function idbSet(h){return idbOpen().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('h','readwrite');tx.objectStore('h').put(h,'handle');tx.oncomplete=function(){res();};tx.onerror=function(){rej(tx.error);};});});}
+  function idbGet(){return idbOpen().then(function(db){return new Promise(function(res){var tx=db.transaction('h','readonly');var rq=tx.objectStore('h').get('handle');rq.onsuccess=function(){res(rq.result||null);};rq.onerror=function(){res(null);};});}).catch(function(){return null;});}
+  function idbDel(){return idbOpen().then(function(db){return new Promise(function(res){var tx=db.transaction('h','readwrite');tx.objectStore('h').delete('handle');tx.oncomplete=function(){res();};tx.onerror=function(){res();};});}).catch(function(){});}
+
+  function verifyPermission(h,request){
+    var opts={mode:'readwrite'};
+    return h.queryPermission(opts).then(function(p){
+      if(p==='granted')return true;
+      if(request)return h.requestPermission(opts).then(function(p2){return p2==='granted';});
+      return false;
+    });
+  }
+  function fileState(){return JSON.stringify({students:state.students,periods:state.periods,entries:state.entries,timetable:state.timetable,notes:state.notes,_savedAt:Date.now(),_savedBy:state.currentUser||''});}
+  function scheduleWrite(){clearTimeout(writeTimer);writeTimer=setTimeout(function(){writeTimer=null;writeFile();},700);}
+  function writeFile(){
+    if(!fileHandle)return Promise.resolve();
+    var json=fileState();
+    return fileHandle.createWritable().then(function(w){return w.write(json).then(function(){return w.close();});}).then(function(){lastContent=json;}).catch(function(e){console.error('Schreibfehler',e);toast('⚠️ Konnte nicht in Datei schreiben');});
+  }
+  function applyRemote(txt){
+    try{var d=JSON.parse(txt);}catch(e){return;}
+    suppressWrite=true;
+    state.students=d.students||[];state.periods=d.periods||[];state.entries=d.entries||[];state.timetable=d.timetable||null;state.notes=d.notes||[];
+    migrate();
+    try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+    lastContent=txt;
+    // aktive Auswahl prüfen
+    if(activeStudentId&&!state.students.some(function(s){return s.id===activeStudentId;}))activeStudentId=null;
+    renderAll();
+    suppressWrite=false;
+  }
+  function startPoll(){clearInterval(pollTimer);pollTimer=setInterval(checkFile,7000);}
+  function checkFile(){
+    if(!fileHandle||suppressWrite||writeTimer)return;
+    fileHandle.getFile().then(function(f){return f.text();}).then(function(txt){
+      if(txt&&txt!==lastContent){applyRemote(txt);toast('🔄 Von Kollege aktualisiert');}
+    }).catch(function(){});
+  }
+  function afterPick(h,isNew){
+    return verifyPermission(h,true).then(function(ok){
+      if(!ok){toast('⚠️ Kein Zugriff erteilt');return;}
+      fileHandle=h;return idbSet(h).then(function(){return h.getFile();}).then(function(f){return f.text();}).then(function(txt){
+        if(!isNew&&txt&&txt.trim()){
+          if(confirm('Daten aus der gemeinsamen Datei laden? Die lokalen Daten auf DIESEM Gerät werden ersetzt.')){applyRemote(txt);}
+          else{return writeFile();}
+        }else{return writeFile();}
+      }).then(function(){
+        fileConnected=true;startPoll();renderSyncUI();hideReconnect();toast('🔗 Mit gemeinsamer Datei verbunden');
+      });
+    });
+  }
+  function connectNew(){
+    if(!fsSupported()){toast('⚠️ Nur in Chrome/Edge möglich');return;}
+    window.showSaveFilePicker({suggestedName:'klassenbuch-daten.json',types:[{description:'Klassenbuch-Daten',accept:{'application/json':['.json']}}]}).then(function(h){return afterPick(h,true);}).catch(function(e){if(e&&e.name!=='AbortError')console.error(e);});
+  }
+  function connectExisting(){
+    if(!fsSupported()){toast('⚠️ Nur in Chrome/Edge möglich');return;}
+    window.showOpenFilePicker({types:[{description:'Klassenbuch-Daten',accept:{'application/json':['.json']}}],multiple:false}).then(function(arr){return afterPick(arr[0],false);}).catch(function(e){if(e&&e.name!=='AbortError')console.error(e);});
+  }
+  function disconnectFile(){fileConnected=false;fileHandle=null;clearInterval(pollTimer);idbDel();renderSyncUI();toast('Verbindung getrennt (lokale Daten bleiben)');}
+
+  function reconnectFromGesture(){
+    if(!fileHandle)return;
+    verifyPermission(fileHandle,true).then(function(ok){
+      if(!ok){toast('⚠️ Kein Zugriff');return;}
+      return fileHandle.getFile().then(function(f){return f.text();}).then(function(txt){
+        if(txt&&txt.trim())applyRemote(txt);
+        fileConnected=true;startPoll();renderSyncUI();hideReconnect();toast('🔗 Wieder verbunden');
+      });
+    });
+  }
+  function initSync(){
+    if(!fsSupported()){renderSyncUI();return;}
+    idbGet().then(function(h){
+      if(!h){renderSyncUI();return;}
+      fileHandle=h;
+      h.queryPermission({mode:'readwrite'}).then(function(p){
+        if(p==='granted'){
+          h.getFile().then(function(f){return f.text();}).then(function(txt){if(txt&&txt.trim())applyRemote(txt);fileConnected=true;startPoll();renderSyncUI();}).catch(function(){showReconnect();});
+        }else{showReconnect();renderSyncUI();}
+      });
+    });
+  }
+  function showReconnect(){var b=document.getElementById('reconnect-bar');if(b)b.style.display='flex';}
+  function hideReconnect(){var b=document.getElementById('reconnect-bar');if(b)b.style.display='none';}
+  function renderSyncUI(){
+    var box=document.getElementById('sync-box');if(!box)return;
+    if(!fsSupported()){box.innerHTML='<div class="sync-status warn">⚠️ Gemeinsame Datei wird nur in <b>Chrome</b> oder <b>Edge</b> unterstützt (nicht Firefox/Safari).</div>';return;}
+    if(fileConnected){
+      box.innerHTML='<div class="sync-status ok">🔗 <b>Verbunden</b> — Änderungen werden automatisch auf O:\\ gespeichert und mit dem Team synchronisiert.</div>'+
+        '<div class="btn-row" style="margin-top:0;"><button class="btn btn-ghost" id="sync-refresh">🔄 Jetzt aktualisieren</button><button class="btn btn-ghost" id="sync-disconnect">Verbindung trennen</button></div>';
+    }else{
+      box.innerHTML='<div class="sync-status">Noch nicht verbunden. Die Daten liegen nur auf diesem Gerät.</div>'+
+        '<div class="btn-row" style="margin-top:0;"><button class="btn btn-primary" id="sync-existing">📂 Bestehende Datei öffnen</button><button class="btn btn-ghost" id="sync-new">➕ Neue gemeinsame Datei erstellen</button></div>'+
+        '<p class="sub" style="margin:10px 0 0;">Tipp: Eine Person erstellt die Datei auf O:\\ einmalig, alle anderen wählen „Bestehende Datei öffnen".</p>';
+    }
+  }
 
   /* ---- Helpers ---- */
   function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
@@ -1060,7 +1191,15 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     document.getElementById('cal-year').addEventListener('change',function(e){calYear=e.target.value;renderCalendar();});
     document.getElementById('cal-load-periods').addEventListener('click',function(){if(!confirm('Alle korrekten Luxemburger Perioden (2025/26 & 2026/27) laden? Bestehende Perioden werden ersetzt.'))return;state.periods=luPeriods();save();fillPeriods();renderAll();renderCalendar();toast('✅ LU-Perioden geladen');});
     document.getElementById('btn-pdf').addEventListener('click',makePDF);
-    document.getElementById('btn-data').addEventListener('click',function(){document.getElementById('storage-warn').style.display=storageOK()?'none':'block';openModal('modal-data');});
+    document.getElementById('btn-data').addEventListener('click',function(){document.getElementById('storage-warn').style.display=storageOK()?'none':'block';renderSyncUI();openModal('modal-data');});
+    // Sync-Buttons (delegiert, da dynamisch)
+    document.getElementById('modal-data').addEventListener('click',function(e){
+      if(e.target.closest('#sync-new'))connectNew();
+      else if(e.target.closest('#sync-existing'))connectExisting();
+      else if(e.target.closest('#sync-refresh'))checkFile();
+      else if(e.target.closest('#sync-disconnect'))disconnectFile();
+    });
+    var rcb=document.getElementById('reconnect-btn');if(rcb)rcb.addEventListener('click',reconnectFromGesture);
 
     document.getElementById('add-student-go').addEventListener('click',addStudent);
     document.getElementById('new-student-name').addEventListener('keydown',function(e){if(e.key==='Enter')addStudent();});
@@ -1108,6 +1247,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     document.getElementById('user-grid').addEventListener('click',function(e){var t=e.target.closest('[data-user]');if(t){setUser(t.dataset.user);closeModals();}});
 
     renderAll();
+    initSync();
     // Bediener wählen erzwingen, falls noch keiner gewählt
     if(!state.currentUser){renderUserGrid();openModal('modal-user');}
   }

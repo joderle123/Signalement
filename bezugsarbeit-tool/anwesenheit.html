@@ -105,30 +105,83 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .day-sum{margin-top:13px;font-size:13px;color:var(--muted);font-weight:600;background:var(--primary-50);border-radius:var(--radius-sm);padding:10px 14px;}
 .no-school{padding:20px;text-align:center;color:var(--muted);background:linear-gradient(var(--bg),#fff);border:1px dashed var(--line);border-radius:var(--radius-sm);font-weight:500;}
 /* Wochen-Raster */
-.wk-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 12px;}
+.rec-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:14px 0 12px;}
+.wk-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .wk-nav .range{font-weight:800;color:var(--primary-dark);font-size:14px;}
 .wk-nav .date-in{font-size:13px;padding:7px 10px;}
+.rec-hint{font-size:12px;color:var(--muted);background:var(--primary-50);border-radius:10px;padding:8px 13px;margin:12px 0;}
+.rec-hint b{color:var(--primary-dark);}
+.wk-sum{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border-radius:12px;padding:11px 16px;font-size:14px;font-weight:600;margin-top:12px;box-shadow:0 4px 14px rgba(108,92,231,.25);}
+.wk-sum b{font-size:18px;font-weight:900;margin:0 3px;}
 .wk-grid{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.wk-grid table{border-collapse:separate;border-spacing:4px;width:100%;min-width:560px;}
-.wk-grid thead th{font-size:13px;font-weight:800;text-align:center;padding:4px 2px;border-radius:8px;}
-.wk-grid thead th.today{background:var(--primary-50);color:var(--primary-dark);}
-.wk-grid thead th .dt{display:block;font-size:11px;font-weight:600;color:var(--muted);}
-.wk-grid thead th .hb{display:block;font-size:9px;font-weight:800;color:var(--danger-dark);text-transform:uppercase;letter-spacing:.03em;}
+.wk-grid table{border-collapse:separate;border-spacing:5px;width:100%;}
+.wk-grid-large table{min-width:760px;}
+.wk-grid thead th{font-size:13px;font-weight:800;text-align:center;padding:8px 4px;border-radius:10px;background:#FAFAFE;border:1px solid var(--line);min-width:120px;}
+.wk-grid thead th.th-time{background:transparent;border:none;min-width:60px;}
+.wk-grid thead th.today{background:linear-gradient(var(--primary-50),#fff);border-color:var(--primary-light);color:var(--primary-dark);box-shadow:0 2px 6px rgba(108,92,231,.15);}
+.wk-grid thead th .dh{display:flex;align-items:baseline;justify-content:center;gap:6px;flex-wrap:wrap;}
+.wk-grid thead th .dn{font-size:14px;font-weight:900;}
+.wk-grid thead th .dt{font-size:11px;font-weight:600;color:var(--muted);}
+.wk-grid thead th .dhrs{font-size:11px;font-weight:800;background:var(--danger);color:#fff;padding:1px 7px;border-radius:999px;}
+.wk-grid thead th.today .dhrs{background:var(--primary-dark);}
+.wk-grid thead th .hb{display:block;font-size:10px;font-weight:800;color:var(--danger-dark);margin-top:4px;}
+.day-acts{display:flex;gap:4px;justify-content:center;margin-top:6px;}
+.day-btn{border:1.5px solid var(--line);background:#fff;color:var(--text);font:inherit;font-size:11px;font-weight:800;padding:4px 8px;border-radius:8px;cursor:pointer;transition:.12s;line-height:1.2;}
+.day-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary);transform:translateY(-1px);}
+.day-btn.ghost{padding:4px 7px;}
+.day-btn.ghost:hover{background:var(--danger);border-color:var(--danger);}
+.day-btn.note:hover{background:var(--warn);border-color:var(--warn);}
 .wk-grid td{padding:0;vertical-align:stretch;}
-.wk-grid td.todaycol{background:var(--primary-50);border-radius:8px;}
-.wk-grid .tc{font-size:10px;color:var(--muted);text-align:right;padding-right:6px;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.2;vertical-align:middle;}
-.wcell{width:100%;height:100%;min-height:46px;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:7px 5px;font:inherit;font-size:11px;font-weight:700;cursor:pointer;line-height:1.2;color:var(--text);transition:.1s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;}
-.wcell:hover{border-color:var(--primary);background:var(--primary-50);}
-.wcell.empty{background:transparent;border:1px dashed #E3E3EE;color:transparent;cursor:default;min-height:46px;}
-.wcell.pause{background:#F7F8FC;color:var(--muted);font-weight:500;}
-.wcell.marked{border-width:2.5px;}
+.wk-grid td.todaycol{background:rgba(108,92,231,.05);border-radius:10px;}
+.wk-grid .tc{font-size:11px;color:var(--muted);text-align:right;padding:8px 8px;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.25;vertical-align:middle;font-weight:600;}
+.wk-grid .tc .tw{display:inline-block;margin-top:2px;font-size:10px;font-weight:800;color:var(--primary-dark);background:var(--primary-50);padding:1px 6px;border-radius:999px;}
+.wk-grid .tc .tw.mute{background:transparent;color:#CACAD8;}
+.wcell-wrap{position:relative;}
+.wcell{width:100%;height:100%;min-height:62px;border:2px solid var(--line);background:#fff;border-radius:11px;padding:10px 8px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;line-height:1.25;color:var(--text);transition:.12s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;position:relative;}
+.wcell .subj-lbl{display:block;}
+.wcell:hover{border-color:var(--primary);background:var(--primary-50);transform:translateY(-1px);box-shadow:0 3px 10px rgba(108,92,231,.15);}
+.wcell.empty{background:transparent;border:1.5px dashed #E3E3EE;color:transparent;cursor:default;min-height:62px;}
+.wcell.empty:hover{transform:none;box-shadow:none;background:transparent;}
+.wcell.pause{background:#F7F8FC;color:var(--muted);font-weight:500;font-size:12px;}
+.wcell.marked{border-width:3px;font-weight:800;}
 .wcell.marked.entschuldigt{border-color:var(--info);background:var(--info-50);color:#2C6FB5;}
 .wcell.marked.unentschuldigt{border-color:var(--danger);background:var(--danger-50);color:var(--danger-dark);}
 .wcell.marked.verspaetet{border-color:var(--warn);background:var(--warn-50);color:#9A6B00;}
-.wcell .mk{font-size:11px;font-weight:900;padding:0 6px;border-radius:999px;}
+.wcell .mk{font-size:11px;font-weight:900;padding:1px 8px;border-radius:999px;}
 .wcell.marked.entschuldigt .mk{background:var(--info);color:#fff;}
 .wcell.marked.unentschuldigt .mk{background:var(--danger);color:#fff;}
 .wcell.marked.verspaetet .mk{background:var(--warn);color:#fff;}
+.wcell .note-ind{position:absolute;top:3px;right:5px;font-size:11px;opacity:.85;}
+.note-btn{position:absolute;top:3px;left:5px;border:none;background:transparent;font-size:13px;cursor:pointer;opacity:0;padding:2px;line-height:1;transition:opacity .15s;border-radius:6px;}
+.wcell-wrap:hover .note-btn{opacity:.65;}
+.note-btn:hover{opacity:1!important;background:#fff;box-shadow:var(--shadow-sm);}
+
+/* Mini-Statistik pro Schüler */
+.mini-stats{margin-top:18px;}
+.empty-mini{text-align:center;color:var(--muted);font-size:13px;padding:14px;background:var(--bg);border-radius:10px;}
+.mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;}
+.mini-card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+.mini-card .mini-h{font-size:13px;font-weight:800;color:var(--primary-dark);margin-bottom:8px;}
+.mini-card table{font-size:12px;}
+.mini-card th{padding:4px 6px;font-size:10px;border-bottom:1px solid var(--line);}
+.mini-card td{padding:5px 6px;border-bottom:1px solid #ECECF5;}
+.mini-card tr:last-child td{border-bottom:none;}
+.mini-card td.big{font-weight:800;color:var(--primary);}
+/* Klassenbuch */
+textarea.inp{font:inherit;font-size:14px;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--radius-sm);width:100%;resize:vertical;font-family:inherit;color:var(--text);}
+textarea.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring);}
+.note-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:280px;overflow:auto;}
+.note-item{display:flex;gap:10px;padding:11px 13px;background:var(--bg);border-radius:11px;border-left:3px solid var(--primary);}
+.note-item .nt-ic{font-size:18px;flex:0 0 auto;}
+.note-item .nt-body{flex:1 1 auto;}
+.note-item .nt-meta{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px;}
+.note-item .nt-txt{font-size:14px;line-height:1.45;white-space:pre-wrap;}
+.note-item .nt-del{border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:14px;padding:4px 6px;border-radius:6px;flex:0 0 auto;align-self:flex-start;}
+.note-item .nt-del:hover{background:var(--danger-50);color:var(--danger-dark);}
+.note-item.pruefung{border-left-color:#C0392B;}
+.note-item.hausaufgabe{border-left-color:#0CA678;}
+.note-item.bemerkung{border-left-color:#6C5CE7;}
+.note-item.allgemein{border-left-color:#7A7A92;}
 
 /* Cards / tables */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:6px 6px;animation:rise .35s both;}
@@ -278,6 +331,32 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   </div>
 </div>
 
+<!-- Klassenbuch-Notiz-Modal -->
+<div class="modal-bg" id="modal-note">
+  <div class="modal wide">
+    <h3>📔 Klassenbuch — Notizen</h3>
+    <p class="sub" id="note-context">Datum, Fach und Block werden hier angezeigt.</p>
+    <div id="note-existing"></div>
+    <div class="note-form">
+      <div class="modal-row">
+        <select id="note-type" class="inp">
+          <option value="bemerkung">💬 Bemerkung</option>
+          <option value="pruefung">📝 Prüfung</option>
+          <option value="hausaufgabe">📒 Hausaufgabe</option>
+          <option value="allgemein">📌 Allgemein</option>
+        </select>
+      </div>
+      <div class="modal-row">
+        <textarea id="note-text" class="inp" rows="3" placeholder="Notiz, Prüfungsinhalt, Bemerkung …"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" data-close>Schliessen</button>
+        <button class="btn btn-primary" id="note-add">+ Hinzufügen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Stundenplan-Modal -->
 <div class="modal-bg" id="modal-tt">
   <div class="modal wide">
@@ -376,6 +455,10 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   ];
   function blockHours(b){var p=function(s){var a=s.split(':');return (+a[0])*60+(+a[1]);};return (p(b.end)-p(b.start))/60;}
   var PAUSE_SUBJECTS={'Paus':1,'Mëttespaus':1};
+  // Tag = 6 Schulstunden. Morgenblock = 2, Nachmittagsblock = 1, Morning Meeting + Pausen = 0.
+  var BLOCK_WEIGHTS={b1:0,b2:2,b3:0,b4:2,b5:0,b6:1,b7:1};
+  function blockWeight(blockId,subject){if(!subject||PAUSE_SUBJECTS[subject]||subject==='Morning Meeting')return 0;return BLOCK_WEIGHTS[blockId]||0;}
+  function countHours(e){return blockWeight(e.blockId,e.subject);}
 
   // Standard-Stundenplan (Abschrift — im Tool editierbar)
   // row(L1, L2, N1, N2): 8:30–10:00 | 10:30–12:00 | 13:00–14:00 | 14:00–16:00
@@ -455,8 +538,9 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     return null;
   }
 
-  var state={students:[],periods:[],entries:[],timetable:null};
+  var state={students:[],periods:[],entries:[],timetable:null,notes:[]};
   var ui={}; var pen='unentschuldigt'; var ttLevel='L1';
+  var NOTE_TYPES={pruefung:{label:'Prüfung',icon:'📝',color:'#C0392B'},hausaufgabe:{label:'Hausaufgabe',icon:'📒',color:'#0CA678'},bemerkung:{label:'Bemerkung',icon:'💬',color:'#6C5CE7'},allgemein:{label:'Allgemein',icon:'📌',color:'#7A7A92'}};
 
   /* ---- Persistenz / Migration ---- */
   function storageOK(){try{var k='__t'+Date.now();localStorage.setItem(k,'1');localStorage.removeItem(k);return true;}catch(e){return false;}}
@@ -466,6 +550,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       state.periods=Array.isArray(p.periods)?p.periods:[];
       state.entries=Array.isArray(p.entries)?p.entries:[];
       state.timetable=p.timetable||null;
+      state.notes=Array.isArray(p.notes)?p.notes:[];
     }}catch(e){console.error(e);}
     // Migration
     state.students.forEach(function(s){if(!s.level)s.level='L1';});
@@ -514,7 +599,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   /* ---- Summary ---- */
   function renderSummary(){
     var list=periodEntries();var e=0,u=0,v=0;
-    list.forEach(function(x){if(x.status==='entschuldigt')e+=entryHours(x);else if(x.status==='unentschuldigt')u+=entryHours(x);else if(x.status==='verspaetet')v++;});
+    list.forEach(function(x){if(x.status==='entschuldigt')e+=countHours(x);else if(x.status==='unentschuldigt')u+=countHours(x);else if(x.status==='verspaetet')v++;});
     document.getElementById('summary').innerHTML=
       sCard('total','📊',nf(e+u),'Absenz-Stunden total')+
       sCard('ent','✅',nf(e),'Excusé (Std.)')+
@@ -524,7 +609,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   function sCard(c,ic,v,l){return '<div class="sum '+c+'"><div class="ic">'+ic+'</div><div class="v">'+v+'</div><div class="l">'+l+'</div></div>';}
 
   /* ---- Schülerkarten + Recorder ---- */
-  function studentTotal(id){var p=curPeriod();return state.entries.filter(function(e){return e.studentId===id&&STATUS[e.status]&&STATUS[e.status].isAbsence&&inPeriod(e,p);}).reduce(function(a,e){return a+entryHours(e);},0);}
+  function studentTotal(id){var p=curPeriod();return state.entries.filter(function(e){return e.studentId===id&&STATUS[e.status]&&STATUS[e.status].isAbsence&&inPeriod(e,p);}).reduce(function(a,e){return a+countHours(e);},0);}
   function entryFor(sid,date,blockId){return state.entries.find(function(e){return e.studentId===sid&&e.date===date&&e.blockId===blockId;});}
 
   function renderStudents(){
@@ -547,6 +632,9 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     }).join('');
   }
 
+  function noteFor(date,blockId,level,subject){return state.notes.filter(function(n){return n.date===date&&((n.blockId&&n.blockId===blockId)||(n.subject&&n.subject===subject))&&(!n.level||n.level===level);});}
+  function dayCounted(sid,date){var s=0;state.entries.forEach(function(e){if(e.studentId===sid&&e.date===date&&STATUS[e.status]&&STATUS[e.status].isAbsence)s+=countHours(e);});return s;}
+
   function recorderHTML(s,u){
     if(!s.level){
       return '<div class="rec-row" style="margin-top:14px;"><label>Niveau festlegen:</label>'+
@@ -556,42 +644,78 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var mon=mondayOf(u.date);
     var days=[];for(var k=0;k<5;k++)days.push(addDays(mon,k));
     var todayISO=today();var SHORT=['Mo','Di','Mi','Do','Fr'];
-    var penRow='<div class="rec-row" style="margin-top:14px;"><label>Status:</label>'+
-      '<div class="pen">'+penBtn('entschuldigt','✓ Excusé')+penBtn('unentschuldigt','✕ Non-excusé')+penBtn('verspaetet','⏰ Retard')+'</div></div>';
-    var nav='<div class="wk-nav">'+
-      '<button class="btn btn-ghost btn-sm" data-week="prev" data-sid="'+s.id+'">←</button>'+
-      '<span class="range">'+fmtD(days[0])+' – '+fmtD(days[4])+'</span>'+
-      '<button class="btn btn-ghost btn-sm" data-week="next" data-sid="'+s.id+'">→</button>'+
-      '<button class="btn btn-ghost btn-sm" data-week="today" data-sid="'+s.id+'">Heute</button>'+
-      '<input type="date" class="date-in" data-date="'+s.id+'" value="'+u.date+'" title="Zu Woche springen">'+
+    var topRow='<div class="rec-top">'+
+      '<div class="pen">'+penBtn('entschuldigt','✓ Excusé')+penBtn('unentschuldigt','✕ Non-excusé')+penBtn('verspaetet','⏰ Retard')+'</div>'+
+      '<div class="head-spacer"></div>'+
+      '<div class="wk-nav">'+
+        '<button class="btn btn-ghost btn-sm" data-week="prev" data-sid="'+s.id+'">←</button>'+
+        '<span class="range">'+fmtD(days[0])+' – '+fmtD(days[4])+'</span>'+
+        '<button class="btn btn-ghost btn-sm" data-week="next" data-sid="'+s.id+'">→</button>'+
+        '<button class="btn btn-ghost btn-sm" data-week="today" data-sid="'+s.id+'">Heute</button>'+
+        '<input type="date" class="date-in" data-date="'+s.id+'" value="'+u.date+'" title="Zu Woche springen">'+
+      '</div>'+
     '</div>';
-    // Kopfzeile
-    var head='<tr><th></th>';
-    days.forEach(function(d,i){var hol=holidayInfo(d);head+='<th'+(d===todayISO?' class="today"':'')+'>'+SHORT[i]+'<span class="dt">'+fmtD(d).slice(0,5)+'</span>'+(hol?'<span class="hb">'+(hol.type==='ferien'?'Ferien':'Feiertag')+'</span>':'')+'</th>';});
+    var help='<div class="rec-hint">💡 Klick = Status setzen · Klick (gleicher Status) = entfernen · Klick (anderer Status) = wechseln · <b>Tag-Button</b> markiert die ganze Spalte · 📝 öffnet Klassenbuch-Notiz</div>';
+    // Kopfzeile mit „Tag markieren"
+    var head='<tr><th class="th-time"></th>';
+    days.forEach(function(d,i){var hol=holidayInfo(d);var wd=wdOf(d);var dayHrs=dayCounted(s.id,d);
+      var dayBtns=hol?'<span class="hb">'+(hol.type==='ferien'?'🏖️ Ferien':'🎉 Feiertag')+'</span>':
+        '<div class="day-acts"><button class="day-btn" data-dayact="mark" data-sid="'+s.id+'" data-date="'+d+'" title="Ganzen Tag mit aktuellem Status markieren">Tag</button>'+
+        '<button class="day-btn ghost" data-dayact="clear" data-sid="'+s.id+'" data-date="'+d+'" title="Tag leeren">✕</button>'+
+        '<button class="day-btn note" data-noteact="day" data-sid="'+s.id+'" data-date="'+d+'" title="Tages-Notizen">📝</button></div>';
+      head+='<th'+(d===todayISO?' class="today"':'')+'>'+
+        '<div class="dh"><span class="dn">'+SHORT[i]+'</span><span class="dt">'+fmtD(d).slice(0,5)+'</span>'+(dayHrs?'<span class="dhrs">'+nf(dayHrs)+'h</span>':'')+'</div>'+
+        dayBtns+
+      '</th>';});
     head+='</tr>';
     // Zeilen je Block
     var body='';var weekTotal=0;
     BLOCKS.forEach(function(b,bi){
-      var hrs=blockHours(b);
-      // Block-Zeile nur zeigen, wenn an irgendeinem Tag ein Fach existiert
       var anySubj=days.some(function(d){var wd=wdOf(d);return wd>=1&&wd<=5&&(state.timetable[s.level][wd][bi]||'');});
       if(!anySubj)return;
-      body+='<tr><td class="tc">'+b.start+'<br>'+b.end+'</td>';
+      var bw=BLOCK_WEIGHTS[b.id]||0;
+      body+='<tr><td class="tc"><div>'+b.start+'</div><div>'+b.end+'</div>'+(bw?'<div class="tw">'+bw+'h</div>':'<div class="tw mute">–</div>')+'</td>';
       days.forEach(function(d){
         var wd=wdOf(d);var subj=(wd>=1&&wd<=5)?(state.timetable[s.level][wd][bi]||''):'';
         var hol=holidayInfo(d);
         if(hol||!subj){body+='<td><div class="wcell empty" aria-disabled="true">·</div></td>';return;}
-        var ent=entryFor(s.id,d,b.id);var isPause=PAUSE_SUBJECTS[subj];
-        if(ent&&STATUS[ent.status].isAbsence)weekTotal+=hrs;
-        var cls='wcell'+(isPause?' pause':'')+(ent?' marked '+ent.status:'');
-        body+='<td'+(d===todayISO?' class="todaycol"':'')+'><button class="'+cls+'" data-blk="'+b.id+'" data-sid="'+s.id+'" data-date="'+d+'">'+esc(subj)+(ent?'<span class="mk">'+STATUS[ent.status].short+'</span>':'')+'</button></td>';
+        var ent=entryFor(s.id,d,b.id);var isPause=PAUSE_SUBJECTS[subj]||subj==='Morning Meeting';
+        if(ent&&STATUS[ent.status].isAbsence)weekTotal+=blockWeight(b.id,subj);
+        var notes=noteFor(d,b.id,s.level,subj);
+        var cls='wcell'+(isPause?' pause':'')+(ent?' marked '+ent.status:'')+(notes.length?' has-note':'');
+        var noteIco=notes.length?'<span class="note-ind" title="'+notes.length+' Notiz(en)">'+(notes[0]&&NOTE_TYPES[notes[0].type]?NOTE_TYPES[notes[0].type].icon:'📝')+'</span>':'';
+        body+='<td'+(d===todayISO?' class="todaycol"':'')+'><div class="wcell-wrap"><button class="'+cls+'" data-blk="'+b.id+'" data-sid="'+s.id+'" data-date="'+d+'">'+
+          '<span class="subj-lbl">'+esc(subj)+'</span>'+
+          (ent?'<span class="mk">'+STATUS[ent.status].short+'</span>':'')+
+          noteIco+
+        '</button><button class="note-btn" data-noteact="block" data-sid="'+s.id+'" data-date="'+d+'" data-blk="'+b.id+'" data-subj="'+esc(subj)+'" title="Notiz zu '+esc(subj)+'">📝</button></div></td>';
       });
       body+='</tr>';
     });
-    return penRow+nav+'<div class="wk-grid"><table><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>'+
-      '<div class="day-sum">Diese Woche erfasst: '+nf(weekTotal)+' Std. abwesend. Tippe eine Zelle an/aus (mit gewähltem Status).</div>';
+    var sum='<div class="wk-sum"><div class="wk-sum-main">📊 Woche: <b>'+nf(weekTotal)+'</b> Std. abwesend</div></div>';
+    var miniStats=studentMiniStats(s);
+    return topRow+'<div class="wk-grid wk-grid-large"><table><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>'+help+sum+miniStats;
   }
   function penBtn(st,label){return '<button class="'+(pen===st?'active '+st:'')+'" data-pen="'+st+'">'+label+'</button>';}
+
+  // Pro-Schüler-Mini-Übersicht: Wochentag-Ø und Top-Fächer
+  function studentMiniStats(s){
+    var p=curPeriod();
+    var list=state.entries.filter(function(e){return e.studentId===s.id&&inPeriod(e,p)&&STATUS[e.status]&&STATUS[e.status].isAbsence;});
+    if(!list.length)return '<div class="mini-stats empty-mini">Noch keine Absenzen für '+esc(s.name)+' in dieser Periode.</div>';
+    // Wochentag
+    var dByWd={},sByWd={};list.forEach(function(e){var w=e.weekday;(dByWd[w]=dByWd[w]||new Set()).add(e.date);sByWd[w]=(sByWd[w]||0)+countHours(e);});
+    var wdRows=[1,2,3,4,5].filter(function(w){return dByWd[w];}).map(function(w){var d=dByWd[w].size,sm=sByWd[w]||0,avg=d?sm/d:0;return '<tr><td><b>'+WD[w]+'</b></td><td class="n">'+d+'</td><td class="n">'+nf(sm)+'</td><td class="n big">'+nf(avg)+'</td></tr>';}).join('');
+    // Fach
+    var bySub={};list.forEach(function(e){var k=e.subject||'(allgemein)';(bySub[k]=bySub[k]||{c:0,h:0,e:0,n:0});bySub[k].c++;bySub[k].h+=countHours(e);if(e.status==='entschuldigt')bySub[k].e++;else if(e.status==='unentschuldigt')bySub[k].n++;});
+    var subNames=Object.keys(bySub).sort(function(a,b){return bySub[b].h-bySub[a].h;});
+    var subRows=subNames.map(function(nm){var o=bySub[nm];return '<tr><td><b>'+esc(nm)+'</b></td><td class="c">'+o.c+'</td><td class="c" style="color:#2C6FB5;font-weight:700;">'+(o.e||'·')+'</td><td class="c" style="color:var(--danger-dark);font-weight:700;">'+(o.n||'·')+'</td><td class="n big">'+nf(o.h)+'</td></tr>';}).join('');
+    return '<div class="mini-stats">'+
+      '<div class="mini-grid">'+
+        '<div class="mini-card"><div class="mini-h">📅 Wochentag-Ø</div><table><thead><tr><th>Tag</th><th class="n">Tage</th><th class="n">Σ Std.</th><th class="n">Ø/Tag</th></tr></thead><tbody>'+wdRows+'</tbody></table></div>'+
+        '<div class="mini-card"><div class="mini-h">📚 Fach-Übersicht</div><table><thead><tr><th>Fach</th><th class="c">×</th><th class="c">Exc.</th><th class="c">Non.</th><th class="n">Std.</th></tr></thead><tbody>'+subRows+'</tbody></table></div>'+
+      '</div></div>';
+  }
 
   function rerenderStudent(sid){
     var s=state.students.find(function(x){return x.id===sid;});var u=ui[sid];if(!s)return;
@@ -611,17 +735,36 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var subj=state.timetable[s.level][wd][BLOCKS.indexOf(b)]||'';if(!subj)return;
     var existing=entryFor(sid,date,blockId);
     if(existing){
-      state.entries=state.entries.filter(function(e){return e!==existing;});
+      // Klick mit GLEICHEM Status → entfernen; Klick mit ANDEREM Status → wechseln
+      if(existing.status===pen){state.entries=state.entries.filter(function(e){return e!==existing;});}
+      else{existing.status=pen;}
     }else{
       state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:blockId,subject:subj,status:pen,hours:blockHours(b),note:''});
     }
     save();rerenderStudent(sid);renderSummary();renderWeekday();renderSubject();
   }
+  function markWholeDay(sid,date){
+    var s=state.students.find(function(x){return x.id===sid;});if(!s)return;
+    var wd=wdOf(date);if(wd<1||wd>5)return;if(holidayInfo(date))return;
+    var tt=state.timetable[s.level][wd];
+    BLOCKS.forEach(function(b,i){
+      var subj=tt[i]||'';if(!subj)return;
+      var ex=entryFor(sid,date,b.id);
+      if(ex){ex.status=pen;} // immer auf aktuellen Pen-Status setzen
+      else{state.entries.push({id:uid(),studentId:sid,date:date,weekday:wd,blockId:b.id,subject:subj,status:pen,hours:blockHours(b),note:''});}
+    });
+    save();rerenderStudent(sid);renderSummary();renderWeekday();renderSubject();
+  }
+  function clearWholeDay(sid,date){
+    var before=state.entries.length;
+    state.entries=state.entries.filter(function(e){return !(e.studentId===sid&&e.date===date);});
+    if(state.entries.length!==before){save();rerenderStudent(sid);renderSummary();renderWeekday();renderSubject();}
+  }
 
   /* ---- Wochentag-Durchschnitt ---- */
   function renderWeekday(){
     var list=periodEntries();var datesByWd={},sumByWd={};
-    list.forEach(function(e){var w=e.weekday!=null?e.weekday:wdOf(e.date);(datesByWd[w]=datesByWd[w]||new Set()).add(e.date);if(STATUS[e.status]&&STATUS[e.status].isAbsence)sumByWd[w]=(sumByWd[w]||0)+entryHours(e);});
+    list.forEach(function(e){var w=e.weekday!=null?e.weekday:wdOf(e.date);(datesByWd[w]=datesByWd[w]||new Set()).add(e.date);if(STATUS[e.status]&&STATUS[e.status].isAbsence)sumByWd[w]=(sumByWd[w]||0)+countHours(e);});
     var peak=null;WD_ORDER.forEach(function(w){if(datesByWd[w]){var avg=(sumByWd[w]||0)/datesByWd[w].size;if(!peak||avg>peak.avg)peak={w:w,avg:avg};}});
     var rows='',any=false;
     WD_ORDER.forEach(function(w){if(!datesByWd[w])return;any=true;var d=datesByWd[w].size,sm=sumByWd[w]||0,avg=d?sm/d:0;rows+='<tr'+(peak&&peak.w===w&&avg>0?' class="wd-peak"':'')+'><td><strong>'+WD[w]+'</strong></td><td class="n">'+d+'</td><td class="n">'+nf(sm)+'</td><td class="n big">'+nf(avg)+'</td></tr>';});
@@ -639,7 +782,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     var lvlSub={L1:levelSubjects('L1'),L2:levelSubjects('L2')};
     function studentsWith(subj){var n=0;state.students.forEach(function(s){if(lvlSub[s.level]&&lvlSub[s.level][subj])n++;});return n;}
     var by={};
-    list.forEach(function(e){var s=e.subject||'(allgemein)';(by[s]=by[s]||{cnt:0,hrs:0,exc:0,non:0});var o=by[s];o.cnt++;o.hrs+=entryHours(e);if(e.status==='entschuldigt')o.exc++;else if(e.status==='unentschuldigt')o.non++;});
+    list.forEach(function(e){var s=e.subject||'(allgemein)';(by[s]=by[s]||{cnt:0,hrs:0,exc:0,non:0});var o=by[s];o.cnt++;o.hrs+=countHours(e);if(e.status==='entschuldigt')o.exc++;else if(e.status==='unentschuldigt')o.non++;});
     var names=Object.keys(by).sort(function(a,b){return by[b].hrs-by[a].hrs;});
     var peak=null;names.forEach(function(nm){var denom=studentsWith(nm)||state.students.length||1;var avg=by[nm].hrs/denom;if(!peak||avg>peak.avg)peak={nm:nm,avg:avg};});
     var rows=names.map(function(nm){var o=by[nm];var denom=studentsWith(nm)||state.students.length||1;var avg=o.hrs/denom;
@@ -654,6 +797,34 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   }
 
   function renderAll(){fillPeriods();renderSummary();renderStudents();renderWeekday();renderSubject();}
+
+  /* ---- Klassenbuch (Notizen) ---- */
+  var noteCtx={date:null,blockId:null,subject:null,level:null};
+  function openNoteModal(ctx){noteCtx=ctx;
+    var lvlTxt=ctx.level?(' · Niveau '+ctx.level):'';
+    var subTxt=ctx.subject?(' · '+ctx.subject):'';
+    var blkTxt=ctx.blockId?(' · '+(BLOCKS.find(function(b){return b.id===ctx.blockId;})||{start:'',end:''}).start+'–'+(BLOCKS.find(function(b){return b.id===ctx.blockId;})||{end:''}).end):'';
+    document.getElementById('note-context').textContent=fmtD(ctx.date)+lvlTxt+subTxt+blkTxt;
+    renderNoteList();document.getElementById('note-text').value='';openModal('modal-note');document.getElementById('note-text').focus();
+  }
+  function renderNoteList(){
+    var list=state.notes.filter(function(n){
+      if(n.date!==noteCtx.date)return false;
+      if(noteCtx.blockId){return n.blockId===noteCtx.blockId&&(!noteCtx.level||!n.level||n.level===noteCtx.level);}
+      // Tages-Modal: alle Notizen des Tages für dieses Niveau
+      return !noteCtx.level||!n.level||n.level===noteCtx.level;
+    }).sort(function(a,b){return (a.blockId||'').localeCompare(b.blockId||'');});
+    var box=document.getElementById('note-existing');
+    if(!list.length){box.innerHTML='<div class="empty-mini" style="margin-bottom:14px;">Noch keine Notizen für diese Auswahl.</div>';return;}
+    box.innerHTML='<div class="note-list">'+list.map(function(n){var nt=NOTE_TYPES[n.type]||NOTE_TYPES.allgemein;var b=BLOCKS.find(function(x){return x.id===n.blockId;});var meta=(b?b.start+'–'+b.end:'Tag')+(n.subject?' · '+esc(n.subject):'')+(n.level?' · '+n.level:'');return '<div class="note-item '+n.type+'"><span class="nt-ic">'+nt.icon+'</span><div class="nt-body"><div class="nt-meta">'+nt.label+' · '+meta+'</div><div class="nt-txt">'+esc(n.text)+'</div></div><button class="nt-del" data-delnote="'+n.id+'" title="Notiz löschen">✕</button></div>';}).join('')+'</div>';
+  }
+  function addNote(){
+    var txt=document.getElementById('note-text').value.trim();if(!txt)return;
+    var type=document.getElementById('note-type').value;
+    state.notes.push({id:uid(),date:noteCtx.date,blockId:noteCtx.blockId||null,subject:noteCtx.subject||null,level:noteCtx.level||null,type:type,text:txt});
+    save();document.getElementById('note-text').value='';renderNoteList();renderStudents();toast('✅ Notiz hinzugefügt');
+  }
+  function delNote(id){state.notes=state.notes.filter(function(n){return n.id!==id;});save();renderNoteList();renderStudents();toast('🗑 Notiz gelöscht');}
 
   /* ---- Schülerverwaltung ---- */
   function addStudent(){var n=document.getElementById('new-student-name');var c=document.getElementById('new-student-class');var l=document.getElementById('new-student-level');var name=n.value.trim();if(!name)return;state.students.push({id:uid(),name:name,klasse:c.value.trim(),level:l.value});save();n.value='';c.value='';n.focus();renderStudentMgmt();renderAll();}
@@ -693,7 +864,7 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     if(!list.length){body.innerHTML='<div class="empty"><div class="i">📭</div><p>Keine Einträge für diese Auswahl.</p></div>';return;}
     // Fächer sammeln: Wochentag-Zählung (gefiltert) + Excusé/Non-excusé-Aufteilung
     var subjects={};
-    list.forEach(function(e){var s=e.subject||'(allgemein)';(subjects[s]=subjects[s]||{wd:{},cnt:0,hrs:0,exc:0,non:0});var o=subjects[s];o.wd[e.weekday]=(o.wd[e.weekday]||0)+1;o.cnt++;o.hrs+=entryHours(e);if(e.status==='entschuldigt')o.exc++;else if(e.status==='unentschuldigt')o.non++;});
+    list.forEach(function(e){var s=e.subject||'(allgemein)';(subjects[s]=subjects[s]||{wd:{},cnt:0,hrs:0,exc:0,non:0});var o=subjects[s];o.wd[e.weekday]=(o.wd[e.weekday]||0)+1;o.cnt++;o.hrs+=countHours(e);if(e.status==='entschuldigt')o.exc++;else if(e.status==='unentschuldigt')o.non++;});
     var names=Object.keys(subjects).sort(function(a,b){return subjects[b].cnt-subjects[a].cnt;});
     var head='<tr><th>Fach</th>';WD_ORDER.forEach(function(d){head+='<th class="c">'+WD[d].slice(0,2)+'</th>';});head+='<th class="c">Exc.</th><th class="c">Non-exc.</th><th class="n">Σ Anz.</th><th class="n">Σ Std.</th></tr>';
     var rows='';
@@ -738,12 +909,12 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   /* ---- PDF ---- */
   function buildReport(){
     var p=curPeriod();var label=p?p.name:'Ganzes Schuljahr';var list=periodEntries();var d=new Date().toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'numeric'});
-    var gE=0,gU=0,gV=0;list.forEach(function(e){if(e.status==='entschuldigt')gE+=entryHours(e);else if(e.status==='unentschuldigt')gU+=entryHours(e);else gV++;});
-    var sRows=state.students.map(function(s){var sl=list.filter(function(e){return e.studentId===s.id;});var e1=0,u1=0,v1=0;sl.forEach(function(e){if(e.status==='entschuldigt')e1+=entryHours(e);else if(e.status==='unentschuldigt')u1+=entryHours(e);else v1++;});
+    var gE=0,gU=0,gV=0;list.forEach(function(e){if(e.status==='entschuldigt')gE+=countHours(e);else if(e.status==='unentschuldigt')gU+=countHours(e);else gV++;});
+    var sRows=state.students.map(function(s){var sl=list.filter(function(e){return e.studentId===s.id;});var e1=0,u1=0,v1=0;sl.forEach(function(e){if(e.status==='entschuldigt')e1+=countHours(e);else if(e.status==='unentschuldigt')u1+=countHours(e);else v1++;});
       // Top-Fach
       var subj={};sl.forEach(function(e){if(STATUS[e.status].isAbsence)subj[e.subject]=(subj[e.subject]||0)+1;});var top=Object.keys(subj).sort(function(a,b){return subj[b]-subj[a];})[0];
       return '<tr><td>'+esc(s.name)+' <span style="color:#999">'+(s.level||'')+'</span></td><td class="n">'+nf(e1)+'</td><td class="n">'+nf(u1)+'</td><td class="n b">'+nf(e1+u1)+'</td><td class="n">'+(v1||'–')+'</td><td>'+(top?esc(top)+' ('+subj[top]+'×)':'–')+'</td></tr>';}).join('')||'<tr><td colspan="6">Keine Schüler.</td></tr>';
-    var datesByWd={},sumByWd={};list.forEach(function(e){var w=e.weekday!=null?e.weekday:wdOf(e.date);(datesByWd[w]=datesByWd[w]||new Set()).add(e.date);if(STATUS[e.status].isAbsence)sumByWd[w]=(sumByWd[w]||0)+entryHours(e);});
+    var datesByWd={},sumByWd={};list.forEach(function(e){var w=e.weekday!=null?e.weekday:wdOf(e.date);(datesByWd[w]=datesByWd[w]||new Set()).add(e.date);if(STATUS[e.status].isAbsence)sumByWd[w]=(sumByWd[w]||0)+countHours(e);});
     var wRows='';WD_ORDER.forEach(function(w){if(!datesByWd[w])return;var dd=datesByWd[w].size,ss=sumByWd[w]||0;wRows+='<tr><td>'+WD[w]+'</td><td class="n">'+dd+'</td><td class="n">'+nf(ss)+'</td><td class="n b">'+nf(dd?ss/dd:0)+'</td></tr>';});if(!wRows)wRows='<tr><td colspan="4">Keine Einträge.</td></tr>';
     return '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Absenzen-Bericht</title><style>@page{margin:18mm 15mm;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:-apple-system,"Segoe UI",Arial,sans-serif;color:#1A1A2E;font-size:12px;}.h{display:flex;justify-content:space-between;border-bottom:2px solid #6C5CE7;padding-bottom:12px;margin-bottom:16px;}.h h1{font-size:20px;}.h .s{color:#777;font-size:12px;margin-top:3px;}.h .m{text-align:right;font-size:11px;color:#777;}.cards{display:flex;gap:10px;margin-bottom:16px;}.c{flex:1;border:1px solid #E8E8F0;border-radius:8px;padding:10px;}.c .l{font-size:9px;text-transform:uppercase;color:#999;font-weight:700;}.c .v{font-size:22px;font-weight:800;}h2{font-size:13px;margin:16px 0 7px;color:#5A4BD1;}table{width:100%;border-collapse:collapse;font-size:11.5px;}th{background:#F3F1FE;text-align:left;padding:7px 9px;font-size:9px;text-transform:uppercase;color:#555;}td{padding:6px 9px;border-bottom:1px solid #F0F0F6;}td.n,th.n{text-align:right;}td.b{font-weight:700;}.foot{margin-top:22px;border-top:1px solid #E8E8F0;padding-top:8px;font-size:10px;color:#999;}</style></head><body>'+
       '<div class="h"><div><h1>Absenzen-Bericht</h1><div class="s">'+esc(label)+'</div></div><div class="m">Erstellt am '+d+'<br>'+state.students.length+' Schüler · '+list.length+' Einträge</div></div>'+
@@ -759,8 +930,8 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
   function exportJSON(){dl('anwesenheit-backup-'+today()+'.json',JSON.stringify(state,null,2),'application/json');toast('⬇️ Backup gespeichert');}
   function csvCell(v){var s=String(v==null?'':v);return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
   function exportCSV(){var lines=['Datum;Wochentag;Schueler;Niveau;Block;Fach;Status;Stunden'];state.entries.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(e){var s=state.students.find(function(x){return x.id===e.studentId;});var b=BLOCKS.find(function(x){return x.id===e.blockId;});lines.push([e.date,WD[e.weekday!=null?e.weekday:wdOf(e.date)],s?s.name:'(gelöscht)',s?(s.level||''):'',b?(b.start+'-'+b.end):'',e.subject||'',STATUS[e.status]?STATUS[e.status].label:e.status,String(entryHours(e)).replace('.',',')].map(csvCell).join(';'));});dl('anwesenheit-'+today()+'.csv','﻿'+lines.join('\r\n'),'text/csv;charset=utf-8');toast('⬇️ CSV exportiert');}
-  function importJSON(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!Array.isArray(d.students))throw 0;if(!confirm('Backup laden? Aktuelle Daten werden ersetzt.'))return;state.students=d.students||[];state.periods=Array.isArray(d.periods)?d.periods:[];state.entries=Array.isArray(d.entries)?d.entries:[];state.timetable=d.timetable||defaultTimetable();ui={};load();save();renderStudentMgmt();renderAll();closeModals();toast('✅ Backup geladen');}catch(e){toast('⚠️ Datei nicht lesbar');}};r.readAsText(file);}
-  function resetAll(){if(!confirm('Wirklich ALLE Daten löschen?'))return;if(!confirm('Letzte Warnung: alles wird gelöscht.'))return;state={students:[],periods:[],entries:[],timetable:defaultTimetable()};ui={};ensurePeriods();save();renderStudentMgmt();renderAll();closeModals();toast('🗑 Alles gelöscht');}
+  function importJSON(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!Array.isArray(d.students))throw 0;if(!confirm('Backup laden? Aktuelle Daten werden ersetzt.'))return;state.students=d.students||[];state.periods=Array.isArray(d.periods)?d.periods:[];state.entries=Array.isArray(d.entries)?d.entries:[];state.timetable=d.timetable||defaultTimetable();state.notes=Array.isArray(d.notes)?d.notes:[];ui={};load();save();renderStudentMgmt();renderAll();closeModals();toast('✅ Backup geladen');}catch(e){toast('⚠️ Datei nicht lesbar');}};r.readAsText(file);}
+  function resetAll(){if(!confirm('Wirklich ALLE Daten löschen?'))return;if(!confirm('Letzte Warnung: alles wird gelöscht.'))return;state={students:[],periods:[],entries:[],timetable:defaultTimetable(),notes:[]};ui={};ensurePeriods();save();renderStudentMgmt();renderAll();closeModals();toast('🗑 Alles gelöscht');}
 
   function openModal(id){document.getElementById(id).classList.add('open');}
   function closeModals(){document.querySelectorAll('.modal-bg').forEach(function(m){m.classList.remove('open');});}
@@ -787,6 +958,8 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
     document.getElementById('import-json').addEventListener('change',function(e){if(e.target.files[0])importJSON(e.target.files[0]);e.target.value='';});
     document.getElementById('stats-student').addEventListener('change',renderStats);
     document.getElementById('stats-status').addEventListener('change',renderStats);
+    document.getElementById('note-add').addEventListener('click',addNote);
+    document.getElementById('note-existing').addEventListener('click',function(e){var t=e.target.closest('[data-delnote]');if(t&&confirm('Notiz löschen?'))delNote(t.dataset.delnote);});
 
     document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModals();});});
     document.body.addEventListener('click',function(e){if(e.target.closest('[data-close]'))closeModals();});
@@ -807,6 +980,8 @@ select.inp:focus{outline:none;border-color:var(--primary);box-shadow:var(--ring)
       if((t=e.target.closest('[data-toggle]'))){var u=ui[t.dataset.toggle];u.open=!u.open;renderStudents();return;}
       if((t=e.target.closest('[data-pen]'))){pen=t.dataset.pen;document.querySelectorAll('.pen button').forEach(function(b){b.className='';});document.querySelectorAll('[data-pen="'+pen+'"]').forEach(function(b){b.className='active '+pen;});return;}
       if((t=e.target.closest('[data-week]'))){var uu=ui[t.dataset.sid];var act=t.dataset.week;uu.date=act==='today'?today():addDays(uu.date,act==='next'?7:-7);rerenderStudent(t.dataset.sid);return;}
+      if((t=e.target.closest('[data-noteact]'))){var s2=state.students.find(function(x){return x.id===t.dataset.sid;});openNoteModal({date:t.dataset.date,blockId:t.dataset.blk||null,subject:t.dataset.subj||null,level:s2?s2.level:null});return;}
+      if((t=e.target.closest('[data-dayact]'))){if(t.dataset.dayact==='mark')markWholeDay(t.dataset.sid,t.dataset.date);else if(t.dataset.dayact==='clear')clearWholeDay(t.dataset.sid,t.dataset.date);return;}
       if((t=e.target.closest('[data-blk]'))){toggleBlock(t.dataset.sid,t.dataset.blk,t.dataset.date);return;}
       if((t=e.target.closest('[data-setlevel]'))){setLevel(t.dataset.sid,t.dataset.setlevel);return;}
     });
